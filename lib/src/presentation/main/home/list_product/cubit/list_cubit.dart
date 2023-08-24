@@ -48,7 +48,7 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  Future<void> newListings(int pageNo, cityId) async {
+  Future<List<ProductModel>> loadListings(int pageNo, cityId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
@@ -64,11 +64,12 @@ class ListCubit extends Cubit<ListState> {
     );
 
     final listUpdated = result?[0];
+    final returnList = list;
     if (listUpdated.isNotEmpty) {
+      returnList.addAll(listUpdated);
       list.addAll(listUpdated);
-      listLoaded = list;
-      emit(ListStateUpdated(list));
     }
+    return returnList;
   }
 
   List<ProductModel> getLoadedList() => listLoaded;
@@ -133,6 +134,10 @@ class ListCubit extends Cubit<ListState> {
     } else {
       return null;
     }
+  }
+
+  void setNewFeed(List<ProductModel> feed) {
+    emit(ListStateUpdated(feed));
   }
 
   Future<String?> getCategory() async {

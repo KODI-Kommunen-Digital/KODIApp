@@ -7,7 +7,6 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -261,45 +260,56 @@ class _ListLoadedState extends State<ListLoaded> {
   final PageType _pageType = PageType.list;
   final ProductViewType _listMode = Application.setting.listMode;
   double previousScrollPosition = 0;
-  int pageNo = 1;
+
+  int displayedPageNo = 1;
+  int loadedPageNo = 1;
+
+  List<List<ProductModel>> feed = [];
+
+  Future<void> preLoadFeed(bool initial) async {
+    List<ProductModel> page;
+    isLoading = true;
+    int reps = 1;
+
+    if (initial) {
+      reps = 2;
+    }
+    for (int i = 0; i < reps; i++) {
+      page = await context
+          .read<ListCubit>()
+          .loadListings(loadedPageNo, widget.selectedId);
+      feed.add(page);
+      loadedPageNo++;
+    }
+    isLoading = false;
+  }
 
   @override
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
     loadListingsList();
+    preLoadFeed(true);
   }
 
   @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    widget.list.clear();
+    //widget.list.clear();
     super.dispose();
   }
 
   void _scrollListener() {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoadingMore = true;
-          previousScrollPosition = _scrollController.position.pixels;
-        });
-        context
-            .read<ListCubit>()
-            .newListings(++pageNo, widget.selectedId)
-            .then((_) {
+        if (!isLoading) {
           setState(() {
-            isLoadingMore = false;
+            context.read<ListCubit>().setNewFeed(feed[displayedPageNo]);
+            displayedPageNo++;
           });
-        }).catchError(
-          (error) {
-            setState(() {
-              isLoadingMore = false;
-            });
-            logError('Error loading more listings: $error');
-          },
-        );
+          preLoadFeed(false);
+        }
       }
     }
   }
@@ -319,9 +329,10 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
-    setState(() {
-      isLoading = false;
+    context.read<ListCubit>().onLoad(widget.selectedId).then((value) {
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
