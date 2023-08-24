@@ -296,7 +296,7 @@ class _ListLoadedState extends State<ListLoaded> {
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
-    //widget.list.clear();
+    widget.list.clear(); //error: final list can't be cleared
     super.dispose();
   }
 
