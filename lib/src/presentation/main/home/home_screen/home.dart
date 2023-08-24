@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_home_feed.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -14,7 +15,6 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 import 'cubit/home_cubit.dart';
@@ -30,10 +30,15 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
-  int pageNo = 1;
+
+  int displayedPageNo = 1;
+  int loadedPageNo = 1;
+
   late bool checkSavedCity;
   final _scrollController = ScrollController();
   bool isLoading = false;
+
+  List<HomeFeed> feed = [];
 
   @override
   void initState() {
@@ -58,24 +63,29 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.dispose();
   }
 
+  Future<void> preLoadFeed(bool initial) async {
+    HomeFeed page;
+    isLoading = true;
+    int reps = 1;
+
+    if (initial) reps = 2;
+    for (int i = 0; i < reps; i++) {
+      page = await AppBloc.homeCubit.loadPage(loadedPageNo);
+      feed.add(page);
+      loadedPageNo++;
+    }
+    isLoading = false;
+  }
+
   void _scrollListener() {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoading = true;
-        });
-        AppBloc.homeCubit.newListings(++pageNo).then((_) {
+        if (!isLoading) {
           setState(() {
-            isLoading = false;
+            displayedPageNo++;
           });
-        }).catchError(
-          (error) {
-            setState(() {
-              isLoading = false;
-            });
-            logError('Error loading new listings: $error');
-          },
-        );
+          preLoadFeed(false);
+        }
       }
     }
   }
@@ -132,6 +142,15 @@ class _HomeScreenState extends State<HomeScreen> {
             if (AppBloc.homeCubit.getDoesScroll()) {
               AppBloc.homeCubit.setDoesScroll(false);
               scrollUp();
+            }
+            if (feed.isEmpty) {
+              feed.add(HomeFeed(
+                  banner: banner,
+                  category: category,
+                  location: location,
+                  recent: recent));
+              loadedPageNo++;
+              preLoadFeed(true);
             }
           }
 
@@ -209,7 +228,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         _buildCategory(AppBloc.homeCubit
                             .getCategoriesWithoutHidden(category ?? [])),
                         _buildLocation(location),
-                        _buildRecent(recent, selectedCityId),
+                        _buildRecent(
+                            (feed.isEmpty)
+                                ? recent
+                                : feed[displayedPageNo-1].recent,
+                            selectedCityId),
                         if (isLoading)
                           const CircularProgressIndicator.adaptive(),
                         const SizedBox(height: 50),
