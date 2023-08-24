@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
 import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_home_feed.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+
 // import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -163,7 +165,7 @@ class HomeCubit extends Cubit<HomeState> {
     return false;
   }
 
-  Future<void> newListings(int pageNo) async {
+  Future<HomeFeed> loadPage(int pageNo) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
@@ -192,12 +194,12 @@ class HomeCubit extends Cubit<HomeState> {
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
-    recent.addAll(newRecent);
-    emit(HomeState.updated(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-    ));
+    List<ProductModel> returnRecent = recent;
+    returnRecent.addAll(newRecent);
+    return HomeFeed(
+        category: formattedCategories,
+        banner: banner,
+        location: location,
+        recent: returnRecent);
   }
 }
