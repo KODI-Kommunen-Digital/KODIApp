@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -41,6 +42,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseApi().initNotifications();
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
@@ -85,7 +87,7 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return ChangeNotifierProvider(
-                  create:  (_) => LanguageManager(),
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
