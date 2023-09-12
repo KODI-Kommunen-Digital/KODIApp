@@ -1,34 +1,40 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:http/http.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 
-Future<void> handleBackgroundMessage(RemoteMessage message) async {
-  logDebug("Title: ${message.notification?.title}");
-  logDebug("Body: ${message.notification?.body}");
-  logDebug("Payload: ${message.data}");
-}
+Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  void handleMessage(RemoteMessage? message) {
-    //Logic to navigate to post, implement later
-    if (message != null) {}
+  FirebaseApi(this.navigatorKey);
+
+  Future<void> handleMessage(RemoteMessage? message) async {
+    if (message != null) {
+      final item = await ListRepository.loadProduct(
+          message.data["cityId"], message.data["id"]);
+      //Error, data not properly converted in routes
+      navigatorKey.currentState
+          ?.pushNamed(Routes.productDetail, arguments: item);
+    }
   }
 
+  /*
   static Future<void> sendPushNotification(
       String notificationTitle, String notificationBody) async {
     try {
       final body = {
         "to": "/topics/warnings",
-        //"dKZfGFfcQ4CjEEPimIXhIQ:APA91bEFy6zZW06lxA9-MObJeOajlIceS955r8hfm1gGJ2VT1jPbBFfRhvf0VdrsrWDDkDAKXW1idHfeiRc4ikJo5puDG_HPuNjUb8-s7ZkecoJUR9Oc6MUzNqvkfFY5k83Fx0_Q12ho",
         "notification": {
           "title": notificationTitle, //our name should be send
           "body": notificationBody,
-        }
+        },
+        /*
+        "data": {
+          "route":
+        }*/
       };
 
       var url = Uri.parse("https://fcm.googleapis.com/fcm/send");
@@ -45,19 +51,9 @@ class FirebaseApi {
       logError("Failed to send notification");
     }
   }
-
+*/
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
-
-    //FCM Token for testing
-    try {
-      final fCMToken = await _firebaseMessaging.getToken();
-      print("Token: $fCMToken");
-    } catch (e) {
-      logError("Couldn't retrieve token: $e");
-    }
-    //End FCM Token
-
     await _firebaseMessaging.subscribeToTopic("warnings");
 
     await FirebaseMessaging.instance

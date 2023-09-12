@@ -42,7 +42,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FirebaseApi().initNotifications();
+  await FirebaseApi(globalNavKey).initNotifications();
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
@@ -89,6 +89,7 @@ class _HeidiAppState extends State<HeidiApp> {
                 return ChangeNotifierProvider(
                   create: (_) => LanguageManager(),
                   child: MaterialApp(
+                    navigatorKey: globalNavKey,
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
