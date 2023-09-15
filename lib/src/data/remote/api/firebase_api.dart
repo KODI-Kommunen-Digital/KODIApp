@@ -14,10 +14,12 @@ class FirebaseApi {
   Future<void> handleMessage(RemoteMessage? message) async {
     if (message != null) {
       final item = await ListRepository.loadProduct(
-          message.data["cityId"], message.data["id"]);
+          int.parse(message.data["cityId"]), message.data["id"]);
       //Error, data not properly converted in routes
-      navigatorKey.currentState
-          ?.pushNamed(Routes.productDetail, arguments: item);
+      if (item != null) {
+        navigatorKey.currentState
+            ?.pushNamed(Routes.productDetail, arguments: item);
+      }
     }
   }
 
