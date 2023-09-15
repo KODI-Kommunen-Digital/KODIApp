@@ -109,9 +109,9 @@ class ListRepository {
   static Future<ResultApiModel?> uploadImage(File image, profile) async {
     final prefs = await Preferences.openBox();
     String imageType = '';
-    if(image.path.contains('jpg')){
+    if (image.path.contains('jpg')) {
       imageType = 'jpg';
-    }else if(image.path.contains('png')){
+    } else if (image.path.contains('png')) {
       imageType = 'png';
     }
     final formData = FormData.fromMap({
@@ -131,7 +131,10 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      return ProductModel.fromJson(response.data, setting: Application.setting);
+      final product =
+          ProductModel.fromJson(response.data, setting: Application.setting);
+      product.cityId = cityId;
+      return product;
     } else {
       logError('Product Request Response', response.message);
     }
