@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+
 // import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -18,6 +19,8 @@ class HomeCubit extends Cubit<HomeState> {
   bool calledExternally = false;
   bool doesScroll = false;
 
+  List<ProductModel> prevRecent = [];
+
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
@@ -31,8 +34,9 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
-    if(!isRefreshLoader){
-    emit(HomeState.categoryLoading(location));}
+    if (!isRefreshLoader) {
+      emit(HomeState.categoryLoading(location));
+    }
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
@@ -51,6 +55,13 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+    if (isRefreshLoader) {
+      if (isRecentEqual(recent, prevRecent)) {
+        return;
+      }
+      prevRecent = recent;
+    }
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
@@ -70,8 +81,6 @@ class HomeCubit extends Cubit<HomeState> {
       location,
       recent,
     ));
-
-
   }
 
   void scrollUp() {
@@ -94,6 +103,69 @@ class HomeCubit extends Cubit<HomeState> {
 
   void setCalledExternally(bool called) {
     calledExternally = called;
+  }
+
+  bool isRecentEqual(
+      List<ProductModel> recentHome, List<ProductModel> recentApi) {
+    if (recentHome.length != recentApi.length) {
+      return false;
+    }
+
+    for (int i = 0; i < recentHome.length; i++) {
+      final homeObj = recentHome[i];
+      final apiObj = recentApi[i];
+
+      if (homeObj.id != apiObj.id ||
+          homeObj.userId != apiObj.userId ||
+          homeObj.subcategoryId != apiObj.subcategoryId ||
+          homeObj.categoryId != apiObj.categoryId ||
+          homeObj.cityId != apiObj.cityId ||
+          homeObj.villageId != apiObj.villageId ||
+          homeObj.statusId != apiObj.statusId ||
+          homeObj.sourceId != apiObj.sourceId ||
+          homeObj.title != apiObj.title ||
+          homeObj.image != apiObj.image ||
+          homeObj.pdf != apiObj.pdf ||
+          homeObj.videoURL != apiObj.videoURL ||
+          homeObj.category != apiObj.category ||
+          homeObj.startDate != apiObj.startDate ||
+          homeObj.endDate != apiObj.endDate ||
+          homeObj.createDate != apiObj.createDate ||
+          homeObj.username != apiObj.username ||
+          homeObj.firstname != apiObj.firstname ||
+          homeObj.lastname != apiObj.lastname ||
+          homeObj.profileImage != apiObj.profileImage ||
+          homeObj.dateEstablish != apiObj.dateEstablish ||
+          homeObj.rate != apiObj.rate ||
+          homeObj.numRate != apiObj.numRate ||
+          homeObj.rateText != apiObj.rateText ||
+          homeObj.status != apiObj.status ||
+          homeObj.favorite != apiObj.favorite ||
+          homeObj.address != apiObj.address ||
+          homeObj.zipCode != apiObj.zipCode ||
+          homeObj.phone != apiObj.phone ||
+          homeObj.fax != apiObj.fax ||
+          homeObj.email != apiObj.email ||
+          homeObj.website != apiObj.website ||
+          homeObj.description != apiObj.description ||
+          homeObj.color != apiObj.color ||
+          homeObj.icon != apiObj.icon ||
+          homeObj.price != apiObj.price ||
+          homeObj.priceMin != apiObj.priceMin ||
+          homeObj.priceMax != apiObj.priceMax ||
+          homeObj.country != apiObj.country ||
+          homeObj.city != apiObj.city ||
+          homeObj.state != apiObj.state ||
+          homeObj.author != apiObj.author ||
+          homeObj.link != apiObj.link ||
+          homeObj.bookingUse != apiObj.bookingUse ||
+          homeObj.bookingStyle != apiObj.bookingStyle ||
+          homeObj.priceDisplay != apiObj.priceDisplay) {
+        return false;
+      }
+    }
+
+    return true; // All corresponding objects are equal
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
