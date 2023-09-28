@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
-  List<ProductModel> prevRecent = [];
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -163,13 +162,6 @@ class _HomeScreenState extends State<HomeScreen> {
             if (AppBloc.homeCubit.getDoesScroll()) {
               AppBloc.homeCubit.setDoesScroll(false);
               scrollUp();
-            }
-
-            if (AppBloc.homeCubit.isRecentEqual(prevRecent, recent)) {
-              print("Content unchanged");
-            } else {
-              print("Content changed!");
-              prevRecent = recent;
             }
           }
 

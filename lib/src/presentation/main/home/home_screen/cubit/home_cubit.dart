@@ -18,6 +18,8 @@ class HomeCubit extends Cubit<HomeState> {
   bool calledExternally = false;
   bool doesScroll = false;
 
+  List<ProductModel> prevRecent = [];
+
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
@@ -50,6 +52,14 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+
+    if (isRefreshLoader) {
+      if (isRecentEqual(recent, prevRecent)) {
+        return;
+      }
+      prevRecent = recent;
+    }
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
