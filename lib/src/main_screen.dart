@@ -17,13 +17,32 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   String _selectedPage = Routes.home;
   late bool login;
 
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.resumed) {
+      String? initialLink = await getInitialLink();
+      if (initialLink != null) {
+        setState(() {});
+      }
+    }
   }
 
   @override
@@ -37,8 +56,8 @@ class _MainScreenState extends State<MainScreen> {
               if (snapshot.data!
                   .contains("https://app.smartregion-auf.de/VerifyEmail?")) {
                 //return VerifyEmail page
-              } else if (snapshot.data!.contains(
-                  "https://app.smartregion-auf.de/PasswordForgot?")) {
+              } else if (snapshot.data!
+                  .contains("https://app.smartregion-auf.de/PasswordForgot?")) {
                 //return PasswordForgot page
               }
             }
