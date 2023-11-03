@@ -33,6 +33,15 @@ class _MainScreenState extends State<MainScreen> {
         future: getInitialLink(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data != null) {
+              if (snapshot.data!
+                  .contains("https://app.smartregion-auf.de/VerifyEmail?")) {
+                //return VerifyEmail page
+              } else if (snapshot.data!.contains(
+                  "https://app.smartregion-auf.de/PasswordForgot?")) {
+                //return PasswordForgot page
+              }
+            }
             return Scaffold(
               body: BlocListener<AuthenticationCubit, AuthenticationState>(
                 listener: (context, authentication) async {
