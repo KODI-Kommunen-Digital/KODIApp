@@ -8,6 +8,7 @@ import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:uni_links/uni_links.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -28,25 +29,34 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     const submitPosition = FloatingActionButtonLocation.centerDocked;
-    return Scaffold(
-      body: BlocListener<AuthenticationCubit, AuthenticationState>(
-        listener: (context, authentication) async {
-          _listenAuthenticateChange(authentication);
-        },
-        child: IndexedStack(
-          index: _exportIndexed(_selectedPage),
-          children: const <Widget>[
-            HomeScreen(),
-            DiscoveryScreen(),
-            WishListScreen(),
-            AccountScreen()
-          ],
-        ),
-      ),
-      bottomNavigationBar: _buildBottomMenu(),
-      floatingActionButton: _buildSubmit(),
-      floatingActionButtonLocation: submitPosition,
-    );
+    return FutureBuilder(
+        future: getInitialLink(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return Scaffold(
+              body: BlocListener<AuthenticationCubit, AuthenticationState>(
+                listener: (context, authentication) async {
+                  _listenAuthenticateChange(authentication);
+                },
+                child: IndexedStack(
+                  index: _exportIndexed(_selectedPage),
+                  children: const <Widget>[
+                    HomeScreen(),
+                    DiscoveryScreen(),
+                    WishListScreen(),
+                    AccountScreen()
+                  ],
+                ),
+              ),
+              bottomNavigationBar: _buildBottomMenu(),
+              floatingActionButton: _buildSubmit(),
+              floatingActionButtonLocation: submitPosition,
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        });
   }
 
   bool _requireAuth(String route) {
