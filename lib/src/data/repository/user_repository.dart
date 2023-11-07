@@ -195,7 +195,6 @@ class UserRepository {
       "token": uri.queryParameters["token"],
       "password": password
     };
-    print(params.toString());
     final response = await Api.requestChangePassword(params);
     logError('Change Password Response', response.message);
 
