@@ -11,9 +11,10 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:uni_links/uni_links.dart';
 
-
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  final bool loadLink;
+
+  const MainScreen({this.loadLink = true, Key? key}) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -27,6 +28,7 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     WidgetsBinding.instance.addObserver(this);
+    if (!widget.loadLink) loadLink = false;
     super.initState();
   }
 
@@ -65,7 +67,9 @@ class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
                     //return VerifyEmail page
                   } else if (snapshot.data!.contains(
                       "https://app.smartregion-auf.de/PasswordForgot?")) {
-                    return const ChangePasswordScreen();
+                    return ChangePasswordScreen(
+                      link: snapshot.data!,
+                    );
                   }
                 }
                 return Scaffold(

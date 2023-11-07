@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
@@ -81,6 +82,12 @@ class Routes {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case home:
+        return MaterialPageRoute(builder: (context) {
+          return const MainScreen(
+            loadLink: false,
+          );
+        });
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
