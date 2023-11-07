@@ -4,11 +4,14 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
 class ChangePasswordScreen extends StatefulWidget {
-  const ChangePasswordScreen({Key? key}) : super(key: key);
+  final String? link;
+
+  const ChangePasswordScreen({this.link, Key? key}) : super(key: key);
 
   @override
   State<ChangePasswordScreen> createState() => _ChangePasswordScreenState();
@@ -53,12 +56,12 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
     if (_errorPass == null && _errorNewPass == null) {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
-        _textPassController.text,
-        _textNewPassController.text,
-      );
+          _textPassController.text, _textNewPassController.text, widget.link);
       if (!mounted) return;
-      if (result) {
+      if (result && widget.link == null) {
         Navigator.pop(context);
+      } else if (result && widget.link != null) {
+        Navigator.pushReplacementNamed(context, Routes.home);
       }
     }
   }
