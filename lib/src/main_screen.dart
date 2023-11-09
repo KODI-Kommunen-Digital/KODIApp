@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
-import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
@@ -20,101 +19,77 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> with WidgetsBindingObserver {
+class _MainScreenState extends State<MainScreen> {
   String _selectedPage = Routes.home;
   late bool login;
   bool loadLink = true;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
     if (!widget.loadLink) loadLink = false;
     super.initState();
   }
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    super.didChangeAppLifecycleState(state);
-
-    if (state == AppLifecycleState.resumed) {
-      String? initialLink = await getInitialLink();
-      if (initialLink != null) {
-        setState(() {
-          loadLink = true;
-        });
-      }
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
-    const submitPosition = FloatingActionButtonLocation.centerDocked;
     return (loadLink)
         ? FutureBuilder(
             future: getInitialLink(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                loadLink = false;
-                if (snapshot.data != null) {
-                  if (snapshot.data!.contains(
-                      "https://app.smartregion-auf.de/VerifyEmail?")) {
-                    //return VerifyEmail page
-                  } else if (snapshot.data!.contains(
-                      "https://app.smartregion-auf.de/PasswordForgot?")) {
-                    return ChangePasswordScreen(
-                      link: snapshot.data!,
-                    );
-                  }
-                }
-                return Scaffold(
-                  body: BlocListener<AuthenticationCubit, AuthenticationState>(
-                    listener: (context, authentication) async {
-                      _listenAuthenticateChange(authentication);
-                    },
-                    child: IndexedStack(
-                      index: _exportIndexed(_selectedPage),
-                      children: const <Widget>[
-                        HomeScreen(),
-                        DiscoveryScreen(),
-                        WishListScreen(),
-                        AccountScreen()
-                      ],
-                    ),
-                  ),
-                  bottomNavigationBar: _buildBottomMenu(),
-                  floatingActionButton: _buildSubmit(),
-                  floatingActionButtonLocation: submitPosition,
-                );
+                return mainScreen(snapshot);
+              } else {
+                return Container();
               }
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
             })
-        : Scaffold(
-            body: BlocListener<AuthenticationCubit, AuthenticationState>(
-              listener: (context, authentication) async {
-                _listenAuthenticateChange(authentication);
-              },
-              child: IndexedStack(
-                index: _exportIndexed(_selectedPage),
-                children: const <Widget>[
-                  HomeScreen(),
-                  DiscoveryScreen(),
-                  WishListScreen(),
-                  AccountScreen()
-                ],
-              ),
-            ),
-            bottomNavigationBar: _buildBottomMenu(),
-            floatingActionButton: _buildSubmit(),
-            floatingActionButtonLocation: submitPosition,
-          );
+        : StreamBuilder(
+            stream: linkStream,
+            builder: (context, snapshot) {
+              return mainScreen(snapshot);
+            });
+  }
+
+  Widget mainScreen(AsyncSnapshot<String?> snapshot) {
+    const submitPosition = FloatingActionButtonLocation.centerDocked;
+    loadLink = false;
+    if (snapshot.data != null) {
+      if (snapshot.data!
+          .contains("https://app.smartregion-auf.de/VerifyEmail?")) {
+        //return VerifyEmail page
+      } else if (snapshot.data!
+          .contains("https://app.smartregion-auf.de/PasswordForgot?")) {
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamed(context, Routes.changePassword, arguments: {'link': snapshot.data!});
+        });
+        //return ChangePasswordScreen(
+        //  link: snapshot.data!,
+        //);
+      }
+    }
+    return Scaffold(
+      body: BlocListener<AuthenticationCubit, AuthenticationState>(
+        listener: (context, authentication) async {
+          _listenAuthenticateChange(authentication);
+        },
+        child: IndexedStack(
+          index: _exportIndexed(_selectedPage),
+          children: const <Widget>[
+            HomeScreen(),
+            DiscoveryScreen(),
+            WishListScreen(),
+            AccountScreen()
+          ],
+        ),
+      ),
+      bottomNavigationBar: _buildBottomMenu(),
+      floatingActionButton: _buildSubmit(),
+      floatingActionButtonLocation: submitPosition,
+    );
   }
 
   bool _requireAuth(String route) {
