@@ -190,7 +190,9 @@ class Routes {
       case changePassword:
         return MaterialPageRoute(
           builder: (context) {
-            return const ChangePasswordScreen();
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return ChangePasswordScreen(link: arguments["link"],);
           },
         );
 
