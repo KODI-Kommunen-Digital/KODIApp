@@ -22,6 +22,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   String _selectedPage = Routes.home;
   late bool login;
+  String link = "";
   bool loadLink = true;
 
   @override
@@ -59,12 +60,18 @@ class _MainScreenState extends State<MainScreen> {
     loadLink = false;
     if (snapshot.data != null) {
       if (snapshot.data!
-          .contains("https://app.smartregion-auf.de/VerifyEmail?")) {
+          .contains("https://app.smartregion-auf.de/VerifyEmail?") && snapshot.data! != link) {
+        link = snapshot.data!;
+        WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+          Navigator.pushNamed(context, Routes.verifyEmail, arguments: {"link": snapshot.data!});
+        });
         //return VerifyEmail page
       } else if (snapshot.data!
-          .contains("https://app.smartregion-auf.de/PasswordForgot?")) {
+          .contains("https://app.smartregion-auf.de/PasswordForgot?") && snapshot.data! != link) {
+        link = snapshot.data!;
         WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-          Navigator.pushNamed(context, Routes.changePassword, arguments: {'link': snapshot.data!});
+          Navigator.pushNamed(context, Routes.changePassword,
+              arguments: {'link': snapshot.data!});
         });
         //return ChangePasswordScreen(
         //  link: snapshot.data!,

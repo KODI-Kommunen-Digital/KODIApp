@@ -431,5 +431,8 @@
   "my_groups": "My Groups",
   "all_listings": "All Listings",
   "my_posts": "My Posts",
-  "requests": "Requests"
+  "requests": "Requests",
+  "verify_email": "Verify Email",
+  "email_error_verified": "Your email could not be verified. Please try again later!",
+  "email_successfully_verified": "Your email was successfully verified, you will be redirected shortly!"
 }
