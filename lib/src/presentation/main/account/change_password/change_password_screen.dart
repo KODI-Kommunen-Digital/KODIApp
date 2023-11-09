@@ -4,7 +4,6 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -60,8 +59,6 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       if (!mounted) return;
       if (result && widget.link == null) {
         Navigator.pop(context);
-      } else if (result && widget.link != null) {
-        Navigator.pushReplacementNamed(context, Routes.home);
       }
     }
   }

@@ -431,5 +431,8 @@
   "my_groups": "Meine Gruppen",
   "all_listings": "Alle Beiträge",
   "my_posts": "Meine Posts", 
-  "requests": "Anfragen"
+  "requests": "Anfragen",
+  "verify_email": "Bestätige Email",
+  "email_error_verified": "Ihre Email konnte nicht bestätigt werden. Versuchen Sie es später erneut!",
+  "email_successfully_verified": "Ihre Email wurde erfolgreich bestätigt, Sie werden in Kürze weitergeleitet!"
 }

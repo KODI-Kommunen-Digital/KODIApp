@@ -24,6 +24,7 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/login/verify_email/verify_email_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -79,6 +80,7 @@ class Routes {
   static const String imageZoom = "/imageZoom";
   static const String profileSettings = "/profileSettings";
   static const String faq = "/faq";
+  static const String verifyEmail = "/verifyEmail";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -227,6 +229,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ContactUsScreen();
+          },
+        );
+
+      case verifyEmail:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return VerifyEmailScreen(link: arguments["link"]);
           },
         );
 
