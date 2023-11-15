@@ -57,7 +57,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
           _textPassController.text, _textNewPassController.text, widget.link);
       if (!mounted) return;
-      if (result && widget.link == null) {
+      if (result) {
         Navigator.pop(context);
       }
     }
