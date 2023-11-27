@@ -56,17 +56,20 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+    /*
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
-    }).toList();
+    }).toList();*/
 
     const banner = Images.slider;
 
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
+    /*List<CategoryModel> formattedCategories =
+        await formatCategoriesList(category, categoryCount, savedCity?.id);*/
+
+    List<CategoryModel> formattedCategories = await formatCategoriesList(category, savedCity?.id);
 
     emit(HomeStateLoaded(
       banner,
@@ -136,24 +139,24 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<List<CategoryModel>> formatCategoriesList(
-      List<CategoryModel> categories,
-      List<CategoryModel> categoryCount,
-      int? cityId) async {
+      List<CategoryModel> categories, int? cityId) async {
     // Sort List
-    Map<int, int?> idToCountMap = {};
-    for (var obj in categoryCount) {
-      idToCountMap[obj.id] = obj.count;
+    List<int> categoryOrder = [1, 3, 10, 13, 4, 14, 5, 6, 11, 15, 12, 9, 16];
+
+    List<CategoryModel> sortedCategories = [];
+    List<CategoryModel> remainingCategories = [];
+
+    for (var categoryId in categoryOrder) {
+      var category = categories.firstWhere((cat) => cat.id == categoryId);
+      sortedCategories.add(category);
     }
 
-    categories.sort((a, b) {
-      if (a.id == 14) return -1;
-      if (b.id == 14) return 1;
-
-      return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
-    });
+    remainingCategories =
+        categories.where((cat) => !categoryOrder.contains(cat.id)).toList();
+    sortedCategories.addAll(remainingCategories);
 
     // Hide tag on empty categories
-    for (var element in categories) {
+    for (var element in sortedCategories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
       if (!hasContent) {
         element.hide = true;
@@ -163,7 +166,7 @@ class HomeCubit extends Cubit<HomeState> {
       }
     }
 
-    return categories;
+    return sortedCategories;
   }
 
   Future<void> saveCityId(int cityId) async {
