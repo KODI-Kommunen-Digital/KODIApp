@@ -85,6 +85,7 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return MaterialApp(
+                  navigatorKey: globalNavKey,
                   debugShowCheckedModeBanner: false,
                   theme: theme.lightTheme,
                   darkTheme: theme.darkTheme,
