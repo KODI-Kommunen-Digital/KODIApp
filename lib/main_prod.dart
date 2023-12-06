@@ -17,6 +17,9 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
+import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -33,6 +36,11 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await FirebaseApi(globalNavKey).initNotifications();
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
