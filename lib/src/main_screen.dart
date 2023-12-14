@@ -1,3 +1,4 @@
+import 'package:app_links/app_links.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -8,7 +9,6 @@ import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:uni_links/uni_links.dart';
 
 class MainScreen extends StatefulWidget {
   final bool loadLink;
@@ -20,6 +20,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final appLinks = AppLinks();
   String _selectedPage = Routes.home;
   late bool login;
   String link = "";
@@ -40,7 +41,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return (loadLink)
         ? FutureBuilder(
-            future: getInitialLink(),
+            future: appLinks.getInitialAppLinkString(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 return mainScreen(snapshot);
@@ -49,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
               }
             })
         : StreamBuilder(
-            stream: linkStream,
+            stream: appLinks.allStringLinkStream,
             builder: (context, snapshot) {
               return mainScreen(snapshot);
             });
