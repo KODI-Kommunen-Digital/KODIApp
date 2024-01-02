@@ -1,6 +1,8 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
@@ -54,9 +56,16 @@ class FirebaseApi {
     }
   }
 */
+
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
     await _firebaseMessaging.subscribeToTopic("warnings");
+
+    UserModel? user = await UserRepository.loadUser();
+    int? userId = user?.id;
+    if (userId != null) {
+      uploadToken(userId);
+    }
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -65,5 +74,16 @@ class FirebaseApi {
     _firebaseMessaging.getInitialMessage().then(handleMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> uploadToken(int id) async {
+    String? token = await _firebaseMessaging.getToken();
+
+    if (token != null) {
+      String uploadedToken = ""; //Fetch from Database with id
+      if (uploadedToken != token) {
+        //Upload id|token
+      }
+    }
   }
 }
