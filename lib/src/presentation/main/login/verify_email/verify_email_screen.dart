@@ -18,7 +18,7 @@ class VerifyEmailScreen extends StatefulWidget {
 class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
   @override
   void initState() {
-    AppBloc.verifyEmail.verifyEmail(widget.link);
+    AppBloc.verifyEmailCubit.verifyEmail(widget.link);
     super.initState();
   }
 

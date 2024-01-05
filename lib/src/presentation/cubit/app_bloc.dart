@@ -42,14 +42,14 @@ class AppBloc {
   // static final searchCubit = SearchCubit();
   static final productDetailCubit = ProductDetailCubit();
   static final contactUsCubit = ContactUsCubit();
-  static final verifyEmail = VerifyEmailCubit();
+  static final verifyEmailCubit = VerifyEmailCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
       create: (context) => applicationCubit,
     ),
     BlocProvider<VerifyEmailCubit>(
-      create: (context) => verifyEmail,
+      create: (context) => verifyEmailCubit,
     ),
     BlocProvider<UserCubit>(
       create: (context) => userCubit,
