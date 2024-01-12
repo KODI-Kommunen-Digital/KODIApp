@@ -1,7 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 
@@ -58,6 +61,12 @@ class FirebaseApi {
   Future<void> initNotifications() async {
     await _firebaseMessaging.requestPermission();
     await _firebaseMessaging.subscribeToTopic("warnings");
+    int uId = await getLoggedUserId();
+
+    if(uId > 0) {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) uploadToken(uId, token);
+    }
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -66,5 +75,16 @@ class FirebaseApi {
     _firebaseMessaging.getInitialMessage().then(handleMessage);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessage);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> uploadToken(int userId, String token) async {
+    final response = await Api.uploadToken(userId, {"firebaseToken": token});
+    logError(response.message);
+  }
+
+  Future<int> getLoggedUserId() async{
+    final prefs = await Preferences.openBox();
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+    return userId;
   }
 }
