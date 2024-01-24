@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+// import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
-import 'package:heidi/src/utils/configs/application.dart';
 
 class HomeSwipe extends StatelessWidget {
   final double height;
@@ -17,7 +15,7 @@ class HomeSwipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
+    // final memoryCacheManager = DefaultCacheManager();
     if (images != null) {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {
