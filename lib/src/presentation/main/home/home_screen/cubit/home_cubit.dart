@@ -169,7 +169,6 @@ class HomeCubit extends Cubit<HomeState> {
       var forum = categories.removeAt(forumIndex);
       categories.insert(6, forum);
     }
-
     // Hide tag on empty categories
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);

@@ -67,6 +67,7 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  List<ImageListModel>? imageLists;
 
   ProductModel(
       {required this.id,
@@ -124,7 +125,7 @@ class ProductModel {
       this.villageId,
       this.statusId,
       this.sourceId,
-      this.showExternal});
+      this.imageLists});
 
   factory ProductModel.fromJson(
     Map<String, dynamic> json, {
@@ -207,6 +208,10 @@ class ProductModel {
       return ProductModel.fromJson(item, setting: setting);
     }).toList();
 
+    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+      return ImageListModel.fromJson(item);
+    }).toList();
+
     final bookingUse = json['booking_use'] == true;
     if (bookingUse) {
       priceDisplay = json['booking_price_display'];
@@ -270,6 +275,7 @@ class ProductModel {
       bookingUse: bookingUse,
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
+      imageLists: imagesList,
     );
   }
 
@@ -324,6 +330,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
+      imageLists: json['otherlogos'],
     );
   }
 
@@ -337,5 +344,30 @@ class ProductModel {
         "thumb": {},
       },
     };
+  }
+}
+
+class ImageListModel {
+  int? id;
+  int? imageOrder;
+  int? listingId;
+  String? logo;
+
+  ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
+
+  ImageListModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    imageOrder = json['imageOrder'];
+    listingId = json['listingId'];
+    logo = json['logo'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['imageOrder'] = imageOrder;
+    data['listingId'] = listingId;
+    data['logo'] = logo;
+    return data;
   }
 }
