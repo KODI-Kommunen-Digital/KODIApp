@@ -208,35 +208,38 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return UpgradeAlert(
-            upgrader: Upgrader(
-                debugLogging: true,
-                debugDisplayAlways: true,
-                countryCode: 'DE',
-                showLater: false,
-                shouldPopScope: () => true,
-                canDismissDialog: true,
-                durationUntilAlertAgain: const Duration(days: 1),
-                dialogStyle: Platform.isIOS
-                    ? UpgradeDialogStyle.cupertino
-                    : UpgradeDialogStyle.material,
-                willDisplayUpgrade: (
-                    {String? appStoreVersion,
-                    bool? display,
-                    String? installedVersion,
-                    String? minAppVersion}) {
-                  if (display != null) {
-                    setState(() {
-                      latestAppStoreVersion = appStoreVersion ?? '';
-                    });
-                  }
-                },
-                onUpdate: () {
-                  return true;
-                },
-                onIgnore: () {
-                  AppBloc.homeCubit.saveIgnoreAppVersion(latestAppStoreVersion);
-                  return true;
-                }),
+            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
+                ? null
+                : Upgrader(
+                    debugLogging: true,
+                    debugDisplayAlways: true,
+                    countryCode: 'DE',
+                    showLater: false,
+                    shouldPopScope: () => true,
+                    canDismissDialog: true,
+                    durationUntilAlertAgain: const Duration(days: 1),
+                    dialogStyle: Platform.isIOS
+                        ? UpgradeDialogStyle.cupertino
+                        : UpgradeDialogStyle.material,
+                    willDisplayUpgrade: (
+                        {String? appStoreVersion,
+                        bool? display,
+                        String? installedVersion,
+                        String? minAppVersion}) {
+                      if (display != null) {
+                        setState(() {
+                          latestAppStoreVersion = appStoreVersion ?? '';
+                        });
+                      }
+                    },
+                    onUpdate: () {
+                      return true;
+                    },
+                    onIgnore: () {
+                      AppBloc.homeCubit
+                          .saveIgnoreAppVersion(latestAppStoreVersion);
+                      return true;
+                    }),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
