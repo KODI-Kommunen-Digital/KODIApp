@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -7,10 +9,12 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
+  List<Asset> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -48,27 +52,32 @@ class AddListingCubit extends Cubit<AddListingState> {
     String? price,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
+    List<File>? imagesList,
+    isImageChanged,
   }) async {
     try {
       final response = await _repo.saveProduct(
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          startDate,
-          endDate,
-          startTime,
-          endTime);
+        title,
+        description,
+        place,
+        country,
+        state,
+        city,
+        statusId,
+        sourceId,
+        address,
+        zipcode,
+        phone,
+        email,
+        website,
+        status,
+        startDate,
+        endDate,
+        startTime,
+        endTime,
+        imagesList,
+        isImageChanged,
+      );
       if (response.success) {
         return true;
       } else {
@@ -111,6 +120,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     required bool isImageChanged,
+    List<File>? imagesList,
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -136,7 +146,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           price,
           isImageChanged,
           startTime,
-          endTime);
+          endTime,
+          imagesList);
       if (response.success) {
         return true;
       } else {
@@ -222,6 +233,30 @@ class AddListingCubit extends Cubit<AddListingState> {
       logError('request subCategoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
     }
+  }
+
+  void saveAssets(assetList) {
+    selectedAssets = assetList;
+  }
+
+  void removeAssetsByIndex(index) {
+    if (selectedAssets.isNotEmpty && index <= selectedAssets.length - 1) {
+      selectedAssets.removeAt(index);
+    }
+  }
+
+  void removeAssets(assets) {
+    if (selectedAssets.isNotEmpty) {
+      selectedAssets.remove(assets);
+    }
+  }
+
+  void clearAssets() {
+    selectedAssets.clear();
+  }
+
+  List<Asset> getSelectedAssets() {
+    return selectedAssets;
   }
 
   Future<ResultApiModel?> loadSubCategory(value) async {
