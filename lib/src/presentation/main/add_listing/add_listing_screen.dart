@@ -207,8 +207,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listCity = loadCitiesResponse?.data;
       selectedCategory = Translate.of(context).translate(
           _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      if (selectedCategory == "news" || selectedCategory == null) {
-        selectSubCategory(selectedCategory);
+      if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory == null) {
+        selectSubCategory(selectedCategory?.toLowerCase());
       }
       _processing = true;
     });
@@ -238,7 +239,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
-            .loadSubCategory(selectedCategory);
+            .loadSubCategory(selectedCategory?.toLowerCase());
         listSubCategory = subCategoryResponse!.data;
       }
       if (widget.item?.startDate != '') {
@@ -594,9 +595,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           allowEmpty: false);
     }
 
-    logError('selectedCategory', selectedCategory);
-
-    if (selectedCategory == "events") {
+    if (selectedCategory?.toLowerCase() == "events") {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -837,9 +836,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
                                 .translate('input_category')),
-                            value: selectedCategory == 'News'
-                                ? selectedCategory?.toLowerCase()
-                                : selectedCategory,
+                            value: selectedCategory,
                             items: listCategory.map((category) {
                               return DropdownMenuItem(
                                   value: category['name'],
@@ -854,14 +851,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         selectedCategory = value as String?;
                                         context
                                             .read<AddListingCubit>()
-                                            .setCategoryId(selectedCategory);
+                                            .setCategoryId(selectedCategory
+                                                ?.toLowerCase());
                                       },
                                     );
 
                                     if (selectedCategory?.toLowerCase() ==
                                             "news" ||
                                         selectedCategory == null) {
-                                      selectSubCategory(selectedCategory);
+                                      selectSubCategory(
+                                          selectedCategory?.toLowerCase());
                                     }
                                   }
                                 : null)),
@@ -1149,7 +1148,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             Visibility(
-              visible: selectedCategory == "events",
+              visible: selectedCategory?.toLowerCase() == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1350,10 +1349,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
     context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
     // clearStartEndDate();
-    final subCategoryResponse =
-        await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
+    final subCategoryResponse = await context
+        .read<AddListingCubit>()
+        .loadSubCategory(selectedCategory!.toLowerCase());
     if (!mounted) return;
-    context.read<AddListingCubit>().setCategoryId(selectedCategory);
+    context
+        .read<AddListingCubit>()
+        .setCategoryId(selectedCategory.toLowerCase());
     setState(() {
       listSubCategory = subCategoryResponse!.data;
 
