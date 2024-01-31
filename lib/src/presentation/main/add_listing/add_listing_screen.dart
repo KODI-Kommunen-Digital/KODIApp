@@ -87,6 +87,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _featurePdf;
   String? _startDate;
   String? _endDate;
+  String? _createdAt;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
   String? selectedVillage;
@@ -230,6 +231,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
+      _createdAt = widget.item?.createDate ?? '';
       selectedCategory = Translate.of(context)
           .translate(_getCategoryTranslation(widget.item!.categoryId!));
       final city = listCity
@@ -491,6 +493,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               price: _textPriceController.text,
               startDate: _startDate,
               endDate: _endDate,
+              createdAt: _createdAt,
               startTime: _startTime,
               endTime: _endTime,
               isImageChanged: isImageChanged,
