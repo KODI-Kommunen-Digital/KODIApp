@@ -367,17 +367,23 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     FilePickerResult? result =
                         await FilePicker.platform.pickFiles(
                       type: FileType.image,
+                      allowMultiple: true,
                     );
                     if (result != null) {
                       _file = File('');
                       setState(() {
-                        _file = File(result.files.single.path!);
+                        _file = File(result.files.first.path!);
                         isImageUploaded = false;
                       });
+                      images.clear();
+                      for(final selectedImages in result.files){
+                        images.add(File(selectedImages.path!));
+                      }
+                      widget.onChange(images);
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        widget.onChange([]);
+                        // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);

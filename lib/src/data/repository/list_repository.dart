@@ -431,6 +431,7 @@ class ListRepository {
     String? status,
     String? startDate,
     String? endDate,
+    String? createdAt,
     String? price,
     bool isImageChanged,
     TimeOfDay? startTime,
@@ -495,7 +496,7 @@ class ListRepository {
       "villageId": villageId ?? 0,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "createdAt": "",
+      "createdAt": createdAt,
       "pdf": null,
       "expiryDate": null,
       "updatedAt": currentDate.toString(),
@@ -526,17 +527,30 @@ class ListRepository {
 
               // Ensure the file extension matches the actual image type
               if (file.path.contains('.')) {
-                var fileExtension = file.path.split('.').last.toLowerCase();
-                var fileName = '$image.$fileExtension';
-                formData.files.add(MapEntry(
-                  'image',
-                  await MultipartFile.fromFile(
-                    file.path,
-                    filename: fileName,
-                    contentType: MediaType(
-                        'image', fileExtension), // Set the correct content type
-                  ),
-                ));
+                if (file.path.contains('com.')) {
+                  var fileName = '$image';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType(
+                          'image', 'png'), // Set the correct content type
+                    ),
+                  ));
+                } else {
+                  var fileExtension = file.path.split('.').last.toLowerCase();
+                  var fileName = '$image.$fileExtension';
+                  formData.files.add(MapEntry(
+                    'image',
+                    await MultipartFile.fromFile(
+                      file.path,
+                      filename: fileName,
+                      contentType: MediaType('image',
+                          fileExtension), // Set the correct content type
+                    ),
+                  ));
+                }
               } else {
                 // var fileExtension = file.path.split('.').last.toLowerCase();
                 var fileName = '$image';
