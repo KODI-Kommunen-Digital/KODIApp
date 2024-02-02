@@ -500,7 +500,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                           imageUrl.logo != null &&
                                           imageUrl.logo != 'admin/News.jpeg'
                                       ? imageUrl.logo
-                                      : "${Application.picturesURL}${product.image.isNotEmpty ? product.image : 'admin/News.jpeg'}";
+                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
