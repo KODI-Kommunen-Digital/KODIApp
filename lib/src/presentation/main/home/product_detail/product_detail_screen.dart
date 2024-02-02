@@ -471,11 +471,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 );
               },
               child: CachedNetworkImage(
-                imageUrl: product.sourceId == 2 || product.sourceId == 3
-                    ? product.image
-                    : product.image == 'admin/News.jpeg'
-                        ? "${Application.picturesURL}${product.image}"
-                        : "${Application.picturesURL}${product.image}?cacheKey=$uniqueKey",
+                imageUrl:
+                    product.sourceId == 2 && product.image != 'admin/News.jpeg'
+                        ? product.image
+                        : product.sourceId == 3 &&
+                                product.image != 'admin/News.jpeg'
+                            ? product.image
+                            : "${Application.picturesURL}${product.image}",
                 cacheManager: memoryCacheManager,
                 placeholder: (context, url) {
                   return AppPlaceholder(
