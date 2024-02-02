@@ -492,14 +492,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         items: product.imageLists?.map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
-                              String imageUrlString = product.sourceId == 2 &&
-                                      product.image != null &&
-                                      product.image != 'admin/News.jpeg'
-                                  ? product.image
+                              String? imageUrlString = product.sourceId == 2 &&
+                                      imageUrl.logo != null &&
+                                      imageUrl.logo != 'admin/News.jpeg'
+                                  ? imageUrl.logo
                                   : product.sourceId == 3 &&
-                                          product.image != null &&
-                                          product.image != 'admin/News.jpeg'
-                                      ? product.image
+                                          imageUrl.logo != null &&
+                                          imageUrl.logo != 'admin/News.jpeg'
+                                      ? imageUrl.logo
                                       : "${Application.picturesURL}${product.image.isNotEmpty ? product.image : 'admin/News.jpeg'}";
                               return Container(
                                 width: MediaQuery.of(context).size.width,
@@ -509,7 +509,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   color: Colors.black,
                                 ),
                                 child: Image.network(
-                                  imageUrlString,
+                                  imageUrlString!,
                                   fit: BoxFit.fitHeight,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
