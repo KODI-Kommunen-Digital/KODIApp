@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously, unnecessary_null_comparison
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
@@ -467,6 +467,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ? InkWell(
               onTap: () {
                 Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                  'sourceId': product.sourceId,
                   'imageList': product.imageLists,
                   'pdf': null,
                 });
@@ -491,16 +492,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         items: product.imageLists?.map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
-                              String imageUrlString;
-                              if ((product.sourceId == 2 ||
-                                      product.sourceId == 3) &&
-                                  imageUrl.logo != 'admin/News.jpeg') {
-                                imageUrlString = imageUrl.logo!;
-                              } else {
-                                imageUrlString =
-                                    "${Application.picturesURL}${imageUrl.logo}";
-                              }
-
+                              String imageUrlString = product.sourceId == 2 &&
+                                      product.image != null &&
+                                      product.image != 'admin/News.jpeg'
+                                  ? product.image
+                                  : product.sourceId == 3 &&
+                                          product.image != null &&
+                                          product.image != 'admin/News.jpeg'
+                                      ? product.image
+                                      : "${Application.picturesURL}${product.image.isNotEmpty ? product.image : 'admin/News.jpeg'}";
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
@@ -539,27 +539,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           );
                         }).toList(),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: product.imageLists!.map((url) {
-                            int index = product.imageLists!.indexOf(url);
-                            return Container(
-                              width: 10.0,
-                              height: 10.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentImageIndex == index
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                              ),
-                            );
-                          }).toList(),
+                      if (product.imageLists!.length > 1)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: product.imageLists!.map((url) {
+                              int index = product.imageLists!.indexOf(url);
+                              return Container(
+                                width: 10.0,
+                                height: 10.0,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: currentImageIndex == index
+                                      ? Colors.blueAccent
+                                      : Colors.grey,
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -576,6 +577,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       if (!mounted) return;
                       Navigator.pushNamed(context, Routes.imageZoom,
                           arguments: {
+                            'sourceId': product.sourceId,
                             'imageList': product.imageLists,
                             'pdf':
                                 "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
