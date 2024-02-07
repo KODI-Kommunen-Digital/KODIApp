@@ -109,7 +109,6 @@ class Api {
       url: filePath,
       data: params,
     );
-    //Not uploading for some reason
     return ResultApiModel.fromJson(result);
   }
 
