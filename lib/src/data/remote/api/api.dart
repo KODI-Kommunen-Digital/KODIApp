@@ -180,6 +180,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> uploadToken(userId, params) async {
+    final filePath = '/users/$userId/storeFirebaseUserToken';
+    final result = await HTTPManager(forum: true).post(
+      url: filePath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestHasForum() async {
     final result = await HTTPManager(forum: false).get(url: hasForum);
     return ResultApiModel.fromJson(result);
