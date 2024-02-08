@@ -62,6 +62,7 @@ Map<String, dynamic> _$FavoriteDetailsModelToJson(
       'longitude': instance.longitude,
       'latitude': instance.latitude,
       'villageId': instance.villageId,
+      'expiryDate': instance.expiryDate,
       'startDate': instance.startDate,
       'endDate': instance.endDate,
       'createdAt': instance.createdAt,
