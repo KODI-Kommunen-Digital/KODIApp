@@ -85,11 +85,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List listSubCategory = [];
 
   String? _featurePdf;
+  String? _expiryDate;
   String? _startDate;
   String? _endDate;
   String? _createdAt;
+  TimeOfDay? _expiryTime;
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
+  bool _isExpiryDateEnabled = false;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -104,6 +107,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void initState() {
     super.initState();
     _onProcess();
+    if (widget.item != null) {
+      if (widget.item?.expiryDate != null && widget.item?.expiryDate != "") {
+        _isExpiryDateEnabled = true;
+      } else if (widget.item?.expiryDate == null &&
+          widget.item?.expiryDate == "") {
+        _isExpiryDateEnabled = false;
+      }
+    } else if (widget.item == null) {
+      _setDefaultExpiryDate();
+      _isExpiryDateEnabled = true;
+    }
+  }
+
+  void _setDefaultExpiryDate() {
+    if (widget.item?.expiryDate == null) {
+      DateTime now = DateTime.now();
+      DateTime twoWeeksFromNow = now.add(const Duration(days: 14));
+      setState(() {
+        _expiryDate = DateFormat('yyyy-MM-dd').format(twoWeeksFromNow);
+        _expiryTime = const TimeOfDay(hour: 0, minute: 0);
+      });
+    }
   }
 
   String clearedText(String text) {
@@ -277,6 +302,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       }
+      if (widget.item?.expiryDate != '') {
+        List<String> expiryDateTime = widget.item!.expiryDate.split(' ');
+        String dateString = expiryDateTime[0];
+        DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
+        _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
+        List<String> startTimeParts = expiryDateTime[1].split(':');
+        int startHour = int.parse(startTimeParts[0]);
+        int startMinute = int.parse(startTimeParts[1]);
+        _expiryTime = TimeOfDay(hour: startHour, minute: startMinute);
+      }
       if (widget.item?.pdf == '') {
         List<File> images = await downloadImages(widget.item!.imageLists!);
         setState(() {
@@ -348,6 +383,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return downloadedImages;
   }
 
+  void _onShowExpiryDatePicker() async {
+    final DateTime now = DateTime.now();
+    final DateTime initialDate = _expiryDate != null
+        ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
+        : now.add(const Duration(days: 14));
+    final DateTime firstDate = DateTime(now.year - 5);
+    final DateTime lastDate = DateTime(now.year + 5);
+
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+    );
+    if (picked != null && mounted) {
+      setState(() {
+        _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
+      });
+    }
+  }
+
   void _onShowStartDatePicker(String? startDate) async {
     final now = DateTime.now();
     final dateFormat = DateFormat('yyyy-MM-dd');
@@ -409,6 +465,22 @@ class _AddListingScreenState extends State<AddListingScreen> {
           _endDate = picked.dateView;
         });
       }
+    }
+  }
+
+  Future<void> _onShowExpiryTimePicker() async {
+    final TimeOfDay initialTime =
+        _expiryTime ?? const TimeOfDay(hour: 0, minute: 0);
+
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+    );
+
+    if (pickedTime != null && mounted) {
+      setState(() {
+        _expiryTime = pickedTime;
+      });
     }
   }
 
@@ -476,6 +548,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .deletePdf(widget.item?.cityId, widget.item?.id);
         }
+        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+
         setState(() {
           isLoading = true;
         });
@@ -491,11 +566,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
               price: _textPriceController.text,
+              expiryDate: submitExpiryDate,
               startDate: _startDate,
               endDate: _endDate,
               createdAt: _createdAt,
+              expiryTime: submitExpiryTime,
               startTime: _startTime,
               endTime: _endTime,
+              timeless: _isExpiryDateEnabled ? 0 : 1,
               isImageChanged: isImageChanged,
               statusId: statusId,
               imagesList: selectedImages,
@@ -510,6 +588,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
           context.read<AddListingCubit>().clearAssets();
         }
       } else {
+        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
         setState(() {
           isLoading = true;
         });
@@ -523,10 +603,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
               email: _textEmailController.text,
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
+              expiryDate: submitExpiryDate,
               startDate: _startDate,
               endDate: _endDate,
+              expiryTime: submitExpiryTime,
               startTime: _startTime,
               endTime: _endTime,
+              timeless: _isExpiryDateEnabled ? 0 : 1,
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
             );
@@ -832,41 +915,38 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
-                                  value: category['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
-                            }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) async {
-                                    setState(
-                                      () {
-                                        selectedCategory = value as String?;
-                                        context
-                                            .read<AddListingCubit>()
-                                            .setCategoryId(selectedCategory
-                                                ?.toLowerCase());
-                                      },
-                                    );
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context)
+                              .translate('input_category')),
+                          value: selectedCategory?.toLowerCase(),
+                          items: listCategory.map((category) {
+                            return DropdownMenuItem(
+                              value: category['name'].toLowerCase(),
+                              child: Text(Translate.of(context).translate(
+                                  _getCategoryTranslation(category['id']))),
+                            );
+                          }).toList(),
+                          onChanged: (value) async {
+                            setState(
+                              () {
+                                selectedCategory = value as String?;
+                                context.read<AddListingCubit>().setCategoryId(
+                                    selectedCategory?.toLowerCase());
+                              },
+                            );
 
-                                    if (selectedCategory?.toLowerCase() ==
-                                            "news" ||
-                                        selectedCategory == null) {
-                                      selectSubCategory(
-                                          selectedCategory?.toLowerCase());
-                                    }
-                                  }
-                                : null)),
+                            if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory == null) {
+                              selectSubCategory(
+                                  selectedCategory?.toLowerCase());
+                            }
+                          },
+                        ),
+                ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -897,32 +977,32 @@ class _AddListingScreenState extends State<AddListingScreen> {
               children: [
                 if (selectedCategory?.toLowerCase() == "news")
                   Expanded(
-                      child: listSubCategory.isEmpty
-                          ? const LinearProgressIndicator()
-                          : DropdownButton(
-                              isExpanded: true,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
-                              value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        _getSubCategoryTranslation(
-                                            subcategory['id']))));
-                              }).toList(),
-                              onChanged: widget.item == null
-                                  ? (value) {
-                                      context
-                                          .read<AddListingCubit>()
-                                          .getSubCategoryId(value);
-                                      setState(() {
-                                        selectedSubCategory = value as String?;
-                                      });
-                                    }
-                                  : null,
-                            )),
+                    child: listSubCategory.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_subcategory')),
+                            value: selectedSubCategory,
+                            items: listSubCategory.map((subcategory) {
+                              return DropdownMenuItem(
+                                value: subcategory['name'],
+                                child: Text(Translate.of(context).translate(
+                                    _getSubCategoryTranslation(
+                                        subcategory['id']))),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              context
+                                  .read<AddListingCubit>()
+                                  .getSubCategoryId(value);
+                              setState(() {
+                                selectedSubCategory = value as String?;
+                              });
+                            },
+                          ),
+                  ),
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
@@ -994,36 +1074,100 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ),
               ],
             ),
+            const SizedBox(height: 6),
+            if (selectedCategory?.toLowerCase() == "news")
+              Padding(
+                padding: const EdgeInsets.only(left: 0),
+                child: Row(
+                  children: [
+                    Checkbox(
+                      value: _isExpiryDateEnabled,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          _isExpiryDateEnabled = value!;
+                          if (_isExpiryDateEnabled &&
+                              (_expiryDate == null || _expiryTime == null)) {
+                            DateTime now = DateTime.now();
+                            DateTime twoWeeksFromNow =
+                                now.add(const Duration(days: 14));
+                            _expiryDate ??= DateFormat('yyyy-MM-dd')
+                                .format(twoWeeksFromNow);
+                            _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
+                          }
+                        });
+                      },
+                      activeColor: Colors.blue,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isExpiryDateEnabled = !_isExpiryDateEnabled;
+                        });
+                      },
+                      child: Text(Translate.of(context)
+                          .translate('enable_expiry_date')),
+                    ),
+                  ],
+                ),
+              ),
+            const SizedBox(height: 6),
+            Visibility(
+              visible: (selectedCategory?.toLowerCase() == "news") &&
+                  (_isExpiryDateEnabled || widget.item?.timeless == 0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 10),
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('expiry_date'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(
+                      Icons.calendar_today_outlined,
+                      color: Theme.of(context).hintColor,
+                    ),
+                    value: _expiryDate,
+                    title: Translate.of(context).translate(
+                      'choose_date',
+                    ),
+                    onPressed: () async {
+                      _onShowExpiryDatePicker();
+                    },
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                      leading: Icon(
+                        Icons.access_time,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _expiryTime?.format(context),
+                      title: Translate.of(context).translate(
+                        'choose_exptime',
+                      ),
+                      onPressed: () async {
+                        _onShowExpiryTimePicker();
+                      }),
+                  const SizedBox(height: 16),
+                ],
+              ),
+            ),
             const SizedBox(height: 16),
-            const SizedBox(height: 8),
-            // Text(
-            //   Translate.of(context).translate('village'),
-            //   style: Theme.of(context)
-            //       .textTheme
-            //       .titleMedium!
-            //       .copyWith(fontWeight: FontWeight.bold),
-            // ),
-            // Row(
-            //   children: [
-            //     Expanded(
-            //         child: DropdownButton(
-            //       isExpanded: true,
-            //       menuMaxHeight: 200,
-            //       hint: Text(Translate.of(context).translate('input_village')),
-            //       value: selectedVillage,
-            //       items: listVillage.map((village) {
-            //         return DropdownMenuItem(
-            //             value: village['name'], child: Text(village['name']));
-            //       }).toList(),
-            //       onChanged: (value) {
-            //         setState(() {
-            //           selectedVillage = value as String?;
-            //         });
-            //       },
-            //     )),
-            //   ],
-            // ),
-            // const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,
