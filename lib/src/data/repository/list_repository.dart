@@ -213,6 +213,7 @@ class ListRepository {
             data['longitude'] ?? 0.0,
             data['latitude'] ?? 0.0,
             data['villageId'] ?? 0,
+            data['expiryDate'] ?? '',
             data['startDate'] ?? '',
             data['endDate'] ?? '',
             data['createdAt'] ?? '',
@@ -305,12 +306,15 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
+    TimeOfDay? expiryTime,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
     bool isImageChanged,
+    int? timeless,
   ) async {
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -319,6 +323,20 @@ class ListRepository {
     final cityId = await getCityId(city);
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -368,9 +386,11 @@ class ListRepository {
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
+      "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subCategoryId": subCategoryId,
+      "timeless": timeless
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
@@ -429,15 +449,19 @@ class ListRepository {
     String? email,
     String? website,
     String? status,
+    String? expiryDate,
     String? startDate,
     String? endDate,
     String? createdAt,
     String? price,
     bool isImageChanged,
+    TimeOfDay? expiryTime,
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
+    int? timeless,
   ) async {
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -446,6 +470,21 @@ class ListRepository {
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     DateTime currentDate = DateTime.now();
+
+    String? combinedExpiryDateTime;
+
+    if (expiryDate != null) {
+      String formattedTime;
+      if (expiryTime!.hour < 10) {
+        formattedTime =
+            "${expiryTime.periodOffset}${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
+        combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
+      }
+    }
 
     if (startDate != null) {
       String formattedTime;
@@ -494,11 +533,11 @@ class ListRepository {
       "longitude": 245.65, //dummy data
       "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
+      "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "createdAt": createdAt,
       "pdf": null,
-      "expiryDate": null,
       "updatedAt": currentDate.toString(),
       "zipcode": null,
       "appointmentId": null,
@@ -507,6 +546,7 @@ class ListRepository {
         {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
       ],
       "cityId": cityId,
+      "timeless": timeless
     };
 
     final response =
