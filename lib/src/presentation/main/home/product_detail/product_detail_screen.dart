@@ -1,5 +1,7 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously, unnecessary_null_comparison
 
+import 'dart:io';
+import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -450,23 +452,43 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         ),
       ),
     );
-
+    double carouselHeight = 0;
+    if (Platform.isAndroid) {
+      double screenHeight = MediaQuery.of(context).size.height;
+      double screenWidth = MediaQuery.of(context).size.width;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom +
+          kToolbarHeight;
+      double aspectRatio = screenWidth / screenHeight;
+      double maxCarouselHeight = 350;
+      double targetHeightRatioPortrait = 0.35;
+      double targetHeightRatioLandscape = 0.3;
+      if (aspectRatio > 1.0) {
+        carouselHeight =
+            screenHeight * targetHeightRatioLandscape - safeAreaVertical;
+      } else {
+        carouselHeight =
+            screenHeight * targetHeightRatioPortrait - safeAreaVertical;
+      }
+      carouselHeight = math.min(carouselHeight, maxCarouselHeight);
+    } else if (Platform.isIOS) {
+      double screenHeight = MediaQuery.of(context).size.height;
+      double safeAreaVertical = MediaQuery.of(context).padding.top +
+          MediaQuery.of(context).padding.bottom;
+      double targetHeightRatio = 0.35;
+      carouselHeight = (screenHeight - safeAreaVertical) * targetHeightRatio;
+    }
     if (product != null) {
       ///Action
       action = [
         actionGalleries,
         const SizedBox(width: 8),
       ];
-      double screenHeight = MediaQuery.of(context).size.height;
-      double safeAreaVertical = MediaQuery.of(context).padding.top +
-          MediaQuery.of(context).padding.bottom;
-      double targetHeightRatio = 0.35;
-      double carouselHeight =
-          (screenHeight - safeAreaVertical) * targetHeightRatio;
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
                 Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                  'sourceId': product.sourceId,
                   'imageList': product.imageLists,
                   'pdf': null,
                 });
@@ -491,16 +513,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         items: product.imageLists?.map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
-                              String imageUrlString;
-                              if ((product.sourceId == 2 ||
-                                      product.sourceId == 3) &&
-                                  imageUrl.logo != 'admin/News.jpeg') {
-                                imageUrlString = imageUrl.logo!;
-                              } else {
-                                imageUrlString =
-                                    "${Application.picturesURL}${imageUrl.logo}";
-                              }
-
+                              String? imageUrlString = product.sourceId == 2 &&
+                                      imageUrl.logo != null &&
+                                      imageUrl.logo != 'admin/News.jpeg'
+                                  ? imageUrl.logo
+                                  : product.sourceId == 3 &&
+                                          imageUrl.logo != null &&
+                                          imageUrl.logo != 'admin/News.jpeg'
+                                      ? imageUrl.logo
+                                      : "${Application.picturesURL}${imageUrl.logo!.isNotEmpty ? imageUrl.logo : 'admin/News.jpeg'}";
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 margin:
@@ -509,7 +530,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   color: Colors.black,
                                 ),
                                 child: Image.network(
-                                  imageUrlString,
+                                  imageUrlString!,
                                   fit: BoxFit.fitHeight,
                                   loadingBuilder: (BuildContext context,
                                       Widget child,
@@ -539,27 +560,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           );
                         }).toList(),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: product.imageLists!.map((url) {
-                            int index = product.imageLists!.indexOf(url);
-                            return Container(
-                              width: 10.0,
-                              height: 10.0,
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 2.0),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: currentImageIndex == index
-                                    ? Colors.blueAccent
-                                    : Colors.grey,
-                              ),
-                            );
-                          }).toList(),
+                      if (product.imageLists!.length > 1)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: product.imageLists!.map((url) {
+                              int index = product.imageLists!.indexOf(url);
+                              return Container(
+                                width: 10.0,
+                                height: 10.0,
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 2.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: currentImageIndex == index
+                                      ? Colors.blueAccent
+                                      : Colors.grey,
+                                ),
+                              );
+                            }).toList(),
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ],
@@ -576,6 +598,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       if (!mounted) return;
                       Navigator.pushNamed(context, Routes.imageZoom,
                           arguments: {
+                            'sourceId': product.sourceId,
                             'imageList': product.imageLists,
                             'pdf':
                                 "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
