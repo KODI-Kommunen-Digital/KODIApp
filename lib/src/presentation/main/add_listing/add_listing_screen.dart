@@ -121,7 +121,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _setDefaultExpiryDate() {
-    if (widget.item?.expiryDate == null) {
+    if (widget.item?.expiryDate == null || widget.item?.expiryDate == "") {
       DateTime now = DateTime.now();
       DateTime twoWeeksFromNow = now.add(const Duration(days: 14));
       setState(() {
@@ -943,6 +943,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 selectedCategory == null) {
                               selectSubCategory(
                                   selectedCategory?.toLowerCase());
+                              _setDefaultExpiryDate();
                             }
                           },
                         ),
