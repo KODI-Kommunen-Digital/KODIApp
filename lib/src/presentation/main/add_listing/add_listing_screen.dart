@@ -68,6 +68,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorContent;
   String? _errorZipCode;
   String? _errorPhone;
+
   // String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
@@ -233,12 +234,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listCity = loadCitiesResponse?.data;
       selectedCategory = Translate.of(context).translate(
           _getCategoryTranslation(loadCategoryResponse?.data.first['id']));
-      if (selectedCategory?.toLowerCase() == "news" ||
-          selectedCategory == null) {
-        selectSubCategory(selectedCategory?.toLowerCase());
-      }
       _processing = true;
     });
+
+    if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+      await selectSubCategory(selectedCategory?.toLowerCase());
+    }
 
     Map<String, dynamic> params = {};
     if (widget.item != null) {
@@ -259,6 +260,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = Translate.of(context)
           .translate(_getCategoryTranslation(widget.item!.categoryId!));
+      selectedSubCategory = listSubCategory.firstWhere(
+          (element) => element["id"] == widget.item!.subcategoryId)["name"];
+
       final city = listCity
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
@@ -930,22 +934,27 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                   _getCategoryTranslation(category['id']))),
                             );
                           }).toList(),
-                          onChanged: (value) async {
-                            setState(
-                              () {
-                                selectedCategory = value as String?;
-                                context.read<AddListingCubit>().setCategoryId(
-                                    selectedCategory?.toLowerCase());
-                              },
-                            );
+                          onChanged: widget.item == null
+                              ? (value) async {
+                                  setState(
+                                    () {
+                                      selectedCategory = value as String?;
+                                      context
+                                          .read<AddListingCubit>()
+                                          .setCategoryId(
+                                              selectedCategory?.toLowerCase());
+                                    },
+                                  );
 
-                            if (selectedCategory?.toLowerCase() == "news" ||
-                                selectedCategory == null) {
-                              selectSubCategory(
-                                  selectedCategory?.toLowerCase());
-                              _setDefaultExpiryDate();
-                            }
-                          },
+                                  if (selectedCategory?.toLowerCase() ==
+                                          "news" ||
+                                      selectedCategory == null) {
+                                    selectSubCategory(
+                                        selectedCategory?.toLowerCase());
+                                    _setDefaultExpiryDate();
+                                  }
+                                }
+                              : null,
                         ),
                 ),
               ],
@@ -994,14 +1003,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                         subcategory['id']))),
                               );
                             }).toList(),
-                            onChanged: (value) {
-                              context
-                                  .read<AddListingCubit>()
-                                  .getSubCategoryId(value);
-                              setState(() {
-                                selectedSubCategory = value as String?;
-                              });
-                            },
+                            onChanged: widget.item == null
+                                ? (value) {
+                                    context
+                                        .read<AddListingCubit>()
+                                        .getSubCategoryId(value);
+                                    setState(() {
+                                      selectedSubCategory = value as String?;
+                                    });
+                                  }
+                                : null,
                           ),
                   ),
               ],
@@ -1506,7 +1517,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
         .setCategoryId(selectedCategory.toLowerCase());
     setState(() {
       listSubCategory = subCategoryResponse!.data;
-
       selectedSubCategory = subCategoryResponse.data.first['name'];
     });
   }

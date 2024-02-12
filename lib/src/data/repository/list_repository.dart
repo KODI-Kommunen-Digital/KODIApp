@@ -389,7 +389,7 @@ class ListRepository {
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "subCategoryId": subCategoryId,
+      "subcategoryId": subCategoryId,
       "timeless": timeless
     };
     final response =
@@ -680,7 +680,7 @@ class ListRepository {
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
     final item =
-        jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+        jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
