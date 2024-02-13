@@ -1,4 +1,4 @@
-package com.gesekeapp
+package com.geseketest
 
 import io.flutter.embedding.android.FlutterActivity
 

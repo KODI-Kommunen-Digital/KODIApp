@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA',
-    appId: '1:241988975776:android:a3d635e126c5c193b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
+    apiKey: 'AIzaSyDfUUvcJAzz5i7YEpI60RJZz1HbOVnuRmY',
+    appId: '1:1041875317830:android:027eaaa04e53fe89510647',
+    messagingSenderId: '1041875317830',
+    projectId: 'test-bded3',
+    storageBucket: 'test-bded3.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBt91UklC0sCKh6tfNXfXd6DF45SOguCY4',
-    appId: '1:241988975776:ios:a8cccbffaf984429b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
-    iosBundleId: 'gesekeapp',
+    apiKey: 'AIzaSyBo5UR4nlJ0ZYfAGf5mI04t-jljPaKXkVM',
+    appId: '1:1041875317830:ios:cf5dc53d601830f6510647',
+    messagingSenderId: '1041875317830',
+    projectId: 'test-bded3',
+    storageBucket: 'test-bded3.appspot.com',
+    iosBundleId: 'geseketest',
   );
 }
