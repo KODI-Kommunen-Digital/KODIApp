@@ -49,8 +49,8 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 140,
                           child: const PDF().cachedFromUrl(
                             "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                             placeholder: (progress) =>
@@ -75,8 +75,8 @@ class AppProductItem extends StatelessWidget {
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              height: 100,
-                              width: 100,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
@@ -85,8 +85,8 @@ class AppProductItem extends StatelessWidget {
                         },
                         imageBuilder: (context, imageProvider) {
                           return Container(
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 140,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
@@ -98,8 +98,8 @@ class AppProductItem extends StatelessWidget {
                         errorWidget: (context, url, error) {
                           return AppPlaceholder(
                             child: Container(
-                              width: 84,
-                              height: 84,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
@@ -322,6 +322,15 @@ class AppProductItem extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (item?.sourceId == 3)
+                Text(
+                  "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                ),
             ],
           ),
         );
@@ -461,6 +470,15 @@ class AppProductItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        if (item?.sourceId == 3)
+                          Text(
+                            "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            maxLines: 2,
+                          ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
                         const Row(
