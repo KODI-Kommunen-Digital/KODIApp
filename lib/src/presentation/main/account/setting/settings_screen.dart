@@ -68,7 +68,9 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
             actions: <Widget>[
               TextButton(
-                child: const Text('Cancel'),
+                child: Text(
+                  Translate.of(context).translate('cancel'),
+                ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
               TextButton(
@@ -210,24 +212,24 @@ class _SettingsScreenState extends State<SettingsScreen>
                 },
               ),
             ),
-            if(widget.user != null)
-            AppListTitle(
-              title: Translate.of(context).translate('profile_settings'),
-              onPressed: () {
-                _onNavigate(Routes.profileSettings);
-              },
-              trailing: Row(
-                children: <Widget>[
-                  RotatedBox(
-                    quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                    child: const Icon(
-                      Icons.keyboard_arrow_right,
-                      textDirection: TextDirection.ltr,
+            if (widget.user != null)
+              AppListTitle(
+                title: Translate.of(context).translate('profile_settings'),
+                onPressed: () {
+                  _onNavigate(Routes.profileSettings);
+                },
+                trailing: Row(
+                  children: <Widget>[
+                    RotatedBox(
+                      quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                      child: const Icon(
+                        Icons.keyboard_arrow_right,
+                        textDirection: TextDirection.ltr,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
             AppListTitle(
               title: Translate.of(context).translate('legal'),
               onPressed: () {
