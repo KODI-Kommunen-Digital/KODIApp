@@ -248,22 +248,23 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: CachedNetworkImage(
-                                              // imageUrl: item.sourceId == 2 ||
-                                              //         item.sourceId == 3
-                                              //     ? item.image
-                                              //     : "${Application.picturesURL}${item.image}",
                                               imageUrl: item.sourceId == 2 &&
                                                       item.image != null &&
                                                       item.image !=
                                                           'admin/News.jpeg'
                                                   ? item.image
                                                   : item.sourceId == 3 &&
-                                                          item.image != null &&
-                                                          item.image !=
-                                                              'admin/News.jpeg'
-                                                      ? item.image
-                                                      : "${Application.picturesURL}${item.image}",
-
+                                                          item.image != null
+                                                      ? (item.image.startsWith(
+                                                              'admin')
+                                                          ? "${Application.picturesURL}${item.image}"
+                                                          : item.image)
+                                                      : item.image != null &&
+                                                              item.image
+                                                                  .startsWith(
+                                                                      'admin')
+                                                          ? "${Application.picturesURL}${item.image}"
+                                                          : "${Application.picturesURL}${item.image}",
                                               cacheManager: memoryCacheManager,
                                               placeholder: (context, url) {
                                                 return AppPlaceholder(
@@ -344,7 +345,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                           fontWeight:
                                                               FontWeight.bold),
                                                 ),
-                                                const SizedBox(height: 8),
+                                                const SizedBox(height: 4),
                                                 Text(
                                                   item.categoryId == 3
                                                       ? (item.endDate != ""
@@ -359,20 +360,18 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                             FontWeight.bold,
                                                       ),
                                                 ),
-                                                const SizedBox(height: 8),
                                                 if (item.sourceId == 3)
                                                   Text(
-                                                    "${Translate.of(context).translate('quelle')} ${item.website}",
+                                                    "${Translate.of(context).translate('quelle')} ${item.externalId}",
                                                     style: Theme.of(context)
                                                         .textTheme
                                                         .bodySmall!
                                                         .copyWith(
                                                             fontWeight:
                                                                 FontWeight
-                                                                    .bold),
+                                                                    .w600),
                                                     maxLines: 1,
                                                   ),
-                                                const SizedBox(height: 8),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
@@ -389,6 +388,12 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                           _openListingStatusActionPopUp(
                                                               item);
                                                         },
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          minimumSize:
+                                                              const Size(
+                                                                  80, 30),
+                                                        ),
                                                         child: Text(
                                                           Translate.of(context)
                                                               .translate(

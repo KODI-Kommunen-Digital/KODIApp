@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
-import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:photo_view/photo_view.dart';
 
 class ImageZoomScreen extends StatefulWidget {
   final List<ImageListModel>? imageList;
@@ -52,16 +52,9 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Container(
-                            width: MediaQuery.of(context).size.width,
-                            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-                            decoration: const BoxDecoration(
-                              color: Colors
-                                  .black, // Change the background color to black
-                            ),
-                            child: // Inside the ImageZoomScreen's build method
-
-                                CarouselSlider(
+                          GestureDetector(
+                            onTap: () {},
+                            child: CarouselSlider(
                               options: CarouselOptions(
                                 height: 550.0,
                                 viewportFraction: 1.0,
@@ -75,57 +68,53 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                 },
                               ),
                               items: widget.imageList?.map((imageItem) {
-                                return Builder(
-                                  builder: (BuildContext context) {
-                                    String imageUrlString = widget.sourceId ==
-                                                2 &&
-                                            imageItem.logo != null &&
-                                            imageItem.logo != 'admin/News.jpeg'
-                                        ? imageItem.logo!
-                                        : widget.sourceId == 3 &&
+                                    return Builder(
+                                      builder: (BuildContext context) {
+                                        String imageUrlString = widget
+                                                        .sourceId ==
+                                                    2 &&
                                                 imageItem.logo != null &&
-                                                imageItem.logo != "" &&
                                                 imageItem.logo !=
                                                     'admin/News.jpeg'
                                             ? imageItem.logo!
-                                            : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
-                                    return Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      margin: const EdgeInsets.symmetric(
-                                          horizontal: 5.0),
-                                      decoration: const BoxDecoration(
-                                        color: Colors.black,
-                                      ),
-                                      child: Image.network(
-                                        imageUrlString,
-                                        fit: BoxFit.contain,
-                                        loadingBuilder: (BuildContext context,
-                                            Widget child,
-                                            ImageChunkEvent? loadingProgress) {
-                                          if (loadingProgress == null) {
-                                            return child;
-                                          }
-                                          return AppPlaceholder(
-                                            child: Container(
-                                              width: 120,
-                                              height: 140,
-                                              decoration: const BoxDecoration(
-                                                color: Colors.black,
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(8),
-                                                  bottomLeft:
-                                                      Radius.circular(8),
-                                                ),
-                                              ),
-                                              child: const Icon(Icons.error),
+                                            : widget.sourceId == 3 &&
+                                                    imageItem.logo != null &&
+                                                    imageItem.logo != "" &&
+                                                    imageItem.logo !=
+                                                        'admin/News.jpeg'
+                                                ? imageItem.logo!
+                                                : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
+                                        return Container(
+                                          width:
+                                              MediaQuery.of(context).size.width,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 5.0),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.black,
+                                          ),
+                                          child: GestureDetector(
+                                            onTap: () {},
+                                            child: PhotoView(
+                                              imageProvider:
+                                                  NetworkImage(imageUrlString),
+                                              minScale: PhotoViewComputedScale
+                                                  .contained,
+                                              maxScale: PhotoViewComputedScale
+                                                      .covered *
+                                                  2,
+                                              initialScale:
+                                                  PhotoViewComputedScale
+                                                      .contained,
+                                              heroAttributes:
+                                                  PhotoViewHeroAttributes(
+                                                      tag: imageUrlString),
                                             ),
-                                          );
-                                        },
-                                      ),
+                                          ),
+                                        );
+                                      },
                                     );
-                                  },
-                                );
-                              }).toList(),
+                                  }).toList() ??
+                                  [],
                             ),
                           ),
                           const SizedBox(
@@ -152,17 +141,6 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                             ),
                         ],
                       ),
-                // PhotoView(
-                //         imageProvider: CachedNetworkImageProvider(
-                //             imageUrl.contains('admin/News.jpeg')
-                //                 ? imageUrl
-                //                 : imageUrl.contains('instagram')
-                //                     ? imageUrl
-                //                     : '$imageUrl?cacheKey=$uniqueKey'),
-                //         minScale: PhotoViewComputedScale.contained * 0.8,
-                //         maxScale: PhotoViewComputedScale.covered * 2.0,
-                //         initialScale: PhotoViewComputedScale.contained,
-                //       ),
               ),
             ),
             Positioned(
@@ -172,8 +150,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                 icon: const Icon(Icons.arrow_back),
                 color: Colors.white,
                 onPressed: () {
-                  Navigator.pop(
-                      context); // Navigate back when the button is pressed
+                  Navigator.pop(context);
                 },
               ),
             ),
