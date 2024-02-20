@@ -1082,39 +1082,46 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 6),
             if (selectedCategory?.toLowerCase() == "news")
               Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: _isExpiryDateEnabled,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isExpiryDateEnabled = value!;
-                          if (_isExpiryDateEnabled &&
-                              (_expiryDate == null || _expiryTime == null)) {
-                            DateTime now = DateTime.now();
-                            DateTime twoWeeksFromNow =
-                                now.add(const Duration(days: 14));
-                            _expiryDate ??= DateFormat('yyyy-MM-dd')
-                                .format(twoWeeksFromNow);
-                            _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
-                          }
-                        });
-                      },
-                      activeColor: Colors.blue,
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _isExpiryDateEnabled = !_isExpiryDateEnabled;
-                        });
-                      },
-                      child: Text(Translate.of(context)
-                          .translate('enable_expiry_date')),
-                    ),
-                  ],
-                ),
-              ),
+                  padding: const EdgeInsets.only(left: 0),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: _isExpiryDateEnabled,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isExpiryDateEnabled = value!;
+                            if (_isExpiryDateEnabled &&
+                                (_expiryDate == null || _expiryTime == null)) {
+                              DateTime now = DateTime.now();
+                              DateTime twoWeeksFromNow =
+                                  now.add(const Duration(days: 14));
+                              _expiryDate ??= DateFormat('yyyy-MM-dd')
+                                  .format(twoWeeksFromNow);
+                              _expiryTime ??=
+                                  const TimeOfDay(hour: 0, minute: 0);
+                            }
+                          });
+                        },
+                        activeColor: Theme.of(context).primaryColor,
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isExpiryDateEnabled = !_isExpiryDateEnabled;
+                            });
+                          },
+                          child: Text(
+                            Translate.of(context)
+                                .translate('enable_expiry_date'),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
             const SizedBox(height: 6),
             Visibility(
               visible: (selectedCategory?.toLowerCase() == "news") &&

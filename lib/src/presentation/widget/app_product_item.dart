@@ -49,8 +49,8 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                          width: 100,
-                          height: 100,
+                          width: 120,
+                          height: 140,
                           child: const PDF().cachedFromUrl(
                             "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                             placeholder: (progress) =>
@@ -66,17 +66,20 @@ class AppProductItem extends StatelessWidget {
                                 item?.image != null &&
                                 item?.image != 'admin/News.jpeg'
                             ? item!.image
-                            : item?.sourceId == 3 &&
-                                    item?.image != null &&
-                                    item?.image != 'admin/News.jpeg'
-                                ? item!.image
-                                : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            : item?.sourceId == 3 && item?.image != null
+                                ? (item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : item!.image)
+                                : item?.image != null &&
+                                        item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
-                              height: 100,
-                              width: 100,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                               ),
@@ -85,8 +88,8 @@ class AppProductItem extends StatelessWidget {
                         },
                         imageBuilder: (context, imageProvider) {
                           return Container(
-                            width: 100,
-                            height: 100,
+                            width: 120,
+                            height: 140,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
@@ -98,8 +101,8 @@ class AppProductItem extends StatelessWidget {
                         errorWidget: (context, url, error) {
                           return AppPlaceholder(
                             child: Container(
-                              width: 84,
-                              height: 84,
+                              width: 120,
+                              height: 140,
                               decoration: const BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.only(
@@ -199,11 +202,11 @@ class AppProductItem extends StatelessWidget {
                     const SizedBox(height: 4),
                     if (item?.sourceId == 3)
                       Text(
-                        "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                        "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
                         style: Theme.of(context)
                             .textTheme
                             .bodySmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                            .copyWith(fontWeight: FontWeight.w600),
                         maxLines: 1,
                       ),
                     const SizedBox(height: 2),
@@ -231,11 +234,13 @@ class AppProductItem extends StatelessWidget {
                         item?.image != null &&
                         item?.image != 'admin/News.jpeg'
                     ? item!.image
-                    : item?.sourceId == 3 &&
-                            item?.image != null &&
-                            item?.image != 'admin/News.jpeg'
-                        ? item!.image
-                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                    : item?.sourceId == 3 && item?.image != null
+                        ? (item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : item!.image)
+                        : item?.image != null && item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -322,6 +327,15 @@ class AppProductItem extends StatelessWidget {
                 maxLines: 1,
                 style: Theme.of(context).textTheme.bodySmall,
               ),
+              if (item?.sourceId == 3)
+                Text(
+                  "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  maxLines: 2,
+                ),
             ],
           ),
         );
@@ -360,11 +374,14 @@ class AppProductItem extends StatelessWidget {
                                     item?.image != null &&
                                     item?.image != 'admin/News.jpeg'
                                 ? item!.image
-                                : item?.sourceId == 3 &&
-                                        item?.image != null &&
-                                        item?.image != 'admin/News.jpeg'
-                                    ? item!.image
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                                : item?.sourceId == 3 && item?.image != null
+                                    ? (item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : item!.image)
+                                    : item?.image != null &&
+                                            item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                             cacheManager: memoryCacheManager,
                             placeholder: (context, url) {
                               return AppPlaceholder(
@@ -461,6 +478,15 @@ class AppProductItem extends StatelessWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                         ),
+                        if (item?.sourceId == 3)
+                          Text(
+                            "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            maxLines: 2,
+                          ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
                         const Row(
