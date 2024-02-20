@@ -400,7 +400,7 @@
   "input_tumblr": "Geben Sie den Tumblr-Link ein",
   "input_flickr": "Geben Sie den Flickr-Link ein",
   "input_pinterest": "Geben Sie den Pinterest-Link ein",
-  "expiry_date": "Verfallsdatum",
+  "expiry_date": "Ablaufdatum",
   "daily": "Täglich",
   "hourly": "Stündlich",
   "slot": "Slot",
@@ -483,7 +483,7 @@
   "choose_stime":"Startzeit wählen",
   "choose_etime":"Endzeit wählen",  
   "choose_exptime":"Ablaufzeit wählen",
-  "enable_expiry_date":"Ein Ablaufdatum hinzufügen",  
+  "enable_expiry_date":"Ein Ablaufdatum hinzufügen, an dem der Beitrag gelöscht wird",  
   "message_sent":"Nachricht gesendet",
   "message_sent_success":"Die Nachricht wurde versandt.",
   "submit_contactUs_message":"Vielen Dank für dein Feedback.",
@@ -512,7 +512,10 @@
   "view_reply":"weitere Antworten ansehen",
   "no_reply":"Keine Antworten",
   "image_size_exceed":"Bildgröße wurde überschritten",
-  "select_small_images":"Bitte wählen Sie Bilder aus, die 10 MB oder weniger groß sind.",
-  "quelle":"Quelle:"
+  "select_small_images":"Bitte wählen Sie Bilder aus, die 20 MB oder weniger groß sind.",
+  "quelle":"Quelle:",
+  "notificationPermission" : "Benachrichtigungen sind für diese App deaktiviert. Um sie zu aktivieren, öffnen Sie bitte die App-Einstellungen und erteilen Sie die Erlaubnis.",
+  "openSettings" : "Einstellungen öffnen",
+  "enableNotification": "Benachrichtigungen aktivieren"
 }
 

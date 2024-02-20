@@ -47,7 +47,7 @@ Future<void> main() async {
 
   await SentryFlutter.init((options) {
     options.dsn =
-    'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';
+        'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
 
@@ -55,7 +55,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseApi(globalNavKey).initNotifications();
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();

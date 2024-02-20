@@ -23,7 +23,7 @@ class Api {
   static const String faq = "/moreInfo";
   static const String forum = "/forumapi/cities/1/forums";
   static const String hasForum = "/cities?hasForum=true";
-  static const bool showExternalListings = false;
+  static const bool showExternalListings = true;
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
