@@ -1,5 +1,9 @@
+// ignore_for_file: use_build_context_synchronously
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:heidi/main_prod.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
@@ -7,6 +11,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -15,9 +20,107 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
-  bool _receiveNotification = true;
+class _SettingsScreenState extends State<SettingsScreen>
+    with WidgetsBindingObserver {
+  late final Preferences prefs;
+  late final String pushNotificationsPermission;
+  late bool _receiveNotification = true;
   bool darkModeEnabled = true;
+
+  Future<void> initializePreferences() async {
+    final prefs = await Preferences.openBox();
+    final pushNotificationsPermission =
+        await prefs.getKeyValue(Preferences.pushNotificationsPermission, '0');
+    final receiveNotification =
+        await prefs.getKeyValue(Preferences.receiveNotification, '0');
+
+    setState(() {
+      if (pushNotificationsPermission == "authorized" &&
+          receiveNotification == "true") {
+        _receiveNotification = true;
+      } else if (pushNotificationsPermission == "authorized" &&
+          receiveNotification == "false") {
+        _receiveNotification = false;
+      } else if (pushNotificationsPermission == "denied") {
+        _receiveNotification = false;
+      }
+    });
+  }
+
+  Future<void> updateNotificationPermissionPreference(bool newValue) async {
+    final prefs = await Preferences.openBox();
+    final pushNotificationsPermission = await prefs.getKeyValue(
+        Preferences.pushNotificationsPermission, 'notAsked');
+
+    if (pushNotificationsPermission == 'denied') {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              Translate.of(context).translate('enableNotification'),
+            ),
+            content: Text(
+              Translate.of(context).translate('notificationPermission'),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: const Text('Cancel'),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              TextButton(
+                child: Text(
+                  Translate.of(context).translate('openSettings'),
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  openAppSettings();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      setState(() {
+        _receiveNotification = false;
+      });
+      checkNotificationPermissionStatus();
+    } else {
+      setState(() {
+        _receiveNotification = newValue;
+      });
+      await prefs.setKeyValue(Preferences.receiveNotification,
+          _receiveNotification ? 'true' : 'false');
+      await FirebaseApi(globalNavKey, prefs).refreshNotifications();
+    }
+  }
+
+  Future<void> openAppSettings() async {
+    if (!await launchUrl(Uri.parse('app-settings:'))) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Failed to open app settings.'),
+      ));
+    }
+  }
+
+  Future<void> checkNotificationPermissionStatus() async {
+    final settings = await FirebaseMessaging.instance.getNotificationSettings();
+    final prefs = await Preferences.openBox();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      await prefs.setKeyValue(
+          Preferences.pushNotificationsPermission, 'authorized');
+      setState(() {
+        _receiveNotification = true;
+      });
+    } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+      await prefs.setKeyValue(
+          Preferences.pushNotificationsPermission, 'denied');
+      setState(() {
+        _receiveNotification = false;
+      });
+    }
+  }
 
   Future<void> switchTheme() async {
     final prefBox = await Preferences.openBox();
@@ -41,12 +144,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     isDarkMode();
+    initializePreferences();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      checkNotificationPermissionStatus();
+    }
   }
 
   void _onNavigate(String route) {
@@ -71,10 +185,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               trailing: CupertinoSwitch(
                 activeColor: Theme.of(context).primaryColor,
                 value: _receiveNotification,
-                onChanged: (value) {
+                onChanged: (value) async {
                   setState(() {
                     _receiveNotification = value;
                   });
+                  await updateNotificationPermissionPreference(value);
+                  checkNotificationPermissionStatus();
                 },
               ),
             ),
