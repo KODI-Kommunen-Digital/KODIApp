@@ -170,7 +170,8 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      return ProductModel.fromJson(response.data, setting: Application.setting, cityId: cityId);
+      return ProductModel.fromJson(response.data,
+          setting: Application.setting, cityId: cityId);
     } else {
       logError('Product Request Response', response.message);
     }
@@ -316,7 +317,7 @@ class ListRepository {
     bool isImageChanged,
     int? timeless,
   ) async {
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -336,6 +337,12 @@ class ListRepository {
             "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
         combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
       }
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     if (startDate != null) {
@@ -462,7 +469,7 @@ class ListRepository {
     int? timeless,
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
@@ -510,6 +517,12 @@ class ListRepository {
             "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
       }
+    }
+
+    if (categoryId == 1) {
+      subCategoryId = subCategoryId;
+    } else {
+      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {
@@ -679,8 +692,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item =
-        jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
