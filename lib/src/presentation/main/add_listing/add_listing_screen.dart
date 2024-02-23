@@ -1538,7 +1538,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     setState(() {
       listSubCategory = subCategoryResponse!.data;
 
-      selectedSubCategory = subCategoryResponse.data.first['name'];
+      selectedSubCategory = subCategoryResponse.data.last['name'];
     });
   }
 }
