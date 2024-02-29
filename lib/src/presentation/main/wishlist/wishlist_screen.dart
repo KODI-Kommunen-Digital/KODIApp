@@ -84,7 +84,6 @@ class _WishListLoadedState extends State<WishListLoaded> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

@@ -211,6 +211,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget attachments = Container();
     Widget createdDate = Container();
     Widget description = Container();
+    Widget booking = Container();
     Widget info = AppPlaceholder(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -950,6 +951,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
+      booking = InkWell(
+        onTap: () {
+          Navigator.pushNamed(
+            context,
+            Routes.booking,
+            arguments: widget.item.title,
+          );
+        },
+        child: Container(
+          height: 40,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
+          ),
+          child: Text(
+            Translate.of(context).translate('book_now'),
+            style: Theme.of(context)
+                .textTheme
+                .labelLarge!
+                .copyWith(color: Colors.white),
+          ),
+        ),
+      );
+
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
@@ -1121,6 +1148,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(),
                 ),
+                booking,
                 info,
                 // latest,
                 const SizedBox(height: 16),

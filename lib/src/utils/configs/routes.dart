@@ -16,6 +16,9 @@ import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.d
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
+import 'package:heidi/src/data/model/model_user.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -49,8 +52,25 @@ import 'package:heidi/src/presentation/main/home/product_detail/product_detail_s
 import 'package:heidi/src/presentation/main/login/forgot_password/forgot_password_screen.dart';
 import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
-import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
-import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/create_appointment_screen.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/open_time_slots/open_time_slots.dart';
+import 'package:heidi/src/presentation/main/add_listing/create_appointment/select_holidays/select_holidays.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_listings/all_listings_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_listings/cubit/all_listings_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_requests/all_requests_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_details/appointment_detail_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/my_appointments_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/requests/appointment_requests_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_screen.dart';
+import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -75,6 +95,8 @@ class Routes {
   static const String submit = "/submit";
   static const String editProfile = "/editProfile";
   static const String changePassword = "/changePassword";
+  static const String createAppointment = "/createAppointment";
+  static const String selectHolidays = "/selectHolidays";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
   static const String aboutUs = "/aboutUs";
@@ -120,6 +142,11 @@ class Routes {
   static const String addGroups = "/addGroup";
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
+  static const String mitredenWebview = "/mitredenWebview";
+  static const String appointments = "/appointments";
+  static const String myAppointments = "/myAppointments";
+  static const String appointmentDetails = "/appointmentDetails";
+  static const String appointmentRequests = "/appointmentRequests";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -174,7 +201,6 @@ class Routes {
             return const EditProfileScreen();
           },
         );
-
       case allListings:
         return MaterialPageRoute(
           builder: (context) {
@@ -228,19 +254,6 @@ class Routes {
           },
         );
 
-      case submit:
-        return MaterialPageRoute(
-          builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
-            return AddListingScreen(
-              item: arguments['item'] as ProductModel?,
-              isNewList: arguments['isNewList'] as bool,
-            );
-          },
-          fullscreenDialog: true,
-        );
-
       case imageZoom:
         return MaterialPageRoute(
           builder: (context) {
@@ -263,6 +276,33 @@ class Routes {
           fullscreenDialog: true,
         );
 
+      case submit:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AddListingScreen(
+              item: arguments['item'] as ProductModel?,
+              isNewList: arguments['isNewList'] as bool,
+            );
+          },
+          fullscreenDialog: true,
+        );
+
+      case booking:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => BookingCubit(
+                context.read(),
+              ),
+              child: BookingScreen(
+                listingTitle: settings.arguments as String,
+              ),
+            );
+          },
+        );
+
       case submitSuccess:
         return MaterialPageRoute(
           builder: (context) {
@@ -275,6 +315,37 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ChangePasswordScreen();
+          },
+        );
+
+      case createAppointment:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CreateAppointmentCubit(
+                context.read(),
+              ),
+              child: const CreateAppointmentScreen(),
+            );
+          },
+        );
+
+      case selectHolidays:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => CreateAppointmentCubit(
+                context.read(),
+              ),
+              child: const SelectHolidaysScreen(),
+            );
+          },
+        );
+
+      case openTime:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const OpenTimeSlotsScreen();
           },
         );
 
@@ -326,6 +397,49 @@ class Routes {
                 user: arguments['user'] as UserModel,
                 isEditable: arguments['editable'] as bool,
               ),
+            );
+          },
+        );
+
+      case appointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AppointmentScreen(
+              user: arguments['user'] as UserModel,
+            );
+          },
+        );
+
+      case myAppointments:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => MyAppointmentsCubit(),
+              child: const MyAppointmentsScreen(),
+            );
+          },
+        );
+
+      case appointmentDetails:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => AppointmentDetailsCubit(),
+              child: const AppointmentDetailsScreen(),
+            );
+          },
+        );
+
+      case appointmentRequests:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => AppointmentRequestsCubit(
+                context.read(),
+              ),
+              child: const AppointmentRequestsScreen(),
             );
           },
         );

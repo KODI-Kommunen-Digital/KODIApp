@@ -79,7 +79,7 @@ class AppPickerItem extends StatelessWidget {
         height: 48,
         decoration: BoxDecoration(
           color: Theme.of(context).dividerColor.withOpacity(.07),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           children: [

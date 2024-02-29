@@ -83,10 +83,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<String> getIgnoreAppVersion() async {
     final prefs = await Preferences.openBox();
-    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
     return ignoreVersion;
   }
-
 
   Future<bool> doesUserExist() async {
     final int userId = await UserRepository.getLoggedUserId();

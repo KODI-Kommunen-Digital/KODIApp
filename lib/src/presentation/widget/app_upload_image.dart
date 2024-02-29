@@ -221,8 +221,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
               });
               final item = response.data['data']?['image'];
               widget.onChange(item);
-            } else {
-              logError('Image Upload Permission Error', response);
             }
           }
         } else if (await Permission.photos.isDenied) {
@@ -376,7 +374,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for(final selectedImages in result.files){
+                      for (final selectedImages in result.files) {
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);

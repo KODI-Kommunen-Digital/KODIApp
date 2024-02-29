@@ -22,7 +22,6 @@ class AppUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     switch (type) {
       case UserViewType.information:
         if (user == null) {
@@ -112,7 +111,6 @@ class AppUserInfo extends StatelessWidget {
                       maxLines: 1,
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
-                    // description,
                     const SizedBox(height: 4),
                     Text(
                       user!.email,

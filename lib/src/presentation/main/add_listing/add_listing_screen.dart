@@ -1199,7 +1199,47 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const SizedBox(),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 0, 20, 0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.createAppointment);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            Translate.of(context)
+                                .translate('appointmentDetails'),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 4,
+                          ),
+                          const Icon(
+                            Icons.arrow_forward,
+                            color: Colors.blue,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),
               // errorText: _errorAddress,

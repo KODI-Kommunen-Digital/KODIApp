@@ -111,7 +111,9 @@ class _AppTextInputState extends State<AppTextInput> {
       );
     }
 
-    if (widget.controller != null && widget.controller!.text.isNotEmpty && widget.hasDelete) {
+    if (widget.controller != null &&
+        widget.controller!.text.isNotEmpty &&
+        widget.hasDelete) {
       deleteAction = Row(
         mainAxisSize: MainAxisSize.min,
         children: [

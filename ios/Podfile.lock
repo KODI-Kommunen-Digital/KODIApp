@@ -80,6 +80,14 @@ PODS:
     - GoogleUtilities/UserDefaults (~> 7.8)
     - nanopb (< 2.30910.0, >= 2.30908.0)
   - Flutter (1.0.0)
+  - Flutter (1.0.0)
+  - flutter_inappwebview (0.0.1):
+    - Flutter
+    - flutter_inappwebview/Core (= 0.0.1)
+    - OrderedSet (~> 5.0)
+  - flutter_inappwebview/Core (0.0.1):
+    - Flutter
+    - OrderedSet (~> 5.0)
   - flutter_pdfview (1.0.2):
     - Flutter
   - flutter_svprogresshud (0.0.7):
@@ -127,6 +135,7 @@ PODS:
   - nanopb/encode (2.30909.1)
   - open_filex (0.0.2):
     - Flutter
+  - OrderedSet (5.0.0)
   - package_info_plus (0.4.5):
     - Flutter
   - path_provider_foundation (0.0.1):
@@ -149,6 +158,9 @@ PODS:
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
+  - SDWebImage (5.18.1):
+    - SDWebImage/Core (= 5.18.1)
+  - SDWebImage/Core (5.18.1)
   - sqflite (0.0.3):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -186,6 +198,9 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_inappwebview (from `.symlinks/plugins/flutter_inappwebview/ios`)
   - flutter_pdfview (from `.symlinks/plugins/flutter_pdfview/ios`)
   - flutter_svprogresshud (from `.symlinks/plugins/flutter_svprogresshud/ios`)
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
@@ -226,6 +241,12 @@ SPEC REPOS:
     - SDWebImage
     - Sentry
     - SentryPrivate
+    - DKImagePickerController
+    - DKPhotoGallery
+    - FMDB
+    - OrderedSet
+    - Reachability
+    - SDWebImage
     - sqlite3
     - SwiftyGif
 
@@ -236,6 +257,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity/ios"
   device_info:
     :path: ".symlinks/plugins/device_info/ios"
+<<<<<<< HEAD
   device_info_plus:
     :path: ".symlinks/plugins/device_info_plus/ios"
   file_picker:
@@ -246,6 +268,14 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
+=======
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
+  Flutter:
+    :path: Flutter
+  flutter_inappwebview:
+    :path: ".symlinks/plugins/flutter_inappwebview/ios"
+>>>>>>> waldi/feature/appointment_booking
   flutter_pdfview:
     :path: ".symlinks/plugins/flutter_pdfview/ios"
   flutter_svprogresshud:
@@ -285,6 +315,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   audio_session: 4f3e461722055d21515cf3261b64c973c062f345
+<<<<<<< HEAD
   BSGridCollectionViewLayout: 333dcb457a5a3bdd9212607ab5756553dcfe06cb
   BSImagePicker: 07404254f2fcdaf5a2eb403c0f8c337267ce8738
   BSImageView: a149459433a2687157d034c78e059d30ac7f2544
@@ -302,6 +333,15 @@ SPEC CHECKSUMS:
   FirebaseInstallations: 390ea1d10a4d02b20c965cbfd527ee9b3b412acb
   FirebaseMessaging: 9bc34a98d2e0237e1b121915120d4d48ddcf301e
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+=======
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
+>>>>>>> waldi/feature/appointment_booking
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   flutter_svprogresshud: 821512698d752572c11a1c0ad11fd359c687054e
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
@@ -313,11 +353,16 @@ SPEC CHECKSUMS:
   multiple_images_picker: c57bdc05801e244c110040889e84851a56e140fd
   nanopb: d4d75c12cd1316f4a64e3c6963f879ecd4b5e0d5
   open_filex: 6e26e659846ec990262224a12ef1c528bb4edbe4
+<<<<<<< HEAD
+=======
+  OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
+>>>>>>> waldi/feature/appointment_booking
   package_info_plus: fd030dabf36271f146f1f3beacd48f564b0f17f7
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+<<<<<<< HEAD
   SDWebImage: fc8f2d48bbfd72ef39d70e981bd24a3f3be53fec
   Sentry: 64a9f9c3637af913adcf53deced05bbe452d1410
   sentry_flutter: 57912cf425e09398bdf47f38842a1fcb9836f1be
@@ -326,6 +371,12 @@ SPEC CHECKSUMS:
   sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
   sqlite3: e0a0623a33a20a47cb5921552aebc6e9e437dc91
   sqlite3_flutter_libs: 0d61e18fab1bed977dbd2d2fc76a726044ca00e7
+=======
+  SDWebImage: ebdbcebc7933a45226d9313bd0118bc052ad458b
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  sqlite3: fd89671d969f3e73efe503ce203e28b016b58f68
+  sqlite3_flutter_libs: 04ba0d14a04335a2fbf9a331e8664f401fbccdd5
+>>>>>>> waldi/feature/appointment_booking
   SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
   url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126

@@ -223,6 +223,22 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> getUserDetails(userId, cityId) async {
+    final filePath = '/users/$userId?cityId=$cityId&cityUser=true';
+    final result = await HTTPManager(forum: false).get(
+      url: filePath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
+    final String removeList = "/cities/$cityId/listings/$listingId";
+    final result = await HTTPManager(forum: false).delete(
+      url: removeList,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Change Profile
   static Future<ResultApiModel> requestChangeProfile(params, userId) async {
     final filePath = 'users/$userId';
@@ -247,14 +263,6 @@ class Api {
   static Future<ResultApiModel> requestUser({required userId}) async {
     final filePath = 'users/$userId';
     final result = await HTTPManager(forum: false).get(url: filePath);
-    return ResultApiModel.fromJson(result);
-  }
-
-  static Future<ResultApiModel> getUserDetails(userId, cityId) async {
-    final filePath = 'users/$userId?cityId=$cityId&cityUser=true';
-    final result = await HTTPManager(forum: false).get(
-      url: filePath,
-    );
     return ResultApiModel.fromJson(result);
   }
 
@@ -432,7 +440,6 @@ class Api {
       data: params,
       loading: true,
     );
-
     return ResultApiModel.fromJson(result);
   }
 
@@ -458,14 +465,6 @@ class Api {
     final result = await HTTPManager(forum: false).delete(
       url: '/cities/$cityId/listings/$listingId/imageDelete',
       loading: true,
-    );
-    return ResultApiModel.fromJson(result);
-  }
-
-  static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
-    final String removeList = "/cities/$cityId/listings/$listingId";
-    final result = await HTTPManager(forum: false).delete(
-      url: removeList,
     );
     return ResultApiModel.fromJson(result);
   }

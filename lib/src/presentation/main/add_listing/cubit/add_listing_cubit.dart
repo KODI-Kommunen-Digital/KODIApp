@@ -185,7 +185,7 @@ class AddListingCubit extends Cubit<AddListingState> {
       if (response.success) {
         return true;
       } else {
-        logError('save Product Response Failed', response.message);
+        logError('edit Product Response Failed', response.message);
         return false;
       }
     } catch (e, stackTrace) {

@@ -73,26 +73,14 @@ class ListRepository {
     return null;
   }
 
-  ///load wish list
-  // static Future<List?> loadWishList({
-  //   int? page,
-  //   int? perPage,
-  // }) async {
-  //   Map<String, dynamic> params = {
-  //     "page": page,
-  //     "per_page": perPage,
-  //   };
-  //   final response = await Api.requestWishList(params);
-  //   if (response.success) {
-  //     final list = List.from(response.data ?? []).map((item) {
-  //       return ProductModel.fromJson(item, setting: Application.setting);
-  //     }).toList();
-
-  //     return [list, response.pagination];
-  //   }
-  //   AppBloc.messageCubit.onShow(response.message);
-  //   return null;
-  // }
+  Future<int> getCityId(cityName) async {
+    final response = await Api.requestSubmitCities();
+    var jsonCategory = response.data;
+    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
+    final itemId = item['id'];
+    final cityId = itemId;
+    return cityId;
+  }
 
   static Future<bool> addWishList(int? userId, ProductModel items) async {
     final Map<String, dynamic> params = {};
@@ -473,9 +461,37 @@ class ListRepository {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
-
     String? combinedStartDateTime;
     String? combinedEndDateTime;
+
+    if (startDate != null) {
+      String formattedTime;
+      if (startTime!.hour < 10) {
+        formattedTime =
+            "${startTime.periodOffset}${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
+        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${startTime.hour}:${startTime.minute.toString().padLeft(2, '0')}";
+        combinedStartDateTime = "${startDate.trim()}T$formattedTime";
+      }
+    }
+
+    if (endDate != null && endDate != "") {
+      String formattedTime;
+      if (endTime!.hour < 10) {
+        formattedTime =
+            "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      } else {
+        formattedTime =
+            "${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
+        combinedEndDateTime = "${endDate.trim()}T$formattedTime";
+      }
+    } else {
+      combinedEndDateTime = "";
+    }
+
     DateTime currentDate = DateTime.now();
 
     String? combinedExpiryDateTime;
@@ -673,15 +689,6 @@ class ListRepository {
     final itemId = item['id'];
     final categoryId = itemId;
     prefs.setKeyValue(Preferences.categoryId, categoryId);
-  }
-
-  Future<int> getCityId(cityName) async {
-    final response = await Api.requestSubmitCities();
-    var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
-    final itemId = item['id'];
-    final cityId = itemId;
-    return cityId;
   }
 
   Future<int> getCategoryId() async {

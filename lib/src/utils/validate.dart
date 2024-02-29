@@ -6,20 +6,22 @@ enum ValidateType {
   tag,
   cpassword,
   website,
+  userName
 }
 
 class UtilValidator {
   static const String errorEmpty = "value_not_empty";
   static const String errorRange = "value_not_valid_range";
   static const String errorEmail = "value_not_valid_email";
+  static const String errorWebsite = "value_not_website";
   static const String errorNumber = "value_not_number";
   static const String errorPhone = "value_not_phone";
   static const String errorPassword = "value_not_valid_password";
   static const String errorId = "value_not_valid_id";
   static const String errorCpassword = "value_not_equal_password";
-  static const String errorWebsite = "value_not_website";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
+  static const String errorUsername = "value_not_username";
 
   static String? validate(String data,
       {ValidateType? type = ValidateType.normal,
@@ -83,10 +85,9 @@ class UtilValidator {
           return errorCpassword;
         }
         break;
-
       case ValidateType.website:
         final websiteRegex = RegExp(
-            r"^(https?|ftp):\/\/(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
+            r"^(?:(?:https?|ftp):\/\/)?(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
         if (!websiteRegex.hasMatch(data)) {
           return errorWebsite;
         }

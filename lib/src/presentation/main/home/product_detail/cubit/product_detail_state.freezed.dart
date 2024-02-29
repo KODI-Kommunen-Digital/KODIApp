@@ -25,7 +25,11 @@ mixin _$ProductDetailState {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
+<<<<<<< HEAD
             bool isDarkMode)
+=======
+            List<dynamic> cityList)
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -35,7 +39,11 @@ mixin _$ProductDetailState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -45,7 +53,11 @@ mixin _$ProductDetailState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -141,7 +153,11 @@ class _$ProductDetailInitial implements ProductDetailInitial {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
+<<<<<<< HEAD
             bool isDarkMode)
+=======
+            List<dynamic> cityList)
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -154,7 +170,11 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -167,7 +187,11 @@ class _$ProductDetailInitial implements ProductDetailInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -265,7 +289,11 @@ class _$ProductDetailLoading implements ProductDetailLoading {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
+<<<<<<< HEAD
             bool isDarkMode)
+=======
+            List<dynamic> cityList)
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -278,7 +306,11 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -291,7 +323,11 @@ class _$ProductDetailLoading implements ProductDetailLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -355,7 +391,11 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
       List<FavoriteModel>? favoritesList,
       UserModel? userDetail,
       bool isLoggedIn,
+<<<<<<< HEAD
       bool isDarkMode});
+=======
+      List<dynamic> cityList});
+>>>>>>> waldi/feature/appointment_booking
 }
 
 /// @nodoc
@@ -373,7 +413,11 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
     Object? favoritesList = freezed,
     Object? userDetail = freezed,
     Object? isLoggedIn = null,
+<<<<<<< HEAD
     Object? isDarkMode = null,
+=======
+    Object? cityList = null,
+>>>>>>> waldi/feature/appointment_booking
   }) {
     return _then(_$ProductDetailLoaded(
       null == product
@@ -392,10 +436,17 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
           ? _value.isLoggedIn
           : isLoggedIn // ignore: cast_nullable_to_non_nullable
               as bool,
+<<<<<<< HEAD
       null == isDarkMode
           ? _value.isDarkMode
           : isDarkMode // ignore: cast_nullable_to_non_nullable
               as bool,
+=======
+      null == cityList
+          ? _value._cityList
+          : cityList // ignore: cast_nullable_to_non_nullable
+              as List<dynamic>,
+>>>>>>> waldi/feature/appointment_booking
     ));
   }
 }
@@ -408,8 +459,14 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       final List<FavoriteModel>? favoritesList,
       this.userDetail,
       this.isLoggedIn,
+<<<<<<< HEAD
       this.isDarkMode)
       : _favoritesList = favoritesList;
+=======
+      final List<dynamic> cityList)
+      : _favoritesList = favoritesList,
+        _cityList = cityList;
+>>>>>>> waldi/feature/appointment_booking
 
   @override
   final ProductModel product;
@@ -427,12 +484,26 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   final UserModel? userDetail;
   @override
   final bool isLoggedIn;
+<<<<<<< HEAD
   @override
   final bool isDarkMode;
 
   @override
   String toString() {
     return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn, isDarkMode: $isDarkMode)';
+=======
+  final List<dynamic> _cityList;
+  @override
+  List<dynamic> get cityList {
+    if (_cityList is EqualUnmodifiableListView) return _cityList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_cityList);
+  }
+
+  @override
+  String toString() {
+    return 'ProductDetailState.loaded(product: $product, favoritesList: $favoritesList, userDetail: $userDetail, isLoggedIn: $isLoggedIn, cityList: $cityList)';
+>>>>>>> waldi/feature/appointment_booking
   }
 
   @override
@@ -447,8 +518,12 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
                 other.userDetail == userDetail) &&
             (identical(other.isLoggedIn, isLoggedIn) ||
                 other.isLoggedIn == isLoggedIn) &&
+<<<<<<< HEAD
             (identical(other.isDarkMode, isDarkMode) ||
                 other.isDarkMode == isDarkMode));
+=======
+            const DeepCollectionEquality().equals(other._cityList, _cityList));
+>>>>>>> waldi/feature/appointment_booking
   }
 
   @override
@@ -458,7 +533,11 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       const DeepCollectionEquality().hash(_favoritesList),
       userDetail,
       isLoggedIn,
+<<<<<<< HEAD
       isDarkMode);
+=======
+      const DeepCollectionEquality().hash(_cityList));
+>>>>>>> waldi/feature/appointment_booking
 
   @JsonKey(ignore: true)
   @override
@@ -477,11 +556,19 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
+<<<<<<< HEAD
             bool isDarkMode)
         loaded,
     required TResult Function(String error) error,
   }) {
     return loaded(product, favoritesList, userDetail, isLoggedIn, isDarkMode);
+=======
+            List<dynamic> cityList)
+        loaded,
+    required TResult Function(String error) error,
+  }) {
+    return loaded(product, favoritesList, userDetail, isLoggedIn, cityList);
+>>>>>>> waldi/feature/appointment_booking
   }
 
   @override
@@ -490,12 +577,20 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(
+<<<<<<< HEAD
         product, favoritesList, userDetail, isLoggedIn, isDarkMode);
+=======
+        product, favoritesList, userDetail, isLoggedIn, cityList);
+>>>>>>> waldi/feature/appointment_booking
   }
 
   @override
@@ -504,13 +599,21 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
+<<<<<<< HEAD
       return loaded(product, favoritesList, userDetail, isLoggedIn, isDarkMode);
+=======
+      return loaded(product, favoritesList, userDetail, isLoggedIn, cityList);
+>>>>>>> waldi/feature/appointment_booking
     }
     return orElse();
   }
@@ -559,13 +662,21 @@ abstract class ProductDetailLoaded implements ProductDetailState {
       final List<FavoriteModel>? favoritesList,
       final UserModel? userDetail,
       final bool isLoggedIn,
+<<<<<<< HEAD
       final bool isDarkMode) = _$ProductDetailLoaded;
+=======
+      final List<dynamic> cityList) = _$ProductDetailLoaded;
+>>>>>>> waldi/feature/appointment_booking
 
   ProductModel get product;
   List<FavoriteModel>? get favoritesList;
   UserModel? get userDetail;
   bool get isLoggedIn;
+<<<<<<< HEAD
   bool get isDarkMode;
+=======
+  List<dynamic> get cityList;
+>>>>>>> waldi/feature/appointment_booking
   @JsonKey(ignore: true)
   _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
       throw _privateConstructorUsedError;
@@ -643,7 +754,11 @@ class _$ProductDetailError implements ProductDetailError {
             List<FavoriteModel>? favoritesList,
             UserModel? userDetail,
             bool isLoggedIn,
+<<<<<<< HEAD
             bool isDarkMode)
+=======
+            List<dynamic> cityList)
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -656,7 +771,11 @@ class _$ProductDetailError implements ProductDetailError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -669,7 +788,11 @@ class _$ProductDetailError implements ProductDetailError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProductModel product, List<FavoriteModel>? favoritesList,
+<<<<<<< HEAD
             UserModel? userDetail, bool isLoggedIn, bool isDarkMode)?
+=======
+            UserModel? userDetail, bool isLoggedIn, List<dynamic> cityList)?
+>>>>>>> waldi/feature/appointment_booking
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),

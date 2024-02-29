@@ -100,7 +100,8 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           child: ListView.separated(
             itemCount: context.read<DiscoveryCubit>().location.length,
             separatorBuilder: (BuildContext context, int index) => Divider(
-              color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+              color:
+                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
               height: 1,
               thickness: 1,
             ),
