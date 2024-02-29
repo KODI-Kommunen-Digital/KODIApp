@@ -1,11 +1,11 @@
 {
-    "name": "KODIApp",
-    "short_name": "KODIApp",
+    "name": "KODI App",
+    "short_name": "KODI App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "KODIApp",
+    "description": "KODI App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

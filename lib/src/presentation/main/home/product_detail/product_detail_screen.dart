@@ -959,20 +959,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             arguments: widget.item.title,
           );
         },
-        child: Container(
-          height: 40,
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.3),
-          ),
-          child: Text(
-            Translate.of(context).translate('book_now'),
-            style: Theme.of(context)
-                .textTheme
-                .labelLarge!
-                .copyWith(color: Colors.white),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Container(
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            ),
+            child: Text(
+              Translate.of(context).translate('book_now'),
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Colors.white),
+            ),
           ),
         ),
       );
