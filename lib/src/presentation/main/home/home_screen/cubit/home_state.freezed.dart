@@ -21,10 +21,6 @@ mixin _$HomeState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -40,10 +36,6 @@ mixin _$HomeState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -59,10 +51,6 @@ mixin _$HomeState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -79,10 +67,6 @@ mixin _$HomeState {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) =>
@@ -92,10 +76,6 @@ mixin _$HomeState {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) =>
@@ -105,10 +85,6 @@ mixin _$HomeState {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
@@ -174,10 +150,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -196,10 +168,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -218,10 +186,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -244,10 +208,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) {
@@ -260,10 +220,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) {
@@ -276,10 +232,6 @@ class _$HomeStateInitial implements HomeStateInitial {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
@@ -336,10 +288,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -358,10 +306,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -380,10 +324,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -406,10 +346,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) {
@@ -422,10 +358,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) {
@@ -438,10 +370,6 @@ class _$HomeStateLoading implements HomeStateLoading {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
@@ -535,10 +463,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -557,10 +481,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -579,10 +499,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -605,10 +521,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) {
@@ -621,10 +533,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) {
@@ -637,10 +545,6 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
@@ -663,154 +567,6 @@ abstract class HomeStatecategoryLoading implements HomeState {
 }
 
 /// @nodoc
-<<<<<<< HEAD
-=======
-abstract class _$$HomeStatecategoryLoadedCopyWith<$Res> {
-  factory _$$HomeStatecategoryLoadedCopyWith(_$HomeStatecategoryLoaded value,
-          $Res Function(_$HomeStatecategoryLoaded) then) =
-      __$$HomeStatecategoryLoadedCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$HomeStatecategoryLoadedCopyWithImpl<$Res>
-    extends _$HomeStateCopyWithImpl<$Res, _$HomeStatecategoryLoaded>
-    implements _$$HomeStatecategoryLoadedCopyWith<$Res> {
-  __$$HomeStatecategoryLoadedCopyWithImpl(_$HomeStatecategoryLoaded _value,
-      $Res Function(_$HomeStatecategoryLoaded) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$HomeStatecategoryLoaded implements HomeStatecategoryLoaded {
-  const _$HomeStatecategoryLoaded();
-
-  @override
-  String toString() {
-    return 'HomeState.categoryLoaded()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$HomeStatecategoryLoaded);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<CategoryModel>? location) categoryLoading,
-    required TResult Function() categoryLoaded,
-    required TResult Function(
-            String banner,
-            List<CategoryModel> category,
-            List<CategoryModel> location,
-            List<ProductModel> recent,
-            bool isRefreshLoader)
-        loaded,
-    required TResult Function(String error) error,
-  }) {
-    return categoryLoaded();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<CategoryModel>? location)? categoryLoading,
-    TResult? Function()? categoryLoaded,
-    TResult? Function(
-            String banner,
-            List<CategoryModel> category,
-            List<CategoryModel> location,
-            List<ProductModel> recent,
-            bool isRefreshLoader)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return categoryLoaded?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<CategoryModel>? location)? categoryLoading,
-    TResult Function()? categoryLoaded,
-    TResult Function(
-            String banner,
-            List<CategoryModel> category,
-            List<CategoryModel> location,
-            List<ProductModel> recent,
-            bool isRefreshLoader)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (categoryLoaded != null) {
-      return categoryLoaded();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(HomeStateInitial value) initial,
-    required TResult Function(HomeStateLoading value) loading,
-    required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
-    required TResult Function(HomeStateLoaded value) loaded,
-    required TResult Function(HomeStateError value) error,
-  }) {
-    return categoryLoaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(HomeStateInitial value)? initial,
-    TResult? Function(HomeStateLoading value)? loading,
-    TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
-    TResult? Function(HomeStateLoaded value)? loaded,
-    TResult? Function(HomeStateError value)? error,
-  }) {
-    return categoryLoaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(HomeStateInitial value)? initial,
-    TResult Function(HomeStateLoading value)? loading,
-    TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
-    TResult Function(HomeStateLoaded value)? loaded,
-    TResult Function(HomeStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (categoryLoaded != null) {
-      return categoryLoaded(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class HomeStatecategoryLoaded implements HomeState {
-  const factory HomeStatecategoryLoaded() = _$HomeStatecategoryLoaded;
-}
-
-/// @nodoc
->>>>>>> waldi/feature/appointment_booking
 abstract class _$$HomeStateLoadedCopyWith<$Res> {
   factory _$$HomeStateLoadedCopyWith(
           _$HomeStateLoaded value, $Res Function(_$HomeStateLoaded) then) =
@@ -947,10 +703,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -969,10 +721,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -991,10 +739,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -1017,10 +761,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) {
@@ -1033,10 +773,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) {
@@ -1049,10 +785,6 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
@@ -1149,10 +881,6 @@ class _$HomeStateError implements HomeStateError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CategoryModel>? location) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function() categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -1171,10 +899,6 @@ class _$HomeStateError implements HomeStateError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(
             String banner,
             List<CategoryModel> category,
@@ -1193,10 +917,6 @@ class _$HomeStateError implements HomeStateError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CategoryModel>? location)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function()? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(
             String banner,
             List<CategoryModel> category,
@@ -1219,10 +939,6 @@ class _$HomeStateError implements HomeStateError {
     required TResult Function(HomeStateInitial value) initial,
     required TResult Function(HomeStateLoading value) loading,
     required TResult Function(HomeStatecategoryLoading value) categoryLoading,
-<<<<<<< HEAD
-=======
-    required TResult Function(HomeStatecategoryLoaded value) categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     required TResult Function(HomeStateLoaded value) loaded,
     required TResult Function(HomeStateError value) error,
   }) {
@@ -1235,10 +951,6 @@ class _$HomeStateError implements HomeStateError {
     TResult? Function(HomeStateInitial value)? initial,
     TResult? Function(HomeStateLoading value)? loading,
     TResult? Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult? Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult? Function(HomeStateLoaded value)? loaded,
     TResult? Function(HomeStateError value)? error,
   }) {
@@ -1251,10 +963,6 @@ class _$HomeStateError implements HomeStateError {
     TResult Function(HomeStateInitial value)? initial,
     TResult Function(HomeStateLoading value)? loading,
     TResult Function(HomeStatecategoryLoading value)? categoryLoading,
-<<<<<<< HEAD
-=======
-    TResult Function(HomeStatecategoryLoaded value)? categoryLoaded,
->>>>>>> waldi/feature/appointment_booking
     TResult Function(HomeStateLoaded value)? loaded,
     TResult Function(HomeStateError value)? error,
     required TResult orElse(),
