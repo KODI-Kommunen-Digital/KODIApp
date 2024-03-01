@@ -544,6 +544,7 @@
   "noAvailableSlots": "Für diesen Zeitraum sind keine Plätze mehr verfügbar",
   "noOfAvailableSlots": "Sie können nur bis zu {0} Zeitfenster für {1} Personen auswählen.",
   "selectHolidays": "Wählen Sie Feiertage aus",
-  "bookAppointment": "Termin buchen"
+  "bookAppointment": "Termin buchen",
+  "order_now": "Jetzt bestellen"
 }
 

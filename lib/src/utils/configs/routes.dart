@@ -55,14 +55,14 @@ import 'package:heidi/src/presentation/main/add_listing/create_appointment/creat
 import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/create_appointment/open_time_slots/open_time_slots.dart';
 import 'package:heidi/src/presentation/main/add_listing/create_appointment/select_holidays/select_holidays.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_details/appointment_detail_screen.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/appointment_screen.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/my_appointments/my_appointments_screen.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/requests/appointment_requests_screen.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
-import 'package:heidi/src/presentation/main/dashboard/my_listings/my_listings_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/appointment_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/my_appointments_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/appointment_requests_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/booking_screen.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/booking/cubit/booking_cubit.dart';
 

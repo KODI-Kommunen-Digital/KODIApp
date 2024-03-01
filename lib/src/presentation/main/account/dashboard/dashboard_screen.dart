@@ -57,6 +57,17 @@ class DashboardScreen extends StatelessWidget {
               },
             ),
             GridItemButton(
+              icon: Icons.calendar_month,
+              title: Translate.of(context).translate("appointments"),
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.appointments,
+                  arguments: {'user': user},
+                );
+              },
+            ),
+            GridItemButton(
               icon: Icons.group,
               title: Translate.of(context).translate("my_groups"),
               onPressed: () {

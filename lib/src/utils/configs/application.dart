@@ -12,7 +12,8 @@ class Application {
       // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
       // 'https://smrauf1heidi.obs.eu-de.otc.t-systems.com/';
       // 'https://developement1heidi.obs.eu-de.otc.t-systems.com/';
-      'https://gesekeheidi.obs.eu-de.otc.t-systems.com/';
+      // 'https://gesekeheidi.obs.eu-de.otc.t-systems.com/';
+      'https://newheidi.obs.eu-de.otc.t-systems.com/';
 
   static const String defaultPicturesURL =
       // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';

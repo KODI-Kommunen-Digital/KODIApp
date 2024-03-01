@@ -20,10 +20,16 @@ class CitiesDropDown extends StatefulWidget {
 }
 
 class _CitiesDropDownState extends State<CitiesDropDown> {
+  String? chosenOption;
+
+  @override
+  void initState() {
+    super.initState();
+    chosenOption = widget.selectedOption;
+  }
+
   @override
   Widget build(BuildContext context) {
-    String? chosenOption;
-    if (widget.selectedOption != "") chosenOption = widget.selectedOption;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
@@ -36,10 +42,14 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
           child: DropdownButtonFormField<String>(
             value: chosenOption,
             onChanged: (newValue) {
-              setState(() {
-                widget.setLocationCallback!(newValue!);
-                chosenOption = newValue;
-              });
+              if (newValue != null && newValue != chosenOption) {
+                widget.setLocationCallback?.call(
+                    newValue); // Use ?.call() to safely invoke the callback
+                setState(() {
+                  chosenOption =
+                      newValue; // Update the state with the new value
+                });
+              }
             },
             items: widget.cityTitlesList?.map((String option) {
               return DropdownMenuItem<String>(
@@ -54,8 +64,9 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
               labelText: widget.hintText ??
                   Translate.of(context).translate('select_location'),
               labelStyle: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
-                      Colors.white),
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
+              ),
               border: const OutlineInputBorder(),
             ),
           ),

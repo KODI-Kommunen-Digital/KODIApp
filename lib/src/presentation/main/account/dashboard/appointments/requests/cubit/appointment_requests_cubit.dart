@@ -2,7 +2,7 @@
 
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
-import 'package:heidi/src/presentation/main/dashboard/appointments/requests/cubit/appointment_requests_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_state.dart';
 
 class AppointmentRequestsCubit extends Cubit<AppointmentRequestsState> {
   final ListRepository _repo;

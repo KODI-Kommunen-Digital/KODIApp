@@ -249,7 +249,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         selectedCity = loadCitiesResponse!.data.first['name'];
       }
-      selectedSubCategory = loadCategoryResponse?.data.first['name'];
+      selectedSubCategory = loadCategoryResponse?.data.last['name'];
       listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
       _processing = true;

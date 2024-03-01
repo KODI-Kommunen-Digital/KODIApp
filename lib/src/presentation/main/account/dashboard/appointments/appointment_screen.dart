@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_user.dart';
-import 'package:heidi/src/presentation/main/dashboard/dashboard_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 

@@ -539,5 +539,6 @@
   "noAvailableSlots": "There are no more slots left for this time period",
   "noOfAvailableSlots": "You can only select up to {0} time slots for {1} people.",
   "selectHolidays": "Select Holidays",
-  "bookAppointment": "Book Appointment"
+  "bookAppointment": "Book Appointment",
+  "order_now": "Jetzt bestellen"
 }
