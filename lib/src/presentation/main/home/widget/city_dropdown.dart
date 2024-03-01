@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -7,29 +8,27 @@ class CitiesDropDown extends StatefulWidget {
   final String? hintText;
   final String? selectedOption;
 
-  const CitiesDropDown(
-      {Key? key,
-      required this.setLocationCallback,
-      required this.cityTitlesList,
-      this.hintText,
-      this.selectedOption})
-      : super(key: key);
+  const CitiesDropDown({
+    Key? key,
+    required this.setLocationCallback,
+    required this.cityTitlesList,
+    this.hintText,
+    this.selectedOption,
+  }) : super(key: key);
 
   @override
   State<CitiesDropDown> createState() => _CitiesDropDownState();
 }
 
 class _CitiesDropDownState extends State<CitiesDropDown> {
-  String? chosenOption;
-
-  @override
-  void initState() {
-    super.initState();
-    chosenOption = widget.selectedOption;
-  }
-
   @override
   Widget build(BuildContext context) {
+    String? chosenOption =
+        widget.selectedOption != "" ? widget.selectedOption : null;
+    EdgeInsets contentPadding = Platform.isIOS
+        ? const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0)
+        : const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0);
+
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
@@ -42,22 +41,23 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
           child: DropdownButtonFormField<String>(
             value: chosenOption,
             onChanged: (newValue) {
-              if (newValue != null && newValue != chosenOption) {
-                widget.setLocationCallback?.call(
-                    newValue); // Use ?.call() to safely invoke the callback
-                setState(() {
-                  chosenOption =
-                      newValue; // Update the state with the new value
-                });
-              }
+              setState(() {
+                widget.setLocationCallback!(newValue!);
+                chosenOption = newValue;
+              });
             },
             items: widget.cityTitlesList?.map((String option) {
               return DropdownMenuItem<String>(
                 value: option,
-                child: Text(option),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: 10.0),
+                  child: Text(option, style: const TextStyle(fontSize: 16)),
+                ),
               );
             }).toList(),
             decoration: InputDecoration(
+              contentPadding: contentPadding,
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),
