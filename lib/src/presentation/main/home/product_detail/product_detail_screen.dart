@@ -854,7 +854,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.website.isNotEmpty && product.id != 10) {
+      if (product.website.isNotEmpty && product.id != 13 && product.id != 14) {
         website = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1020,7 +1020,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       booking = InkWell(
         onTap: () {
-          if (widget.item.id == 10) {
+          if (widget.item.id == 13 || widget.item.id == 14) {
             _makeTechAction(product.website);
           } else {
             Navigator.pushNamed(
@@ -1041,9 +1041,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
             ),
             child: Text(
-              widget.item.id == 10
+              widget.item.id == 13
                   ? Translate.of(context).translate('order_now')
-                  : Translate.of(context).translate('book_now'),
+                  : widget.item.id == 14
+                      ? Translate.of(context).translate('buy_now')
+                      : Translate.of(context).translate('book_now'),
               style: Theme.of(context)
                   .textTheme
                   .labelLarge!

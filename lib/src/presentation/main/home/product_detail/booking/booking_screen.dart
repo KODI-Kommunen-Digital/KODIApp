@@ -726,22 +726,22 @@ class _BookingScreenState extends State<BookingDetailsLoaded> {
         ),
         for (int i = 0; i < adults; i++)
           Text(
-            'Client ${i + 1}:\n'
+            'Kunde ${i + 1}:\n'
             'Name: ${_textFistNameController[i].text} ${_textLastNameController[i].text} '
             '${_textEmailController[i].text.isNotEmpty ? '\nEmail: ${_textEmailController[i].text}' : ''}  '
             '${_textAddressController[i].text != '' ? '\nAddress: ${_textAddressController[i].text}' : ''} '
-            '${_textPhoneController[i].text != '' ? '\nTelephone: ${_textPhoneController[i].text}' : ''}'
+            '${_textPhoneController[i].text != '' ? '\nTelefon: ${_textPhoneController[i].text}' : ''}'
             '${_textMessageController[i].text != '' ? '\nDescription: ${_textMessageController[i].text}' : ''} \n',
             style: const TextStyle(
                 fontWeight: FontWeight.bold), // Apply bold style
           ),
         Text(
-          'Appointment Date: $selectedDate',
+          'Buchungsdatum: $selectedDate',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         for (final slots in _selectedTimeSlots)
           Text(
-            'Appointment Slots $slots,',
+            'Buchungsslots $slots,',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
       ],

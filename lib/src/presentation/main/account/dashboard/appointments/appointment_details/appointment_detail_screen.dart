@@ -36,9 +36,7 @@ class AppointmentDetailsLoading extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(
-            Translate.of(context).translate('my_appointments'),
-          ),
+          title: Text("Termindetails"),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
   }
@@ -60,9 +58,6 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
   List<String> appointments = [];
   final List<String> _selectedTimeSlots = [
     '8:00 - 8:15',
-    '8:15 - 8:30',
-    '8:30 - 8:45',
-    '8:45 - 9:00',
   ];
 
   @override
@@ -94,11 +89,11 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                     context,
                     Routes.imageZoom,
                     arguments:
-                        "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
+                        "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                   );
                 },
                 child: Image.network(
-                  "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
+                  "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                   width: 120,
                   height: 140,
                   fit: BoxFit.cover,
@@ -144,15 +139,15 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                 children: <Widget>[
                   const SizedBox(height: 16),
                   Text(
-                    'Haircut',
+                    'Haarschnitt',
                     style: Theme.of(context).textTheme.headlineLarge,
                   ),
-                  for (int i = 0; i < 2; i++)
+                  for (int i = 0; i < 1; i++)
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          '\nClient ${i + 1}:',
+                          '\nKunde ${i + 1}:',
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 16),
@@ -161,8 +156,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             labelText: 'Name',
                             border: OutlineInputBorder(),
                           ),
-                          controller:
-                              TextEditingController(text: 'Saud Bin Afaq'),
+                          controller: TextEditingController(text: 'Niklas'),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -174,7 +168,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: const OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text: 'Saud.afaq123@gmail.com'),
+                              text: 'niklas123@gmail.com'),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -187,7 +181,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: const OutlineInputBorder(),
                           ),
                           controller:
-                              TextEditingController(text: 'Peter Hille Weg 13'),
+                              TextEditingController(text: 'Salzkotten 13'),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -199,7 +193,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: OutlineInputBorder(),
                           ),
                           controller:
-                              TextEditingController(text: '015785104060'),
+                              TextEditingController(text: '015122392323'),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white
@@ -212,7 +206,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentDetailsLoaded> {
                             border: OutlineInputBorder(),
                           ),
                           controller: TextEditingController(
-                              text: 'I want to book another appointment'),
+                              text: 'Ich brauche dringend einen Haarschnitt'),
                           enabled: false, // Make text unchangeable
                           style: const TextStyle(
                               color: Colors.white), // Set text color to white

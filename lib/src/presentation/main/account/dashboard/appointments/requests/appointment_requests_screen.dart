@@ -5,6 +5,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_ap
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AppointmentRequestsScreen extends StatelessWidget {
@@ -33,7 +34,7 @@ class AppointmentRequestsLoading extends StatelessWidget {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            Translate.of(context).translate('my_appointments'),
+            Translate.of(context).translate('my_appointment_requests'),
           ),
         ),
         body: const Center(child: CircularProgressIndicator.adaptive()));
@@ -69,7 +70,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          Translate.of(context).translate('my_appointments'),
+          Translate.of(context).translate('my_appointment_requests'),
         ),
       ),
       body: Stack(children: [
@@ -93,7 +94,8 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                             padding: const EdgeInsets.only(top: 12),
                             child: InkWell(
                               onTap: () {
-                                //Go to appointment
+                                Navigator.pushNamed(
+                                    context, Routes.appointmentDetails);
                               },
                               child: Container(
                                 padding:
@@ -106,7 +108,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            "https://heimat-digital.com/wp-content/uploads/2023/02/1674120769077.jpeg",
+                                            "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                                             width: 120,
                                             height: 140,
                                             fit: BoxFit.cover,
@@ -163,7 +165,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
-                                              Text("category",
+                                              Text("Termin",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
@@ -171,7 +173,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                                                         fontWeight:
                                                             FontWeight.bold,
                                                       )),
-                                              Text("date",
+                                              Text("Datum",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!)
@@ -186,8 +188,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                                           ),
                                           onSelected: (String choice) async {
                                             if (choice ==
-                                                Translate.of(context).translate(
-                                                    'delete_appointments')) {
+                                                "Terminanfrage stornieren") {
                                               final response =
                                                   await showRemoveAppointmentPopup(
                                                       context);
@@ -202,7 +203,7 @@ class _MyAppointmentsLoadedState extends State<AppointmentRequestsLoaded> {
                                           itemBuilder: (BuildContext context) {
                                             return {
                                               Translate.of(context).translate(
-                                                  'delete_appointments'),
+                                                  'cancel_appointment_request'),
                                             }.map((String choice) {
                                               return PopupMenuItem<String>(
                                                 value: choice,

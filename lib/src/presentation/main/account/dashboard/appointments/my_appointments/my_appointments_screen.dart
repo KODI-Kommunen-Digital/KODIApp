@@ -105,7 +105,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: Image.network(
-                                            "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
+                                            "https://newheidi.obs.eu-de.otc.t-systems.com/user_8/city_1_listing_15_2_1709543526085",
                                             width: 120,
                                             height: 140,
                                             fit: BoxFit.cover,
@@ -163,7 +163,7 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                                           FontWeight.bold,
                                                     ),
                                               ),
-                                              Text("Haircut",
+                                              Text("Haarschnitt",
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
@@ -215,8 +215,8 @@ class _MyAppointmentsLoadedState extends State<MyAppointmentsLoaded> {
                                             return {
                                               Translate.of(context).translate(
                                                   'delete_appointments'),
-                                              Translate.of(context).translate(
-                                                  'edit_appointments')
+                                              // Translate.of(context).translate(
+                                              //     'edit_appointments')
                                             }.map((String choice) {
                                               return PopupMenuItem<String>(
                                                 value: choice,

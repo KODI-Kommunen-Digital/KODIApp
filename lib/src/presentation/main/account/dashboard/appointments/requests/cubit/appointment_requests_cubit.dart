@@ -15,12 +15,9 @@ class AppointmentRequestsCubit extends Cubit<AppointmentRequestsState> {
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!isRefreshLoader) emit(const AppointmentRequestsState.loading());
     List<String> sampleData = [
-      "aasdas",
-      "basdasd",
-      "asihjdioa",
-      "ahsdf9a",
-      "asoihd",
-      "asoidh"
+      "Haarschnitt",
+      "Bartschneiden",
+      "Haarfärbung",
     ];
     await Future.delayed(const Duration(seconds: 2));
     emit(AppointmentRequestsState.loaded(sampleData, false));
