@@ -197,7 +197,7 @@ class ProductModel {
     } else if (json['categoryId'] == 4) {
       category = "Vereine";
     } else if (json['categoryId'] == 5) {
-      category = "Regionale Produkte";
+      category = "Produkte";
     } else if (json['categoryId'] == 6) {
       category = "Biete/Suche";
     } else if (json['categoryId'] == 9) {
@@ -207,7 +207,7 @@ class ProductModel {
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
     } else if (json['categoryId'] == 13) {
-      category = "Essen & Trinken";
+      category = "Essen";
     } else if (json['categoryId'] == 17) {
       category = "Freizeit";
     }
