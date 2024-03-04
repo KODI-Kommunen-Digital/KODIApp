@@ -36,7 +36,7 @@
         },
         {
             "id": 5,
-            "name": "Regionale Produkte",
+            "name": "Produkte",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
             "color": "#4a90a4",
@@ -76,7 +76,7 @@
         },
         {
             "id": 13,
-            "name": "Essen & Trinken",
+            "name": "Essen",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
             "color": "#027148",
