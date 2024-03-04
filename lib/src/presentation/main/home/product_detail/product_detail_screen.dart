@@ -1226,7 +1226,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(),
                 ),
-                booking,
+                if (product!.id == 13 || product.id == 14 || product.id == 15)
+                  booking,
                 info,
                 // latest,
                 const SizedBox(height: 16),
