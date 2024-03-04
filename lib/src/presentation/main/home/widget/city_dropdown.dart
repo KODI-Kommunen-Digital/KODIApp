@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/main/home/widget/qr_code_scanner.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class CitiesDropDown extends StatefulWidget {
@@ -29,6 +30,51 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
         ? const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0)
         : const EdgeInsets.symmetric(vertical: 0.0, horizontal: 15.0);
 
+    // return SafeArea(
+    //   child: Container(
+    //     padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
+    //     child: Card(
+    //       margin: const EdgeInsets.all(10),
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(12),
+    //       ),
+    //       elevation: 2,
+    //       child: DropdownButtonFormField<String>(
+    //         value: chosenOption,
+    //         onChanged: (newValue) {
+    //           setState(() {
+    //             widget.setLocationCallback!(newValue!);
+    //             chosenOption = newValue;
+    //           });
+    //         },
+    //         items: widget.cityTitlesList?.map((String option) {
+    //           return DropdownMenuItem<String>(
+    //             value: option,
+    //             child: Padding(
+    //               padding: const EdgeInsets.symmetric(
+    //                   vertical: 0.0, horizontal: 10.0),
+    //               child: Text(option, style: const TextStyle(fontSize: 16)),
+    //             ),
+    //           );
+    //         }).toList(),
+    //         decoration: InputDecoration(
+    //           contentPadding: contentPadding,
+    //           focusedBorder: const OutlineInputBorder(
+    //             borderSide: BorderSide(color: Colors.white),
+    //           ),
+    //           labelText: widget.hintText ??
+    //               Translate.of(context).translate('select_location'),
+    //           labelStyle: TextStyle(
+    //             color: Theme.of(context).textTheme.bodyLarge?.color ??
+    //                 Colors.white,
+    //           ),
+    //           border: const OutlineInputBorder(),
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
+
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
@@ -38,40 +84,64 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 2,
-          child: DropdownButtonFormField<String>(
-            value: chosenOption,
-            onChanged: (newValue) {
-              setState(() {
-                widget.setLocationCallback!(newValue!);
-                chosenOption = newValue;
-              });
-            },
-            items: widget.cityTitlesList?.map((String option) {
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0.0, horizontal: 10.0),
-                  child: Text(option, style: const TextStyle(fontSize: 16)),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  // Ensures DropdownButtonFormField takes the remaining space
+                  child: DropdownButtonFormField<String>(
+                    value: chosenOption,
+                    onChanged: (newValue) {
+                      setState(() {
+                        widget.setLocationCallback!(newValue!);
+                        chosenOption = newValue;
+                      });
+                    },
+                    items: widget.cityTitlesList?.map((String option) {
+                      return DropdownMenuItem<String>(
+                        value: option,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 0.0, horizontal: 10.0),
+                          child: Text(option,
+                              style: const TextStyle(fontSize: 16)),
+                        ),
+                      );
+                    }).toList(),
+                    decoration: InputDecoration(
+                      contentPadding: contentPadding,
+                      focusedBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      labelText: widget.hintText ??
+                          Translate.of(context).translate('select_location'),
+                      labelStyle: TextStyle(
+                        color: Theme.of(context).textTheme.bodyLarge?.color ??
+                            Colors.white,
+                      ),
+                      border: const OutlineInputBorder(),
+                    ),
+                  ),
                 ),
-              );
-            }).toList(),
-            decoration: InputDecoration(
-              contentPadding: contentPadding,
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              labelText: widget.hintText ??
-                  Translate.of(context).translate('select_location'),
-              labelStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-              ),
-              border: const OutlineInputBorder(),
+                IconButton(
+                  icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
+                  onPressed: () {
+                    _navigateAndScanQR(context);
+                  },
+                ),
+              ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  void _navigateAndScanQR(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const QRScanner()),
     );
   }
 }
