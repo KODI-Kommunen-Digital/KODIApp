@@ -211,11 +211,17 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.imageLink == "1") {
-      await Navigator.pushNamed(
-        context,
-        Routes.signIn,
-        arguments: Routes.submit,
-      );
+      if (AppBloc.userCubit.state == null) {
+        final result = await Navigator.pushNamed(
+          context,
+          Routes.signIn,
+          arguments: Routes.submit,
+        );
+        if (result == null) return;
+      }
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.submit,
+          arguments: {'isNewList': true});
     } else if (service.imageLink == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),

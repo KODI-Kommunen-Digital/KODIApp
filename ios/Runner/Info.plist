@@ -27,7 +27,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>Need camera access for uploading images</string>
+	<string>Der Kamerazugriff wird zum Scannen von QR-Codes benötigt</string>
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string>We need access to the Downloads folder for file access.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>

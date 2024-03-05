@@ -859,8 +859,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           product.id != 14 &&
           product.id != 1063 &&
           product.id != 15 &&
-          product.id != 2 &&
-          product.id != 1 &&
+          (product.id != 2 && widget.item.cityId == 2) &&
+          (product.id != 1 && widget.item.cityId == 2) &&
           product.id != 5 &&
           product.id != 16) {
         website = Column(
@@ -1031,11 +1031,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           if (widget.item.id == 13 ||
               widget.item.id == 14 ||
               widget.item.id == 1063 ||
-              widget.item.id == 2 ||
+              (widget.item.id == 2 && widget.item.cityId == 2) ||
+              (widget.item.id == 1 && widget.item.cityId == 2) ||
               widget.item.id == 16 ||
               widget.item.id == 15 ||
-              widget.item.id == 5 ||
-              widget.item.id == 1) {
+              widget.item.id == 5) {
             _makeTechAction(product.website);
           } else {
             Navigator.pushNamed(
@@ -1062,10 +1062,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ? Translate.of(context).translate('buy_now')
                       : widget.item.id == 1063
                           ? Translate.of(context).translate('book_tickets')
-                          : widget.item.id == 2
+                          : widget.item.id == 2 && widget.item.cityId == 2
                               ? Translate.of(context)
                                   .translate('waste_calender')
-                              : widget.item.id == 1
+                              : widget.item.id == 1 && widget.item.cityId == 2
                                   ? Translate.of(context).translate('about_env')
                                   : widget.item.id == 16 && widget.item.id == 5
                                       ? Translate.of(context)
@@ -1256,10 +1256,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     product?.id == 14 ||
                     product?.id == 15 ||
                     product?.id == 1063 ||
-                    product?.id == 2 ||
+                    (product?.id == 2 && product?.cityId == 2) ||
+                    (product?.id == 1 && product?.cityId == 2) ||
                     product?.id == 5 ||
-                    product?.id == 16 ||
-                    product?.id == 1)
+                    product?.id == 16)
                   booking,
                 info,
                 // latest,

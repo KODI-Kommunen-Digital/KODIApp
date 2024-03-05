@@ -85,11 +85,10 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
           ),
           elevation: 2,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            padding: const EdgeInsets.symmetric(horizontal: 0.0),
             child: Row(
               children: <Widget>[
                 Expanded(
-                  // Ensures DropdownButtonFormField takes the remaining space
                   child: DropdownButtonFormField<String>(
                     value: chosenOption,
                     onChanged: (newValue) {
@@ -121,14 +120,16 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
                             Colors.white,
                       ),
                       border: const OutlineInputBorder(),
+                      suffixIcon: IconButton(
+                        padding: const EdgeInsets.all(3),
+                        icon: const Icon(Icons.qr_code_scanner,
+                            color: Colors.white),
+                        onPressed: () {
+                          _navigateAndScanQR(context);
+                        },
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
-                  onPressed: () {
-                    _navigateAndScanQR(context);
-                  },
                 ),
               ],
             ),

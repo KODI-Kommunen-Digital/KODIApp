@@ -86,8 +86,9 @@ class SignInLoaded extends StatefulWidget {
 }
 
 class _SignInLoadedState extends State<SignInLoaded> {
-  final _textIDController = TextEditingController();
-  final _textPassController = TextEditingController();
+  final _textIDController = TextEditingController(text: 'testuser');
+  final _textPassController = TextEditingController(text: 'testuser');
+
   final _focusID = FocusNode();
   final _focusPass = FocusNode();
   bool _showPassword = false;
