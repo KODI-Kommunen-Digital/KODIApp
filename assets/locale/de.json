@@ -300,7 +300,7 @@
   "facilities_require": "Einrichtungen sind erforderlich",
   "tags_require": "Tags sind erforderlich",
   "country_require": "Land ist erforderlich",
-  "city_require": "Stadt ist erforderlich",
+  "city_require": "Ort ist erforderlich",
   "gps_require": "GPS ist erforderlich",
   "icon_require": "Symbol ist erforderlich",
   "input_zipcode": "Postleitzahl",
@@ -369,7 +369,6 @@
   "iban": "Wir gehen",
   "account_number": "Kontonummer",
   "swift_code": "SWIFT-Code",
-  "book_now": "Beratungstermin buchen",
   "buy_now": "Jetzt kaufen",
   "payment_method": "Bezahlverfahren",
   "data_not_found": "Daten nicht gefunden",
@@ -552,6 +551,7 @@
   "book_tickets": "Ticket kaufen",
   "waste_calender": "Abfallkalender anschauen",
   "book_consultation":"Jetzt Beratung buchen",
-  "about_env":"Schau dir die Daten an"
+  "about_env":"Schau dir die Daten an",
+  "book_now": "Termin buchen"
 }
 

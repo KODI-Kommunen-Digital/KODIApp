@@ -1034,7 +1034,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               (widget.item.id == 2 && widget.item.cityId == 2) ||
               (widget.item.id == 1 && widget.item.cityId == 2) ||
               widget.item.id == 16 ||
-              widget.item.id == 15 ||
               widget.item.id == 5) {
             _makeTechAction(product.website);
           } else {

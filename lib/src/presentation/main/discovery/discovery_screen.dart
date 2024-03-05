@@ -253,7 +253,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Stadt Auswählen'),
+          title: const Text('Ort Auswählen'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
