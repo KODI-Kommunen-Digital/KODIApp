@@ -56,7 +56,7 @@ class _QRScannerState extends State<QRScanner> {
           ),
           Positioned(
             bottom: 100,
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: const Text(
                 'Scannen Sie dies, um den Laden zu betreten',

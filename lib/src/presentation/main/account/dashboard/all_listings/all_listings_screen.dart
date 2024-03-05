@@ -372,6 +372,18 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                     .w600),
                                                     maxLines: 1,
                                                   ),
+                                                if (item.sourceId == 2)
+                                                  Text(
+                                                    "${Translate.of(context).translate('quelle')} ${item.website}",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w600),
+                                                    maxLines: 1,
+                                                  ),
                                                 Row(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment

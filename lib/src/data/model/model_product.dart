@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -143,6 +145,7 @@ class ProductModel {
     Map<String, dynamic> socials = {};
     UserModel? author;
     String? category;
+    String? website;
     String? externalId;
     LocationData? location;
     CategoryModel? country;
@@ -215,8 +218,12 @@ class ProductModel {
     if (json['sourceId'] == 3 && json['externalId'] != null) {
       Uri uri = Uri.parse(json['externalId']);
       externalId = uri.authority;
+    } else if (json['sourceId'] == 2 && json['website'] != null) {
+      Uri uri = Uri.parse(json['website']);
+      website = uri.authority;
     } else {
       externalId = json['externalId'];
+      website = json['website'];
     }
 
     final listRelated = List.from(json['related'] ?? []).map((item) {
@@ -265,7 +272,7 @@ class ProductModel {
       phone: json['phone'] ?? '',
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
-      website: json['website'] ?? '',
+      website: website ?? '',
       externalId: externalId ?? '',
       description: json['description'],
       color: json['color'] ?? '',
