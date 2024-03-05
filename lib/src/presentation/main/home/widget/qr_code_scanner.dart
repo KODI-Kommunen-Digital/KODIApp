@@ -54,21 +54,21 @@ class _QRScannerState extends State<QRScanner> {
               },
             ),
           ),
-          Positioned(
-            bottom: 100,
-            child: SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: const Text(
-                'Scannen Sie dies, um den Laden zu betreten',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 100,
+          //   child: SizedBox(
+          //     width: MediaQuery.of(context).size.width,
+          //     child: const Text(
+          //       'Scannen Sie dies, um den Laden zu betreten',
+          //       textAlign: TextAlign.center,
+          //       style: TextStyle(
+          //         color: Colors.white,
+          //         fontSize: 18,
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

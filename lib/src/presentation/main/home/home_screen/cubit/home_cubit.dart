@@ -55,6 +55,7 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =

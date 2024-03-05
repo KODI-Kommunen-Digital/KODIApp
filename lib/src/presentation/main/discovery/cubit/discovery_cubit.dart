@@ -70,9 +70,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     Map<int, String> cityWebsites = {
       0: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger",
-      1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86974&behoerde=29997690498&gemeinde=325524110678",
-      2: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86925&behoerde=70664072559&gemeinde=006746347678",
-      3: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86944&behoerde=93996542745&gemeinde=208079671678",
+      1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=94572&behoerde=71996696712&gemeinde=898745703691",
+      2: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=94548&behoerde=64441660600&gemeinde=663856825691",
+      3: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=94536&behoerde=11664135546&gemeinde=529634609691",
     };
 
     return cityWebsites[cityId];
@@ -98,7 +98,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   List<CitizenServiceModel> initializeServices() {
     return [
-      // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
+      CitizenServiceModel(imageUrl: Images.service15, imageLink: "1"),
+      CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
       // CitizenServiceModel(
       //     imageUrl: Images.service3,
       //     imageLink: "3",

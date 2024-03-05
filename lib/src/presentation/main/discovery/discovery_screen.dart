@@ -211,8 +211,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.imageLink == "1") {
-      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView);
+      await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.submit,
+      );
     } else if (service.imageLink == "2") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),

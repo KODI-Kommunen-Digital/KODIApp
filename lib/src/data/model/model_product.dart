@@ -217,6 +217,7 @@ class ProductModel {
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
       Uri uri = Uri.parse(json['externalId']);
+      website = json['website'];
       externalId = uri.authority;
     } else if (json['sourceId'] == 2 && json['website'] != null) {
       Uri uri = Uri.parse(json['website']);

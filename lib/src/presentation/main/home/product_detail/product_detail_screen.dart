@@ -854,7 +854,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.website.isNotEmpty && product.id != 13 && product.id != 14) {
+      if (product.website.isNotEmpty &&
+          product.id != 13 &&
+          product.id != 14 &&
+          product.id != 1063 &&
+          product.id != 15 &&
+          product.id != 2 &&
+          product.id != 1 &&
+          product.id != 5 &&
+          product.id != 16) {
         website = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1020,7 +1028,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       booking = InkWell(
         onTap: () {
-          if (widget.item.id == 13 || widget.item.id == 14) {
+          if (widget.item.id == 13 ||
+              widget.item.id == 14 ||
+              widget.item.id == 1063 ||
+              widget.item.id == 2 ||
+              widget.item.id == 16 ||
+              widget.item.id == 15 ||
+              widget.item.id == 5 ||
+              widget.item.id == 1) {
             _makeTechAction(product.website);
           } else {
             Navigator.pushNamed(
@@ -1045,7 +1060,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ? Translate.of(context).translate('order_now')
                   : widget.item.id == 14
                       ? Translate.of(context).translate('buy_now')
-                      : Translate.of(context).translate('book_now'),
+                      : widget.item.id == 1063
+                          ? Translate.of(context).translate('book_tickets')
+                          : widget.item.id == 2
+                              ? Translate.of(context)
+                                  .translate('waste_calender')
+                              : widget.item.id == 1
+                                  ? Translate.of(context).translate('about_env')
+                                  : widget.item.id == 16 && widget.item.id == 5
+                                      ? Translate.of(context)
+                                          .translate('book_consultation')
+                                      : Translate.of(context)
+                                          .translate('book_now'),
               style: Theme.of(context)
                   .textTheme
                   .labelLarge!
@@ -1226,7 +1252,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(),
                 ),
-                if (product?.id == 13 || product?.id == 14 || product?.id == 15)
+                if (product?.id == 13 ||
+                    product?.id == 14 ||
+                    product?.id == 15 ||
+                    product?.id == 1063 ||
+                    product?.id == 2 ||
+                    product?.id == 5 ||
+                    product?.id == 16 ||
+                    product?.id == 1)
                   booking,
                 info,
                 // latest,

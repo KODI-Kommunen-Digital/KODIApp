@@ -548,6 +548,10 @@
   "noOfAvailableSlots": "Sie können nur bis zu {0} Zeitfenster für {1} Personen auswählen.",
   "selectHolidays": "Wählen Sie Feiertage aus",
   "bookAppointment": "Termin buchen",
-  "order_now": "Jetzt bestellen"
+  "order_now": "Jetzt bestellen",
+  "book_tickets": "Ticket kaufen",
+  "waste_calender": "Abfallkalender anschauen",
+  "book_consultation":"Jetzt Beratung buchen",
+  "about_env":"Schau dir die Daten an"
 }
 
