@@ -254,7 +254,6 @@ class UserRepository {
             favoriteListResponse.data['id'],
             favoriteListResponse.data['userId'],
             favoriteListResponse.data['title'],
-            favoriteListResponse.data['place'],
             categoryDetails.title,
             favoriteListResponse.data['description'],
             favoriteListResponse.data['media'],

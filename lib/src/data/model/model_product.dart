@@ -1,5 +1,3 @@
-// ignore_for_file: unused_local_variable
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -72,6 +70,7 @@ class ProductModel {
   final String? priceDisplay;
   List<ImageListModel>? imageLists;
   int? timeless;
+  final String? button;
 
   ProductModel(
       {required this.id,
@@ -133,7 +132,8 @@ class ProductModel {
       this.sourceId,
       this.imageLists,
       this.showExternal,
-      this.timeless});
+      this.timeless,
+      this.button});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -161,9 +161,16 @@ class ProductModel {
     String priceMax = '';
     String priceDisplay = '';
     int? timeless;
+    String? button;
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
+    }
+
+    if (json['place'] != null && json['place'] != "") {
+      button = json['place'];
+    } else {
+      button = null;
     }
 
     if ((json['expiryDate']) != null) {
@@ -306,6 +313,7 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
+      button: button,
     );
   }
 

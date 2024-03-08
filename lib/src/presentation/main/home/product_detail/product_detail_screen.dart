@@ -1028,20 +1028,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       booking = InkWell(
         onTap: () {
-          if (widget.item.id == 13 ||
-              widget.item.id == 14 ||
-              widget.item.id == 1063 ||
-              (widget.item.id == 2 && widget.item.cityId == 2) ||
-              (widget.item.id == 1 && widget.item.cityId == 2) ||
-              widget.item.id == 16 ||
-              widget.item.id == 5) {
-            _makeTechAction(product.website);
-          } else {
+          if (widget.item.button == null ||
+              widget.item.button == "Termin Buchen") {
             Navigator.pushNamed(
               context,
               Routes.booking,
               arguments: widget.item.title,
             );
+          } else {
+            _makeTechAction(product.website);
           }
         },
         child: Padding(
@@ -1055,22 +1050,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
             ),
             child: Text(
-              widget.item.id == 13
-                  ? Translate.of(context).translate('order_now')
-                  : widget.item.id == 14
-                      ? Translate.of(context).translate('buy_now')
-                      : widget.item.id == 1063
-                          ? Translate.of(context).translate('book_tickets')
-                          : widget.item.id == 2 && widget.item.cityId == 2
-                              ? Translate.of(context)
-                                  .translate('waste_calender')
-                              : widget.item.id == 1 && widget.item.cityId == 2
-                                  ? Translate.of(context).translate('about_env')
-                                  : widget.item.id == 16 && widget.item.id == 5
-                                      ? Translate.of(context)
-                                          .translate('book_consultation')
-                                      : Translate.of(context)
-                                          .translate('book_now'),
+              widget.item.button ?? Translate.of(context).translate('book_now'),
               style: Theme.of(context)
                   .textTheme
                   .labelLarge!
@@ -1251,15 +1231,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(),
                 ),
-                if (product?.id == 13 ||
-                    product?.id == 14 ||
-                    product?.id == 15 ||
-                    product?.id == 1063 ||
-                    (product?.id == 2 && product?.cityId == 2) ||
-                    (product?.id == 1 && product?.cityId == 2) ||
-                    product?.id == 5 ||
-                    product?.id == 16)
-                  booking,
+                if (product?.button != null) booking,
                 info,
                 // latest,
                 const SizedBox(height: 16),

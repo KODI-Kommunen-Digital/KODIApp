@@ -65,7 +65,8 @@ class AllListingsCubit extends Cubit<AllListingsState> {
               userId: product.userId,
               sourceId: product.sourceId,
               imageLists: product.imageLists,
-              expiryDate: product.expiryDate),
+              expiryDate: product.expiryDate,
+              button: product.button),
         );
       }
     }

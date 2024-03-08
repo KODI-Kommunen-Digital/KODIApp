@@ -1,4 +1,4 @@
-package com.gesekeapp
+package com.kodi_app
 
 import io.flutter.embedding.android.FlutterActivity
 

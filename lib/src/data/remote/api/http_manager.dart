@@ -16,11 +16,9 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl =
-        !forum ? 'http://188.34.194.81:8002/' : 'http://188.34.194.81:8003/';
-    // _baseUrl = !forum
-    //     ? 'https://test.smartregion-auf.de/api/'
-    //     : 'https://test.smartregion-auf.de/forumapi/';
+    _baseUrl = !forum
+        ? 'https://api.kodi-community.com/'
+        : 'https://forumapi.kodi-community.com/';
 
     _dio = Dio(
       BaseOptions(

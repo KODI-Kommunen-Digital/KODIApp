@@ -8,7 +8,6 @@ class FavoriteDetailsModel {
   final int userId;
   final String title;
   String? category;
-  String? place;
   final String description;
   String? media;
   int? categoryId;
@@ -37,7 +36,6 @@ class FavoriteDetailsModel {
       this.id,
       this.userId,
       this.title,
-      this.place,
       this.category,
       this.description,
       this.media,
