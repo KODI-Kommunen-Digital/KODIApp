@@ -17,8 +17,8 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://api.kodi-community.com/'
-        : 'https://forumapi.kodi-community.com/';
+        ? 'https://api.kodi-community.de/'
+        : 'https://forumapi.kodi-community.de/';
 
     _dio = Dio(
       BaseOptions(
