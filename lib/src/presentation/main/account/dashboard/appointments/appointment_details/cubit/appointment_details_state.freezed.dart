@@ -12,7 +12,7 @@ part of 'appointment_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AppointmentDetailsState {
@@ -83,29 +83,29 @@ class _$AppointmentDetailsStateCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateInitialCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateInitialCopyWith(
-          _$AppointmentDetailsStateInitial value,
-          $Res Function(_$AppointmentDetailsStateInitial) then) =
-      __$$AppointmentDetailsStateInitialCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateInitialImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateInitialImplCopyWith(
+          _$AppointmentDetailsStateInitialImpl value,
+          $Res Function(_$AppointmentDetailsStateInitialImpl) then) =
+      __$$AppointmentDetailsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateInitialCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateInitialImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateInitial>
-    implements _$$AppointmentDetailsStateInitialCopyWith<$Res> {
-  __$$AppointmentDetailsStateInitialCopyWithImpl(
-      _$AppointmentDetailsStateInitial _value,
-      $Res Function(_$AppointmentDetailsStateInitial) _then)
+        _$AppointmentDetailsStateInitialImpl>
+    implements _$$AppointmentDetailsStateInitialImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateInitialImplCopyWithImpl(
+      _$AppointmentDetailsStateInitialImpl _value,
+      $Res Function(_$AppointmentDetailsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AppointmentDetailsStateInitial
+class _$AppointmentDetailsStateInitialImpl
     implements AppointmentDetailsStateInitial {
-  const _$AppointmentDetailsStateInitial();
+  const _$AppointmentDetailsStateInitialImpl();
 
   @override
   String toString() {
@@ -113,10 +113,10 @@ class _$AppointmentDetailsStateInitial
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateInitial);
+            other is _$AppointmentDetailsStateInitialImpl);
   }
 
   @override
@@ -195,33 +195,33 @@ class _$AppointmentDetailsStateInitial
 abstract class AppointmentDetailsStateInitial
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateInitial() =
-      _$AppointmentDetailsStateInitial;
+      _$AppointmentDetailsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateLoadingCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateLoadingCopyWith(
-          _$AppointmentDetailsStateLoading value,
-          $Res Function(_$AppointmentDetailsStateLoading) then) =
-      __$$AppointmentDetailsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateLoadingImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateLoadingImplCopyWith(
+          _$AppointmentDetailsStateLoadingImpl value,
+          $Res Function(_$AppointmentDetailsStateLoadingImpl) then) =
+      __$$AppointmentDetailsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateLoadingCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateLoadingImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateLoading>
-    implements _$$AppointmentDetailsStateLoadingCopyWith<$Res> {
-  __$$AppointmentDetailsStateLoadingCopyWithImpl(
-      _$AppointmentDetailsStateLoading _value,
-      $Res Function(_$AppointmentDetailsStateLoading) _then)
+        _$AppointmentDetailsStateLoadingImpl>
+    implements _$$AppointmentDetailsStateLoadingImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateLoadingImplCopyWithImpl(
+      _$AppointmentDetailsStateLoadingImpl _value,
+      $Res Function(_$AppointmentDetailsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AppointmentDetailsStateLoading
+class _$AppointmentDetailsStateLoadingImpl
     implements AppointmentDetailsStateLoading {
-  const _$AppointmentDetailsStateLoading();
+  const _$AppointmentDetailsStateLoadingImpl();
 
   @override
   String toString() {
@@ -229,10 +229,10 @@ class _$AppointmentDetailsStateLoading
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateLoading);
+            other is _$AppointmentDetailsStateLoadingImpl);
   }
 
   @override
@@ -311,27 +311,27 @@ class _$AppointmentDetailsStateLoading
 abstract class AppointmentDetailsStateLoading
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateLoading() =
-      _$AppointmentDetailsStateLoading;
+      _$AppointmentDetailsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AppointmentDetailsStateLoadedCopyWith<$Res> {
-  factory _$$AppointmentDetailsStateLoadedCopyWith(
-          _$AppointmentDetailsStateLoaded value,
-          $Res Function(_$AppointmentDetailsStateLoaded) then) =
-      __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$AppointmentDetailsStateLoadedImplCopyWith<$Res> {
+  factory _$$AppointmentDetailsStateLoadedImplCopyWith(
+          _$AppointmentDetailsStateLoadedImpl value,
+          $Res Function(_$AppointmentDetailsStateLoadedImpl) then) =
+      __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<String> appointments, bool isRefreshLoader});
 }
 
 /// @nodoc
-class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
+class __$$AppointmentDetailsStateLoadedImplCopyWithImpl<$Res>
     extends _$AppointmentDetailsStateCopyWithImpl<$Res,
-        _$AppointmentDetailsStateLoaded>
-    implements _$$AppointmentDetailsStateLoadedCopyWith<$Res> {
-  __$$AppointmentDetailsStateLoadedCopyWithImpl(
-      _$AppointmentDetailsStateLoaded _value,
-      $Res Function(_$AppointmentDetailsStateLoaded) _then)
+        _$AppointmentDetailsStateLoadedImpl>
+    implements _$$AppointmentDetailsStateLoadedImplCopyWith<$Res> {
+  __$$AppointmentDetailsStateLoadedImplCopyWithImpl(
+      _$AppointmentDetailsStateLoadedImpl _value,
+      $Res Function(_$AppointmentDetailsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -340,7 +340,7 @@ class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
     Object? appointments = null,
     Object? isRefreshLoader = null,
   }) {
-    return _then(_$AppointmentDetailsStateLoaded(
+    return _then(_$AppointmentDetailsStateLoadedImpl(
       null == appointments
           ? _value._appointments
           : appointments // ignore: cast_nullable_to_non_nullable
@@ -355,8 +355,9 @@ class __$$AppointmentDetailsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
-  const _$AppointmentDetailsStateLoaded(
+class _$AppointmentDetailsStateLoadedImpl
+    implements AppointmentDetailsStateLoaded {
+  const _$AppointmentDetailsStateLoadedImpl(
       final List<String> appointments, this.isRefreshLoader)
       : _appointments = appointments;
 
@@ -377,10 +378,10 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AppointmentDetailsStateLoaded &&
+            other is _$AppointmentDetailsStateLoadedImpl &&
             const DeepCollectionEquality()
                 .equals(other._appointments, _appointments) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
@@ -394,9 +395,10 @@ class _$AppointmentDetailsStateLoaded implements AppointmentDetailsStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AppointmentDetailsStateLoadedCopyWith<_$AppointmentDetailsStateLoaded>
-      get copyWith => __$$AppointmentDetailsStateLoadedCopyWithImpl<
-          _$AppointmentDetailsStateLoaded>(this, _$identity);
+  _$$AppointmentDetailsStateLoadedImplCopyWith<
+          _$AppointmentDetailsStateLoadedImpl>
+      get copyWith => __$$AppointmentDetailsStateLoadedImplCopyWithImpl<
+          _$AppointmentDetailsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -472,11 +474,12 @@ abstract class AppointmentDetailsStateLoaded
     implements AppointmentDetailsState {
   const factory AppointmentDetailsStateLoaded(
           final List<String> appointments, final bool isRefreshLoader) =
-      _$AppointmentDetailsStateLoaded;
+      _$AppointmentDetailsStateLoadedImpl;
 
   List<String> get appointments;
   bool get isRefreshLoader;
   @JsonKey(ignore: true)
-  _$$AppointmentDetailsStateLoadedCopyWith<_$AppointmentDetailsStateLoaded>
+  _$$AppointmentDetailsStateLoadedImplCopyWith<
+          _$AppointmentDetailsStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

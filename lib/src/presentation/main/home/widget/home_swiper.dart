@@ -22,7 +22,7 @@ class HomeSwipe extends StatelessWidget {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {
             return CachedNetworkImage(
-              imageUrl: "${Application.picturesURL}admin/HomeSwiper.jpg",
+              imageUrl: "${Application.picturesURL}admin/Homepage.jpg",
               cacheManager: memoryCacheManager,
               placeholder: (context, url) {
                 return AppPlaceholder(
