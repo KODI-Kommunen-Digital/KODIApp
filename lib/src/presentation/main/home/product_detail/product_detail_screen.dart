@@ -854,15 +854,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.website.isNotEmpty &&
-          product.id != 13 &&
-          product.id != 14 &&
-          product.id != 1063 &&
-          product.id != 15 &&
-          (product.id != 2 && widget.item.cityId == 2) &&
-          (product.id != 1 && widget.item.cityId == 2) &&
-          product.id != 5 &&
-          product.id != 16) {
+      if (product.button == null) {
         website = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -1140,7 +1132,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             phone,
             fax,
             email,
-            website,
+            if (product.button == null) website,
             openHours,
             attachments,
             const SizedBox(height: 16),

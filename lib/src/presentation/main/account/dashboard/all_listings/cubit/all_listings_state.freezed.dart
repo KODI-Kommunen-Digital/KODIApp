@@ -12,7 +12,7 @@ part of 'all_listings_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$AllListingsState {
@@ -81,25 +81,27 @@ class _$AllListingsStateCopyWithImpl<$Res, $Val extends AllListingsState>
 }
 
 /// @nodoc
-abstract class _$$AllListingsStateInitialCopyWith<$Res> {
-  factory _$$AllListingsStateInitialCopyWith(_$AllListingsStateInitial value,
-          $Res Function(_$AllListingsStateInitial) then) =
-      __$$AllListingsStateInitialCopyWithImpl<$Res>;
+abstract class _$$AllListingsStateInitialImplCopyWith<$Res> {
+  factory _$$AllListingsStateInitialImplCopyWith(
+          _$AllListingsStateInitialImpl value,
+          $Res Function(_$AllListingsStateInitialImpl) then) =
+      __$$AllListingsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AllListingsStateInitialCopyWithImpl<$Res>
-    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateInitial>
-    implements _$$AllListingsStateInitialCopyWith<$Res> {
-  __$$AllListingsStateInitialCopyWithImpl(_$AllListingsStateInitial _value,
-      $Res Function(_$AllListingsStateInitial) _then)
+class __$$AllListingsStateInitialImplCopyWithImpl<$Res>
+    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateInitialImpl>
+    implements _$$AllListingsStateInitialImplCopyWith<$Res> {
+  __$$AllListingsStateInitialImplCopyWithImpl(
+      _$AllListingsStateInitialImpl _value,
+      $Res Function(_$AllListingsStateInitialImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AllListingsStateInitial implements AllListingsStateInitial {
-  const _$AllListingsStateInitial();
+class _$AllListingsStateInitialImpl implements AllListingsStateInitial {
+  const _$AllListingsStateInitialImpl();
 
   @override
   String toString() {
@@ -107,10 +109,10 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllListingsStateInitial);
+            other is _$AllListingsStateInitialImpl);
   }
 
   @override
@@ -186,29 +188,31 @@ class _$AllListingsStateInitial implements AllListingsStateInitial {
 }
 
 abstract class AllListingsStateInitial implements AllListingsState {
-  const factory AllListingsStateInitial() = _$AllListingsStateInitial;
+  const factory AllListingsStateInitial() = _$AllListingsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$AllListingsStateLoadingCopyWith<$Res> {
-  factory _$$AllListingsStateLoadingCopyWith(_$AllListingsStateLoading value,
-          $Res Function(_$AllListingsStateLoading) then) =
-      __$$AllListingsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$AllListingsStateLoadingImplCopyWith<$Res> {
+  factory _$$AllListingsStateLoadingImplCopyWith(
+          _$AllListingsStateLoadingImpl value,
+          $Res Function(_$AllListingsStateLoadingImpl) then) =
+      __$$AllListingsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$AllListingsStateLoadingCopyWithImpl<$Res>
-    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateLoading>
-    implements _$$AllListingsStateLoadingCopyWith<$Res> {
-  __$$AllListingsStateLoadingCopyWithImpl(_$AllListingsStateLoading _value,
-      $Res Function(_$AllListingsStateLoading) _then)
+class __$$AllListingsStateLoadingImplCopyWithImpl<$Res>
+    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateLoadingImpl>
+    implements _$$AllListingsStateLoadingImplCopyWith<$Res> {
+  __$$AllListingsStateLoadingImplCopyWithImpl(
+      _$AllListingsStateLoadingImpl _value,
+      $Res Function(_$AllListingsStateLoadingImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AllListingsStateLoading implements AllListingsStateLoading {
-  const _$AllListingsStateLoading();
+class _$AllListingsStateLoadingImpl implements AllListingsStateLoading {
+  const _$AllListingsStateLoadingImpl();
 
   @override
   String toString() {
@@ -216,10 +220,10 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllListingsStateLoading);
+            other is _$AllListingsStateLoadingImpl);
   }
 
   @override
@@ -295,24 +299,26 @@ class _$AllListingsStateLoading implements AllListingsStateLoading {
 }
 
 abstract class AllListingsStateLoading implements AllListingsState {
-  const factory AllListingsStateLoading() = _$AllListingsStateLoading;
+  const factory AllListingsStateLoading() = _$AllListingsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$AllListingsStateLoadedCopyWith<$Res> {
-  factory _$$AllListingsStateLoadedCopyWith(_$AllListingsStateLoaded value,
-          $Res Function(_$AllListingsStateLoaded) then) =
-      __$$AllListingsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$AllListingsStateLoadedImplCopyWith<$Res> {
+  factory _$$AllListingsStateLoadedImplCopyWith(
+          _$AllListingsStateLoadedImpl value,
+          $Res Function(_$AllListingsStateLoadedImpl) then) =
+      __$$AllListingsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ProductModel> recent});
 }
 
 /// @nodoc
-class __$$AllListingsStateLoadedCopyWithImpl<$Res>
-    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateLoaded>
-    implements _$$AllListingsStateLoadedCopyWith<$Res> {
-  __$$AllListingsStateLoadedCopyWithImpl(_$AllListingsStateLoaded _value,
-      $Res Function(_$AllListingsStateLoaded) _then)
+class __$$AllListingsStateLoadedImplCopyWithImpl<$Res>
+    extends _$AllListingsStateCopyWithImpl<$Res, _$AllListingsStateLoadedImpl>
+    implements _$$AllListingsStateLoadedImplCopyWith<$Res> {
+  __$$AllListingsStateLoadedImplCopyWithImpl(
+      _$AllListingsStateLoadedImpl _value,
+      $Res Function(_$AllListingsStateLoadedImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -320,7 +326,7 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
   $Res call({
     Object? recent = null,
   }) {
-    return _then(_$AllListingsStateLoaded(
+    return _then(_$AllListingsStateLoadedImpl(
       null == recent
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
@@ -331,8 +337,8 @@ class __$$AllListingsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$AllListingsStateLoaded implements AllListingsStateLoaded {
-  const _$AllListingsStateLoaded(final List<ProductModel> recent)
+class _$AllListingsStateLoadedImpl implements AllListingsStateLoaded {
+  const _$AllListingsStateLoadedImpl(final List<ProductModel> recent)
       : _recent = recent;
 
   final List<ProductModel> _recent;
@@ -349,10 +355,10 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$AllListingsStateLoaded &&
+            other is _$AllListingsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._recent, _recent));
   }
 
@@ -363,9 +369,9 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$AllListingsStateLoadedCopyWith<_$AllListingsStateLoaded> get copyWith =>
-      __$$AllListingsStateLoadedCopyWithImpl<_$AllListingsStateLoaded>(
-          this, _$identity);
+  _$$AllListingsStateLoadedImplCopyWith<_$AllListingsStateLoadedImpl>
+      get copyWith => __$$AllListingsStateLoadedImplCopyWithImpl<
+          _$AllListingsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -438,10 +444,10 @@ class _$AllListingsStateLoaded implements AllListingsStateLoaded {
 
 abstract class AllListingsStateLoaded implements AllListingsState {
   const factory AllListingsStateLoaded(final List<ProductModel> recent) =
-      _$AllListingsStateLoaded;
+      _$AllListingsStateLoadedImpl;
 
   List<ProductModel> get recent;
   @JsonKey(ignore: true)
-  _$$AllListingsStateLoadedCopyWith<_$AllListingsStateLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$AllListingsStateLoadedImplCopyWith<_$AllListingsStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
