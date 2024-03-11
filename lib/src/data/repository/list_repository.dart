@@ -91,7 +91,7 @@ class ListRepository {
     }
     final response = await Api.requestSearchListing(content, linkFilter);
     if (response.success) {
-      final list = List.from(response.data ?? []).map((item) {
+      final list = List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
         return ProductModel.fromJson(item, setting: Application.setting);
       }).toList();
       return [list];
