@@ -271,7 +271,7 @@ class ProductModel {
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,
-      cityId: cityId ?? json['cityId'] ?? 0,
+      cityId: cityId ?? int.parse(json['cityId']?.toString() ?? '0'),
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
       sourceId: json['sourceId'] ?? 1,
