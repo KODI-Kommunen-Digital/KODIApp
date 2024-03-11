@@ -165,6 +165,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 listCity: listCity,
                 selectedId:
                     selectedFilter?.currentLocation ?? widget.arguments['id'],
+                updated: true,
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -251,12 +252,14 @@ class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
   final int selectedId;
   final List listCity;
+  final bool updated;
 
   const ListLoaded(
       {Key? key,
       required this.list,
       required this.selectedId,
-      required this.listCity})
+      required this.listCity,
+      this.updated = false})
       : super(key: key);
 
   @override
@@ -281,7 +284,7 @@ class _ListLoadedState extends State<ListLoaded> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    loadListingsList();
+    if(!widget.updated) loadListingsList();
   }
 
   @override
