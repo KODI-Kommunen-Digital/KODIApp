@@ -37,42 +37,42 @@ class AllListingsCubit extends Cubit<AllListingsState> {
           await Api.requestStatusLocList(currentCityFilter, 1, status);
     } else {
       listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1);
+    }
 
-      List<ProductModel> productData =
-          List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
+    List<ProductModel> productData =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
 
-      for (final listing in productData) {
-        final product = await loadProduct(listing.cityId, listing.id);
-        if (product != null) {
-          listDataList.add(
-            ProductModel(
-                id: listing.id,
-                cityId: listing.cityId,
-                title: product.title,
-                image: product.image,
-                pdf: product.pdf,
-                category: product.category,
-                categoryId: product.categoryId,
-                subcategoryId: product.subcategoryId,
-                startDate: product.startDate,
-                endDate: product.endDate,
-                createDate: product.createDate,
-                favorite: product.favorite,
-                address: product.address,
-                phone: product.phone,
-                email: product.email,
-                website: product.website,
-                externalId: product.externalId,
-                description: product.description,
-                statusId: product.statusId,
-                userId: product.userId,
-                sourceId: product.sourceId,
-                imageLists: product.imageLists,
-                expiryDate: product.expiryDate),
-          );
-        }
+    for (final listing in productData) {
+      final product = await loadProduct(listing.cityId, listing.id);
+      if (product != null) {
+        listDataList.add(
+          ProductModel(
+              id: listing.id,
+              cityId: listing.cityId,
+              title: product.title,
+              image: product.image,
+              pdf: product.pdf,
+              category: product.category,
+              categoryId: product.categoryId,
+              subcategoryId: product.subcategoryId,
+              startDate: product.startDate,
+              endDate: product.endDate,
+              createDate: product.createDate,
+              favorite: product.favorite,
+              address: product.address,
+              phone: product.phone,
+              email: product.email,
+              website: product.website,
+              externalId: product.externalId,
+              description: product.description,
+              statusId: product.statusId,
+              userId: product.userId,
+              sourceId: product.sourceId,
+              imageLists: product.imageLists,
+              expiryDate: product.expiryDate),
+        );
       }
     }
 
