@@ -30,11 +30,8 @@ class ListCubit extends Cubit<ListState> {
   Future<void> onLoad(cityId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
+    final categoryId = await prefs.getKeyValue(Preferences.categoryId, '');
+    final type = await prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
       categoryId: categoryId,
@@ -50,14 +47,24 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  Future<void> setCategoryFilter(int filter, int? cityId) async {
+    final prefs = await Preferences.openBox();
+
+    if (filter == 0) {
+      prefs.setKeyValue(Preferences.categoryId, '');
+    } else {
+      prefs.setKeyValue(Preferences.categoryId, filter);
+    }
+    if (cityId != null) {
+      onLoad(cityId);
+    }
+  }
+
   Future<List<ProductModel>> newListings(int pageNo, city) async {
     final prefs = await Preferences.openBox();
     // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final type = prefs.getKeyValue(Preferences.type, '');
-    if (type == 'location') {
-      prefs.setKeyValue(Preferences.categoryId, '');
-    }
 
     final result = await ListRepository.loadList(
       categoryId: categoryId,
@@ -75,7 +82,18 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  void onProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
+  Future<void> searchListing(content) async {
+    emit(const ListStateLoading());
+    final result = await ListRepository.searchListing(content: content);
+    final List<ProductModel> listUpdated = result?[0] ?? [];
+    if (listUpdated.isNotEmpty) {
+      list = [];
+      list.addAll(listUpdated);
+    }
+    emit(ListStateUpdated(filteredList, listCity));
+  }
+
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
