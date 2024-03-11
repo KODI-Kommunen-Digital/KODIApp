@@ -241,9 +241,9 @@ class ProductModel {
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
       timeless: timeless,
-      image: (json['logo'] != null && json['logo'] != "")
-          ? json['logo']
-          : 'admin/News.jpeg',
+      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
+          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
+          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
