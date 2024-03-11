@@ -336,6 +336,15 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Get Listings by status and location
+  static Future<ResultApiModel> requestStatusLocList(
+      params, pageNo, status) async {
+    var list =
+        '/listings?cityId=$params&statusId=$status&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Get Home Slider Images
   static Future<ResultApiModel> requestSliderImages() async {
     final result = await UtilAsset.loadJson("assets/data/sliders.json");
@@ -622,6 +631,12 @@ class Api {
 
   static Future<ResultApiModel> moreInfo() async {
     final result = await HTTPManager(forum: false).get(url: faq);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestSearchListing(content) async {
+    var list = 'listings/search?searchQuery=$content';
+    final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 

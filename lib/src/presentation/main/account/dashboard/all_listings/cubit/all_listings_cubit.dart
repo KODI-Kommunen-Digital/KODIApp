@@ -26,53 +26,61 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     List<ProductModel> listDataList = [];
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
+    int currentCityFilter = await getCurrentCityFilter();
 
-    if (status == 0) {
+    if (status == 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestAllListings(1);
-    } else {
+    } else if (status != 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestStatusListings(status, 1);
-    }
+    } else if (status != 0 && currentCityFilter != 0) {
+      listingsRequestResponse =
+          await Api.requestStatusLocList(currentCityFilter, 1, status);
+    } else {
+      listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1);
 
-    List<ProductModel> productData =
-        List.from(listingsRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
+      List<ProductModel> productData =
+          List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
 
-    for (final listing in productData) {
-      final product = await loadProduct(listing.cityId, listing.id);
-      if (product != null) {
-        listDataList.add(
-          ProductModel(
-              id: listing.id,
-              cityId: listing.cityId,
-              title: product.title,
-              image: product.image,
-              pdf: product.pdf,
-              category: product.category,
-              categoryId: product.categoryId,
-              subcategoryId: product.subcategoryId,
-              startDate: product.startDate,
-              endDate: product.endDate,
-              createDate: product.createDate,
-              favorite: product.favorite,
-              address: product.address,
-              phone: product.phone,
-              email: product.email,
-              website: product.website,
-              externalId: product.externalId,
-              description: product.description,
-              statusId: product.statusId,
-              userId: product.userId,
-              sourceId: product.sourceId,
-              imageLists: product.imageLists,
-              expiryDate: product.expiryDate),
-        );
+      for (final listing in productData) {
+        final product = await loadProduct(listing.cityId, listing.id);
+        if (product != null) {
+          listDataList.add(
+            ProductModel(
+                id: listing.id,
+                cityId: listing.cityId,
+                title: product.title,
+                image: product.image,
+                pdf: product.pdf,
+                category: product.category,
+                categoryId: product.categoryId,
+                subcategoryId: product.subcategoryId,
+                startDate: product.startDate,
+                endDate: product.endDate,
+                createDate: product.createDate,
+                favorite: product.favorite,
+                address: product.address,
+                phone: product.phone,
+                email: product.email,
+                website: product.website,
+                externalId: product.externalId,
+                description: product.description,
+                statusId: product.statusId,
+                userId: product.userId,
+                sourceId: product.sourceId,
+                imageLists: product.imageLists,
+                expiryDate: product.expiryDate),
+          );
+        }
       }
     }
 
     posts = listDataList;
 
-    emit(AllListingsState.loaded(posts));
+    int currentListingFilter = await getCurrentStatus();
+    emit(AllListingsState.loaded(
+        posts, currentListingFilter, currentCityFilter));
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
@@ -80,56 +88,78 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     return loadProductResponse;
   }
 
+  Future<void> searchListing(content) async {
+    emit(const AllListingsState.loading());
+    final result = await ListRepository.searchListing(content: content);
+    final List<ProductModel> listUpdated = result?[0] ?? [];
+    if (listUpdated.isNotEmpty) {
+      posts = [];
+      posts.addAll(listUpdated);
+    }
+
+    int currentListingFilter = await getCurrentStatus();
+    int currentCityFilter = await getCurrentCityFilter();
+    emit(AllListingsState.loaded(
+        listUpdated, currentListingFilter, currentCityFilter));
+  }
+
   Future<dynamic> newListings(int pageNo) async {
     if (pageNo == 1) posts = [];
     final int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
     List<ProductModel> listDataList = [];
+    int currentCityFilter = await getCurrentCityFilter();
 
-    if (status == 0) {
+    if (status == 0 || currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestAllListings(pageNo);
-    } else {
+    } else if (status != 0 && currentCityFilter == 0) {
       listingsRequestResponse = await Api.requestStatusListings(status, pageNo);
-    }
+    } else if (status != 0 && currentCityFilter != 0) {
+      listingsRequestResponse =
+          await Api.requestStatusLocList(currentCityFilter, pageNo, status);
+    } else {
+      listingsRequestResponse =
+          await Api.requestLocList(currentCityFilter, pageNo);
 
-    final newProductData =
-        List.from(listingsRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
+      final newProductData =
+          List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
 
-    for (final listing in newProductData) {
-      final product = await loadProduct(listing.cityId, listing.id);
-      if (product != null) {
-        listDataList.add(
-          ProductModel(
-              id: listing.id,
-              cityId: listing.cityId,
-              title: product.title,
-              image: product.image,
-              pdf: product.pdf,
-              category: product.category,
-              categoryId: product.categoryId,
-              subcategoryId: product.subcategoryId,
-              startDate: product.startDate,
-              endDate: product.endDate,
-              createDate: product.createDate,
-              favorite: product.favorite,
-              address: product.address,
-              phone: product.phone,
-              email: product.email,
-              website: product.website,
-              externalId: product.externalId,
-              description: product.description,
-              statusId: product.statusId,
-              userId: product.userId,
-              sourceId: product.sourceId,
-              imageLists: product.imageLists,
-              expiryDate: product.expiryDate),
-        );
+      for (final listing in newProductData) {
+        final product = await loadProduct(listing.cityId, listing.id);
+        if (product != null) {
+          listDataList.add(
+            ProductModel(
+                id: listing.id,
+                cityId: listing.cityId,
+                title: product.title,
+                image: product.image,
+                pdf: product.pdf,
+                category: product.category,
+                categoryId: product.categoryId,
+                subcategoryId: product.subcategoryId,
+                startDate: product.startDate,
+                endDate: product.endDate,
+                createDate: product.createDate,
+                favorite: product.favorite,
+                address: product.address,
+                phone: product.phone,
+                email: product.email,
+                website: product.website,
+                externalId: product.externalId,
+                description: product.description,
+                statusId: product.statusId,
+                userId: product.userId,
+                sourceId: product.sourceId,
+                imageLists: product.imageLists,
+                expiryDate: product.expiryDate),
+          );
+        }
       }
+      posts.addAll(listDataList);
+      return posts;
     }
-    posts.addAll(listDataList);
-    return posts;
   }
 
   Future<bool> deleteUserList(int? cityId, int listingId) async {
@@ -151,5 +181,22 @@ class AllListingsCubit extends Cubit<AllListingsState> {
   Future<void> setCurrentStatus(int status) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.listingStatusFilter, status);
+  }
+
+  Future<void> setCurrentCityFilter(int filter) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.allListingCityFilter, filter);
+  }
+
+  Future<int> getCurrentCityFilter() async {
+    final prefs = await Preferences.openBox();
+    int filter = prefs.getKeyValue(Preferences.allListingCityFilter, 0);
+    return filter;
+  }
+
+  Future<int> getCurrentStatusFilter() async {
+    final prefs = await Preferences.openBox();
+    int filter = prefs.getKeyValue(Preferences.listingStatusFilter, 0);
+    return filter;
   }
 }
