@@ -209,16 +209,16 @@ class AppProductItem extends StatelessWidget {
                             .copyWith(fontWeight: FontWeight.w600),
                         maxLines: 1,
                       ),
-                    if (item?.sourceId == 2)
-                      Text(
-                        "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(fontWeight: FontWeight.bold),
-                        maxLines: 2,
-                      ),
-                    const SizedBox(height: 2),
+                    // if (item?.sourceId == 2)
+                    //   Text(
+                    //     "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                    //     style: Theme.of(context)
+                    //         .textTheme
+                    //         .bodySmall!
+                    //         .copyWith(fontWeight: FontWeight.bold),
+                    //     maxLines: 2,
+                    //   ),
+                    // const SizedBox(height: 2),
                   ],
                 ),
               ),
@@ -345,15 +345,15 @@ class AppProductItem extends StatelessWidget {
                       .copyWith(fontWeight: FontWeight.bold),
                   maxLines: 2,
                 ),
-              if (item?.sourceId == 2)
-                Text(
-                  "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodySmall!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  maxLines: 2,
-                ),
+              // if (item?.sourceId == 2)
+              //   Text(
+              //     "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+              //     style: Theme.of(context)
+              //         .textTheme
+              //         .bodySmall!
+              //         .copyWith(fontWeight: FontWeight.bold),
+              //     maxLines: 2,
+              //   ),
             ],
           ),
         );
@@ -505,15 +505,15 @@ class AppProductItem extends StatelessWidget {
                                 .copyWith(fontWeight: FontWeight.bold),
                             maxLines: 2,
                           ),
-                        if (item?.sourceId == 2)
-                          Text(
-                            "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(fontWeight: FontWeight.bold),
-                            maxLines: 2,
-                          ),
+                        // if (item?.sourceId == 2)
+                        //   Text(
+                        //     "${Translate.of(context).translate('quelle')} ${item?.website ?? ''}",
+                        //     style: Theme.of(context)
+                        //         .textTheme
+                        //         .bodySmall!
+                        //         .copyWith(fontWeight: FontWeight.bold),
+                        //     maxLines: 2,
+                        //   ),
                         const SizedBox(height: 4),
                         const SizedBox(height: 8),
                         const Row(
