@@ -83,10 +83,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<String> getIgnoreAppVersion() async {
     final prefs = await Preferences.openBox();
-    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
     return ignoreVersion;
   }
-
 
   Future<bool> doesUserExist() async {
     final int userId = await UserRepository.getLoggedUserId();
@@ -173,7 +173,7 @@ class HomeCubit extends Cubit<HomeState> {
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
       if (!hasContent) {
-        element.hide = true;
+        element.hide = false;
       }
       if (element.id == 14) {
         element.hide = false;

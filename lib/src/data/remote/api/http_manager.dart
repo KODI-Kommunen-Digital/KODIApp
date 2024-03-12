@@ -16,9 +16,7 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-        ? 'https://app.geseke.it/api/'
-        : 'https://app.geseke.it/forumapi/';
+    _baseUrl = !forum ? 'https://hivada.de/api' : 'https://hivada.de/api';
     // _baseUrl = !forum
     //     ? 'https://test.smartregion-auf.de/api/'
     //     : 'https://test.smartregion-auf.de/forumapi/';
