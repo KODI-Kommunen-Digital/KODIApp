@@ -880,7 +880,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.button == null) {
+      if (product.button == null &&
+          product.website != null &&
+          product.website.isNotEmpty) {
         website = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
