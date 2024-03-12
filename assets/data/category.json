@@ -3,13 +3,12 @@
     "data": [ 
         {
             "id": 1,
-            "name": "News",
+            "name": "Energiedienstleistungen",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
             "color": "#ff8a65",
             "categoryType" : "category"
         },
-        
         {
             "id": 3,
             "name": "Events",
@@ -20,7 +19,7 @@
         },
         {
             "id": 4,
-            "name": "Vereine",
+            "name": "IoT",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
             "color": "#5dade2",
@@ -28,7 +27,7 @@
         },
         {
             "id": 5,
-            "name": "Regionale Produkte",
+            "name": "Kommunale Wärmeplanung",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
             "color": "#4a90a4",
@@ -36,47 +35,55 @@
         },
         {
             "id": 6,
-            "name": "Suche/Biete",
+            "name": "Wasserstoff",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
             "color": "#58d68d",
             "categoryType" : "category"
         },
         {
-            "id": 9,
-            "name": "Fundbüro",
+            "id": 7,
+            "name": "Dekarbonisierung",
             "noOfSubcategories": 0,
             "icon": "fas fa-search",
             "color": "#58d68d",
             "categoryType" : "category"
         },
         {
-            "id": 10,
-            "name": "Unternehmen",
+            "id": 9,
+            "name": "Erzeugung",
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
             "color": "#fdc60a",
             "categoryType" : "category"
         },
         {
-            "id": 11,
-            "name": "Mitfahrbank",
+            "id": 10,
+            "name": "Handel",
             "noOfSubcategories": 0,
             "icon": "fas fa-bus",
             "color": "#ff8a65",
             "categoryType" : "category"
         },
         {
-            "id": 13,
-            "name": "Essen & Trinken",
+            "id": 11,
+            "name": "Fernwärme",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
             "color": "#027148",
             "categoryType" : "category"
         },
         {
-            "id": 17,
-            "name": "Freizeit",
+            "id": 12,
+            "name": "Smart City",
+            "noOfSubcategories": 0,                
+            "icon": "fas fa-umbrella-beach",
+            "color": "#fdc60a",
+            "categoryType" : "category"
+        },
+        {
+            "id": 13,
+            "name": "Dynamischer Tarif",
             "noOfSubcategories": 0,                
             "icon": "fas fa-umbrella-beach",
             "color": "#fdc60a",

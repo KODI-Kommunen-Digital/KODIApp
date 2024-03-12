@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://app.geseke.it/ImprintPage');
+                _makeAction('https://hivada.de/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('https://app.geseke.it/PrivacyPolicy');
+                _makeAction('https://hivada.de/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +79,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('https://app.geseke.it/TermsOfUse');
+                _makeAction('https://hivada.de/TermsOfUse');
               },
               trailing: Row(
                 children: <Widget>[
