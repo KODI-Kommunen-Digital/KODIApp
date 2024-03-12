@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Geseke-App",
+            "name": "Hivada-App",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Geseke-App (profile mode)",
+            "name": "Hivada-App (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Geseke-App (release mode)",
+            "name": "Hivada-App (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

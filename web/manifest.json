@@ -1,11 +1,11 @@
 {
-    "name": "Geseke-App",
-    "short_name": "Geseke-App",
+    "name": "Hivada-App",
+    "short_name": "Hivada-App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Geseke-App",
+    "description": "Hivada-App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

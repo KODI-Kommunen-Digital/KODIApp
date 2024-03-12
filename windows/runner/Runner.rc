@@ -89,7 +89,7 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
-            VALUE "CompanyName", "Geseke App" "\0"
+            VALUE "CompanyName", "Hivada App" "\0"
             VALUE "FileDescription", "heidi" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
             VALUE "InternalName", "heidi" "\0"
