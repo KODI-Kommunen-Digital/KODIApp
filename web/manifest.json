@@ -1,11 +1,11 @@
 {
-    "name": "Hivada-App",
-    "short_name": "Hivada-App",
+    "name": "Hivada",
+    "short_name": "Hivada",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Hivada-App",
+    "description": "Hivada",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Hivada-App",
+            "name": "Hivada",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Hivada-App (profile mode)",
+            "name": "Hivada (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Hivada-App (release mode)",
+            "name": "Hivada (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
