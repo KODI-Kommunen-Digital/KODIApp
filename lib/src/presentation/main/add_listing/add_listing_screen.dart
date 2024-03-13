@@ -251,6 +251,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       // selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
+      selectedCategory = jsonCategory.first['name'];
       // selectedCategory = selectedSubCategory;
       _processing = true;
     });
@@ -382,26 +383,26 @@ class _AddListingScreenState extends State<AddListingScreen> {
     });
   }
 
-  void _onShowExpiryDatePicker() async {
-    final DateTime now = DateTime.now();
-    final DateTime initialDate = _expiryDate != null
-        ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
-        : now.add(const Duration(days: 14));
-    final DateTime firstDate = DateTime(now.year - 5);
-    final DateTime lastDate = DateTime(now.year + 5);
+  // void _onShowExpiryDatePicker() async {
+  //   final DateTime now = DateTime.now();
+  //   final DateTime initialDate = _expiryDate != null
+  //       ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
+  //       : now.add(const Duration(days: 14));
+  //   final DateTime firstDate = DateTime(now.year - 5);
+  //   final DateTime lastDate = DateTime(now.year + 5);
 
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
-    );
-    if (picked != null && mounted) {
-      setState(() {
-        _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
-      });
-    }
-  }
+  //   final DateTime? picked = await showDatePicker(
+  //     context: context,
+  //     initialDate: initialDate,
+  //     firstDate: firstDate,
+  //     lastDate: lastDate,
+  //   );
+  //   if (picked != null && mounted) {
+  //     setState(() {
+  //       _expiryDate = DateFormat('yyyy-MM-dd').format(picked);
+  //     });
+  //   }
+  // }
 
   Future<List<File>> downloadImages(List<ImageListModel> imageUrls) async {
     List<File> downloadedImages = [];
@@ -494,21 +495,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
   }
 
-  Future<void> _onShowExpiryTimePicker() async {
-    final TimeOfDay initialTime =
-        _expiryTime ?? const TimeOfDay(hour: 0, minute: 0);
+  // Future<void> _onShowExpiryTimePicker() async {
+  //   final TimeOfDay initialTime =
+  //       _expiryTime ?? const TimeOfDay(hour: 0, minute: 0);
 
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: initialTime,
-    );
+  //   final TimeOfDay? pickedTime = await showTimePicker(
+  //     context: context,
+  //     initialTime: initialTime,
+  //   );
 
-    if (pickedTime != null && mounted) {
-      setState(() {
-        _expiryTime = pickedTime;
-      });
-    }
-  }
+  //   if (pickedTime != null && mounted) {
+  //     setState(() {
+  //       _expiryTime = pickedTime;
+  //     });
+  //   }
+  // }
 
   Future<void> _onShowStartTimePicker(TimeOfDay? startTime) async {
     if (startTime != null) {
@@ -756,16 +757,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _getCategoryTranslation(int id) {
     Map<int, String> categories = {
-      1: "category_news",
+      1: "category_energiedienstleistungen",
       3: "category_events",
-      4: "category_clubs",
-      5: "category_products",
-      6: "category_offer_search",
-      9: "category_lost_found",
-      10: "category_companies",
-      11: "category_public_transport",
-      13: "category_food",
-      17: "category_free"
+      4: "category_iot",
+      5: "category_kommunale_waermeplanung",
+      6: "category_wasserstoff",
+      7: "category_dekarbonisierung",
+      9: "category_erzeugung",
+      10: "category_handel",
+      11: "category_fernwaerme",
+      12: "category_smart_city",
+      13: "category_dynamischer_tarif",
     };
     return categories[id];
   }
@@ -1101,104 +1103,104 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ],
             ),
             const SizedBox(height: 6),
-            if (selectedCategory?.toLowerCase() == "news")
-              Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: _isExpiryDateEnabled,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isExpiryDateEnabled = value!;
-                          if (_isExpiryDateEnabled &&
-                              (_expiryDate == null || _expiryTime == null)) {
-                            DateTime now = DateTime.now();
-                            DateTime twoWeeksFromNow =
-                                now.add(const Duration(days: 14));
-                            _expiryDate ??= DateFormat('yyyy-MM-dd')
-                                .format(twoWeeksFromNow);
-                            _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
-                          }
-                        });
-                      },
-                      activeColor: Theme.of(context).primaryColor,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isExpiryDateEnabled = !_isExpiryDateEnabled;
-                          });
-                        },
-                        child: Text(
-                          Translate.of(context).translate('enable_expiry_date'),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            const SizedBox(height: 6),
-            Visibility(
-              visible: (selectedCategory?.toLowerCase() == "news") &&
-                  (_isExpiryDateEnabled || widget.item?.timeless == 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('expiry_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _expiryDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowExpiryDatePicker();
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                      leading: Icon(
-                        Icons.access_time,
-                        color: Theme.of(context).hintColor,
-                      ),
-                      value: _expiryTime?.format(context),
-                      title: Translate.of(context).translate(
-                        'choose_exptime',
-                      ),
-                      onPressed: () async {
-                        _onShowExpiryTimePicker();
-                      }),
-                  const SizedBox(height: 16),
-                ],
-              ),
-            ),
+            // if (selectedCategory?.toLowerCase() == "news")
+            //   Padding(
+            //     padding: const EdgeInsets.only(left: 0),
+            //     child: Row(
+            //       children: [
+            //         Checkbox(
+            //           value: _isExpiryDateEnabled,
+            //           onChanged: (bool? value) {
+            //             setState(() {
+            //               _isExpiryDateEnabled = value!;
+            //               if (_isExpiryDateEnabled &&
+            //                   (_expiryDate == null || _expiryTime == null)) {
+            //                 DateTime now = DateTime.now();
+            //                 DateTime twoWeeksFromNow =
+            //                     now.add(const Duration(days: 14));
+            //                 _expiryDate ??= DateFormat('yyyy-MM-dd')
+            //                     .format(twoWeeksFromNow);
+            //                 _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
+            //               }
+            //             });
+            //           },
+            //           activeColor: Theme.of(context).primaryColor,
+            //         ),
+            //         Expanded(
+            //           child: GestureDetector(
+            //             onTap: () {
+            //               setState(() {
+            //                 _isExpiryDateEnabled = !_isExpiryDateEnabled;
+            //               });
+            //             },
+            //             child: Text(
+            //               Translate.of(context).translate('enable_expiry_date'),
+            //               style: Theme.of(context).textTheme.bodyMedium,
+            //               maxLines: 2,
+            //               overflow: TextOverflow.ellipsis,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // const SizedBox(height: 6),
+            // Visibility(
+            //   visible: (selectedCategory?.toLowerCase() == "news") &&
+            //       (_isExpiryDateEnabled || widget.item?.timeless == 0),
+            //   child: Column(
+            //     crossAxisAlignment: CrossAxisAlignment.start,
+            //     children: [
+            //       const SizedBox(height: 10),
+            //       Text.rich(
+            //         TextSpan(
+            //           text: Translate.of(context).translate('expiry_date'),
+            //           style: Theme.of(context)
+            //               .textTheme
+            //               .titleMedium!
+            //               .copyWith(fontWeight: FontWeight.bold),
+            //           children: const <TextSpan>[
+            //             TextSpan(
+            //               text: ' *',
+            //               style: TextStyle(
+            //                 color: Colors.red,
+            //                 fontWeight: FontWeight.bold,
+            //               ),
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //       const SizedBox(height: 8),
+            //       AppPickerItem(
+            //         leading: Icon(
+            //           Icons.calendar_today_outlined,
+            //           color: Theme.of(context).hintColor,
+            //         ),
+            //         value: _expiryDate,
+            //         title: Translate.of(context).translate(
+            //           'choose_date',
+            //         ),
+            //         onPressed: () async {
+            //           _onShowExpiryDatePicker();
+            //         },
+            //       ),
+            //       const SizedBox(height: 8),
+            //       AppPickerItem(
+            //           leading: Icon(
+            //             Icons.access_time,
+            //             color: Theme.of(context).hintColor,
+            //           ),
+            //           value: _expiryTime?.format(context),
+            //           title: Translate.of(context).translate(
+            //             'choose_exptime',
+            //           ),
+            //           onPressed: () async {
+            //             _onShowExpiryTimePicker();
+            //           }),
+            //       const SizedBox(height: 16),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 10),
             AppTextInput(
               hintText: Translate.of(context).translate('input_address'),

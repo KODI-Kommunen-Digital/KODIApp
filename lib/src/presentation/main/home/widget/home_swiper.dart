@@ -37,9 +37,12 @@ class HomeSwipe extends StatelessWidget {
                 return Container(
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.fill,
-                    ),
+                        image: imageProvider,
+                        fit: BoxFit.fill,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(0.2),
+                          BlendMode.darken,
+                        )),
                   ),
                 );
               },

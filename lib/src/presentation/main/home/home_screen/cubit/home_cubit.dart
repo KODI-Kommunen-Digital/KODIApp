@@ -173,11 +173,11 @@ class HomeCubit extends Cubit<HomeState> {
     for (var element in categories) {
       bool hasContent = await categoryHasContent(element.id, cityId);
       if (!hasContent) {
-        element.hide = false;
+        element.hide = true;
       }
-      if (element.id == 14) {
-        element.hide = false;
-      }
+      // if (element.id == 14) {
+      //   element.hide = true;
+      // }
     }
 
     return categories;

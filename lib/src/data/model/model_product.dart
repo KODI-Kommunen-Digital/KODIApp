@@ -170,7 +170,7 @@ class ProductModel {
     }
 
     if (json['categoryId'] == 1) {
-      category = "Nachricht";
+      category = "Energiedienstleistungen";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
       if ((json['expiryDate']) != null) {
@@ -179,7 +179,7 @@ class ProductModel {
             DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
       }
     } else if (json['categoryId'] == 3) {
-      category = "Veranstaltungen";
+      category = "Events";
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       if ((json['endDate']) != null) {
@@ -195,19 +195,23 @@ class ProductModel {
         endDate = "";
       }
     } else if (json['categoryId'] == 4) {
-      category = "Vereine";
+      category = "Internet of Things/IoT";
     } else if (json['categoryId'] == 5) {
-      category = "Regionale Produkte";
+      category = "Kommunale Wärmeplanung";
     } else if (json['categoryId'] == 6) {
-      category = "Biete/Suche";
+      category = "Wasserstoff";
+    } else if (json['categoryId'] == 7) {
+      category = "Dekarbonisierung";
     } else if (json['categoryId'] == 9) {
-      category = "Verloren gefunden";
+      category = "Erzeugung";
     } else if (json['categoryId'] == 10) {
-      category = "Firmenporträts";
+      category = "Handel";
     } else if (json['categoryId'] == 11) {
-      category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
+      category = "Fernwärme";
+    } else if (json['categoryId'] == 12) {
+      category = "Smart City";
     } else if (json['categoryId'] == 13) {
-      category = "Essen & Trinken";
+      category = "Dynamischer Tarif";
     } else if (json['categoryId'] == 17) {
       category = "Freizeit";
     }
