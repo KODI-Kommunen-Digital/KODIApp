@@ -75,7 +75,9 @@ class ListRepository {
   }
 
   static Future<List<List<ProductModel>>?> searchListing(
-      {required content, required MultiFilter multiFilter}) async {
+      {required content,
+      required MultiFilter multiFilter,
+      int pageNo = 1}) async {
     String linkFilter = "";
     if (multiFilter.hasListingStatusFilter &&
         (multiFilter.currentListingStatus ?? 0) != 0) {
@@ -89,9 +91,11 @@ class ListRepository {
         (multiFilter.currentCategory ?? 0) != 0) {
       linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
     }
-    final response = await Api.requestSearchListing(content, linkFilter);
+    final response =
+        await Api.requestSearchListing(content, linkFilter, pageNo);
     if (response.success) {
-      final list = List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
+      final list =
+          List<Map<String, dynamic>>.from(response.data ?? []).map((item) {
         return ProductModel.fromJson(item, setting: Application.setting);
       }).toList();
       return [list];

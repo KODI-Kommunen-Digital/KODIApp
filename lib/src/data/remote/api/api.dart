@@ -634,8 +634,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestSearchListing(content, filter) async {
-    var list = 'listings/search?searchQuery=$content$filter';
+  static Future<ResultApiModel> requestSearchListing(content, filter, pageNo) async {
+    var list = 'listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10&showExternalListings=$showExternalListings';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
