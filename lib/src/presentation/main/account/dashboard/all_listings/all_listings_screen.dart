@@ -82,10 +82,10 @@ class AllListingsLoaded extends StatefulWidget {
 
   const AllListingsLoaded(
       {required this.user,
-        this.posts,
-        super.key,
-        required this.currentListingFilter,
-        required this.currentCityFilter});
+      this.posts,
+      super.key,
+      required this.currentListingFilter,
+      required this.currentCityFilter});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -96,6 +96,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   final TextEditingController _searchController = TextEditingController();
   double previousScrollPosition = 0;
   bool isLoadingMore = false;
+  bool isSearching = false;
+  String? searchTerm;
   int pageNo = 1;
   List<ProductModel>? posts;
   bool isSwiped = false;
@@ -507,9 +509,6 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                     ),
                     onPressed: () {
                       String content = _searchController.text;
-                      setState(() {
-                        AppBloc.allListingsCubit.searchListing(content);
-                      });
                       _searchController.clear();
                       Navigator.pop(context, content);
                     },
@@ -525,7 +524,19 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if ((searchResult ?? "").trim() != "") {
-      context.read<AllListingsCubit>().searchListing(searchResult!.trim());
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult!.trim();
+      setState(() {
+        posts = [];
+        isLoadingMore = true;
+      });
+      posts = await context
+          .read<AllListingsCubit>()
+          .searchListing(searchTerm, pageNo);
+      setState(() {
+        isLoadingMore = false;
+      });
     }
   }
 
@@ -686,7 +697,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
           isLoadingMore = true;
           //previousScrollPosition = _scrollController.position.pixels;
         });
-        posts = await context.read<AllListingsCubit>().newListings(++pageNo);
+        if (!isSearching) {
+          posts = await context.read<AllListingsCubit>().newListings(++pageNo);
+        } else {
+          posts = await context
+              .read<AllListingsCubit>()
+              .searchListing(searchTerm, ++pageNo);
+        }
         setState(() {
           isLoadingMore = false;
         });
