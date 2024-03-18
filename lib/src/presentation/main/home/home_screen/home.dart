@@ -416,7 +416,6 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         final prefs = await Preferences.openBox();
         prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.categoryId, item.id);
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listProduct,
