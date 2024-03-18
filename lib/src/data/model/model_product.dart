@@ -241,9 +241,9 @@ class ProductModel {
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
       timeless: timeless,
-      image: (json['logo'] != null && json['logo'] != "")
-          ? json['logo']
-          : 'admin/News.jpeg',
+      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
+          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
+          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
@@ -271,7 +271,7 @@ class ProductModel {
       color: json['color'] ?? '',
       categoryId: json['categoryId'] ?? 0,
       subcategoryId: json['subcategoryId'] ?? 0,
-      cityId: cityId ?? json['cityId'] ?? 0,
+      cityId: cityId ?? int.parse(json['cityId']?.toString() ?? '0'),
       villageId: json['villageId'] ?? 0,
       statusId: json['statusId'] ?? 0,
       sourceId: json['sourceId'] ?? 1,
