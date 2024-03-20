@@ -24,6 +24,7 @@ class Api {
   static const String forum = "/forumapi/cities/1/forums";
   static const String hasForum = "/cities?hasForum=true";
   static const bool showExternalListings = true;
+  static const String adData = "/ads";
 
   static Future<ResultApiModel> requestLogin(params) async {
     try {
@@ -622,6 +623,11 @@ class Api {
 
   static Future<ResultApiModel> moreInfo() async {
     final result = await HTTPManager(forum: false).get(url: faq);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestAdData() async {
+    final result = await HTTPManager(forum: false).get(url: adData);
     return ResultApiModel.fromJson(result);
   }
 

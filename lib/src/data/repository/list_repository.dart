@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -170,7 +171,8 @@ class ListRepository {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
-      return ProductModel.fromJson(response.data, setting: Application.setting, cityId: cityId);
+      return ProductModel.fromJson(response.data,
+          setting: Application.setting, cityId: cityId);
     } else {
       logError('Product Request Response', response.message);
     }
@@ -679,8 +681,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item =
-        jsonCategory.firstWhere((item) => item['name'] == value);
+    final item = jsonCategory.firstWhere((item) => item['name'] == value);
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
@@ -688,5 +689,11 @@ class ListRepository {
 
   void clearSubCategory() async {
     prefs.deleteKey(Preferences.subCategoryId);
+  }
+
+  Future<AdDataModel> loadAdData() async {
+    final response = await Api.requestAdData();
+    final responseData = response.data;
+    return AdDataModel(link: responseData.datalink, image: responseData.image);
   }
 }
