@@ -691,8 +691,8 @@ class ListRepository {
     prefs.deleteKey(Preferences.subCategoryId);
   }
 
-  Future<AdDataModel> loadAdData() async {
-    final response = await Api.requestAdData();
+  Future<AdDataModel> loadAdData(cityId) async {
+    final response = await Api.requestAdData(cityId);
     final responseData = response.data;
     return AdDataModel(link: responseData.datalink, image: responseData.image);
   }
