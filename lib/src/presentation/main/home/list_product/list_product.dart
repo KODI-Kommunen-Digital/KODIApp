@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -35,7 +35,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   MultiFilter? selectedFilter;
   int pageNo = 1;
-  bool isSearching = false;
 
   @override
   void initState() {
@@ -48,7 +47,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
-    // ignore: use_build_context_synchronously
     await context
         .read<ListCubit>()
         .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
@@ -179,10 +177,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future _searchListings() async {
-    String? searchResult = await openSearchDialog();
-    if ((searchResult ?? "").trim() != "") {
-      // ignore: use_build_context_synchronously
-      context.read<ListCubit>().searchListing(searchResult!.trim(), true);
+    dynamic searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      context.read<ListCubit>().searchListing(searchResult.trim(), true);
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        context.read<ListCubit>().isSearching) {
+      context.read<ListCubit>().cancelSearch(
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
     }
   }
 
@@ -198,8 +199,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
               AppTextInput(
                 hintText: Translate.of(context).translate('search_title'),
                 keyboardType: TextInputType.text,
-                trailing: const Icon(Icons.search),
-                hasDelete: false,
                 controller: _searchController,
                 //focusNode: _focusPass,
               ),
@@ -210,7 +209,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   TextButton(
                     onPressed: () {
                       _searchController.clear();
-                      Navigator.pop(context);
+                      Navigator.pop(context, null);
                     },
                     child: Text(Translate.of(context).translate('cancel')),
                   ),
@@ -218,7 +217,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   TextButton(
                     onPressed: () {
                       String content = _searchController.text;
-                      _searchController.clear();
                       Navigator.pop(context, content);
                     },
                     child: Text(
