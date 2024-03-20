@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
@@ -38,6 +39,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
+  AdDataModel? _adData;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -48,6 +50,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
+    _loadAdData();
+  }
+
+  void _loadAdData() async {
+    _adData = await ProductDetailCubit.loadAdData();
+    setState(() {});
   }
 
   @override
@@ -898,7 +906,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         );
       }
-
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
         String color = (isDarkMode) ? 'white' : 'black';
@@ -918,6 +925,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           return '<img src="$href">';
         });
 
+        List<String> words = modifiedDescription.split(' ');
+
+        int insertPosition = 50;
+        if (words.length < 50) {
+          insertPosition = words.length;
+        }
+
+        String adBanner = '''
+<div style="position: relative; display: inline-block;">
+  <a href="${_adData!.link}?isAd=true" style="text-decoration: none;"> 
+    <img src="${Application.picturesURL}${_adData!.image}" alt="Ad Banner" style="max-width: 100%; height: 10rem; display: block;">
+    <div style="position: absolute; top: 0; right: 0; background-color: rgba(0, 0, 0, 0.7); color: white; font-size: 0.5rem; z-index: 2; padding: 5px; text-align: right;">
+      Anzeige
+    </div>
+  </a>
+</div>
+''';
+        List<String> beforeAd = words.sublist(0, insertPosition);
+        List<String> afterAd = words.sublist(insertPosition);
+        modifiedDescription =
+            '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
+
         description = HtmlWidget(
           modifiedDescription,
           textStyle: TextStyle(
@@ -928,7 +957,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           customStylesBuilder: (element) {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
-            } else if (element.localName == '') {
+            } else if (element.localName == 'a') {
+              // Handle link clicks
+              element.attributes['onclick'] =
+                  'window.flutter_inappwebview.callHandler("openUrl", "${element.attributes['href']}")';
               return {'color': hexColor};
             }
             var style = element.attributes['style'];
@@ -938,15 +970,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             } else {
               style = 'color: $hexColor;';
             }
-
             return {'style': style};
           },
-          // onTapUrl: (url) {
-          //   if (Uri.parse(url).hasAbsolutePath) {
-          //     _makeAction(url);
-          //   }
-          //   return false;
-          // },
+          onTapUrl: (url) {
+            final uri = Uri.parse(url);
+            if (uri.queryParameters['isAd'] == 'true') {
+              return false;
+            } else {
+              if (Uri.parse(url).hasAbsolutePath) {
+                _makeAction(url);
+              }
+              return false;
+            }
+          },
         );
       }
 
