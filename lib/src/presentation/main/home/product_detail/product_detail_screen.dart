@@ -935,8 +935,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         String adBanner = '''
 <div style="position: relative; display: inline-block; width: 100%;">
-  <a href="${_adData!.link}" style="position: relative; text-decoration: none; display: block;">
-    <img src="${Application.picturesURL}${_adData!.image}" alt="Ad Banner" style="width: 100%; height: 10rem; display: block;">
+  <a href="${_adData!.link}?isAd=true">
+    <img src="${Application.picturesURL}${_adData!.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: 100%; display: block;">
     <div style="position: absolute; top: 0; right: 0; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; z-index: 2; text-align: right;"> 
       Anzeige
     </div>
