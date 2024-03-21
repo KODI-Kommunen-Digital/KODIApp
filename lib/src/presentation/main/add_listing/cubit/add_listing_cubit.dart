@@ -244,6 +244,15 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
+  void setSubCategoryId(value) async {
+    try {
+      _repo.setSubCategoryId(value);
+    } catch (e, stackTrace) {
+      logError('set subCategoryID Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    }
+  }
+
   void saveAssets(assetList) {
     selectedAssets = assetList;
   }

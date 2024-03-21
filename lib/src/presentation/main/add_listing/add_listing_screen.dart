@@ -1022,6 +1022,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                   .getSubCategoryId(value);
                               setState(() {
                                 selectedSubCategory = value as String?;
+                                context
+                                    .read<AddListingCubit>()
+                                    .setSubCategoryId(
+                                        selectedSubCategory?.toLowerCase());
                               });
                             },
                           ),
@@ -1572,9 +1576,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
     context
         .read<AddListingCubit>()
         .setCategoryId(selectedCategory.toLowerCase());
+    context
+        .read<AddListingCubit>()
+        .setSubCategoryId(subCategoryResponse?.data.last['name']);
+
     setState(() {
       listSubCategory = subCategoryResponse!.data;
-
       selectedSubCategory = subCategoryResponse.data.last['name'];
     });
   }
