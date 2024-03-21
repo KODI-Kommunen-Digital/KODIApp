@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -689,11 +688,5 @@ class ListRepository {
 
   void clearSubCategory() async {
     prefs.deleteKey(Preferences.subCategoryId);
-  }
-
-  Future<AdDataModel> loadAdData(cityId) async {
-    final response = await Api.requestAdData(cityId);
-    final responseData = response.data;
-    return AdDataModel(link: responseData.datalink, image: responseData.image);
   }
 }
