@@ -928,15 +928,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         List<String> words = modifiedDescription.split(' ');
 
-        int insertPosition = 50;
-        if (words.length < 50) {
-          insertPosition = words.length;
-        }
+        int insertPosition = words.length >= 50 ? 50 : words.length;
 
-        String adBanner = '''
-<div style="position: relative; display: inline-block; width: 100%;">
-  <a href="${_adData!.link}?isAd=true">
-    <img src="${Application.picturesURL}${_adData!.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: 100%; display: block;">
+        if (_adData != null) {
+          String adBanner = '''
+<div style="position: relative; display: inline-block; width: 100%; min-height: 300px;">
+  <a href="${_adData?.link}?isAd=true" style="display: block; height: 100%;">
+    <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: auto; display: block;">
     <div style="position: absolute; top: 0; right: 0; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; z-index: 2; text-align: right;"> 
       Anzeige
     </div>
@@ -944,10 +942,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 </div>
 ''';
 
-        List<String> beforeAd = words.sublist(0, insertPosition);
-        List<String> afterAd = words.sublist(insertPosition);
-        modifiedDescription =
-            '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
+          List<String> beforeAd = words.sublist(0, insertPosition);
+          List<String> afterAd = words.sublist(insertPosition);
+          modifiedDescription =
+              '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
+        }
 
         description = HtmlWidget(
           modifiedDescription,
@@ -959,11 +958,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           customStylesBuilder: (element) {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
-            } else if (element.localName == 'a') {
-              // Handle link clicks
-              element.attributes['onclick'] =
-                  'window.flutter_inappwebview.callHandler("openUrl", "${element.attributes['href']}")';
-              return {'color': hexColor};
             }
             var style = element.attributes['style'];
             if (style != null) {
@@ -976,14 +970,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           },
           onTapUrl: (url) {
             final uri = Uri.parse(url);
-            if (uri.queryParameters['isAd'] == 'true') {
-              return false;
+            Uri newUri;
+            if (uri.queryParameters.keys.length == 1 &&
+                uri.queryParameters.containsKey('isAd')) {
+              newUri = uri.replace(query: '');
             } else {
-              if (Uri.parse(url).hasAbsolutePath) {
-                _makeAction(url);
-              }
-              return false;
+              newUri = uri.replace(
+                queryParameters: Map.from(uri.queryParameters)..remove('isAd'),
+              );
             }
+
+            if (newUri.hasAbsolutePath) {
+              _makeAction(newUri.toString());
+            }
+            return false;
           },
         );
       }
