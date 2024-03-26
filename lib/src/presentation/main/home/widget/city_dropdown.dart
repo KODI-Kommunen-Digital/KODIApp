@@ -26,12 +26,12 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
     String? chosenOption =
         widget.selectedOption != "" ? widget.selectedOption : null;
     EdgeInsets contentPadding = Platform.isIOS
-        ? const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0)
+        ? const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0)
         : const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0);
 
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
+        padding: const EdgeInsets.only(left: 10, right: 5, bottom: 8),
         child: Card(
           margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
