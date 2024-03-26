@@ -1,4 +1,4 @@
-package com.gesekeapp
+package com.coburgapp
 
 import io.flutter.embedding.android.FlutterActivity
 

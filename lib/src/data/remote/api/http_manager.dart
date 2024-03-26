@@ -16,12 +16,8 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-        ? 'https://app.geseke.it/api/'
-        : 'https://app.geseke.it/forumapi/';
-    // // _baseUrl = !forum
-    //      ? 'https://test.smartregion-auf.de/api/'
-    //      : 'https://test.smartregion-auf.de/forumapi/';
+    _baseUrl =
+        !forum ? 'http://116.203.2.158:8002/' : 'http:/116.203.2.158:8002/';
 
     _dio = Dio(
       BaseOptions(
