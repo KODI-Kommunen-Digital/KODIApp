@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
@@ -38,6 +39,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
+  AdDataModel? _adData;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -48,6 +50,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
+    _loadAdData();
+  }
+
+  void _loadAdData() async {
+    _adData = await ProductDetailCubit.loadAdData(widget.item.cityId);
+    setState(() {});
   }
 
   @override
@@ -898,7 +906,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         );
       }
-
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
         String color = (isDarkMode) ? 'white' : 'black';
@@ -918,6 +925,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           return '<img src="$href">';
         });
 
+        List<String> words = modifiedDescription.split(' ');
+
+        int insertPosition = words.length >= 50 ? 50 : words.length;
+
+        if (_adData != null) {
+          String adBanner = '''
+    <div style="position: relative; display: inline-block; width: 100%;">
+      <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
+        <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: 100%; display: block;">
+        <div style="position: absolute; top: 0; right: 0; color: white; padding: 4px 8px; font-size: 10px; font-weight: bold; z-index: 2; text-align: right; text-decoration: none;"> 
+          Anzeige
+        </div>
+      </a>
+    </div>
+    ''';
+
+          List<String> beforeAd = words.sublist(0, insertPosition);
+          List<String> afterAd = words.sublist(insertPosition);
+          modifiedDescription =
+              '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
+        }
+
         description = HtmlWidget(
           modifiedDescription,
           textStyle: TextStyle(
@@ -928,8 +957,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           customStylesBuilder: (element) {
             if (element.localName == 'img') {
               return {'max-width': '100%'};
-            } else if (element.localName == '') {
-              return {'color': hexColor};
             }
             var style = element.attributes['style'];
             if (style != null) {
@@ -938,15 +965,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             } else {
               style = 'color: $hexColor;';
             }
-
             return {'style': style};
           },
-          // onTapUrl: (url) {
-          //   if (Uri.parse(url).hasAbsolutePath) {
-          //     _makeAction(url);
-          //   }
-          //   return false;
-          // },
+          onTapUrl: (url) {
+            if (Platform.isAndroid) {
+              final uri = Uri.parse(url);
+              final newUri = Uri(
+                scheme: uri.scheme,
+                host: uri.host,
+                path: uri.path,
+                queryParameters: Map.from(uri.queryParameters)..remove('isAd'),
+              );
+              if (newUri.hasAbsolutePath) {
+                _makeAction(newUri.toString());
+              }
+              return false;
+            } else if (Platform.isIOS) {
+              final uri = Uri.parse(url);
+              if (uri.queryParameters['isAd'] == 'true') {
+                return false;
+              } else {
+                final newUri = Uri(
+                  scheme: uri.scheme,
+                  host: uri.host,
+                  path: uri.path,
+                  queryParameters: Map.from(uri.queryParameters)
+                    ..remove('isAd'),
+                );
+                if (newUri.hasAbsolutePath) {
+                  _makeAction(newUri.toString());
+                }
+                return false;
+              }
+            }
+            return false;
+          },
         );
       }
 
