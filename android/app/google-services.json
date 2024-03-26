@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "241988975776",
-    "project_id": "geseke-app-df8ca",
-    "storage_bucket": "geseke-app-df8ca.appspot.com"
+    "project_id": "Coburg-df8ca",
+    "storage_bucket": "Coburg-df8ca.appspot.com"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:241988975776:android:a3d635e126c5c193b19dc5",
         "android_client_info": {
-          "package_name": "com.geseketest"
+          "package_name": "com.coburgtest"
         }
       },
       "oauth_client": [],

@@ -181,17 +181,19 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "10") {
-      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-      if (cityId != 0) {
-        if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'forums'});
-      } else {
-        if (!mounted) return;
-        _showCitySelectionPopup(context);
-      }
-    } else {
+    }
+    // else if (service.imageLink == "10") {
+    //   final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+    //   if (cityId != 0) {
+    //     if (!mounted) return;
+    //     Navigator.pushNamed(context, Routes.listGroups,
+    //         arguments: {'id': service.arguments, 'title': 'forums'});
+    //   } else {
+    //     if (!mounted) return;
+    //     _showCitySelectionPopup(context);
+    //   }
+    // }
+    else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
       if (service.categoryId != null) {
@@ -203,29 +205,29 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
   }
 
-  void _showCitySelectionPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Stadt Auswählen'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translate.of(context).translate('please_select_city')),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // void _showCitySelectionPopup(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return AlertDialog(
+  //         title: const Text('Stadt Auswählen'),
+  //         content: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             Text(Translate.of(context).translate('please_select_city')),
+  //             const SizedBox(height: 16),
+  //           ],
+  //         ),
+  //         actions: <Widget>[
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: const Text('OK'),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 }

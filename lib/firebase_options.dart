@@ -53,16 +53,16 @@ class DefaultFirebaseOptions {
     apiKey: 'AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA',
     appId: '1:241988975776:android:a3d635e126c5c193b19dc5',
     messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
+    projectId: 'Coburg-df8ca',
+    storageBucket: 'Coburg-df8ca.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBt91UklC0sCKh6tfNXfXd6DF45SOguCY4',
     appId: '1:241988975776:ios:a8cccbffaf984429b19dc5',
     messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
-    iosBundleId: 'gesekeapp',
+    projectId: 'Coburg-df8ca',
+    storageBucket: 'Coburg-df8ca.appspot.com',
+    iosBundleId: 'coburgapp',
   );
 }
