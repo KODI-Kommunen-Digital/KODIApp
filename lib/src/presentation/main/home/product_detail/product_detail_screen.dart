@@ -931,15 +931,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         if (_adData != null) {
           String adBanner = '''
-<div style="position: relative; display: inline-block; width: 100%; min-height: 300px;">
-  <a href="${_adData?.link}?isAd=true" style="display: block; height: 100%;">
-    <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: auto; display: block;">
-    <div style="position: absolute; top: 0; right: 0; background-color: rgba(0, 0, 0, 0.5); color: white; padding: 4px 8px; font-size: 12px; font-weight: bold; z-index: 2; text-align: right;"> 
-      Anzeige
+    <div style="position: relative; display: inline-block; width: 100%;">
+      <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
+        <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; height: auto; display: block;">
+        <div style="position: absolute; top: 0; right: 0; color: white; padding: 4px 8px; font-size: 10px; font-weight: bold; z-index: 2; text-align: right; text-decoration: none;"> 
+          Anzeige
+        </div>
+      </a>
     </div>
-  </a>
-</div>
-''';
+    ''';
 
           List<String> beforeAd = words.sublist(0, insertPosition);
           List<String> afterAd = words.sublist(insertPosition);
@@ -968,19 +968,35 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             return {'style': style};
           },
           onTapUrl: (url) {
-            final uri = Uri.parse(url);
-            Uri newUri;
-            if (uri.queryParameters.keys.length == 1 &&
-                uri.queryParameters.containsKey('isAd')) {
-              newUri = uri.replace(query: '');
-            } else {
-              newUri = uri.replace(
+            if (Platform.isAndroid) {
+              final uri = Uri.parse(url);
+              final newUri = Uri(
+                scheme: uri.scheme,
+                host: uri.host,
+                path: uri.path,
                 queryParameters: Map.from(uri.queryParameters)..remove('isAd'),
               );
-            }
-
-            if (newUri.hasAbsolutePath) {
-              _makeAction(newUri.toString());
+              if (newUri.hasAbsolutePath) {
+                _makeAction(newUri.toString());
+              }
+              return false;
+            } else if (Platform.isIOS) {
+              final uri = Uri.parse(url);
+              if (uri.queryParameters['isAd'] == 'true') {
+                return false;
+              } else {
+                final newUri = Uri(
+                  scheme: uri.scheme,
+                  host: uri.host,
+                  path: uri.path,
+                  queryParameters: Map.from(uri.queryParameters)
+                    ..remove('isAd'),
+                );
+                if (newUri.hasAbsolutePath) {
+                  _makeAction(newUri.toString());
+                }
+                return false;
+              }
             }
             return false;
           },
