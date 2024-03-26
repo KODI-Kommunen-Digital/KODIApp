@@ -1002,7 +1002,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           },
         );
       }
-
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
