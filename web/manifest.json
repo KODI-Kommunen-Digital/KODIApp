@@ -1,11 +1,11 @@
 {
-    "name": "Geseke-App",
-    "short_name": "Geseke-App",
+    "name": "Salzkotten-App",
+    "short_name": "Salzkotten-App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Geseke-App",
+    "description": "Salzkotten-App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
