@@ -5,6 +5,7 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+// import 'package:firebase_remote_config/firebase_remote_config.dart';
 
 Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 
@@ -97,4 +98,22 @@ class FirebaseApi {
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     return userId;
   }
+
+  // Future<void> initRemoteConfig() async {
+  //   final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
+  //   try {
+  //     await remoteConfig.setConfigSettings(RemoteConfigSettings(
+  //       fetchTimeout: const Duration(seconds: 10),
+  //       minimumFetchInterval: const Duration(seconds: 10),
+  //     ));
+  //     await remoteConfig.setDefaults({
+  //       'show_ad': false,
+  //     });
+  //     await remoteConfig.fetchAndActivate();
+  //     final showAd = remoteConfig.getBool('showAds');
+  //     logInfo('showAds: $showAd');
+  //   } catch (exception) {
+  //     logError('Unable to fetch remote config: $exception');
+  //   }
+  // }
 }

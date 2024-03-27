@@ -928,9 +928,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         List<String> words = modifiedDescription.split(' ');
 
-        int insertPosition = words.length >= 50 ? 50 : words.length;
+        int insertPosition = words.length >= 100 ? 100 : words.length;
 
-        if (_adData != null) {
+        if (_adData != null && words.length > 50) {
           String adBanner = '''
     <div style="position: relative; display: inline-block; width: 100%;">
       <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
@@ -981,23 +981,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 _makeAction(newUri.toString());
               }
               return false;
-            } else if (Platform.isIOS) {
-              final uri = Uri.parse(url);
-              if (uri.queryParameters['isAd'] == 'true') {
-                return false;
-              } else {
-                final newUri = Uri(
-                  scheme: uri.scheme,
-                  host: uri.host,
-                  path: uri.path,
-                  queryParameters: Map.from(uri.queryParameters)
-                    ..remove('isAd'),
-                );
-                if (newUri.hasAbsolutePath) {
-                  _makeAction(newUri.toString());
-                }
-                return false;
-              }
             }
             return false;
           },

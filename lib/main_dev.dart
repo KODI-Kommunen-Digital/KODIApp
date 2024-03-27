@@ -56,6 +56,7 @@ Future<void> main() async {
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  // await FirebaseApi(globalNavKey, prefBox).initRemoteConfig();
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
