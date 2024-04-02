@@ -358,9 +358,9 @@ class ListRepository {
       }
     }
 
-    if (endDate != null && endDate != "") {
+    if (endDate != null && endDate != "" && endTime != null) {
       String formattedTime;
-      if (endTime!.hour < 10) {
+      if (endTime.hour < 10) {
         formattedTime =
             "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
@@ -506,9 +506,9 @@ class ListRepository {
       }
     }
 
-    if (endDate != null && endDate != "") {
+    if (endDate != null && endDate != "" && endTime != null) {
       String formattedTime;
-      if (endTime!.hour < 10) {
+      if (endTime.hour < 10) {
         formattedTime =
             "${endTime.periodOffset}${endTime.hour}:${endTime.minute.toString().padLeft(2, '0')}";
         combinedEndDateTime = "${endDate.trim()}T$formattedTime";
