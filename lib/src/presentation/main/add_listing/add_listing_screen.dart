@@ -278,6 +278,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = jsonCategory.firstWhere(
           (element) => element["id"] == widget.item!.categoryId)["name"];
+      context
+          .read<AddListingCubit>()
+          .setCategoryId(selectedCategory?.toLowerCase());
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         selectedSubCategory = listSubCategory.firstWhere(
