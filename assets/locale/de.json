@@ -520,6 +520,7 @@
   "choose_time_period": "Zeitraum auswählen",
   "choose_listing_status": "Beitragsstatus auswählen",
   "choose_forum": "Forum auswählen",
-  "all": "Alle"
+  "all": "Alle",
+  "error_message": "Es ist ein Fehler aufgetreten, versuchen Sie es später erneut."
 }
 
