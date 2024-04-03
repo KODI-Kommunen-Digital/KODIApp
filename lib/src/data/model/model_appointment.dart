@@ -52,7 +52,7 @@ class AppointmentModel {
     }
 
     final Map<String, dynamic> openHours =
-        json['metaData']['OpeningDates'] ?? {};
+        json['metaData']['openingDates'] ?? {};
     List<OpenTimeModel> parsedOpenHours = [];
 
     const daysOfWeek = [

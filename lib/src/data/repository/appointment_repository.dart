@@ -119,7 +119,7 @@ class AppointmentRepository {
     Map<String, dynamic> metaData = {
       'Holidays': parsedHolidays,
       'maxBookingPerSlot': maxBookingPerSlot,
-      'OpeningDates': parsedOpenHours
+      'openingDates': parsedOpenHours
     };
 
     Map<String, dynamic> params = {
@@ -175,7 +175,7 @@ class AppointmentRepository {
     Map<String, dynamic> metaData = {
       'Holidays': parsedHolidays,
       'maxBookingPerSlot': maxBookingPerSlot,
-      'OpeningDates': parsedOpenHours
+      'openingDates': parsedOpenHours
     };
 
     Map<String, dynamic> params = {
