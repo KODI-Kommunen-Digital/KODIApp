@@ -41,7 +41,7 @@ class AppointmentServiceModel {
       parsedHolidays = null;
     }
 
-    final Map<String, dynamic>? openHours = json['MetaData']['OpeningDates'];
+    final Map<String, dynamic>? openHours = json['MetaData']['openingDates'];
     List<OpenTimeModel>? parsedOpenHours = [];
 
     if (openHours != null) {
