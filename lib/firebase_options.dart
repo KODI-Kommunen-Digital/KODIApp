@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '241988975776',
     projectId: 'geseke-app-df8ca',
     storageBucket: 'geseke-app-df8ca.appspot.com',
-    iosBundleId: 'gesekeapp',
+    iosBundleId: 'salzkottenapp',
   );
 }
