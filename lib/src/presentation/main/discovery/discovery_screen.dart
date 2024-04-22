@@ -267,7 +267,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(link));
 
-    await showModalBottomSheet(
+    showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (BuildContext context) {
@@ -282,18 +282,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
-                    // Expanded(
-                    //   child: Text(
-                    //     link,
-                    //     overflow: TextOverflow.ellipsis,
-                    //     maxLines: 1,
-                    //     style: TextStyle(
-                    //       color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    //           Colors.white,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
                     const Spacer(),
                     IconButton(
                       icon: Icon(
@@ -308,9 +296,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                   ],
                 ),
               ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+              Expanded(
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -321,6 +307,18 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         );
       },
     );
+
+    Timer.periodic(const Duration(milliseconds: 100), (timer) async {
+      var readyState = await webViewController
+          .runJavaScriptReturningResult("document.readyState;");
+
+      if (readyState is String &&
+          readyState.toLowerCase().contains('complete')) {
+        await webViewController.runJavaScript(
+            "document.querySelector('div[slot=\"navbar\"]').style.display='none';");
+        timer.cancel();
+      }
+    });
   }
 
   void _showCitySelectionPopup(BuildContext context) {
