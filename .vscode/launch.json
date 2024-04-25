@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Auf App",
+            "name": "Fichtel Business",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Auf App (profile mode)",
+            "name": "Fichtel Business (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Auf App (release mode)",
+            "name": "Fichtel Business (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

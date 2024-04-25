@@ -1,11 +1,11 @@
 {
-    "name": "Auf App",
-    "short_name": "Auf App",
+    "name": "Fichtel Business",
+    "short_name": "Fichtel Business",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Auf App",
+    "description": "Fichtel Business",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
