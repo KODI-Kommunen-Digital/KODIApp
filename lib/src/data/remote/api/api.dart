@@ -643,8 +643,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestAdData(cityId) async {
-    var list = '/ads?cityId=$cityId';
+  static Future<ResultApiModel> requestAdData(cityId, listingId) async {
+    var list = '/ads?cityId=$cityId&listingId=listingId';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
