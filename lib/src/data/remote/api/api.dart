@@ -644,7 +644,7 @@ class Api {
   }
 
   static Future<ResultApiModel> requestAdData(cityId, listingId) async {
-    var list = '/ads?cityId=$cityId&listingId=listingId';
+    var list = '/ads?cityId=$cityId&listingId=$listingId';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
