@@ -89,6 +89,7 @@ dependencies:
   multiple_images_picker: ^1.0.1
   html: ^0.15.4
   firebase_remote_config: ^4.3.8
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:

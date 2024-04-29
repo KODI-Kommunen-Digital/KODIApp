@@ -122,8 +122,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     }
   }
 
-  static Future<AdDataModel> loadAdData(cityId) async {
-    final response = await Api.requestAdData(cityId);
+  static Future<AdDataModel> loadAdData(cityId, listingId) async {
+    final response = await Api.requestAdData(cityId, listingId);
     final responseData = response.data;
     return AdDataModel(
         link: responseData['link'], image: responseData['image']);

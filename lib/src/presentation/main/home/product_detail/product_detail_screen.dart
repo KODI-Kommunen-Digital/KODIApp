@@ -85,7 +85,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void _loadAdData() async {
-    _adData = await ProductDetailCubit.loadAdData(widget.item.cityId);
+    _adData =
+        await ProductDetailCubit.loadAdData(widget.item.cityId, widget.item.id);
     setState(() {});
   }
 
