@@ -3,8 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_appointment.dart';
-import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -14,18 +12,10 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_l
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/appointment_detail_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_details/cubit/appointment_details_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/appointment_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/cubit/my_appointments_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/my_appointments/my_appointments_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/appointment_requests_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/appointments/requests/cubit/appointment_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
-
 // import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
@@ -39,10 +29,6 @@ import 'package:heidi/src/presentation/main/account/profile_settings/profile_set
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
-import 'package:heidi/src/presentation/main/add_listing/create_appointment/create_appointment_screen.dart';
-import 'package:heidi/src/presentation/main/add_listing/create_appointment/cubit/create_appoitment_cubit.dart';
-import 'package:heidi/src/presentation/main/add_listing/create_appointment/open_time_slots/open_time_slots.dart';
-import 'package:heidi/src/presentation/main/add_listing/create_appointment/select_holidays/select_holidays.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
@@ -322,40 +308,6 @@ class Routes {
           },
         );
 
-      case createAppointment:
-        return MaterialPageRoute(
-          builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
-            return BlocProvider(
-              create: (context) => CreateAppointmentCubit(),
-              child: CreateAppointmentScreen(
-                serviceEntries: arguments['serviceEntries']
-                    as List<AppointmentServiceModel>?,
-              ),
-            );
-          },
-        );
-
-      case selectHolidays:
-        return MaterialPageRoute(
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => CreateAppointmentCubit(),
-              child: const SelectHolidaysScreen(
-                selectedDates: [],
-              ),
-            );
-          },
-        );
-
-      case openTime:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const OpenTimeSlotsScreen();
-          },
-        );
-
       case legal:
         return MaterialPageRoute(
           builder: (context) {
@@ -403,52 +355,6 @@ class Routes {
               child: DashboardScreen(
                 isEditable: arguments['editable'] as bool,
               ),
-            );
-          },
-        );
-
-      case appointments:
-        return MaterialPageRoute(
-          builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
-            return AppointmentScreen(
-              user: arguments['user'] as UserModel,
-            );
-          },
-        );
-
-      case myAppointments:
-        return MaterialPageRoute(
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => MyAppointmentsCubit(),
-              child: const MyAppointmentsScreen(),
-            );
-          },
-        );
-
-      case appointmentDetails:
-        return MaterialPageRoute(
-          builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
-            return BlocProvider(
-              create: (context) => AppointmentDetailsCubit(),
-              child: AppointmentDetailsScreen(
-                  appointment: arguments['item'] as AppointmentModel),
-            );
-          },
-        );
-
-      case appointmentRequests:
-        return MaterialPageRoute(
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => AppointmentRequestsCubit(
-                context.read(),
-              ),
-              child: const AppointmentRequestsScreen(),
             );
           },
         );
