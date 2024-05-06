@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       bottomNavigationBar: _buildBottomMenu(),
-      floatingActionButton: _buildSubmit(),
+      // floatingActionButton: _buildSubmit(),
       floatingActionButtonLocation: submitPosition,
     );
   }
@@ -193,29 +193,29 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget? _buildSubmit() {
-    return FloatingActionButton(
-      backgroundColor: Theme.of(context).primaryColor,
-      onPressed: _onSubmit,
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
-      ),
-    );
-  }
+  // Widget? _buildSubmit() {
+  //   return FloatingActionButton(
+  //     backgroundColor: Theme.of(context).primaryColor,
+  //     onPressed: _onSubmit,
+  //     child: const Icon(
+  //       Icons.add,
+  //       color: Colors.white,
+  //     ),
+  //   );
+  // }
 
-  void _onSubmit() async {
-    if (AppBloc.userCubit.state == null) {
-      final result = await Navigator.pushNamed(
-        context,
-        Routes.signIn,
-        arguments: Routes.submit,
-      );
-      if (result == null) return;
-    }
-    if (!mounted) return;
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  }
+  // void _onSubmit() async {
+  //   if (AppBloc.userCubit.state == null) {
+  //     final result = await Navigator.pushNamed(
+  //       context,
+  //       Routes.signIn,
+  //       arguments: Routes.submit,
+  //     );
+  //     if (result == null) return;
+  //   }
+  //   if (!mounted) return;
+  //   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+  // }
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
@@ -226,7 +226,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
-            const SizedBox(width: 56),
+            // const SizedBox(width: 56),
             _buildMenuItem(Routes.wishList),
             _buildMenuItem(Routes.account),
           ],

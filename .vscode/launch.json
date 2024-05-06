@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Auf App",
+            "name": "Troisdorf",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Auf App (profile mode)",
+            "name": "Troisdorf (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Auf App (release mode)",
+            "name": "Troisdorf (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

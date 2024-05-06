@@ -13,7 +13,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Auf App"
+        android:label="Troisdorf"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
