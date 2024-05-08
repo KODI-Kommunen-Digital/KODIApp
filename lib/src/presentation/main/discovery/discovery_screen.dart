@@ -174,23 +174,35 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.imageLink == "1") {
-      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "2") {
+    // if (service.imageLink == "1") {
+    //   await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
+    //       mode: LaunchMode.inAppWebView);
+    // } else if (service.imageLink == "2") {
+    //   await launchUrl(
+    //       Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
+    //       mode: LaunchMode.inAppWebView);
+    // } else if (service.imageLink == "10") {
+    //   final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+    //   if (cityId != 0) {
+    //     if (!mounted) return;
+    //     Navigator.pushNamed(context, Routes.listGroups,
+    //         arguments: {'id': service.arguments, 'title': 'forums'});
+    //   } else {
+    //     if (!mounted) return;
+    //     _showCitySelectionPopup(context);
+    //   }
+    // }
+    if (service.imageLink == "3" ||
+        service.imageLink == "4" ||
+        service.imageLink == "5" ||
+        service.imageLink == "6" ||
+        service.imageLink == "7") {
       await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
+          Uri.parse(
+              await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
+                  ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "10") {
-      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-      if (cityId != 0) {
-        if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'forums'});
-      } else {
-        if (!mounted) return;
-        _showCitySelectionPopup(context);
-      }
+    } else if (service.imageLink == "8" || service.imageLink == "9") {
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -198,8 +210,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         AppBloc.discoveryCubit
             .setServiceValue(Preferences.categoryId, null, service.categoryId);
       }
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': service.arguments, 'title': '', 'isCategoryService': true});
+      Navigator.pushNamed(context, Routes.listProduct, arguments: {
+        'id': service.arguments,
+        'title': '',
+        'isCategoryService': true
+      });
     }
   }
 

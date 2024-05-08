@@ -128,7 +128,7 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
-    - assets/env/.envAuf
+    - assets/env/.envTroisdorf
     - assets/data/categories_config.json
     - assets/data/subcategories_config.json
     - assets/data/services_config.json

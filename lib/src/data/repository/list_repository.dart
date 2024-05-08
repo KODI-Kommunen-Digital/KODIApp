@@ -1,7 +1,5 @@
 // ignore_for_file: unused_local_variable
-
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -30,7 +28,7 @@ class ListRepository {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
-    if (type == "category" || (type == "location" && categoryId != "")) {
+    if (type == "category") {
       int params = categoryId;
       final response = await Api.requestCatList(params, cityId, pageNo);
       if (response.success) {

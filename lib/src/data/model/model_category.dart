@@ -43,7 +43,7 @@ class CategoryModel {
     final icon = UtilIcon.getIconFromCss(json['icon']);
     final color = UtilColor.getColorFromHex(json['color']);
     return CategoryModel(
-      id: json['id'] ?? json['id'] ?? json["categoryId"] ?? 0,
+      id: json['id'] ?? json['id'] ?? json["categoryId"] ?? 1,
       title: json['name'] ?? 'Unknown',
       count: json['count'] ?? json["totalCount"] ?? 0,
       image: json['image'] ?? '',
