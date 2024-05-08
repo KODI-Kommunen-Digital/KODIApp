@@ -56,7 +56,7 @@ Future<void> main() async {
         'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envAuf");
+  await dotenv.load(fileName: "assets/env/.envTroisdorf");
   await CategoryManager.loadCategories();
 }
 

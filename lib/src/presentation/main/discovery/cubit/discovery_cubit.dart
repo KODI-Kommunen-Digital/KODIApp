@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+// import 'package:heidi/src/data/remote/local/link_manager.dart';
 import 'package:heidi/src/data/remote/local/service_manager.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -162,5 +163,22 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     currentCity = cityId;
     return cityId;
+  }
+
+  // Future<String?> getServiceLink(String serviceId) async {
+  //   return LinkManager.getServiceLink(serviceId); // Fetch from LinkManager
+  // }
+
+  Future<String?> getServiceLink(String imageLink) async {
+    Map<String, String> serviceLinks = {
+      "3": "https://termin.troisdorf.de/",
+      "4": "https://onlinedienste.troisdorf.de/",
+      "5":
+          "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
+      "6": "https://troisdorf.dksr.city/map/",
+      "7": "https://web.troisdorf.de/chatbot/"
+    };
+
+    return serviceLinks[imageLink];
   }
 }
