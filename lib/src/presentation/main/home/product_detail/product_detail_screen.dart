@@ -215,11 +215,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Wählen Sie Kalendar App'),
-          content: Text('Welche Kalender App wollen Sie benutzen?),
+          title: Text(Translate.of(context).translate("choose_calendar")),
+          content: Text(Translate.of(context).translate('which_calendar')),
           actions: <Widget>[
             TextButton(
-              child: Text('Standard Calendar'),
+              child: Text(Translate.of(context).translate('standard_calendar')),
               onPressed: () {
                 Navigator.of(context).pop();
                 _addEvent(widget.item);
@@ -227,7 +227,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             if (Platform.isAndroid)
               TextButton(
-                child: Text('Google Kalender'),
+                child: Text(Translate.of(context).translate('google_calendar')),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await launch(
@@ -236,14 +236,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             if (Platform.isIOS)
               TextButton(
-                child: Text('Apple Calendar'),
+                child: Text(Translate.of(context).translate('apple_calendar')),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await launch('calshow://');
                 },
               ),
             TextButton(
-              child: Text('Cancel'),
+              child: Text(Translate.of(context).translate('cancel')),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -259,18 +259,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Keine Erlaubnis erteilt'),
-          content: Text(
-              'Erlaubnis für Kalender ist notwendig. Erneut versuchen?'),
+          title: Text(Translate.of(context).translate("no_permission")),
+          content: Text(Translate.of(context).translate("event_no_permission")),
           actions: <Widget>[
             TextButton(
-              child: Text('Nein'),
+              child: Text(Translate.of(context).translate("no")),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Ja'),
+              child: Text(Translate.of(context).translate("yes")),
               onPressed: () {
                 Navigator.of(context).pop();
                 _requestPermissions();
@@ -330,16 +329,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           await _deviceCalendarPlugin.createOrUpdateEvent(event);
 
       if (createEventResult!.isSuccess && createEventResult.data!.isNotEmpty) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_successful"))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                Translate.of(context).translate("event_added_successful"))));
         _launchCalendarApp(event);
       } else {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_fail"))));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text(Translate.of(context).translate("event_added_fail"))));
       }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_none"))));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(Translate.of(context).translate("event_added_none"))));
     }
   }
 

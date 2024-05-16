@@ -533,5 +533,12 @@
   "duration": "Duration",
   "event_added_successful": "Event added successfully",
   "event_added_fail": "Failed to add event",
-  "event_added_none": "No calendars found"
+  "event_added_none": "No calendars found",
+  "event_no_permission": "Permission for calender is neccessary. Try again?",
+  "no_permission": "No permission given",
+  "choose_calendar": "Choose a calendar app",
+  "which_calendar": "Which calendar app do you want to use?",
+  "standard_calendar": "Standard Calendar",
+  "google_calendar": "Google Calendar",
+  "apple_calendar": "Apple Calendar"
 }
