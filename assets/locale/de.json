@@ -532,6 +532,9 @@
   "addMoreServices": "Füge Dienst hinzu",
   "create_appointment": "Erstelle Termin",
   "addServiceName": "Gebe Dienstnamen ein",
-  "duration": "Dauer"
+  "duration": "Dauer",
+  "event_added_successful": "Event erfolgreich hinzugefügt",
+  "event_added_fail": "Hinzufügen von Event fehlgeschlagen",
+  "event_added_none": "Kalender nicht gefunden"
 }
 
