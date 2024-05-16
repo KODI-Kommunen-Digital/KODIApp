@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/remote/local/service_manager.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
@@ -18,6 +20,8 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic recent;
   dynamic sliders;
   dynamic categoryCount;
+  final List<CitizenServiceModel> hiddenServices = [];
+  late List<CitizenServiceModel> services;
   bool calledExternally = false;
   bool doesScroll = false;
 
@@ -65,15 +69,26 @@ class HomeCubit extends Cubit<HomeState> {
 
     const banner = Images.slider;
 
+    services = await ServiceManager.initializeServices();
+
+    List<CitizenServiceModel> servicesCopy = List.from(services);
+
+    for (var element in servicesCopy) {
+      if (element.categoryId != null || element.type == "subCategoryService") {
+        bool hasContent = await element.hasContent();
+        if (!hasContent) {
+          hiddenServices.add(element);
+        }
+      }
+    }
+
+    //Remove to see all services
+    services.removeWhere((element) => hiddenServices.contains(element));
+
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
-    emit(HomeStateLoaded(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-      isRefreshLoader,
-    ));
+    emit(HomeStateLoaded(banner, formattedCategories, location, recent,
+        isRefreshLoader, services));
   }
 
   Future<void> saveIgnoreAppVersion(String version) async {
@@ -121,13 +136,7 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(
-      banner,
-      category,
-      location,
-      recent,
-      false,
-    ));
+    emit(HomeStateLoaded(banner, category, location, recent, false, services));
   }
 
   bool getCalledExternally() {
@@ -234,5 +243,41 @@ class HomeCubit extends Cubit<HomeState> {
     }).toList();
     recent.addAll(newRecent);
     return recent;
+  }
+
+  Future<void> onLocationFilter(int locationId, bool calledExternal) async {
+    await saveCityId(locationId);
+    emit(const HomeState.loading());
+    await onLoad(false);
+    if (calledExternal) {
+      AppBloc.homeCubit.setCalledExternally(true);
+      await AppBloc.homeCubit.onLoad(false);
+    }
+  }
+
+  Future<void> setServiceValue(String preference, String? type, int? id) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(preference, type ?? id);
+  }
+
+  Future<int?> getCitySelected() async {
+    final prefs = await Preferences.openBox();
+    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
+    return cityId;
+  }
+
+  Future<String?> getServiceLink(String imageLink) async {
+    Map<String, String> serviceLinks = {
+      "3": "https://termin.troisdorf.de/",
+      "4": "https://onlinedienste.troisdorf.de/",
+      "5":
+          "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
+      "6": "https://troisdorf.dksr.city/map/",
+      "7": "https://web.troisdorf.de/chatbot/",
+      "9":
+          "https://geoportal.troisdorf.de/app.php/application/start#75000@7.05291/50.80266r0@EPSG:25832",
+      "11": "https://www.smart-app-troisdorf.de/gewinnspiel",
+    };
+    return serviceLinks[imageLink];
   }
 }
