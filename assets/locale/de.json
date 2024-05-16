@@ -535,6 +535,13 @@
   "duration": "Dauer",
   "event_added_successful": "Event erfolgreich hinzugefügt",
   "event_added_fail": "Hinzufügen von Event fehlgeschlagen",
-  "event_added_none": "Kalender nicht gefunden"
+  "event_added_none": "Kalender nicht gefunden",
+  "event_no_permission": "Erlaubnis für Kalender ist notwendig. Erneut versuchen?",
+  "no_permission": "Keine Erlaubnis erteilt",
+  "choose_calendar": "Wählen Sie eine Kalender App",
+  "which_calendar": "Welche Kalender App wollen Sie benutzen?",
+  "standard_calendar": "Standard Kalender",
+  "google_calendar": "Google Kalender",
+  "apple_calendar": "Apple Kalender"
 }
 
