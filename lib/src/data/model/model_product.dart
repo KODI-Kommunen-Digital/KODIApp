@@ -204,7 +204,7 @@ class ProductModel {
         endDate = "";
       }
     } else if (json['categoryId'] == 4) {
-      category = "Vereine";
+      category = "Mängelmelder";
     } else if (json['categoryId'] == 5) {
       category = "Regionale Produkte";
     } else if (json['categoryId'] == 6) {

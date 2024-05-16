@@ -176,9 +176,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "5":
           "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
       "6": "https://troisdorf.dksr.city/map/",
-      "7": "https://web.troisdorf.de/chatbot/"
+      "7": "https://web.troisdorf.de/chatbot/",
+      "9":
+          "https://geoportal.troisdorf.de/app.php/application/start#75000@7.05291/50.80266r0@EPSG:25832",
+      "11": "https://www.smart-app-troisdorf.de/gewinnspiel",
     };
-
     return serviceLinks[imageLink];
   }
 }

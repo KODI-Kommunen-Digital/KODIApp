@@ -1,11 +1,11 @@
 {
-    "name": "Troisdorf",
-    "short_name": "Troisdorf",
+    "name": "smarT:app",
+    "short_name": "smarT:app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Troisdorf",
+    "description": "smarT:app",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
