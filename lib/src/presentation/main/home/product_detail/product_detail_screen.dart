@@ -194,7 +194,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     PermissionStatus status;
 
     // Check current permission status
-    status = await Permission.calendar.status;
+    status = await Permission.calendar.request();
 
     if (status.isDenied || status.isRestricted || status.isLimited) {
       // Request permission
