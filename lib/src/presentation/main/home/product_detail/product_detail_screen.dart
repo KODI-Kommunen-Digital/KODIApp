@@ -331,15 +331,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       if (createEventResult!.isSuccess && createEventResult.data!.isNotEmpty) {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Event added successfully')));
+            .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_successful"))));
         _launchCalendarApp(event);
       } else {
         ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Failed to add event')));
+            .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_fail"))));
       }
     } else {
       ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('No calendars found')));
+          .showSnackBar(SnackBar(content: Text(Translate.of(context).translate("event_added_none"))));
     }
   }
 

@@ -530,5 +530,8 @@
   "addMoreServices": "Add service",
   "create_appointment": "Create Appointment",
   "addServiceName": "Add service name",
-  "duration": "Duration"
+  "duration": "Duration",
+  "event_added_successful": "Event added successfully",
+  "event_added_fail": "Failed to add event",
+  "event_added_none": "No calendars found"
 }
