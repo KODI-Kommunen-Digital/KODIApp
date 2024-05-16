@@ -9,10 +9,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
@@ -23,6 +23,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
   List<ProductModel>? recent = [];
+  List<CitizenServiceModel>? services = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -170,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
             category = state.category;
             location = state.location;
             recent = state.recent;
+            services = state.services;
             isRefreshLoader = true;
             categoryLoading = false;
 
@@ -262,7 +265,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               selectedCityTitle = data;
                               selectedCityId = list.id;
                             });
-                            await AppBloc.discoveryCubit
+                            await AppBloc.homeCubit
                                 .onLocationFilter(selectedCityId, false);
                           } else if (data ==
                               Translate.of(context)
@@ -272,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             });
                             _onUpdateCategory();
                             AppBloc.homeCubit.saveCityId(selectedCityId);
-                            await AppBloc.discoveryCubit
+                            await AppBloc.homeCubit
                                 .onLocationFilter(selectedCityId, false);
                             break;
                           }
@@ -294,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? const CircularProgressIndicator.adaptive()
                               : _buildCategory(AppBloc.homeCubit
                                   .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
+                          _buildServices(services),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
@@ -402,7 +405,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id != -1) {
       if (item.id == 17) {
-        final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+        final cityId = await context.read<HomeCubit>().getCitySelected();
         if (cityId != 0) {
           if (!mounted) return;
           Navigator.pushNamed(context, Routes.listGroups,
@@ -419,23 +422,6 @@ class _HomeScreenState extends State<HomeScreen> {
         Navigator.pushNamed(context, Routes.listProduct,
             arguments: {'id': selectedCityId, 'title': ''});
       }
-    } else if (item.id != -1 && !item.hasChild) {
-      _onPopUpCatError();
-    }
-  }
-
-  Future<void> _onLocation(CategoryModel item) async {
-    if (item.id == -1) {
-      _onPopUpCatError();
-      return;
-    }
-
-    if (item.id != -1) {
-      final prefs = await Preferences.openBox();
-      prefs.setKeyValue(Preferences.type, "location");
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': item.id, 'title': item.title});
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
@@ -560,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLocation(List<CategoryModel>? location) {
+  Widget _buildServices(List<CitizenServiceModel>? services) {
     Widget content = ListView.builder(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -574,38 +560,42 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       itemCount: List.generate(8, (index) => index).length,
     );
-    if (location != null) {
+    if (services != null) {
       content = ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         itemBuilder: (context, index) {
-          final item = location[index];
           return selectedCityId != 0
-              ? Visibility(
-                  visible: item.title != selectedCityTitle,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppCategory(
-                      item: item,
-                      type: CategoryView.cardLarge,
-                      onPressed: () {
-                        _onLocation(item);
-                      },
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: InkWell(
+                    onTap: () {
+                      navigateToLink(services[index]);
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.asset(
+                        services[index].imageUrl,
+                        fit: BoxFit.cover,
+                      ),
                     ),
-                  ),
-                )
+                  ))
               : Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: AppCategory(
-                    item: item,
-                    type: CategoryView.cardLarge,
-                    onPressed: () {
-                      _onLocation(item);
+                  child: InkWell(
+                    onTap: () {
+                      navigateToLink(services[index]);
                     },
-                  ),
-                );
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15.0),
+                      child: Image.asset(
+                        services[index].imageUrl,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ));
         },
-        itemCount: location.length,
+        itemCount: services.length,
       );
     }
 
@@ -619,20 +609,19 @@ class _HomeScreenState extends State<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                Translate.of(context).translate(
-                  'popular_location',
-                ),
+                'Services',
                 style: Theme.of(context)
                     .textTheme
                     .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
+              /*
               Text(
                 Translate.of(context).translate(
                   'let_find_interesting',
                 ),
                 style: Theme.of(context).textTheme.bodyLarge,
-              ),
+              ),*/
             ],
           ),
         ),
@@ -731,5 +720,67 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> navigateToLink(CitizenServiceModel service) async {
+    // if (service.imageLink == "1") {
+    //   await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
+    //       mode: LaunchMode.inAppWebView);
+    // } else if (service.imageLink == "2") {
+    //   await launchUrl(
+    //       Uri.parse(await AppBloc.homeCubit.getCityLink() ?? ""),
+    //       mode: LaunchMode.inAppWebView);
+    // } else if (service.imageLink == "10") {
+    //   final cityId = await context.read<homeCubit>().getCitySelected();
+    //   if (cityId != 0) {
+    //     if (!mounted) return;
+    //     Navigator.pushNamed(context, Routes.listGroups,
+    //         arguments: {'id': service.arguments, 'title': 'forums'});
+    //   } else {
+    //     if (!mounted) return;
+    //     _showCitySelectionPopup(context);
+    //   }
+    // }
+    if (service.imageLink == "3" ||
+        service.imageLink == "4" ||
+        service.imageLink == "5" ||
+        service.imageLink == "6" ||
+        service.imageLink == "7" ||
+        service.imageLink == "9" ||
+        service.imageLink == "11") {
+      await launchUrl(
+          Uri.parse(
+              await AppBloc.homeCubit.getServiceLink(service.imageLink) ??
+                  ""),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "8") {
+      _onSubmit();
+    } else if (service.imageLink == "10") {
+    } else {
+      AppBloc.homeCubit
+          .setServiceValue(Preferences.type, service.type, null);
+      if (service.categoryId != null) {
+        AppBloc.homeCubit
+            .setServiceValue(Preferences.categoryId, null, service.categoryId);
+      }
+      Navigator.pushNamed(context, Routes.listProduct, arguments: {
+        'id': service.arguments,
+        'title': '',
+        'type': 'categoryService'
+      });
+    }
+  }
+
+  void _onSubmit() async {
+    if (AppBloc.userCubit.state == null) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.submit,
+      );
+      if (result == null) return;
+    }
+    if (!mounted) return;
+    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
   }
 }
