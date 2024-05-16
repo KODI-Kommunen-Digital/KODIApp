@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 
 part 'home_state.freezed.dart';
@@ -19,6 +20,7 @@ class HomeState with _$HomeState {
     List<CategoryModel> location,
     List<ProductModel> recent,
     bool isRefreshLoader,
+      List<CitizenServiceModel> services,
   ) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;
