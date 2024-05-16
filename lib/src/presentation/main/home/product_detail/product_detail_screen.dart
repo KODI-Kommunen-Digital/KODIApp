@@ -227,7 +227,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             if (Platform.isAndroid)
               TextButton(
-                child: Text('Google Calendar'),
+                child: Text('Google Kalender'),
                 onPressed: () async {
                   Navigator.of(context).pop();
                   await launch(
@@ -259,18 +259,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Permission Denied'),
+          title: Text('Keine Erlaubnis erteilt'),
           content: Text(
-              'Calendar permission is required to add events. Would you like to try again?'),
+              'Erlaubnis für Kalender ist notwendig. Erneut versuchen?'),
           actions: <Widget>[
             TextButton(
-              child: Text('No'),
+              child: Text('Nein'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Yes'),
+              child: Text('Ja'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _requestPermissions();
