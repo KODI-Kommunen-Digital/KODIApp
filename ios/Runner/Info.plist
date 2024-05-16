@@ -40,6 +40,10 @@
 	<string>Need microphone access for uploading audio</string>
 	<key>NSCalendarsUsageDescription</key>
 	<string>We need access to your calendar to add events</string>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>We need access to your calendar to add events</string>
+	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+	<string>We need access to your calendar to add events</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
