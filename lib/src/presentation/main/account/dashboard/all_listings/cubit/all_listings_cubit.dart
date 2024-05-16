@@ -27,17 +27,11 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     List<ProductModel> listDataList = [];
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
-    int currentCityFilter = await getCurrentCityFilter();
 
-    if (status == 0 && currentCityFilter == 0) {
-      listingsRequestResponse = await Api.requestAllListings(1);
-    } else if (status != 0 && currentCityFilter == 0) {
+    if (status != 0) {
       listingsRequestResponse = await Api.requestStatusListings(status, 1);
-    } else if (status != 0 && currentCityFilter != 0) {
-      listingsRequestResponse =
-          await Api.requestStatusLocList(currentCityFilter, 1, status);
     } else {
-      listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1);
+      listingsRequestResponse = await Api.requestAllListings(1);
     }
 
     List<ProductModel> productData =
@@ -82,7 +76,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
     int currentListingFilter = await getCurrentStatus();
     emit(AllListingsState.loaded(
-        posts, currentListingFilter, currentCityFilter));
+        posts, currentListingFilter));
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
