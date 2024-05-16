@@ -71,13 +71,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasLocationFilter: true,
           currentLocation:
               selectedFilter?.currentLocation ?? widget.arguments['id'],
-          cities: AppBloc.discoveryCubit.location);
+          cities: AppBloc.homeCubit.location);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
           currentLocation:
               selectedFilter?.currentLocation ?? widget.arguments['id'],
-          cities: AppBloc.discoveryCubit.location);
+          cities: AppBloc.homeCubit.location);
     }
   }
 

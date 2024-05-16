@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
-import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -37,7 +36,6 @@ class _MainScreenState extends State<MainScreen> {
           index: _exportIndexed(_selectedPage),
           children: const <Widget>[
             HomeScreen(),
-            DiscoveryScreen(),
             WishListScreen(),
             AccountScreen()
           ],
@@ -52,7 +50,6 @@ class _MainScreenState extends State<MainScreen> {
   bool _requireAuth(String route) {
     switch (route) {
       case Routes.home:
-      case Routes.discovery:
       case Routes.account:
         return false;
       default:
@@ -64,12 +61,10 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
         return 0;
-      case Routes.discovery:
-        return 1;
       case Routes.wishList:
-        return 2;
+        return 1;
       case Routes.account:
-        return 3;
+        return 2;
       default:
         return 0;
     }
@@ -120,10 +115,6 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.wishListCubit.setDoesScroll(true);
         AppBloc.wishListCubit.scrollUp();
         break;
-      case Routes.discovery:
-        AppBloc.discoveryCubit.setDoesScroll(true);
-        AppBloc.discoveryCubit.scrollUp();
-        break;
     }
   }
 
@@ -138,12 +129,6 @@ class _MainScreenState extends State<MainScreen> {
         iconData = Icons.home_outlined;
         title = Translate.of(context).translate(
           'home',
-        );
-        break;
-      case Routes.discovery:
-        iconData = Icons.touch_app_rounded;
-        title = Translate.of(context).translate(
-          'services',
         );
         break;
       case Routes.wishList:
@@ -225,7 +210,6 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildMenuItem(Routes.home),
-            _buildMenuItem(Routes.discovery),
             // const SizedBox(width: 56),
             _buildMenuItem(Routes.wishList),
             _buildMenuItem(Routes.account),
