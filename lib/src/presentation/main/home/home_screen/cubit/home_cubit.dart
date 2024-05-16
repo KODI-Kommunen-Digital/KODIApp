@@ -36,6 +36,9 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
+    if (!calledExternally && !isRefreshLoader) {
+      await AppBloc.discoveryCubit.onLoad();
+    }
 
     if (!isRefreshLoader) {
       emit(HomeState.categoryLoading(location));
