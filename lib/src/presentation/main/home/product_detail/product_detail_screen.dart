@@ -19,12 +19,12 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -194,7 +194,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     PermissionStatus status;
 
     // Check current permission status
-    status = await Permission.calendar.status;
+    status = await Permission.calendar.request();
 
     if (status.isDenied || status.isRestricted || status.isLimited) {
       // Request permission
@@ -290,21 +290,40 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     if (calendar != null) {
       // Specify the timezone you want to use, e.g., local time zone
-      tz.TZDateTime now = tz.TZDateTime.now(local);
+      late DateTime eventStart;
+      if (product.startDate != "") {
+        String startDate = "${product.startDate.replaceAll(".", "-")}:00";
+        DateTime startDateTime =
+            DateFormat("dd-MM-yyyy HH:mm:ss").parse(startDate);
+        String formattedStartDate =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(startDateTime);
+        eventStart = DateTime.parse(formattedStartDate);
+      } else {
+        DateTime now = DateTime.now();
+        eventStart = now;
+      }
 
-      var eventStart = product.startDate != ""
-          ? tz.TZDateTime.from(DateTime.parse(product.startDate), tz.local)
-          : now;
-
-      var eventEnd = product.endDate != ""
-          ? tz.TZDateTime.from(DateTime.parse(product.endDate), tz.local)
-          : now.add(const Duration(hours: 1));
+      late DateTime eventEnd;
+      if (product.endDate != "" && product.endDate.length > 5) {
+        String endDate = "${product.endDate.replaceAll(".", "-")}:00";
+        DateTime endDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").parse(endDate);
+        String formattedEndDate =
+            DateFormat("yyyy-MM-dd HH:mm:ss").format(endDateTime);
+        eventEnd = DateTime.parse(formattedEndDate);
+      } else if (product.endDate != "" && product.endDate.length <= 5) {
+        int newHour = int.parse(product.endDate.split(":")[0]);
+        int newMinute = int.parse(product.endDate.split(":")[1]);
+        eventEnd = DateTime(eventStart.year, eventStart.month, eventStart.day,
+            newHour, newMinute, 0, 0, 0);
+      } else {
+        eventEnd = eventStart.add(const Duration(hours: 1));
+      }
 
       var event = Event(
         calendar.id,
         title: product.title,
-        start: eventStart,
-        end: eventEnd,
+        start: TZDateTime.from(eventStart, UTC),
+        end: TZDateTime.from(eventEnd, UTC),
       );
 
       var createEventResult =
@@ -313,6 +332,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (createEventResult!.isSuccess && createEventResult.data!.isNotEmpty) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Event added successfully')));
+        _launchCalendarApp(event);
       } else {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Failed to add event')));
@@ -326,7 +346,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _launchCalendarApp(Event event) async {
     final url = Uri(
       scheme: 'content',
-      path: 'com.android.calendar/time/',
+      path: (Platform.isAndroid) ? 'com.android.calendar/time/' : 'calshow',
       queryParameters: {
         'title': event.title,
         'dtstart': event.start!.millisecondsSinceEpoch.toString(),
