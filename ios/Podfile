@@ -52,7 +52,9 @@ post_install do |installer|
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         '$(inherited)',
         ## dart: PermissionGroup.calendar
-        'PERMISSION_EVENTS=0',
+        'PERMISSION_EVENTS=1',
+        ## dart: PermissionGroup.calendarFullAccess
+        'PERMISSION_EVENTS_FULL_ACCESS=1',
         ## dart: PermissionGroup.reminders
         'PERMISSION_REMINDERS=0',
         ## dart: PermissionGroup.contacts
