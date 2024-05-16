@@ -22,6 +22,9 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:device_calendar/device_calendar.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
@@ -35,6 +38,7 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _scrollController = ScrollController();
   final _productDetailCubit = ProductDetailCubit();
+  final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
 
@@ -144,8 +148,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
+                color: Colors.black,
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
@@ -154,18 +157,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         link,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
+                        style: const TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.close,
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
+                        color: Colors.white,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -187,6 +188,158 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       },
     );
+  }
+
+  Future<void> _requestPermissions() async {
+    PermissionStatus status;
+
+    // Check current permission status
+    status = await Permission.calendar.status;
+
+    if (status.isDenied || status.isRestricted || status.isLimited) {
+      // Request permission
+      status = await Permission.calendar.request();
+    }
+
+    if (status.isGranted) {
+      _showCalendarChoiceDialog();
+    } else if (status.isPermanentlyDenied) {
+      await openAppSettings();
+    } else {
+      _showPermissionDeniedDialog();
+    }
+  }
+
+  Future<void> _showCalendarChoiceDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Choose Calendar App'),
+          content: Text('Which calendar app do you want to use?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Default Calendar'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _addEvent(widget.item);
+              },
+            ),
+            if (Platform.isAndroid)
+              TextButton(
+                child: Text('Google Calendar'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await launch(
+                      'https://calendar.google.com/calendar/r/eventedit');
+                },
+              ),
+            if (Platform.isIOS)
+              TextButton(
+                child: Text('Apple Calendar'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await launch('calshow://');
+                },
+              ),
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showPermissionDeniedDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Permission Denied'),
+          content: Text(
+              'Calendar permission is required to add events. Would you like to try again?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _requestPermissions();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _addEvent(ProductModel product) async {
+    var calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+    var calendars = calendarsResult.data;
+
+    var calendar = calendars?.first;
+
+    if (calendar != null) {
+      // Specify the timezone you want to use, e.g., local time zone
+      tz.TZDateTime now = tz.TZDateTime.now(local);
+
+      var eventStart = product.startDate != ""
+          ? tz.TZDateTime.from(DateTime.parse(product.startDate), tz.local)
+          : now;
+
+      var eventEnd = product.endDate != ""
+          ? tz.TZDateTime.from(DateTime.parse(product.endDate), tz.local)
+          : now.add(const Duration(hours: 1));
+
+      var event = Event(
+        calendar.id,
+        title: product.title,
+        start: eventStart,
+        end: eventEnd,
+      );
+
+      var createEventResult =
+          await _deviceCalendarPlugin.createOrUpdateEvent(event);
+
+      if (createEventResult!.isSuccess && createEventResult.data!.isNotEmpty) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Event added successfully')));
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Failed to add event')));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('No calendars found')));
+    }
+  }
+
+  void _launchCalendarApp(Event event) async {
+    final url = Uri(
+      scheme: 'content',
+      path: 'com.android.calendar/time/',
+      queryParameters: {
+        'title': event.title,
+        'dtstart': event.start!.millisecondsSinceEpoch.toString(),
+        'dtend': event.end!.millisecondsSinceEpoch.toString(),
+        'description': event.description,
+      },
+    );
+
+    if (await canLaunch(url.toString())) {
+      await launch(url.toString());
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 
   ///Build content UI
@@ -251,6 +404,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   color: Theme.of(context).textTheme.bodyLarge?.color ??
                       Colors.white,
                 ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                      width: 100,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 10,
+                      width: 200,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                  ],
+                )
               ],
             ),
             const SizedBox(height: 16),
@@ -969,6 +1155,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
+                IconButton(
+                  icon: const Icon(Icons.event),
+                  onPressed: _requestPermissions,
+                ),
                 const SizedBox(width: 8),
                 // price,
                 // booking,
@@ -1021,7 +1211,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 startDate,
-                endDate
+                endDate,
                 // priceRange,
               ],
             ),

@@ -261,7 +261,7 @@ class ListCubit extends Cubit<ListState> {
       1: "category_news",
       2: "category_traffic",
       3: "category_events",
-      4: "category_clubs",
+      4: "category_defect_report",
       5: "category_products",
       6: "category_offer_search",
       7: "category_free",

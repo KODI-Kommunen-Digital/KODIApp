@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Troisdorf",
+            "name": "smarT:app",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Troisdorf (profile mode)",
+            "name": "smarT:app (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Troisdorf (release mode)",
+            "name": "smarT:app (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

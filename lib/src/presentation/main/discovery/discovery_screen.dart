@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
@@ -11,7 +10,6 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -196,13 +194,17 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "4" ||
         service.imageLink == "5" ||
         service.imageLink == "6" ||
-        service.imageLink == "7") {
+        service.imageLink == "7" ||
+        service.imageLink == "9" ||
+        service.imageLink == "11") {
       await launchUrl(
           Uri.parse(
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "8" || service.imageLink == "9") {
+    } else if (service.imageLink == "8") {
+      _onSubmit();
+    } else if (service.imageLink == "10") {
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -213,34 +215,21 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Navigator.pushNamed(context, Routes.listProduct, arguments: {
         'id': service.arguments,
         'title': '',
-        'isCategoryService': true
+        'type': 'categoryService'
       });
     }
   }
 
-  void _showCitySelectionPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Stadt Auswählen'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translate.of(context).translate('please_select_city')),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
+  void _onSubmit() async {
+    if (AppBloc.userCubit.state == null) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.submit,
+      );
+      if (result == null) return;
+    }
+    if (!mounted) return;
+    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
   }
 }
