@@ -215,11 +215,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Choose Calendar App'),
-          content: Text('Which calendar app do you want to use?'),
+          title: Text('Wählen Sie Kalendar App'),
+          content: Text('Welche Kalender App wollen Sie benutzen?),
           actions: <Widget>[
             TextButton(
-              child: Text('Default Calendar'),
+              child: Text('Standard Calendar'),
               onPressed: () {
                 Navigator.of(context).pop();
                 _addEvent(widget.item);
