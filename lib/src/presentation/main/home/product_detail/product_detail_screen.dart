@@ -1313,9 +1313,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       slivers: <Widget>[
         SliverAppBar(
           leading: IconButton(
-            icon: Icon(
+            icon: const Icon(
               Icons.arrow_back,
-              color: Theme.of(context).iconTheme.color,
+              color: Colors.blue,
             ),
             onPressed: () {
               Navigator.of(context).pop();

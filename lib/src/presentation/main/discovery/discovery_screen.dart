@@ -171,6 +171,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "5" ||
         service.imageLink == "6" ||
         service.imageLink == "7" ||
+        service.imageLink == "8" ||
         service.imageLink == "9" ||
         service.imageLink == "11") {
       await launchUrl(
@@ -178,9 +179,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "8") {
-      _onSubmit();
-    } else if (service.imageLink == "10") {
+    }
+    // else if (service.imageLink == "8") {
+    //   _onSubmit();
+    // }
+    else if (service.imageLink == "10") {
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

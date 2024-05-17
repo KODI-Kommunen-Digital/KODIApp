@@ -179,7 +179,7 @@ class ProductModel {
     }
 
     if (json['categoryId'] == 1) {
-      category = "Nachricht";
+      category = "News";
       final parsedDateTime = DateTime.parse(json['createdAt']);
       createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
       if ((json['expiryDate']) != null) {
@@ -281,7 +281,7 @@ class ProductModel {
       rateText: json['post_status'] ?? '',
       status: status,
       favorite: json['wishlist'] ?? false,
-      address: json['address'] ?? '',
+      address: json['place'] ?? '',
       zipCode: json['zip_code'] ?? '',
       phone: json['phone'] ?? '',
       fax: json['fax'] ?? '',
