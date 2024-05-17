@@ -199,16 +199,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
   }
 
-  void _onSubmit() async {
-    if (AppBloc.userCubit.state == null) {
-      final result = await Navigator.pushNamed(
-        context,
-        Routes.signIn,
-        arguments: Routes.submit,
-      );
-      if (result == null) return;
-    }
-    if (!mounted) return;
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  }
+  // void _onSubmit() async {
+  //   if (AppBloc.userCubit.state == null) {
+  //     final result = await Navigator.pushNamed(
+  //       context,
+  //       Routes.signIn,
+  //       arguments: Routes.submit,
+  //     );
+  //     if (result == null) return;
+  //   }
+  //   if (!mounted) return;
+  //   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+  // }
 }
