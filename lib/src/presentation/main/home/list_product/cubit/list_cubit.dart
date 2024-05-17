@@ -95,13 +95,9 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
 
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     List<ProductModel>? listDataList = [];
-    MultiFilter multiFilter = MultiFilter(
-        hasCategoryFilter: true,
-        hasLocationFilter: true,
-        currentLocation: cityId,
-        currentCategory: categoryId);
+    MultiFilter multiFilter =
+        MultiFilter(hasCategoryFilter: true, currentCategory: categoryId);
 
     final result = await ListRepository.searchListing(
         content: content, multiFilter: multiFilter, pageNo: pageNo++);
@@ -151,8 +147,7 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, int? currentCity) {
+  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -160,12 +155,7 @@ class ListCubit extends Cubit<ListState> {
         if (startDate != null) {
           final startMonth = startDate.month;
           final currentMonth = currentDate.month;
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startMonth == currentMonth) &&
-                (product.cityId == currentCity);
-          } else {
-            return startMonth == currentMonth;
-          }
+          return startMonth == currentMonth;
         }
         return false;
       }).toList();
@@ -177,21 +167,11 @@ class ListCubit extends Cubit<ListState> {
         if (startDate != null) {
           final startWeek = _getWeekNumber(startDate);
           final currentWeek = _getWeekNumber(currentDate);
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startWeek == currentWeek) &&
-                (product.cityId == currentCity);
-          } else {
-            return startWeek == currentWeek;
-          }
+          return startWeek == currentWeek;
         }
         return false;
       }).toList();
 
-      emit(ListStateUpdated(filteredList, listCity));
-    } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
-      filteredList = loadedList.where((product) {
-        return product.cityId == currentCity;
-      }).toList();
       emit(ListStateUpdated(filteredList, listCity));
     } else {
       emit(ListStateUpdated(loadedList, listCity));

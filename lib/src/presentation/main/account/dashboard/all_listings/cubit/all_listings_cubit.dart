@@ -86,13 +86,10 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<List<ProductModel>?> searchListing(content, int pageNo) async {
     int currentListingFilter = await getCurrentStatus();
-    int currentCityFilter = await getCurrentCityFilter();
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
-        hasLocationFilter: true,
         hasListingStatusFilter: true,
-        currentListingStatus: currentListingFilter,
-        currentLocation: currentCityFilter);
+        currentListingStatus: currentListingFilter);
 
     final result = await ListRepository.searchListing(
         content: content, multiFilter: multiFilter, pageNo: pageNo);
