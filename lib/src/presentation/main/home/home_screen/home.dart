@@ -15,7 +15,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
-import 'package:heidi/src/presentation/widget/app_category_item.dart';
+// import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -297,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? const CircularProgressIndicator.adaptive()
                               : _buildCategory(AppBloc.homeCubit
                                   .getCategoriesWithoutHidden(category ?? [])),
-                          _buildServices(services),
+                          // _buildServices(services),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
@@ -546,93 +546,93 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildServices(List<CitizenServiceModel>? services) {
-    Widget content = ListView.builder(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: AppCategory(
-            type: CategoryView.cardLarge,
-          ),
-        );
-      },
-      itemCount: List.generate(8, (index) => index).length,
-    );
-    if (services != null) {
-      content = ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        itemBuilder: (context, index) {
-          return selectedCityId != 0
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {
-                      navigateToLink(services[index]);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: Image.asset(
-                        services[index].imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ))
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: InkWell(
-                    onTap: () {
-                      navigateToLink(services[index]);
-                    },
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(15.0),
-                      child: Image.asset(
-                        services[index].imageUrl,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ));
-        },
-        itemCount: services.length,
-      );
-    }
+  // Widget _buildServices(List<CitizenServiceModel>? services) {
+  //   Widget content = ListView.builder(
+  //     scrollDirection: Axis.horizontal,
+  //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //     itemBuilder: (context, index) {
+  //       return const Padding(
+  //         padding: EdgeInsets.symmetric(horizontal: 8),
+  //         child: AppCategory(
+  //           type: CategoryView.cardLarge,
+  //         ),
+  //       );
+  //     },
+  //     itemCount: List.generate(8, (index) => index).length,
+  //   );
+  //   if (services != null) {
+  //     content = ListView.builder(
+  //       scrollDirection: Axis.horizontal,
+  //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+  //       itemBuilder: (context, index) {
+  //         return selectedCityId != 0
+  //             ? Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 8),
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     navigateToLink(services[index]);
+  //                   },
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15.0),
+  //                     child: Image.asset(
+  //                       services[index].imageUrl,
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                 ))
+  //             : Padding(
+  //                 padding: const EdgeInsets.symmetric(horizontal: 8),
+  //                 child: InkWell(
+  //                   onTap: () {
+  //                     navigateToLink(services[index]);
+  //                   },
+  //                   child: ClipRRect(
+  //                     borderRadius: BorderRadius.circular(15.0),
+  //                     child: Image.asset(
+  //                       services[index].imageUrl,
+  //                       fit: BoxFit.cover,
+  //                     ),
+  //                   ),
+  //                 ));
+  //       },
+  //       itemCount: services.length,
+  //     );
+  //   }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Services',
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              /*
-              Text(
-                Translate.of(context).translate(
-                  'let_find_interesting',
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),*/
-            ],
-          ),
-        ),
-        Container(
-          height: 180,
-          padding: const EdgeInsets.only(top: 4),
-          child: content,
-        ),
-      ],
-    );
-  }
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       const SizedBox(height: 8),
+  //       Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 16),
+  //         child: Column(
+  //           crossAxisAlignment: CrossAxisAlignment.start,
+  //           children: [
+  //             Text(
+  //               'Services',
+  //               style: Theme.of(context)
+  //                   .textTheme
+  //                   .titleLarge!
+  //                   .copyWith(fontWeight: FontWeight.bold),
+  //             ),
+  //             /*
+  //             Text(
+  //               Translate.of(context).translate(
+  //                 'let_find_interesting',
+  //               ),
+  //               style: Theme.of(context).textTheme.bodyLarge,
+  //             ),*/
+  //           ],
+  //         ),
+  //       ),
+  //       Container(
+  //         height: 180,
+  //         padding: const EdgeInsets.only(top: 4),
+  //         child: content,
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
       List<CategoryModel>? cities) {
@@ -750,15 +750,13 @@ class _HomeScreenState extends State<HomeScreen> {
         service.imageLink == "11") {
       await launchUrl(
           Uri.parse(
-              await AppBloc.homeCubit.getServiceLink(service.imageLink) ??
-                  ""),
+              await AppBloc.homeCubit.getServiceLink(service.imageLink) ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "8") {
       _onSubmit();
     } else if (service.imageLink == "10") {
     } else {
-      AppBloc.homeCubit
-          .setServiceValue(Preferences.type, service.type, null);
+      AppBloc.homeCubit.setServiceValue(Preferences.type, service.type, null);
       if (service.categoryId != null) {
         AppBloc.homeCubit
             .setServiceValue(Preferences.categoryId, null, service.categoryId);
