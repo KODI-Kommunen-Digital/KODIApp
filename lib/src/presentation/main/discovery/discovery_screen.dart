@@ -173,7 +173,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "7" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
-        service.imageLink == "11") {
+        service.imageLink == "11" ||
+        service.imageLink == "12" ||
+        service.imageLink == "13" ||
+        service.imageLink == "14") {
       await launchUrl(
           Uri.parse(
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??

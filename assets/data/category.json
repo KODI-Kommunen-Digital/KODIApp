@@ -2,14 +2,13 @@
     "status": "success",
     "data": [ 
         {
-            "id": 1,
-            "name": "News",
-            "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
-            "color": "#ff8a65",
+            "id": 4,
+            "name": "Gewinnspiel",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-clover",
+            "color": "#102C54",
             "categoryType" : "category"
         },
-        
         {
             "id": 3,
             "name": "Events",
@@ -19,11 +18,43 @@
             "categoryType" : "category"
         },
         {
-            "id": 19,
-            "name": "Mängelmelder",
+            "id": 1,
+            "name": "News",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#ff8a65",
+            "categoryType" : "category"
+        },
+        {
+            "id": 5,
+            "name": "Mobilität",
             "noOfSubcategories": 0,
-            "icon": "far fa-flag",
-            "color": "#5dade2",
+            "icon": "fas fa-location-dot",
+            "color": "#497E76",
+            "categoryType" : "category"
+        },
+        {
+            "id": 6,
+            "name": "Online-Dienste",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-globe",
+            "color": "#84C3BE",
+            "categoryType" : "category"
+        },
+        {
+            "id": 7,
+            "name": "Stadtwerke",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-bolt",
+            "color": "#4C9141",
+            "categoryType" : "category"
+        },
+        {
+            "id": 8,
+            "name": "Sehenswertes",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-eye",
+            "color": "#826C34",
             "categoryType" : "category"
         }
     ]
