@@ -427,6 +427,29 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _onService(CategoryModel item) async {
+    if (item.id == 4) {
+      await launchUrl(
+          Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
+          mode: LaunchMode.inAppWebView);
+    } else if (item.id == 5) {
+      await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
+          mode: LaunchMode.inAppWebView);
+    } else if (item.id == 6) {
+      await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
+          mode: LaunchMode.inAppWebView);
+    } else if (item.id == 7) {
+      await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
+          mode: LaunchMode.inAppWebView);
+    } else if (item.id == 8) {
+      await launchUrl(
+          Uri.parse(
+              "https://geoportal.troisdorf.de/app.php/application/mobile"),
+          mode: LaunchMode.inAppWebView);
+    }
+    return;
+  }
+
   void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
@@ -518,7 +541,7 @@ class _HomeScreenState extends State<HomeScreen> {
         "color": "#36454F",
       });
 
-      if (category.length >= 7) {
+      if (category.length >= 8) {
         listBuild = category.take(7).toList();
         listBuild.add(more);
       }
@@ -531,7 +554,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
-                _onCategory(item, category);
+                if (item.id == 4 ||
+                    item.id == 5 ||
+                    item.id == 6 ||
+                    item.id == 7 ||
+                    item.id == 8) {
+                  _onService(item);
+                } else {
+                  _onCategory(item, category);
+                }
                 return false;
               },
             );
