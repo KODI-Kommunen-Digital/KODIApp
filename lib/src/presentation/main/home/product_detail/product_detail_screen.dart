@@ -1,4 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
+// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously, deprecated_member_use
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
@@ -23,11 +23,11 @@ import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:device_calendar/device_calendar.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
+  const ProductDetailScreen({super.key, required this.item});
 
   final ProductModel item;
 
@@ -38,7 +38,6 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _scrollController = ScrollController();
   final _productDetailCubit = ProductDetailCubit();
-  final DeviceCalendarPlugin _deviceCalendarPlugin = DeviceCalendarPlugin();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
 
@@ -190,23 +189,77 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
+  // Future<void> _requestPermissions() async {
+  //   PermissionStatus status;
+
+  //   // Check current permission status
+  //   status = await Permission.calendar.status;
+
+  //   if (status.isDenied || status.isRestricted || status.isLimited) {
+  //     // Request permission
+  //     status = await Permission.calendar.request();
+  //   }
+
+  //   if (status.isGranted) {
+  //     _showCalendarChoiceDialog();
+  //   } else if (status.isPermanentlyDenied) {
+  //     await openAppSettings();
+  //   } else {
+  //     _showPermissionDeniedDialog();
+  //   }
+  // }
+
   Future<void> _requestPermissions() async {
-    PermissionStatus status;
+    PermissionStatus status = await Permission.calendar.status;
 
-    // Check current permission status
-    status = await Permission.calendar.status;
+    if (Platform.isIOS) {
+      // Check for iOS 17 or above
+      if (int.parse(
+              Platform.operatingSystemVersion.split(' ')[1].split('.')[0]) >=
+          17) {
+        // Request calendarWriteOnly and calendarFullAccess for iOS 17 and above
+        PermissionStatus writeStatus =
+            await Permission.calendarWriteOnly.request();
+        PermissionStatus fullAccessStatus =
+            await Permission.calendarFullAccess.request();
 
-    if (status.isDenied || status.isRestricted || status.isLimited) {
-      // Request permission
-      status = await Permission.calendar.request();
-    }
+        if (writeStatus.isGranted || fullAccessStatus.isGranted) {
+          _showCalendarChoiceDialog();
+        } else if (writeStatus.isPermanentlyDenied ||
+            fullAccessStatus.isPermanentlyDenied) {
+          await openAppSettings();
+        } else {
+          _showPermissionDeniedDialog();
+        }
+      } else {
+        // Below iOS 17 handling
+        if (status.isDenied || status.isRestricted || status.isLimited) {
+          // Request permission
+          status = await Permission.calendar.request();
+        }
 
-    if (status.isGranted) {
-      _showCalendarChoiceDialog();
-    } else if (status.isPermanentlyDenied) {
-      await openAppSettings();
+        if (status.isGranted) {
+          _showCalendarChoiceDialog();
+        } else if (status.isPermanentlyDenied) {
+          await openAppSettings();
+        } else {
+          _showPermissionDeniedDialog();
+        }
+      }
     } else {
-      _showPermissionDeniedDialog();
+      // Android or other platforms handling
+      if (status.isDenied || status.isRestricted || status.isLimited) {
+        // Request permission
+        status = await Permission.calendar.request();
+      }
+
+      if (status.isGranted) {
+        _showCalendarChoiceDialog();
+      } else if (status.isPermanentlyDenied) {
+        await openAppSettings();
+      } else {
+        _showPermissionDeniedDialog();
+      }
     }
   }
 
@@ -225,23 +278,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 _addEvent(widget.item);
               },
             ),
-            if (Platform.isAndroid)
-              TextButton(
-                child: Text(Translate.of(context).translate('google_calendar')),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  await launch(
-                      'https://calendar.google.com/calendar/r/eventedit');
-                },
-              ),
-            if (Platform.isIOS)
-              TextButton(
-                child: Text(Translate.of(context).translate('apple_calendar')),
-                onPressed: () async {
-                  Navigator.of(context).pop();
-                  await launch('calshow://');
-                },
-              ),
+            // if (Platform.isAndroid)
+            //   TextButton(
+            //     child: Text(Translate.of(context).translate('google_calendar')),
+            //     onPressed: () async {
+            //       Navigator.of(context).pop();
+            //       await launch(
+            //           'https://calendar.google.com/calendar/r/eventedit');
+            //     },
+            //   ),
+            // if (Platform.isIOS)
+            //   TextButton(
+            //     child: Text(Translate.of(context).translate('apple_calendar')),
+            //     onPressed: () async {
+            //       Navigator.of(context).pop();
+            //       await launch('calshow://');
+            //     },
+            //   ),
             TextButton(
               child: Text(Translate.of(context).translate('cancel')),
               onPressed: () {
@@ -282,85 +335,84 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Future<void> _addEvent(ProductModel product) async {
-    var calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
-    var calendars = calendarsResult.data;
+    DateTime eventStart;
+    DateTime eventEnd;
 
-    var calendar = calendars?.first;
-
-    if (calendar != null) {
-      // Specify the timezone you want to use, e.g., local time zone
-      late DateTime eventStart;
-      if (product.startDate != "") {
+    if (product.startDate.isNotEmpty) {
+      try {
         String startDate = "${product.startDate.replaceAll(".", "-")}:00";
-        DateTime startDateTime =
-            DateFormat("dd-MM-yyyy HH:mm:ss").parse(startDate);
-        String formattedStartDate =
-            DateFormat("yyyy-MM-dd HH:mm:ss").format(startDateTime);
-        eventStart = DateTime.parse(formattedStartDate);
-      } else {
-        DateTime now = DateTime.now();
-        eventStart = now;
-      }
-
-      late DateTime eventEnd;
-      if (product.endDate != "" && product.endDate.length > 5) {
-        String endDate = "${product.endDate.replaceAll(".", "-")}:00";
-        DateTime endDateTime = DateFormat("dd-MM-yyyy HH:mm:ss").parse(endDate);
-        String formattedEndDate =
-            DateFormat("yyyy-MM-dd HH:mm:ss").format(endDateTime);
-        eventEnd = DateTime.parse(formattedEndDate);
-      } else if (product.endDate != "" && product.endDate.length <= 5) {
-        int newHour = int.parse(product.endDate.split(":")[0]);
-        int newMinute = int.parse(product.endDate.split(":")[1]);
-        eventEnd = DateTime(eventStart.year, eventStart.month, eventStart.day,
-            newHour, newMinute, 0, 0, 0);
-      } else {
-        eventEnd = eventStart.add(const Duration(hours: 1));
-      }
-
-      var event = Event(
-        calendar.id,
-        title: product.title,
-        start: TZDateTime.from(eventStart, UTC),
-        end: TZDateTime.from(eventEnd, UTC),
-      );
-
-      var createEventResult =
-          await _deviceCalendarPlugin.createOrUpdateEvent(event);
-
-      if (createEventResult!.isSuccess && createEventResult.data!.isNotEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                Translate.of(context).translate("event_added_successful"))));
-        _launchCalendarApp(event);
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                Text(Translate.of(context).translate("event_added_fail"))));
+        eventStart = DateFormat("dd-MM-yyyy HH:mm:ss").parse(startDate);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(Translate.of(context)
+                  .translate("invalid_start_date_format"))),
+        );
+        return;
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(Translate.of(context).translate("event_added_none"))));
+      eventStart = DateTime.now();
     }
-  }
 
-  void _launchCalendarApp(Event event) async {
-    final url = Uri(
-      scheme: 'content',
-      path: (Platform.isAndroid) ? 'com.android.calendar/time/' : 'calshow',
-      queryParameters: {
-        'title': event.title,
-        'dtstart': event.start!.millisecondsSinceEpoch.toString(),
-        'dtend': event.end!.millisecondsSinceEpoch.toString(),
-        'description': event.description,
-      },
+    if (product.endDate.isNotEmpty) {
+      try {
+        if (product.endDate.length > 5) {
+          String endDate = "${product.endDate.replaceAll(".", "-")}:00";
+          eventEnd = DateFormat("dd-MM-yyyy HH:mm:ss").parse(endDate);
+        } else {
+          int newHour = int.parse(product.endDate.split(":")[0]);
+          int newMinute = int.parse(product.endDate.split(":")[1]);
+
+          // Check if end time is 00:00 and change it to 24:00
+          if (newHour == 0 && newMinute == 0) {
+            newHour = 24;
+          }
+
+          eventEnd = DateTime(eventStart.year, eventStart.month, eventStart.day,
+              newHour, newMinute);
+        }
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              content: Text(
+                  Translate.of(context).translate("invalid_end_date_format"))),
+        );
+        return;
+      }
+    } else {
+      eventEnd = eventStart.add(const Duration(hours: 1));
+    }
+
+    if (eventEnd.isBefore(eventStart)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(Translate.of(context).translate("end_before_start"))),
+      );
+      return;
+    }
+
+    Event event = Event(
+      title: product.title,
+      description: product.description,
+      location: product.address,
+      startDate: eventStart,
+      endDate: eventEnd,
     );
 
-    if (await canLaunch(url.toString())) {
-      await launch(url.toString());
-    } else {
-      throw 'Could not launch $url';
-    }
+    Add2Calendar.addEvent2Cal(event).then((success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(success
+                ? Translate.of(context).translate("event_added_successful")
+                : Translate.of(context).translate("event_added_fail"))),
+      );
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                "${Translate.of(context).translate("error_occurred")}: $e")),
+      );
+    });
   }
 
   ///Build content UI
@@ -1176,10 +1228,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                IconButton(
-                  icon: const Icon(Icons.event),
-                  onPressed: _requestPermissions,
-                ),
+                if (product.category!.toLowerCase() == "veranstaltungen")
+                  IconButton(
+                    icon: const Icon(Icons.event),
+                    onPressed: _requestPermissions,
+                  ),
                 const SizedBox(width: 8),
                 // price,
                 // booking,
