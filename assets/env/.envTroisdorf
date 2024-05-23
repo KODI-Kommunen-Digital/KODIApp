@@ -1,4 +1,4 @@
-DEFAULT_API_URL=http://80.158.110.197:3001/
+DEFAULT_API_URL=https://heidi.troisdorf.dksr.city/api/
 FORUM_API_URL=https://app.smartregion-auf.de/forumapi/
 APPOINTMENT_API_URL=https://app.smartregion-auf.de/appointmentapi/v1/
 IMAGE_URL=https://troisdorf1heidi.obs.eu-de.otc.t-systems.com/

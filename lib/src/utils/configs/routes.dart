@@ -55,6 +55,7 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+// import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -131,7 +132,7 @@ class Routes {
   static const String myAppointments = "/myAppointments";
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
-  static const String test = "/test";
+  // static const String wasteCalendar = "/wasteCalendar";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -530,6 +531,13 @@ class Routes {
             return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
+
+      // case wasteCalendar:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return WasteCalendar();
+      //     },
+      //   );
 
       default:
         const SignInScreen();
