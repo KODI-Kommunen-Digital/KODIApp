@@ -129,12 +129,12 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                         imageUrl: widget.favoritesList[index]
                                                     .sourceId ==
                                                 2
-                                            ? "${Application.picturesURL}${widget.favoritesList[index].logo}"
+                                            ? "${widget.favoritesList[index].logo}"
                                             : (widget.favoritesList[index]
                                                         .logo ==
                                                     null
                                                 ? "${Application.picturesURL}admin/News.jpeg"
-                                                : "${Application.picturesURL}${widget.favoritesList[index].logo}"),
+                                                : "${widget.favoritesList[index].logo}"),
                                         cacheManager: memoryCacheManager,
                                         imageBuilder: (context, imageProvider) {
                                           return Container(

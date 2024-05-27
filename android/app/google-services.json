@@ -1,115 +1,26 @@
 {
   "project_info": {
-    "project_number": "660123882783",
-    "project_id": "smart-region-1ce64",
-    "storage_bucket": "smart-region-1ce64.appspot.com"
+    "project_number": "849722874570",
+    "project_id": "troisdorf-d301a",
+    "storage_bucket": "troisdorf-d301a.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:660123882783:android:28a76e08049c01dbb1cc2a",
+        "mobilesdk_app_id": "1:849722874570:android:c6256ed9f68e4be951f233",
         "android_client_info": {
-          "package_name": "com.example.heidi"
+          "package_name": "com.troisdorf.app"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDVYPcTzVQOcKjjJGHW_BOlW2nfLbLhT18"
+          "current_key": "AIzaSyADCGvKWsLgUJQRibe4V5415bNNFricMj0"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "660123882783-3gi7uh3v72s0e46p3dmr5k1l3cs1tur5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.troisdorf"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:660123882783:android:aef1ebe54aadc718b1cc2a",
-        "android_client_info": {
-          "package_name": "com.smartauf"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDVYPcTzVQOcKjjJGHW_BOlW2nfLbLhT18"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "660123882783-3gi7uh3v72s0e46p3dmr5k1l3cs1tur5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.troisdorf"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:660123882783:android:8259bab2e595c4fbb1cc2a",
-        "android_client_info": {
-          "package_name": "com.troisdorfauf"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDVYPcTzVQOcKjjJGHW_BOlW2nfLbLhT18"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "660123882783-gn0pes765eft2dmsogi4tqij4r6hhffi.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "660123882783-3gi7uh3v72s0e46p3dmr5k1l3cs1tur5.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.troisdorf"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }
