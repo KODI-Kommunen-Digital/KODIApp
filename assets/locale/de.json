@@ -542,6 +542,9 @@
   "which_calendar": "Welche Kalender App wollen Sie benutzen?",
   "standard_calendar": "Standard Kalender",
   "google_calendar": "Google Kalender",
-  "apple_calendar": "Apple Kalender"
+  "apple_calendar": "Apple Kalender",
+  "invalid_end_date_format": "ungültiges Enddatumformat",
+  "invalid_start_date_format": "ungültiges Startdatumformat",
+  "end_before_start": "Endzeit liegt vor Startzeit"
 }
 

@@ -218,15 +218,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Platform.operatingSystemVersion.split(' ')[1].split('.')[0]) >=
           17) {
         // Request calendarWriteOnly and calendarFullAccess for iOS 17 and above
-        PermissionStatus writeStatus =
-            await Permission.calendarWriteOnly.request();
+        // PermissionStatus writeStatus =
+        //     await Permission.calendarWriteOnly.request();
         PermissionStatus fullAccessStatus =
             await Permission.calendarFullAccess.request();
 
-        if (writeStatus.isGranted || fullAccessStatus.isGranted) {
+        // if (writeStatus.isGranted || fullAccessStatus.isGranted) {
+        //   _showCalendarChoiceDialog();
+        // } else if (writeStatus.isPermanentlyDenied ||
+        //     fullAccessStatus.isPermanentlyDenied) {
+        //   await openAppSettings();
+        // }
+        if (fullAccessStatus.isGranted) {
           _showCalendarChoiceDialog();
-        } else if (writeStatus.isPermanentlyDenied ||
-            fullAccessStatus.isPermanentlyDenied) {
+        } else if (fullAccessStatus.isPermanentlyDenied) {
           await openAppSettings();
         } else {
           _showPermissionDeniedDialog();
@@ -340,8 +345,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     if (product.startDate.isNotEmpty) {
       try {
-        String startDate = "${product.startDate.replaceAll(".", "-")}:00";
-        eventStart = DateFormat("dd-MM-yyyy HH:mm:ss").parse(startDate);
+        String startDate = product.startDate.replaceAll(".", "-");
+        // Check if startDate contains time information
+        if (!startDate.contains(":")) {
+          // If no time is provided, append "00:00:00.000"
+          startDate += " 00:00:00.000";
+        } else {
+          // Append milliseconds if time is provided
+          startDate += ":00.000";
+        }
+        eventStart = DateFormat("dd-MM-yyyy HH:mm:ss.SSS").parse(startDate);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -380,7 +393,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return;
       }
     } else {
-      eventEnd = eventStart.add(const Duration(hours: 1));
+      eventEnd = DateTime(
+          eventStart.year, eventStart.month, eventStart.day, 24, 0, 0, 0);
     }
 
     if (eventEnd.isBefore(eventStart)) {
@@ -1228,11 +1242,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (product.category!.toLowerCase() == "veranstaltungen")
-                  IconButton(
-                    icon: const Icon(Icons.event),
-                    onPressed: _requestPermissions,
-                  ),
+                // if (product.category!.toLowerCase() == "veranstaltungen")
+                //   IconButton(
+                //     icon: const Icon(Icons.event),
+                //     onPressed: _requestPermissions,
+                //   ),
                 const SizedBox(width: 8),
                 // price,
                 // booking,

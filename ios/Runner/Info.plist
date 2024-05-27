@@ -26,6 +26,10 @@
 	<string>1.0.0</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCalendarsFullAccessUsageDescription</key>
+	<string>Wir benötigen Zugriff auf Ihren Kalender, um Ereignisse hinzuzufügen</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>We need access to your calendar to add events</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access for uploading images</string>
 	<key>NSDownloadsFolderUsageDescription</key>
@@ -38,12 +42,6 @@
 	<string>This app will use your location to show features near you.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Need microphone access for uploading audio</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>We need access to your calendar to add events</string>
-	<key>NSCalendarsFullAccessUsageDescription</key>
-	<string>We need access to your calendar to add events</string>
-	<key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-	<string>We need access to your calendar to add events</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Wir benötigen Zugang zur Bildergalerie, sodass du Bilder hochladen kannst.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
