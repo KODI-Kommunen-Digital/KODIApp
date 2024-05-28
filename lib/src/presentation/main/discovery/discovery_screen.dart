@@ -166,6 +166,33 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //     _showCitySelectionPopup(context);
     //   }
     // }
+
+    void showAbfallPopup(BuildContext context) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(Translate.of(context).translate('waste_calendar')),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(Translate.of(context).translate('waste_calendar_message')),
+                const SizedBox(height: 12),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
@@ -187,6 +214,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   _onSubmit();
     // }
     else if (service.imageLink == "10") {
+      showAbfallPopup(context);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

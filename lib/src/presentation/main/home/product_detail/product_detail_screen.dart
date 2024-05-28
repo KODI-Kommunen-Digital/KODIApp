@@ -1242,7 +1242,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // if (product.category!.toLowerCase() == "veranstaltungen")
+                // if (product.category!.toLowerCase() == "events")
                 //   IconButton(
                 //     icon: const Icon(Icons.event),
                 //     onPressed: _requestPermissions,

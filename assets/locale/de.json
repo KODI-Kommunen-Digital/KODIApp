@@ -543,6 +543,8 @@
   "standard_calendar": "Standard Kalender",
   "google_calendar": "Google Kalender",
   "apple_calendar": "Apple Kalender",
+  "waste_calendar": "Abfallkalender",
+  "waste_calendar_message": "Der Abfallkalender steht dir in Kürze zur Verfügung.",
   "invalid_end_date_format": "ungültiges Enddatumformat",
   "invalid_start_date_format": "ungültiges Startdatumformat",
   "end_before_start": "Endzeit liegt vor Startzeit"
