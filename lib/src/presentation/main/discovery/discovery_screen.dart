@@ -193,6 +193,58 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       );
     }
 
+    Future<bool> showContestRules(BuildContext context) async {
+      bool shouldLaunch = false;
+
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Gewinnspiel"),
+            content: const Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                    "Regeln: Trage deine Email Adresse ein und habe die Chance auf einen Gewinn. "),
+                SizedBox(height: 12),
+                Text(
+                    "Hinweis: Apple steht in keiner Verbindung zum Gewinnspiel."),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  shouldLaunch = true;
+                  Navigator.of(context).pop();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+
+      return shouldLaunch;
+    }
+
+    Future<void> launchContestPage(
+        BuildContext context, String imageLink) async {
+      // Show the contest rules dialog
+      bool shouldLaunch = await showContestRules(context);
+
+      // If the user clicks OK, launch the URL
+      if (shouldLaunch) {
+        String? serviceLink =
+            await AppBloc.discoveryCubit.getServiceLink(imageLink);
+        if (serviceLink != null && serviceLink.isNotEmpty) {
+          await launchUrl(
+            Uri.parse(serviceLink),
+            mode: LaunchMode.inAppWebView,
+          );
+        }
+      }
+    }
+
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
@@ -200,7 +252,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "7" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
-        service.imageLink == "11" ||
         service.imageLink == "12" ||
         service.imageLink == "13" ||
         service.imageLink == "14") {
@@ -209,6 +260,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "11") {
+      await launchContestPage(context, service.imageLink);
     }
     // else if (service.imageLink == "8") {
     //   _onSubmit();
