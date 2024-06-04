@@ -72,6 +72,8 @@ class ListRepository {
         }).toList();
         return [list, response.pagination];
       }
+    } else if (categoryId == 4 || categoryId == 5) {
+      return [];
     }
     return null;
   }

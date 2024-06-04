@@ -5,7 +5,7 @@ import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
-import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
+import 'package:heidi/src/presentation/main/portal/portal_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
-            WishListScreen(),
+            PortalScreen(),
             AccountScreen()
           ],
         ),
@@ -66,7 +66,7 @@ class _MainScreenState extends State<MainScreen> {
         return 0;
       case Routes.discovery:
         return 1;
-      case Routes.wishList:
+      case Routes.portal:
         return 2;
       case Routes.account:
         return 3;
@@ -116,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.homeCubit.scrollUp();
         break;
 
-      case Routes.wishList:
+      case Routes.portal:
         AppBloc.wishListCubit.setDoesScroll(true);
         AppBloc.wishListCubit.scrollUp();
         break;
@@ -146,10 +146,10 @@ class _MainScreenState extends State<MainScreen> {
           'services',
         );
         break;
-      case Routes.wishList:
-        iconData = Icons.bookmark_outline;
+      case Routes.portal:
+        iconData = Icons.work;
         title = Translate.of(context).translate(
-          'wish_list',
+          'portal',
         );
         break;
       case Routes.account:
@@ -227,7 +227,7 @@ class _MainScreenState extends State<MainScreen> {
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
             const SizedBox(width: 56),
-            _buildMenuItem(Routes.wishList),
+            _buildMenuItem(Routes.portal),
             _buildMenuItem(Routes.account),
           ],
         ),

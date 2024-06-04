@@ -122,6 +122,7 @@ class Routes {
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
+  static const String portal = "/portal";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -499,12 +500,18 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return FilterScreen(
-              multiFilter: arguments["multifilter"]
-            );
+            return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
 
+      case portal:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return FilterScreen(multiFilter: arguments["multifilter"]);
+          },
+        );
       default:
         const SignInScreen();
 
