@@ -1,5 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:heidi/main_dev.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -10,17 +10,19 @@ Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
-  final GlobalKey<NavigatorState> navigatorKey;
   final Preferences prefs;
 
-  FirebaseApi(this.navigatorKey, this.prefs);
+  FirebaseApi(globalNavKey, this.prefs);
 
   Future<void> handleMessageOnUserInteraction(RemoteMessage? message) async {
     if (message != null) {
+      if (message.notification?.title == "Müllabholung") {
+        globalNavKey.currentState?.pushNamed(Routes.wasteCalendar);
+      }
       final item = await ListRepository.loadProduct(
           int.parse(message.data["cityId"]), int.parse(message.data["id"]));
       if (item != null) {
-        navigatorKey.currentState
+        globalNavKey.currentState
             ?.pushNamed(Routes.productDetail, arguments: item);
       }
     }
@@ -52,9 +54,9 @@ class FirebaseApi {
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      await _firebaseMessaging.subscribeToTopic("WasteTruck_1_10");
     } else {
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      await _firebaseMessaging.unsubscribeFromTopic("WasteTruck_1_10");
     }
 
     int uId = await getLoggedUserId();
@@ -71,6 +73,14 @@ class FirebaseApi {
     FirebaseMessaging.onMessage.listen(handleForegroundNotification);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessageOnUserInteraction);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> subscribeToTopic(String topic) async {
+    await _firebaseMessaging.subscribeToTopic(topic);
+  }
+
+  Future<void> unsubscribeFromTopic(String topic) async {
+    await _firebaseMessaging.unsubscribeFromTopic(topic);
   }
 
   Future<void> refreshNotifications() async {

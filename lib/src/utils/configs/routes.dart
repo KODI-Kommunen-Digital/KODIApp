@@ -16,7 +16,6 @@ import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.d
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_listings_screen.dart';
-// import 'package:heidi/src/presentation/main/account/dashboard/test/test.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
@@ -55,7 +54,7 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
-// import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
+import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -132,7 +131,7 @@ class Routes {
   static const String myAppointments = "/myAppointments";
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
-  // static const String wasteCalendar = "/wasteCalendar";
+  static const String wasteCalendar = "/wasteCalendar";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -532,12 +531,12 @@ class Routes {
           },
         );
 
-      // case wasteCalendar:
-      //   return MaterialPageRoute(
-      //     builder: (context) {
-      //       return WasteCalendar();
-      //     },
-      //   );
+      case Routes.wasteCalendar:
+        return MaterialPageRoute(
+          builder: (context) {
+            return WasteCalendar();
+          },
+        );
 
       default:
         const SignInScreen();

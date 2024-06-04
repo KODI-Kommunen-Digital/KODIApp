@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "849722874570",
-    "project_id": "troisdorf-d301a",
-    "storage_bucket": "troisdorf-d301a.appspot.com"
+    "project_number": "883143298531",
+    "project_id": "troisdorf-8d735",
+    "storage_bucket": "troisdorf-8d735.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:849722874570:android:c6256ed9f68e4be951f233",
+        "mobilesdk_app_id": "1:883143298531:android:69bc49887bd6d7aaf9a4d6",
         "android_client_info": {
           "package_name": "com.troisdorf.app"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyADCGvKWsLgUJQRibe4V5415bNNFricMj0"
+          "current_key": "AIzaSyBaw_iYQqaT48ByeSX_E9rGcFSWEunHJxY"
         }
       ],
       "services": {

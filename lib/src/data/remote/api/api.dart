@@ -760,10 +760,16 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestTestListings() async {
-    var list = '/cities/1/listings';
-    final result =
-        await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
+  static Future<ResultApiModel> requestWasteStreets(int cityId) async {
+    var list = '/cities/1/wasteCalender/streets';
+    final result = await HTTPManager(apiType: APIType.waste).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestWastePickup(
+      int cityId, String streetId) async {
+    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates';
+    final result = await HTTPManager(apiType: APIType.waste).get(url: list);
     return ResultApiModel.fromJson(result);
   }
 

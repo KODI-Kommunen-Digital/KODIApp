@@ -43,6 +43,8 @@ class Preferences {
   static const String listingTitle = "allListingCityFilter";
   static const String listingId = "listingId";
   static const String listingDesc = "listingDesc";
+  static const String selectedLocationId = 'selectedLocationId';
+  static const String selectedLocationName = 'selectedLocationName';
 
   Preferences._(this._box);
 

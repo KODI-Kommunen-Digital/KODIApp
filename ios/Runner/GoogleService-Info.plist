@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAerhROxa0LLd6dlWmz9XCE5Q2zIMBsZsM</string>
+	<string>AIzaSyCxxUDdn-FL2HmP11qFhLm_fckgdzfnWNs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>849722874570</string>
+	<string>883143298531</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.troisdorf.app</string>
 	<key>PROJECT_ID</key>
-	<string>troisdorf-d301a</string>
+	<string>troisdorf-8d735</string>
 	<key>STORAGE_BUCKET</key>
-	<string>troisdorf-d301a.appspot.com</string>
+	<string>troisdorf-8d735.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:849722874570:ios:8dc34acd10816bab51f233</string>
+	<string>1:883143298531:ios:7d03202ce2957fb3f9a4d6</string>
 </dict>
 </plist>
