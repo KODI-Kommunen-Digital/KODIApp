@@ -503,6 +503,118 @@ class AppProductItem extends StatelessWidget {
           ),
         );
 
+      case ProductViewType.card:
+        if (item == null) {
+          return const EmptyProductItem();
+        }
+        return InkWell(
+          onTap: () async {
+            onPressed!();
+          },
+          child: Column(
+            children: <Widget>[
+              item?.pdf != '' && item?.image == 'admin/News.jpeg'
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: SizedBox(
+                          width: 120,
+                          height: 140,
+                          child: const PDF().cachedFromUrl(
+                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                            placeholder: (progress) =>
+                                Center(child: Text('$progress %')),
+                            errorWidget: (error) =>
+                                Center(child: Text(error.toString())),
+                          )),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: item?.sourceId == 2 &&
+                                item?.image != null &&
+                                item?.image != 'admin/News.jpeg'
+                            ? item!.image
+                            : item?.sourceId == 3 && item?.image != null
+                                ? (item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : item!.image)
+                                : item?.image != null &&
+                                        item!.image.startsWith('admin')
+                                    ? "${Application.picturesURL}${item!.image}"
+                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                        cacheManager: memoryCacheManager,
+                        placeholder: (context, url) {
+                          return AppPlaceholder(
+                            child: Container(
+                              width: 120,
+                              height: 140,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                              ),
+                            ),
+                          );
+                        },
+                        imageBuilder: (context, imageProvider) {
+                          return Container(
+                            width: 120,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.fitHeight,
+                              ),
+                            ),
+                          );
+                        },
+                        errorWidget: (context, url, error) {
+                          return AppPlaceholder(
+                            child: Container(
+                              width: 120,
+                              height: 140,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                              ),
+                              child: const Icon(Icons.error),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+              const SizedBox(height: 4),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      item!.title,
+                      maxLines: 2,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyLarge!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 4),
+                    if (item?.sourceId == 3)
+                      Text(
+                        "${Translate.of(context).translate('quelle')} ${item?.externalId ?? ''}",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(fontWeight: FontWeight.w600),
+                      ),
+                    const SizedBox(height: 2),
+                  ],
+                ),
+              ),
+              trailing ?? Container()
+            ],
+          ),
+        );
+
       default:
         return Container(width: 160.0);
     }

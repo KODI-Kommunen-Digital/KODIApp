@@ -15,6 +15,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic category;
   dynamic location;
   dynamic recent;
+  dynamic company;
   dynamic sliders;
   dynamic categoryCount;
   bool calledExternally = false;
@@ -55,6 +56,12 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+
+    final companyRequestResponse = await Api.requestCatList(10, savedCity, 1);
+    company = List.from(companyRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
@@ -72,6 +79,7 @@ class HomeCubit extends Cubit<HomeState> {
       formattedCategories,
       location,
       recent,
+      company,
       isRefreshLoader,
     ));
   }
@@ -126,6 +134,7 @@ class HomeCubit extends Cubit<HomeState> {
       category,
       location,
       recent,
+      company,
       false,
     ));
   }
