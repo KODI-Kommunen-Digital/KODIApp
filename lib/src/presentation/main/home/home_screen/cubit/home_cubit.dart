@@ -244,4 +244,17 @@ class HomeCubit extends Cubit<HomeState> {
     recent.addAll(newRecent);
     return recent;
   }
+
+  Future<dynamic> newCompanies(int pageNo) async {
+    if (!await hasInternet()) {
+      emit(const HomeState.error("no_internet"));
+    }
+
+    final listingsRequestResponse = await Api.requestCatList(10, null, pageNo);
+    final newCompanies = List.from(listingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+    company.addAll(newCompanies);
+    return company;
+  }
 }

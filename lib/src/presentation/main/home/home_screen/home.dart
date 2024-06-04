@@ -40,8 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
   int pageNo = 1;
+  int companyPageNo = 1;
   late bool checkSavedCity;
   final _scrollController = ScrollController();
+  final _scrollCompanyController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
   bool isRefreshLoader = false;
@@ -60,6 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    _scrollCompanyController.addListener(_scrollCompanyListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
@@ -84,6 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
     _scrollController.removeListener(_scrollListener);
+    _scrollCompanyController.removeListener(_scrollCompanyListener);
     _scrollController.dispose();
   }
 
@@ -91,6 +95,30 @@ class _HomeScreenState extends State<HomeScreen> {
     bool exists = await AppBloc.homeCubit.doesUserExist();
     if (!exists) {
       AppBloc.loginCubit.onLogout();
+    }
+  }
+
+  Future<void> _scrollCompanyListener() async {
+    if (_scrollCompanyController.position.atEdge) {
+      if (_scrollCompanyController.position.pixels != 0) {
+        setState(() {
+          isLoading = true;
+        });
+        company =
+            await AppBloc.homeCubit.newCompanies(++companyPageNo).then((_) {
+          setState(() {
+            isLoading = false;
+          });
+        }).catchError(
+          (error, stackTrace) async {
+            setState(() {
+              isLoading = false;
+            });
+            logError('Error loading new companies: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+          },
+        );
+      }
     }
   }
 
@@ -428,7 +456,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-
   void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
@@ -576,7 +603,7 @@ class _HomeScreenState extends State<HomeScreen> {
       physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
+          padding: const EdgeInsets.only(left: 8),
           child: AppProductItem(
               type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
         );
@@ -587,23 +614,33 @@ class _HomeScreenState extends State<HomeScreen> {
     if (company != null) {
       content = ListView.builder(
         shrinkWrap: true,
+        controller: _scrollCompanyController,
         padding: const EdgeInsets.all(0),
         scrollDirection: Axis.horizontal,
         itemBuilder: (context, index) {
-          final item = company[index];
-          return Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: AppProductItem(
-              onPressed: () {
-                _onProductDetail(item);
-              },
-              item: item,
-              type: ProductViewType.card,
-              isRefreshLoader: isRefreshLoader,
-            ),
-          );
+          if (index < company.length) {
+            final item = company[index];
+            return Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: AppProductItem(
+                onPressed: () {
+                  _onProductDetail(item);
+                },
+                item: item,
+                type: ProductViewType.card,
+                isRefreshLoader: isRefreshLoader,
+              ),
+            );
+          }
+          if (isLoading) {
+            return const SizedBox(
+                height: 50,
+                width: 50,
+                child: Center(child: CircularProgressIndicator()));
+          }
+          return Container();
         },
-        itemCount: company.length,
+        itemCount: company.length + 1,
       );
     }
 
