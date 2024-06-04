@@ -11,7 +11,7 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
-enum APIType { defaultAPI, forum, appointment }
+enum APIType { defaultAPI, forum, appointment, waste }
 
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
@@ -28,6 +28,9 @@ class HTTPManager {
         break;
       case APIType.appointment:
         _baseUrl = dotenv.env['APPOINTMENT_API_URL']!;
+        break;
+      case APIType.waste:
+        _baseUrl = dotenv.env['WASTE_API_URL']!;
         break;
     }
 

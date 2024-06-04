@@ -11,7 +11,7 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
+import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -116,18 +116,21 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: Scaffold(
-                      body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                        builder: (context, state) {
-                          if (state == const ApplicationState.loaded()) {
+                    home: FutureBuilder<String?>(
+                      future: _getStoredLocation(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          final location = snapshot.data;
+                          if (location != null) {
                             return const MainScreen();
+                          } else {
+                            return const IntroPage();
                           }
-                          if (state == const ApplicationState.loading()) {
-                            return const SplashScreen();
-                          }
-                          return const MainScreen();
-                        },
-                      ),
+                        }
+                      },
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
@@ -146,5 +149,10 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+
+  Future<String?> _getStoredLocation() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }
 }

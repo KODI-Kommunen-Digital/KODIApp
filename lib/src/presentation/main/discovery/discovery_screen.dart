@@ -167,31 +167,31 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   }
     // }
 
-    void showAbfallPopup(BuildContext context) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(Translate.of(context).translate('waste_calendar')),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(Translate.of(context).translate('waste_calendar_message')),
-                const SizedBox(height: 12),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
+    // void showAbfallPopup(BuildContext context) {
+    //   showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: Text(Translate.of(context).translate('waste_calendar')),
+    //         content: Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Text(Translate.of(context).translate('waste_calendar_message')),
+    //             const SizedBox(height: 12),
+    //           ],
+    //         ),
+    //         actions: <Widget>[
+    //           TextButton(
+    //             onPressed: () {
+    //               Navigator.of(context).pop();
+    //             },
+    //             child: const Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
+    // }
 
     Future<bool> showContestRules(BuildContext context) async {
       bool shouldLaunch = false;
@@ -267,7 +267,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   _onSubmit();
     // }
     else if (service.imageLink == "10") {
-      showAbfallPopup(context);
+      Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

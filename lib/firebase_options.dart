@@ -50,21 +50,21 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDVYPcTzVQOcKjjJGHW_BOlW2nfLbLhT18',
-    appId: '1:660123882783:android:8259bab2e595c4fbb1cc2a',
-    messagingSenderId: '660123882783',
-    projectId: 'smart-region-1ce64',
-    storageBucket: 'smart-region-1ce64.appspot.com',
+    apiKey: 'AIzaSyBaw_iYQqaT48ByeSX_E9rGcFSWEunHJxY',
+    appId: '1:883143298531:android:69bc49887bd6d7aaf9a4d6',
+    messagingSenderId: '883143298531',
+    projectId: 'troisdorf-8d735',
+    storageBucket: 'troisdorf-8d735.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAF7sEOfWwKCe5HXFkjBRF4utW0TxOsAzc',
-    appId: '1:660123882783:ios:2a1331f5b1e82fe6b1cc2a',
-    messagingSenderId: '660123882783',
-    projectId: 'smart-region-1ce64',
-    storageBucket: 'smart-region-1ce64.appspot.com',
+    apiKey: 'AIzaSyCxxUDdn-FL2HmP11qFhLm_fckgdzfnWNs',
+    appId: '1:883143298531:ios:7d03202ce2957fb3f9a4d6',
+    messagingSenderId: '883143298531',
+    projectId: 'troisdorf-8d735',
+    storageBucket: 'troisdorf-8d735.appspot.com',
     iosClientId:
         '660123882783-3gi7uh3v72s0e46p3dmr5k1l3cs1tur5.apps.googleusercontent.com',
-    iosBundleId: 'com.troisdorf',
+    iosBundleId: 'com.troisdorf.com',
   );
 }
