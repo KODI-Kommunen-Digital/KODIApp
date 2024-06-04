@@ -446,7 +446,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Select Location'),
+          title: const Text('Wähle deinen Ort'),
           content: TypeAheadFormField(
             textFieldConfiguration: TextFieldConfiguration(
               controller: typeAheadController,
