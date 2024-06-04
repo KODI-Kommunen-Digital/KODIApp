@@ -26,6 +26,7 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
@@ -41,6 +42,7 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
@@ -56,6 +58,7 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,
@@ -155,6 +158,7 @@ class _$HomeStateInitial implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
@@ -173,6 +177,7 @@ class _$HomeStateInitial implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
@@ -191,6 +196,7 @@ class _$HomeStateInitial implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,
@@ -293,6 +299,7 @@ class _$HomeStateLoading implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
@@ -311,6 +318,7 @@ class _$HomeStateLoading implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
@@ -329,6 +337,7 @@ class _$HomeStateLoading implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,
@@ -468,6 +477,7 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
@@ -486,6 +496,7 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
@@ -504,6 +515,7 @@ class _$HomeStatecategoryLoading implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,
@@ -577,6 +589,7 @@ abstract class _$$HomeStateLoadedCopyWith<$Res> {
       List<CategoryModel> category,
       List<CategoryModel> location,
       List<ProductModel> recent,
+      List<ProductModel> company,
       bool isRefreshLoader});
 }
 
@@ -595,6 +608,7 @@ class __$$HomeStateLoadedCopyWithImpl<$Res>
     Object? category = null,
     Object? location = null,
     Object? recent = null,
+    Object? company = null,
     Object? isRefreshLoader = null,
   }) {
     return _then(_$HomeStateLoaded(
@@ -614,6 +628,10 @@ class __$$HomeStateLoadedCopyWithImpl<$Res>
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
+      null == company
+          ? _value._company
+          : company // ignore: cast_nullable_to_non_nullable
+              as List<ProductModel>,
       null == isRefreshLoader
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
@@ -630,10 +648,12 @@ class _$HomeStateLoaded implements HomeStateLoaded {
       final List<CategoryModel> category,
       final List<CategoryModel> location,
       final List<ProductModel> recent,
+      final List<ProductModel> company,
       this.isRefreshLoader)
       : _category = category,
         _location = location,
-        _recent = recent;
+        _recent = recent,
+        _company = company;
 
   @override
   final String banner;
@@ -661,12 +681,20 @@ class _$HomeStateLoaded implements HomeStateLoaded {
     return EqualUnmodifiableListView(_recent);
   }
 
+  final List<ProductModel> _company;
+  @override
+  List<ProductModel> get company {
+    if (_company is EqualUnmodifiableListView) return _company;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_company);
+  }
+
   @override
   final bool isRefreshLoader;
 
   @override
   String toString() {
-    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, recent: $recent, isRefreshLoader: $isRefreshLoader)';
+    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, recent: $recent, company: $company, isRefreshLoader: $isRefreshLoader)';
   }
 
   @override
@@ -678,6 +706,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
             const DeepCollectionEquality().equals(other._category, _category) &&
             const DeepCollectionEquality().equals(other._location, _location) &&
             const DeepCollectionEquality().equals(other._recent, _recent) &&
+            const DeepCollectionEquality().equals(other._company, _company) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
                 other.isRefreshLoader == isRefreshLoader));
   }
@@ -689,6 +718,7 @@ class _$HomeStateLoaded implements HomeStateLoaded {
       const DeepCollectionEquality().hash(_category),
       const DeepCollectionEquality().hash(_location),
       const DeepCollectionEquality().hash(_recent),
+      const DeepCollectionEquality().hash(_company),
       isRefreshLoader);
 
   @JsonKey(ignore: true)
@@ -708,11 +738,12 @@ class _$HomeStateLoaded implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(banner, category, location, recent, isRefreshLoader);
+    return loaded(banner, category, location, recent, company, isRefreshLoader);
   }
 
   @override
@@ -726,11 +757,13 @@ class _$HomeStateLoaded implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(banner, category, location, recent, isRefreshLoader);
+    return loaded?.call(
+        banner, category, location, recent, company, isRefreshLoader);
   }
 
   @override
@@ -744,13 +777,15 @@ class _$HomeStateLoaded implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(banner, category, location, recent, isRefreshLoader);
+      return loaded(
+          banner, category, location, recent, company, isRefreshLoader);
     }
     return orElse();
   }
@@ -802,12 +837,14 @@ abstract class HomeStateLoaded implements HomeState {
       final List<CategoryModel> category,
       final List<CategoryModel> location,
       final List<ProductModel> recent,
+      final List<ProductModel> company,
       final bool isRefreshLoader) = _$HomeStateLoaded;
 
   String get banner;
   List<CategoryModel> get category;
   List<CategoryModel> get location;
   List<ProductModel> get recent;
+  List<ProductModel> get company;
   bool get isRefreshLoader;
   @JsonKey(ignore: true)
   _$$HomeStateLoadedCopyWith<_$HomeStateLoaded> get copyWith =>
@@ -886,6 +923,7 @@ class _$HomeStateError implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)
         loaded,
     required TResult Function(String error) error,
@@ -904,6 +942,7 @@ class _$HomeStateError implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult? Function(String error)? error,
@@ -922,6 +961,7 @@ class _$HomeStateError implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
+            List<ProductModel> company,
             bool isRefreshLoader)?
         loaded,
     TResult Function(String error)? error,

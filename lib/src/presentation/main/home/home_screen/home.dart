@@ -16,7 +16,6 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
-import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -50,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
   List<ProductModel>? recent = [];
+  List<ProductModel>? company = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -172,6 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
             category = state.category;
             location = state.location;
             recent = state.recent;
+            company = state.company;
             isRefreshLoader = true;
             categoryLoading = false;
 
@@ -296,7 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? const CircularProgressIndicator.adaptive()
                               : _buildCategory(AppBloc.homeCubit
                                   .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
+                          _buildCompany(company),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
@@ -427,22 +428,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onLocation(CategoryModel item) async {
-    if (item.id == -1) {
-      _onPopUpCatError();
-      return;
-    }
-
-    if (item.id != -1) {
-      final prefs = await Preferences.openBox();
-      prefs.setKeyValue(Preferences.type, "location");
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': item.id, 'title': item.title});
-    } else if (item.id != -1 && !item.hasChild) {
-      _onPopUpCatError();
-    }
-  }
 
   void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
@@ -583,88 +568,80 @@ class _HomeScreenState extends State<HomeScreen> {
     return;
   }
 
-  Widget _buildLocation(List<CategoryModel>? location) {
+  Widget _buildCompany(List<ProductModel>? company) {
     Widget content = ListView.builder(
+      padding: const EdgeInsets.all(0),
+      shrinkWrap: true,
       scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      physics: const NeverScrollableScrollPhysics(),
       itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: AppCategory(
-            type: CategoryView.cardLarge,
-          ),
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16),
+          child: AppProductItem(
+              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
         );
       },
-      itemCount: List.generate(8, (index) => index).length,
+      itemCount: 8,
     );
-    if (location != null) {
+
+    if (company != null) {
       content = ListView.builder(
+        shrinkWrap: true,
+        padding: const EdgeInsets.all(0),
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         itemBuilder: (context, index) {
-          final item = location[index];
-          return selectedCityId != 0
-              ? Visibility(
-                  visible: item.title != selectedCityTitle,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppCategory(
-                      item: item,
-                      type: CategoryView.cardLarge,
-                      onPressed: () {
-                        _onLocation(item);
-                      },
-                    ),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: AppCategory(
-                    item: item,
-                    type: CategoryView.cardLarge,
-                    onPressed: () {
-                      _onLocation(item);
-                    },
-                  ),
-                );
+          final item = company[index];
+          return Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: AppProductItem(
+              onPressed: () {
+                _onProductDetail(item);
+              },
+              item: item,
+              type: ProductViewType.card,
+              isRefreshLoader: isRefreshLoader,
+            ),
+          );
         },
-        itemCount: location.length,
+        itemCount: company.length,
       );
     }
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                Translate.of(context).translate(
-                  'popular_location',
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  Translate.of(context).translate(
+                    'do_you_know',
+                  ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontWeight: FontWeight.bold),
                 ),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                Translate.of(context).translate(
-                  'let_find_interesting',
+                Text(
+                  Translate.of(context).translate(
+                    'company_matching',
+                  ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-        Container(
-          height: 180,
-          padding: const EdgeInsets.only(top: 4),
-          child: content,
-        ),
-      ],
+          Container(
+            height: 180,
+            padding: const EdgeInsets.only(top: 4),
+            child: content,
+          ),
+        ],
+      ),
     );
   }
 

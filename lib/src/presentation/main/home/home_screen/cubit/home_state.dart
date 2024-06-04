@@ -18,6 +18,7 @@ class HomeState with _$HomeState {
     List<CategoryModel> category,
     List<CategoryModel> location,
     List<ProductModel> recent,
+    List<ProductModel> company,
     bool isRefreshLoader,
   ) = HomeStateLoaded;
 
