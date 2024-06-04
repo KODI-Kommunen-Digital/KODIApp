@@ -32,10 +32,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     for (var element in servicesCopy) {
       if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
+        // bool hasContent = await element.hasContent();
+        // if (!hasContent) {
+        //   hiddenServices.add(element);
+        // }
       }
     }
 
@@ -118,41 +118,41 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           imageLink: "5",
           arguments: 5,
           categoryId: 3),
-      CitizenServiceModel(
-          imageUrl: Images.service6,
-          imageLink: "6",
-          arguments: 6,
-          categoryId: 4),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service6,
+      //     imageLink: "6",
+      //     arguments: 6,
+      //     categoryId: 4),
       CitizenServiceModel(
           imageUrl: Images.service7,
           imageLink: "7",
           arguments: 7,
           categoryId: 10),
-      CitizenServiceModel(
-          imageUrl: Images.service8,
-          imageLink: "8",
-          arguments: 8,
-          categoryId: 13),
-      CitizenServiceModel(
-          imageUrl: Images.service9,
-          imageLink: "9",
-          arguments: 9,
-          categoryId: 6),
-      CitizenServiceModel(
-        imageUrl: Images.service10,
-        imageLink: "10",
-        arguments: 10,
-      ),
-      CitizenServiceModel(
-          imageUrl: Images.service13,
-          imageLink: "13",
-          categoryId: 15,
-          arguments: 0),
-      CitizenServiceModel(
-          imageUrl: Images.service14,
-          imageLink: "14",
-          categoryId: 14,
-          arguments: 0),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service8,
+      //     imageLink: "8",
+      //     arguments: 8,
+      //     categoryId: 13),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service9,
+      //     imageLink: "9",
+      //     arguments: 9,
+      //     categoryId: 6),
+      // CitizenServiceModel(
+      //   imageUrl: Images.service10,
+      //   imageLink: "10",
+      //   arguments: 10,
+      // ),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service13,
+      //     imageLink: "13",
+      //     categoryId: 15,
+      //     arguments: 0),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service14,
+      //     imageLink: "14",
+      //     categoryId: 14,
+      //     arguments: 0),
     ];
   }
 

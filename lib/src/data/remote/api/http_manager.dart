@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -17,12 +16,12 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://app.smartregion-auf.de/api/'
-        : 'https://app.smartregion-auf.de/forumapi/';
-    // ? 'http://localhost:3001/'
-    //     : 'http://localhost:3002/';
-    //? 'https://app.geseke.it/api/'
-    //: 'https://app.geseke.it/forumapi/';
+        // ? 'https://app.smartregion-auf.de/api/'
+        // : 'https://app.smartregion-auf.de/forumapi/';
+        // ? 'http://localhost:3001/'
+        //     : 'http://localhost:3002/';
+        ? 'http://49.13.33.27:8002/'
+        : 'http://49.13.33.27:8002/';
 
     _dio = Dio(
       BaseOptions(

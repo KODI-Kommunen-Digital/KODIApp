@@ -1,6 +1,8 @@
 {
   "home": "Start",
-  "wish_list": "Favoriten",
+  "wish_list": "Favoriten",  
+  "portal": "Portal",  
+  "portal_head": "Bewerberportal",
   "message": "Mitteilungen",
   "notification": "Benachrichtigung",
   "account": "Nutzername",
@@ -458,6 +460,7 @@
   "category_rathaus": "Rathaus",
   "category_newsletter": "Mitteilungsblatt",
   "category_official_notification": "Amtliche Mitteilung",
+  "category_applicant": "Antragsteller",
   "login" : "Anmeldung",
   "please_select_city": "Bitte wähle einen Ort, um das Forum zu betreten.",
   "login_required" : "Anmeldung erforderlich",

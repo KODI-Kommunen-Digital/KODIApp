@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 import 'dart:io';
 
 import 'package:dotted_border/dotted_border.dart';
@@ -233,15 +233,28 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
-    if (!loadCategoryResponse?.data.isEmpty) {
-      jsonCategory = loadCategoryResponse!.data;
-      final selectedCategory = jsonCategory.first['name'];
-      if (!mounted) return;
-      final subCategoryResponse = await context
-          .read<AddListingCubit>()
-          .loadSubCategory(selectedCategory);
-      listSubCategory = subCategoryResponse!.data;
+    if (loadCategoryResponse != null && loadCategoryResponse.data.isNotEmpty) {
+      jsonCategory = loadCategoryResponse.data;
+
+      // if (widget.isNewList == false) {
+      //   jsonCategory =
+      //       jsonCategory.where((category) => category['id'] == 20).toList();
+      // } else {
+      //   jsonCategory.removeWhere((category) => category['id'] == 20);
+      // }
+
+      // if (jsonCategory.isNotEmpty) {
+      //   final selectedCategory = jsonCategory.first['name'];
+      //   if (!mounted) return;
+      //   final subCategoryResponse = await context
+      //       .read<AddListingCubit>()
+      //       .loadSubCategory(selectedCategory);
+      //   if (subCategoryResponse != null) {
+      //     listSubCategory = subCategoryResponse.data;
+      //   }
+      // }
     }
+
     setState(() {
       listCategory = loadCategoryResponse?.data;
       if (currentCity != null && currentCity != 0) {
@@ -353,6 +366,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         });
       }
     } else {
+      selectedCategory =
+          jsonCategory.firstWhere((category) => category['id'] == 20)['name'];
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
@@ -772,6 +787,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       14: "category_rathaus",
       15: "category_newsletter",
       16: "category_official_notification",
+      20: "category_applicant",
     };
     return categories[id];
   }

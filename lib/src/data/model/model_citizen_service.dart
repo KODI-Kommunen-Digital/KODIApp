@@ -20,6 +20,11 @@ class CitizenServiceModel {
       type: type,
       pageNo: 1,
     );
-    return !result?[0].isEmpty;
+
+    if (result == null) {
+      return false;
+    }
+
+    return !result[0].isEmpty;
   }
 }

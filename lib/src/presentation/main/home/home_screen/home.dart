@@ -24,6 +24,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -227,7 +228,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '2.4.2';
+                          latestAppStoreVersion = appStoreVersion ?? '';
                         });
                       }
                     },
@@ -547,7 +548,15 @@ class _HomeScreenState extends State<HomeScreen> {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
-                _onCategory(item, category);
+                if (item.id == 4 ||
+                    item.id == 5 ||
+                    item.id == 6 ||
+                    item.id == 7 ||
+                    item.id == 8) {
+                  _onService(item);
+                } else {
+                  _onCategory(item, category);
+                }
                 return false;
               },
             );
@@ -560,6 +569,18 @@ class _HomeScreenState extends State<HomeScreen> {
       padding: const EdgeInsets.all(8),
       child: content,
     );
+  }
+
+  Future<void> _onService(CategoryModel item) async {
+    if (item.id == 4) {
+      await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/"),
+          mode: LaunchMode.inAppWebView);
+    } else if (item.id == 5) {
+      await launchUrl(
+          Uri.parse("https://freiraum-fichtelgebirge.de/ueber-uns/"),
+          mode: LaunchMode.inAppWebView);
+    }
+    return;
   }
 
   Widget _buildLocation(List<CategoryModel>? location) {
