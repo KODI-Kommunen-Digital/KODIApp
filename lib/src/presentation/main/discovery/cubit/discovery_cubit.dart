@@ -183,7 +183,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "11": "https://www.smart-app-troisdorf.de/gewinnspiel",
       "12": "https://www.aggua.de/",
       "13": "https://www.stadtwerke-troisdorf.de/",
-      "14": "https://www.jeti-line.de/"
+      "14": "https://www.jeti-line.de/",
+      "15":
+          "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/"
     };
     return serviceLinks[imageLink];
   }
