@@ -4,8 +4,6 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'cubit.dart';
 
@@ -26,54 +24,36 @@ class ListCubit extends Cubit<ListState> {
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
   List<ProductModel> filteredList = [];
-  List listCity = [];
   bool isSearching = false;
   String? searchTerm;
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad(categoryId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
-    listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
       categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
-      cityId: cityId,
+      cityId: 1,
     );
     if (result != null) {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(list, listCity));
+      emit(ListStateLoaded(list));
     }
   }
 
-  Future<void> setCategoryFilter(int filter, int? cityId) async {
+  Future<List<ProductModel>> newListings(int pageNo, categoryId) async {
     final prefs = await Preferences.openBox();
-
-    if (filter == 0) {
-      prefs.setKeyValue(Preferences.categoryId, 0);
-    } else {
-      prefs.setKeyValue(Preferences.categoryId, filter);
-    }
-    if (cityId != null) {
-      onLoad(cityId);
-    }
-  }
-
-  Future<List<ProductModel>> newListings(int pageNo, city) async {
-    final prefs = await Preferences.openBox();
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
 
     final result = await ListRepository.loadList(
-      categoryId: (categoryId == 0) ? "" : categoryId,
+      categoryId: categoryId,
       type: type,
       pageNo: pageNo,
-      cityId: city,
+      cityId: 1,
     );
 
     final listUpdated = result?[0] ?? [];
@@ -95,12 +75,11 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
 
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasCategoryFilter: true,
         hasLocationFilter: true,
-        currentLocation: cityId,
+        currentLocation: 1,
         currentCategory: categoryId);
 
     final result = await ListRepository.searchListing(
@@ -141,7 +120,7 @@ class ListCubit extends Cubit<ListState> {
       );
     }
 
-    emit(ListStateUpdated(listDataList, listCity));
+    emit(ListStateUpdated(listDataList));
   }
 
   Future<void> cancelSearch(int cityId) async {
@@ -151,7 +130,7 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
+  /*void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
       bool filterLocation, int? currentCity) {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
@@ -170,7 +149,7 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateUpdated(filteredList, listCity));
+      emit(ListStateUpdated(filteredList));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
         final startDate = _parseDate(product.startDate);
@@ -187,14 +166,14 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
 
-      emit(ListStateUpdated(filteredList, listCity));
+      emit(ListStateUpdated(filteredList));
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
       filteredList = loadedList.where((product) {
         return product.cityId == currentCity;
       }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
+      emit(ListStateUpdated(filteredList));
     } else {
-      emit(ListStateUpdated(loadedList, listCity));
+      emit(ListStateUpdated(loadedList));
     }
   }
 
@@ -243,7 +222,7 @@ class ListCubit extends Cubit<ListState> {
     final startOfYear = DateTime(date.year, 1, 1);
     final daysSinceStartOfYear = date.difference(startOfYear).inDays;
     return (daysSinceStartOfYear / 7).ceil();
-  }
+  }*/
 
   Future<bool?> categoryPreferencesCall() async {
     final prefs = await Preferences.openBox();

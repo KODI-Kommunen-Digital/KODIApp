@@ -449,7 +449,7 @@ class _HomeScreenState extends State<HomeScreen> {
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': selectedCityId, 'title': ''});
+            arguments: {'id': item.id, 'title': ''});
       }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
