@@ -54,6 +54,7 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.home:
       case Routes.discovery:
       case Routes.account:
+      case Routes.portal:
         return false;
       default:
         return true;
@@ -114,11 +115,6 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.home:
         AppBloc.homeCubit.setDoesScroll(true);
         AppBloc.homeCubit.scrollUp();
-        break;
-
-      case Routes.portal:
-        AppBloc.portalCubit.setDoesScroll(true);
-        AppBloc.portalCubit.scrollUp();
         break;
       case Routes.discovery:
         AppBloc.discoveryCubit.setDoesScroll(true);

@@ -11,8 +11,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     emit(const AuthenticationState.loading());
     UserModel? user = await AppBloc.userCubit.onLoadUser();
     if (user != null) {
-      AppBloc.portalCubit.onLoad();
-
       AppBloc.userCubit.onFetchUser();
 
       emit(const AuthenticationState.loaded());
@@ -27,8 +25,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     Api.requestUser(userId: user.id);
 
     await AppBloc.userCubit.onSaveUser(user);
-
-    AppBloc.portalCubit.onLoad();
 
     emit(const AuthenticationState.loaded());
   }
