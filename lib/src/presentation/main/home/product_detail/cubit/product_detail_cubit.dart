@@ -4,7 +4,6 @@ import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -101,7 +100,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     final prefs = await Preferences.openBox();
     final int? userId = prefs.getKeyValue(Preferences.userId, '');
     await ListRepository.addWishList(userId, product);
-    await AppBloc.portalCubit.onLoad();
   }
 
   Future<void> onDeleteFavorite(ProductModel? product) async {
@@ -116,7 +114,6 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           await ListRepository.removeWishList(userId, fList.favoriteId);
         }
       }
-      await AppBloc.portalCubit.onLoad();
     }
   }
 }
