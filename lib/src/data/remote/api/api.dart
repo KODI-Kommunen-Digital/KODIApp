@@ -288,6 +288,13 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Get Contact
+  static Future<ResultApiModel> requestContact() async {
+    final result = await UtilAsset.loadJson("assets/data/contact.json");
+    // final result = await HTTPManager(forum: false).get(url: contact, params: params);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Get Home Categories
   static Future<ResultApiModel> requestHomeCategory() async {
     final result = await UtilAsset.loadJson("assets/data/category.json");

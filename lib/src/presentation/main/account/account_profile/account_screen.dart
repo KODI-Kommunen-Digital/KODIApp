@@ -182,7 +182,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ),
                     if (user != null)
                       AppListTitle(
-                        title: Translate.of(context).translate('contact'),
+                        title: Translate.of(context).translate('feedback'),
                         onPressed: () {
                           _onNavigate(Routes.contactUs);
                         },
