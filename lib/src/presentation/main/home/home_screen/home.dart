@@ -588,9 +588,11 @@ class _HomeScreenState extends State<HomeScreen> {
       await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/"),
           mode: LaunchMode.inAppWebView);
     } else if (item.id == 5) {
+      /*
       await launchUrl(
           Uri.parse("https://freiraum-fichtelgebirge.de/ueber-uns/"),
-          mode: LaunchMode.inAppWebView);
+          mode: LaunchMode.inAppWebView);*/
+      Navigator.pushNamed(context, Routes.contact);
     }
     return;
   }

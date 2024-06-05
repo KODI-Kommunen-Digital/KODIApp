@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_contact.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -161,6 +162,17 @@ class ListRepository {
       logError('Remove UserList Response Failed', response.message);
       return false;
     }
+  }
+
+  static Future<List<ContactPerson>?> loadContact() async {
+    final response = await Api.requestContact();
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ContactPerson.fromJson(item);
+      }).toList();
+      return list;
+    }
+    return null;
   }
 
   ///Upload image

@@ -34,7 +34,6 @@
       "lastname": "Berek",
       "role": "Landrat",
       "email": "peter.berek@landkreis-wunsiedel.de",
-      "phone": "",
       "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Peter_Berek_710x710px.jpg"
     },
     {
@@ -88,7 +87,6 @@
       "lastname": "Köhler",
       "role": "Leitung Geschäftsbereich Kreisangelegenheiten",
       "email": "tobias.koehler@landkreis-wunsiedel.de",
-      "phone": "",
       "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Tobias_Koehler_710x710px.jpg"
     },
     {
@@ -133,7 +131,6 @@
       "lastname": "Menzel",
       "role": "Werkstudentin Smartes Fichtelgebirge",
       "email": "eva.menzel@landkreis-wunsiedel.de",
-      "phone": "",
       "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Eva_1000x1000-1.jpg"
     },
     {
@@ -141,8 +138,6 @@
       "firstname": "Cerstin",
       "lastname": "Panzer",
       "role": "Mobilitätsmanagerin",
-      "email": "",
-      "phone": "",
       "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Cerstin_1000x1000_neu.jpg"
     },
     {
