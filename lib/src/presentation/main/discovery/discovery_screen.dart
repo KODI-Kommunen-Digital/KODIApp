@@ -138,7 +138,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
                 services[index].imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           );
@@ -254,7 +254,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "9" ||
         service.imageLink == "12" ||
         service.imageLink == "13" ||
-        service.imageLink == "14") {
+        service.imageLink == "14" ||
+        service.imageLink == "15") {
       await launchUrl(
           Uri.parse(
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
