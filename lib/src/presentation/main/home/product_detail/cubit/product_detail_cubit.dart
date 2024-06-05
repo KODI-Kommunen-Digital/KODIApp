@@ -101,7 +101,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     final prefs = await Preferences.openBox();
     final int? userId = prefs.getKeyValue(Preferences.userId, '');
     await ListRepository.addWishList(userId, product);
-    await AppBloc.wishListCubit.onLoad();
+    await AppBloc.portalCubit.onLoad();
   }
 
   Future<void> onDeleteFavorite(ProductModel? product) async {
@@ -116,7 +116,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
           await ListRepository.removeWishList(userId, fList.favoriteId);
         }
       }
-      await AppBloc.wishListCubit.onLoad();
+      await AppBloc.portalCubit.onLoad();
     }
   }
 }

@@ -117,8 +117,8 @@ class _MainScreenState extends State<MainScreen> {
         break;
 
       case Routes.portal:
-        AppBloc.wishListCubit.setDoesScroll(true);
-        AppBloc.wishListCubit.scrollUp();
+        AppBloc.portalCubit.setDoesScroll(true);
+        AppBloc.portalCubit.scrollUp();
         break;
       case Routes.discovery:
         AppBloc.discoveryCubit.setDoesScroll(true);
