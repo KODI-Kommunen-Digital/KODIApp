@@ -1,0 +1,266 @@
+{
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "firstname": "Markus",
+      "lastname": "Bauernfeind",
+      "role": "Leerstandsmanager",
+      "email": "markus.bauernfeind@landkreis-wunsiedel.de",
+      "phone": "09232 80-457",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Markus_Bauernfeind710x710px.jpg"
+    },
+    {
+      "id": 2,
+      "firstname": "Katharina",
+      "lastname": "Becher",
+      "role": "Leitung Image & Regionale Identität",
+      "email": "katharina.hupfer@landkreis-wunsiedel.de",
+      "phone": "09232 80-485",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Katharina_Hupfer_710x710px.jpg"
+    },
+    {
+      "id": 3,
+      "firstname": "Cosima",
+      "lastname": "Benker",
+      "role": "Projektleitung Freiraum für Macher",
+      "email": "cosima.benker@landkreis-wunsiedel.de",
+      "phone": "09232 80-549",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Cosima_Benker_710x710px.jpg"
+    },
+    {
+      "id": 4,
+      "firstname": "Peter",
+      "lastname": "Berek",
+      "role": "Landrat",
+      "email": "peter.berek@landkreis-wunsiedel.de",
+      "phone": "",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Peter_Berek_710x710px.jpg"
+    },
+    {
+      "id": 5,
+      "firstname": "Martina",
+      "lastname": "Busch",
+      "role": "Geschäftsstellenleitung Gesundheitsregion Plus",
+      "email": "martina.busch@landkreis-wunsiedel.de",
+      "phone": "09232 80-115",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Martina_Busch_710x710px.jpg"
+    },
+    {
+      "id": 6,
+      "firstname": "Florian",
+      "lastname": "Ernst",
+      "role": "Leitung Kreisentwicklung",
+      "email": "florian.ernst@landkreis-wunsiedel.de",
+      "phone": "09232 80-483",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Florian_Ernst_710x710px.jpg"
+    },
+    {
+      "id": 7,
+      "firstname": "Benjamin",
+      "lastname": "Fischer",
+      "role": "Mobilitätsmanager",
+      "email": "benjamin.fischer@landkreis-wunsiedel.de",
+      "phone": "09232 80-486",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2023/10/benjaminFischer_final_final.jpg"
+    },
+    {
+      "id": 8,
+      "firstname": "Dennis",
+      "lastname": "Fricken",
+      "role": "Leitung Mobilität",
+      "email": "dennis.fricken@landkreis-wunsiedel.de",
+      "phone": "09232 80-447",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/08/DennisFricken-1.jpg"
+    },
+    {
+      "id": 9,
+      "firstname": "Lisa",
+      "lastname": "Hertel",
+      "role": "Öko-Modellregion",
+      "email": "lisa.hertel@landkreis-wunsiedel.de",
+      "phone": "09232 80-668",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Lisa_Hertel_710x710px.jpg"
+    },
+    {
+      "id": 10,
+      "firstname": "Tobias",
+      "lastname": "Köhler",
+      "role": "Leitung Geschäftsbereich Kreisangelegenheiten",
+      "email": "tobias.koehler@landkreis-wunsiedel.de",
+      "phone": "",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Tobias_Koehler_710x710px.jpg"
+    },
+    {
+      "id": 11,
+      "firstname": "Daniela",
+      "lastname": "Konschak",
+      "role": "Projektmanagerin Resiliente Regionen",
+      "email": "daniela.konschak@landkreis-wunsiedel.de",
+      "phone": "09232 80565",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Ansprechpartner-Platzhalter-rund.png"
+    },
+    {
+      "id": 12,
+      "firstname": "Jürgen",
+      "lastname": "Kromer",
+      "role": "Klimaschutzmanager",
+      "email": "jk@idf.gmbh",
+      "phone": "09232 9782589",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Juergen_Kromer_710x710px.jpg"
+    },
+    {
+      "id": 13,
+      "firstname": "Christine",
+      "lastname": "Lauterbach",
+      "role": "Geschäftsführung LEADER-Aktionsgruppe",
+      "email": "christine.lauterbach@landkreis-wunsiedel.de",
+      "phone": "09232 80-666",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Christine_Lauterbach_710x710px.jpg"
+    },
+    {
+      "id": 14,
+      "firstname": "Johannes",
+      "lastname": "Loos",
+      "role": "Mobilitätsmanager",
+      "email": "johannes.loos@landkreis-wunsiedel.de",
+      "phone": "09232 80-488",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/01/JohannesLoos_Mitarbeiter.jpg"
+    },
+    {
+      "id": 15,
+      "firstname": "Eva",
+      "lastname": "Menzel",
+      "role": "Werkstudentin Smartes Fichtelgebirge",
+      "email": "eva.menzel@landkreis-wunsiedel.de",
+      "phone": "",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Eva_1000x1000-1.jpg"
+    },
+    {
+      "id": 16,
+      "firstname": "Cerstin",
+      "lastname": "Panzer",
+      "role": "Mobilitätsmanagerin",
+      "email": "",
+      "phone": "",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Cerstin_1000x1000_neu.jpg"
+    },
+    {
+      "id": 17,
+      "firstname": "Annalena",
+      "lastname": "Graske",
+      "role": "Wirtschaftsförderung & Projektleitung Heimat-Digital-Regional",
+      "email": "annalena.pecher@landkreis-wunsiedel.de",
+      "phone": "09232 80-559",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/04/Annelena.jpg"
+    },
+    {
+      "id": 18,
+      "firstname": "Stephanie",
+      "lastname": "Philipp",
+      "role": "Wirtschaftsförderung & Bildungsregion",
+      "email": "stephanie.philipp@landkreis-wunsiedel.de",
+      "phone": "09232 80-493",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Stephanie_Philipp_710x710px.jpg"
+    },
+    {
+      "id": 19,
+      "firstname": "Franziska",
+      "lastname": "Pöhlmann",
+      "role": "Projektmanagerin Smartes Fichtelgebirge",
+      "email": "franziska.poehlmann@landkreis-wunsiedel.de",
+      "phone": "09232 80-556",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/06/Franziska_Mitarbeiterfoto_quadratisch.jpg"
+    },
+    {
+      "id": 20,
+      "firstname": "Alexander",
+      "lastname": "Popp",
+      "role": "Regionalmanagement & Wirtschaftsförderung",
+      "email": "alexander.popp@landkreis-wunsiedel.de",
+      "phone": "09232 80-480",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/01/Alexander_Popp_710x710px.png"
+    },
+    {
+      "id": 21,
+      "firstname": "Oliver",
+      "lastname": "Rauh",
+      "role": "Projektleitung Smartes Fichtelgebirge",
+      "email": "oliver.rauh@landkreis-wunsiedel.de",
+      "phone": "09232 80-468",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/07/Mitarbeiter_OliverRauh.jpg"
+    },
+    {
+      "id": 22,
+      "firstname": "Anke",
+      "lastname": "Rieß-Fähnrich",
+      "role": "Öffentlichkeitsarbeit",
+      "email": "anke.riess-faehnrich@landkreis-wunsiedel.de",
+      "phone": "09232 80-540",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Anke_Riess_Faehnrich_710x710px.jpg"
+    },
+    {
+      "id": 23,
+      "firstname": "Laura",
+      "lastname": "Stecher",
+      "role": "Öko-Modellregion",
+      "email": "laura.stecher@landkreis-wunsiedel.de",
+      "phone": "09232 80-667",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Laura_Stecher_710x710px.jpg"
+    },
+    {
+      "id": 24,
+      "firstname": "Katrin",
+      "lastname": "Steidl",
+      "role": "Projektmanagerin Resiliente Regionen",
+      "email": "katrin.steidl@landkreis-wunsiedel.de",
+      "phone": "09232 80-554",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/01/KatrinSteidl-1.jpg"
+    },
+    {
+      "id": 25,
+      "firstname": "Svenja",
+      "lastname": "Faßbinder",
+      "role": "Kommunale Jugendarbeit/ Kreisjugendamt",
+      "email": "svenja.fassbinder@landkreis-wunsiedel.de",
+      "phone": "09232 80-316",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2023/03/Mitarbeiterin_SvenjaFassbinder.jpg"
+    },
+    {
+      "id": 26,
+      "firstname": "Christoph",
+      "lastname": "Wiedekind",
+      "role": "Chief Digital Officer",
+      "email": "cw@idf.gmbh",
+      "phone": "09232 9782 580",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Christoph_Wiedekind_710x710px.jpg"
+    },
+    {
+      "id": 27,
+      "firstname": "Ronja",
+      "lastname": "Wunderlich",
+      "role": "Sport- und Kulturförderung",
+      "email": "ronja.wunderlich@landkreis-wunsiedel.de",
+      "phone": "09232 80-464",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Ronja_Wunderlich_710x710px.jpg"
+    },
+    {
+      "id": 28,
+      "firstname": "Nadine",
+      "lastname": "Zettlmeißl",
+      "role": "Klimaschutzmanagerin",
+      "email": "nz@idf.gmbh",
+      "phone": "09232 9782583",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2022/10/Nadine_Mitarbeiterfoto.png"
+    },
+    {
+      "id": 29,
+      "firstname": "Nina",
+      "lastname": "Ziesel",
+      "role": "Geschäftsstellenleitung Gesundheitsregion Plus",
+      "email": "nina.ziesel@landkreis-wunsiedel.de",
+      "phone": "09232 80-508",
+      "image": "https://freiraum-fichtelgebirge.de/app/uploads/2021/10/Nina_Ziesel_710x710px.jpg"
+    }
+  ]
+}
