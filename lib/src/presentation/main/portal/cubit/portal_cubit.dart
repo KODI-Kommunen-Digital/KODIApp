@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:intl/intl.dart';
 
 import 'cubit.dart';
@@ -7,14 +9,15 @@ class PortalCubit extends Cubit<PortalState> {
   PortalCubit() : super(const PortalLoading());
   bool doesScroll = false;
 
-  dynamic response;
+  dynamic user;
 
   Future<void> onLoad() async {
     emit(const PortalLoading());
-    //final prefBox = await Preferences.openBox();
+    final prefBox = await Preferences.openBox();
+    final userId = prefBox.getKeyValue(Preferences.userId, 0);
+    user = await UserRepository.fetchUser(userId);
 
-    //final userId = prefBox.getKeyValue(Preferences.userId, 0);
-    emit(const PortalState.loaded());
+    emit(PortalState.loaded(user));
   }
 
   String onDateParse(String date) {
@@ -33,6 +36,6 @@ class PortalCubit extends Cubit<PortalState> {
 
   void scrollUp() {
     emit(const PortalLoading());
-    emit(const PortalState.loaded());
+    emit(PortalState.loaded(user));
   }
 }

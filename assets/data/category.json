@@ -1,46 +1,53 @@
 {
-    "status": "success",
-    "data": [ 
-        {
-            "id": 1,
-            "name": "News",
-            "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
-            "color": "#ff8a65",
-            "categoryType" : "category"
-        },
-        
-        {
-            "id": 3,
-            "name": "Events",
-            "noOfSubcategories": 0,
-            "icon": "far fa-calendar-check",
-            "color": "#a569bd",
-            "categoryType" : "category"
-        },
-        {
-            "id": 4,
-            "name": "Freiraum für Macht",
-            "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#5dade2",
-            "categoryType" : "category"
-        },
-        {
-            "id": 10,
-            "name": "Unternehmen",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        {
-            "id": 5,
-            "name": "Kontakte",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-address-book",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        }
-    ]
+  "status": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "News",
+      "noOfSubcategories": 8,
+      "icon": "fas fa-newspaper",
+      "color": "#ff8a65",
+      "categoryType": "category"
+    },
+    {
+      "id": 3,
+      "name": "Events",
+      "noOfSubcategories": 0,
+      "icon": "far fa-calendar-check",
+      "color": "#a569bd",
+      "categoryType": "category"
+    },
+    {
+      "id": 4,
+      "name": "Freiraum für Macht",
+      "noOfSubcategories": 0,
+      "icon": "far fa-handshake",
+      "color": "#5dade2",
+      "categoryType": "category"
+    },
+    {
+      "id": 10,
+      "name": "Unternehmen",
+      "noOfSubcategories": 0,
+      "icon": "fas fa-briefcase",
+      "color": "#fdc60a",
+      "categoryType": "category"
+    },
+    {
+      "id": 5,
+      "name": "Kontakte",
+      "noOfSubcategories": 0,
+      "icon": "fas fa-address-book",
+      "color": "#58d68d",
+      "categoryType": "category"
+    },
+    {
+      "id": 20,
+      "name": "Antragssteller",
+      "noOfSubcategories": 0,
+      "icon": "fas fa-user-group",
+      "color": "#027148",
+      "categoryType": "category"
+    }
+  ]
 }
