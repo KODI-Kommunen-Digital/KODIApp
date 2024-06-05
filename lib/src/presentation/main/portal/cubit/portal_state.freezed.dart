@@ -20,7 +20,7 @@ mixin _$PortalState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(UserModel? user) loaded,
     required TResult Function(String errorMessage) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$PortalState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(UserModel? user)? loaded,
     TResult? Function(String errorMessage)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$PortalState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(UserModel? user)? loaded,
     TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$PortalInitial implements PortalInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(UserModel? user) loaded,
     required TResult Function(String errorMessage) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$PortalInitial implements PortalInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(UserModel? user)? loaded,
     TResult? Function(String errorMessage)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$PortalInitial implements PortalInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(UserModel? user)? loaded,
     TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$PortalLoading implements PortalLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(UserModel? user) loaded,
     required TResult Function(String errorMessage) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$PortalLoading implements PortalLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(UserModel? user)? loaded,
     TResult? Function(String errorMessage)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$PortalLoading implements PortalLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(UserModel? user)? loaded,
     TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
@@ -319,6 +319,8 @@ abstract class _$$PortalLoadedCopyWith<$Res> {
   factory _$$PortalLoadedCopyWith(
           _$PortalLoaded value, $Res Function(_$PortalLoaded) then) =
       __$$PortalLoadedCopyWithImpl<$Res>;
+  @useResult
+  $Res call({UserModel? user});
 }
 
 /// @nodoc
@@ -328,36 +330,60 @@ class __$$PortalLoadedCopyWithImpl<$Res>
   __$$PortalLoadedCopyWithImpl(
       _$PortalLoaded _value, $Res Function(_$PortalLoaded) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? user = freezed,
+  }) {
+    return _then(_$PortalLoaded(
+      freezed == user
+          ? _value.user
+          : user // ignore: cast_nullable_to_non_nullable
+              as UserModel?,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$PortalLoaded implements PortalLoaded {
-  const _$PortalLoaded();
+  const _$PortalLoaded(this.user);
+
+  @override
+  final UserModel? user;
 
   @override
   String toString() {
-    return 'PortalState.loaded()';
+    return 'PortalState.loaded(user: $user)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PortalLoaded);
+        (other.runtimeType == runtimeType &&
+            other is _$PortalLoaded &&
+            (identical(other.user, user) || other.user == user));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, user);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$PortalLoadedCopyWith<_$PortalLoaded> get copyWith =>
+      __$$PortalLoadedCopyWithImpl<_$PortalLoaded>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(UserModel? user) loaded,
     required TResult Function(String errorMessage) error,
   }) {
-    return loaded();
+    return loaded(user);
   }
 
   @override
@@ -365,10 +391,10 @@ class _$PortalLoaded implements PortalLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(UserModel? user)? loaded,
     TResult? Function(String errorMessage)? error,
   }) {
-    return loaded?.call();
+    return loaded?.call(user);
   }
 
   @override
@@ -376,12 +402,12 @@ class _$PortalLoaded implements PortalLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(UserModel? user)? loaded,
     TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded();
+      return loaded(user);
     }
     return orElse();
   }
@@ -425,7 +451,12 @@ class _$PortalLoaded implements PortalLoaded {
 }
 
 abstract class PortalLoaded implements PortalState {
-  const factory PortalLoaded() = _$PortalLoaded;
+  const factory PortalLoaded(final UserModel? user) = _$PortalLoaded;
+
+  UserModel? get user;
+  @JsonKey(ignore: true)
+  _$$PortalLoadedCopyWith<_$PortalLoaded> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -495,7 +526,7 @@ class _$PortalError implements PortalError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(UserModel? user) loaded,
     required TResult Function(String errorMessage) error,
   }) {
     return error(errorMessage);
@@ -506,7 +537,7 @@ class _$PortalError implements PortalError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(UserModel? user)? loaded,
     TResult? Function(String errorMessage)? error,
   }) {
     return error?.call(errorMessage);
@@ -517,7 +548,7 @@ class _$PortalError implements PortalError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(UserModel? user)? loaded,
     TResult Function(String errorMessage)? error,
     required TResult orElse(),
   }) {
