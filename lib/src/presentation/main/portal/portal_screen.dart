@@ -47,6 +47,7 @@ class _PortalScreenState extends State<PortalScreen> {
                 //TODO check if user is allowed to view applications
                 final prefs = await Preferences.openBox();
                 prefs.setKeyValue(Preferences.categoryId, 20);
+                prefs.setKeyValue(Preferences.type, 'category');
                 Navigator.pushNamed(
                   context,
                   Routes.listProduct,
