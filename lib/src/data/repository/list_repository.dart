@@ -716,7 +716,7 @@ class ListRepository {
     return requestVillageResponse;
   }
 
-  void setCategoryId(value) async {
+  Future<void> setCategoryId(value) async {
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere(
