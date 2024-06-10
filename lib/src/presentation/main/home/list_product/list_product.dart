@@ -29,17 +29,24 @@ class ListProductScreen extends StatefulWidget {
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   int pageNo = 1;
-  late int categoryId;
+  int? categoryId;
+  String? searchTerm;
 
   @override
   void initState() {
     super.initState();
     categoryId = widget.arguments['id'];
+    searchTerm = widget.arguments['search'];
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(categoryId);
+    if(searchTerm != null) {
+      await context.read<ListCubit>().searchListing(searchTerm, true);
+    } else {
+      await context.read<ListCubit>().onLoad(categoryId);
+    }
+
   }
 
   @override
@@ -63,11 +70,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
                     }
                   }),
           actions: [
-            IconButton(
-                onPressed: () {
-                  _searchListings();
-                },
-                icon: const Icon(Icons.search))
+            Visibility(
+              visible: searchTerm == null,
+              child: IconButton(
+                  onPressed: () {
+                    _searchListings();
+                  },
+                  icon: const Icon(Icons.search)),
+            )
           ],
         ),
         body: BlocConsumer<ListCubit, ListState>(
@@ -82,13 +92,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loading: () => const ListLoading(),
             loaded: (list) => ListLoaded(
               list: list,
-              selectedId: categoryId,
+              selectedId: categoryId ?? 0,
             ),
             updated: (list) {
               return ListLoaded(
                 list: list,
                 updated: true,
-                selectedId: categoryId,
+                selectedId: categoryId ?? 0,
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -107,7 +117,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context.read<ListCubit>().searchListing(searchResult.trim(), true);
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
-      context.read<ListCubit>().cancelSearch(categoryId);
+      context.read<ListCubit>().cancelSearch(categoryId ?? 0);
     }
   }
 
