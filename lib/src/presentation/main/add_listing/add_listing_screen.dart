@@ -70,6 +70,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool _processing = false;
   String? _errorTitle;
   String? _errorContent;
+  String? _errorEmail;
   String? _errorZipCode;
   String? _errorPhone;
 
@@ -122,7 +123,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       context
           .read<AddListingCubit>()
-          .setCategoryId(selectedCategory?.toLowerCase());
+          .setCategoryIdFromName(selectedCategory?.toLowerCase());
     } else if (widget.item == null) {
       _setDefaultExpiryDate();
       _isExpiryDateEnabled = true;
@@ -259,6 +260,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     setState(() {
       listCategory = loadCategoryResponse?.data;
+      if (!widget.isApplicant && listCategory.isNotEmpty) {
+        listCategory.removeWhere((element) => element['id'] == 20);
+      }
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
@@ -639,6 +643,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           context.read<AddListingCubit>().clearAssets();
         }
       } else {
+        if (widget.isApplicant) {
+          await context.read<AddListingCubit>().setCategoryId(20);
+        }
         String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
         TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
 
@@ -702,14 +709,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _errorPhone = UtilValidator.validate(
       _textPhoneController.text,
       type: ValidateType.phone,
-      allowEmpty: true,
+      allowEmpty: widget.isApplicant ? false : true,
     );
 
-    // _errorEmail = UtilValidator.validate(
-    //   _textEmailController.text,
-    //   type: ValidateType.email,
-    //   allowEmpty: true,
-    // );
+    _errorEmail = UtilValidator.validate(
+      _textEmailController.text,
+      type: ValidateType.email,
+      allowEmpty: widget.isApplicant ? false : true,
+    );
 
     _errorWebsite = UtilValidator.validate(
       _textWebsiteController.text,
@@ -747,7 +754,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorContent,
       _errorCategory,
       _errorPhone,
-      // _errorEmail,
+      _errorEmail,
       _errorWebsite,
       _errorStatus,
       _errorSDate,
@@ -757,7 +764,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorContent != null ||
         _errorCategory != null ||
         _errorPhone != null ||
-        // _errorEmail != null ||
+        _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
         _errorSDate != null) {
@@ -880,7 +887,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
               Text.rich(
                 TextSpan(
-                  text: Translate.of(context).translate('title'),
+                  text: Translate.of(context)
+                      .translate(widget.isApplicant ? 'name' : 'title'),
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
@@ -899,7 +907,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ]),
             const SizedBox(height: 8),
             AppTextInput(
-              hintText: Translate.of(context).translate('input_title'),
+              hintText: Translate.of(context).translate(
+                  widget.isApplicant ? 'input_flname' : 'input_title'),
               errorText: _errorTitle,
               controller: _textTitleController,
               focusNode: _focusTitle,
@@ -920,7 +929,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 16),
             Text.rich(
               TextSpan(
-                text: Translate.of(context).translate('input_content'),
+                text: Translate.of(context).translate(
+                    widget.isApplicant ? 'about_me' : 'input_content'),
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
@@ -939,7 +949,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             AppTextInput(
               maxLines: 3,
-              hintText: Translate.of(context).translate('input_content'),
+              hintText: Translate.of(context).translate(
+                  widget.isApplicant ? 'tell_about_you' : 'input_content'),
               errorText: _errorContent,
               controller: _textContentController,
               focusNode: _focusContent,
@@ -951,6 +962,103 @@ class _AddListingScreenState extends State<AddListingScreen> {
               },
             ),
             const SizedBox(height: 16),
+            Visibility(
+              visible: widget.isApplicant,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('email'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+            ),
+            Visibility(
+                visible: widget.isApplicant, child: const SizedBox(height: 8)),
+            Visibility(
+              visible: widget.isApplicant,
+              child: AppTextInput(
+                hintText: Translate.of(context).translate('input_email'),
+                errorText: _errorEmail,
+                controller: _textEmailController,
+                focusNode: _focusEmail,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  _errorEmail = UtilValidator.validate(
+                      _textEmailController.text,
+                      type: ValidateType.email);
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusEmail,
+                    _focusPhone,
+                  );
+                },
+              ),
+            ),
+            Visibility(
+                visible: widget.isApplicant, child: const SizedBox(height: 16)),
+            Visibility(
+              visible: widget.isApplicant,
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('phone'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ]),
+            ),
+            Visibility(
+                visible: widget.isApplicant, child: const SizedBox(height: 8)),
+            Visibility(
+              visible: widget.isApplicant,
+              child: AppTextInput(
+                hintText:
+                    Translate.of(context).translate('input_phone_whatsapp'),
+                errorText: _errorPhone,
+                controller: _textPhoneController,
+                focusNode: _focusPhone,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  _errorPhone = UtilValidator.validate(
+                      _textTitleController.text,
+                      type: ValidateType.phone);
+                },
+              ),
+            ),
+            Visibility(
+                visible: widget.isApplicant, child: const SizedBox(height: 16)),
             Text.rich(
               TextSpan(
                 text: Translate.of(context).translate('category'),
@@ -994,7 +1102,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       selectedCategory = value as String?;
                                       context
                                           .read<AddListingCubit>()
-                                          .setCategoryId(
+                                          .setCategoryIdFromName(
                                               selectedCategory?.toLowerCase());
                                     },
                                   );
@@ -1288,64 +1396,74 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ),
             ),
             const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_phone'),
-              errorText: _errorPhone,
-              controller: _textPhoneController,
-              focusNode: _focusPhone,
-              maxLength: 15,
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.next,
-              onChanged: (text) {
-                setState(() {
-                  _errorPhone = UtilValidator.validate(
-                    _textPhoneController.text,
-                    type: ValidateType.phone,
-                    allowEmpty: true,
+            Visibility(
+              visible: widget.isApplicant == false,
+              child: AppTextInput(
+                hintText: Translate.of(context).translate('input_phone'),
+                errorText: _errorPhone,
+                controller: _textPhoneController,
+                focusNode: _focusPhone,
+                maxLength: 15,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  setState(() {
+                    _errorPhone = UtilValidator.validate(
+                      _textPhoneController.text,
+                      type: ValidateType.phone,
+                      allowEmpty: true,
+                    );
+                  });
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusPhone,
+                    _focusEmail,
                   );
-                });
-              },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusPhone,
-                  _focusEmail,
-                );
-              },
-              leading: Icon(
-                Icons.phone_outlined,
-                color: Theme.of(context).hintColor,
+                },
+                leading: Icon(
+                  Icons.phone_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
             ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_email'),
-              // errorText: _errorEmail,
-              controller: _textEmailController,
-              focusNode: _focusEmail,
-              textInputAction: TextInputAction.next,
-              // onChanged: (text) {
-              //   setState(() {
-              //     _errorEmail = UtilValidator.validate(
-              //       _textEmailController.text,
-              //       type: ValidateType.email,
-              //       allowEmpty: true,
-              //     );
-              //   });
-              // },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusEmail,
-                  _focusWebsite,
-                );
-              },
-              leading: Icon(
-                Icons.email_outlined,
-                color: Theme.of(context).hintColor,
+            Visibility(
+                visible: widget.isApplicant == false,
+                child: const SizedBox(height: 8)),
+            Visibility(
+              visible: widget.isApplicant == false,
+              child: AppTextInput(
+                hintText: Translate.of(context).translate('input_email'),
+                // errorText: _errorEmail,
+                controller: _textEmailController,
+                focusNode: _focusEmail,
+                textInputAction: TextInputAction.next,
+                // onChanged: (text) {
+                //   setState(() {
+                //     _errorEmail = UtilValidator.validate(
+                //       _textEmailController.text,
+                //       type: ValidateType.email,
+                //       allowEmpty: true,
+                //     );
+                //   });
+                // },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusEmail,
+                    _focusWebsite,
+                  );
+                },
+                leading: Icon(
+                  Icons.email_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
             ),
-            const SizedBox(height: 8),
+            Visibility(
+                visible: widget.isApplicant == false,
+                child: const SizedBox(height: 8)),
             AppTextInput(
               hintText: Translate.of(context).translate('input_website'),
               errorText: _errorWebsite,
@@ -1573,7 +1691,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     if (!mounted) return;
     context
         .read<AddListingCubit>()
-        .setCategoryId(selectedCategory.toLowerCase());
+        .setCategoryIdFromName(selectedCategory.toLowerCase());
     context
         .read<AddListingCubit>()
         .setSubCategoryId(subCategoryResponse?.data.last['name']);
