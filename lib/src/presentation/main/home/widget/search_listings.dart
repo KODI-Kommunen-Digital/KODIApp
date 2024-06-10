@@ -33,25 +33,31 @@ class _SearchListingsState extends State<SearchListings> {
           elevation: 2,
           child: TextField(
             controller: searchController,
-            onChanged: (value) {
+            onSubmitted: (value) {
               widget.onSearchCallback?.call(value);
             },
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(
-                vertical: 0.0,
-                horizontal: 15.0,
-              ),
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
-              ),
-              hintText: widget.hintText ?? "Suchlisten",
-              hintStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-              ),
-              border: const OutlineInputBorder(),
-              prefixIcon: const Icon(Icons.search),
-            ),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 0.0,
+                  horizontal: 15.0,
+                ),
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
+                ),
+                hintText: widget.hintText ?? "Suchlisten",
+                hintStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                ),
+                border: const OutlineInputBorder(),
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: searchController.text.isNotEmpty
+                    ? IconButton(
+                        onPressed: () {
+                          searchController.clear();
+                        },
+                        icon: const Icon(Icons.clear))
+                    : const SizedBox()),
           ),
         ),
       ),
