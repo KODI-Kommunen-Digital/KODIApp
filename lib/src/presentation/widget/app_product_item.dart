@@ -131,9 +131,7 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      (cityName != null)
-                          ? "${item?.category ?? ''} - $cityName"
-                          : item?.category ?? '',
+                      item?.category ?? '',
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
