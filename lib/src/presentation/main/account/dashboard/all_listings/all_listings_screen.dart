@@ -188,7 +188,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                       Navigator.pushNamed(
                                           context, Routes.submit, arguments: {
                                         'item': item,
-                                        'isNewList': false,
+                                        'isApplicant': false,
                                         'isAdmin': true
                                       }).then((value) async {
                                         await _onRefresh();
@@ -512,7 +512,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     switch (chosen) {
       case 1:
         Navigator.pushNamed(context, Routes.submit,
-                arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
+                arguments: {'item': item, 'isApplicant': false, 'isAdmin': true})
             .then((value) async {
           await _onRefresh();
         });

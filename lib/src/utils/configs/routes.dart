@@ -240,7 +240,7 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return AddListingScreen(
               item: arguments['item'] as ProductModel?,
-              isNewList: arguments['isNewList'] as bool,
+              isApplicant: arguments['isApplicant'] as bool,
             );
           },
           fullscreenDialog: true,
@@ -514,7 +514,7 @@ class Routes {
             return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
-        case contact:
+      case contact:
         return MaterialPageRoute(
           builder: (context) {
             return ContactScreen();

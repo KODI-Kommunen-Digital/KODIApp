@@ -210,7 +210,7 @@ class _MainScreenState extends State<MainScreen> {
       if (result == null) return;
     }
     if (!mounted) return;
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+    Navigator.pushNamed(context, Routes.submit, arguments: {'isApplicant': false});
   }
 
   Widget _buildBottomMenu() {

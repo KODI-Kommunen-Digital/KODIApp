@@ -163,7 +163,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                     Routes.submit, arguments: {
                                                   'item':
                                                       userListingsList[index],
-                                                  'isNewList': false
+                                                  'isApplicant': false
                                                 }).then((value) async {
                                                   final response = await context
                                                       .read<ProfileCubit>()
