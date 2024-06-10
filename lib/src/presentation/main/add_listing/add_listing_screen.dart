@@ -367,7 +367,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     } else {
       selectedCategory =
-          jsonCategory.firstWhere((category) => category['id'] == 20)['name'];
+          jsonCategory.firstWhere((category) => category['id'] == 1)['name'];
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
