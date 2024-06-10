@@ -447,7 +447,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
 
   Future<void> updateListings(int index) async {
     Navigator.pushNamed(context, Routes.submit,
-            arguments: {'item': userListingsList[index], 'isNewList': false})
+            arguments: {'item': userListingsList[index], 'isApplicant': false})
         .then((value) async {
       final response =
           await context.read<ProfileCubit>().loadUserListing(widget.user.id, 1);

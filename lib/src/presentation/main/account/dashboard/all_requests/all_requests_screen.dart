@@ -142,7 +142,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                       Navigator.pushNamed(
                                           context, Routes.submit, arguments: {
                                         'item': item,
-                                        'isNewList': false,
+                                        'isApplicant': false,
                                         'isAdmin': true
                                       }).then((value) async {
                                         await _onRefresh();

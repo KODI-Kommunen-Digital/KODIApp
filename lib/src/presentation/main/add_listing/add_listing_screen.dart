@@ -26,12 +26,14 @@ import 'cubit/add_listing_cubit.dart';
 
 class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
-  final bool isNewList;
+  final bool isApplicant;
+
+  //newList, editList, applicant
 
   const AddListingScreen({
     Key? key,
     this.item,
-    required this.isNewList,
+    required this.isApplicant,
   }) : super(key: key);
 
   @override
@@ -366,8 +368,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
         });
       }
     } else {
-      selectedCategory =
-          jsonCategory.firstWhere((category) => category['id'] == 1)['name'];
+      if (widget.isApplicant) {
+        selectedCategory =
+            jsonCategory.firstWhere((category) => category['id'] == 20)['name'];
+      } else {
+        selectedCategory =
+            jsonCategory.firstWhere((category) => category['id'] == 1)['name'];
+      }
+
       if (currentCity != null && currentCity != 0) {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
@@ -679,7 +687,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSuccess() {
     Navigator.pop(context);
     // context.read<HomeCubit>().onLoad(false);
-    if (widget.isNewList) {
+    if (widget.item == null) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
   }
@@ -979,22 +987,26 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 child: Text(Translate.of(context).translate(
                                     _getCategoryTranslation(category['id']))));
                           }).toList(),
-                          onChanged: (value) async {
-                            setState(
-                              () {
-                                selectedCategory = value as String?;
-                                context.read<AddListingCubit>().setCategoryId(
-                                    selectedCategory?.toLowerCase());
-                              },
-                            );
-                            if (selectedCategory?.toLowerCase() == "news" ||
-                                selectedCategory == null) {
-                              selectSubCategory(
-                                  selectedCategory?.toLowerCase());
-                              _setDefaultExpiryDate();
-                            }
-                          },
-                        ),
+                          onChanged: !widget.isApplicant
+                              ? (value) async {
+                                  setState(
+                                    () {
+                                      selectedCategory = value as String?;
+                                      context
+                                          .read<AddListingCubit>()
+                                          .setCategoryId(
+                                              selectedCategory?.toLowerCase());
+                                    },
+                                  );
+                                  if (selectedCategory?.toLowerCase() ==
+                                          "news" ||
+                                      selectedCategory == null) {
+                                    selectSubCategory(
+                                        selectedCategory?.toLowerCase());
+                                    _setDefaultExpiryDate();
+                                  }
+                                }
+                              : null),
                 )
               ],
             ),
@@ -1095,7 +1107,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             return DropdownMenuItem(
                                 value: city['name'], child: Text(city['name']));
                           }).toList(),
-                          onChanged: widget.item == null
+                          onChanged: /*widget.item == null
                               ? (value) async {
                                   setState(() {
                                     selectedCity = value as String?;
@@ -1122,7 +1134,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                     });
                                   }
                                 }
-                              : null),
+                              : null*/
+                              null),
                 ),
               ],
             ),

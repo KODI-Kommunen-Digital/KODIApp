@@ -68,7 +68,7 @@ class _PortalScreenState extends State<PortalScreen> {
                     context,
                     Routes.submit,
                     arguments: {
-                      'isNewList': false,
+                      'isApplicant': true,
                     },
                   );
                 } else {
