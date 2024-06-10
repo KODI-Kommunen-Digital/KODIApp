@@ -16,8 +16,10 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       if (result.success) {
         final data = result.data as List<dynamic>;
 
+        // Normalize 'now' and 'twoWeeksFromNow' to have the time set to 00:00:00
         final DateTime now = DateTime.now();
-        final DateTime twoWeeksFromNow = now.add(const Duration(days: 14));
+        final DateTime today = DateTime(now.year, now.month, now.day);
+        final DateTime twoWeeksFromNow = today.add(const Duration(days: 14));
 
         List<WasteCollection> wasteCollections = [];
         List<WasteCollection> carouselCollections = [];
@@ -25,12 +27,14 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
         for (var item in data) {
           final collection = WasteCollection.fromJson(item);
           wasteCollections.add(collection);
-          if (collection.date.isAfter(now) &&
-              collection.date.isBefore(twoWeeksFromNow)) {
+          final DateTime collectionDate = DateTime(
+              collection.date.year, collection.date.month, collection.date.day);
+          if (collectionDate.isAtSameMomentAs(today) ||
+              (collectionDate.isAfter(today) &&
+                  collectionDate.isBefore(twoWeeksFromNow))) {
             carouselCollections.add(collection);
           }
         }
-
         emit(WasteCalendarLoaded(wasteCollections, carouselCollections));
       } else {
         emit(WasteCalendarError(
