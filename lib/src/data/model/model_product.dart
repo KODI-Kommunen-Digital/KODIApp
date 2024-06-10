@@ -214,7 +214,7 @@ class ProductModel {
     } else if (json['categoryId'] == 9) {
       category = "Verloren gefunden";
     } else if (json['categoryId'] == 10) {
-      category = "Firmenporträts";
+      category = "Unternehmen";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
     } else if (json['categoryId'] == 12) {
@@ -225,10 +225,8 @@ class ProductModel {
       category = "Rathaus";
     } else if (json['categoryId'] == 15) {
       category = "Mitteilungsblatt";
-    } else if (json['categoryId'] == 16) {
-      category = "Amtliche Mitteilung";
-    }else if (json['categoryId'] == 20) {
-      category = "Antragsteller";
+    } else if (json['categoryId'] == 20) {
+      category = "Applicants";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
