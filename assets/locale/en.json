@@ -532,5 +532,7 @@
   "company_matching": "Matching of company profiles",
   "choose_profile_type": "Please choose your profile type",
   "company": "Company",
-  "applicant": "Applicant"
+  "applicant": "Applicant",
+  "open_whatsapp": "How do you want to open this number?",
+  "call": "Call"
 }

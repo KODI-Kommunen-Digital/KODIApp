@@ -103,14 +103,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   ///Phone action
   void _phoneAction(String phone) async {
-    String cleanedPhone = phone.replaceAll(' ', '');
-    try {
-      await launchUrl(Uri.parse('tel:$cleanedPhone'));
-    } catch (e, stackTrace) {
-      if (!mounted) return;
-      _showMessage(Translate.of(context).translate('cannot_make_action'));
-      await Sentry.captureException(e, stackTrace: stackTrace);
+    bool? openWithWhatsApp = await _openWhatsapp();
+    if(openWithWhatsApp != null) {
+      String cleanedPhone = phone.replaceAll(' ', '');
+      try {
+        if (openWithWhatsApp) {
+          await launchUrl(Uri.parse('https://wa.me/$cleanedPhone?text='));
+        } else {
+          await launchUrl(Uri.parse('tel:$cleanedPhone'));
+        }
+      } catch (e, stackTrace) {
+        if (!mounted) return;
+        _showMessage(Translate.of(context).translate('cannot_make_action'));
+        await Sentry.captureException(e, stackTrace: stackTrace);
+      }
     }
+
+  }
+
+  Future<bool?> _openWhatsapp() async {
+    bool? choice = await showDialog<bool?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            Translate.of(context).translate('open_whatsapp'),
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text("WhatsApp"),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(Translate.of(context).translate('call')),
+            ),
+          ],
+        );
+      },
+    );
+    return choice;
   }
 
   ///Mail action
