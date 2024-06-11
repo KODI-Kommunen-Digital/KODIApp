@@ -20,8 +20,8 @@ class HTTPManager {
         // : 'https://app.smartregion-auf.de/forumapi/';
         // ? 'http://localhost:3001/'
         //     : 'http://localhost:3002/';
-        ? 'http://49.13.33.27:8002/'
-        : 'http://49.13.33.27:8002/';
+        ? 'https://www.fichtelbusiness.de/api'
+        : 'https://www.fichtelbusiness.de/api';
 
     _dio = Dio(
       BaseOptions(
