@@ -138,7 +138,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
                 services[index].imageUrl,
-                fit: BoxFit.contain,
+                fit: BoxFit.cover,
               ),
             ),
           );
