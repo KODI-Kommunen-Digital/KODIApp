@@ -76,6 +76,7 @@ class _PortalScreenState extends State<PortalScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                       content: Text(
                           Translate.of(context).translate('login_required'))));
+                  Navigator.pushNamed(context, Routes.signIn);
                 }
               },
             ),
