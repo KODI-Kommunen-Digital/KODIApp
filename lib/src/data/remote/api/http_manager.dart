@@ -37,8 +37,8 @@ class HTTPManager {
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        connectTimeout: const Duration(milliseconds: 30000),
+        receiveTimeout: const Duration(milliseconds: 30000),
         contentType: Headers.formUrlEncodedContentType,
         responseType: ResponseType.json,
       ),
