@@ -45,7 +45,7 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
               isCreatedByGuest: booking.isCreatedByGuest,
               description: booking.description,
               appointmentTitle: product.title,
-          imageLink: product.image));
+              imageLink: product.image));
         } else {
           bookings.add(booking);
           logError("Failed loading product for booking ${booking.id}");
@@ -95,21 +95,11 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
   }
 
   Future<bool> deleteBooking(BookingModel booking) async {
-
-    final prefs = await Preferences.openBox();
-    int userId = prefs.getKeyValue(Preferences.userId, -1);
-
-    if (userId == -1) {
-      logError("Failed loading product for booking, can't fetch userId");
+    bool success = await repo.deleteBooking(booking.appointmentId, booking.id);
+    if (success) {
+      return true;
     } else {
-      bool success = await repo.deleteBookingUser(
-          userId, booking.appointmentId, booking.id);
-
-      if (success) {
-        return true;
-      } else {
-        logError("Failed deleting booking");
-      }
+      logError("Failed deleting booking");
     }
     return false;
   }
