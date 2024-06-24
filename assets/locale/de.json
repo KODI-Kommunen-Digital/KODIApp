@@ -547,6 +547,7 @@
   "waste_calendar_message": "Der Abfallkalender steht dir in Kürze zur Verfügung.",
   "invalid_end_date_format": "ungültiges Enddatumformat",
   "invalid_start_date_format": "ungültiges Startdatumformat",
-  "end_before_start": "Endzeit liegt vor Startzeit"
+  "end_before_start": "Endzeit liegt vor Startzeit",
+  "add_to_calendar": "Zum Kalendar hinzufügen"
 }
 
