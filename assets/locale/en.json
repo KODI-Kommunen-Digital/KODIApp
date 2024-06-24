@@ -540,5 +540,6 @@
   "which_calendar": "Which calendar app do you want to use?",
   "standard_calendar": "Standard Calendar",
   "google_calendar": "Google Calendar",
-  "apple_calendar": "Apple Calendar"
+  "apple_calendar": "Apple Calendar",
+  "add_to_calendar": "Add to calendar"
 }

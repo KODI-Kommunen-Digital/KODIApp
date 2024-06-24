@@ -23,6 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
 // import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -447,6 +448,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget website = Container();
     Widget startDate = Container();
     Widget endDate = Container();
+    Widget addCalendarButton = Container();
     Widget openHours = Container();
     Widget attachments = Container();
     Widget createdDate = Container();
@@ -1137,6 +1139,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             )
           ],
         );
+
+        addCalendarButton = TextButton(
+            child: Text(Translate.of(context).translate('add_to_calendar')),
+            onPressed: () {
+              _requestPermissions();
+            });
       }
 
       if (product.endDate.isNotEmpty) {
@@ -1300,6 +1308,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: <Widget>[
                 startDate,
                 endDate,
+                addCalendarButton,
                 // priceRange,
               ],
             ),
