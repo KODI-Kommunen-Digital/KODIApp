@@ -219,6 +219,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
+      color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
       child: SizedBox(
         height: 56,
         child: Row(
