@@ -577,7 +577,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
         for (XFile asset in resultListCopy) {
           //final ByteData byteData = await asset.getByteData();
           //final List<int> imageData = byteData.buffer.asUint8List();
-          final List<int> imageData = await asset.readAsBytes();
+          final Uint8List imageData = await asset.readAsBytes();
           final tempDir = await getTemporaryDirectory();
           final filePath = '${tempDir.path}/${asset.name}';
 
