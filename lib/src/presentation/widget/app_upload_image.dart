@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, unused_catch_stack
+// ignore_for_file: unused_local_variable, unused_catch_stack, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -33,7 +33,7 @@ class AppUploadImage extends StatefulWidget {
   final bool forumGroup;
 
   const AppUploadImage({
-    Key? key,
+    super.key,
     this.title,
     this.image,
     required this.onChange,
@@ -41,7 +41,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   State<AppUploadImage> createState() => _AppUploadImageState();

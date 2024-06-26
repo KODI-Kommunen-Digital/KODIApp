@@ -3,7 +3,7 @@ import 'package:heidi/src/utils/translate.dart';
 
 class AppNumberPicker extends StatefulWidget {
   final int? value;
-  const AppNumberPicker({Key? key, this.value}) : super(key: key);
+  const AppNumberPicker({super.key, this.value});
 
   @override
   State<AppNumberPicker> createState() {
