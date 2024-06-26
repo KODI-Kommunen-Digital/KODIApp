@@ -23,8 +23,7 @@ import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
-// import 'package:add_2_calendar/add_2_calendar.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -190,26 +189,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  // Future<void> _requestPermissions() async {
-  //   PermissionStatus status;
-
-  //   // Check current permission status
-  //   status = await Permission.calendar.status;
-
-  //   if (status.isDenied || status.isRestricted || status.isLimited) {
-  //     // Request permission
-  //     status = await Permission.calendar.request();
-  //   }
-
-  //   if (status.isGranted) {
-  //     _showCalendarChoiceDialog();
-  //   } else if (status.isPermanentlyDenied) {
-  //     await openAppSettings();
-  //   } else {
-  //     _showPermissionDeniedDialog();
-  //   }
-  // }
-
   Future<void> _requestPermissions() async {
     PermissionStatus status = await Permission.calendar.status;
 
@@ -219,8 +198,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Platform.operatingSystemVersion.split(' ')[1].split('.')[0]) >=
           17) {
         // Request calendarWriteOnly and calendarFullAccess for iOS 17 and above
-        // PermissionStatus writeStatus =
-        //     await Permission.calendarWriteOnly.request();
+        PermissionStatus writeStatus =
+            await Permission.calendarWriteOnly.request();
         PermissionStatus fullAccessStatus =
             await Permission.calendarFullAccess.request();
 
@@ -230,7 +209,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         //     fullAccessStatus.isPermanentlyDenied) {
         //   await openAppSettings();
         // }
-        if (fullAccessStatus.isGranted) {
+        if (writeStatus.isGranted && fullAccessStatus.isGranted) {
           _showCalendarChoiceDialog();
         } else if (fullAccessStatus.isPermanentlyDenied) {
           await openAppSettings();
@@ -406,28 +385,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       return;
     }
 
-    // Event event = Event(
-    //   title: product.title,
-    //   description: product.description,
-    //   location: product.address,
-    //   startDate: eventStart,
-    //   endDate: eventEnd,
-    // );
+    Event event = Event(
+      title: product.title,
+      description: product.description,
+      location: product.address,
+      startDate: eventStart,
+      endDate: eventEnd,
+    );
 
-    // Add2Calendar.addEvent2Cal(event).then((success) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //         content: Text(success
-    //             ? Translate.of(context).translate("event_added_successful")
-    //             : Translate.of(context).translate("event_added_fail"))),
-    //   );
-    // }).catchError((e) {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(
-    //         content: Text(
-    //             "${Translate.of(context).translate("error_occurred")}: $e")),
-    //   );
-    // });
+    Add2Calendar.addEvent2Cal(event).then((success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(success
+                ? Translate.of(context).translate("event_added_successful")
+                : Translate.of(context).translate("event_added_fail"))),
+      );
+    }).catchError((e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(
+                "${Translate.of(context).translate("error_occurred")}: $e")),
+      );
+    });
   }
 
   ///Build content UI
@@ -1140,11 +1119,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         );
 
-        addCalendarButton = TextButton(
-            child: Text(Translate.of(context).translate('add_to_calendar')),
-            onPressed: () {
-              _requestPermissions();
-            });
+        // addCalendarButton = TextButton(
+        //     child: Text(Translate.of(context).translate('add_to_calendar')),
+        //     onPressed: () {
+        //       _requestPermissions();
+        //     });
       }
 
       if (product.endDate.isNotEmpty) {
@@ -1250,11 +1229,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                // if (product.category!.toLowerCase() == "events")
-                //   IconButton(
-                //     icon: const Icon(Icons.event),
-                //     onPressed: _requestPermissions,
-                //   ),
+                if (product.category!.toLowerCase() == "events")
+                  IconButton(
+                      icon: const Icon(Icons.event),
+                      onPressed: _requestPermissions,
+                      color: Colors.blue),
                 const SizedBox(width: 8),
                 // price,
                 // booking,
