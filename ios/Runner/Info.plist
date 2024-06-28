@@ -29,7 +29,7 @@
 	<key>NSCalendarsFullAccessUsageDescription</key>
 	<string>Wir benötigen Zugriff auf Ihren Kalender, um Ereignisse hinzuzufügen</string>
 	<key>NSCalendarsUsageDescription</key>
-	<string>We need access to your calendar to add events</string>
+	<string>Wir brauchen Zugriff zu deinem Kalender, um Events hinzuzufügen</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Need camera access for uploading images</string>
 	<key>NSDownloadsFolderUsageDescription</key>
