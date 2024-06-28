@@ -12,13 +12,13 @@ class AppNavBar extends StatelessWidget {
   final IconData iconModeView;
 
   const AppNavBar({
-    Key? key,
+    super.key,
     this.pageStyle = PageType.list,
     this.currentSort,
     required this.onChangeSort,
     required this.iconModeView,
     required this.onFilter,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
