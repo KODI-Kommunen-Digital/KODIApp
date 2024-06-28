@@ -47,7 +47,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Translate.of(context).translate('cust_services')),
+        title: Text(Translate.of(context).translate('services')),
         actions: [
           BlocConsumer<DiscoveryCubit, DiscoveryState>(
             listener: (context, state) {},
