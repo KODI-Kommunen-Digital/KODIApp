@@ -200,8 +200,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         // Request calendarWriteOnly and calendarFullAccess for iOS 17 and above
         PermissionStatus writeStatus =
             await Permission.calendarWriteOnly.request();
-        PermissionStatus fullAccessStatus =
-            await Permission.calendarFullAccess.request();
+        // PermissionStatus fullAccessStatus =
+        //     await Permission.calendarFullAccess.request();
 
         // if (writeStatus.isGranted || fullAccessStatus.isGranted) {
         //   _showCalendarChoiceDialog();
@@ -209,9 +209,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         //     fullAccessStatus.isPermanentlyDenied) {
         //   await openAppSettings();
         // }
-        if (writeStatus.isGranted && fullAccessStatus.isGranted) {
+        if (writeStatus.isGranted) {
           _showCalendarChoiceDialog();
-        } else if (fullAccessStatus.isPermanentlyDenied) {
+        } else if (writeStatus.isPermanentlyDenied) {
           await openAppSettings();
         } else {
           _showPermissionDeniedDialog();
