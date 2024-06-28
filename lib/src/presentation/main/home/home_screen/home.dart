@@ -158,7 +158,9 @@ class _HomeScreenState extends State<HomeScreen> {
         listener: (context, state) {
           state.maybeWhen(
             error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(Translate.of(context).translate('no_internet')))),
+              content: Text(Translate.of(context).translate('no_internet')),
+              duration: const Duration(seconds: 4),
+            )),
             orElse: () {},
           );
         },
@@ -427,27 +429,98 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Future<void> _onService(CategoryModel item) async {
+  //   if (item.id == 4) {
+  //     await launchUrl(
+  //         Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 5) {
+  //     await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 6) {
+  //     await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 7) {
+  //     await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 8) {
+  //     await launchUrl(
+  //         Uri.parse(
+  //             "https://geoportal.troisdorf.de/app.php/application/mobile"),
+  //         mode: LaunchMode.inAppWebView);
+  //   }
+  //   return;
+  // }
+
   Future<void> _onService(CategoryModel item) async {
-    if (item.id == 4) {
-      await launchUrl(
-          Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 5) {
-      await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 6) {
-      await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 7) {
-      await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 8) {
-      await launchUrl(
-          Uri.parse(
-              "https://geoportal.troisdorf.de/app.php/application/mobile"),
+    if (item.id == 5) {
+      final webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                  child: WebViewWidget(
+                    controller: webViewController,
+                    gestureRecognizers: gestureRecognizers,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      await webViewController.runJavaScript(
+          "document.querySelector('.flex').style.display = 'none';");
+    } else {
+      // Handle other cases as before
+      await launchUrl(Uri.parse(getServiceUrl(item.id)),
           mode: LaunchMode.inAppWebView);
     }
-    return;
+  }
+
+  String getServiceUrl(int id) {
+    switch (id) {
+      case 4:
+        return "https://www.smart-app-troisdorf.de/gewinnspiel";
+      case 6:
+        return "https://onlinedienste.troisdorf.de/";
+      case 7:
+        return "https://www.stadtwerke-troisdorf.de/";
+      case 8:
+        return "https://geoportal.troisdorf.de/app.php/application/mobile";
+      default:
+        return "";
+    }
   }
 
   void _makeAction(String link) async {
