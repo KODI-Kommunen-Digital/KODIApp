@@ -274,7 +274,7 @@ class Api {
 
   static Future<ResultApiModel> requestSubmitSubCategory(
       {required categoryId}) async {
-    final filePath = 'categories/$categoryId/subcategories';
+    final filePath = '/categories/$categoryId/subcategories';
     final result = await HTTPManager(forum: false).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
