@@ -460,10 +460,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvoked: (pop) async {
             Navigator.pop(context, searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -511,9 +510,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
     switch (chosen) {
       case 1:
-        Navigator.pushNamed(context, Routes.submit,
-                arguments: {'item': item, 'isApplicant': false, 'isAdmin': true})
-            .then((value) async {
+        Navigator.pushNamed(context, Routes.submit, arguments: {
+          'item': item,
+          'isApplicant': false,
+          'isAdmin': true
+        }).then((value) async {
           await _onRefresh();
         });
         break;
