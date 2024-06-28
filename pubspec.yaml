@@ -156,6 +156,14 @@ flutter:
         - asset: assets/fonts/ProximaNova-Extrabld.otf
         - asset: assets/fonts/ProximaNova-Regular.otf
         - asset: assets/fonts/ProximaNovaT-Thin.otf
+    - family: Calibri
+      fonts:
+        - asset: assets/fonts/Calibri-Bold-Italic.ttf
+        - asset: assets/fonts/Calibri-Bold.ttf
+        - asset: assets/fonts/Calibri-Italic.ttf
+        - asset: assets/fonts/Calibri-Light.ttf
+        - asset: assets/fonts/Calibri-Light-Italic.ttf
+        - asset: assets/fonts/Calibri-Regular.ttf
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Black.ttf
