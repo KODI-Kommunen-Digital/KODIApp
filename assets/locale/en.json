@@ -1,6 +1,12 @@
 {
   "home": "Home",
   "wish_list": "Wishlist",
+  "portal_head": "Career in Fichtelgebirge",
+  "portal_subhead": "Change of perspective",
+  "portal_text": "Are you an entrepreneur in the region looking for workers?\nOr are you a go-getter interested in a new career opportunity in the Fichtelgebirge?",
+  "i_am": "I am...",
+  "portal_company": "... seeking new employees and colleagues",
+  "portal_employee": "... open to new career opportunities",
   "message": "Messages",
   "notification": "Notification",
   "maccount": "Account",
