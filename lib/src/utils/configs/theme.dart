@@ -5,7 +5,7 @@ enum DarkOption { dynamic, alwaysOn, alwaysOff }
 
 class AppTheme {
   ///Default font
-  static const String defaultFont = "Poppins";
+  static const String defaultFont = "Calibri";
 
   ///List Font support
   static final List<String> fontSupport = [
@@ -14,7 +14,8 @@ class AppTheme {
     "Raleway",
     "Roboto",
     "Merriweather",
-    "Poppins"
+    "Poppins",
+    "Calibri"
   ];
 
   ///Default Theme

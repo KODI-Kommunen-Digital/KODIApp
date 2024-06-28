@@ -55,7 +55,7 @@ class ThemeCubit extends Cubit<ThemeState> {
     ///Setup Theme with setting darkOption
     final currentState = AppBloc.themeCubit.state;
     theme ??= currentState.theme;
-    font ??= currentState.font;
+    font = currentState.font;
     darkOption ??= currentState.darkOption;
     textScaleFactor ??= currentState.textScaleFactor ?? 1.0;
     ThemeState themeState;
