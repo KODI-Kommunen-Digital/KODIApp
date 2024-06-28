@@ -197,6 +197,7 @@ class _MainScreenState extends State<MainScreen> {
   //   return FloatingActionButton(
   //     backgroundColor: Theme.of(context).primaryColor,
   //     onPressed: _onSubmit,
+  //     shape: const CircleBorder(),
   //     child: const Icon(
   //       Icons.add,
   //       color: Colors.white,
