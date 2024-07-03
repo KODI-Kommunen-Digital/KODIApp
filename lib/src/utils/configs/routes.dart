@@ -19,9 +19,8 @@ import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_lis
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
-import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
-import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/legal/rsag_screen.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
 import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
@@ -132,6 +131,7 @@ class Routes {
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
   static const String wasteCalendar = "/wasteCalendar";
+  static const String rsag = "/rsag";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -315,17 +315,10 @@ class Routes {
           },
         );
 
-      case imprint:
+      case rsag:
         return MaterialPageRoute(
           builder: (context) {
-            return const ImprintScreen();
-          },
-        );
-
-      case privacy:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const PrivacyScreen();
+            return const RsagScreen();
           },
         );
 

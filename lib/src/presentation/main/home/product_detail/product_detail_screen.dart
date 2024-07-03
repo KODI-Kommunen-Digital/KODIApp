@@ -62,7 +62,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _onScroll() {
     Color? color;
     if (_scrollController.position.extentBefore < 110) {
-      color = Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white;
+      color = Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white;
     }
     if (color != _iconColor) {
       setState(() {
@@ -85,7 +85,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: <Widget>[
                 Text(
                   message,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                  style: Theme.of(context).textTheme.bodyMedium,
                 ),
               ],
             ),
@@ -417,7 +417,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget actionGalleries = Container();
     Widget banner = AppPlaceholder(
       child: Container(
-        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+        color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
     Widget address = Container();
@@ -443,7 +443,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               height: 16,
               width: 150,
               color:
-                  Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+                  Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -454,14 +454,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 16,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 20,
                       width: 150,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -469,7 +469,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 Container(
                   height: 10,
                   width: 100,
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                 ),
               ],
@@ -482,7 +482,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -493,14 +493,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -515,7 +515,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -526,14 +526,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -548,7 +548,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -559,14 +559,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -581,7 +581,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -592,14 +592,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -614,7 +614,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -625,14 +625,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -647,7 +647,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   height: 32,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
                         Colors.white,
                   ),
                 ),
@@ -658,14 +658,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     Container(
                       height: 10,
                       width: 100,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                     const SizedBox(height: 4),
                     Container(
                       height: 10,
                       width: 200,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                     ),
                   ],
@@ -675,32 +675,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             const SizedBox(height: 24),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
             const SizedBox(height: 4),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
             const SizedBox(height: 4),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
             const SizedBox(height: 4),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
             const SizedBox(height: 4),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
             const SizedBox(height: 4),
             Container(
                 height: 10,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white),
           ],
         ),
@@ -903,7 +903,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           child: Icon(
                             Icons.location_on_outlined,
                             color:
-                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                Theme.of(context).textTheme.bodyMedium?.color ??
                                     Colors.white,
                             size: 18,
                           ),
@@ -923,7 +923,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyLarge!
+                                    .bodyMedium!
                                     .copyWith(fontWeight: FontWeight.bold),
                               ),
                             ],
@@ -959,7 +959,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     child: Icon(
                       Icons.phone_outlined,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                       size: 18,
                     ),
@@ -979,7 +979,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge!
+                              .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -1012,7 +1012,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     child: Icon(
                       Icons.email_outlined,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                       size: 18,
                     ),
@@ -1032,7 +1032,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge!
+                              .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -1065,7 +1065,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     ),
                     child: Icon(
                       Icons.language_outlined,
-                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                       size: 18,
                     ),
@@ -1085,7 +1085,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
-                              .bodyLarge!
+                              .bodyMedium!
                               .copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -1175,7 +1175,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         description = HtmlWidget(modifiedDescription,
             textStyle: TextStyle(
                 fontSize: 16.0,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
                     Colors.white,
                 height: 1.6), customStylesBuilder: (element) {
           if (element.localName == 'img') {
