@@ -201,7 +201,7 @@ class Api {
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
     final result = await HTTPManager(forum: false)
-        .get(url: 'cities/$cityId/listings/$listingId');
+        .get(url: '/cities/$cityId/listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 

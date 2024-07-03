@@ -53,6 +53,8 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/wishlist/cubit/wish_list_cubit.dart';
+import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -348,6 +350,16 @@ class Routes {
                 user: arguments['user'] as UserModel,
                 isEditable: arguments['editable'] as bool,
               ),
+            );
+          },
+        );
+
+      case wishList:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => WishListCubit(),
+              child: const WishListScreen(),
             );
           },
         );
