@@ -181,6 +181,13 @@ class HomeCubit extends Cubit<HomeState> {
     //   }
     // }
 
+     for (var element in categories) {
+       if (element.id == 4 || element.id == 20) {
+         element.hide = true;
+       }
+     }
+
+
     return categories;
   }
 
