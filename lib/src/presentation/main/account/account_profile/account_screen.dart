@@ -167,6 +167,21 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ),
                     if (user != null)
                       AppListTitle(
+                        title: Translate.of(context).translate('my_contacts'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.profile,
+                              arguments: {'user': user, 'editable': true});
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
+                    if (user != null)
+                      AppListTitle(
                         title: Translate.of(context).translate('dashboard'),
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.dashboard,
