@@ -18,7 +18,7 @@ import 'cubit/cubit.dart';
 class ListGroupScreen extends StatefulWidget {
   final Map<String, dynamic> arguments;
 
-  const ListGroupScreen({Key? key, required this.arguments}) : super(key: key);
+  const ListGroupScreen({super.key, required this.arguments});
 
   @override
   State<ListGroupScreen> createState() => _ListGroupScreenState();
@@ -142,7 +142,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
 }
 
 class ListLoading extends StatelessWidget {
-  const ListLoading({Key? key}) : super(key: key);
+  const ListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +158,11 @@ class ListLoaded extends StatefulWidget {
   final int userId;
 
   const ListLoaded({
-    Key? key,
+    super.key,
     required this.list,
     required this.selectedCityId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
