@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, unused_catch_stack
+// ignore_for_file: unused_local_variable, unused_catch_stack, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -6,7 +6,6 @@ import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -17,7 +16,6 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -34,7 +32,7 @@ class AppUploadImage extends StatefulWidget {
   final bool forumGroup;
 
   const AppUploadImage({
-    Key? key,
+    super.key,
     this.title,
     this.image,
     required this.onChange,
@@ -42,7 +40,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   State<AppUploadImage> createState() => _AppUploadImageState();
@@ -56,9 +54,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
   String title = '';
   bool isPermanentlyDenied = false;
   List<File> images = [];
-  List<Asset> resultList = <Asset>[];
+  List<XFile> resultList = <XFile>[];
   List<File> selectedFiles = [];
-  List<Asset> selectedAssets = [];
+  List<XFile> selectedAssets = [];
   String? image;
 
   @override
@@ -561,10 +559,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      resultList = await MultipleImagesPicker.pickImages(
-        maxImages: 8,
-        selectedAssets: selectedAssets,
+      resultList = await _picker.pickMultiImage(
+        limit: 8,
       );
+      selectedAssets = resultList;
       if (resultList.isNotEmpty) {
         if (!mounted) return;
         context.read<AddListingCubit>().clearAssets();
@@ -573,11 +571,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
         });
-        List<Asset> resultListCopy = List.from(resultList);
+        List<XFile> resultListCopy = List.from(resultList);
 
-        for (Asset asset in resultListCopy) {
-          final ByteData byteData = await asset.getByteData();
-          final List<int> imageData = byteData.buffer.asUint8List();
+        for (XFile asset in resultListCopy) {
+          //final ByteData byteData = await asset.getByteData();
+          //final List<int> imageData = byteData.buffer.asUint8List();
+          final List<int> imageData = await asset.readAsBytes();
           final tempDir = await getTemporaryDirectory();
           final filePath = '${tempDir.path}/${asset.name}';
 
