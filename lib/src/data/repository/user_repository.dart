@@ -251,35 +251,37 @@ class UserRepository {
           categoryDetails = categories.singleWhere((element) =>
               element.id == favoriteListResponse.data['categoryId']);
 
-          favoriteList.add(FavoriteDetailsModel(
-            favoriteListResponse.data['id'],
-            favoriteListResponse.data['userId'],
-            favoriteListResponse.data['title'],
-            favoriteListResponse.data['place'],
-            categoryDetails.title,
-            favoriteListResponse.data['description'],
-            favoriteListResponse.data['media'],
-            favoriteListResponse.data['categoryId'],
-            favoriteListResponse.data['subcategoryId'] ?? 0,
-            favoriteListResponse.data['address'] ?? '',
-            favoriteListResponse.data['email'],
-            favoriteListResponse.data['phone'],
-            favoriteListResponse.data['website'],
-            favoriteListResponse.data['price'],
-            favoriteListResponse.data['discountPrice'],
-            favoriteListResponse.data['logo'],
-            favoriteListResponse.data['statusId'],
-            favoriteListResponse.data['sourceId'],
-            favoriteListResponse.data['longitude'],
-            favoriteListResponse.data['latitude'],
-            favoriteListResponse.data['villageId'],
-            favoriteListResponse.data['expiryDate'],
-            favoriteListResponse.data['startDate'],
-            favoriteListResponse.data['endDate'],
-            favoriteListResponse.data['createdAt'],
-            favoriteListResponse.data['pdf'] ?? '',
-            data['cityId'],
-          ));
+          if(favoriteListResponse.data['categoryId'] == 20 || favoriteListResponse.data['categoryId'] == 10) {
+            favoriteList.add(FavoriteDetailsModel(
+              favoriteListResponse.data['id'],
+              favoriteListResponse.data['userId'],
+              favoriteListResponse.data['title'],
+              favoriteListResponse.data['place'],
+              categoryDetails.title,
+              favoriteListResponse.data['description'],
+              favoriteListResponse.data['media'],
+              favoriteListResponse.data['categoryId'],
+              favoriteListResponse.data['subcategoryId'] ?? 0,
+              favoriteListResponse.data['address'] ?? '',
+              favoriteListResponse.data['email'],
+              favoriteListResponse.data['phone'],
+              favoriteListResponse.data['website'],
+              favoriteListResponse.data['price'],
+              favoriteListResponse.data['discountPrice'],
+              favoriteListResponse.data['logo'],
+              favoriteListResponse.data['statusId'],
+              favoriteListResponse.data['sourceId'],
+              favoriteListResponse.data['longitude'],
+              favoriteListResponse.data['latitude'],
+              favoriteListResponse.data['villageId'],
+              favoriteListResponse.data['expiryDate'],
+              favoriteListResponse.data['startDate'],
+              favoriteListResponse.data['endDate'],
+              favoriteListResponse.data['createdAt'],
+              favoriteListResponse.data['pdf'] ?? '',
+              data['cityId'],
+            ));
+          }
         } else {
           logError('Favorite Response Failed', favoriteListResponse.message);
         }
