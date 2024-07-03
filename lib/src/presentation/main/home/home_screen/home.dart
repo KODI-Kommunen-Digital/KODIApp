@@ -806,7 +806,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
