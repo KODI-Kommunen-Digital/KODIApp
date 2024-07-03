@@ -78,7 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void connectivityInternet() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult>? result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult>? result) {
       AppBloc.homeCubit.onLoad(false);
     });
   }
@@ -590,28 +592,25 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  Translate.of(context).translate(
-                    'do_you_know',
-                  ),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                Translate.of(context).translate(
+                  'do_you_know',
                 ),
-                Text(
-                  Translate.of(context).translate(
-                    'company_matching',
-                  ),
-                  style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                Translate.of(context).translate(
+                  'company_matching',
                 ),
-              ],
-            ),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
           ),
           Container(
             height: 180,

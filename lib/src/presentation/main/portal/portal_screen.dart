@@ -78,34 +78,6 @@ class _PortalScreenState extends State<PortalScreen> {
                   style: Theme.of(context).textTheme.bodyMedium!,
                 ),
                 onPressed: () async {
-                  //TODO check if user is allowed to view applications
-                  final prefs = await Preferences.openBox();
-                  prefs.setKeyValue(Preferences.categoryId, 20);
-                  prefs.setKeyValue(Preferences.type, 'category');
-                  Navigator.pushNamed(
-                    context,
-                    Routes.listProduct,
-                    arguments: {
-                      'id': 20,
-                      'title':
-                          Translate.of(context).translate('category_applicant')
-                    },
-                  );
-                },
-              ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    minimumSize: const Size(150, 100),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    maximumSize: const Size(150, double.infinity)),
-                child: Text(
-                  Translate.of(context).translate('portal_company'),
-                  style: Theme.of(context).textTheme.bodyMedium!,
-                ),
-                onPressed: () async {
                   UserModel? user = await UserRepository.loadUser();
                   if (user != null) {
                     Navigator.pushNamed(
@@ -121,6 +93,34 @@ class _PortalScreenState extends State<PortalScreen> {
                             .translate('login_required'))));
                     Navigator.pushNamed(context, Routes.signIn);
                   }
+                },
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    minimumSize: const Size(150, 100),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    maximumSize: const Size(150, double.infinity)),
+                child: Text(
+                  Translate.of(context).translate('portal_company'),
+                  style: Theme.of(context).textTheme.bodyMedium!,
+                ),
+                onPressed: () async {
+                  //TODO check if user is allowed to view applications
+                  final prefs = await Preferences.openBox();
+                  prefs.setKeyValue(Preferences.categoryId, 20);
+                  prefs.setKeyValue(Preferences.type, 'category');
+                  Navigator.pushNamed(
+                    context,
+                    Routes.listProduct,
+                    arguments: {
+                      'id': 20,
+                      'title':
+                          Translate.of(context).translate('category_applicant')
+                    },
+                  );
                 },
               ),
             ],
@@ -147,7 +147,6 @@ class _PortalScreenState extends State<PortalScreen> {
               ),
             ],
           )
-
         ],
       ),
     );
