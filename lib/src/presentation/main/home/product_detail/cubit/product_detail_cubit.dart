@@ -7,6 +7,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:loggy/loggy.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class ProductDetailCubit extends Cubit<ProductDetailState> {
@@ -69,6 +70,18 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     isFavorite = !isFavorite;
   }
 
+  Map<int, int> parseMap(Map<dynamic, dynamic> originalMap) {
+    final resultMap = <int, int>{};
+    for (final key in originalMap.keys) {
+      if (key is int && originalMap[key] is int) {
+        resultMap[key] = originalMap[key] as int;
+      } else {
+        logError("Couldn't fetch votes");
+      }
+    }
+    return resultMap;
+  }
+
   Future<int> getLoggedInUserId() async {
     return await UserRepository.getLoggedUserId();
   }
@@ -117,16 +130,30 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       await ListRepository.saveVote(cityId, removeVoteParams, listingId);
     }
 
-    // Add new vote
-    final addVoteParams = {
-      'optionId': optionId,
-      'vote': 1,
-    };
+    dynamic addVoteParams;
+
+    if (previousOptionId != null && previousOptionId == optionId) {
+      addVoteParams = {
+        'optionId': optionId,
+        'vote': -1,
+      };
+    } else {
+      // Add new vote
+      addVoteParams = {
+        'optionId': optionId,
+        'vote': 1,
+      };
+    }
+
     final response =
         await ListRepository.saveVote(cityId, addVoteParams, listingId);
 
     if (response.success) {
-      votes[listingId] = optionId;
+      if (previousOptionId != null && previousOptionId == optionId) {
+        votes.removeWhere((key, value) => key == listingId);
+      } else {
+        votes[listingId] = optionId;
+      }
       await prefs.setKeyValue('pollVotes', votes);
     }
 
