@@ -813,7 +813,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate(
                   'what_happen',
                 ),
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
