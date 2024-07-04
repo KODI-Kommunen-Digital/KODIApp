@@ -747,6 +747,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         _errorSDate = null;
       }
+    } else {
+      _errorSDate = null;
     }
 
     List<String?> errors = [
@@ -803,6 +805,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       15: "category_newsletter",
       16: "category_official_notification",
       20: "category_applicant",
+      26: "category_project",
     };
     return categories[id];
   }
