@@ -14,12 +14,11 @@ import 'package:heidi/src/utils/translate.dart';
 
 class ForumGroupItem extends StatefulWidget {
   const ForumGroupItem(
-      {Key? key,
+      {super.key,
       this.item,
       required this.userId,
       required this.onPressed,
-      required this.fromGroupList})
-      : super(key: key);
+      required this.fromGroupList});
 
   final ForumGroupModel? item;
   final void Function(bool) onPressed;

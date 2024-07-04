@@ -26,7 +26,7 @@ class CreateAppointmentScreen extends StatelessWidget {
 }
 
 class CreateAppointmentLoading extends StatelessWidget {
-  const CreateAppointmentLoading({Key? key}) : super(key: key);
+  const CreateAppointmentLoading({super.key});
 
   @override
   Widget build(BuildContext context) {

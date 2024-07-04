@@ -12,7 +12,7 @@ import 'package:heidi/src/utils/translate.dart';
 class OpenTimeSlotsScreen extends StatefulWidget {
   final List<OpenTimeModel>? selected;
 
-  const OpenTimeSlotsScreen({Key? key, this.selected}) : super(key: key);
+  const OpenTimeSlotsScreen({super.key, this.selected});
 
   @override
   State<OpenTimeSlotsScreen> createState() {

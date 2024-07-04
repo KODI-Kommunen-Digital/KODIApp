@@ -10,7 +10,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -115,6 +115,7 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.homeCubit.setDoesScroll(true);
         AppBloc.homeCubit.scrollUp();
         break;
+
       case Routes.wishList:
         AppBloc.wishListCubit.setDoesScroll(true);
         AppBloc.wishListCubit.scrollUp();
@@ -177,10 +178,10 @@ class _MainScreenState extends State<MainScreen> {
             iconData,
             color: color,
           ),
-          const SizedBox(height: 2),
+          const SizedBox(height: 1),
           Text(
             Translate.of(context).translate(title),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
+            style: Theme.of(context).textTheme.labelMedium!.copyWith(
                   fontSize: 10,
                   color: color,
                 ),
@@ -196,6 +197,7 @@ class _MainScreenState extends State<MainScreen> {
     return FloatingActionButton(
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: _onSubmit,
+      shape: const CircleBorder(),
       child: const Icon(
         Icons.add,
         color: Colors.white,
@@ -218,8 +220,9 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
+      height: 64,
+      color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
       child: SizedBox(
-        height: 56,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [

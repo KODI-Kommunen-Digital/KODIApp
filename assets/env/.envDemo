@@ -1,0 +1,14 @@
+DEFAULT_API_URL=https://api.kodi-community.com/
+WASTE_API_URL=https://api.kodi-community.com/
+APPOINTMENT_API_URL=https://app.smartregion-auf.de/appointmentapi/v1/
+FORUM_API_URL=https://forumapi.kodi-community.com/
+IMAGE_URL=https://newheidi.obs.eu-de.otc.t-systems.com/
+DEFAULT_PROFILE_IMAGE_URL=https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png
+CATEGORIES_JSON=assets/data/categories_config.json
+SUBCATEGORIES_JSON=assets/data/subcategories_config.json
+SERVICES_CONFIG=assets/data/services_config.json
+SERVICES_LINKS_JSON=assets/data/services_links_config.json
+IMPRINT_URL=https://www.troisdorf.de/de/impressum/
+PRIVACY_POLICY_URL=https://heidi.troisdorf.dksr.city/PrivacyPolicy
+TERMS_OF_USE_URL=https://heidi.troisdorf.dksr.city/TermsOfUse
+FORUM=FALSE

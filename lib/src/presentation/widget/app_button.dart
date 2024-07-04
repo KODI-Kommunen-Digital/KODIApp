@@ -16,7 +16,7 @@ class AppButton extends StatelessWidget {
 
   const AppButton(
     this.text, {
-    Key? key,
+    super.key,
     required this.onPressed,
     this.icon,
     this.loading = false,
@@ -24,7 +24,7 @@ class AppButton extends StatelessWidget {
     this.type = ButtonType.normal,
     this.mainAxisSize = MainAxisSize.min,
     this.size = ButtonSize.large,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +146,7 @@ class AppButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: disabled ? null : onPressed,
           style: ElevatedButton.styleFrom(
+            backgroundColor: Theme.of(context).primaryColor,
             minimumSize: buttonSize,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -153,19 +154,15 @@ class AppButton extends StatelessWidget {
           ),
           child: Row(
             mainAxisSize: mainAxisSize,
+            crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Flexible(
-                child: Text(
-                  text,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                ),
+              Text(
+                text,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ],
           ),

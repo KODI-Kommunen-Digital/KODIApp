@@ -25,7 +25,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
+  const ProductDetailScreen({super.key, required this.item});
 
   final ProductModel item;
 
@@ -67,32 +67,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         _iconColor = color;
       });
     }
-  }
-
-  void _showRubbishCalenderPopup() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate('rubbish_calender_head')),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translate.of(context).translate('rubbish_calender')),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   void _showMessage(String message) async {
@@ -1056,7 +1030,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               arguments: widget.item.title,
             );
           } else if (widget.item.id == 2 && widget.item.cityId == 2) {
-            _showRubbishCalenderPopup();
+            Navigator.pushNamed(
+              context,
+              Routes.wasteCalendar,
+            );
           } else {
             _makeTechAction(product.website);
           }

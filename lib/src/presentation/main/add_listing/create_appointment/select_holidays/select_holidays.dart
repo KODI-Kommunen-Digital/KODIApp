@@ -58,7 +58,7 @@ class _SelectHolidaysScreenState extends State<SelectHolidaysScreen> {
                       },
                     ),
                   );
-                }).toList(),
+                }),
               ],
             ),
             const SizedBox(height: 25),

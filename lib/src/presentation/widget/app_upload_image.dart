@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, use_build_context_synchronously
+// ignore_for_file: unused_local_variable, unused_catch_stack, use_build_context_synchronously
 
 import 'dart:io';
 
@@ -17,11 +17,9 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -35,7 +33,7 @@ class AppUploadImage extends StatefulWidget {
   final bool forumGroup;
 
   const AppUploadImage({
-    Key? key,
+    super.key,
     this.title,
     this.image,
     required this.onChange,
@@ -43,7 +41,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   State<AppUploadImage> createState() => _AppUploadImageState();
@@ -57,9 +55,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
   String title = '';
   bool isPermanentlyDenied = false;
   List<File> images = [];
-  List<Asset> resultList = <Asset>[];
+  List<XFile> resultList = <XFile>[];
   List<File> selectedFiles = [];
-  List<Asset> selectedAssets = [];
+  List<XFile> selectedAssets = [];
   String? image;
 
   @override
@@ -145,8 +143,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   widget.onDelete!();
                   setState(() {
                     image = null;
+                    // images.removeAt(0);
                     if (selectedAssets.length > 1) {
-                      images.removeAt(0);
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
                     _file = null;
@@ -221,6 +219,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
               });
               final item = response.data['data']?['image'];
               widget.onChange(item);
+            } else {
+              logError('Image Upload Permission Error', response);
             }
           }
         } else if (await Permission.photos.isDenied) {
@@ -264,7 +264,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e, stackTrace) {
       logError('Image Upload Permission Error', e);
-      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -374,7 +373,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for (final selectedImages in result.files) {
+                      for(final selectedImages in result.files){
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);
@@ -561,10 +560,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      resultList = await MultipleImagesPicker.pickImages(
-        maxImages: 8,
-        selectedAssets: selectedAssets,
+      resultList = await _picker.pickMultiImage(
+        limit: 8,
       );
+      selectedAssets = resultList;
       if (resultList.isNotEmpty) {
         if (!mounted) return;
         context.read<AddListingCubit>().clearAssets();
@@ -573,11 +572,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
         setState(() {
           selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
         });
-        List<Asset> resultListCopy = List.from(resultList);
+        List<XFile> resultListCopy = List.from(resultList);
 
-        for (Asset asset in resultListCopy) {
-          final ByteData byteData = await asset.getByteData();
-          final List<int> imageData = byteData.buffer.asUint8List();
+        for (XFile asset in resultListCopy) {
+          //final ByteData byteData = await asset.getByteData();
+          //final List<int> imageData = byteData.buffer.asUint8List();
+          final Uint8List imageData = await asset.readAsBytes();
           final tempDir = await getTemporaryDirectory();
           final filePath = '${tempDir.path}/${asset.name}';
 

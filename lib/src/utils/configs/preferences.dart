@@ -38,6 +38,8 @@ class Preferences {
   static const String pushNotificationsPermission =
       "pushNotificationsPermission";
   static const String receiveNotification = "receiveNotification";
+  static const String selectedLocationId = 'selectedLocationId';
+  static const String selectedLocationName = 'selectedLocationName';
 
   Preferences._(this._box);
 

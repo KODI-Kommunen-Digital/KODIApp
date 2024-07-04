@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
+  await dotenv.load(fileName: "assets/env/.envDemo");
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -115,7 +117,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaleFactor: theme.textScaleFactor,
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,

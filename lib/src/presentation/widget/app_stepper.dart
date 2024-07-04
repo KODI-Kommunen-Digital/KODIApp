@@ -6,10 +6,10 @@ class AppStepper extends StatelessWidget {
   final List<StepModel> list;
 
   const AppStepper({
-    Key? key,
+    super.key,
     this.active = 0,
     required this.list,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

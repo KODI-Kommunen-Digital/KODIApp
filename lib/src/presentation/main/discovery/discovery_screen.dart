@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
 
 import 'dart:async';
 
@@ -18,7 +18,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
-  const DiscoveryScreen({Key? key}) : super(key: key);
+  const DiscoveryScreen({super.key});
 
   @override
   State<DiscoveryScreen> createState() => _DiscoveryScreenState();
@@ -141,7 +141,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 }
 
 class DiscoveryLoading extends StatelessWidget {
-  const DiscoveryLoading({Key? key}) : super(key: key);
+  const DiscoveryLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -155,9 +155,9 @@ class DiscoveryLoaded extends StatefulWidget {
   final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
-    Key? key,
+    super.key,
     required this.services,
-  }) : super(key: key);
+  });
 
   @override
   State<DiscoveryLoaded> createState() => _DiscoveryLoadedState();
@@ -246,6 +246,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       }
     } else if (service.imageLink == "11") {
       _makeTechAction("https://troisdorf.dksr.city/map/");
+    } else if (service.imageLink == "16") {
+      Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

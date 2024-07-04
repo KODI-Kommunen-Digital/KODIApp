@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -10,21 +11,34 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+enum APIType { defaultAPI, forum, appointment, waste }
+
 class HTTPManager {
   final exceptionCode = ['jwt_auth_bad_iss', 'jwt_auth_invalid_token'];
   late final Dio _dio;
   late String _baseUrl;
 
-  HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-        ? 'https://api.kodi-community.com/'
-        : 'https://forumapi.kodi-community.com/';
+  HTTPManager({APIType apiType = APIType.defaultAPI}) {
+    switch (apiType) {
+      case APIType.defaultAPI:
+        _baseUrl = dotenv.env['DEFAULT_API_URL']!;
+        break;
+      case APIType.forum:
+        _baseUrl = dotenv.env['FORUM_API_URL']!;
+        break;
+      case APIType.appointment:
+        _baseUrl = dotenv.env['APPOINTMENT_API_URL']!;
+        break;
+      case APIType.waste:
+        _baseUrl = dotenv.env['WASTE_API_URL']!;
+        break;
+    }
 
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        connectTimeout: const Duration(milliseconds: 30000),
+        receiveTimeout: const Duration(milliseconds: 30000),
         contentType: Headers.formUrlEncodedContentType,
         responseType: ResponseType.json,
       ),
@@ -53,7 +67,6 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
-        logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();
@@ -127,7 +140,7 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -157,7 +170,7 @@ class HTTPManager {
         cancelToken: cancelToken,
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -191,7 +204,7 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -218,7 +231,7 @@ class HTTPManager {
         options: options,
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -263,7 +276,7 @@ class HTTPManager {
         "success": false,
         "message": 'download_fail',
       };
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -285,13 +298,13 @@ class HTTPManager {
   }
 
   ///Error common handle
-  Map<String, dynamic> _errorHandle(DioError error) {
+  Map<String, dynamic> _errorHandle(DioException error) {
     String message = "unknown_error";
     Map<String, dynamic> data = {};
 
     switch (error.type) {
-      case DioErrorType.sendTimeout:
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
         message = "request_time_out";
         break;
 

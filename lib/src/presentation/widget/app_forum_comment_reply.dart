@@ -8,10 +8,10 @@ class CommentReplyWidget extends StatefulWidget {
   final PostDetailCubit postDetailCubit;
 
   const CommentReplyWidget({
-    Key? key,
+    super.key,
     required this.comment,
     required this.postDetailCubit,
-  }) : super(key: key);
+  });
 
   @override
   CommentReplyWidgetState createState() => CommentReplyWidgetState();

@@ -13,7 +13,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'cubit/my_groups_state.dart';
 
 class MyGroupsScreen extends StatefulWidget {
-  const MyGroupsScreen({Key? key}) : super(key: key);
+  const MyGroupsScreen({super.key});
 
   @override
   State<MyGroupsScreen> createState() => _MyGroupsScreenState();
@@ -41,31 +41,28 @@ class _MyGroupsScreenState extends State<MyGroupsScreen> {
         body: BlocConsumer<MyGroupsCubit, MyGroupsState>(
           listener: (context, state) {
             state.maybeWhen(
-              error: (msg) =>
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(SnackBar(content: Text(msg))),
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
               orElse: () {},
             );
           },
-          builder: (context, state) =>
-              state.when(
-                loading: () => const ListLoading(),
-                loaded: (list, userId) =>
-                    ListLoaded(
-                      list: list,
-                      userId: userId,
-                    ),
-                updated: (list, userId) {
-                  return ListLoaded(
-                    list: list,
-                    userId: userId,
-                  );
-                },
-                error: (e) => ErrorWidget('Failed to load listings.'),
-                initial: () {
-                  return Container();
-                },
-              ),
+          builder: (context, state) => state.when(
+            loading: () => const ListLoading(),
+            loaded: (list, userId) => ListLoaded(
+              list: list,
+              userId: userId,
+            ),
+            updated: (list, userId) {
+              return ListLoaded(
+                list: list,
+                userId: userId,
+              );
+            },
+            error: (e) => ErrorWidget('Failed to load listings.'),
+            initial: () {
+              return Container();
+            },
+          ),
         ),
       ),
     );
@@ -73,7 +70,7 @@ class _MyGroupsScreenState extends State<MyGroupsScreen> {
 }
 
 class ListLoading extends StatelessWidget {
-  const ListLoading({Key? key}) : super(key: key);
+  const ListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,10 +85,10 @@ class ListLoaded extends StatefulWidget {
   final int userId;
 
   const ListLoaded({
-    Key? key,
+    super.key,
     required this.list,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -121,54 +118,52 @@ class _ListLoadedState extends State<ListLoaded> {
         Expanded(
           child: widget.list.isNotEmpty
               ? SafeArea(
-            child: Stack(
-              children: [
-                CustomScrollView(
-                  slivers: <Widget>[
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                            (BuildContext context, int index) {
-                          final item = widget.list[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 16),
-                            child: _buildItem(item: item, type: _listMode),
-                          );
-                        },
-                        childCount: widget.list.length,
+                  child: Stack(
+                    children: [
+                      CustomScrollView(
+                        slivers: <Widget>[
+                          SliverList(
+                            delegate: SliverChildBuilderDelegate(
+                              (BuildContext context, int index) {
+                                final item = widget.list[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child:
+                                      _buildItem(item: item, type: _listMode),
+                                );
+                              },
+                              childCount: widget.list.length,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                if (isLoadingMore)
-                  const Positioned(
-                    bottom: 50,
-                    left: 0,
-                    right: 0,
-                    child: Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
+                      if (isLoadingMore)
+                        const Positioned(
+                          bottom: 50,
+                          left: 0,
+                          right: 0,
+                          child: Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
+                        ),
+                    ],
                   ),
-              ],
-            ),
-          )
+                )
               : Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Icon(Icons.sentiment_satisfied),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    Translate.of(context).translate('list_is_empty'),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodyLarge,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Icon(Icons.sentiment_satisfied),
+                      Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Text(
+                          Translate.of(context).translate('list_is_empty'),
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
         )
       ],
     );
