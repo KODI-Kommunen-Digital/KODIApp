@@ -75,9 +75,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<void> _loadPollVotes() async {
     final prefs = await Preferences.openBox();
-    final Map<int, int> votes = prefs.getKeyValue('pollVotes', {});
+    final Map<dynamic, dynamic> votes = prefs.getKeyValue('pollVotes', {});
     setState(() {
-      pollVotes = votes;
+      pollVotes = _productDetailCubit.parseMap(votes);
       selectedOption = votes[widget.item.id];
     });
   }
@@ -92,10 +92,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   Future<void> _savePollVote(int optionId) async {
-    if (selectedOption == optionId) {
-      return;
-    }
-
     final previousOption = selectedOption;
     final response = await _productDetailCubit.saveVote(
       widget.item.cityId ?? 1,
@@ -103,6 +99,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       optionId,
     );
 
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
     if (response.success) {
       setState(() {
         pollVotes[widget.item.id] = optionId;
@@ -115,10 +112,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           }
         }
       });
-      _showSnackBar("Vote submitted successfully");
+      _showSnackBar(Translate.of(context).translate('vote_submit_successful'));
     } else {
-      _showSnackBar("Failed to save vote");
+      _showSnackBar(Translate.of(context).translate('vote_submit_fail'));
     }
+    _productDetailCubit.onLoad(widget.item);
   }
 
   Widget _buildPollOptions(ProductModel product) {
