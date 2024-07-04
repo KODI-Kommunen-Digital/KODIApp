@@ -44,6 +44,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             sourceId: product.sourceId,
             expiryDate: product.expiryDate,
             imageLists: product.imageLists,
+            pollOptions: product.pollOptions,
           ),
         );
       }
@@ -82,6 +83,7 @@ class ProfileCubit extends Cubit<ProfileState> {
             sourceId: product.sourceId,
             expiryDate: product.expiryDate,
             imageLists: product.imageLists,
+            pollOptions: product.pollOptions,
           ),
         );
       }

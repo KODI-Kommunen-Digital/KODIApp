@@ -5,16 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:multiple_images_picker/multiple_images_picker.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
-  List<Asset> selectedAssets = [];
+  List<XFile> selectedAssets = [];
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -56,33 +57,36 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
-    isImageChanged,
+    required bool isImageChanged,
+    List<PollOptionModel>? pollOptions, // New parameter for poll options
   }) async {
     try {
       final response = await _repo.saveProduct(
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          expiryDate,
-          startDate,
-          endDate,
-          expiryTime,
-          timeless,
-          startTime,
-          endTime,
-          imagesList,
-          isImageChanged,);
+        title,
+        description,
+        place,
+        country,
+        state,
+        city,
+        statusId,
+        sourceId,
+        address,
+        zipcode,
+        phone,
+        email,
+        website,
+        status,
+        expiryDate,
+        startDate,
+        endDate,
+        expiryTime,
+        timeless,
+        startTime,
+        endTime,
+        imagesList,
+        isImageChanged,
+        pollOptions, // Pass poll options to repository method
+      );
 
       if (response.success) {
         return true;
@@ -131,37 +135,40 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? endTime,
     required bool isImageChanged,
     List<File>? imagesList,
+    List<PollOptionModel>? pollOptions, // New parameter for poll options
   }) async {
     try {
       final response = await _repo.editProduct(
-          listingId,
-          categoryId,
-          cityId,
-          title,
-          description,
-          place,
-          country,
-          state,
-          city,
-          statusId,
-          sourceId,
-          address,
-          zipcode,
-          phone,
-          email,
-          website,
-          status,
-          expiryDate,
-          startDate,
-          endDate,
-          createdAt,
-          price,
-          isImageChanged,
-          expiryTime,
-          timeless,
-          startTime,
-          endTime,
-          imagesList);
+        listingId,
+        categoryId,
+        cityId,
+        title,
+        description,
+        place,
+        country,
+        state,
+        city,
+        statusId,
+        sourceId,
+        address,
+        zipcode,
+        phone,
+        email,
+        website,
+        status,
+        expiryDate,
+        startDate,
+        endDate,
+        createdAt,
+        price,
+        isImageChanged,
+        expiryTime,
+        timeless,
+        startTime,
+        endTime,
+        imagesList,
+        pollOptions, // Pass poll options to repository method
+      );
       if (response.success) {
         return true;
       } else {
@@ -271,7 +278,6 @@ class AddListingCubit extends Cubit<AddListingState> {
   void removeAssets(assets) {
     if (selectedAssets.isNotEmpty) {
       selectedAssets.remove(assets);
-
     }
   }
 
@@ -279,7 +285,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     selectedAssets.clear();
   }
 
-  List<Asset> getSelectedAssets() {
+  List<XFile> getSelectedAssets() {
     return selectedAssets;
   }
 

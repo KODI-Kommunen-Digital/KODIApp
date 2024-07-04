@@ -9,6 +9,7 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_picker_item.dart';
@@ -29,10 +30,10 @@ class AddListingScreen extends StatefulWidget {
   final bool isNewList;
 
   const AddListingScreen({
-    Key? key,
+    super.key,
     this.item,
     required this.isNewList,
-  }) : super(key: key);
+  });
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
@@ -107,6 +108,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
   late int? currentCity;
   late List<dynamic> jsonCategory;
 
+  // Poll options state
+  List<PollOptionModel> pollOptions = [];
+  final List<TextEditingController> _pollOptionControllers = [];
+
   @override
   void initState() {
     super.initState();
@@ -174,6 +179,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _focusEmail.dispose();
     _focusWebsite.dispose();
     _focusPrice.dispose();
+    // Dispose poll option controllers
+    for (var controller in _pollOptionControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -351,6 +360,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
           downloadedImages.addAll(images);
         });
+      }
+
+      // Load existing poll options if the category is poll
+      if (widget.item!.categoryId == 25) {
+        pollOptions = widget.item!.pollOptions ?? [];
+        for (var pollOption in pollOptions) {
+          var controller = TextEditingController(text: pollOption.title);
+          _pollOptionControllers.add(controller);
+        }
       }
     } else {
       if (currentCity != null && currentCity != 0) {
@@ -605,6 +623,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
               isImageChanged: isImageChanged,
               statusId: statusId,
               imagesList: selectedImages,
+              pollOptions: selectedCategory?.toLowerCase() == 'polls'
+                  ? pollOptions
+                      .map((option) => PollOptionModel(
+                            id: option.id,
+                            title: _pollOptionControllers[
+                                    pollOptions.indexOf(option)]
+                                .text,
+                            listingsId: option.listingsId,
+                            votes: option.votes,
+                          ))
+                      .toList()
+                  : null,
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
@@ -641,6 +671,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
+              pollOptions: selectedCategory?.toLowerCase() == 'polls'
+                  ? pollOptions
+                      .map((option) => PollOptionModel(
+                            id: option.id,
+                            title: _pollOptionControllers[
+                                    pollOptions.indexOf(option)]
+                                .text,
+                            listingsId: option.listingsId,
+                            votes: option.votes,
+                          ))
+                      .toList()
+                  : null,
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
@@ -772,6 +814,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       14: "category_rathaus",
       15: "category_newsletter",
       16: "category_official_notification",
+      25: "category_polls",
     };
     return categories[id];
   }
@@ -806,190 +849,153 @@ class _AddListingScreenState extends State<AddListingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              height: 180,
-              child: AppUploadImage(
-                title:
-                    Translate.of(context).translate('upload_feature_image_pdf'),
-                image: _featurePdf == ''
-                    ? selectedImages!.isNotEmpty
-                        ? selectedImages![0].path
-                        : null
-                    // downloadedImages[0].path
-                    : _featurePdf,
-                profile: false,
-                forumGroup: false,
-                onDelete: () {
-                  if (selectedImages!.isNotEmpty) {
-                    setState(() {
-                      // downloadedImages.removeAt(0);
-                      selectedImages?.removeAt(0);
-                      isImageChanged = true;
-                    });
-                  }
-                },
-                onChange: (result) {
-                  if (result.isNotEmpty) {
-                    setState(() {
-                      selectedImages?.clear();
-                      if (downloadedImages.isNotEmpty &&
-                          !downloadedImages[0].path.contains('Defaultimage')) {
-                        selectedImages?.addAll(downloadedImages);
-                      }
-                      selectedImages?.addAll(result);
-                    });
-                  } else {
-                    setState(() {
-                      selectedImages?.clear();
-                    });
-                  }
-                  isImageChanged = true;
-                },
-              ),
-            ),
-            const SizedBox(height: 16),
-            Visibility(
-              visible: selectedImages!.length > 1,
-              child: _buildImageList(),
-            ),
-            const SizedBox(height: 16),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('title'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+            if (selectedCategory?.toLowerCase() == "polls") ...[
+              SizedBox(
+                height: 180,
+                child: AppUploadImage(
+                  title: Translate.of(context)
+                      .translate('upload_feature_image_pdf'),
+                  image: _featurePdf == ''
+                      ? selectedImages!.isNotEmpty
+                          ? selectedImages![0].path
+                          : null
+                      // downloadedImages[0].path
+                      : _featurePdf,
+                  profile: false,
+                  forumGroup: false,
+                  onDelete: () {
+                    if (selectedImages!.isNotEmpty) {
+                      setState(() {
+                        // downloadedImages.removeAt(0);
+                        selectedImages?.removeAt(0);
+                        isImageChanged = true;
+                      });
+                    }
+                  },
+                  onChange: (result) {
+                    if (result.isNotEmpty) {
+                      setState(() {
+                        selectedImages?.clear();
+                        if (downloadedImages.isNotEmpty &&
+                            !downloadedImages[0]
+                                .path
+                                .contains('Defaultimage')) {
+                          selectedImages?.addAll(downloadedImages);
+                        }
+                        selectedImages?.addAll(result);
+                      });
+                    } else {
+                      setState(() {
+                        selectedImages?.clear();
+                      });
+                    }
+                    isImageChanged = true;
+                  },
                 ),
               ),
-            ]),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_title'),
-              errorText: _errorTitle,
-              controller: _textTitleController,
-              focusNode: _focusTitle,
-              textInputAction: TextInputAction.next,
-              onChanged: (text) {
-                _errorTitle = UtilValidator.validate(
-                  _textTitleController.text,
-                );
-              },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusTitle,
-                  _focusContent,
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('input_content'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 16),
+              Visibility(
+                visible: selectedImages!.length > 1,
+                child: _buildImageList(),
               ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              maxLines: 3,
-              hintText: Translate.of(context).translate('input_content'),
-              errorText: _errorContent,
-              controller: _textContentController,
-              focusNode: _focusContent,
-              textInputAction: TextInputAction.done,
-              onChanged: (text) {
-                _errorContent = UtilValidator.validate(
-                  _textContentController.text,
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('category'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+              const SizedBox(height: 16),
+            ],
+            if (selectedCategory?.toLowerCase() != "polls") ...[
+              SizedBox(
+                height: 180,
+                child: AppUploadImage(
+                  title: Translate.of(context)
+                      .translate('upload_feature_image_pdf'),
+                  image: _featurePdf == ''
+                      ? selectedImages!.isNotEmpty
+                          ? selectedImages![0].path
+                          : null
+                      // downloadedImages[0].path
+                      : _featurePdf,
+                  profile: false,
+                  forumGroup: false,
+                  onDelete: () {
+                    if (selectedImages!.isNotEmpty) {
+                      setState(() {
+                        // downloadedImages.removeAt(0);
+                        selectedImages?.removeAt(0);
+                        isImageChanged = true;
+                      });
+                    }
+                  },
+                  onChange: (result) {
+                    if (result.isNotEmpty) {
+                      setState(() {
+                        selectedImages?.clear();
+                        if (downloadedImages.isNotEmpty &&
+                            !downloadedImages[0]
+                                .path
+                                .contains('Defaultimage')) {
+                          selectedImages?.addAll(downloadedImages);
+                        }
+                        selectedImages?.addAll(result);
+                      });
+                    } else {
+                      setState(() {
+                        selectedImages?.clear();
+                      });
+                    }
+                    isImageChanged = true;
+                  },
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: listCategory.isEmpty
-                      ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(Translate.of(context)
-                              .translate('input_category')),
-                          value: selectedCategory,
-                          items: listCategory.map((category) {
-                            return DropdownMenuItem(
-                                value: category['name'],
-                                child: Text(Translate.of(context).translate(
-                                    _getCategoryTranslation(category['id']))));
-                          }).toList(),
-                          onChanged: (value) async {
-                            setState(
-                              () {
-                                selectedCategory = value as String?;
-                                context.read<AddListingCubit>().setCategoryId(
-                                    selectedCategory?.toLowerCase());
-                              },
-                            );
-                            if (selectedCategory?.toLowerCase() == "news" ||
-                                selectedCategory == null) {
-                              selectSubCategory(
-                                  selectedCategory?.toLowerCase());
-                              _setDefaultExpiryDate();
-                            }
-                          },
+              const SizedBox(height: 16),
+              Visibility(
+                visible: selectedImages!.length > 1,
+                child: _buildImageList(),
+              ),
+              const SizedBox(height: 16),
+            ],
+            if (selectedCategory?.toLowerCase() == "polls") ...[
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text.rich(
+                  TextSpan(
+                    text: Translate.of(context).translate('question'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
                         ),
-                )
-              ],
-            ),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
+                      ),
+                    ],
+                  ),
+                ),
+              ]),
               const SizedBox(height: 8),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_question'),
+                errorText: _errorTitle,
+                controller: _textTitleController,
+                focusNode: _focusTitle,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  _errorTitle = UtilValidator.validate(
+                    _textTitleController.text,
+                  );
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusTitle,
+                    _focusContent,
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
               Text.rich(
                 TextSpan(
-                  text: Translate.of(context).translate('subCategory'),
+                  text: Translate.of(context).translate('input_content'),
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
@@ -1005,462 +1011,760 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   ],
                 ),
               ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                if (selectedCategory?.toLowerCase() == "news")
+              const SizedBox(height: 8),
+              AppTextInput(
+                maxLines: 3,
+                hintText: Translate.of(context).translate('input_content'),
+                errorText: _errorContent,
+                controller: _textContentController,
+                focusNode: _focusContent,
+                textInputAction: TextInputAction.done,
+                onChanged: (text) {
+                  _errorContent = UtilValidator.validate(
+                    _textContentController.text,
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('category'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
                   Expanded(
-                    child: listSubCategory.isEmpty
+                    child: listCategory.isEmpty
                         ? const LinearProgressIndicator()
                         : DropdownButton(
                             isExpanded: true,
                             menuMaxHeight: 200,
                             hint: Text(Translate.of(context)
-                                .translate('input_subcategory')),
-                            value: selectedSubCategory,
-                            items: listSubCategory.map((subcategory) {
+                                .translate('input_category')),
+                            value: selectedCategory,
+                            items: listCategory.map((category) {
                               return DropdownMenuItem(
-                                  value: subcategory['name'],
+                                  value: category['name'],
                                   child: Text(Translate.of(context).translate(
-                                      _getSubCategoryTranslation(
-                                          subcategory['id']))));
+                                      _getCategoryTranslation(
+                                          category['id']))));
                             }).toList(),
-                            onChanged: (value) {
-                              context
-                                  .read<AddListingCubit>()
-                                  .getSubCategoryId(value);
-                              setState(() {
-                                selectedSubCategory = value as String?;
-                                context
-                                    .read<AddListingCubit>()
-                                    .setSubCategoryId(
-                                        selectedSubCategory?.toLowerCase());
-                              });
+                            onChanged: (value) async {
+                              setState(
+                                () {
+                                  selectedCategory = value as String?;
+                                  context.read<AddListingCubit>().setCategoryId(
+                                      selectedCategory?.toLowerCase());
+                                },
+                              );
                             },
                           ),
-                  ),
-              ],
-            ),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
-              const SizedBox(height: 8),
-            const SizedBox(height: 8),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('city'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  )
                 ],
               ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: listCity.isEmpty
-                      ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('input_city')),
-                          value: selectedCity ?? listCity.first['name'],
-                          items: listCity.map((city) {
-                            return DropdownMenuItem(
-                                value: city['name'], child: Text(city['name']));
-                          }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
-                                      }
-                                    }
-                                  });
-                                  selectedVillage = null;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .clearVillage();
-                                  if (value != null) {
-                                    final loadVillageResponse = await context
-                                        .read<AddListingCubit>()
-                                        .loadVillages(value);
-                                    selectedVillage =
-                                        loadVillageResponse.data.first['name'];
-                                    villageId =
-                                        loadVillageResponse.data.first['id'];
-                                    setState(() {
-                                      listVillage = loadVillageResponse.data;
-                                    });
-                                  }
-                                }
-                              : null),
-                ),
-              ],
-            ),
-            const SizedBox(height: 6),
-            if (selectedCategory?.toLowerCase() == "news")
-              Padding(
-                padding: const EdgeInsets.only(left: 0),
-                child: Row(
-                  children: [
-                    Checkbox(
-                      value: _isExpiryDateEnabled,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _isExpiryDateEnabled = value!;
-                          if (_isExpiryDateEnabled &&
-                              (_expiryDate == null || _expiryTime == null)) {
-                            DateTime now = DateTime.now();
-                            DateTime twoWeeksFromNow =
-                                now.add(const Duration(days: 14));
-                            _expiryDate ??= DateFormat('yyyy-MM-dd')
-                                .format(twoWeeksFromNow);
-                            _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
-                          }
-                        });
-                      },
-                      activeColor: Theme.of(context).primaryColor,
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isExpiryDateEnabled = !_isExpiryDateEnabled;
-                          });
-                        },
-                        child: Text(
-                          Translate.of(context).translate('enable_expiry_date'),
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+              const SizedBox(height: 8),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('poll_options'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
               ),
-            const SizedBox(height: 6),
-            Visibility(
-              visible: (selectedCategory?.toLowerCase() == "news") &&
-                  (_isExpiryDateEnabled || widget.item?.timeless == 0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 10),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('expiry_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+              const SizedBox(height: 8),
+              ..._buildPollOptionFields(),
+              const SizedBox(height: 16),
+              Center(
+                child: ElevatedButton(
+                  onPressed: _addPollOption,
+                  child: Text(Translate.of(context).translate('add_option')),
+                ),
+              ),
+            ],
+            if (selectedCategory?.toLowerCase() != "polls") ...[
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                Text.rich(
+                  TextSpan(
+                    text: Translate.of(context).translate('title'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _expiryDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowExpiryDatePicker();
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                      leading: Icon(
-                        Icons.access_time,
-                        color: Theme.of(context).hintColor,
                       ),
-                      value: _expiryTime?.format(context),
-                      title: Translate.of(context).translate(
-                        'choose_exptime',
+                    ],
+                  ),
+                ),
+              ]),
+              const SizedBox(height: 8),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_title'),
+                errorText: _errorTitle,
+                controller: _textTitleController,
+                focusNode: _focusTitle,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  _errorTitle = UtilValidator.validate(
+                    _textTitleController.text,
+                  );
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusTitle,
+                    _focusContent,
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('input_content'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
                       ),
-                      onPressed: () async {
-                        _onShowExpiryTimePicker();
-                      }),
-                  const SizedBox(height: 16),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              AppTextInput(
+                maxLines: 3,
+                hintText: Translate.of(context).translate('input_content'),
+                errorText: _errorContent,
+                controller: _textContentController,
+                focusNode: _focusContent,
+                textInputAction: TextInputAction.done,
+                onChanged: (text) {
+                  _errorContent = UtilValidator.validate(
+                    _textContentController.text,
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('category'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: listCategory.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(Translate.of(context)
+                                .translate('input_category')),
+                            value: selectedCategory,
+                            items: listCategory.map((category) {
+                              return DropdownMenuItem(
+                                  value: category['name'],
+                                  child: Text(Translate.of(context).translate(
+                                      _getCategoryTranslation(
+                                          category['id']))));
+                            }).toList(),
+                            onChanged: (value) async {
+                              setState(
+                                () {
+                                  selectedCategory = value as String?;
+                                  context.read<AddListingCubit>().setCategoryId(
+                                      selectedCategory?.toLowerCase());
+                                },
+                              );
+                              if (selectedCategory?.toLowerCase() == "news" ||
+                                  selectedCategory == null) {
+                                selectSubCategory(
+                                    selectedCategory?.toLowerCase());
+                                _setDefaultExpiryDate();
+                              }
+                            },
+                          ),
+                  )
                 ],
               ),
-            ),
-            const SizedBox(height: 10),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_address'),
-              // errorText: _errorAddress,
-              controller: _textAddressController,
-              focusNode: _focusAddress,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusAddress,
-                  _focusZipCode,
-                );
-              },
-              leading: Icon(
-                Icons.home_outlined,
-                color: Theme.of(context).hintColor,
+              if (selectedCategory?.toLowerCase() == "news" ||
+                  selectedCategory == null)
+                const SizedBox(height: 8),
+              if (selectedCategory?.toLowerCase() == "news" ||
+                  selectedCategory == null)
+                Text.rich(
+                  TextSpan(
+                    text: Translate.of(context).translate('subCategory'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.bold),
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: ' *',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  if (selectedCategory?.toLowerCase() == "news")
+                    Expanded(
+                      child: listSubCategory.isEmpty
+                          ? const LinearProgressIndicator()
+                          : DropdownButton(
+                              isExpanded: true,
+                              menuMaxHeight: 200,
+                              hint: Text(Translate.of(context)
+                                  .translate('input_subcategory')),
+                              value: selectedSubCategory,
+                              items: listSubCategory.map((subcategory) {
+                                return DropdownMenuItem(
+                                    value: subcategory['name'],
+                                    child: Text(Translate.of(context).translate(
+                                        _getSubCategoryTranslation(
+                                            subcategory['id']))));
+                              }).toList(),
+                              onChanged: (value) {
+                                context
+                                    .read<AddListingCubit>()
+                                    .getSubCategoryId(value);
+                                setState(() {
+                                  selectedSubCategory = value as String?;
+                                  context
+                                      .read<AddListingCubit>()
+                                      .setSubCategoryId(
+                                          selectedSubCategory?.toLowerCase());
+                                });
+                              },
+                            ),
+                    ),
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_zipcode'),
-              errorText: _errorZipCode,
-              controller: _textZipCodeController,
-              focusNode: _focusZipCode,
-              maxLength: 5,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.number,
-              onChanged: (text) {
-                setState(() {
-                  _errorZipCode = UtilValidator.validate(
-                    _textZipCodeController.text,
-                    type: ValidateType.number,
-                    allowEmpty: true,
+              if (selectedCategory?.toLowerCase() == "news" ||
+                  selectedCategory == null)
+                const SizedBox(height: 8),
+              const SizedBox(height: 8),
+              Text.rich(
+                TextSpan(
+                  text: Translate.of(context).translate('city'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium!
+                      .copyWith(fontWeight: FontWeight.bold),
+                  children: const <TextSpan>[
+                    TextSpan(
+                      text: ' *',
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                children: [
+                  Expanded(
+                    child: listCity.isEmpty
+                        ? const LinearProgressIndicator()
+                        : DropdownButton(
+                            isExpanded: true,
+                            menuMaxHeight: 200,
+                            hint: Text(
+                                Translate.of(context).translate('input_city')),
+                            value: selectedCity ?? listCity.first['name'],
+                            items: listCity.map((city) {
+                              return DropdownMenuItem(
+                                  value: city['name'],
+                                  child: Text(city['name']));
+                            }).toList(),
+                            onChanged: widget.item == null
+                                ? (value) async {
+                                    setState(() {
+                                      selectedCity = value as String?;
+                                      for (var element in listCity) {
+                                        if (element["name"] == value) {
+                                          cityId = element["id"];
+                                        }
+                                      }
+                                    });
+                                    selectedVillage = null;
+                                    context
+                                        .read<AddListingCubit>()
+                                        .clearVillage();
+                                    if (value != null) {
+                                      final loadVillageResponse = await context
+                                          .read<AddListingCubit>()
+                                          .loadVillages(value);
+                                      selectedVillage = loadVillageResponse
+                                          .data.first['name'];
+                                      villageId =
+                                          loadVillageResponse.data.first['id'];
+                                      setState(() {
+                                        listVillage = loadVillageResponse.data;
+                                      });
+                                    }
+                                  }
+                                : null),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              if (selectedCategory?.toLowerCase() == "news")
+                Padding(
+                  padding: const EdgeInsets.only(left: 0),
+                  child: Row(
+                    children: [
+                      Checkbox(
+                        value: _isExpiryDateEnabled,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isExpiryDateEnabled = value!;
+                            if (_isExpiryDateEnabled &&
+                                (_expiryDate == null || _expiryTime == null)) {
+                              DateTime now = DateTime.now();
+                              DateTime twoWeeksFromNow =
+                                  now.add(const Duration(days: 14));
+                              _expiryDate ??= DateFormat('yyyy-MM-dd')
+                                  .format(twoWeeksFromNow);
+                              _expiryTime ??=
+                                  const TimeOfDay(hour: 0, minute: 0);
+                            }
+                          });
+                        },
+                        activeColor: Theme.of(context).primaryColor,
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isExpiryDateEnabled = !_isExpiryDateEnabled;
+                            });
+                          },
+                          child: Text(
+                            Translate.of(context)
+                                .translate('enable_expiry_date'),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              const SizedBox(height: 6),
+              Visibility(
+                visible: (selectedCategory?.toLowerCase() == "news") &&
+                    (_isExpiryDateEnabled || widget.item?.timeless == 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 10),
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('expiry_date'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AppPickerItem(
+                      leading: Icon(
+                        Icons.calendar_today_outlined,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _expiryDate,
+                      title: Translate.of(context).translate(
+                        'choose_date',
+                      ),
+                      onPressed: () async {
+                        _onShowExpiryDatePicker();
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    AppPickerItem(
+                        leading: Icon(
+                          Icons.access_time,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        value: _expiryTime?.format(context),
+                        title: Translate.of(context).translate(
+                          'choose_exptime',
+                        ),
+                        onPressed: () async {
+                          _onShowExpiryTimePicker();
+                        }),
+                    const SizedBox(height: 16),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_address'),
+                // errorText: _errorAddress,
+                controller: _textAddressController,
+                focusNode: _focusAddress,
+                textInputAction: TextInputAction.next,
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusAddress,
+                    _focusZipCode,
                   );
-                });
-              },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusZipCode,
-                  _focusPhone,
-                );
-              },
-              leading: Icon(
-                Icons.wallet_travel_outlined,
-                color: Theme.of(context).hintColor,
+                },
+                leading: Icon(
+                  Icons.home_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_phone'),
-              errorText: _errorPhone,
-              controller: _textPhoneController,
-              focusNode: _focusPhone,
-              maxLength: 15,
-              keyboardType: TextInputType.phone,
-              textInputAction: TextInputAction.next,
-              onChanged: (text) {
-                setState(() {
-                  _errorPhone = UtilValidator.validate(
-                    _textPhoneController.text,
-                    type: ValidateType.phone,
-                    allowEmpty: true,
-                  );
-                });
-              },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusPhone,
-                  _focusEmail,
-                );
-              },
-              leading: Icon(
-                Icons.phone_outlined,
-                color: Theme.of(context).hintColor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_email'),
-              // errorText: _errorEmail,
-              controller: _textEmailController,
-              focusNode: _focusEmail,
-              textInputAction: TextInputAction.next,
-              // onChanged: (text) {
-              //   setState(() {
-              //     _errorEmail = UtilValidator.validate(
-              //       _textEmailController.text,
-              //       type: ValidateType.email,
-              //       allowEmpty: true,
-              //     );
-              //   });
-              // },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusEmail,
-                  _focusWebsite,
-                );
-              },
-              leading: Icon(
-                Icons.email_outlined,
-                color: Theme.of(context).hintColor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_website'),
-              errorText: _errorWebsite,
-              controller: _textWebsiteController,
-              focusNode: _focusWebsite,
-              textInputAction: TextInputAction.done,
-              onChanged: (text) {
-                setState(() {
-                  _errorWebsite = UtilValidator.validate(
-                      _textWebsiteController.text,
+              const SizedBox(height: 8),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_zipcode'),
+                errorText: _errorZipCode,
+                controller: _textZipCodeController,
+                focusNode: _focusZipCode,
+                maxLength: 5,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.number,
+                onChanged: (text) {
+                  setState(() {
+                    _errorZipCode = UtilValidator.validate(
+                      _textZipCodeController.text,
+                      type: ValidateType.number,
                       allowEmpty: true,
-                      type: ValidateType.website);
-                });
-              },
-              leading: Icon(
-                Icons.language_outlined,
-                color: Theme.of(context).hintColor,
+                    );
+                  });
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusZipCode,
+                    _focusPhone,
+                  );
+                },
+                leading: Icon(
+                  Icons.wallet_travel_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
               ),
-            ),
-            Visibility(
-              visible: selectedCategory?.toLowerCase() == "events",
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('start_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+              const SizedBox(height: 8),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_phone'),
+                errorText: _errorPhone,
+                controller: _textPhoneController,
+                focusNode: _focusPhone,
+                maxLength: 15,
+                keyboardType: TextInputType.phone,
+                textInputAction: TextInputAction.next,
+                onChanged: (text) {
+                  setState(() {
+                    _errorPhone = UtilValidator.validate(
+                      _textPhoneController.text,
+                      type: ValidateType.phone,
+                      allowEmpty: true,
+                    );
+                  });
+                },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusPhone,
+                    _focusEmail,
+                  );
+                },
+                leading: Icon(
+                  Icons.phone_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_email'),
+                // errorText: _errorEmail,
+                controller: _textEmailController,
+                focusNode: _focusEmail,
+                textInputAction: TextInputAction.next,
+                // onChanged: (text) {
+                //   setState(() {
+                //     _errorEmail = UtilValidator.validate(
+                //       _textEmailController.text,
+                //       type: ValidateType.email,
+                //       allowEmpty: true,
+                //     );
+                //   });
+                // },
+                onSubmitted: (text) {
+                  Utils.fieldFocusChange(
+                    context,
+                    _focusEmail,
+                    _focusWebsite,
+                  );
+                },
+                leading: Icon(
+                  Icons.email_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+              const SizedBox(height: 8),
+              AppTextInput(
+                hintText: Translate.of(context).translate('input_website'),
+                errorText: _errorWebsite,
+                controller: _textWebsiteController,
+                focusNode: _focusWebsite,
+                textInputAction: TextInputAction.done,
+                onChanged: (text) {
+                  setState(() {
+                    _errorWebsite = UtilValidator.validate(
+                        _textWebsiteController.text,
+                        allowEmpty: true,
+                        type: ValidateType.website);
+                  });
+                },
+                leading: Icon(
+                  Icons.language_outlined,
+                  color: Theme.of(context).hintColor,
+                ),
+              ),
+              Visibility(
+                visible: selectedCategory?.toLowerCase() == "events",
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('start_date'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
+                    const SizedBox(height: 8),
+                    AppPickerItem(
+                      leading: Icon(
+                        Icons.calendar_today_outlined,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _startDate,
+                      title: Translate.of(context).translate(
+                        'choose_date',
+                      ),
+                      onPressed: () async {
+                        _onShowStartDatePicker(_startDate);
+                      },
                     ),
-                    value: _startDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowStartDatePicker(_startDate);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('start_time'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                    const SizedBox(height: 8),
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('start_time'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
+                    const SizedBox(height: 8),
+                    AppPickerItem(
+                        leading: Icon(
+                          Icons.access_time,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        value: _startTime?.format(context),
+                        title: Translate.of(context).translate(
+                          'choose_stime',
+                        ),
+                        onPressed: () async {
+                          _onShowStartTimePicker(_startTime);
+                        }),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('end_date'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AppPickerItem(
+                      leading: Icon(
+                        Icons.calendar_today_outlined,
+                        color: Theme.of(context).hintColor,
+                      ),
+                      value: _endDate,
+                      title: Translate.of(context).translate(
+                        'choose_date',
+                      ),
+                      onPressed: () async {
+                        _onShowEndDatePicker(_endDate);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        text: Translate.of(context).translate('end_time'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AppPickerItem(
                       leading: Icon(
                         Icons.access_time,
                         color: Theme.of(context).hintColor,
                       ),
-                      value: _startTime?.format(context),
+                      value: _endTime?.format(context),
                       title: Translate.of(context).translate(
-                        'choose_stime',
+                        'choose_etime',
                       ),
                       onPressed: () async {
-                        _onShowStartTimePicker(_startTime);
-                      }),
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('end_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
+                        _onShowEndTimePicker(_endTime);
+                      },
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _endDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowEndDatePicker(_endDate);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('end_time'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.access_time,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _endTime?.format(context),
-                    title: Translate.of(context).translate(
-                      'choose_etime',
-                    ),
-                    onPressed: () async {
-                      _onShowEndTimePicker(_endTime);
-                    },
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),
     );
+  }
+
+  List<Widget> _buildPollOptionFields() {
+    return List<Widget>.generate(pollOptions.length, (index) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
+          children: [
+            Expanded(
+              child: AppTextInput(
+                hintText: Translate.of(context).translate('option_title'),
+                controller: _pollOptionControllers[index],
+                onChanged: (text) {
+                  setState(() {
+                    pollOptions[index].title = text;
+                  });
+                },
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red[900]),
+              onPressed: () {
+                setState(() {
+                  pollOptions.removeAt(index);
+                  _pollOptionControllers.removeAt(index);
+                });
+              },
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  void _addPollOption() {
+    if (pollOptions.length < 10) {
+      setState(() {
+        pollOptions
+            .add(PollOptionModel(id: 0, title: '', listingsId: 0, votes: 0));
+        _pollOptionControllers.add(TextEditingController());
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(Translate.of(context).translate('max_options'))),
+      );
+    }
   }
 
   Widget _buildImageList() {

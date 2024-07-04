@@ -1,11 +1,11 @@
 {
-    "name": "Auf App",
-    "short_name": "Auf App",
+    "name": "Mitwiz App",
+    "short_name": "Mitwiz App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Auf App",
+    "description": "Mitwiz App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

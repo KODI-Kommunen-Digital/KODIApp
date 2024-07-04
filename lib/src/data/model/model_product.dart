@@ -1,11 +1,11 @@
 // ignore_for_file: unused_local_variable
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_file.dart';
 import 'package:heidi/src/data/model/model_image.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
@@ -72,70 +72,73 @@ class ProductModel {
   final String? bookingStyle;
   final String? priceDisplay;
   List<ImageListModel>? imageLists;
+  List<PollOptionModel>? pollOptions;
 
   int? timeless;
 
-  ProductModel(
-      {required this.id,
-      required this.title,
-      required this.image,
-      this.pdf,
-      this.videoURL,
-      this.category,
-      required this.expiryDate,
-      required this.startDate,
-      required this.endDate,
-      required this.createDate,
-      this.username,
-      this.firstname,
-      this.lastname,
-      this.profileImage,
-      this.dateEstablish,
-      this.rate,
-      this.numRate,
-      this.rateText,
-      this.status,
-      required this.favorite,
-      required this.address,
-      this.zipCode,
-      required this.phone,
-      this.fax,
-      required this.email,
-      required this.website,
-      required this.externalId,
-      required this.description,
-      this.color,
-      this.icon,
-      this.tags,
-      this.price,
-      this.priceMin,
-      this.priceMax,
-      this.country,
-      this.city,
-      this.state,
-      this.author,
-      this.galleries,
-      this.features,
-      this.related,
-      this.latest,
-      this.openHours,
-      this.socials,
-      this.location,
-      this.attachments,
-      this.link,
-      this.bookingUse,
-      this.bookingStyle,
-      this.priceDisplay,
-      this.categoryId,
-      this.subcategoryId,
-      required this.userId,
-      this.cityId,
-      this.villageId,
-      this.statusId,
-      this.timeless,
-      this.sourceId,
-      this.imageLists,
-      this.showExternal});
+  ProductModel({
+    required this.id,
+    required this.title,
+    required this.image,
+    this.pdf,
+    this.videoURL,
+    this.category,
+    required this.expiryDate,
+    required this.startDate,
+    required this.endDate,
+    required this.createDate,
+    this.username,
+    this.firstname,
+    this.lastname,
+    this.profileImage,
+    this.dateEstablish,
+    this.rate,
+    this.numRate,
+    this.rateText,
+    this.status,
+    required this.favorite,
+    required this.address,
+    this.zipCode,
+    required this.phone,
+    this.fax,
+    required this.email,
+    required this.website,
+    required this.externalId,
+    required this.description,
+    this.color,
+    this.icon,
+    this.tags,
+    this.price,
+    this.priceMin,
+    this.priceMax,
+    this.country,
+    this.city,
+    this.state,
+    this.author,
+    this.galleries,
+    this.features,
+    this.related,
+    this.latest,
+    this.openHours,
+    this.socials,
+    this.location,
+    this.attachments,
+    this.link,
+    this.bookingUse,
+    this.bookingStyle,
+    this.priceDisplay,
+    this.categoryId,
+    this.subcategoryId,
+    required this.userId,
+    this.cityId,
+    this.villageId,
+    this.statusId,
+    this.timeless,
+    this.sourceId,
+    this.imageLists,
+    this.showExternal,
+    this.pollOptions,
+  });
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -227,6 +230,8 @@ class ProductModel {
       category = "Mitteilungsblatt";
     } else if (json['categoryId'] == 16) {
       category = "Amtliche Mitteilung";
+    } else if (json['categoryId'] == 25) {
+      category = "Umfrage";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
@@ -251,6 +256,13 @@ class ProductModel {
     final bookingUse = json['booking_use'] == true;
     if (bookingUse) {
       priceDisplay = json['booking_price_display'];
+    }
+
+    List<PollOptionModel>? pollOptions;
+    if (json['categoryId'] == 25) {
+      pollOptions = List.from(json['pollOptions'] ?? []).map((item) {
+        return PollOptionModel.fromJson(item);
+      }).toList();
     }
 
     return ProductModel(
@@ -315,6 +327,7 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
+      pollOptions: pollOptions,
     );
   }
 

@@ -1,4 +1,5 @@
-// ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously
+// ignore_for_file: use_build_context_synchronously, depend_on_referenced_packages
+
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
@@ -20,11 +21,12 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
+  const ProductDetailScreen({super.key, required this.item});
 
   final ProductModel item;
 
@@ -37,6 +39,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
+  Map<int, int> pollVotes = {};
+  int? selectedOption;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -47,6 +51,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
+    _loadPollVotes();
   }
 
   @override
@@ -66,6 +71,91 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         _iconColor = color;
       });
     }
+  }
+
+  Future<void> _loadPollVotes() async {
+    final prefs = await Preferences.openBox();
+    final Map<int, int> votes = prefs.getKeyValue('pollVotes', {});
+    setState(() {
+      pollVotes = votes;
+      selectedOption = votes[widget.item.id];
+    });
+  }
+
+  void _showSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  Future<void> _savePollVote(int optionId) async {
+    if (selectedOption == optionId) {
+      return;
+    }
+
+    final previousOption = selectedOption;
+    final response = await _productDetailCubit.saveVote(
+      widget.item.cityId ?? 1,
+      widget.item.id,
+      optionId,
+    );
+
+    if (response.success) {
+      setState(() {
+        pollVotes[widget.item.id] = optionId;
+        selectedOption = optionId;
+        for (var option in widget.item.pollOptions!) {
+          if (option.id == optionId) {
+            option.votes++;
+          } else if (option.id == previousOption) {
+            option.votes--;
+          }
+        }
+      });
+      _showSnackBar("Vote submitted successfully");
+    } else {
+      _showSnackBar("Failed to save vote");
+    }
+  }
+
+  Widget _buildPollOptions(ProductModel product) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 16),
+        ...product.pollOptions!.map((option) {
+          final isSelected = option.id == selectedOption;
+          return GestureDetector(
+            onTap: () async {
+              await _savePollVote(option.id);
+            },
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 4),
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: isSelected ? const Color(0xFF657983) : Colors.grey,
+                  style: BorderStyle.solid,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(option.title),
+                  Text(option.votes.toString()),
+                ],
+              ),
+            ),
+          );
+        }),
+        const SizedBox(height: 16),
+      ],
+    );
   }
 
   void _showMessage(String message) async {
@@ -248,6 +338,72 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   color: Theme.of(context).textTheme.bodyLarge?.color ??
                       Colors.white,
                 ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                      width: 100,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 10,
+                      width: 200,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: <Widget>[
+                Container(
+                  width: 32,
+                  height: 32,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      height: 10,
+                      width: 100,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                    const SizedBox(height: 4),
+                    Container(
+                      height: 10,
+                      width: 200,
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                    ),
+                  ],
+                )
               ],
             ),
             const SizedBox(height: 16),
@@ -1023,6 +1179,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ],
             ),
             description,
+            if (widget.item.categoryId == 25) _buildPollOptions(product),
             address,
             phone,
             fax,
