@@ -192,7 +192,25 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         _showCitySelectionPopup(context);
       }
     } else if (service.imageLink == "15") {
-      await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {"id": 15});
+      await Navigator.pushNamed(context, Routes.discoveryDetail,
+          arguments: {"id": 15});
+    } else if (service.imageLink == "16") {
+      //Fördermittelwegweiser
+    } else if (service.imageLink == "18") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-unternehmen/standort/'),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "19") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-innovation/wasserstoff-modellregion/'),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "20") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-unternehmen/start-ups/'),
+          mode: LaunchMode.inAppWebView);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
