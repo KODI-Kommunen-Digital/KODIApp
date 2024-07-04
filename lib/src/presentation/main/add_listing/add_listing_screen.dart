@@ -586,6 +586,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
+        await context.read<AddListingCubit>().setCategoryId(
+            selectedCategory?.toLowerCase());
         if (isImageChanged) {
           await context
               .read<AddListingCubit>()
