@@ -20,13 +20,19 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   bool doesScroll = false;
   int? currentCity;
 
-  Future<void> onLoad() async {
+  Future<void> onLoad({int? id}) async {
     emit(const DiscoveryState.loading());
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    services = initializeServices();
+    if (id == null) {
+      services = initializeServices();
+    } else {
+      if (id == 15) {
+        services = initializeServices15();
+      }
+    }
 
     List<CitizenServiceModel> servicesCopy = List.from(services);
 
@@ -176,6 +182,21 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageUrl: Images.service20,
         imageLink: "20",
         arguments: 20,
+      ),
+    ];
+  }
+
+  List<CitizenServiceModel> initializeServices15() {
+    return [
+      CitizenServiceModel(
+        imageUrl: Images.service3,
+        imageLink: "21",
+        arguments: 150
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service3,
+        imageLink: "22",
+        arguments: 151
       ),
     ];
   }

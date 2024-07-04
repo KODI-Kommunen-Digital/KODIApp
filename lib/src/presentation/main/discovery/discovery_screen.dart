@@ -191,6 +191,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
+    } else if (service.imageLink == "15") {
+      await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {"id": 15});
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
