@@ -18,12 +18,7 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
 
   void onLoad(ProductModel item) async {
     final int userId = await UserRepository.getLoggedUserId();
-    bool isLoggedIn = false;
-    if (userId == 0) {
-      isLoggedIn = false;
-    } else {
-      isLoggedIn = true;
-    }
+    bool isLoggedIn = userId != 0;
     bool darkModeEnabled = await isDarkMode();
 
     if (item.cityId != null) {
@@ -43,26 +38,13 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
                 }
               }
             }
-            if (favoritesList.isNotEmpty) {
-              emit(ProductDetailLoaded(product!, favoritesList, userDetail,
-                  isLoggedIn, darkModeEnabled));
-            } else {
-              final int userId = await UserRepository.getLoggedUserId();
-              if (userId == 0) {
-                isLoggedIn = false;
-              } else {
-                isLoggedIn = true;
-              }
-              emit(ProductDetailLoaded(
-                  product!, null, userDetail, isLoggedIn, darkModeEnabled));
-            }
+            emit(ProductDetailLoaded(product!, favoritesList, userDetail,
+                isLoggedIn, darkModeEnabled));
           } catch (e, stackTrace) {
             emit(ProductDetailLoaded(
                 product!, null, userDetail, isLoggedIn, darkModeEnabled));
             await Sentry.captureException(e, stackTrace: stackTrace);
           }
-          emit(ProductDetailLoaded(product!, favoritesList, userDetail,
-              isLoggedIn, darkModeEnabled));
         } else {
           emit(ProductDetailLoaded(
               product!, null, userDetail, isLoggedIn, darkModeEnabled));
@@ -118,5 +100,36 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       }
       await AppBloc.wishListCubit.onLoad();
     }
+  }
+
+  Future<ResultApiModel> saveVote(
+      int cityId, int listingId, int optionId) async {
+    final prefs = await Preferences.openBox();
+    final Map<dynamic, dynamic> votes = prefs.getKeyValue('pollVotes', {});
+    final int? previousOptionId = votes[listingId];
+
+    // Remove previous vote if there was one
+    if (previousOptionId != null && previousOptionId != optionId) {
+      final removeVoteParams = {
+        'optionId': previousOptionId,
+        'vote': -1,
+      };
+      await ListRepository.saveVote(cityId, removeVoteParams, listingId);
+    }
+
+    // Add new vote
+    final addVoteParams = {
+      'optionId': optionId,
+      'vote': 1,
+    };
+    final response =
+        await ListRepository.saveVote(cityId, addVoteParams, listingId);
+
+    if (response.success) {
+      votes[listingId] = optionId;
+      await prefs.setKeyValue('pollVotes', votes);
+    }
+
+    return response;
   }
 }

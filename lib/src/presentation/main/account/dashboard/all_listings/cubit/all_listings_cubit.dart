@@ -73,6 +73,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
             sourceId: product.sourceId,
             imageLists: product.imageLists,
             expiryDate: product.expiryDate,
+            pollOptions: product.pollOptions,
           ),
         );
       }
@@ -137,7 +138,8 @@ class AllListingsCubit extends Cubit<AllListingsState> {
               sourceId: product.sourceId,
               imageLists: product.imageLists,
               expiryDate: product.expiryDate,
-              externalId: product.externalId),
+              externalId: product.externalId,
+              pollOptions: product.pollOptions),
         );
       }
     }
@@ -197,6 +199,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
             sourceId: product.sourceId,
             imageLists: product.imageLists,
             expiryDate: product.expiryDate,
+            pollOptions: product.pollOptions,
           ),
         );
       }

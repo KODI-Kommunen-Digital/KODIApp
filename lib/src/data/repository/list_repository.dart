@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -349,6 +350,7 @@ class ListRepository {
     TimeOfDay? endTime,
     List<File>? imagesList,
     bool isImageChanged,
+    List<PollOptionModel>? pollOptions, // Add poll options parameter
   ) async {
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -417,21 +419,25 @@ class ListRepository {
       "email": email,
       "phone": phone,
       "website": website,
-      "price": 100, //dummy data
-      "discountPrice": 100, //dummy data
+      "price": 100, // dummy data
+      "discountPrice": 100, // dummy data
       "logo": null,
-      "statusId": 1, //dummy data
-      "sourceId": 1, //dummy data
-      "longitude": 245.65, //dummy data
-      "latitude": 22.456, //dummy data
+      "statusId": 1, // dummy data
+      "sourceId": 1, // dummy data
+      "longitude": 245.65, // dummy data
+      "latitude": 22.456, // dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
-      "timeless": timeless
+      "timeless": timeless,
+      "pollOptions": pollOptions
+          ?.map((e) => e.toJson())
+          .toList(), // Add poll options to params
     };
+
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
     if (response.success) {
@@ -500,6 +506,7 @@ class ListRepository {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
+    List<PollOptionModel>? pollOptions, // Add poll options parameter
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
@@ -570,13 +577,13 @@ class ListRepository {
       "email": email,
       "phone": phone,
       "website": website,
-      "price": 100, //dummy data
-      "discountPrice": 100, //dummy data
+      "price": 100, // dummy data
+      "discountPrice": 100, // dummy data
       "hasAttachment": isImageChanged ? true : false,
-      "statusId": statusId ?? 1, //change 1 to 3 when done
-      "sourceId": 1, //dummy data
-      "longitude": 245.65, //dummy data
-      "latitude": 22.456, //dummy data
+      "statusId": statusId ?? 1, // change 1 to 3 when done
+      "sourceId": 1, // dummy data
+      "longitude": 245.65, // dummy data
+      "latitude": 22.456, // dummy data
       "villageId": villageId ?? 0,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
@@ -597,6 +604,9 @@ class ListRepository {
         }
       ],
       "cityId": cityId,
+      "pollOptions": pollOptions
+          ?.map((e) => e.toJson())
+          .toList(), // Add poll options to params
     };
 
     final response =
@@ -748,5 +758,11 @@ class ListRepository {
 
   void clearSubCategory() async {
     prefs.deleteKey(Preferences.subCategoryId);
+  }
+
+  static Future<ResultApiModel> saveVote(
+      int cityId, Map<String, dynamic> params, int listingId) async {
+    final response = await Api.requestSaveVote(cityId, params, listingId);
+    return response;
   }
 }
