@@ -238,9 +238,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void setCategoryId(value) async {
+  Future<void> setCategoryId(value) async {
     try {
-      _repo.setCategoryId(value);
+      await _repo.setCategoryId(value);
     } catch (e, stackTrace) {
       logError('request categoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
