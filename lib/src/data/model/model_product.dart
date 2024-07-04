@@ -71,6 +71,7 @@ class ProductModel {
   final bool? bookingUse;
   final String? bookingStyle;
   final String? priceDisplay;
+  final int? viewCount;
   List<ImageListModel>? imageLists;
   List<PollOptionModel>? pollOptions;
 
@@ -138,6 +139,7 @@ class ProductModel {
     this.imageLists,
     this.showExternal,
     this.pollOptions,
+    this.viewCount
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
@@ -328,6 +330,7 @@ class ProductModel {
       priceDisplay: priceDisplay,
       imageLists: imagesList,
       pollOptions: pollOptions,
+      viewCount: json['viewCount'] ?? 0
     );
   }
 

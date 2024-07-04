@@ -312,15 +312,33 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 const SizedBox(
                                                   height: 24,
                                                 ),
-                                                Text(
-                                                  item.category ?? '',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      item.category ?? '',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      '${Translate.of(context).translate('views')}: ${item.viewCount ?? 0}',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w100,
+                                                          ),
+                                                    ),
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(

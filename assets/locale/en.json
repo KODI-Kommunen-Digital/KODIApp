@@ -526,5 +526,6 @@
   "welcomeForumTitle": "Welcome to the group function!",
   "welcomeForum": "Here you can create new groups using the blue plus icon. You can create private and public groups. Members can join public groups at any time and make a request for private groups. Have fun!",
   "vote_submit_successful": "Vote submitted successfully",
-  "vote_submit_fail": "Failed to save vote"
+  "vote_submit_fail": "Failed to save vote",
+  "views": "Views"
 }

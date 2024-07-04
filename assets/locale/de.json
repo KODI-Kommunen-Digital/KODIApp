@@ -531,6 +531,7 @@
   "welcomeForumTitle": "Willkommen bei der Gruppenfunktion!",
   "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!",
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
-  "vote_submit_fail": "Fehler beim Abstimmen"
+  "vote_submit_fail": "Fehler beim Abstimmen",
+  "views": "Aufrufe"
 }
 
