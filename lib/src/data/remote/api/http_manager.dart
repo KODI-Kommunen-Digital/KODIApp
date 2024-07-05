@@ -15,10 +15,18 @@ class HTTPManager {
   late final Dio _dio;
   late String _baseUrl;
 
-  HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-        ? 'https://app.smartregion-auf.de/api/'
-        : 'https://app.smartregion-auf.de/forumapi/';
+  HTTPManager({String apiType = ""}) {
+    _baseUrl = 'https://test.smartregion-auf.de';
+    switch(apiType) {
+      case "":
+        _baseUrl = '$_baseUrl/api/';
+        break;
+      case "forum":
+        _baseUrl = '$_baseUrl/forumapi/';
+        break;
+      case "container":
+        _baseUrl = '$_baseUrl/containerapi/v1/';
+    }
     // ? 'http://localhost:3001/'
     //     : 'http://localhost:3002/';
     //? 'https://app.geseke.it/api/'
