@@ -43,21 +43,11 @@ class FirebaseApi {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "authorized");
+      await _firebaseMessaging.subscribeToTopic("warnings");
     } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "denied");
+      await _firebaseMessaging.unsubscribeFromTopic("warnings");
     }
-
-    // final pushNotificationsPermission =
-    //     await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
-    // final receiveNotification =
-    //     await prefs.getKeyValue(Preferences.receiveNotification, "true");
-
-    // if (pushNotificationsPermission == "authorized" &&
-    //     receiveNotification == "true") {
-    //   await _firebaseMessaging.subscribeToTopic("WasteTruck_1_10");
-    // } else {
-    //   await _firebaseMessaging.unsubscribeFromTopic("WasteTruck_1_10");
-    // }
 
     int uId = await getLoggedUserId();
     if (uId > 0) {

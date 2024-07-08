@@ -298,6 +298,20 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                           Navigator.of(context).pop();
                         },
                       ),
+                      const Expanded(
+                        child: Center(
+                          child: Text(
+                            'smartAPP',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                          width:
+                              48), // Placeholder to balance the space taken by the IconButton
                     ],
                   ),
                 ),
