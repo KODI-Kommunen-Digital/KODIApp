@@ -63,7 +63,14 @@ class Api {
   static Future<ResultApiModel> requestUserListings(userId, pageNo) async {
     final result = await HTTPManager(forum: false).get(
         url:
-            //'users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
+            'users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
+
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestMyListings(pageNo) async {
+    final result = await HTTPManager(forum: false).get(
+        url:
         'users/myListings');
     return ResultApiModel.fromJson(result);
   }

@@ -221,7 +221,7 @@ class ListRepository {
       userId = id;
     }
 
-    final listResponse = await Api.requestUserListings(userId, pageNo);
+    final listResponse = await Api.requestMyListings(pageNo);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
