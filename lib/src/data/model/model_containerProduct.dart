@@ -1,0 +1,68 @@
+class ContainerProductModel {
+  final int id;
+  final String? createdAt;
+  final String? updatedAt;
+  final String? deletedAt;
+  final String title;
+  final String description;
+  final double price;
+  final double tax;
+  final int inventory;
+  final int minCount;
+  final int maxCount;
+  final int sellerId;
+  final int shopId;
+  final int categoryId;
+  final int subCategoryId;
+  final String? meta;
+  final bool isActive;
+  final bool isArchived;
+  final int? deletedBy;
+  final List<String>? productImages;
+
+  ContainerProductModel(
+      {required this.id,
+      required this.createdAt,
+      required this.updatedAt,
+      required this.deletedAt,
+      required this.title,
+      required this.description,
+      required this.price,
+      required this.tax,
+      required this.inventory,
+      required this.minCount,
+      required this.maxCount,
+      required this.sellerId,
+      required this.shopId,
+      required this.categoryId,
+      required this.subCategoryId,
+      required this.meta,
+      required this.isActive,
+      required this.isArchived,
+      required this.deletedBy,
+      required this.productImages});
+
+  factory ContainerProductModel.fromJson(Map<String, dynamic> json) {
+    return ContainerProductModel(
+        id: json['id'],
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+        deletedAt: json['deletedAt'],
+        title: json['title'],
+        description: json['description'],
+        price: json['price'],
+        tax: json['tax'],
+        inventory: json['inventory'],
+        maxCount: json['maxCount'],
+        minCount: json['minCount'],
+        sellerId: json['sellerId'],
+        shopId: json['shopId'],
+        categoryId: json['categoryId'],
+        subCategoryId: json['subCategoryId'],
+        meta: json['meta'],
+        isActive: json['isActive'],
+        isArchived: json['isArchived'],
+        deletedBy: json['deletedBy'],
+        productImages: json['productImages']);
+  }
+}
