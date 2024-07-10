@@ -546,6 +546,8 @@
   "company": "Unternehmen",
   "applicant": "Antragsteller",
   "open_whatsapp": "Worüber wollen Sie diese Nummer öffnen?",
-  "call": "Anruf"
+  "call": "Anruf",
+  "funding_guide": "Fördermittelwegweiser",
+  "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein"
 }
 
