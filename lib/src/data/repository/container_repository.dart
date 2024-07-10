@@ -22,7 +22,7 @@ class ContainerRepository {
       }).toList();
       return list;
     } else {
-      logError('Error loading stores: ${response.message}');
+      logError('Error loading stores: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -36,7 +36,8 @@ class ContainerRepository {
       }).toList();
       return list;
     } else {
-      logError('Error loading store categories: ${response.message}');
+      logError(
+          'Error loading store categories: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -51,7 +52,8 @@ class ContainerRepository {
       }).toList();
       return list;
     } else {
-      logError('Error loading store categories: ${response.message}');
+      logError(
+          'Error loading store categories: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -62,7 +64,7 @@ class ContainerRepository {
       final storeDetails = StoreModel.fromJson(response.data);
       return storeDetails;
     } else {
-      logError('Error loading stores: ${response.message}');
+      logError('Error loading stores: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -87,7 +89,7 @@ class ContainerRepository {
     if (response.success) {
       return true;
     } else {
-      logError('Error patching store: ${response.message}');
+      logError('Error patching store: ${response.data} ${response.message}');
       return false;
     }
   }
@@ -218,8 +220,8 @@ class ContainerRepository {
       required double price,
       required double tax,
       required int inventory,
-      int? minCount,
-      int? maxCount,
+      required int minCount,
+      required int maxCount,
       String? meta,
       required bool isActive}) async {
     Map<String, dynamic> params = {
@@ -333,6 +335,131 @@ class ContainerRepository {
     } else {
       logError(
           'Error getting product request details: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  Future<bool> addStoreProduct(
+      {required int cityId,
+      required int storeId,
+      required String title,
+      required String description,
+      required double price,
+      required double tax,
+      required int inventory,
+      required int minCount,
+      required int maxCount,
+      String? meta}) async {
+    Map<String, dynamic> params = {
+      "title": title,
+      "description": description,
+      "price": price,
+      "tax": tax,
+      "inventory": inventory,
+      "minCount": minCount,
+      "maxCount": maxCount,
+      "meta": meta
+    };
+
+    final response = await Api.addProduct(cityId, storeId, params);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error posting product: ${response.data} ${response.message}');
+      return false;
+    }
+  }
+
+  Future<List<ContainerProductModel>?> getStoreProducts({
+    required int cityId,
+    required int storeId,
+    required int pageNo,
+    int? categoryId,
+    int? subCategoryId,
+    String? search,
+    String? sort,
+    bool sortDesc = false,
+  }) async {
+    List<String> validSort = [
+      "price",
+      "title",
+      "createdAt",
+      "updatedAt",
+      "quantity",
+      "categoryId",
+      "subCategoryId"
+    ];
+
+    String categoryQuery = "";
+    String subCategoryQuery = "";
+    String searchQuery = "";
+    String sortQuery = "";
+    String sortDescQuery = "";
+
+    if (categoryId != null) {
+      categoryQuery = "&categoryId=$categoryId";
+    }
+
+    if (subCategoryId != null) {
+      subCategoryQuery = "&subCategoryId=$subCategoryId";
+    }
+
+    if (search != null) {
+      searchQuery = "&search=$search";
+    }
+
+    if (sort != null && validSort.contains(sort)) {
+      sortQuery = "&sort=$sort";
+    }
+
+    if (sortDesc == true) {
+      sortDescQuery = "&sortDesc=true";
+    }
+
+    final response = await Api.getStoreProducts(
+        cityId: cityId,
+        storeId: storeId,
+        pageNo: pageNo,
+        category: categoryQuery,
+        subCategory: subCategoryQuery,
+        search: searchQuery,
+        sort: sortQuery,
+        sortDesc: sortDescQuery);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ContainerProductModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError('Error getting products: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<CategoryModel?> loadStoreCategory(
+      int cityId, int storeId, int categoryId) async {
+    final response = await Api.getStoreCategory(cityId, storeId, categoryId);
+    if (response.success) {
+      final category = CategoryModel.fromJson(response.data);
+      return category;
+    } else {
+      logError('Error loading category: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<CategoryModel?> loadStoreSubCategory(
+      int cityId, int storeId, int subCategoryId) async {
+    final response =
+        await Api.getStoreSubCategory(cityId, storeId, subCategoryId);
+    if (response.success) {
+      final subCategory = CategoryModel.fromJson(response.data);
+      return subCategory;
+    } else {
+      logError(
+          'Error loading subCategory: ${response.data} ${response.message}');
       return null;
     }
   }
