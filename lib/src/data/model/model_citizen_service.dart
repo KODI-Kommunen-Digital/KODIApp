@@ -20,6 +20,8 @@ class CitizenServiceModel {
       type: type,
       pageNo: 1,
     );
-    return !result?[0].isEmpty;
+    //return !result?[0].isEmpty;
+    return false;
+    //TODO revert once integration starts
   }
 }
