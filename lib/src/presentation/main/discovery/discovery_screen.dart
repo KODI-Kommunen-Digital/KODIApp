@@ -196,6 +196,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           arguments: {"id": 15});
     } else if (service.imageLink == "16") {
       //Fördermittelwegweiser
+      showNotAvailPopup(context);
     } else if (service.imageLink == "18") {
       await launchUrl(
           Uri.parse(
@@ -234,6 +235,32 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             children: [
               Text(Translate.of(context).translate('please_select_city')),
               const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showNotAvailPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('funding_guide')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('funding_guide_message')),
+              const SizedBox(height: 12),
             ],
           ),
           actions: <Widget>[
