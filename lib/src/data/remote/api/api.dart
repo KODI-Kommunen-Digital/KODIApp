@@ -662,7 +662,7 @@ class Api {
   }
 
   static Future<ResultApiModel> getAllStores(cityId, pageNo) async {
-    var list = '/cities/$cityId/store?pageNo=$pageNo';
+    var list = '/cities/$cityId/store?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -689,7 +689,7 @@ class Api {
   }
 
   static Future<ResultApiModel> getShelves(cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/shelves?pageNo=$pageNo';
+    var list = '/cities/$cityId/store/$storeId/shelves?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -718,15 +718,15 @@ class Api {
   static Future<ResultApiModel> getStoreSellers(
       {cityId, storeId, pageNo}) async {
     var list = (storeId != null)
-        ? '/cities/$cityId/store/$storeId/sellers?pageNo=$pageNo'
-        : '/cities/$cityId/owners/getSellers?pageNo=$pageNo';
+        ? '/cities/$cityId/store/$storeId/sellers?pageNumber=$pageNo'
+        : '/cities/$cityId/owners/getSellers?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> getStoreCategories(
       cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/categories?pageNo=$pageNo';
+    var list = '/cities/$cityId/store/$storeId/categories?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -734,7 +734,7 @@ class Api {
   static Future<ResultApiModel> getStoreSubCategories(
       cityId, storeId, categoryId, pageNo) async {
     var list =
-        '/cities/$cityId/store/$storeId/category/$categoryId/subcategories?pageNo=$pageNo';
+        '/cities/$cityId/store/$storeId/category/$categoryId/subcategories?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -788,8 +788,8 @@ class Api {
   static Future<ResultApiModel> getProductRequests(
       {cityId, storeId, pageNo, reqType, status}) async {
     var list = (cityId != null && storeId != null)
-        ? '/cities/$cityId/store/$storeId/productRequest?pageNo=$pageNo$reqType$status'
-        : '/owners/productRequests?pageNo=$pageNo$reqType$status';
+        ? '/cities/$cityId/store/$storeId/productRequest?pageNumber=$pageNo$reqType$status'
+        : '/owners/productRequests?pageNumber=$pageNo$reqType$status';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -857,7 +857,7 @@ class Api {
   static Future<ResultApiModel> getStoreProducts(
       {required cityId, required storeId, required pageNo, category, subCategory, search, sort, sortDesc}) async {
     var list =
-        '/cities/$cityId/store/$storeId/products?pageNo=$pageNo$category$subCategory$search$sort$sortDesc';
+        '/cities/$cityId/store/$storeId/products?pageNumber=$pageNo$category$subCategory$search$sort$sortDesc';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }

@@ -20,7 +20,7 @@ class StoreModel {
         name: json['name'],
         description: json['description'],
         address: json['address'],
-        latitude: json['latitude'],
-        longitude: json['longitude']);
+        latitude: json['latitude']?.toString(),
+        longitude: json['longitude']?.toString());
   }
 }
