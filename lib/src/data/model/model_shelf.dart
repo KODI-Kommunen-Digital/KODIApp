@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:heidi/src/data/model/model_containerProduct.dart';
+import 'package:heidi/src/data/model/model_container_product.dart';
 
 class ShelfModel {
   final int id;

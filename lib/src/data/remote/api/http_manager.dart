@@ -16,16 +16,16 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({String apiType = ""}) {
-    _baseUrl = 'https://test.smartregion-auf.de';
+    _baseUrl = 'http://192.168.178.126:3011';
     switch(apiType) {
       case "":
-        _baseUrl = '$_baseUrl/api/';
+        _baseUrl = '$_baseUrl/';
         break;
       case "forum":
-        _baseUrl = '$_baseUrl/forumapi/';
+        _baseUrl = '$_baseUrl/';
         break;
       case "container":
-        _baseUrl = '$_baseUrl/containerapi/v1/';
+        _baseUrl = 'http://192.168.178.126:3010/v1/';
     }
     // ? 'http://localhost:3001/'
     //     : 'http://localhost:3002/';
