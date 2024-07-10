@@ -12,6 +12,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_l
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -122,6 +123,7 @@ class Routes {
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
+  static const String containerScreen = "/containerScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -502,6 +504,13 @@ class Routes {
             return FilterScreen(
               multiFilter: arguments["multifilter"]
             );
+          },
+        );
+
+        case containerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ContainerScreen();
           },
         );
 
