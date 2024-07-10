@@ -17,15 +17,19 @@ class HTTPManager {
 
   HTTPManager({String apiType = ""}) {
     _baseUrl = 'http://192.168.178.126:3011';
+    //_baseUrl = 'https://test.smartregion-auf.de';
     switch(apiType) {
       case "":
         _baseUrl = '$_baseUrl/';
+        //_baseUrl = '$_baseUrl/api';
         break;
       case "forum":
         _baseUrl = '$_baseUrl/';
+        //_baseUrl = '$_baseUrl/forumapi/';
         break;
       case "container":
         _baseUrl = 'http://192.168.178.126:3010/v1/';
+        //_baseUrl = '$_baseUrl/containerapi/v1/';
     }
     // ? 'http://localhost:3001/'
     //     : 'http://localhost:3002/';
