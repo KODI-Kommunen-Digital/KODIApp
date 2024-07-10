@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -124,6 +125,7 @@ class Routes {
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
   static const String containerScreen = "/containerScreen";
+  static const String sellerRequest = "/sellerRequest";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -511,6 +513,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return ContainerScreen();
+          },
+        );
+
+      case sellerRequest:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SellerRequestScreen();
           },
         );
 

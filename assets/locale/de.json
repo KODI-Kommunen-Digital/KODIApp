@@ -107,6 +107,8 @@
   "tap_rate": "Tippen Sie zum Bewerten auf einen Stern",
   "title": "Titel",
   "input_title": "Titel",
+  "title_empty": "Titel fehlt",
+  "description_empty": "Beschreibung fehlt",
   "services": "Infos",
   "cust_services": "Bürgerservices",
   "description": "Beschreibung",
@@ -293,7 +295,7 @@
   "price_min": "Preis min",
   "price_max": "Preis max.",
   "input_price": "Preis",
-  "submit": "einreichen",
+  "submit": "Einreichen",
   "user_parse_data_fail": "Fehler beim Analysieren der Benutzerdaten",
   "min_value_not_valid": "Mindestwert ungültig",
   "feature_image_require": "Funktionsbild ist erforderlich",
@@ -528,6 +530,10 @@
   "stores_in_city": "Hier siehst du alle Läden in der ausgewählten Umgebung",
   "seller": "Verkäufer",
   "customer": "Kunde",
-  "owner": "Besitzer"
+  "owner": "Besitzer",
+  "request_seller": "Verkäuferanfrage",
+  "choose_store": "Suche das Geschäft für die Anfrage aus",
+  "store_missing": "Bitte ein geschäft auswählen",
+  "request_success": "Die Anfrage wurde erfolgreich abgeschickt!"
 }
 

@@ -14,7 +14,7 @@ class ContainerRepository {
 
   ContainerRepository(this.prefs);
 
-  static Future<List<StoreModel>?> loadStores(int cityId, int pageNo) async {
+  static Future<List<StoreModel>?> loadStores(int cityId, int? pageNo) async {
     final response = await Api.getAllStores(cityId, pageNo);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
@@ -461,6 +461,47 @@ class ContainerRepository {
       logError(
           'Error loading subCategory: ${response.data} ${response.message}');
       return null;
+    }
+  }
+
+  static Future<Map<String, bool>> getUserPermission(int userId) async {
+    final response = await Api.getUserContainerPermission(userId);
+
+    Map<String, bool> permissions = {
+      'Owner': false,
+      'Seller': false,
+      'Customer': false
+    };
+
+    if (response.success) {
+      for (var permission in response.data) {
+        if (permission == "0") {
+          permissions['Customer'] = true;
+        } else if (permission == "1") {
+          //permissions['Seller'] = true;
+        }
+      }
+    } else {
+      logError(
+          'Error loading user permissions: ${response.data} ${response.message}');
+    }
+    return permissions;
+  }
+
+  static Future<bool> requestBecomeSeller(
+      int storeId, String title, String description) async {
+    Map<String, dynamic> params = {
+      "shopId": storeId,
+      "title": title,
+      "description": description
+    };
+    final response = await Api.requestBecomeSeller(params);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error sending request: ${response.data} ${response.message}');
+      return false;
     }
   }
 }

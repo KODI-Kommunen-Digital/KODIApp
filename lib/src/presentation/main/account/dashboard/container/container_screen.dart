@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_user.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/widget/app_grid_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ContainerScreen extends StatelessWidget {
@@ -12,6 +14,10 @@ class ContainerScreen extends StatelessWidget {
     final prefs = await Preferences.openBox();
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     final user = await UserRepository.fetchUser(userId);
+    if (user != null) {
+      final permissions = await ContainerRepository.getUserPermission(userId);
+      user.updateUser(permissions: permissions);
+    }
     return user;
   }
 
@@ -33,25 +39,29 @@ class ContainerScreen extends StatelessWidget {
                   crossAxisSpacing: 16.0,
                   mainAxisSpacing: 16.0,
                   children: <Widget>[
-                    if (user?.roleId == 1)
+                    if (user?.permissions?['Customer'] == true)
                       GridItemButton(
                         icon: Icons.shopping_cart,
                         title: Translate.of(context).translate("customer"),
-                        onPressed: () {
-                        },
+                        onPressed: () {},
                       ),
                     GridItemButton(
                       icon: Icons.sell,
                       title: Translate.of(context).translate("seller"),
                       onPressed: () {
+                        if (user?.permissions?['Seller'] == true) {
+                          //Navigate to Seller page
+                        } else {
+                          Navigator.pushNamed(context, Routes.sellerRequest);
+                        }
                       },
                     ),
-                    GridItemButton(
-                      icon: Icons.house,
-                      title: Translate.of(context).translate("owner"),
-                      onPressed: () {
-                      },
-                    ),
+                    if (user?.permissions?['Owner'] == true)
+                      GridItemButton(
+                        icon: Icons.house,
+                        title: Translate.of(context).translate("owner"),
+                        onPressed: () {},
+                      ),
                   ],
                 ),
               );

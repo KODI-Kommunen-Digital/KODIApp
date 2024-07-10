@@ -119,6 +119,8 @@
   "tap_rate": "Tap a star to rate",
   "title": "Title",
   "input_title": "Title",
+  "title_empty": "Title is missing",
+  "description_empty": "Description is missing",
   "description": "Description",
   "input_feedback": "Input your feedback",
   "filter": "Filter",
@@ -526,5 +528,9 @@
   "stores_in_city": "Here you can see all stores in your chosen city",
   "seller": "Seller",
   "customer": "Customer",
-  "owner": "Owner"
+  "owner": "Owner",
+  "request_seller": "Request seller",
+  "choose_store": "Choose the store for the request",
+  "store_missing": "Please choose a store",
+  "request_success": "The request was successfully sent!"
 }

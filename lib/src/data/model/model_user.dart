@@ -15,6 +15,7 @@ class UserModel {
   late final String token;
   late String email;
   late final int roleId;
+  Map<String, bool>? permissions;
 
   UserModel(
       {required this.id,
@@ -64,6 +65,7 @@ class UserModel {
     String? description,
     String? image,
     int? total,
+    Map<String, bool>? permissions
   }) {
     this.username = username ?? this.username;
     this.firstname = firstname ?? this.firstname;
@@ -73,6 +75,7 @@ class UserModel {
     this.description = description ?? this.description;
     this.image = image ?? this.image;
     this.total = total ?? this.total;
+    this.permissions = permissions ?? this.permissions;
     return clone();
   }
 
@@ -93,6 +96,7 @@ class UserModel {
     token = source.token;
     email = source.email;
     roleId = source.roleId;
+    permissions = source.permissions;
   }
 
   UserModel clone() {
