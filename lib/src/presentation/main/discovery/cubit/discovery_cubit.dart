@@ -9,15 +9,17 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'discovery_state.dart';
 
 class DiscoveryCubit extends Cubit<DiscoveryState> {
-  DiscoveryCubit() : super(const DiscoveryState.loading());
-
   List<CitizenServiceModel> list = [];
   List<CitizenServiceModel> listLoaded = [];
   List<CitizenServiceModel> filteredList = [];
   List<CategoryModel> location = [];
   final List<CitizenServiceModel> hiddenServices = [];
-  late List<CitizenServiceModel> services;
+  List<CitizenServiceModel> services = [];
   bool doesScroll = false;
+
+  DiscoveryCubit() : super(const DiscoveryState.loading()) {
+    services = initializeServices();
+  }
 
   Future<void> onLoad() async {
     emit(const DiscoveryState.loading());
@@ -25,7 +27,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    services = initializeServices();
 
     List<CitizenServiceModel> servicesCopy = List.from(services);
 

@@ -28,6 +28,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
+  await dotenv.load(fileName: "assets/env/.envDemo");
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
@@ -55,7 +56,6 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await dotenv.load(fileName: "assets/env/.envDemo");
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 }
 
