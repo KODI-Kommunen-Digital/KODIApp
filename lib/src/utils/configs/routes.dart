@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
@@ -126,6 +127,7 @@ class Routes {
   static const String filterScreen = "/filterScreen";
   static const String containerScreen = "/containerScreen";
   static const String sellerRequest = "/sellerRequest";
+  static const String sellerScreen = "/sellerScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -503,13 +505,11 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return FilterScreen(
-              multiFilter: arguments["multifilter"]
-            );
+            return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
 
-        case containerScreen:
+      case containerScreen:
         return MaterialPageRoute(
           builder: (context) {
             return ContainerScreen();
@@ -520,6 +520,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const SellerRequestScreen();
+          },
+        );
+
+      case sellerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SellerScreen();
           },
         );
 

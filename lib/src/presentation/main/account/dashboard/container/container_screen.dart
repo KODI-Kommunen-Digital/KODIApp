@@ -50,7 +50,7 @@ class ContainerScreen extends StatelessWidget {
                       title: Translate.of(context).translate("seller"),
                       onPressed: () {
                         if (user?.permissions?['Seller'] == true) {
-                          //Navigate to Seller page
+                          Navigator.pushNamed(context, Routes.sellerScreen);
                         } else {
                           Navigator.pushNamed(context, Routes.sellerRequest);
                         }
