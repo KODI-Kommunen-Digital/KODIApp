@@ -533,5 +533,6 @@
   "choose_store": "Choose the store for the request",
   "store_missing": "Please choose a store",
   "request_success": "The request was successfully sent!",
-  "product_request": "Product request"
+  "product_request": "Product request",
+  "orders": "Orders"
 }

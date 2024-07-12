@@ -535,6 +535,7 @@
   "choose_store": "Suche das Geschäft für die Anfrage aus",
   "store_missing": "Bitte ein geschäft auswählen",
   "request_success": "Die Anfrage wurde erfolgreich abgeschickt!",
-  "product_request": "Produktanfrage"
+  "product_request": "Produktanfrage",
+  "orders": "Bestellungen"
 }
 
