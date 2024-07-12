@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/main/account/change_password/cubit/change
 import 'package:heidi/src/presentation/main/account/contact_us/cubit/contact_us_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/cubit/seller_request_cubit.dart';
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
@@ -49,6 +50,7 @@ class AppBloc {
   static final allRequestsCubit = AllRequestsCubit();
   static final sellerRequestCubit = SellerRequestCubit();
   static final sellerCubit = SellerCubit();
+  static final customerCubit = CustomerCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -122,6 +124,9 @@ class AppBloc {
     ),
     BlocProvider<SellerCubit>(
       create: (context) => sellerCubit,
+    ),
+    BlocProvider<CustomerCubit>(
+      create: (context) => customerCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,

@@ -43,7 +43,9 @@ class ContainerScreen extends StatelessWidget {
                       GridItemButton(
                         icon: Icons.shopping_cart,
                         title: Translate.of(context).translate("customer"),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.customerScreen);
+                        },
                       ),
                     GridItemButton(
                       icon: Icons.sell,
