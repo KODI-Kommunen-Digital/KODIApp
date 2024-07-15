@@ -144,7 +144,7 @@ class ContainerRepository {
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return ShelfModel.fromJson(item);
+        return ShelfModel.fromJson(item, cityId);
       }).toList();
 
       return list;
@@ -191,7 +191,7 @@ class ContainerRepository {
       int cityId, int storeId, int shelfId) async {
     final response = await Api.getShelfDetails(cityId, storeId, shelfId);
     if (response.success) {
-      final shelf = ShelfModel.fromJson(response.data);
+      final shelf = ShelfModel.fromJson(response.data, cityId);
       return shelf;
     } else {
       logError('Error loading shelf: ${response.data} ${response.message}');
@@ -251,7 +251,7 @@ class ContainerRepository {
       int cityId, int storeId, int productId) async {
     final response = await Api.getProductDetails(cityId, storeId, productId);
     if (response.success) {
-      final product = ContainerProductModel.fromJson(response.data);
+      final product = ContainerProductModel.fromJson(response.data, cityId);
       return product;
     } else {
       logError('Error loading product: ${response.data} ${response.message}');
@@ -429,7 +429,7 @@ class ContainerRepository {
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return ContainerProductModel.fromJson(item);
+        return ContainerProductModel.fromJson(item, cityId);
       }).toList();
       return list;
     } else {

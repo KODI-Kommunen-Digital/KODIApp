@@ -2,6 +2,7 @@
 
 class ContainerProductModel {
   final int id;
+  final int cityId;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
@@ -24,6 +25,7 @@ class ContainerProductModel {
 
   ContainerProductModel(
       {required this.id,
+      required this.cityId,
       required this.createdAt,
       required this.updatedAt,
       required this.deletedAt,
@@ -44,9 +46,10 @@ class ContainerProductModel {
       required this.deletedBy,
       required this.productImages});
 
-  factory ContainerProductModel.fromJson(Map<String, dynamic> json) {
+  factory ContainerProductModel.fromJson(Map<String, dynamic> json, int cityId) {
     return ContainerProductModel(
         id: json['id'],
+        cityId: cityId,
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
         deletedAt: json['deletedAt'],

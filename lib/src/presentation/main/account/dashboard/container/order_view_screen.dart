@@ -61,6 +61,7 @@ class _OrderViewScreenState extends State<OrderViewScreen> {
                 OrderModel item = widget.orders[index];
                 final firstProduct = ContainerProductModel(
                     id: 1,
+                    cityId: 1,
                     createdAt: "createdAt",
                     updatedAt: "updatedAt",
                     deletedAt: "deletedAt",

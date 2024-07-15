@@ -24,10 +24,10 @@ class ShelfModel {
       required this.description,
       required this.product});
 
-  factory ShelfModel.fromJson(Map<String, dynamic> json) {
+  factory ShelfModel.fromJson(Map<String, dynamic> json, int cityId) {
     String productJson = json['product'];
     ContainerProductModel productModel =
-        ContainerProductModel.fromJson(jsonDecode(productJson));
+        ContainerProductModel.fromJson(jsonDecode(productJson), cityId);
 
     return ShelfModel(
         id: json['id'],
