@@ -62,7 +62,9 @@ class ContainerScreen extends StatelessWidget {
                       GridItemButton(
                         icon: Icons.house,
                         title: Translate.of(context).translate("owner"),
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.ownerScreen);
+                        },
                       ),
                   ],
                 ),

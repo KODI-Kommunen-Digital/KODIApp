@@ -27,6 +27,20 @@ class ContainerRepository {
     }
   }
 
+  static Future<List<StoreModel>?> loadStoresOwner(int? pageNo) async {
+    final response = await Api.getOwnerStores(pageNo);
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return StoreModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading onwer stores: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
   static Future<List<CategoryModel>?> loadStoreCategories(
       int cityId, int storeId) async {
     final response = await Api.getStoreCategories(cityId, storeId);

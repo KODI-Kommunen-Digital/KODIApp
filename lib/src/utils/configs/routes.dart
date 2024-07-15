@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_r
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/product_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
@@ -134,6 +135,7 @@ class Routes {
   static const String productRequestScreen = "/productRequestScreen";
   static const String customerScreen = "/customerScreen";
   static const String createProductScreen = "/createProductScreen";
+  static const String ownerScreen = "/ownerScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -561,6 +563,13 @@ class Routes {
               sellerId: arguments['sellerId'],
               product: arguments['product'],
             );
+          },
+        );
+
+      case ownerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const OwnerScreen();
           },
         );
 

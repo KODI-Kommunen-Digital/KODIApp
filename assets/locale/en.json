@@ -388,6 +388,7 @@
   "yes": "Yes",
   "no": "No",
   "Are_you_sure_you_want_to_delete_this_item?": "Are you sure you want to delete this item?",
+  "Are_you_sure_you_want_to_delete_this_store?": "Are you sure you want to delete this store?",
   "transaction_id": "Transaction ID",
   "created_on": "Create On",
   "paid_on": "Paid On",
