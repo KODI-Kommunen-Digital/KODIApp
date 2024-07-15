@@ -211,7 +211,7 @@ class ContainerRepository {
     }
   }
 
-  Future<bool> editProduct(
+  static Future<bool> editProduct(
       {required int cityId,
       required int storeId,
       required int productId,

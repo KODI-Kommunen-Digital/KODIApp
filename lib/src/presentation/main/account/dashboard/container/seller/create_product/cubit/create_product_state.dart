@@ -13,7 +13,8 @@ class CreateProductState with _$CreateProductState {
       List<StoreModel> stores,
       int? selectedCity,
       List<CategoryModel> categories,
-      List<CategoryModel> subCategories) = CreateProductStateLoaded;
+      List<CategoryModel> subCategories,
+      Map<String, dynamic>? productDetails) = CreateProductStateLoaded;
 
   const factory CreateProductState.error() = CreateProductStateError;
 }

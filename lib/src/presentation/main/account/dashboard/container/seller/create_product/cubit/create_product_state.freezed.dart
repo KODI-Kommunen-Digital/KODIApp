@@ -24,7 +24,8 @@ mixin _$CreateProductState {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)
         loaded,
     required TResult Function() error,
   }) =>
@@ -37,7 +38,8 @@ mixin _$CreateProductState {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult? Function()? error,
   }) =>
@@ -50,7 +52,8 @@ mixin _$CreateProductState {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -146,7 +149,8 @@ class _$CreateProductStateLoadingImpl implements CreateProductStateLoading {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)
         loaded,
     required TResult Function() error,
   }) {
@@ -162,7 +166,8 @@ class _$CreateProductStateLoadingImpl implements CreateProductStateLoading {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -178,7 +183,8 @@ class _$CreateProductStateLoadingImpl implements CreateProductStateLoading {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -240,7 +246,8 @@ abstract class _$$CreateProductStateLoadedImplCopyWith<$Res> {
       List<StoreModel> stores,
       int? selectedCity,
       List<CategoryModel> categories,
-      List<CategoryModel> subCategories});
+      List<CategoryModel> subCategories,
+      Map<String, dynamic>? productDetails});
 }
 
 /// @nodoc
@@ -261,6 +268,7 @@ class __$$CreateProductStateLoadedImplCopyWithImpl<$Res>
     Object? selectedCity = freezed,
     Object? categories = null,
     Object? subCategories = null,
+    Object? productDetails = freezed,
   }) {
     return _then(_$CreateProductStateLoadedImpl(
       null == cities
@@ -283,6 +291,10 @@ class __$$CreateProductStateLoadedImplCopyWithImpl<$Res>
           ? _value._subCategories
           : subCategories // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
+      freezed == productDetails
+          ? _value._productDetails
+          : productDetails // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
     ));
   }
 }
@@ -295,11 +307,13 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
       final List<StoreModel> stores,
       this.selectedCity,
       final List<CategoryModel> categories,
-      final List<CategoryModel> subCategories)
+      final List<CategoryModel> subCategories,
+      final Map<String, dynamic>? productDetails)
       : _cities = cities,
         _stores = stores,
         _categories = categories,
-        _subCategories = subCategories;
+        _subCategories = subCategories,
+        _productDetails = productDetails;
 
   final List<CategoryModel> _cities;
   @override
@@ -335,9 +349,19 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
     return EqualUnmodifiableListView(_subCategories);
   }
 
+  final Map<String, dynamic>? _productDetails;
+  @override
+  Map<String, dynamic>? get productDetails {
+    final value = _productDetails;
+    if (value == null) return null;
+    if (_productDetails is EqualUnmodifiableMapView) return _productDetails;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(value);
+  }
+
   @override
   String toString() {
-    return 'CreateProductState.loaded(cities: $cities, stores: $stores, selectedCity: $selectedCity, categories: $categories, subCategories: $subCategories)';
+    return 'CreateProductState.loaded(cities: $cities, stores: $stores, selectedCity: $selectedCity, categories: $categories, subCategories: $subCategories, productDetails: $productDetails)';
   }
 
   @override
@@ -352,7 +376,9 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
             const DeepCollectionEquality()
-                .equals(other._subCategories, _subCategories));
+                .equals(other._subCategories, _subCategories) &&
+            const DeepCollectionEquality()
+                .equals(other._productDetails, _productDetails));
   }
 
   @override
@@ -362,7 +388,8 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
       const DeepCollectionEquality().hash(_stores),
       selectedCity,
       const DeepCollectionEquality().hash(_categories),
-      const DeepCollectionEquality().hash(_subCategories));
+      const DeepCollectionEquality().hash(_subCategories),
+      const DeepCollectionEquality().hash(_productDetails));
 
   @JsonKey(ignore: true)
   @override
@@ -380,11 +407,13 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)
         loaded,
     required TResult Function() error,
   }) {
-    return loaded(cities, stores, selectedCity, categories, subCategories);
+    return loaded(cities, stores, selectedCity, categories, subCategories,
+        productDetails);
   }
 
   @override
@@ -396,12 +425,13 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult? Function()? error,
   }) {
-    return loaded?.call(
-        cities, stores, selectedCity, categories, subCategories);
+    return loaded?.call(cities, stores, selectedCity, categories, subCategories,
+        productDetails);
   }
 
   @override
@@ -413,13 +443,15 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(cities, stores, selectedCity, categories, subCategories);
+      return loaded(cities, stores, selectedCity, categories, subCategories,
+          productDetails);
     }
     return orElse();
   }
@@ -461,17 +493,20 @@ class _$CreateProductStateLoadedImpl implements CreateProductStateLoaded {
 
 abstract class CreateProductStateLoaded implements CreateProductState {
   const factory CreateProductStateLoaded(
-      final List<CategoryModel> cities,
-      final List<StoreModel> stores,
-      final int? selectedCity,
-      final List<CategoryModel> categories,
-      final List<CategoryModel> subCategories) = _$CreateProductStateLoadedImpl;
+          final List<CategoryModel> cities,
+          final List<StoreModel> stores,
+          final int? selectedCity,
+          final List<CategoryModel> categories,
+          final List<CategoryModel> subCategories,
+          final Map<String, dynamic>? productDetails) =
+      _$CreateProductStateLoadedImpl;
 
   List<CategoryModel> get cities;
   List<StoreModel> get stores;
   int? get selectedCity;
   List<CategoryModel> get categories;
   List<CategoryModel> get subCategories;
+  Map<String, dynamic>? get productDetails;
   @JsonKey(ignore: true)
   _$$CreateProductStateLoadedImplCopyWith<_$CreateProductStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -525,7 +560,8 @@ class _$CreateProductStateErrorImpl implements CreateProductStateError {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)
         loaded,
     required TResult Function() error,
   }) {
@@ -541,7 +577,8 @@ class _$CreateProductStateErrorImpl implements CreateProductStateError {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -557,7 +594,8 @@ class _$CreateProductStateErrorImpl implements CreateProductStateError {
             List<StoreModel> stores,
             int? selectedCity,
             List<CategoryModel> categories,
-            List<CategoryModel> subCategories)?
+            List<CategoryModel> subCategories,
+            Map<String, dynamic>? productDetails)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),

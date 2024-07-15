@@ -31,7 +31,7 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CreateProductCubit>().onLoad(null, null, null);
+    context.read<CreateProductCubit>().onLoad(product: widget.product);
   }
 
   @override
@@ -43,27 +43,29 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
         centerTitle: true,
       ),
       body: BlocBuilder<CreateProductCubit, CreateProductState>(
-          builder: (context, state) => state.maybeWhen(
-              loading: () => const CreateProductLoading(),
-              loaded:
-                  (cities, stores, selectedCity, categories, subCategories) =>
+          builder: (context, state) =>
+              state.maybeWhen(
+                  loading: () => const CreateProductLoading(),
+                  loaded: (cities, stores, selectedCity, categories,
+                      subCategories,
+                      productDetails) =>
                       CreateProductLoaded(
-                        cities: [
-                          CategoryModel(
-                              id: 0,
-                              title: Translate.of(context)
-                                  .translate('hselect_location'),
-                              image: ''),
-                          ...cities
-                        ],
-                        stores: stores,
-                        selectedCity: selectedCity,
-                        product: widget.product,
-                        sellerId: widget.sellerId,
-                        categories: categories,
-                        subCategories: subCategories,
-                      ),
-              orElse: () => ErrorWidget("Failed to load listings."))),
+                          cities: [
+                            CategoryModel(
+                                id: 0,
+                                title: Translate.of(context)
+                                    .translate('hselect_location'),
+                                image: ''),
+                            ...cities
+                          ],
+                          stores: stores,
+                          selectedCity: selectedCity,
+                          product: widget.product,
+                          sellerId: widget.sellerId,
+                          categories: categories,
+                          subCategories: subCategories,
+                          productDetails: productDetails),
+                  orElse: () => ErrorWidget("Failed to load listings."))),
     );
   }
 }
@@ -76,16 +78,17 @@ class CreateProductLoaded extends StatefulWidget {
   final int sellerId;
   final List<CategoryModel> categories;
   final List<CategoryModel>? subCategories;
+  final Map<String, dynamic>? productDetails;
 
-  const CreateProductLoaded(
-      {super.key,
-      required this.cities,
-      required this.stores,
-      required this.sellerId,
-      required this.categories,
-      this.subCategories,
-      this.selectedCity,
-      this.product});
+  const CreateProductLoaded({super.key,
+    required this.cities,
+    required this.stores,
+    required this.sellerId,
+    required this.categories,
+    this.subCategories,
+    this.selectedCity,
+    this.product,
+    this.productDetails});
 
   @override
   State<CreateProductLoaded> createState() => _CreateProductLoadedState();
@@ -98,6 +101,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   StoreModel? selectedStore;
   CategoryModel? selectedCategory;
   CategoryModel? selectedSubCategory;
+  bool isActive = true;
 
   String? _errorTitle;
   String? _errorDescription;
@@ -154,25 +158,57 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         selectedCityTitle = city.title;
       }
     }
+
+    if (widget.productDetails != null && widget.product != null) {
+      selectedCategory = widget.productDetails!['category'];
+      selectedSubCategory = widget.productDetails!['subcategory'];
+      selectedCityTitle = widget.productDetails!['cityName'];
+      selectedCityId = widget.product!.cityId;
+      selectedStore = widget.productDetails!['store'];
+      isActive = widget.product!.isActive;
+      _textTitleController.text = widget.product!.title;
+      _textDescriptionController.text = widget.product!.description;
+      _textPriceController.text = widget.product!.price.toString();
+      _textTaxController.text = widget.product!.tax.toString();
+      _textInventoryController.text = widget.product!.inventory.toString();
+      _textMinCountController.text = widget.product!.minCount.toString();
+      _textMaxCountController.text = widget.product!.maxCount.toString();
+    }
   }
 
   void _onSubmit() async {
     final validData = _validData();
     if (validData) {
-      final success = await ContainerRepository.addStoreProduct(
-          cityId: selectedCityId,
-          storeId: selectedStore!.id,
-          title: _textTitleController.text,
-          description: _textDescriptionController.text,
-          price: double.parse(_textPriceController.text),
-          tax: double.parse(_textTaxController.text),
-          inventory: int.parse(_textInventoryController.text),
-          minCount: int.parse(_textMinCountController.text),
-          maxCount: int.parse(_textMaxCountController.text));
+      late bool success;
+      if (widget.product == null) {
+        success = await ContainerRepository.addStoreProduct(
+            cityId: selectedCityId,
+            storeId: selectedStore!.id,
+            title: _textTitleController.text,
+            description: _textDescriptionController.text,
+            price: double.parse(_textPriceController.text),
+            tax: double.parse(_textTaxController.text),
+            inventory: int.parse(_textInventoryController.text),
+            minCount: int.parse(_textMinCountController.text),
+            maxCount: int.parse(_textMaxCountController.text));
+      } else {
+        success = await ContainerRepository.editProduct(
+            cityId: widget.product!.cityId,
+            storeId: widget.product!.shopId,
+            productId: widget.product!.id,
+            title: _textTitleController.text,
+            price: double.parse(_textPriceController.text),
+            tax: double.parse(_textTaxController.text),
+            inventory: int.parse(_textInventoryController.text),
+            minCount: int.parse(_textMinCountController.text),
+            maxCount: int.parse(_textMaxCountController.text),
+            isActive: isActive);
+      }
+
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
-                Text(Translate.of(context).translate('add_product_success'))));
+            Text(Translate.of(context).translate('add_product_success'))));
         Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -264,7 +300,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         if (element != null &&
             !errorMessage.contains(Translate.of(context).translate(element))) {
           errorMessage =
-              "$errorMessage${Translate.of(context).translate(element)}, ";
+          "$errorMessage${Translate.of(context).translate(element)}, ";
         }
       }
       errorMessage = errorMessage.substring(0, errorMessage.length - 2);
@@ -295,9 +331,13 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
               selectedOption: (selectedCityId != 0)
                   ? selectedCityTitle
                   : Translate.of(context).translate('hselect_location'),
-              expandedHeight: MediaQuery.of(context).size.height * 0.3,
+              expandedHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.3,
               banners: Images.slider,
-              setLocationCallback: (data) async {
+              setLocationCallback: (widget.product == null)
+                  ? (data) async {
                 for (final city in widget.cities) {
                   if (city.title == data) {
                     setState(() {
@@ -305,10 +345,13 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       selectedCityId = city.id;
                     });
                     context.read<CreateProductCubit>().onLoad(
-                        city.id, selectedStore?.id, selectedCategory?.id);
+                        cityId: city.id,
+                        storeId: selectedStore?.id,
+                        categoryId: selectedCategory?.id);
                   }
                 }
-              }),
+              }
+                  : null),
           pinned: true,
         ),
         SliverList(
@@ -320,43 +363,45 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   children: <Widget>[
-                    TypeAheadField<StoreModel>(
-                      builder: (context, controller, focusNode) {
-                        return AppTextInput(
-                          controller: controller,
-                          focusNode: focusNode,
-                          autofocus: true,
-                          hintText:
-                              Translate.of(context).translate('city_stores'),
-                        );
-                      },
-                      itemBuilder: (context, store) {
-                        return ListTile(
-                          title: Text(store.name),
-                          subtitle: Text(
-                            store.description,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(overflow: TextOverflow.ellipsis),
-                          ),
-                        );
-                      },
-                      onSelected: (store) {
-                        setState(() {
-                          selectedStore = store;
-                        });
-                      },
-                      suggestionsCallback: (String search) {
-                        final result = widget.stores.where((element) {
-                          return formattedSearchString(element.name)
-                                  .contains(formattedSearchString(search)) ||
-                              formattedSearchString(element.description)
-                                  .contains(formattedSearchString(search));
-                        }).toList();
-                        return result;
-                      },
-                    ),
+                    if (widget.product == null)
+                      TypeAheadField<StoreModel>(
+                        builder: (context, controller, focusNode) {
+                          return AppTextInput(
+                            controller: controller,
+                            focusNode: focusNode,
+                            autofocus: true,
+                            hintText:
+                            Translate.of(context).translate('city_stores'),
+                          );
+                        },
+                        itemBuilder: (context, store) {
+                          return ListTile(
+                            title: Text(store.name),
+                            subtitle: Text(
+                              store.description,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .bodyMedium
+                                  ?.copyWith(overflow: TextOverflow.ellipsis),
+                            ),
+                          );
+                        },
+                        onSelected: (store) {
+                          setState(() {
+                            selectedStore = store;
+                          });
+                        },
+                        suggestionsCallback: (String search) {
+                          final result = widget.stores.where((element) {
+                            return formattedSearchString(element.name)
+                                .contains(formattedSearchString(search)) ||
+                                formattedSearchString(element.description)
+                                    .contains(formattedSearchString(search));
+                          }).toList();
+                          return result;
+                        },
+                      ),
                     const SizedBox(height: 16),
                     if (selectedStore != null)
                       Padding(
@@ -366,15 +411,19 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                           children: [
                             Text(
                               selectedStore!.name,
-                              style: Theme.of(context).textTheme.titleSmall!,
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .titleSmall!,
                             ),
-                            IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    selectedStore = null;
-                                  });
-                                },
-                                icon: const Icon(Icons.close))
+                            if (widget.product == null)
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedStore = null;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.close))
                           ],
                         ),
                       ),
@@ -383,26 +432,26 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       widget.categories.isEmpty
                           ? const LinearProgressIndicator()
                           : DropdownButton(
-                              isExpanded: false,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_category')),
-                              value: selectedCategory,
-                              items: widget.categories.map((category) {
-                                return DropdownMenuItem(
-                                    value: category,
-                                    child: Text(category.title));
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCategory = value;
-                                });
-                                context.read<CreateProductCubit>().onLoad(
-                                    selectedCityId,
-                                    selectedStore?.id,
-                                    selectedCategory?.id);
-                              },
-                            ),
+                        isExpanded: false,
+                        menuMaxHeight: 200,
+                        hint: Text(Translate.of(context)
+                            .translate('input_category')),
+                        value: selectedCategory,
+                        items: widget.categories.map((category) {
+                          return DropdownMenuItem(
+                              value: category,
+                              child: Text(category.title));
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedCategory = value;
+                          });
+                          context.read<CreateProductCubit>().onLoad(
+                              cityId: selectedCityId,
+                              storeId: selectedStore?.id,
+                              categoryId: selectedCategory?.id);
+                        },
+                      ),
                     const SizedBox(height: 16),
                     if ((widget.subCategories ?? []).isNotEmpty)
                       DropdownButton(
@@ -519,10 +568,23 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       keyboardType: TextInputType.number,
                     ),
                     const SizedBox(height: 16),
+                    if (widget.product != null)
+                      CheckboxListTile(
+                          value: isActive,
+                          title:
+                          Text(Translate.of(context).translate('active')),
+                          onChanged: (newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                isActive = newValue;
+                              });
+                            }
+                          }),
+                    if (widget.product != null) const SizedBox(height: 16),
                     AppButton(Translate.of(context).translate('submit'),
                         onPressed: () {
-                      _onSubmit();
-                    })
+                          _onSubmit();
+                        })
                   ],
                 ),
               ),
