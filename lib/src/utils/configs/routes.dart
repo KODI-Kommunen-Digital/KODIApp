@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_r
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/product_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
@@ -132,6 +133,7 @@ class Routes {
   static const String sellerScreen = "/sellerScreen";
   static const String productRequestScreen = "/productRequestScreen";
   static const String customerScreen = "/customerScreen";
+  static const String createProductScreen = "/createProductScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -538,7 +540,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
-            settings.arguments as Map<String, dynamic>;
+                settings.arguments as Map<String, dynamic>;
             return ProductRequestScreen(requests: arguments["requests"]);
           },
         );
@@ -547,6 +549,18 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const CustomerScreen();
+          },
+        );
+
+      case createProductScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return CreateProductScreen(
+              sellerId: arguments['sellerId'],
+              product: arguments['product'],
+            );
           },
         );
 

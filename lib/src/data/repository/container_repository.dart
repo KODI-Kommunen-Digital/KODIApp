@@ -28,8 +28,8 @@ class ContainerRepository {
   }
 
   static Future<List<CategoryModel>?> loadStoreCategories(
-      int cityId, int storeId, int pageNo) async {
-    final response = await Api.getStoreCategories(cityId, storeId, pageNo);
+      int cityId, int storeId) async {
+    final response = await Api.getStoreCategories(cityId, storeId);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
         return CategoryModel.fromJson(item);
@@ -43,9 +43,9 @@ class ContainerRepository {
   }
 
   static Future<List<CategoryModel>?> loadStoreSubCategories(
-      int cityId, int storeId, int categoryId, int pageNo) async {
+      int cityId, int storeId, int categoryId) async {
     final response =
-        await Api.getStoreSubCategories(cityId, storeId, categoryId, pageNo);
+        await Api.getStoreSubCategories(cityId, storeId, categoryId);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
         return CategoryModel.fromJson(item);
@@ -339,7 +339,7 @@ class ContainerRepository {
     }
   }
 
-  Future<bool> addStoreProduct(
+  static Future<bool> addStoreProduct(
       {required int cityId,
       required int storeId,
       required String title,

@@ -47,6 +47,7 @@
   "meet_our_team": "MEET OUR TEAM",
   "category": "Category",
   "subCategory": "Sub-Category",
+  "subCategory_require": "Sub-Category required",
   "delete_Confirmation": "Delete Confirmation",
   "request_Confirmation": "Request confirmation",
   "search": "Search ...",
@@ -534,5 +535,15 @@
   "store_missing": "Please choose a store",
   "request_success": "The request was successfully sent!",
   "product_request": "Product request",
-  "orders": "Orders"
+  "orders": "Orders",
+  "add_product": "Add product",
+  "update_product": "Update product",
+  "value_not_tax": "Value not tax share",
+  "value_not_price": "Value not price",
+  "tax": "Tax share",
+  "inventory": "Inventory",
+  "min_count": "Minimal Inventory",
+  "max_count": "Maximal Inventory",
+  "add_product_success": "Success adding product",
+  "max_smaller_min": "Maximal inventory smaller than minimal inventory"
 }

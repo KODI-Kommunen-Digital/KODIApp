@@ -728,16 +728,16 @@ class Api {
   }
 
   static Future<ResultApiModel> getStoreCategories(
-      cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/categories?pageNumber=$pageNo';
+      cityId, storeId) async {
+    var list = '/cities/$cityId/store/$storeId/categories';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> getStoreSubCategories(
-      cityId, storeId, categoryId, pageNo) async {
+      cityId, storeId, categoryId) async {
     var list =
-        '/cities/$cityId/store/$storeId/category/$categoryId/subcategories?pageNumber=$pageNo';
+        '/cities/$cityId/store/$storeId/category/$categoryId/subcategories';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }

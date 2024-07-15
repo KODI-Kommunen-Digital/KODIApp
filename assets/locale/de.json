@@ -427,6 +427,7 @@
   "input_category": "Kategorie Wählen",
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
   "subCategory": "Unterkategorie",
+  "subCategory_require": "Unterkategorie erforderlich",
   "select_city": "Ort wählen",
   "categorization": "Kategorisierung",
   "category_coming_soon": "Diese Funktion wird in Kürze fertiggestellt. Durch die Kategorien hast du die Möglichkeit deine Interessen zu filtern. Es werden dir dann nur die relevanten Informationen angezeigt.",
@@ -536,6 +537,16 @@
   "store_missing": "Bitte ein geschäft auswählen",
   "request_success": "Die Anfrage wurde erfolgreich abgeschickt!",
   "product_request": "Produktanfrage",
-  "orders": "Bestellungen"
+  "orders": "Bestellungen",
+  "add_product": "Produkt hinzufügen",
+  "update_product": "Produkt aktualisieren",
+  "value_not_tax": "Wert kein Steueranteil",
+  "value_not_price": "Wert kein Preis",
+  "tax": "Steueranteil",
+  "inventory": "Bestand",
+  "min_count": "Minimaler Bestand",
+  "max_count": "Maximaler Bestand",
+  "add_product_success": "Produkt erfolgreich hinzugefügt",
+  "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand"
 }
 

@@ -86,7 +86,8 @@ class _SellerLoadedState extends State<SellerLoaded> {
         shape: const CircleBorder(),
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          //add product screen
+          //TODO switch SellerId with real
+          Navigator.pushNamed(context, Routes.createProductScreen, arguments: {'sellerId': 1});
         },
         child: const Center(
           child: Icon(
