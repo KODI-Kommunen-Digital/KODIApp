@@ -549,6 +549,7 @@
   "invalid_start_date_format": "ungültiges Startdatumformat",
   "end_before_start": "Endzeit liegt vor Startzeit",
   "add_to_calendar": "Zum Kalendar hinzufügen",
-  "rsag": "RSAG App"
+  "rsag": "RSAG App",
+  "views": "Aufrufe"
 }
 

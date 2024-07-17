@@ -541,5 +541,6 @@
   "standard_calendar": "Standard Calendar",
   "google_calendar": "Google Calendar",
   "apple_calendar": "Apple Calendar",
-  "add_to_calendar": "Add to calendar"
+  "add_to_calendar": "Add to calendar",
+  "views": "Views"
 }
