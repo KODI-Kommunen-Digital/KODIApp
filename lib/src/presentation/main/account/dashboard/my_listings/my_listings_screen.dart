@@ -55,7 +55,8 @@ class ProfileLoaded extends StatefulWidget {
   final List<ProductModel> userListings;
   final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, this.isEditable, {super.key});
+  const ProfileLoaded(this.user, this.userListings, this.isEditable,
+      {super.key});
 
   @override
   State<ProfileLoaded> createState() => _ProfileLoadedState();
@@ -230,20 +231,39 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: <Widget>[
-                                                          Text(
-                                                            userListingsList[
-                                                                        index]
-                                                                    .category ??
-                                                                '',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                userListingsList[
+                                                                            index]
+                                                                        .category ??
+                                                                    '',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                              ),
+                                                              Text(
+                                                                '${Translate.of(context).translate('views')}: ${userListingsList[index].viewCount ?? 0}',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w100,
+                                                                    ),
+                                                              ),
+                                                            ],
                                                           ),
                                                           const SizedBox(
                                                               height: 8),
