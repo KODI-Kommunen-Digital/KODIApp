@@ -15,7 +15,10 @@ class ContainerScreen extends StatelessWidget {
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     final user = await UserRepository.fetchUser(userId);
     if (user != null) {
-      final permissions = await ContainerRepository.getUserPermission(userId);
+      //TODO change once integration
+      Map<String, bool> permissions =
+          await ContainerRepository.getUserPermission(userId);
+      permissions = {'Owner': true, 'Seller': true, 'Customer': true};
       user.updateUser(permissions: permissions);
     }
     return user;
@@ -52,7 +55,7 @@ class ContainerScreen extends StatelessWidget {
                       title: Translate.of(context).translate("seller"),
                       onPressed: () {
                         if (user?.permissions?['Seller'] == true) {
-                          Navigator.pushNamed(context, Routes.sellerScreen);
+                          Navigator.pushNamed(context, Routes.sellerScreen, arguments: {'user': user});
                         } else {
                           Navigator.pushNamed(context, Routes.sellerRequest);
                         }

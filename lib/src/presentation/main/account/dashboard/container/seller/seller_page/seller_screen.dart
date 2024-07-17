@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_view_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
@@ -9,7 +10,9 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SellerScreen extends StatefulWidget {
-  const SellerScreen({super.key});
+  final UserModel user;
+
+  const SellerScreen({super.key, required this.user});
 
   @override
   State<SellerScreen> createState() => _SellerScreenState();
@@ -30,6 +33,7 @@ class _SellerScreenState extends State<SellerScreen> {
           loaded: (soldOrders, productRequests) => SellerLoaded(
                 soldOrders: soldOrders,
                 productRequests: productRequests,
+                user: widget.user,
               ),
           orElse: () => ErrorWidget("Failed to load listings.")),
     );
@@ -39,9 +43,13 @@ class _SellerScreenState extends State<SellerScreen> {
 class SellerLoaded extends StatefulWidget {
   final List<OrderModel> soldOrders;
   final List<ProductRequestModel> productRequests;
+  final UserModel user;
 
   const SellerLoaded(
-      {super.key, required this.soldOrders, required this.productRequests});
+      {super.key,
+      required this.soldOrders,
+      required this.productRequests,
+      required this.user});
 
   @override
   State<SellerLoaded> createState() => _SellerLoadedState();
@@ -87,7 +95,8 @@ class _SellerLoadedState extends State<SellerLoaded> {
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
           //TODO switch SellerId with real
-          Navigator.pushNamed(context, Routes.createProductScreen, arguments: {'sellerId': 1});
+          Navigator.pushNamed(context, Routes.createProductScreen,
+              arguments: {'sellerId': widget.user.id});
         },
         child: const Center(
           child: Icon(

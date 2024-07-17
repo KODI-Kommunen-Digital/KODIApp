@@ -532,9 +532,11 @@ class Routes {
         );
 
       case sellerScreen:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return const SellerScreen();
+            return SellerScreen(user: arguments['user']);
           },
         );
 
