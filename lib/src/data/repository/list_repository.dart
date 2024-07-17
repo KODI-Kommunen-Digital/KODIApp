@@ -6,7 +6,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
-import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -212,9 +211,9 @@ class ListRepository {
     return null;
   }
 
-  Future<List<FavoriteDetailsModel>> loadUserListings(id, pageNo) async {
+  Future<List<ProductModel>> loadUserListings(id, pageNo) async {
     int userId;
-    final userList = <FavoriteDetailsModel>[];
+    List<ProductModel> userList = [];
     if (id == 0) {
       userId = prefs.getKeyValue('userId', 0);
     } else {
@@ -225,37 +224,9 @@ class ListRepository {
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
-        for (final data in responseData) {
-          userList.add(FavoriteDetailsModel(
-            data['id'],
-            data['userId'],
-            data['title'] ?? '',
-            data['place'] ?? '',
-            '',
-            data['description'] ?? '',
-            data['media'] ?? '',
-            data['categoryId'] ?? 0,
-            data['subcategoryId'] ?? 0,
-            data['address'] ?? '',
-            data['email'] ?? '',
-            data['phone'] ?? '',
-            data['website'] ?? '',
-            data['price'] ?? 0,
-            data['discountPrice'] ?? 0,
-            data['logo'] ?? '',
-            data['statusId'] ?? 0,
-            data['sourceId'] ?? 0,
-            data['longitude'] ?? 0.0,
-            data['latitude'] ?? 0.0,
-            data['villageId'] ?? 0,
-            data['expiryDate'] ?? '',
-            data['startDate'] ?? '',
-            data['endDate'] ?? '',
-            data['createdAt'] ?? '',
-            data['pdf'] ?? '',
-            data['cityId'] ?? 0,
-          ));
-        }
+        userList = List.from(responseData ?? []).map((item) {
+          return ProductModel.fromJson(item);
+        }).toList();
       }
       return userList;
     } else {
