@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_state.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/order_view_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -59,7 +59,7 @@ class _CustomerLoadedState extends State<CustomerLoaded> {
         title: Text(Translate.of(context).translate('customer')),
         centerTitle: true,
       ),
-      body: OrderViewScreen(
+      body: OrderListScreen(
           orders: orders,
           loadMore: (page) async {
             final newOrders =

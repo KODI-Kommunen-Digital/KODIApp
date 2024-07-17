@@ -1,3 +1,5 @@
+import 'package:heidi/src/data/model/model_shelf.dart';
+
 class OrderModel {
   final int id;
   final int shopId;
@@ -11,6 +13,7 @@ class OrderModel {
   final String? updatedAt;
   final String? deletedAt;
   final Map<String, dynamic>? cartItems;
+  final List<ShelfModel> shelves;
 
   OrderModel(
       {required this.id,
@@ -24,22 +27,29 @@ class OrderModel {
       required this.createdAt,
       required this.updatedAt,
       required this.deletedAt,
-      required this.cartItems});
+      required this.shelves,
+      this.cartItems});
 
-  factory OrderModel.fromJson(Map<String, dynamic> json) {
+  factory OrderModel.fromJson(Map<String, dynamic> json, int cityId) {
+    List<ShelfModel> shelves = [];
+    List<Map<String, dynamic>> shelfJson = json['products'];
+    for(var shelf in shelfJson) {
+      shelves.add(ShelfModel.fromJson(shelf, cityId));
+    }
+
     return OrderModel(
-      id: json['id'],
-      shopId: json['shopId'],
-      amount: json['amount'],
-      products: json['products'],
-      cartId: json['cartId'],
-      userId: json['userId'],
-      paymentId: json['paymentId'],
-      discount: json['discount'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      deletedAt: json['deletedAt'],
-      cartItems: json['cartItems']
-    );
+        id: json['id'],
+        shopId: json['shopId'],
+        amount: json['amount'],
+        products: json['products'],
+        cartId: json['cartId'],
+        userId: json['userId'],
+        paymentId: json['paymentId'],
+        discount: json['discount'],
+        createdAt: json['createdAt'],
+        updatedAt: json['updatedAt'],
+        deletedAt: json['deletedAt'],
+        shelves: shelves,
+        cartItems: json['cartItems']);
   }
 }

@@ -548,6 +548,7 @@
   "min_count": "Minimaler Bestand",
   "max_count": "Maximaler Bestand",
   "add_product_success": "Produkt erfolgreich hinzugefügt",
-  "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand"
+  "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand",
+  "order_details": "Bestelldetails",
+  "order": "Bestellung"
 }
-

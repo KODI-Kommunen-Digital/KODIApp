@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_r
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/product_request_screen.dart';
@@ -136,6 +137,7 @@ class Routes {
   static const String customerScreen = "/customerScreen";
   static const String createProductScreen = "/createProductScreen";
   static const String ownerScreen = "/ownerScreen";
+  static const String orderDetailsScreen = "/orderDetailsScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -572,6 +574,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const OwnerScreen();
+          },
+        );
+
+      case orderDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OrderDetailsScreen(order: arguments['order']);
           },
         );
 

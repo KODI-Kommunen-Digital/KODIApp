@@ -191,7 +191,7 @@ class ContainerRepository {
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return OrderModel.fromJson(item);
+        return OrderModel.fromJson(item, cityId);
       }).toList();
 
       return list;
@@ -277,7 +277,7 @@ class ContainerRepository {
       int cityId, int storeId, int orderId) async {
     final response = await Api.getOrderDetails(cityId, storeId, orderId);
     if (response.success) {
-      final order = OrderModel.fromJson(response.data);
+      final order = OrderModel.fromJson(response.data, cityId);
       return order;
     } else {
       logError('Error loading order: ${response.data} ${response.message}');

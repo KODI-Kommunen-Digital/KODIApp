@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_user.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/order_view_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -80,7 +80,7 @@ class _SellerLoadedState extends State<SellerLoaded> {
               icon: const Icon(Icons.forum))
         ],
       ),
-      body: OrderViewScreen(
+      body: OrderListScreen(
           orders: soldOrders,
           loadMore: (page) async {
             final newOrders = await context.read<SellerCubit>().newOrders(page);
@@ -94,7 +94,6 @@ class _SellerLoadedState extends State<SellerLoaded> {
         shape: const CircleBorder(),
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          //TODO switch SellerId with real
           Navigator.pushNamed(context, Routes.createProductScreen,
               arguments: {'sellerId': widget.user.id});
         },

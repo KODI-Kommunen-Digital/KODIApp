@@ -546,5 +546,7 @@
   "min_count": "Minimal Inventory",
   "max_count": "Maximal Inventory",
   "add_product_success": "Success adding product",
-  "max_smaller_min": "Maximal inventory smaller than minimal inventory"
+  "max_smaller_min": "Maximal inventory smaller than minimal inventory",
+  "order_details": "Order Details",
+  "order": "Order"
 }
