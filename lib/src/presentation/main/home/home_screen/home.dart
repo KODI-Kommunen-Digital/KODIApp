@@ -25,6 +25,7 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
@@ -527,12 +528,45 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    if (item.id != -1) {
+    if (item.id == 1) {
       final prefs = await Preferences.openBox();
       prefs.setKeyValue(Preferences.type, "location");
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': item.id, 'title': item.title, 'type': 'location'});
+    } else if (item.id == 2) {
+      if (Platform.isIOS) {
+        await launchUrl(
+            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+            mode: LaunchMode.externalApplication);
+      } else if (Platform.isAndroid) {
+        await launchUrl(
+            Uri.parse(
+                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+            mode: LaunchMode.externalApplication);
+      }
+    } else if (item.id == 3) {
+      if (Platform.isIOS) {
+        await launchUrl(
+            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+            mode: LaunchMode.externalApplication);
+      } else if (Platform.isAndroid) {
+        await launchUrl(
+            Uri.parse(
+                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+            mode: LaunchMode.externalApplication);
+      }
+    } else if (item.id == 4) {
+      if (Platform.isIOS) {
+        await launchUrl(
+            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+            mode: LaunchMode.externalApplication);
+      } else if (Platform.isAndroid) {
+        await launchUrl(
+            Uri.parse(
+                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+            mode: LaunchMode.externalApplication);
+      }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }

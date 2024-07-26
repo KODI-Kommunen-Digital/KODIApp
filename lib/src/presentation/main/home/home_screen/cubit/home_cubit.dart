@@ -33,6 +33,25 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
 
+    int maxId = location.isNotEmpty
+        ? location.map((e) => e.id).reduce((a, b) => a > b ? a : b)
+        : 0;
+
+    location.add(CategoryModel(
+      id: ++maxId,
+      title: 'Pressig',
+      image: 'admin/City2.png',
+    ));
+    location.add(CategoryModel(
+      id: ++maxId,
+      title: 'Schneckenlohe',
+      image: 'admin/City3.png',
+    ));
+    location.add(CategoryModel(
+      id: ++maxId,
+      title: 'Stockheim',
+      image: 'admin/City4.jpg',
+    ));
     if (!calledExternally && !isRefreshLoader) {
       await AppBloc.discoveryCubit.onLoad();
     }
