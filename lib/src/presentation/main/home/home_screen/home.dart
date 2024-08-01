@@ -364,8 +364,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
+          canPop: false,
           onPopInvoked: (pop) async {
-            Navigator.pop(context, searchTerm);
+            if (pop) return;
+            Navigator.pop(context, null);
           },
           child: SimpleDialog(
               title: Center(
@@ -721,7 +723,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
@@ -810,7 +812,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(

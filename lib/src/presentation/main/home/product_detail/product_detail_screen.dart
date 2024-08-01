@@ -572,7 +572,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: product.imageLists!.map((url) {
+                              children: product.imageLists!.take(8).map((url) {
                                 int index = product.imageLists!.indexOf(url);
                                 return Container(
                                   width: 10.0,
