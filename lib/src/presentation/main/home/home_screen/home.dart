@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -454,6 +455,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onService(CategoryModel item) async {
     if (item.id == 5) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => FullScreenWebView()));
+      /*
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
@@ -500,7 +504,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");
+          "document.querySelector('.flex').style.display = 'none';");*/
     } else {
       // Handle other cases as before
       await launchUrl(Uri.parse(getServiceUrl(item.id)),
@@ -884,5 +888,45 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+  }
+}
+
+class FullScreenWebView extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+                child: InAppWebView(
+                    initialUrlRequest: URLRequest(
+                        url: Uri.parse('https://troisdorf.dksr.city/map/')),
+                    androidOnGeolocationPermissionsShowPrompt:
+                        (InAppWebViewController controller,
+                            String origin) async {
+                      return GeolocationPermissionShowPromptResponse(
+                          origin: origin, allow: true, retain: true);
+                    },
+                    initialOptions: InAppWebViewGroupOptions(
+                      android: AndroidInAppWebViewOptions(
+                        useWideViewPort: true,
+                        geolocationEnabled: true,
+                      ),
+                      ios: IOSInAppWebViewOptions(
+                        allowsInlineMediaPlayback: true,
+                      ),
+                    ),
+                    androidOnPermissionRequest:
+                        (InAppWebViewController controller, String origin,
+                            List<String> resources) async {
+                      return PermissionRequestResponse(
+                          resources: resources,
+                          action: PermissionRequestResponseAction.GRANT);
+                    })),
+          ],
+        ),
+      ),
+    );
   }
 }
