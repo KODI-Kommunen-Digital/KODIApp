@@ -139,6 +139,10 @@ class _SellerRequestLoadedState extends State<SellerRequestLoaded> {
 
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(message)));
+
+      if(success) {
+        Navigator.pop(context);
+      }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text("$_errorTitle $_errorDescription $_errorStore")));
