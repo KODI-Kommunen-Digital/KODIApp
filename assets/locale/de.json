@@ -550,5 +550,8 @@
   "add_product_success": "Produkt erfolgreich hinzugefügt",
   "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand",
   "order_details": "Bestelldetails",
-  "order": "Bestellung"
+  "order": "Bestellung",
+  "products": "Produkte",
+  "price_per_product": "Preis pro Produkt",
+  "quantity": "Menge"
 }

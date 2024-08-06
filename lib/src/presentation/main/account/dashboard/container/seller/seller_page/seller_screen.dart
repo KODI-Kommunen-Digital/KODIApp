@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
@@ -30,9 +29,8 @@ class _SellerScreenState extends State<SellerScreen> {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
           loading: () => const SellerLoading(),
-          loaded: (soldOrders, productRequests) => SellerLoaded(
+          loaded: (soldOrders) => SellerLoaded(
                 soldOrders: soldOrders,
-                productRequests: productRequests,
                 user: widget.user,
               ),
           orElse: () => ErrorWidget("Failed to load listings.")),
@@ -41,22 +39,17 @@ class _SellerScreenState extends State<SellerScreen> {
 }
 
 class SellerLoaded extends StatefulWidget {
-  final List<OrderModel> soldOrders;
-  final List<ProductRequestModel> productRequests;
+  final List<SellerOrderModel> soldOrders;
   final UserModel user;
 
-  const SellerLoaded(
-      {super.key,
-      required this.soldOrders,
-      required this.productRequests,
-      required this.user});
+  const SellerLoaded({super.key, required this.soldOrders, required this.user});
 
   @override
   State<SellerLoaded> createState() => _SellerLoadedState();
 }
 
 class _SellerLoadedState extends State<SellerLoaded> {
-  List<OrderModel> soldOrders = [];
+  List<SellerOrderModel> soldOrders = [];
   int pageNo = 1;
 
   @override
@@ -71,17 +64,9 @@ class _SellerLoadedState extends State<SellerLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('seller')),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.productRequestScreen,
-                    arguments: {'requests': widget.productRequests});
-              },
-              icon: const Icon(Icons.forum))
-        ],
       ),
       body: OrderListScreen(
-          orders: soldOrders,
+          sellerOrders: soldOrders,
           loadMore: (page) async {
             final newOrders = await context.read<SellerCubit>().newOrders(page);
             setState(() {

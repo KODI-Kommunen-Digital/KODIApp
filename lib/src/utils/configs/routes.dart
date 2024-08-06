@@ -17,7 +17,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/customer
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/product_request_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
@@ -582,7 +582,9 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return OrderDetailsScreen(order: arguments['order']);
+            return OrderDetailsScreen(
+                order: arguments['order'],
+                sellerOrder: arguments['sellerOrder']);
           },
         );
 

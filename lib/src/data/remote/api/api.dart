@@ -656,8 +656,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getSellerSoldOrders() async {
-    var list = '/seller/orderSold';
+  static Future<ResultApiModel> getSellerSoldOrders(pageNo) async {
+    var list = '/seller/orderSold&pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }

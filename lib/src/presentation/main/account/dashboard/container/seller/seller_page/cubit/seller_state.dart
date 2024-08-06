@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_seller_order.dart';
 
 part 'seller_state.freezed.dart';
 
@@ -8,8 +7,7 @@ part 'seller_state.freezed.dart';
 class SellerState with _$SellerState {
   const factory SellerState.loading() = SellerStateLoading;
 
-  const factory SellerState.loaded(List<OrderModel> orderSold,
-      List<ProductRequestModel> productRequests) = SellerStateLoaded;
+  const factory SellerState.loaded(List<SellerOrderModel> orderSold) = SellerStateLoaded;
 
   const factory SellerState.error() = SellerStateError;
 }

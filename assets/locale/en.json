@@ -548,5 +548,8 @@
   "add_product_success": "Success adding product",
   "max_smaller_min": "Maximal inventory smaller than minimal inventory",
   "order_details": "Order Details",
-  "order": "Order"
+  "order": "Order",
+  "products": "Products",
+  "price_per_product": "Price per product",
+  "quantity": "Quantity"
 }

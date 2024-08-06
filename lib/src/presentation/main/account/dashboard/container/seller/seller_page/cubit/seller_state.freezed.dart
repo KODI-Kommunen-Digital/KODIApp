@@ -19,27 +19,21 @@ mixin _$SellerState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)
-        loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loaded,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
     TResult? Function()? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) =>
@@ -125,9 +119,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)
-        loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loaded,
     required TResult Function() error,
   }) {
     return loading();
@@ -137,9 +129,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
     TResult? Function()? error,
   }) {
     return loading?.call();
@@ -149,9 +139,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -206,8 +194,7 @@ abstract class _$$SellerStateLoadedImplCopyWith<$Res> {
           $Res Function(_$SellerStateLoadedImpl) then) =
       __$$SellerStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {List<OrderModel> orderSold, List<ProductRequestModel> productRequests});
+  $Res call({List<SellerOrderModel> orderSold});
 }
 
 /// @nodoc
@@ -222,17 +209,12 @@ class __$$SellerStateLoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? orderSold = null,
-    Object? productRequests = null,
   }) {
     return _then(_$SellerStateLoadedImpl(
       null == orderSold
           ? _value._orderSold
           : orderSold // ignore: cast_nullable_to_non_nullable
-              as List<OrderModel>,
-      null == productRequests
-          ? _value._productRequests
-          : productRequests // ignore: cast_nullable_to_non_nullable
-              as List<ProductRequestModel>,
+              as List<SellerOrderModel>,
     ));
   }
 }
@@ -240,30 +222,20 @@ class __$$SellerStateLoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SellerStateLoadedImpl implements SellerStateLoaded {
-  const _$SellerStateLoadedImpl(final List<OrderModel> orderSold,
-      final List<ProductRequestModel> productRequests)
-      : _orderSold = orderSold,
-        _productRequests = productRequests;
+  const _$SellerStateLoadedImpl(final List<SellerOrderModel> orderSold)
+      : _orderSold = orderSold;
 
-  final List<OrderModel> _orderSold;
+  final List<SellerOrderModel> _orderSold;
   @override
-  List<OrderModel> get orderSold {
+  List<SellerOrderModel> get orderSold {
     if (_orderSold is EqualUnmodifiableListView) return _orderSold;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_orderSold);
   }
 
-  final List<ProductRequestModel> _productRequests;
-  @override
-  List<ProductRequestModel> get productRequests {
-    if (_productRequests is EqualUnmodifiableListView) return _productRequests;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_productRequests);
-  }
-
   @override
   String toString() {
-    return 'SellerState.loaded(orderSold: $orderSold, productRequests: $productRequests)';
+    return 'SellerState.loaded(orderSold: $orderSold)';
   }
 
   @override
@@ -272,16 +244,12 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
         (other.runtimeType == runtimeType &&
             other is _$SellerStateLoadedImpl &&
             const DeepCollectionEquality()
-                .equals(other._orderSold, _orderSold) &&
-            const DeepCollectionEquality()
-                .equals(other._productRequests, _productRequests));
+                .equals(other._orderSold, _orderSold));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_orderSold),
-      const DeepCollectionEquality().hash(_productRequests));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_orderSold));
 
   @JsonKey(ignore: true)
   @override
@@ -294,38 +262,32 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)
-        loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loaded,
     required TResult Function() error,
   }) {
-    return loaded(orderSold, productRequests);
+    return loaded(orderSold);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
     TResult? Function()? error,
   }) {
-    return loaded?.call(orderSold, productRequests);
+    return loaded?.call(orderSold);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(orderSold, productRequests);
+      return loaded(orderSold);
     }
     return orElse();
   }
@@ -366,12 +328,10 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
 }
 
 abstract class SellerStateLoaded implements SellerState {
-  const factory SellerStateLoaded(final List<OrderModel> orderSold,
-          final List<ProductRequestModel> productRequests) =
+  const factory SellerStateLoaded(final List<SellerOrderModel> orderSold) =
       _$SellerStateLoadedImpl;
 
-  List<OrderModel> get orderSold;
-  List<ProductRequestModel> get productRequests;
+  List<SellerOrderModel> get orderSold;
   @JsonKey(ignore: true)
   _$$SellerStateLoadedImplCopyWith<_$SellerStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
@@ -416,9 +376,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)
-        loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loaded,
     required TResult Function() error,
   }) {
     return error();
@@ -428,9 +386,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
     TResult? Function()? error,
   }) {
     return error?.call();
@@ -440,9 +396,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<OrderModel> orderSold,
-            List<ProductRequestModel> productRequests)?
-        loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {

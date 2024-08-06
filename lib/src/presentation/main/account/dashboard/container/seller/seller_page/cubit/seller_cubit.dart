@@ -1,8 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model_container_product.dart';
-import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/data/model/model_product_request.dart';
-import 'package:heidi/src/data/model/model_shelf.dart';
+import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'seller_state.dart';
 
@@ -14,109 +11,15 @@ class SellerCubit extends Cubit<SellerState> {
       emit(const SellerState.loading());
     }
 
-    final List<OrderModel>? soldOrders = await ContainerRepository.getSellerOrders();
+    final List<SellerOrderModel>? soldOrders =
+        await ContainerRepository.getSellerOrders(1);
 
-    emit(SellerState.loaded(soldOrders ?? [], []));
+    emit(SellerState.loaded(soldOrders ?? []));
   }
 
-  List<OrderModel> getDummyData() {
-    return [
-      OrderModel(
-          id: 1,
-          shopId: 1,
-          amount: 100,
-          products: 5,
-          shelves: [
-            ShelfModel(
-                id: 1,
-                shopId: 1,
-                productId: 1,
-                createdAt: "createdAt",
-                updatedAt: "updatedAt",
-                deletedAt: "deletedAt",
-                title: "title",
-                description: "description",
-                product: ContainerProductModel(
-                    id: 1,
-                    cityId: 1,
-                    createdAt: "createdAt",
-                    updatedAt: "updatedAt",
-                    deletedAt: "deletedAt",
-                    title: "title",
-                    description: "description",
-                    price: 1123,
-                    tax: 0.1,
-                    inventory: 231,
-                    minCount: 1,
-                    maxCount: 12,
-                    sellerId: 1,
-                    shopId: 1,
-                    categoryId: 1,
-                    subCategoryId: 1,
-                    meta: "meta",
-                    isActive: true,
-                    isArchived: false,
-                    deletedBy: null,
-                    productImages: []))
-          ],
-          cartId: 1,
-          userId: 1,
-          paymentId: 12341,
-          discount: 1,
-          createdAt: "createdAt",
-          updatedAt: "updatedAt",
-          deletedAt: "deletedAt",
-          cartItems: {"cartItems": 50}),
-      OrderModel(
-          id: 1,
-          shopId: 1,
-          amount: 100,
-          products: 5,
-          shelves: [
-            ShelfModel(
-                id: 1,
-                shopId: 1,
-                productId: 1,
-                createdAt: "createdAt",
-                updatedAt: "updatedAt",
-                deletedAt: "deletedAt",
-                title: "title",
-                description: "description",
-                product: ContainerProductModel(
-                    id: 1,
-                    cityId: 1,
-                    createdAt: "createdAt",
-                    updatedAt: "updatedAt",
-                    deletedAt: "deletedAt",
-                    title: "title",
-                    description: "description",
-                    price: 1123,
-                    tax: 0.1,
-                    inventory: 231,
-                    minCount: 1,
-                    maxCount: 12,
-                    sellerId: 1,
-                    shopId: 1,
-                    categoryId: 1,
-                    subCategoryId: 1,
-                    meta: "meta",
-                    isActive: true,
-                    isArchived: false,
-                    deletedBy: null,
-                    productImages: []))
-          ],
-          cartId: 1,
-          userId: 1,
-          paymentId: 12341,
-          discount: 1,
-          createdAt: "createdAt",
-          updatedAt: "updatedAt",
-          deletedAt: "deletedAt",
-          cartItems: {"cartItems": 50}),
-    ];
-  }
-
-  Future<List<OrderModel>> newOrders(int pageNo) async {
-    return [];
+  Future<List<SellerOrderModel>> newOrders(int pageNo) async {
+    final List<SellerOrderModel>? newSoldOrders =
+        await ContainerRepository.getSellerOrders(pageNo);
+    return newSoldOrders ?? [];
   }
 }

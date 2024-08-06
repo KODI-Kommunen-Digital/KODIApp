@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
+import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -504,12 +505,12 @@ class ContainerRepository {
     return permissions;
   }
 
-  static Future<List<OrderModel>?> getSellerOrders() async {
-    final response = await Api.getSellerSoldOrders();
+  static Future<List<SellerOrderModel>?> getSellerOrders(pageNo) async {
+    final response = await Api.getSellerSoldOrders(pageNo);
 
     if(response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return OrderModel.fromJson(item, null);
+        return SellerOrderModel.fromJson(item);
       }).toList();
       return list;
     } else {
