@@ -504,6 +504,20 @@ class ContainerRepository {
     return permissions;
   }
 
+  static Future<List<OrderModel>?> getSellerOrders() async {
+    final response = await Api.getSellerSoldOrders();
+
+    if(response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return OrderModel.fromJson(item, null);
+      }).toList();
+      return list;
+    } else {
+      logError('Error loading seller orders: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
   static Future<bool> requestBecomeSeller(
       int storeId, String title, String description) async {
     Map<String, dynamic> params = {
