@@ -18,7 +18,7 @@ class ContainerScreen extends StatelessWidget {
       //TODO change once integration
       Map<String, bool> permissions =
           await ContainerRepository.getUserPermission(userId);
-      permissions = {'Owner': true, 'Seller': true, 'Customer': true};
+      //permissions = {'Owner': true, 'Seller': true, 'Customer': true};
       user.updateUser(permissions: permissions);
     }
     return user;
