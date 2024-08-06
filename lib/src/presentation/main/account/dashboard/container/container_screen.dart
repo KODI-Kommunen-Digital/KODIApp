@@ -15,7 +15,6 @@ class ContainerScreen extends StatelessWidget {
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     final user = await UserRepository.fetchUser(userId);
     if (user != null) {
-      //TODO change once integration
       Map<String, bool> permissions =
           await ContainerRepository.getUserPermission(userId);
       user.updateUser(permissions: permissions);
