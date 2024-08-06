@@ -17,6 +17,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
+
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -913,11 +914,11 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
       await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
       return true;
-    } else if (permission == LocationPermission.unableToDetermine) {
+    } else if (permission == LocationPermission.unableToDetermine ||
+        permission == LocationPermission.denied) {
       await Geolocator.requestPermission();
       return await requestGeoPermission();
-    } else if ((permission == LocationPermission.deniedForever ||
-            permission == LocationPermission.denied) &&
+    } else if (permission == LocationPermission.deniedForever &&
         fail == false) {
       openAppSettings();
       return await requestGeoPermission(fail: true);
