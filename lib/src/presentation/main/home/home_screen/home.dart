@@ -907,24 +907,37 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
     super.initState();
   }
 
-  Future<bool> requestGeoPermission({bool fail = false}) async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.always ||
-        permission == LocationPermission.whileInUse) {
-      await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      return true;
-    } else if (permission == LocationPermission.unableToDetermine ||
-        permission == LocationPermission.denied) {
-      await Geolocator.requestPermission();
-      return await requestGeoPermission();
-    } else if (permission == LocationPermission.deniedForever &&
-        fail == false) {
-      openAppSettings();
-      return await requestGeoPermission(fail: true);
-    } else {
-      return false;
+  Future<bool> requestGeoPermission() async {
+    bool permissionGranted = false;
+    bool openSettings = true;
+    bool exit = false;
+
+    while (!permissionGranted) {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        try {
+          await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          permissionGranted = true;
+        } catch (e) {
+          logError('Error getting current position: $e');
+        }
+      } else if ((permission == LocationPermission.unableToDetermine ||
+              permission == LocationPermission.denied) &&
+          openSettings == true) {
+        await Geolocator.requestPermission();
+        openSettings = false;
+      } else {
+        if (exit == false) {
+          await openAppSettings();
+          exit = true;
+        } else {
+          return false;
+        }
+      }
     }
+    return permissionGranted;
   }
 
   @override
