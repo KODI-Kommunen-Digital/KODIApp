@@ -10,7 +10,14 @@ import 'create_product_state.dart';
 class CreateProductCubit extends Cubit<CreateProductState> {
   CreateProductCubit() : super(const CreateProductState.loading());
 
-  Future<void> onLoad({int? cityId, int? storeId, int? categoryId, ContainerProductModel? product}) async {
+  Future<void> onLoad(
+      {int? cityId,
+      int? storeId,
+      int? categoryId,
+      ContainerProductModel? product,
+      StoreModel? selectedStore,
+      CategoryModel? selectedCategory,
+      CategoryModel? selectedSubCategory}) async {
     emit(const CreateProductState.loading());
     final cityRequestResponse = await Api.requestCities();
     final cities = List.from(cityRequestResponse.data ?? []).map((item) {
@@ -39,11 +46,19 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       }
     }
     Map<String, dynamic>? productDetails;
-    if(product != null) {
+    if (product != null) {
       productDetails = await getProductDetails(product);
     }
     emit(CreateProductState.loaded(
-        cities, stores, cityId, categories, subCategories, productDetails));
+        cities,
+        stores,
+        cityId,
+        categories,
+        subCategories,
+        productDetails,
+        selectedStore,
+        selectedCategory,
+        selectedSubCategory));
   }
 
   Future<Map<String, dynamic>?> getProductDetails(
