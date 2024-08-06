@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'seller_state.dart';
 
 class SellerCubit extends Cubit<SellerState> {
@@ -12,44 +13,10 @@ class SellerCubit extends Cubit<SellerState> {
     if (!isRefreshLoader) {
       emit(const SellerState.loading());
     }
-    final List<OrderModel> soldOrders = getDummyData();
-    final List<ProductRequestModel> productRequests = [
-      ProductRequestModel(
-          id: 1,
-          title: "title",
-          description: "description",
-          reqType: 1,
-          sellerId: 1,
-          shopId: 1,
-          productId: 1,
-          price: 100,
-          count: 1,
-          threshold: 1,
-          maxCount: 1,
-          status: 1,
-          createdAt: "createdAt",
-          updatedAt: "updatedAt",
-          deletedAt: "deletedAt"),
-      ProductRequestModel(
-          id: 2,
-          title: "titl12312312e",
-          description: "descri123123ption",
-          reqType: 1,
-          sellerId: 1,
-          shopId: 1,
-          productId: 1,
-          price: 100,
-          count: 1,
-          threshold: 1,
-          maxCount: 1,
-          status: 1,
-          createdAt: "createdAt",
-          updatedAt: "updatedAt",
-          deletedAt: "deletedAt")
-    ];
 
-    await Future.delayed(const Duration(seconds: 2));
-    emit(SellerState.loaded(soldOrders, productRequests));
+    final List<OrderModel>? soldOrders = await ContainerRepository.getSellerOrders();
+
+    emit(SellerState.loaded(soldOrders ?? [], []));
   }
 
   List<OrderModel> getDummyData() {
