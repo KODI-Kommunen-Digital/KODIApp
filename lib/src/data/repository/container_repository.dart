@@ -491,9 +491,9 @@ class ContainerRepository {
       for (var permission in response.data) {
         if (permission == "0" || permission == "1") {
           permissions['Customer'] = true;
-        } else if (permission == "101") {
-          permissions['Seller'] = true;
         } else if (permission == "102") {
+          permissions['Seller'] = true;
+        } else if (permission == "101") {
           permissions['Owner'] = true;
         }
       }
