@@ -9,6 +9,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -16,12 +17,14 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
+
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -456,7 +459,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _onService(CategoryModel item) async {
     if (item.id == 5) {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => FullScreenWebView()));
+          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
       /*
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -891,42 +894,95 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class FullScreenWebView extends StatelessWidget {
+class FullScreenWebView extends StatefulWidget {
+  const FullScreenWebView({super.key});
+
+  @override
+  State<FullScreenWebView> createState() => _FullScreenWebViewState();
+}
+
+class _FullScreenWebViewState extends State<FullScreenWebView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<bool> requestGeoPermission({bool fail = false}) async {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+      return true;
+    } else if (permission == LocationPermission.unableToDetermine) {
+      await Geolocator.requestPermission();
+      return await requestGeoPermission();
+    } else if ((permission == LocationPermission.deniedForever ||
+            permission == LocationPermission.denied) &&
+        fail == false) {
+      openAppSettings();
+      return await requestGeoPermission(fail: true);
+    } else {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-                child: InAppWebView(
-                    initialUrlRequest: URLRequest(
-                        url: Uri.parse('https://troisdorf.dksr.city/map/')),
-                    androidOnGeolocationPermissionsShowPrompt:
-                        (InAppWebViewController controller,
-                            String origin) async {
-                      return GeolocationPermissionShowPromptResponse(
-                          origin: origin, allow: true, retain: true);
-                    },
-                    initialOptions: InAppWebViewGroupOptions(
-                      android: AndroidInAppWebViewOptions(
-                        useWideViewPort: true,
-                        geolocationEnabled: true,
+    return FutureBuilder(
+        future: requestGeoPermission(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            bool hasPermission = snapshot.data ?? false;
+            return Scaffold(
+              body: SafeArea(
+                child: (!hasPermission)
+                    ? Center(
+                        child: Text(Translate.of(context)
+                            .translate('geo_permission_needed')),
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                              child: InAppWebView(
+                                  initialUrlRequest: URLRequest(
+                                      url: Uri.parse(
+                                          'https://troisdorf.dksr.city/map/')),
+                                  androidOnGeolocationPermissionsShowPrompt:
+                                      (InAppWebViewController controller,
+                                          String origin) async {
+                                    return GeolocationPermissionShowPromptResponse(
+                                        origin: origin,
+                                        allow: true,
+                                        retain: true);
+                                  },
+                                  initialOptions: InAppWebViewGroupOptions(
+                                    android: AndroidInAppWebViewOptions(
+                                      useWideViewPort: true,
+                                      geolocationEnabled: true,
+                                    ),
+                                    ios: IOSInAppWebViewOptions(
+                                      allowsInlineMediaPlayback: true,
+                                    ),
+                                  ),
+                                  androidOnPermissionRequest:
+                                      (InAppWebViewController controller,
+                                          String origin,
+                                          List<String> resources) async {
+                                    return PermissionRequestResponse(
+                                        resources: resources,
+                                        action: PermissionRequestResponseAction
+                                            .GRANT);
+                                  })),
+                        ],
                       ),
-                      ios: IOSInAppWebViewOptions(
-                        allowsInlineMediaPlayback: true,
-                      ),
-                    ),
-                    androidOnPermissionRequest:
-                        (InAppWebViewController controller, String origin,
-                            List<String> resources) async {
-                      return PermissionRequestResponse(
-                          resources: resources,
-                          action: PermissionRequestResponseAction.GRANT);
-                    })),
-          ],
-        ),
-      ),
-    );
+              ),
+            );
+          }
+        });
   }
 }
