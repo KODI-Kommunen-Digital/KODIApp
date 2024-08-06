@@ -456,7 +456,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _onService(CategoryModel item) async {
     if (item.id == 5) {
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => FullScreenWebView()));
+          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
       /*
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -892,6 +892,8 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class FullScreenWebView extends StatelessWidget {
+  const FullScreenWebView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
