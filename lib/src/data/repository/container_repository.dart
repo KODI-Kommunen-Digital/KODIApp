@@ -373,7 +373,7 @@ class ContainerRepository {
       "inventory": inventory,
       "minCount": minCount,
       "maxCount": maxCount,
-      "meta": meta
+      "meta": meta ?? ''
     };
 
     final response = await Api.addProduct(cityId, storeId, params);

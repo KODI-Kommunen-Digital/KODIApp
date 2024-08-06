@@ -680,8 +680,8 @@ class Api {
 
   static Future<ResultApiModel> addProduct(cityId, storeId, params) async {
     var list = '/cities/$cityId/store/$storeId/product';
-    final result =
-        await HTTPManager(apiType: 'container').post(url: list, data: params);
+    final result = await HTTPManager(apiType: 'container')
+        .post(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
@@ -735,8 +735,7 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getStoreCategories(
-      cityId, storeId) async {
+  static Future<ResultApiModel> getStoreCategories(cityId, storeId) async {
     var list = '/cities/$cityId/store/$storeId/categories';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
