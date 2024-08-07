@@ -236,7 +236,6 @@ class ContainerRepository {
       required double tax,
       required int inventory,
       required int minCount,
-      required int maxCount,
       String? meta,
       required bool isActive}) async {
     Map<String, dynamic> params = {
@@ -246,7 +245,6 @@ class ContainerRepository {
       "tax": tax,
       "inventory": inventory,
       "minCount": minCount,
-      "maxCount": maxCount,
       "meta": meta,
       "isActive": isActive
     };
@@ -363,7 +361,6 @@ class ContainerRepository {
       required double tax,
       required int inventory,
       required int minCount,
-      required int maxCount,
       String? meta}) async {
     Map<String, dynamic> params = {
       "title": title,
@@ -372,7 +369,6 @@ class ContainerRepository {
       "tax": tax,
       "inventory": inventory,
       "minCount": minCount,
-      "maxCount": maxCount,
       "meta": meta ?? ''
     };
 
@@ -508,13 +504,14 @@ class ContainerRepository {
   static Future<List<SellerOrderModel>?> getSellerOrders(pageNo) async {
     final response = await Api.getSellerSoldOrders(pageNo);
 
-    if(response.success) {
+    if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
         return SellerOrderModel.fromJson(item);
       }).toList();
       return list;
     } else {
-      logError('Error loading seller orders: ${response.data} ${response.message}');
+      logError(
+          'Error loading seller orders: ${response.data} ${response.message}');
       return null;
     }
   }

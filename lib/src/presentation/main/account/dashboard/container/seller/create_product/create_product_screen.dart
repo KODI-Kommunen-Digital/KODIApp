@@ -126,7 +126,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   String? _errorTax;
   String? _errorInventory;
   String? _errorMinCount;
-  String? _errorMaxCount;
   String? _errorCategory;
   String? _errorSubCategory;
 
@@ -136,14 +135,12 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   final _textTaxController = TextEditingController();
   final _textInventoryController = TextEditingController();
   final _textMinCountController = TextEditingController();
-  final _textMaxCountController = TextEditingController();
   final _focusTitle = FocusNode();
   final _focusDescription = FocusNode();
   final _focusPrice = FocusNode();
   final _focusTax = FocusNode();
   final _focusInventory = FocusNode();
   final _focusMinCount = FocusNode();
-  final _focusMaxCount = FocusNode();
 
   @override
   void dispose() {
@@ -153,14 +150,12 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
     _textTaxController.dispose();
     _textInventoryController.dispose();
     _textMinCountController.dispose();
-    _textMaxCountController.dispose();
     _focusDescription.dispose();
     _focusTitle.dispose();
     _focusPrice.dispose();
     _focusTax.dispose();
     _focusInventory.dispose();
     _focusMinCount.dispose();
-    _focusMaxCount.dispose();
     super.dispose();
   }
 
@@ -198,7 +193,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _textTaxController.text = widget.product!.tax.toString();
       _textInventoryController.text = widget.product!.inventory.toString();
       _textMinCountController.text = widget.product!.minCount.toString();
-      _textMaxCountController.text = widget.product!.maxCount.toString();
     }
   }
 
@@ -215,8 +209,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             price: double.parse(_textPriceController.text),
             tax: double.parse(_textTaxController.text),
             inventory: int.parse(_textInventoryController.text),
-            minCount: int.parse(_textMinCountController.text),
-            maxCount: int.parse(_textMaxCountController.text));
+            minCount: int.parse(_textMinCountController.text),);
       } else {
         success = await ContainerRepository.editProduct(
             cityId: widget.product!.cityId,
@@ -227,7 +220,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             tax: double.parse(_textTaxController.text),
             inventory: int.parse(_textInventoryController.text),
             minCount: int.parse(_textMinCountController.text),
-            maxCount: int.parse(_textMaxCountController.text),
             isActive: isActive);
       }
 
@@ -286,18 +278,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
     _errorMinCount = UtilValidator.validate(_textMinCountController.text,
         type: ValidateType.number, allowEmpty: false);
 
-    _errorMaxCount = UtilValidator.validate(_textMaxCountController.text,
-        type: ValidateType.number, allowEmpty: false);
-
-    if (_errorMaxCount == null && _errorMinCount == null) {
-      if (int.parse(_textMaxCountController.text) <
-          int.parse(_textMinCountController.text)) {
-        _errorMaxCount = Translate.of(context).translate('max_smaller_min');
-      } else {
-        _errorMaxCount = null;
-      }
-    }
-
     List<String?> errors = [
       _errorTitle,
       _errorDescription,
@@ -306,7 +286,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _errorTax,
       _errorInventory,
       _errorMinCount,
-      _errorMaxCount,
       _errorCategory,
       _errorSubCategory
     ];
@@ -318,7 +297,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         _errorTax != null ||
         _errorInventory != null ||
         _errorMinCount != null ||
-        _errorMaxCount != null ||
         _errorCategory != null ||
         _errorSubCategory != null) {
       String errorMessage = "";
@@ -582,21 +560,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       errorText: _errorMinCount,
                       controller: _textMinCountController,
                       focusNode: _focusMinCount,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusMinCount, _focusMaxCount);
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('max_count'),
-                      maxLines: 1,
-                      maxLength: 10,
-                      errorText: _errorMaxCount,
-                      controller: _textMaxCountController,
-                      focusNode: _focusMaxCount,
                       textInputAction: TextInputAction.next,
                       keyboardType: TextInputType.number,
                     ),
