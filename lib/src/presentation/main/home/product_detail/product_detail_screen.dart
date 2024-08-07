@@ -980,6 +980,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
         }
 
+        if(modifiedDescription.contains(widget.item.website)) {
+          modifiedDescription = modifiedDescription.replaceAll(widget.item.website, "");
+        }
+
         description = HtmlWidget(
           modifiedDescription,
           textStyle: TextStyle(
