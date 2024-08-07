@@ -2,14 +2,6 @@
     "status": "success",
     "data": [ 
         {
-            "id": 4,
-            "name": "Gewinnspiel",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-clover",
-            "color": "#102C54",
-            "categoryType" : "category"
-        },
-        {
             "id": 3,
             "name": "Events",
             "noOfSubcategories": 0,
@@ -55,6 +47,14 @@
             "noOfSubcategories": 0,
             "icon": "fas fa-eye",
             "color": "#826C34",
+            "categoryType" : "category"
+        },
+        {
+            "id": 4,
+            "name": "Neubürger:innen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-clover",
+            "color": "#102C54",
             "categoryType" : "category"
         }
     ]

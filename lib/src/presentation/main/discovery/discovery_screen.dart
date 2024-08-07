@@ -1,7 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
@@ -12,7 +10,6 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'cubit/cubit.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class DiscoveryScreen extends StatefulWidget {
   const DiscoveryScreen({super.key});
@@ -32,7 +29,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   }
 
   Future<void> loadLocationList() async {
-    await context.read<DiscoveryCubit>().onLoad();
+    await context.read<DiscoveryCubit>().onLoad(1);
   }
 
   Future<void> loadSelectedLocation() async {
@@ -104,9 +101,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
   final _scrollController = ScrollController();
   List<CitizenServiceModel> services = [];
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-    Factory(() => EagerGestureRecognizer())
-  };
 
   @override
   void initState() {
@@ -200,55 +194,55 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   );
     // }
 
-    Future<bool> showContestRules(BuildContext context) async {
-      bool shouldLaunch = false;
+    // Future<bool> showContestRules(BuildContext context) async {
+    //   bool shouldLaunch = false;
 
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Gewinnspiel"),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                    "Regeln: Trage deine Email Adresse ein und habe die Chance auf einen Gewinn. "),
-                SizedBox(height: 12),
-                Text(
-                    "Hinweis: Apple steht in keiner Verbindung zum Gewinnspiel."),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  shouldLaunch = true;
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+    //   await showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: const Text("Gewinnspiel"),
+    //         content: const Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Text(
+    //                 "Regeln: Trage deine Email Adresse ein und habe die Chance auf einen Gewinn. "),
+    //             SizedBox(height: 12),
+    //             Text(
+    //                 "Hinweis: Apple steht in keiner Verbindung zum Gewinnspiel."),
+    //           ],
+    //         ),
+    //         actions: <Widget>[
+    //           TextButton(
+    //             onPressed: () {
+    //               shouldLaunch = true;
+    //               Navigator.of(context).pop();
+    //             },
+    //             child: const Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
 
-      return shouldLaunch;
-    }
+    //   return shouldLaunch;
+    // }
 
     Future<void> launchContestPage(
         BuildContext context, String imageLink) async {
       // Show the contest rules dialog
-      bool shouldLaunch = await showContestRules(context);
+      // bool shouldLaunch = await showContestRules(context);
 
       // If the user clicks OK, launch the URL
-      if (shouldLaunch) {
-        String? serviceLink =
-            await AppBloc.discoveryCubit.getServiceLink(imageLink);
-        if (serviceLink != null && serviceLink.isNotEmpty) {
-          await launchUrl(
-            Uri.parse(serviceLink),
-            mode: LaunchMode.inAppWebView,
-          );
-        }
+      // if (shouldLaunch) {
+      String? serviceLink =
+          await AppBloc.discoveryCubit.getServiceLink(imageLink);
+      if (serviceLink != null && serviceLink.isNotEmpty) {
+        await launchUrl(
+          Uri.parse(serviceLink),
+          mode: LaunchMode.inAppWebView,
+        );
+        // }
       }
     }
 
@@ -270,67 +264,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     } else if (service.imageLink == "11") {
       await launchContestPage(context, service.imageLink);
     } else if (service.imageLink == "6") {
-      final webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
-
-      await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'smartAPP',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                          width:
-                              48), // Placeholder to balance the space taken by the IconButton
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(
-                    controller: webViewController,
-                    gestureRecognizers: gestureRecognizers,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");
+      await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': 6,
+      });
     }
     // else if (service.imageLink == "8") {
     //   _onSubmit();

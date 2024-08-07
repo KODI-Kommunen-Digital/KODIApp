@@ -1,11 +1,5 @@
 [ 
  {
-  "imageUrl": "assets/images/services-11.png",
-  "imageLink": "11",
-  "arguments": null,
-  "categoryId": null
- },
- {
   "imageUrl": "assets/images/services-2.png",
   "imageLink": "2",
   "arguments": 3,
@@ -71,6 +65,12 @@
       "arguments": null,
       "categoryId": null
     },
+    {
+      "imageUrl": "assets/images/services-11.png",
+      "imageLink": "11",
+      "arguments": null,
+      "categoryId": null
+     },
     {
       "imageUrl": "assets/images/services-12.png",
       "imageLink": "12",

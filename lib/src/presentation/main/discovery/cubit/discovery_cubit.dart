@@ -21,13 +21,17 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   bool doesScroll = false;
   int? currentCity;
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(int id) async {
     emit(const DiscoveryState.loading());
     final cityRequestResponse = await Api.requestCities();
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    services = await ServiceManager.initializeServices();
+    if (id == 1) {
+      services = await ServiceManager.initializeServices();
+    } else if (id == 6) {
+      services = await ServiceManager.initializeServices6();
+    }
 
     List<CitizenServiceModel> servicesCopy = List.from(services);
 
@@ -53,7 +57,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<void> onLocationFilter(int locationId, bool calledExternal) async {
     await saveCityId(locationId);
     emit(const DiscoveryState.loading());
-    await onLoad();
+    await onLoad(1);
     if (calledExternal) {
       AppBloc.homeCubit.setCalledExternally(true);
       await AppBloc.homeCubit.onLoad(false);
@@ -180,7 +184,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "8":
           "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show",
       "9": "https://geoportal.troisdorf.de/app.php/application/mobile",
-      "11": "https://www.smart-app-troisdorf.de/gewinnspiel",
+      "11":
+          "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/",
       "12": "https://www.aggua.de/",
       "13": "https://www.stadtwerke-troisdorf.de/",
       "14": "https://www.jeti-line.de/",
