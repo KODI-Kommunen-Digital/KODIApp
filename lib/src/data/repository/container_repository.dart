@@ -526,7 +526,7 @@ class ContainerRepository {
       return list;
     } else {
       logError(
-          'Error loading seller orders: ${response.data} ${response.message}');
+          'Error loading customer orders: ${response.data} ${response.message}');
       return null;
     }
   }
