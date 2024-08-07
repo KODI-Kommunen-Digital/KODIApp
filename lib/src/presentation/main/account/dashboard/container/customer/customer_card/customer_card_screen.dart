@@ -194,7 +194,7 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
                                           const SizedBox(height: 4),
                                         if (transaction.createdAt != null)
                                           Text(
-                                            transaction.createdAt!,
+                                            transaction.formatDate(),
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodySmall!

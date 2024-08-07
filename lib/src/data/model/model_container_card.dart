@@ -1,8 +1,8 @@
 class ContainerCardModel {
   final int id;
   final int status;
-  final int expiryMonth;
-  final int expiryYear;
+  final int? expiryMonth;
+  final int? expiryYear;
 
   ContainerCardModel(
       {required this.id,
@@ -14,8 +14,8 @@ class ContainerCardModel {
     return ContainerCardModel(
       id: json['id'] as int,
       status: json['status'] as int,
-      expiryMonth: json['expiryMonth'] as int,
-      expiryYear: json['expiryYear'] as int,
+      expiryMonth: json['expiryMonth'] as int?,
+      expiryYear: json['expiryYear'] as int?,
     );
   }
 }
