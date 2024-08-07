@@ -518,7 +518,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String getServiceUrl(int id) {
     switch (id) {
       case 4:
-        return "https://www.smart-app-troisdorf.de/gewinnspiel";
+        return "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/";
       case 6:
         return "https://onlinedienste.troisdorf.de/";
       case 7:
