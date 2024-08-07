@@ -1,5 +1,7 @@
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_container_card.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_container_transaction.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
@@ -528,6 +530,49 @@ class ContainerRepository {
       logError(
           'Error loading customer orders: ${response.data} ${response.message}');
       return null;
+    }
+  }
+
+  static Future<List<ContainerCardModel>?> getCustomerCards(userId) async {
+    final response = await Api.getCustomerCards(userId);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ContainerCardModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading customer orders: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<ContainerTransactionModel>?> getCustomerTransactions(
+      userId, cardId, pageNo) async {
+    final response = await Api.getCustomerTransactions(userId, cardId, pageNo);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ContainerTransactionModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading customer orders: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<bool> associateCard(userId, cardId, pin) async {
+    Map<String, dynamic> params = {"pinCode": pin};
+    final response = await Api.associateCard(userId, cardId, params);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error associating card: ${response.data} ${response.message}');
+      return false;
     }
   }
 

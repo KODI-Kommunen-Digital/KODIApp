@@ -13,7 +13,9 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/add_customer_card_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/customer_card_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/customer_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
@@ -138,6 +140,8 @@ class Routes {
   static const String createProductScreen = "/createProductScreen";
   static const String ownerScreen = "/ownerScreen";
   static const String orderDetailsScreen = "/orderDetailsScreen";
+  static const String customerCardScreen = "/customerCardScreen";
+  static const String addCustomerCardScreen = "/addCustomerCardScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -585,6 +589,20 @@ class Routes {
             return OrderDetailsScreen(
                 order: arguments['order'],
                 sellerOrder: arguments['sellerOrder']);
+          },
+        );
+
+      case customerCardScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const CustomerCardScreen();
+          },
+        );
+
+        case addCustomerCardScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const AddCustomerCardScreen();
           },
         );
 

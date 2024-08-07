@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_state.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -58,6 +59,13 @@ class _CustomerLoadedState extends State<CustomerLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('customer')),
         centerTitle: true,
+        actions: [
+          IconButton(
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.customerCardScreen);
+              },
+              icon: const Icon(Icons.credit_card))
+        ],
       ),
       body: OrderListScreen(
           orders: orders,

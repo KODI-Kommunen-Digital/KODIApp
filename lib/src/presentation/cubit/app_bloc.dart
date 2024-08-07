@@ -6,7 +6,8 @@ import 'package:heidi/src/presentation/main/account/change_password/cubit/change
 import 'package:heidi/src/presentation/main/account/contact_us/cubit/contact_us_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/cubit/customer_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/cubit/customer_card_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/cubit/owner_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/cubit/create_product_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
@@ -55,6 +56,7 @@ class AppBloc {
   static final customerCubit = CustomerCubit();
   static final createProductCubit = CreateProductCubit();
   static final ownerCubit = OwnerCubit();
+  static final customerCardCubit = CustomerCardCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -137,6 +139,9 @@ class AppBloc {
     ),
     BlocProvider<OwnerCubit>(
       create: (context) => ownerCubit,
+    ),
+    BlocProvider<CustomerCardCubit>(
+      create: (context) => customerCardCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,
