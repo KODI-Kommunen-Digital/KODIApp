@@ -55,19 +55,19 @@ class ContainerProductModel {
         deletedAt: json['deletedAt'],
         title: json['title'],
         description: json['description'],
-        price: json['price'],
-        tax: json['tax'],
-        inventory: json['inventory'],
-        maxCount: json['maxCount'],
-        minCount: json['minCount'],
+        price: json['price'].toDouble(),
+        tax: json['tax'].toDouble(),
+        inventory: json['inventory'] ?? 0,
+        maxCount: json['maxCount'] ?? 0,
+        minCount: json['minCount'] ?? 0,
         sellerId: json['sellerId'],
         shopId: json['shopId'],
         categoryId: json['categoryId'],
         subCategoryId: json['subCategoryId'],
         meta: json['meta'],
-        isActive: json['isActive'],
-        isArchived: json['isArchived'],
+        isActive: (json['isActive'] ?? 0) == 1,
+        isArchived: (json['isArchived'] ?? 0) == 1,
         deletedBy: json['deletedBy'],
-        productImages: json['productImages']);
+        productImages: (json['productImages'] ?? []).cast<String>());
   }
 }

@@ -1,10 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
-import 'package:heidi/src/data/model/model_setting.dart';
-import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OrderDetailsScreen extends StatelessWidget {
@@ -16,6 +17,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         title: Text(Translate.of(context).translate('order_details')),
@@ -40,7 +42,7 @@ class OrderDetailsScreen extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          order!.createdAt ?? '',
+                          order!.formatDate(),
                           style:
                               Theme.of(context).textTheme.bodyMedium!.copyWith(
                                     fontWeight: FontWeight.normal,
@@ -58,29 +60,130 @@ class OrderDetailsScreen extends StatelessWidget {
                           itemCount: order!.shelves.length,
                           itemBuilder: (context, index) {
                             final product = order!.shelves[index].product;
-                            return AppProductItem(
-                                type: ProductViewType.list,
-                                isRefreshLoader: false,
-                                item: ProductModel(
-                                    id: product.id,
-                                    title: product.title,
-                                    image: ((product.productImages ?? [])
-                                            .isNotEmpty
-                                        ? product.productImages!.first
-                                        : ''),
-                                    //Default product image
-                                    expiryDate: '',
-                                    startDate: '',
-                                    endDate: '',
-                                    createDate: product.createdAt ?? '',
-                                    favorite: false,
-                                    address: '',
-                                    phone: '',
-                                    email: '',
-                                    website: '',
-                                    externalId: '',
-                                    description: product.description,
-                                    userId: product.sellerId));
+                            final shelf = order!.shelves[index];
+                            return Container(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
+                              child: Stack(
+                                children: [
+                                  Row(
+                                    children: <Widget>[
+                                      ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: CachedNetworkImage(
+                                          imageUrl: ((product.productImages ??
+                                                      [])
+                                                  .isNotEmpty)
+                                              ? '${Application.picturesURL}${product.productImages!.first}'
+                                              : '${Application.picturesURL}admin/News.jpeg',
+                                          cacheManager: memoryCacheManager,
+                                          placeholder: (context, url) {
+                                            return AppPlaceholder(
+                                              child: Container(
+                                                height: 140,
+                                                width: 120,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          imageBuilder:
+                                              (context, imageProvider) {
+                                            return Container(
+                                              width: 120,
+                                              height: 140,
+                                              decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.fitHeight,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          errorWidget: (context, url, error) {
+                                            return AppPlaceholder(
+                                              child: Container(
+                                                width: 120,
+                                                height: 140,
+                                                decoration: const BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                    topLeft: Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8),
+                                                  ),
+                                                ),
+                                                child: const Icon(Icons.error),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: <Widget>[
+                                            const SizedBox(
+                                              height: 24,
+                                            ),
+                                            Text(
+                                              "${Translate.of(context).translate('name')}: ${product.title}",
+                                              maxLines: 2,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .titleMedium!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              product.description,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.normal,
+                                                  ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const SizedBox(height: 4),
+                                          ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            );
                           }),
                     )
                   ],

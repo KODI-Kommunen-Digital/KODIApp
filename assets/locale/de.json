@@ -296,6 +296,7 @@
   "price_min": "Preis min",
   "price_max": "Preis max.",
   "input_price": "Preis",
+  "price_per_quantity": "Preis pro Stück",
   "submit": "Einreichen",
   "user_parse_data_fail": "Fehler beim Analysieren der Benutzerdaten",
   "min_value_not_valid": "Mindestwert ungültig",
