@@ -17,13 +17,17 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl =
-        !forum ? 'http://116.203.2.158:8002/' : 'http:/116.203.2.158:8002/';
+        !forum ? 'http://116.203.2.158:8002/' : 'http:/116.203.2.158:8003/';
+    // ? 'http://localhost:3001/'
+    //     : 'http://localhost:3002/';
+    //? 'https://app.geseke.it/api/'
+    //: 'https://app.geseke.it/forumapi/';
 
     _dio = Dio(
       BaseOptions(
         baseUrl: _baseUrl,
-        connectTimeout: 30000,
-        receiveTimeout: 30000,
+        connectTimeout: const Duration(milliseconds: 30000),
+        receiveTimeout: const Duration(milliseconds: 30000),
         contentType: Headers.formUrlEncodedContentType,
         responseType: ResponseType.json,
       ),
@@ -52,7 +56,6 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
-        logError('Errors', error.response?.data);
         if (error.response?.data['message'] ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();
@@ -126,7 +129,7 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -156,7 +159,7 @@ class HTTPManager {
         cancelToken: cancelToken,
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -190,7 +193,7 @@ class HTTPManager {
         },
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -217,7 +220,7 @@ class HTTPManager {
         options: options,
       );
       return response.data;
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -262,7 +265,7 @@ class HTTPManager {
         "success": false,
         "message": 'download_fail',
       };
-    } on DioError catch (error, stackTrace) {
+    } on DioException catch (error, stackTrace) {
       await Sentry.captureException(error, stackTrace: stackTrace);
       return _errorHandle(error);
     } finally {
@@ -284,13 +287,13 @@ class HTTPManager {
   }
 
   ///Error common handle
-  Map<String, dynamic> _errorHandle(DioError error) {
+  Map<String, dynamic> _errorHandle(DioException error) {
     String message = "unknown_error";
     Map<String, dynamic> data = {};
 
     switch (error.type) {
-      case DioErrorType.sendTimeout:
-      case DioErrorType.receiveTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
         message = "request_time_out";
         break;
 

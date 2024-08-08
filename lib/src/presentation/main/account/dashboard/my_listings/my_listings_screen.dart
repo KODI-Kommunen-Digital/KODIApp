@@ -18,8 +18,7 @@ class MyListingsScreen extends StatelessWidget {
   final bool isEditable;
 
   const MyListingsScreen(
-      {required this.user, required this.isEditable, Key? key})
-      : super(key: key);
+      {required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class MyListingsScreen extends StatelessWidget {
 }
 
 class ProfileLoading extends StatelessWidget {
-  const ProfileLoading({Key? key}) : super(key: key);
+  const ProfileLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +55,8 @@ class ProfileLoaded extends StatefulWidget {
   final List<ProductModel> userListings;
   final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
-      : super(key: key);
+  const ProfileLoaded(this.user, this.userListings, this.isEditable,
+      {super.key});
 
   @override
   State<ProfileLoaded> createState() => _ProfileLoadedState();
@@ -297,7 +296,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
-                                                                          .only(
+                                                                      .only(
                                                                       top: 8.0),
                                                               child: IconButton(
                                                                 icon: const Icon(
@@ -413,7 +412,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
           title: Center(
             child: Text(Translate.of(context).translate('options'),
                 style: TextStyle(
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                   fontWeight: FontWeight.bold,
                 )),

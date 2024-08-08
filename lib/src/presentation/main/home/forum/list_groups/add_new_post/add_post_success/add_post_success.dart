@@ -4,7 +4,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AddPostSuccessScreen extends StatefulWidget {
-  const AddPostSuccessScreen({Key? key}) : super(key: key);
+  const AddPostSuccessScreen({super.key});
 
   @override
   State<AddPostSuccessScreen> createState() => _AddPostSuccessScreenState();
@@ -65,7 +65,7 @@ class _AddPostSuccessScreenState extends State<AddPostSuccessScreen> {
                         Translate.of(context).translate('completed'),
                         style: Theme.of(context)
                             .textTheme
-                            .titleLarge!
+                            .titleMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
