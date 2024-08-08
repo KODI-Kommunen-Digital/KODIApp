@@ -18,7 +18,7 @@ class CommentInputWidget extends StatefulWidget {
   final String? userImage;
 
   const CommentInputWidget({
-    Key? key,
+    super.key,
     required this.forumId,
     required this.postId,
     required this.commentController,
@@ -29,7 +29,7 @@ class CommentInputWidget extends StatefulWidget {
     required this.userImage,
     required this.postDetailCubit,
     this.onCommentAdded,
-  }) : super(key: key);
+  });
 
   @override
   CommentInputWidgetState createState() => CommentInputWidgetState();
@@ -96,18 +96,24 @@ class CommentInputWidgetState extends State<CommentInputWidget> {
                 hintText: widget.isAddingReply
                     ? Translate.of(context).translate('add_reply')
                     : Translate.of(context).translate('add_comment'),
-                hintStyle: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+                hintStyle: TextStyle(
+                    color: Theme.of(context).textTheme.bodyMedium?.color ??
+                        Colors.white),
                 border: InputBorder.none,
               ),
             ),
           ),
           if (widget.isAddingReply)
             IconButton(
-              icon: Icon(Icons.clear, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+              icon: Icon(Icons.clear,
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
+                      Colors.white),
               onPressed: resetInput,
             ),
           IconButton(
-            icon: Icon(Icons.send, color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white),
+            icon: Icon(Icons.send,
+                color: Theme.of(context).textTheme.bodyMedium?.color ??
+                    Colors.white),
             onPressed: () async {
               final value = widget.isAddingReply
                   ? widget.replyController!.text

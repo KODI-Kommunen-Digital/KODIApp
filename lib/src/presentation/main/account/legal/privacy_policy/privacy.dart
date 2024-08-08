@@ -4,7 +4,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class PrivacyScreen extends StatefulWidget {
-  const PrivacyScreen({Key? key}) : super(key: key);
+  const PrivacyScreen({super.key});
 
   @override
   State<PrivacyScreen> createState() => _PrivacyScreenState();
@@ -39,7 +39,7 @@ class _PrivacyScreenState extends State<PrivacyScreen> {
 
     return Text(
       _privacyPage!.whoWeAre,
-      style: Theme.of(context).textTheme.bodyLarge,
+      style: Theme.of(context).textTheme.bodyMedium,
     );
   }
 

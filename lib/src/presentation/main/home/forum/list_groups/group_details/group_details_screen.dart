@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -365,7 +367,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                                     maxLines: 2,
                                     style: Theme.of(context)
                                         .textTheme
-                                        .bodyLarge!
+                                        .bodyMedium!
                                         .copyWith(fontWeight: FontWeight.bold),
                                   ),
                                   const SizedBox(height: 2),

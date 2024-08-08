@@ -34,48 +34,48 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Filter"),
-          ),
-          body: SingleChildScrollView(
-            child: WillPopScope(
-              onWillPop: () async {
-                Navigator.pop(
-                    context,
-                    MultiFilter(
-                        currentLocation: currentCity,
-                        currentProductEventFilter: currentProductEventFilter,
-                        currentListingStatus: currentListingStatus,
-                        currentForumGroupFilter: currentForumGroupFilter,
-                        currentCategory: currentCategory,
-                        hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
-                        hasProductEventFilter:
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Filter"),
+      ),
+      body: SingleChildScrollView(
+        child: PopScope(
+          canPop: false,
+          onPopInvoked: (pop) async {
+            if (pop) return;
+            Navigator.pop(
+                context,
+                MultiFilter(
+                    currentLocation: currentCity,
+                    currentProductEventFilter: currentProductEventFilter,
+                    currentListingStatus: currentListingStatus,
+                    currentForumGroupFilter: currentForumGroupFilter,
+                    currentCategory: currentCategory,
+                    hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
+                    hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
-                        hasLocationFilter: widget.multiFilter.hasLocationFilter,
-                        hasListingStatusFilter:
+                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
+                    hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
-                        hasCategoryFilter: widget.multiFilter.hasCategoryFilter
-                    ));
-                return false;
-              },
-              child: Column(
-                children: [
-                  if (widget.multiFilter.hasLocationFilter == true)
-                    ..._buildLocationFilter(),
-                  if (widget.multiFilter.hasProductEventFilter == true)
-                    ..._buildProductEventFilter(),
-                  if (widget.multiFilter.hasListingStatusFilter == true)
-                    ..._buildListingStatusFilter(),
-                  if (widget.multiFilter.hasForumGroupFilter == true)
-                    ..._buildForumGroupFilter(),
-                  if (widget.multiFilter.hasCategoryFilter == true)
-                    ..._buildCategoryFilter(),
-                ],
-              ),
-            ),
+                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
+          },
+          child: Column(
+            children: [
+              if (widget.multiFilter.hasLocationFilter == true)
+                ..._buildLocationFilter(),
+              if (widget.multiFilter.hasProductEventFilter == true)
+                ..._buildProductEventFilter(),
+              if (widget.multiFilter.hasListingStatusFilter == true)
+                ..._buildListingStatusFilter(),
+              if (widget.multiFilter.hasForumGroupFilter == true)
+                ..._buildForumGroupFilter(),
+              if (widget.multiFilter.hasCategoryFilter == true)
+                ..._buildCategoryFilter(),
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   List<Widget> _buildLocationFilter() {
@@ -85,12 +85,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_city'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_city'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -113,7 +113,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
@@ -126,12 +126,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_listing_status'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_listing_status'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -183,12 +183,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_forum'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_forum'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -208,7 +208,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 Text(Translate.of(context).translate('all_groups')),
                 Icon(
                   Icons.groups,
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                   size: 18,
                 )
@@ -228,7 +228,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 Text(Translate.of(context).translate('my_groups')),
                 Icon(
                   Icons.person,
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                   size: 18,
                 )
@@ -253,12 +253,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_time_period'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_time_period'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -278,7 +278,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 Text(Translate.of(context).translate('this_month')),
                 Icon(
                   Icons.calendar_today,
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                   size: 18,
                 )
@@ -298,7 +298,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 Text(Translate.of(context).translate('this_week')),
                 Icon(
                   Icons.calendar_today,
-                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                  color: Theme.of(context).textTheme.bodyMedium?.color ??
                       Colors.white,
                   size: 18,
                 )
@@ -323,12 +323,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('input_category'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('input_category'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -351,7 +351,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];

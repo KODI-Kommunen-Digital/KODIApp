@@ -16,8 +16,8 @@ class AppFilterButton extends StatelessWidget {
         Navigator.pushNamed(context, Routes.filterScreen, arguments: {
           "multifilter": multiFilter
         }).then((filter) => {
-          if (filter != null) {filterCallBack(filter as MultiFilter)}
-        });
+              if (filter != null) {filterCallBack(filter as MultiFilter)}
+            });
       },
       style: TextButton.styleFrom(
         textStyle: Theme.of(context)
@@ -27,7 +27,7 @@ class AppFilterButton extends StatelessWidget {
       ),
       icon: Icon(
         Icons.filter_list_rounded,
-        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+        color: Theme.of(context).textTheme.bodyMedium?.color ?? Colors.white,
       ),
     );
   }

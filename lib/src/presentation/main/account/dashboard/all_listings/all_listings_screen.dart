@@ -464,7 +464,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                       padding: const EdgeInsets.all(4.0),
                       child: Text(
                         Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],
@@ -478,10 +478,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(context, searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -586,7 +587,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                             style: TextStyle(
                               color: Theme.of(context)
                                       .textTheme
-                                      .bodyLarge
+                                      .bodyMedium
                                       ?.color ??
                                   Colors.white,
                               fontWeight: FontWeight.bold,

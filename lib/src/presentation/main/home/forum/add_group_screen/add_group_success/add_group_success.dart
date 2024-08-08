@@ -4,7 +4,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AddGroupSuccessScreen extends StatefulWidget {
-  const AddGroupSuccessScreen({Key? key}) : super(key: key);
+  const AddGroupSuccessScreen({super.key});
 
   @override
   State<AddGroupSuccessScreen> createState() => _AddGroupSuccessScreenState();
@@ -65,7 +65,7 @@ class _AddGroupSuccessScreenState extends State<AddGroupSuccessScreen> {
                         Translate.of(context).translate('completed'),
                         style: Theme.of(context)
                             .textTheme
-                            .titleLarge!
+                            .titleMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 8),
