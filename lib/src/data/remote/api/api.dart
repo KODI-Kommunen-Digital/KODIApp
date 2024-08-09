@@ -657,8 +657,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getSellerRequests(sellerId) async {
-    var list = '/seller/$sellerId/sellerRequests';
+  static Future<ResultApiModel> getSellerRequests(pageNo) async {
+    var list = '/seller/requests?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -848,7 +848,8 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getCustomerTransactions(userId, cardId, pageNo) async {
+  static Future<ResultApiModel> getCustomerTransactions(
+      userId, cardId, pageNo) async {
     var list = '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);

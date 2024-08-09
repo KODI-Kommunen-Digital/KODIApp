@@ -539,6 +539,7 @@
   "customer": "Customer",
   "owner": "Owner",
   "request_seller": "Request seller",
+  "requests_seller": "Requests seller",
   "choose_store": "Choose the store for the request",
   "store_missing": "Please choose a store",
   "request_success": "The request was successfully sent!",
@@ -558,5 +559,8 @@
   "order": "Order",
   "products": "Products",
   "price_per_product": "Price per product",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+  "owes": "owes",
+  "accept": "Accept",
+  "decline": "Decline"
 }

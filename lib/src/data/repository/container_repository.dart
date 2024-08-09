@@ -1,3 +1,4 @@
+import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_card.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
@@ -6,9 +7,11 @@ import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
+import 'package:heidi/src/data/model/model_seller_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
@@ -350,6 +353,26 @@ class ContainerRepository {
     } else {
       logError(
           'Error getting product request details: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<SellerRequestModel>?> getSellerRequests(int pageNo) async {
+    final response = await Api.getSellerRequests(pageNo);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return SellerRequestModel.fromJson(item);
+      }).toList();
+
+      for(var request in list) {
+        UserModel? user = await UserRepository.fetchUser(request.userId);
+        if(user != null) request.user = user;
+      }
+      return list;
+    } else {
+      logError(
+          'Error getting seller requests: ${response.data} ${response.message}');
       return null;
     }
   }

@@ -541,6 +541,7 @@
   "customer": "Kunde",
   "owner": "Besitzer",
   "request_seller": "Verkäuferanfrage",
+  "requests_seller": "Verkäuferanfragen",
   "choose_store": "Suche das Geschäft für die Anfrage aus",
   "store_missing": "Bitte ein geschäft auswählen",
   "request_success": "Die Anfrage wurde erfolgreich abgeschickt!",
@@ -560,5 +561,8 @@
   "order": "Bestellung",
   "products": "Produkte",
   "price_per_product": "Preis pro Produkt",
-  "quantity": "Menge"
+  "quantity": "Menge",
+  "owes": "Schulden",
+  "accept": "Akzeptieren",
+  "decline": "Ablehnen"
 }

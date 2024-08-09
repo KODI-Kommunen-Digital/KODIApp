@@ -22,6 +22,8 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/seller/c
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_request_details.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_requests_view_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -142,6 +144,8 @@ class Routes {
   static const String orderDetailsScreen = "/orderDetailsScreen";
   static const String customerCardScreen = "/customerCardScreen";
   static const String addCustomerCardScreen = "/addCustomerCardScreen";
+  static const String sellerRequestsViewScreen = "/sellerRequestsView";
+  static const String sellerRequestDetailsScreen = "/sellerRequestDetails";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -599,10 +603,25 @@ class Routes {
           },
         );
 
-        case addCustomerCardScreen:
+      case addCustomerCardScreen:
         return MaterialPageRoute(
           builder: (context) {
             return const AddCustomerCardScreen();
+          },
+        );
+
+      case sellerRequestsViewScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SellerRequestsViewScreen();
+          },
+        );
+      case sellerRequestDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return SellerRequestDetails(request: arguments['request']);
           },
         );
 
