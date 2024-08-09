@@ -6,21 +6,17 @@ import 'owner_state.dart';
 class OwnerCubit extends Cubit<OwnerState> {
   OwnerCubit() : super(const OwnerState.loading());
 
-  List<StoreModel> stores = [];
-
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!isRefreshLoader) {
       emit(const OwnerState.loading());
     }
-    final newStores = await ContainerRepository.loadStoresOwner(1);
-    stores.addAll(newStores ?? []);
-    emit(OwnerState.loaded(stores));
+    final stores = await ContainerRepository.loadStoresOwner(1);
+    emit(OwnerState.loaded(stores ?? []));
   }
 
   Future<List<StoreModel>> newStores(int pageNo) async {
     final newStores = await ContainerRepository.loadStoresOwner(pageNo);
-    stores.addAll(newStores ?? []);
-    return stores;
+    return newStores ?? [];
   }
 
   Future<bool> deleteStore(StoreModel store) async {

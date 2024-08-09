@@ -65,7 +65,8 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
         setState(() {
           isLoadingMore = true;
         });
-        stores = await context.read<OwnerCubit>().newStores(++pageNo);
+        final newStores = await context.read<OwnerCubit>().newStores(++pageNo);
+        stores.addAll(newStores);
         setState(() {
           isLoadingMore = false;
         });
