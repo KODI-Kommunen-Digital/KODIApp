@@ -63,7 +63,10 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 itemBuilder: (context, index) {
                   if (index < widget.orders!.length) {
                     OrderModel item = widget.orders![index];
-                    final firstProduct = item.shelves.first.product;
+                    dynamic firstProduct;
+                    if (item.shelves.isNotEmpty) {
+                      firstProduct = item.shelves.first.product;
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: InkWell(
@@ -81,7 +84,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                   ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
                                     child: CachedNetworkImage(
-                                      imageUrl: ((firstProduct.productImages ??
+                                      imageUrl: ((firstProduct?.productImages ??
                                                   [])
                                               .isNotEmpty)
                                           ? '${Application.picturesURL}${firstProduct.productImages!.first}'

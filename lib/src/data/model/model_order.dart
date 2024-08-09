@@ -30,10 +30,11 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json, int? cityId) {
     List<ShelfModel> shelves = [];
-    List shelfJson = json['products'];
-    for (var shelf in shelfJson) {
-      //TODO check cityID
-      shelves.add(ShelfModel.fromJson(shelf, cityId ?? 0));
+    dynamic shelfJson = json['products'];
+    if (shelfJson is List) {
+      for (var shelf in shelfJson) {
+        shelves.add(ShelfModel.fromJson(shelf, cityId ?? 0));
+      }
     }
 
     return OrderModel(

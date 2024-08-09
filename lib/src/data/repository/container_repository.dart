@@ -191,7 +191,7 @@ class ContainerRepository {
     }
   }
 
-  Future<List<OrderModel>?> getStoreOrders(
+  static Future<List<OrderModel>?> getStoreOrders(
       int cityId, int storeId, int pageNo) async {
     final response = await Api.getStoreOrders(cityId, storeId, pageNo);
 
@@ -200,7 +200,16 @@ class ContainerRepository {
         return OrderModel.fromJson(item, cityId);
       }).toList();
 
-      return list;
+      List<OrderModel> detailList = [];
+
+      for(var order in list) {
+        final detailOrder = await getOrderDetails(cityId, storeId, order.id);
+        if(detailOrder != null) {
+          detailList.add(detailOrder);
+        }
+      }
+
+      return detailList;
     } else {
       logError('Error loading orders: ${response.data} ${response.message}');
       return null;
@@ -277,7 +286,7 @@ class ContainerRepository {
     }
   }
 
-  Future<OrderModel?> getOrderDetails(
+  static Future<OrderModel?> getOrderDetails(
       int cityId, int storeId, int orderId) async {
     final response = await Api.getOrderDetails(cityId, storeId, orderId);
     if (response.success) {

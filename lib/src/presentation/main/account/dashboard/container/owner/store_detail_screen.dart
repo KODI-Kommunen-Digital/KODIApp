@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/widget/app_grid_item.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class StoreDetailScreen extends StatelessWidget {
@@ -79,7 +80,10 @@ class StoreDetailScreen extends StatelessWidget {
                   GridItemButton(
                     icon: Icons.shopping_cart_sharp,
                     title: Translate.of(context).translate("orders"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.ownerOrdersScreen,
+                          arguments: {'store': store});
+                    },
                   ),
                   GridItemButton(
                     icon: Icons.shopping_bag,

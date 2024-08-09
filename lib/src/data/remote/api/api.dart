@@ -771,7 +771,7 @@ class Api {
   }
 
   static Future<ResultApiModel> getStoreOrders(cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/orders';
+    var list = '/cities/$cityId/store/$storeId/orders?pageNumber=$pageNo';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
