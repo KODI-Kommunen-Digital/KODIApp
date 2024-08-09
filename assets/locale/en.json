@@ -562,5 +562,7 @@
   "quantity": "Quantity",
   "owes": "owes",
   "accept": "Accept",
-  "decline": "Decline"
+  "decline": "Decline",
+  "store": "Store",
+  "shelves": "Shelves"
 }

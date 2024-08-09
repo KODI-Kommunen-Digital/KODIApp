@@ -5,10 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_store.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/owner/cubit/owner_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/owner/cubit/owner_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OwnerScreen extends StatefulWidget {
@@ -63,7 +64,6 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
-          // previousScrollPosition = _scrollController.position.pixels;
         });
         stores = await context.read<OwnerCubit>().newStores(++pageNo);
         setState(() {
@@ -100,7 +100,8 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: InkWell(
                     onTap: () {
-                      //Navigate to Store Details
+                      Navigator.pushNamed(context, Routes.storeDetailScreen,
+                          arguments: {'store': store});
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 4),

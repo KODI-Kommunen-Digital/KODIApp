@@ -1,0 +1,97 @@
+import 'package:flutter/material.dart';
+import 'package:heidi/src/data/model/model_store.dart';
+import 'package:heidi/src/presentation/widget/app_grid_item.dart';
+import 'package:heidi/src/utils/translate.dart';
+
+class StoreDetailScreen extends StatelessWidget {
+  final StoreModel store;
+
+  const StoreDetailScreen({super.key, required this.store});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(Translate.of(context).translate('store')),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    store.name,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(store.description,
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodyMedium!),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("${Translate.of(context).translate('address')}:",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold)),
+                  Text(store.address ?? '',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              const SizedBox(height: 16),
+              GridView.count(
+                shrinkWrap: true,
+                crossAxisCount: 2,
+                padding: const EdgeInsets.all(16.0),
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+                children: <Widget>[
+                  GridItemButton(
+                    icon: Icons.inventory,
+                    title: Translate.of(context).translate("shelves"),
+                    onPressed: () {},
+                  ),
+                  GridItemButton(
+                    icon: Icons.person,
+                    title: Translate.of(context).translate("seller"),
+                    onPressed: () {},
+                  ),
+                  GridItemButton(
+                    icon: Icons.shopping_cart_sharp,
+                    title: Translate.of(context).translate("orders"),
+                    onPressed: () {},
+                  ),
+                  GridItemButton(
+                    icon: Icons.shopping_bag,
+                    title: Translate.of(context).translate("products"),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

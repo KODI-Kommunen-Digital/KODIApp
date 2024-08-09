@@ -14,7 +14,6 @@ class OwnerCubit extends Cubit<OwnerState> {
     }
     final newStores = await ContainerRepository.loadStoresOwner(1);
     stores.addAll(newStores ?? []);
-    await Future.delayed(const Duration(seconds: 2));
     emit(OwnerState.loaded(stores));
   }
 

@@ -8,7 +8,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/cubit/customer_card_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_cubit.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/owner/cubit/owner_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/cubit/create_product_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/cubit/seller_request_cubit.dart';

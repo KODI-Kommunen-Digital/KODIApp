@@ -564,5 +564,7 @@
   "quantity": "Menge",
   "owes": "Schulden",
   "accept": "Akzeptieren",
-  "decline": "Ablehnen"
+  "decline": "Ablehnen",
+  "store": "Laden",
+  "shelves": "Regale"
 }
