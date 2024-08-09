@@ -279,55 +279,8 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                     title: Text(Translate.of(context).translate('edit')),
                   ),
                 ),
-                SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    showDeleteConfirmation(context, item);
-                  },
-                  child: ListTile(
-                    leading: const Icon(Icons.delete),
-                    title: Text(Translate.of(context).translate('delete')),
-                  ),
-                ),
               ]);
         });
-  }
-
-  Future<bool> showDeleteConfirmation(
-      BuildContext context, StoreModel item) async {
-    final result = await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate('delete_Confirmation')),
-          content: Text(Translate.of(context)
-              .translate('Are_you_sure_you_want_to_delete_this_store?')),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () async {
-                Navigator.of(context).pop(true);
-              }, // Yes
-              child: Text(Translate.of(context).translate('yes')),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false), // No
-              child: Text(Translate.of(context).translate('no')),
-            ),
-          ],
-        );
-      },
-    );
-    if (result == true) {
-      if (!mounted) return false;
-      final deleteResponse = await context.read<OwnerCubit>().deleteStore(item);
-      if (deleteResponse) {
-        setState(() {
-          stores.remove(item);
-        });
-      }
-      return deleteResponse;
-    }
-    return false;
   }
 }
 
