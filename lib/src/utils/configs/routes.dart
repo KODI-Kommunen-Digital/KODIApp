@@ -17,8 +17,11 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/customer
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/customer_card_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/customer_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_orders_screen/owner_orders_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/owner_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/owner_orders_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/owner_seller_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
@@ -150,6 +153,9 @@ class Routes {
   static const String sellerRequestDetailsScreen = "/sellerRequestDetails";
   static const String storeDetailScreen = "/storeDetailScreen";
   static const String ownerOrdersScreen = "/ownerOrdersScreen";
+  static const String ownerSellerScreen = "/ownerSellerScreen";
+  static const String ownerShelvesScreen = "/ownerShelvesScreen";
+  static const String ownerProductsScreen = "/ownerProductsScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -639,12 +645,39 @@ class Routes {
           },
         );
 
-        case ownerOrdersScreen:
+      case ownerOrdersScreen:
         return MaterialPageRoute(
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return OwnerOrdersScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerProductsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerProductsScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerSellerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerSellerScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerShelvesScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerShelvesScreen(store: arguments['store']);
           },
         );
 

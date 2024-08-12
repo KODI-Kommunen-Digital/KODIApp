@@ -2,7 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_orders_screen/cubit/owner_orders_state.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/cubit/owner_orders_state.dart';
 
 class OwnerOrdersCubit extends Cubit<OwnerOrdersState> {
   OwnerOrdersCubit() : super(const OwnerOrdersState.loading());
