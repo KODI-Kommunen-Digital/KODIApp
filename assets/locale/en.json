@@ -567,5 +567,10 @@
   "shelves": "Shelves",
   "undefined": "Undefined",
   "remove_product": "Remove product",
-  "are_you_sure_remove_product": "Are you sure to remove the product from the shelf?"
+  "are_you_sure_remove_product": "Are you sure to remove the product from the shelf?",
+  "add_shelf": "Add shelf",
+  "title_short": "Title should be longer than 3 characters",
+  "description_short": "Description should be longer than 3 characters",
+  "product_empty": "Please choose a product",
+  "add_shelf_success": "Shelf added successfully"
 }

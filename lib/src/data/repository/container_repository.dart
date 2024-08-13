@@ -134,7 +134,7 @@ class ContainerRepository {
     }
   }
 
-  Future<bool> saveShelf({
+  static Future<bool> saveShelf({
     required int cityId,
     required int storeId,
     required String title,
@@ -428,7 +428,7 @@ class ContainerRepository {
     }
   }
 
-  Future<List<ContainerProductModel>?> getStoreProducts({
+  static Future<List<ContainerProductModel>?> getStoreProducts({
     required int cityId,
     required int storeId,
     required int pageNo,

@@ -36,9 +36,11 @@ class _OwnerShelvesScreenState extends State<OwnerShelvesScreen> {
         builder: (context, state) => state.maybeWhen(
             loading: () => const OwnerShelvesLoading(),
             loaded: (shelves, categories, subCategories) => OwnerShelvesLoaded(
-                shelves: shelves,
-                categories: categories,
-                subCategories: subCategories),
+                  shelves: shelves,
+                  categories: categories,
+                  subCategories: subCategories,
+                  store: widget.store,
+                ),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -47,12 +49,14 @@ class OwnerShelvesLoaded extends StatefulWidget {
   final List<ShelfModel> shelves;
   final List<CategoryModel> categories;
   final List<CategoryModel> subCategories;
+  final StoreModel store;
 
   const OwnerShelvesLoaded(
       {super.key,
       required this.shelves,
       required this.categories,
-      required this.subCategories});
+      required this.subCategories,
+      required this.store});
 
   @override
   State<OwnerShelvesLoaded> createState() => _OwnerShelvesLoadedState();
@@ -112,6 +116,22 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
           title: Text(Translate.of(context).translate('shelves')),
           centerTitle: true,
         ),
+        floatingActionButton: FloatingActionButton(
+          shape: const CircleBorder(),
+          backgroundColor: Theme.of(context).primaryColor,
+          onPressed: () {
+            Navigator.pushNamed(context, Routes.addShelfScreen,
+                arguments: {'store': widget.store}).then((success) {
+              if (success != null && success == true) {
+                context.read<OwnerShelvesCubit>().onLoad(false);
+              }
+            });
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+        ),
         body: (shelves.isNotEmpty)
             ? ListView.builder(
                 controller: _scrollController,
@@ -131,7 +151,6 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                             context.read<OwnerShelvesCubit>().onLoad(false);
                           }
                         });
-                        //Further Shelf logic
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4),

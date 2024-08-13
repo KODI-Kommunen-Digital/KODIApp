@@ -21,6 +21,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/owner_orders_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/owner_seller_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/add_shelf_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/shelf_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
@@ -158,6 +159,7 @@ class Routes {
   static const String ownerShelvesScreen = "/ownerShelvesScreen";
   static const String ownerProductsScreen = "/ownerProductsScreen";
   static const String shelfDetailScreen = "/shelfDetailScreen";
+  static const String addShelfScreen = "/addShelfScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -692,6 +694,17 @@ class Routes {
               shelf: arguments['shelf'],
               categories: arguments['categories'],
               subCategories: arguments['subCategories'],
+            );
+          },
+        );
+
+      case addShelfScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AddShelfScreen(
+              store: arguments['store'],
             );
           },
         );

@@ -569,5 +569,10 @@
   "shelves": "Regale",
   "undefined": "Nicht definiert",
   "remove_product": "Produkt entfernen",
-  "are_you_sure_remove_product": "Bist du sicher, dass du das Produkt vom Regal entfernen möchtest?"
+  "are_you_sure_remove_product": "Bist du sicher, dass du das Produkt vom Regal entfernen möchtest?",
+  "add_shelf": "Regal hinzufügen",
+  "title_short": "Der Titel soll länger als 3 Buchstaben sein!",
+  "description_short": "Die Beschreibung soll länger als 3 Buchstaben sein!",
+  "product_empty": "Bitte wähle ein Produkt aus",
+  "add_shelf_success": "Regal erfolgreich hinzugefügt"
 }

@@ -715,7 +715,7 @@ class Api {
   static Future<ResultApiModel> addShelf(cityId, storeId, params) async {
     var list = '/cities/$cityId/store/$storeId/shelves';
     final result =
-        await HTTPManager(apiType: 'container').post(url: list, data: params);
+        await HTTPManager(apiType: 'container').post(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
