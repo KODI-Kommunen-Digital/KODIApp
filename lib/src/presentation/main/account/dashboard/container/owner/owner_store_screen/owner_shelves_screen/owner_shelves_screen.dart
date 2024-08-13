@@ -126,7 +126,11 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                               'shelf': item,
                               'categories': widget.categories,
                               'subCategories': widget.subCategories
-                            });
+                            }).then((success) {
+                          if (success != null && success == true) {
+                            context.read<OwnerShelvesCubit>().onLoad(false);
+                          }
+                        });
                         //Further Shelf logic
                       },
                       child: Container(

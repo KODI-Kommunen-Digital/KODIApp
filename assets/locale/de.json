@@ -567,5 +567,7 @@
   "decline": "Ablehnen",
   "store": "Laden",
   "shelves": "Regale",
-  "undefined": "Nicht definiert"
+  "undefined": "Nicht definiert",
+  "remove_product": "Produkt entfernen",
+  "are_you_sure_remove_product": "Bist du sicher, dass du das Produkt vom Regal entfernen möchtest?"
 }

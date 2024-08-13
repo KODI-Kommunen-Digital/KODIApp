@@ -507,6 +507,16 @@ class ContainerRepository {
     }
   }
 
+  static Future<bool> removeProductFromShelf(int shelfId) async {
+    final response = await Api.removeShelfProduct(shelfId);
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error removing product: ${response.data} ${response.message}');
+      return false;
+    }
+  }
+
   static Future<CategoryModel?> loadStoreSubCategory(
       int cityId, int storeId, int subCategoryId) async {
     final response =

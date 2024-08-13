@@ -1,9 +1,13 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -113,9 +117,9 @@ class ShelfDetailsScreen extends StatelessWidget {
                   ),
                 ],
               ),
-                const SizedBox(
-                  height: 16,
-                ),
+              const SizedBox(
+                height: 16,
+              ),
               if (product != null)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -289,16 +293,66 @@ class ShelfDetailsScreen extends StatelessWidget {
                   Text(
                     shelf.formatDate(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
+                          fontWeight: FontWeight.bold,
+                        ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
               ),
+              if (product != null)
+                const SizedBox(
+                  height: 32,
+                ),
+              if (product != null)
+                AppButton(Translate.of(context).translate('remove_product'),
+                    onPressed: () {
+                  showRemoveProductDialog(context);
+                })
             ],
           )),
     );
+  }
+
+  Future<void> showRemoveProductDialog(BuildContext buildContext) async {
+    final result = await showDialog(
+      context: buildContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+              Translate.of(context).translate('group_delete_confirmation')),
+          content: Text(
+              Translate.of(context).translate('are_you_sure_remove_product')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                final bool success =
+                    await ContainerRepository.removeProductFromShelf(shelf.id);
+                if (success) {
+                  Navigator.pop(context);
+                  Navigator.pop(context, true);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        Translate.of(context).translate("error_message"),
+                      ),
+                    ),
+                  );
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(), // No
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {}
   }
 
   String? getCategoryTranslation(int id) {

@@ -565,5 +565,7 @@
   "decline": "Decline",
   "store": "Store",
   "shelves": "Shelves",
-  "undefined": "Undefined"
+  "undefined": "Undefined",
+  "remove_product": "Remove product",
+  "are_you_sure_remove_product": "Are you sure to remove the product from the shelf?"
 }
