@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/cubit/owner_shelves_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OwnerShelvesScreen extends StatefulWidget {
@@ -34,10 +35,10 @@ class _OwnerShelvesScreenState extends State<OwnerShelvesScreen> {
     return BlocBuilder<OwnerShelvesCubit, OwnerShelvesState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const OwnerShelvesLoading(),
-            loaded: (shelves, categories) => OwnerShelvesLoaded(
-                  shelves: shelves,
-                  categories: categories,
-                ),
+            loaded: (shelves, categories, subCategories) => OwnerShelvesLoaded(
+                shelves: shelves,
+                categories: categories,
+                subCategories: subCategories),
             orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
@@ -45,9 +46,13 @@ class _OwnerShelvesScreenState extends State<OwnerShelvesScreen> {
 class OwnerShelvesLoaded extends StatefulWidget {
   final List<ShelfModel> shelves;
   final List<CategoryModel> categories;
+  final List<CategoryModel> subCategories;
 
   const OwnerShelvesLoaded(
-      {super.key, required this.shelves, required this.categories});
+      {super.key,
+      required this.shelves,
+      required this.categories,
+      required this.subCategories});
 
   @override
   State<OwnerShelvesLoaded> createState() => _OwnerShelvesLoadedState();
@@ -116,6 +121,12 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                     ContainerProductModel? product = item.product;
                     return InkWell(
                       onTap: () {
+                        Navigator.pushNamed(context, Routes.shelfDetailScreen,
+                            arguments: {
+                              'shelf': item,
+                              'categories': widget.categories,
+                              'subCategories': widget.subCategories
+                            });
                         //Further Shelf logic
                       },
                       child: Container(

@@ -22,6 +22,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/owner_seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/shelf_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
@@ -156,6 +157,7 @@ class Routes {
   static const String ownerSellerScreen = "/ownerSellerScreen";
   static const String ownerShelvesScreen = "/ownerShelvesScreen";
   static const String ownerProductsScreen = "/ownerProductsScreen";
+  static const String shelfDetailScreen = "/shelfDetailScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -678,6 +680,19 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return OwnerShelvesScreen(store: arguments['store']);
+          },
+        );
+
+      case shelfDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ShelfDetailsScreen(
+              shelf: arguments['shelf'],
+              categories: arguments['categories'],
+              subCategories: arguments['subCategories'],
+            );
           },
         );
 

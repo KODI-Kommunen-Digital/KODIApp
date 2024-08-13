@@ -8,7 +8,7 @@ part 'owner_shelves_state.freezed.dart';
 class OwnerShelvesState with _$OwnerShelvesState {
   const factory OwnerShelvesState.loading() = OwnerShelvesStateLoading;
 
-  const factory OwnerShelvesState.loaded(List<ShelfModel> shelves, List<CategoryModel> categories) =
+  const factory OwnerShelvesState.loaded(List<ShelfModel> shelves, List<CategoryModel> categories, List<CategoryModel> subCategories) =
       OwnerShelvesStateLoaded;
 
   const factory OwnerShelvesState.error() = OwnerShelvesStateError;

@@ -19,8 +19,8 @@ mixin _$OwnerShelvesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(
-            List<ShelfModel> shelves, List<CategoryModel> categories)
+    required TResult Function(List<ShelfModel> shelves,
+            List<CategoryModel> categories, List<CategoryModel> subCategories)
         loaded,
     required TResult Function() error,
   }) =>
@@ -28,7 +28,8 @@ mixin _$OwnerShelvesState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult? Function()? error,
   }) =>
@@ -36,7 +37,8 @@ mixin _$OwnerShelvesState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -127,8 +129,8 @@ class _$OwnerShelvesStateLoadingImpl implements OwnerShelvesStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(
-            List<ShelfModel> shelves, List<CategoryModel> categories)
+    required TResult Function(List<ShelfModel> shelves,
+            List<CategoryModel> categories, List<CategoryModel> subCategories)
         loaded,
     required TResult Function() error,
   }) {
@@ -139,7 +141,8 @@ class _$OwnerShelvesStateLoadingImpl implements OwnerShelvesStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -150,7 +153,8 @@ class _$OwnerShelvesStateLoadingImpl implements OwnerShelvesStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
@@ -207,7 +211,10 @@ abstract class _$$OwnerShelvesStateLoadedImplCopyWith<$Res> {
           $Res Function(_$OwnerShelvesStateLoadedImpl) then) =
       __$$OwnerShelvesStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ShelfModel> shelves, List<CategoryModel> categories});
+  $Res call(
+      {List<ShelfModel> shelves,
+      List<CategoryModel> categories,
+      List<CategoryModel> subCategories});
 }
 
 /// @nodoc
@@ -224,6 +231,7 @@ class __$$OwnerShelvesStateLoadedImplCopyWithImpl<$Res>
   $Res call({
     Object? shelves = null,
     Object? categories = null,
+    Object? subCategories = null,
   }) {
     return _then(_$OwnerShelvesStateLoadedImpl(
       null == shelves
@@ -234,6 +242,10 @@ class __$$OwnerShelvesStateLoadedImplCopyWithImpl<$Res>
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
+      null == subCategories
+          ? _value._subCategories
+          : subCategories // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>,
     ));
   }
 }
@@ -242,9 +254,12 @@ class __$$OwnerShelvesStateLoadedImplCopyWithImpl<$Res>
 
 class _$OwnerShelvesStateLoadedImpl implements OwnerShelvesStateLoaded {
   const _$OwnerShelvesStateLoadedImpl(
-      final List<ShelfModel> shelves, final List<CategoryModel> categories)
+      final List<ShelfModel> shelves,
+      final List<CategoryModel> categories,
+      final List<CategoryModel> subCategories)
       : _shelves = shelves,
-        _categories = categories;
+        _categories = categories,
+        _subCategories = subCategories;
 
   final List<ShelfModel> _shelves;
   @override
@@ -262,9 +277,17 @@ class _$OwnerShelvesStateLoadedImpl implements OwnerShelvesStateLoaded {
     return EqualUnmodifiableListView(_categories);
   }
 
+  final List<CategoryModel> _subCategories;
+  @override
+  List<CategoryModel> get subCategories {
+    if (_subCategories is EqualUnmodifiableListView) return _subCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_subCategories);
+  }
+
   @override
   String toString() {
-    return 'OwnerShelvesState.loaded(shelves: $shelves, categories: $categories)';
+    return 'OwnerShelvesState.loaded(shelves: $shelves, categories: $categories, subCategories: $subCategories)';
   }
 
   @override
@@ -274,14 +297,17 @@ class _$OwnerShelvesStateLoadedImpl implements OwnerShelvesStateLoaded {
             other is _$OwnerShelvesStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._shelves, _shelves) &&
             const DeepCollectionEquality()
-                .equals(other._categories, _categories));
+                .equals(other._categories, _categories) &&
+            const DeepCollectionEquality()
+                .equals(other._subCategories, _subCategories));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_shelves),
-      const DeepCollectionEquality().hash(_categories));
+      const DeepCollectionEquality().hash(_categories),
+      const DeepCollectionEquality().hash(_subCategories));
 
   @JsonKey(ignore: true)
   @override
@@ -294,36 +320,38 @@ class _$OwnerShelvesStateLoadedImpl implements OwnerShelvesStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(
-            List<ShelfModel> shelves, List<CategoryModel> categories)
+    required TResult Function(List<ShelfModel> shelves,
+            List<CategoryModel> categories, List<CategoryModel> subCategories)
         loaded,
     required TResult Function() error,
   }) {
-    return loaded(shelves, categories);
+    return loaded(shelves, categories, subCategories);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult? Function()? error,
   }) {
-    return loaded?.call(shelves, categories);
+    return loaded?.call(shelves, categories, subCategories);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(shelves, categories);
+      return loaded(shelves, categories, subCategories);
     }
     return orElse();
   }
@@ -364,11 +392,14 @@ class _$OwnerShelvesStateLoadedImpl implements OwnerShelvesStateLoaded {
 }
 
 abstract class OwnerShelvesStateLoaded implements OwnerShelvesState {
-  const factory OwnerShelvesStateLoaded(final List<ShelfModel> shelves,
-      final List<CategoryModel> categories) = _$OwnerShelvesStateLoadedImpl;
+  const factory OwnerShelvesStateLoaded(
+      final List<ShelfModel> shelves,
+      final List<CategoryModel> categories,
+      final List<CategoryModel> subCategories) = _$OwnerShelvesStateLoadedImpl;
 
   List<ShelfModel> get shelves;
   List<CategoryModel> get categories;
+  List<CategoryModel> get subCategories;
   @JsonKey(ignore: true)
   _$$OwnerShelvesStateLoadedImplCopyWith<_$OwnerShelvesStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -416,8 +447,8 @@ class _$OwnerShelvesStateErrorImpl implements OwnerShelvesStateError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(
-            List<ShelfModel> shelves, List<CategoryModel> categories)
+    required TResult Function(List<ShelfModel> shelves,
+            List<CategoryModel> categories, List<CategoryModel> subCategories)
         loaded,
     required TResult Function() error,
   }) {
@@ -428,7 +459,8 @@ class _$OwnerShelvesStateErrorImpl implements OwnerShelvesStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult? Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult? Function()? error,
   }) {
@@ -439,7 +471,8 @@ class _$OwnerShelvesStateErrorImpl implements OwnerShelvesStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories)?
+    TResult Function(List<ShelfModel> shelves, List<CategoryModel> categories,
+            List<CategoryModel> subCategories)?
         loaded,
     TResult Function()? error,
     required TResult orElse(),
