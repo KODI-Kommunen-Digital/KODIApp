@@ -158,7 +158,7 @@ class ContainerRepository {
     }
   }
 
-  Future<List<ShelfModel>?> getStoreShelves(
+  static Future<List<ShelfModel>?> getStoreShelves(
       int cityId, int storeId, int pageNo) async {
     final response = await Api.getShelves(cityId, storeId, pageNo);
 
@@ -167,7 +167,19 @@ class ContainerRepository {
         return ShelfModel.fromJson(item, cityId);
       }).toList();
 
-      return list;
+      List<ShelfModel> updatedShelves = [];
+      for (var shelf in list) {
+        if (shelf.productId != null) {
+          ContainerProductModel? product =
+              await getProductDetails(cityId, storeId, shelf.productId!);
+          if (product != null) {
+            updatedShelves.add(ShelfModel.updateProduct(product, shelf));
+          }
+        }
+        updatedShelves.add(shelf);
+      }
+
+      return updatedShelves;
     } else {
       logError('Error loading shelves: ${response.data} ${response.message}');
       return null;
@@ -202,9 +214,9 @@ class ContainerRepository {
 
       List<OrderModel> detailList = [];
 
-      for(var order in list) {
+      for (var order in list) {
         final detailOrder = await getOrderDetails(cityId, storeId, order.id);
-        if(detailOrder != null) {
+        if (detailOrder != null) {
           detailList.add(detailOrder);
         }
       }
@@ -274,7 +286,7 @@ class ContainerRepository {
     }
   }
 
-  Future<ContainerProductModel?> getProductDetails(
+  static Future<ContainerProductModel?> getProductDetails(
       int cityId, int storeId, int productId) async {
     final response = await Api.getProductDetails(cityId, storeId, productId);
     if (response.success) {
@@ -374,9 +386,9 @@ class ContainerRepository {
         return SellerRequestModel.fromJson(item);
       }).toList();
 
-      for(var request in list) {
+      for (var request in list) {
         UserModel? user = await UserRepository.fetchUser(request.userId);
-        if(user != null) request.user = user;
+        if (user != null) request.user = user;
       }
       return list;
     } else {

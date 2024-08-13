@@ -564,5 +564,6 @@
   "accept": "Accept",
   "decline": "Decline",
   "store": "Store",
-  "shelves": "Shelves"
+  "shelves": "Shelves",
+  "undefined": "Undefined"
 }

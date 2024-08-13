@@ -70,12 +70,18 @@ class StoreDetailScreen extends StatelessWidget {
                   GridItemButton(
                     icon: Icons.inventory,
                     title: Translate.of(context).translate("shelves"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.ownerShelvesScreen,
+                          arguments: {'store': store});
+                    },
                   ),
                   GridItemButton(
                     icon: Icons.person,
                     title: Translate.of(context).translate("seller"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.ownerSellerScreen,
+                          arguments: {'store': store});
+                    },
                   ),
                   GridItemButton(
                     icon: Icons.shopping_cart_sharp,
@@ -88,7 +94,10 @@ class StoreDetailScreen extends StatelessWidget {
                   GridItemButton(
                     icon: Icons.shopping_bag,
                     title: Translate.of(context).translate("products"),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, Routes.ownerProductsScreen,
+                          arguments: {'store': store});
+                    },
                   ),
                 ],
               ),

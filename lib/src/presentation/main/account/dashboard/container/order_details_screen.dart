@@ -71,7 +71,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                       ClipRRect(
                                         borderRadius: BorderRadius.circular(12),
                                         child: CachedNetworkImage(
-                                          imageUrl: ((product.productImages ??
+                                          imageUrl: ((product!.productImages ??
                                                       [])
                                                   .isNotEmpty)
                                               ? '${Application.picturesURL}${product.productImages!.first}'
