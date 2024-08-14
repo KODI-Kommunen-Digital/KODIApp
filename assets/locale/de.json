@@ -575,5 +575,7 @@
   "title_short": "Der Titel soll länger als 3 Buchstaben sein!",
   "description_short": "Die Beschreibung soll länger als 3 Buchstaben sein!",
   "product_empty": "Bitte wähle ein Produkt aus",
-  "add_shelf_success": "Regal erfolgreich hinzugefügt"
+  "add_shelf_success": "Regal erfolgreich hinzugefügt",
+  "approve": "Genehmigen",
+  "seller_approved": "Verkäufer wurde genehmigt"
 }

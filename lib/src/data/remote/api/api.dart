@@ -714,8 +714,8 @@ class Api {
 
   static Future<ResultApiModel> addShelf(cityId, storeId, params) async {
     var list = '/cities/$cityId/store/$storeId/shelves';
-    final result =
-        await HTTPManager(apiType: 'container').post(url: list, data: params, loading: true);
+    final result = await HTTPManager(apiType: 'container')
+        .post(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
@@ -825,14 +825,15 @@ class Api {
 
   static Future<ResultApiModel> updateSellerRequest(sellerId, params) async {
     var list = '/owners/updateSeller/$sellerId';
-    final result =
-        await HTTPManager(apiType: 'container').patch(url: list, data: params);
+    final result = await HTTPManager(apiType: 'container')
+        .patch(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> removeShelfProduct(shelfId) async {
     var list = '/owners/removeShelfProduct/$shelfId';
-    final result = await HTTPManager(apiType: 'container').patch(url: list, loading: true);
+    final result =
+        await HTTPManager(apiType: 'container').patch(url: list, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

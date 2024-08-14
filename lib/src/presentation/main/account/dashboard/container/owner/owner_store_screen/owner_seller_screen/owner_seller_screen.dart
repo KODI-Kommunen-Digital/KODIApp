@@ -6,6 +6,8 @@ import 'package:heidi/src/data/model/model_seller.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_state.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OwnerSellerScreen extends StatefulWidget {
@@ -76,8 +78,8 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(Translate.of(context).translate('delete_Confirmation')),
-          content: Text(Translate.of(context)
-              .translate('are_you_sure_remove_seller')),
+          content: Text(
+              Translate.of(context).translate('are_you_sure_remove_seller')),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
@@ -94,7 +96,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
       },
     );
 
-    if(result == true) {
+    if (result == true) {
       await context.read<OwnerSellerCubit>().deleteSeller(seller.id);
       context.read<OwnerSellerCubit>().onLoad(false);
     }
@@ -120,6 +122,14 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
         appBar: AppBar(
           title: Text(Translate.of(context).translate('seller')),
           centerTitle: true,
+          actions: [
+            AppButton(Translate.of(context).translate('requests'),
+                type: ButtonType.text, onPressed: () {
+              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen,
+                      arguments: {'isOwner': true})
+                  .then((a) => context.read<OwnerSellerCubit>().onLoad(false));
+            })
+          ],
         ),
         body: (seller.isNotEmpty)
             ? ListView.separated(
@@ -157,7 +167,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                                 fontWeight: FontWeight.bold),
                                       ),
                                       const SizedBox(height: 4),
-                                      Text(item.description,
+                                      Text(item.description ?? '',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!),

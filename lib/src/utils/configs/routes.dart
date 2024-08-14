@@ -627,7 +627,11 @@ class Routes {
       case sellerRequestsViewScreen:
         return MaterialPageRoute(
           builder: (context) {
-            return const SellerRequestsViewScreen();
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return SellerRequestsViewScreen(
+              isOwner: arguments['isOwner'],
+            );
           },
         );
 
@@ -636,7 +640,9 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return SellerRequestDetails(request: arguments['request']);
+            return SellerRequestDetails(
+                request: arguments['request'],
+                isOwner: arguments['isOwner']);
           },
         );
 

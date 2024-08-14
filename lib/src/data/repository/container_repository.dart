@@ -666,4 +666,20 @@ class ContainerRepository {
       return false;
     }
   }
+
+  static Future<bool> updateSeller(SellerRequestModel seller, int status) async {
+    final params = {
+      'title': seller.title,
+      'description': seller.description,
+      'status': status
+    };
+    final response = await Api.updateSellerRequest(seller.id, params);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error updating seller: ${response.data} ${response.message}');
+      return false;
+    }
+  }
 }

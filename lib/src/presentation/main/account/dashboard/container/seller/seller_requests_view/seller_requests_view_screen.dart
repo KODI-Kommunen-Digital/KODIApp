@@ -7,7 +7,9 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SellerRequestsViewScreen extends StatefulWidget {
-  const SellerRequestsViewScreen({super.key});
+  final bool isOwner;
+
+  const SellerRequestsViewScreen({super.key, this.isOwner = false});
 
   @override
   State<SellerRequestsViewScreen> createState() =>
@@ -26,16 +28,20 @@ class _SellerRequestsViewScreenState extends State<SellerRequestsViewScreen> {
     return BlocBuilder<SellerRequestsViewCubit, SellerRequestsViewState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const SellerRequestsViewLoading(),
-            loaded: (requests) =>
-                SellerRequestsViewLoaded(sellerRequests: requests),
+            loaded: (requests) => SellerRequestsViewLoaded(
+                  sellerRequests: requests,
+                  isOwner: widget.isOwner,
+                ),
             orElse: () => ErrorWidget("Failed to load requests.")));
   }
 }
 
 class SellerRequestsViewLoaded extends StatefulWidget {
   final List<SellerRequestModel> sellerRequests;
+  final bool isOwner;
 
-  const SellerRequestsViewLoaded({super.key, required this.sellerRequests});
+  const SellerRequestsViewLoaded(
+      {super.key, required this.sellerRequests, required this.isOwner});
 
   @override
   State<SellerRequestsViewLoaded> createState() =>
@@ -101,7 +107,16 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                       onTap: () {
                         Navigator.pushNamed(
                             context, Routes.sellerRequestDetailsScreen,
-                            arguments: {'request': request});
+                            arguments: {
+                              'request': request,
+                              'isOwner': widget.isOwner
+                            }).then((approved) {
+                          if (approved != null && approved == true) {
+                            context
+                                .read<SellerRequestsViewCubit>()
+                                .onLoad(false);
+                          }
+                        });
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4),

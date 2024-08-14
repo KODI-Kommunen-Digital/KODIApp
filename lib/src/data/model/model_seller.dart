@@ -7,7 +7,8 @@ class SellerModel {
   final int id;
   final int userId;
   final int shopId;
-  final String description;
+  final String? description;
+  final String? title;
   final int? status;
   final String? createdAt;
   final String? deletedAt;
@@ -20,6 +21,7 @@ class SellerModel {
       required this.shopId,
       required this.description,
       required this.status,
+      required this.title,
       required this.createdAt,
       required this.deletedAt,
       required this.updatedAt,
@@ -30,7 +32,8 @@ class SellerModel {
         id: json['id'],
         userId: json['userId'],
         shopId: json['shopId'],
-        description: json['description'] ?? '',
+        description: json['description'],
+        title: json['title'],
         status: json['status'],
         createdAt: json['createdAt'],
         deletedAt: json['deletedAt'],
@@ -44,6 +47,7 @@ class SellerModel {
         shopId: seller.shopId,
         description: seller.description,
         status: seller.status,
+        title: seller.title,
         createdAt: seller.createdAt,
         deletedAt: seller.deletedAt,
         updatedAt: seller.updatedAt,

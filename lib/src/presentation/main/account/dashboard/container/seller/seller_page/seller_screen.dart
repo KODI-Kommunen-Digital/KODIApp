@@ -70,7 +70,7 @@ class _SellerLoadedState extends State<SellerLoaded> {
             Translate.of(context).translate('requests'),
             type: ButtonType.text,
             onPressed: () {
-              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen);
+              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen, arguments: {'isOwner': false});
             },
           )
         ],

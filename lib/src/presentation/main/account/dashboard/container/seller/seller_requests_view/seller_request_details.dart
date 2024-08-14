@@ -1,11 +1,30 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SellerRequestDetails extends StatelessWidget {
   final SellerRequestModel request;
+  final bool isOwner;
 
-  const SellerRequestDetails({super.key, required this.request});
+  const SellerRequestDetails(
+      {super.key, required this.request, required this.isOwner});
+
+  Future<void> approveSeller(BuildContext context) async {
+    final response = await ContainerRepository.updateSeller(request, 1);
+    late String message;
+    if (response) {
+      message = Translate.of(context).translate('seller_approved');
+      Navigator.pop(context, true);
+    } else {
+      message = Translate.of(context).translate('error_message');
+    }
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +89,17 @@ class SellerRequestDetails extends StatelessWidget {
                     ),
                   ],
                 ),
-              const SizedBox(height: 16.0),
+              const SizedBox(height: 64.0),
+              if (isOwner)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AppButton(Translate.of(context).translate('approve'),
+                        onPressed: () {
+                      approveSeller(context);
+                    }),
+                  ],
+                )
             ],
           ),
         ),
