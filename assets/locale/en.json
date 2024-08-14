@@ -568,6 +568,7 @@
   "undefined": "Undefined",
   "remove_product": "Remove product",
   "are_you_sure_remove_product": "Are you sure to remove the product from the shelf?",
+  "are_you_sure_remove_seller": "Are you sure to delete the seller?",
   "add_shelf": "Add shelf",
   "title_short": "Title should be longer than 3 characters",
   "description_short": "Description should be longer than 3 characters",
