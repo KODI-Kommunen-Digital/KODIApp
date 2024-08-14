@@ -1,5 +1,8 @@
 // ignore_for_file: file_names
 
+import 'package:intl/intl.dart';
+import 'package:loggy/loggy.dart';
+
 class ContainerProductModel {
   final int id;
   final int cityId;
@@ -69,5 +72,15 @@ class ContainerProductModel {
         isArchived: (json['isArchived'] ?? 0) == 1,
         deletedBy: json['deletedBy'],
         productImages: (json['productImages'] ?? []).cast<String>());
+  }
+
+  String formatDate() {
+    try {
+      final dateTime = DateTime.parse(createdAt ?? '');
+      return DateFormat('dd.MM.yyyy').format(dateTime);
+    } on FormatException catch (e) {
+      logError("Error parsing date string: $e");
+      return "";
+    }
   }
 }

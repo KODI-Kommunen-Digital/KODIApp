@@ -249,7 +249,7 @@ class ContainerRepository {
     }
   }
 
-  Future<bool> deleteProduct(int cityId, int storeId, int productId) async {
+  static Future<bool> deleteProduct(int cityId, int storeId, int productId) async {
     final response = await Api.deleteProductStore(
         cityId: cityId, storeId: storeId, productId: productId);
 
