@@ -655,4 +655,15 @@ class ContainerRepository {
       return false;
     }
   }
+
+  static Future<bool> deleteSeller(int sellerId) async {
+    final response = await Api.deleteSeller(sellerId);
+
+    if (response.success) {
+      return true;
+    } else {
+      logError('Error deleting seller: ${response.data} ${response.message}');
+      return false;
+    }
+  }
 }

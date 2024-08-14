@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
@@ -67,6 +69,37 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
     }
   }
 
+  Future<void> showDeleteConfirmation(
+      BuildContext buildContext, SellerModel seller) async {
+    final result = await showDialog(
+      context: buildContext,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('delete_Confirmation')),
+          content: Text(Translate.of(context)
+              .translate('are_you_sure_remove_seller')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+
+    if(result == true) {
+      await context.read<OwnerSellerCubit>().deleteSeller(seller.id);
+      context.read<OwnerSellerCubit>().onLoad(false);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -104,6 +137,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                         child: Stack(
                           children: [
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Expanded(
                                   child: Column(
@@ -171,7 +205,12 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                       ),
                                     ],
                                   ),
-                                )
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showDeleteConfirmation(context, item);
+                                    },
+                                    icon: const Icon(Icons.delete))
                               ],
                             ),
                           ],
