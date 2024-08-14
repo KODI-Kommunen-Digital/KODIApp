@@ -45,7 +45,7 @@ class HomeCategoryItem extends StatelessWidget {
     }
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: MediaQuery.of(context).size.width * 0.23,
       child: GestureDetector(
         onTap: () => onPressed!(item!),
         child: Column(
@@ -69,8 +69,9 @@ class HomeCategoryItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               item!.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.visible,
               style: Theme.of(context)
                   .textTheme
                   .labelLarge!
