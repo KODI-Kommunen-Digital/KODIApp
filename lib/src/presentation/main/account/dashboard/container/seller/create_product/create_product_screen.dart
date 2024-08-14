@@ -202,14 +202,15 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       late bool success;
       if (widget.product == null) {
         success = await ContainerRepository.addStoreProduct(
-            cityId: selectedCityId,
-            storeId: selectedStore!.id,
-            title: _textTitleController.text,
-            description: _textDescriptionController.text,
-            price: double.parse(_textPriceController.text),
-            tax: double.parse(_textTaxController.text),
-            inventory: int.parse(_textInventoryController.text),
-            minCount: int.parse(_textMinCountController.text),);
+          cityId: selectedCityId,
+          storeId: selectedStore!.id,
+          title: _textTitleController.text,
+          description: _textDescriptionController.text,
+          price: double.parse(_textPriceController.text),
+          tax: double.parse(_textTaxController.text),
+          inventory: int.parse(_textInventoryController.text),
+          minCount: int.parse(_textMinCountController.text),
+        );
       } else {
         success = await ContainerRepository.editProduct(
             cityId: widget.product!.cityId,
@@ -597,8 +598,10 @@ class CreateProductLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

@@ -140,7 +140,7 @@ class _SellerRequestLoadedState extends State<SellerRequestLoaded> {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text(message)));
 
-      if(success) {
+      if (success) {
         Navigator.pop(context);
       }
     } else {
@@ -293,8 +293,10 @@ class SellerRequestLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

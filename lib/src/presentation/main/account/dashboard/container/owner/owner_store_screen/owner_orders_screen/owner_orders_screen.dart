@@ -52,6 +52,7 @@ class _OwnerOrdersLoadedState extends State<OwnerOrdersLoaded> {
     super.initState();
     orders.addAll(widget.orders);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +64,7 @@ class _OwnerOrdersLoadedState extends State<OwnerOrdersLoaded> {
           orders: orders,
           loadMore: (page) async {
             final newOrders =
-            await context.read<OwnerOrdersCubit>().newOrders(page);
+                await context.read<OwnerOrdersCubit>().newOrders(page);
             setState(() {
               orders.addAll(newOrders);
               pageNo++;
@@ -79,8 +80,10 @@ class OwnerOrdersLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }

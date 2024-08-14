@@ -186,7 +186,7 @@ class ContainerRepository {
     }
   }
 
-  Future<List<SellerModel>?> getStoreSellers(
+  static Future<List<SellerModel>?> getStoreSellers(
       int cityId, int storeId, int pageNo) async {
     final response = await Api.getStoreSellers(
         cityId: cityId, storeId: storeId, pageNo: pageNo);
@@ -196,7 +196,16 @@ class ContainerRepository {
         return SellerModel.fromJson(item);
       }).toList();
 
-      return list;
+      List<SellerModel> updatedList = [];
+
+      for (var seller in list) {
+        final user = await UserRepository.fetchUser(seller.userId);
+        if (user != null) {
+          updatedList.add(SellerModel.updateUser(seller, user));
+        }
+      }
+
+      return updatedList;
     } else {
       logError('Error loading sellers: ${response.data} ${response.message}');
       return null;
