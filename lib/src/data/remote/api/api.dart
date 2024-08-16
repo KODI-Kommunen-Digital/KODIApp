@@ -837,6 +837,14 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> patchProductRequest(
+      productRequestId, params) async {
+    var list = '/owners/productRequest/$productRequestId';
+    final result = await HTTPManager(apiType: 'container')
+        .patch(url: list, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> deleteSeller(sellerId) async {
     var list = '/owners/deleteSeller/$sellerId';
     final result = await HTTPManager(apiType: 'container').delete(url: list);

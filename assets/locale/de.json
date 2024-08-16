@@ -579,5 +579,6 @@
   "product_empty": "Bitte wähle ein Produkt aus",
   "add_shelf_success": "Regal erfolgreich hinzugefügt",
   "approve": "Genehmigen",
-  "seller_approved": "Verkäufer wurde genehmigt"
+  "seller_approved": "Verkäufer wurde genehmigt",
+  "request_approved": "Anfrage wurde genehmigt"
 }

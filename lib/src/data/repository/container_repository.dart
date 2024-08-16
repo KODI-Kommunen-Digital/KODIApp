@@ -249,7 +249,8 @@ class ContainerRepository {
     }
   }
 
-  static Future<bool> deleteProduct(int cityId, int storeId, int productId) async {
+  static Future<bool> deleteProduct(
+      int cityId, int storeId, int productId) async {
     final response = await Api.deleteProductStore(
         cityId: cityId, storeId: storeId, productId: productId);
 
@@ -337,7 +338,7 @@ class ContainerRepository {
     }
   }
 
-  Future<List<ProductRequestModel>?> getStoreProductRequests(
+  static Future<List<ProductRequestModel>?> getStoreProductRequests(
       {required int cityId,
       required int storeId,
       required int pageNo,
@@ -526,6 +527,18 @@ class ContainerRepository {
     }
   }
 
+  static Future<bool> acceptProductRequest(ProductRequestModel request) async {
+    final params = {'storeId': request.shopId, 'accepted': true};
+    final response = await Api.patchProductRequest(request.id, params);
+    if (response.success) {
+      return true;
+    } else {
+      logError(
+          'Error accepting product request: ${response.data} ${response.message}');
+      return false;
+    }
+  }
+
   static Future<CategoryModel?> loadStoreSubCategory(
       int cityId, int storeId, int subCategoryId) async {
     final response =
@@ -667,7 +680,8 @@ class ContainerRepository {
     }
   }
 
-  static Future<bool> updateSeller(SellerRequestModel seller, int status) async {
+  static Future<bool> updateSeller(
+      SellerRequestModel seller, int status) async {
     final params = {
       'title': seller.title,
       'description': seller.description,

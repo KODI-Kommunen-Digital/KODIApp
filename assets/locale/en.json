@@ -577,5 +577,6 @@
   "product_empty": "Please choose a product",
   "add_shelf_success": "Shelf added successfully",
   "approve": "Approve",
-  "seller_approved": "Seller got approved"
+  "seller_approved": "Seller got approved",
+  "request_approved": "Request got approved"
 }

@@ -6,11 +6,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_state.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class OwnerProductsScreen extends StatefulWidget {
@@ -35,9 +38,10 @@ class _OwnerProductsScreenState extends State<OwnerProductsScreen> {
     return BlocBuilder<OwnerProductsCubit, OwnerProductsState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const OwnerProductsLoading(),
-            loaded: (products, categories, subCategories) =>
+            loaded: (products, requests, categories, subCategories) =>
                 OwnerProductsLoaded(
                   products: products,
+                  requests: requests,
                   categories: categories,
                   subCategories: subCategories,
                 ),
@@ -47,6 +51,7 @@ class _OwnerProductsScreenState extends State<OwnerProductsScreen> {
 
 class OwnerProductsLoaded extends StatefulWidget {
   final List<ContainerProductModel> products;
+  final List<ProductRequestModel> requests;
   final List<CategoryModel> categories;
   final List<CategoryModel> subCategories;
 
@@ -54,7 +59,8 @@ class OwnerProductsLoaded extends StatefulWidget {
       {super.key,
       required this.products,
       required this.categories,
-      required this.subCategories});
+      required this.subCategories,
+      required this.requests});
 
   @override
   State<OwnerProductsLoaded> createState() => _OwnerProductsLoadedState();
@@ -201,6 +207,13 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
         appBar: AppBar(
           title: Text(Translate.of(context).translate('products')),
           centerTitle: true,
+          actions: [
+            AppButton(Translate.of(context).translate('requests'),
+                type: ButtonType.text, onPressed: () {
+              Navigator.pushNamed(context, Routes.productRequestScreen,
+                  arguments: {"requests": widget.requests});
+            })
+          ],
         ),
         body: (products.isNotEmpty)
             ? ListView.builder(

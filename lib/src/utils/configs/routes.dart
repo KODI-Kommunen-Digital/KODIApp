@@ -20,6 +20,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/order_de
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/owner_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/owner_orders_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/product_request_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/owner_seller_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/add_shelf_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
@@ -160,6 +161,7 @@ class Routes {
   static const String ownerProductsScreen = "/ownerProductsScreen";
   static const String shelfDetailScreen = "/shelfDetailScreen";
   static const String addShelfScreen = "/addShelfScreen";
+  static const String productRequestDetailScreen = "/productRequestDetailScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -711,6 +713,17 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return AddShelfScreen(
               store: arguments['store'],
+            );
+          },
+        );
+
+        case productRequestDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ProductRequestDetailScreen(
+              request: arguments['request'],
             );
           },
         );

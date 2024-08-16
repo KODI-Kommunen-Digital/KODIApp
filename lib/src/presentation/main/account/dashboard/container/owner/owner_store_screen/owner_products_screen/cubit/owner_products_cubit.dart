@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_state.dart';
@@ -30,14 +31,23 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
       }
     }
 
+    final requests = await ContainerRepository.getStoreProductRequests(
+        cityId: store.cityId, storeId: store.id, pageNo: 1);
+
     emit(OwnerProductsState.loaded(
-        products ?? [], categories ?? [], subCategories));
+        products ?? [], requests ?? [], categories ?? [], subCategories));
   }
 
   Future<List<ContainerProductModel>> newProducts(int pageNo) async {
     final newProducts = await ContainerRepository.getStoreProducts(
         cityId: store.cityId, storeId: store.id, pageNo: pageNo);
     return newProducts ?? [];
+  }
+
+  Future<List<ProductRequestModel>> newRequests(int pageNo) async {
+    final newRequests = await ContainerRepository.getStoreProductRequests(
+        cityId: store.cityId, storeId: store.id, pageNo: pageNo);
+    return newRequests ?? [];
   }
 
   Future<bool> deleteProduct(ContainerProductModel product) async {

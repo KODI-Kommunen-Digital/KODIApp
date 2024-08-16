@@ -1,15 +1,18 @@
+import 'package:intl/intl.dart';
+import 'package:loggy/loggy.dart';
+
 class ProductRequestModel {
   final int id;
   final String title;
   final String description;
-  final int reqType;
-  final int sellerId;
+  final int? reqType;
+  final int? sellerId;
   final int shopId;
   final int productId;
   final double price;
   final int count;
   final int threshold;
-  final int maxCount;
+  final int? maxCount;
   final int status;
   final String? createdAt;
   final String? updatedAt;
@@ -41,7 +44,7 @@ class ProductRequestModel {
         sellerId: json["sellerId"],
         shopId: json["shopId"],
         productId: json["productId"],
-        price: json["price"],
+        price: json["price"].toDouble(),
         count: json["count"],
         threshold: json["threshold"],
         maxCount: json["maxCount"],
@@ -49,5 +52,15 @@ class ProductRequestModel {
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         deletedAt: json["deletedAt"]);
+  }
+
+  String formatDate() {
+    try {
+      final dateTime = DateTime.parse(createdAt ?? '');
+      return DateFormat('dd.MM.yyyy').format(dateTime);
+    } on FormatException catch (e) {
+      logError("Error parsing date string: $e");
+      return "";
+    }
   }
 }
