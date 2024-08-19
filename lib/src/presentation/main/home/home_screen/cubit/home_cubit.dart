@@ -37,7 +37,7 @@ class HomeCubit extends Cubit<HomeState> {
     }).toList();
 
     if (!calledExternally && !isRefreshLoader) {
-      await AppBloc.discoveryCubit.onLoad();
+      await AppBloc.discoveryCubit.onLoad(1);
     }
 
     if (!isRefreshLoader) {
@@ -276,7 +276,8 @@ class HomeCubit extends Cubit<HomeState> {
       "7": "https://web.troisdorf.de/chatbot/",
       "9":
           "https://geoportal.troisdorf.de/app.php/application/start#75000@7.05291/50.80266r0@EPSG:25832",
-      "11": "https://www.smart-app-troisdorf.de/gewinnspiel",
+      "11":
+          "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/",
     };
     return serviceLinks[imageLink];
   }

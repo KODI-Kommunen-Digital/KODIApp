@@ -125,25 +125,29 @@ class IntroPageState extends State<IntroPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              TypeAheadFormField(
-                textFieldConfiguration: TextFieldConfiguration(
-                  controller: typeAheadController,
-                  decoration: const InputDecoration(
-                    hintText: 'Straßennamen eingeben',
-                    border: OutlineInputBorder(),
-                    suffixIcon: Icon(Icons.arrow_drop_down),
-                  ),
-                ),
+              TypeAheadField(
+                builder: (context, typeAheadController, focusNode) {
+                  return TextField(
+                    controller: typeAheadController,
+                    focusNode: focusNode,
+                    decoration: const InputDecoration(
+                      hintText: 'Straßennamen eingeben',
+                      border: OutlineInputBorder(),
+                      suffixIcon: Icon(Icons.arrow_drop_down),
+                    ),
+                  );
+                },
                 suggestionsCallback: (pattern) {
-                  return locations.where((item) =>
-                      item.name.toLowerCase().contains(pattern.toLowerCase()));
+                  return locations;
+                  //return locations.where((item) =>
+                  //                       item.name.toLowerCase().contains(pattern.toLowerCase()));
                 },
                 itemBuilder: (context, WasteLocation suggestion) {
                   return ListTile(
                     title: Text(suggestion.name),
                   );
                 },
-                onSuggestionSelected: (WasteLocation suggestion) async {
+                onSelected: (WasteLocation suggestion) async {
                   typeAheadController.text = suggestion.name;
                   _selectLocation(suggestion.id.toString(), suggestion.name);
                 },

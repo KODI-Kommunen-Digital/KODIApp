@@ -8,6 +8,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -15,12 +17,14 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
+
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -30,7 +34,7 @@ import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -158,7 +162,9 @@ class _HomeScreenState extends State<HomeScreen> {
         listener: (context, state) {
           state.maybeWhen(
             error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(Translate.of(context).translate('no_internet')))),
+              content: Text(Translate.of(context).translate('no_internet')),
+              duration: const Duration(seconds: 4),
+            )),
             orElse: () {},
           );
         },
@@ -229,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.1';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.3';
                         });
                       }
                     },
@@ -427,27 +433,101 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Future<void> _onService(CategoryModel item) async {
+  //   if (item.id == 4) {
+  //     await launchUrl(
+  //         Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 5) {
+  //     await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 6) {
+  //     await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 7) {
+  //     await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
+  //         mode: LaunchMode.inAppWebView);
+  //   } else if (item.id == 8) {
+  //     await launchUrl(
+  //         Uri.parse(
+  //             "https://geoportal.troisdorf.de/app.php/application/mobile"),
+  //         mode: LaunchMode.inAppWebView);
+  //   }
+  //   return;
+  // }
+
   Future<void> _onService(CategoryModel item) async {
-    if (item.id == 4) {
-      await launchUrl(
-          Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 5) {
-      await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 6) {
-      await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 7) {
-      await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 8) {
-      await launchUrl(
-          Uri.parse(
-              "https://geoportal.troisdorf.de/app.php/application/mobile"),
+    if (item.id == 5) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
+      /*
+      final webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height:
+                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                  child: WebViewWidget(
+                    controller: webViewController,
+                    gestureRecognizers: gestureRecognizers,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+
+      await webViewController.runJavaScript(
+          "document.querySelector('.flex').style.display = 'none';");*/
+    } else {
+      // Handle other cases as before
+      await launchUrl(Uri.parse(getServiceUrl(item.id)),
           mode: LaunchMode.inAppWebView);
     }
-    return;
+  }
+
+  String getServiceUrl(int id) {
+    switch (id) {
+      case 4:
+        return "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/";
+      case 6:
+        return "https://onlinedienste.troisdorf.de/";
+      case 7:
+        return "https://www.stadtwerke-troisdorf.de/";
+      case 8:
+        return "https://geoportal.troisdorf.de/app.php/application/mobile";
+      default:
+        return "";
+    }
   }
 
   void _makeAction(String link) async {
@@ -733,14 +813,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleLarge!
+                    .titleMedium!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
                 Translate.of(context).translate(
                   'what_happen',
                 ),
-                style: Theme.of(context).textTheme.bodyLarge,
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ],
           ),
@@ -811,5 +891,111 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+  }
+}
+
+class FullScreenWebView extends StatefulWidget {
+  const FullScreenWebView({super.key});
+
+  @override
+  State<FullScreenWebView> createState() => _FullScreenWebViewState();
+}
+
+class _FullScreenWebViewState extends State<FullScreenWebView> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<bool> requestGeoPermission() async {
+    bool permissionGranted = false;
+    bool openSettings = true;
+    bool exit = false;
+
+    while (!permissionGranted) {
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        try {
+          await Geolocator.getCurrentPosition(
+              desiredAccuracy: LocationAccuracy.high);
+          permissionGranted = true;
+        } catch (e) {
+          logError('Error getting current position: $e');
+        }
+      } else if ((permission == LocationPermission.unableToDetermine ||
+              permission == LocationPermission.denied) &&
+          openSettings == true) {
+        await Geolocator.requestPermission();
+        openSettings = false;
+      } else {
+        if (exit == false) {
+          await openAppSettings();
+          exit = true;
+        } else {
+          return false;
+        }
+      }
+    }
+    return permissionGranted;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: requestGeoPermission(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            bool hasPermission = snapshot.data ?? false;
+            return Scaffold(
+              body: SafeArea(
+                child: (!hasPermission)
+                    ? Center(
+                        child: Text(Translate.of(context)
+                            .translate('geo_permission_needed')),
+                      )
+                    : Column(
+                        children: [
+                          Expanded(
+                              child: InAppWebView(
+                                  initialUrlRequest: URLRequest(
+                                      url: Uri.parse(
+                                          'https://troisdorf.dksr.city/map/')),
+                                  androidOnGeolocationPermissionsShowPrompt:
+                                      (InAppWebViewController controller,
+                                          String origin) async {
+                                    return GeolocationPermissionShowPromptResponse(
+                                        origin: origin,
+                                        allow: true,
+                                        retain: true);
+                                  },
+                                  initialOptions: InAppWebViewGroupOptions(
+                                    android: AndroidInAppWebViewOptions(
+                                      useWideViewPort: true,
+                                      geolocationEnabled: true,
+                                    ),
+                                    ios: IOSInAppWebViewOptions(
+                                      allowsInlineMediaPlayback: true,
+                                    ),
+                                  ),
+                                  androidOnPermissionRequest:
+                                      (InAppWebViewController controller,
+                                          String origin,
+                                          List<String> resources) async {
+                                    return PermissionRequestResponse(
+                                        resources: resources,
+                                        action: PermissionRequestResponseAction
+                                            .GRANT);
+                                  })),
+                        ],
+                      ),
+              ),
+            );
+          }
+        });
   }
 }

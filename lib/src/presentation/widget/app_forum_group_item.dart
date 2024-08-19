@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,12 +14,11 @@ import 'package:heidi/src/utils/translate.dart';
 
 class ForumGroupItem extends StatefulWidget {
   const ForumGroupItem(
-      {Key? key,
+      {super.key,
       this.item,
       required this.userId,
       required this.onPressed,
-      required this.fromGroupList})
-      : super(key: key);
+      required this.fromGroupList});
 
   final ForumGroupModel? item;
   final void Function(bool) onPressed;

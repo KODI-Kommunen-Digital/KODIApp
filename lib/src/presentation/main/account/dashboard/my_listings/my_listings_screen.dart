@@ -18,8 +18,7 @@ class MyListingsScreen extends StatelessWidget {
   final bool isEditable;
 
   const MyListingsScreen(
-      {required this.user, required this.isEditable, Key? key})
-      : super(key: key);
+      {required this.user, required this.isEditable, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +40,7 @@ class MyListingsScreen extends StatelessWidget {
 }
 
 class ProfileLoading extends StatelessWidget {
-  const ProfileLoading({Key? key}) : super(key: key);
+  const ProfileLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +55,8 @@ class ProfileLoaded extends StatefulWidget {
   final List<ProductModel> userListings;
   final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, this.isEditable, {Key? key})
-      : super(key: key);
+  const ProfileLoaded(this.user, this.userListings, this.isEditable,
+      {super.key});
 
   @override
   State<ProfileLoaded> createState() => _ProfileLoadedState();
@@ -232,20 +231,42 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             CrossAxisAlignment
                                                                 .start,
                                                         children: <Widget>[
-                                                          Text(
-                                                            userListingsList[
-                                                                        index]
-                                                                    .category ??
-                                                                '',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: [
+                                                              Text(
+                                                                userListingsList[
+                                                                            index]
+                                                                        .category ??
+                                                                    '',
+                                                                style: Theme.of(
+                                                                        context)
+                                                                    .textTheme
+                                                                    .bodySmall!
+                                                                    .copyWith(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                    ),
+                                                              ),
+                                                              if (userListingsList[
+                                                                          index]
+                                                                      .viewCount !=
+                                                                  null)
+                                                                Text(
+                                                                  '${Translate.of(context).translate('views')}: ${userListingsList[index].viewCount}',
+                                                                  style: Theme.of(
+                                                                          context)
+                                                                      .textTheme
+                                                                      .bodySmall!
+                                                                      .copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight.w100,
+                                                                      ),
                                                                 ),
+                                                            ],
                                                           ),
                                                           const SizedBox(
                                                               height: 8),

@@ -447,24 +447,28 @@ class _WasteCalendarState extends State<WasteCalendar> {
       builder: (context) {
         return AlertDialog(
           title: const Text('Wähle deinen Ort'),
-          content: TypeAheadFormField(
-            textFieldConfiguration: TextFieldConfiguration(
-              controller: typeAheadController,
-              decoration: const InputDecoration(
-                hintText: 'Straßennamen eingeben',
-                suffixIcon: Icon(Icons.arrow_drop_down),
-              ),
-            ),
-            suggestionsCallback: (pattern) {
-              return locations.where((item) =>
-                  item.name.toLowerCase().contains(pattern.toLowerCase()));
+          content: TypeAheadField(
+            builder: (context, typeAheadController, focusNode) {
+              return TextField(
+                controller: typeAheadController,
+                focusNode: focusNode,
+                decoration: const InputDecoration(
+                  hintText: 'Straßennamen eingeben',
+                  suffixIcon: Icon(Icons.arrow_drop_down),
+                ),
+              );
             },
             itemBuilder: (context, WasteLocation suggestion) {
               return ListTile(
                 title: Text(suggestion.name),
               );
             },
-            onSuggestionSelected: (WasteLocation suggestion) async {
+            suggestionsCallback: (pattern) {
+              return locations;
+              //return locations.where((item) =>
+              //                   item.name.toLowerCase().contains(pattern.toLowerCase()))
+            },
+            onSelected: (WasteLocation suggestion) async {
               typeAheadController.text = suggestion.name;
               _selectLocation(suggestion.id.toString(), suggestion.name);
               Navigator.pop(context);

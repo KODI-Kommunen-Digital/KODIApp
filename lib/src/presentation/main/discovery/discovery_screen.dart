@@ -1,3 +1,4 @@
+// ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
-  const DiscoveryScreen({Key? key}) : super(key: key);
+  const DiscoveryScreen({super.key});
 
   @override
   State<DiscoveryScreen> createState() => _DiscoveryScreenState();
@@ -28,7 +29,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
   }
 
   Future<void> loadLocationList() async {
-    await context.read<DiscoveryCubit>().onLoad();
+    await context.read<DiscoveryCubit>().onLoad(1);
   }
 
   Future<void> loadSelectedLocation() async {
@@ -74,7 +75,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 }
 
 class DiscoveryLoading extends StatelessWidget {
-  const DiscoveryLoading({Key? key}) : super(key: key);
+  const DiscoveryLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +89,9 @@ class DiscoveryLoaded extends StatefulWidget {
   final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
-    Key? key,
+    super.key,
     required this.services,
-  }) : super(key: key);
+  });
 
   @override
   State<DiscoveryLoaded> createState() => _DiscoveryLoadedState();
@@ -193,62 +194,61 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   );
     // }
 
-    Future<bool> showContestRules(BuildContext context) async {
-      bool shouldLaunch = false;
+    // Future<bool> showContestRules(BuildContext context) async {
+    //   bool shouldLaunch = false;
 
-      await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text("Gewinnspiel"),
-            content: const Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                    "Regeln: Trage deine Email Adresse ein und habe die Chance auf einen Gewinn. "),
-                SizedBox(height: 12),
-                Text(
-                    "Hinweis: Apple steht in keiner Verbindung zum Gewinnspiel."),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  shouldLaunch = true;
-                  Navigator.of(context).pop();
-                },
-                child: const Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
+    //   await showDialog(
+    //     context: context,
+    //     builder: (BuildContext context) {
+    //       return AlertDialog(
+    //         title: const Text("Gewinnspiel"),
+    //         content: const Column(
+    //           mainAxisSize: MainAxisSize.min,
+    //           children: [
+    //             Text(
+    //                 "Regeln: Trage deine Email Adresse ein und habe die Chance auf einen Gewinn. "),
+    //             SizedBox(height: 12),
+    //             Text(
+    //                 "Hinweis: Apple steht in keiner Verbindung zum Gewinnspiel."),
+    //           ],
+    //         ),
+    //         actions: <Widget>[
+    //           TextButton(
+    //             onPressed: () {
+    //               shouldLaunch = true;
+    //               Navigator.of(context).pop();
+    //             },
+    //             child: const Text('OK'),
+    //           ),
+    //         ],
+    //       );
+    //     },
+    //   );
 
-      return shouldLaunch;
-    }
+    //   return shouldLaunch;
+    // }
 
     Future<void> launchContestPage(
         BuildContext context, String imageLink) async {
       // Show the contest rules dialog
-      bool shouldLaunch = await showContestRules(context);
+      // bool shouldLaunch = await showContestRules(context);
 
       // If the user clicks OK, launch the URL
-      if (shouldLaunch) {
-        String? serviceLink =
-            await AppBloc.discoveryCubit.getServiceLink(imageLink);
-        if (serviceLink != null && serviceLink.isNotEmpty) {
-          await launchUrl(
-            Uri.parse(serviceLink),
-            mode: LaunchMode.inAppWebView,
-          );
-        }
+      // if (shouldLaunch) {
+      String? serviceLink =
+          await AppBloc.discoveryCubit.getServiceLink(imageLink);
+      if (serviceLink != null && serviceLink.isNotEmpty) {
+        await launchUrl(
+          Uri.parse(serviceLink),
+          mode: LaunchMode.inAppWebView,
+        );
+        // }
       }
     }
 
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
-        service.imageLink == "6" ||
         service.imageLink == "7" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
@@ -263,6 +263,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "11") {
       await launchContestPage(context, service.imageLink);
+    } else if (service.imageLink == "6") {
+      await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': 6,
+      });
     }
     // else if (service.imageLink == "8") {
     //   _onSubmit();
