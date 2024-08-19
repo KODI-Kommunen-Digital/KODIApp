@@ -22,8 +22,7 @@ import 'cubit/cubit.dart';
 class ListProductScreen extends StatefulWidget {
   final Map<String, dynamic> arguments;
 
-  const ListProductScreen({Key? key, required this.arguments})
-      : super(key: key);
+  const ListProductScreen({super.key, required this.arguments});
 
   @override
   State<ListProductScreen> createState() => _ListProductScreenState();
@@ -135,12 +134,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      if(!isCategoryService)
-                      AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent),
-                          filterCallBack: (filter) {
-                            _updateSelectedFilter(filter);
-                          }),
+                      if (!isCategoryService)
+                        AppFilterButton(
+                            multiFilter: whatCanFilter(isEvent),
+                            filterCallBack: (filter) {
+                              _updateSelectedFilter(filter);
+                            }),
                       IconButton(
                           onPressed: () {
                             _searchListings();
@@ -203,10 +202,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -251,7 +251,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 }
 
 class ListLoading extends StatelessWidget {
-  const ListLoading({Key? key}) : super(key: key);
+  const ListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -268,12 +268,11 @@ class ListLoaded extends StatefulWidget {
   final bool updated;
 
   const ListLoaded(
-      {Key? key,
+      {super.key,
       required this.list,
       required this.selectedId,
       required this.listCity,
-      this.updated = false})
-      : super(key: key);
+      this.updated = false});
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();

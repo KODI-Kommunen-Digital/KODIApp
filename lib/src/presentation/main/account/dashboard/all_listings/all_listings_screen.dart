@@ -372,6 +372,19 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 .circular(10),
                                                       ),
                                                       child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
+                                                        ),
                                                         onPressed: () async {
                                                           _openListingStatusActionPopUp(
                                                               item);
@@ -460,10 +473,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(context, searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(

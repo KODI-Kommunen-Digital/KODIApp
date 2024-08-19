@@ -24,7 +24,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({Key? key, required this.item}) : super(key: key);
+  const ProductDetailScreen({super.key, required this.item});
 
   final ProductModel item;
 
@@ -572,7 +572,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             padding: const EdgeInsets.only(bottom: 10.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: product.imageLists!.map((url) {
+                              children: product.imageLists!.take(8).map((url) {
                                 int index = product.imageLists!.indexOf(url);
                                 return Container(
                                   width: 10.0,
