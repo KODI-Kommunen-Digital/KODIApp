@@ -19,15 +19,15 @@ import 'package:heidi/src/presentation/main/account/dashboard/my_listings/my_lis
 import 'package:heidi/src/presentation/main/account/edit_profile/edit_profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/faq/cubit/faq_cubit.dart';
 import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
-import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
-import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/legal/rsag_screen.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
 import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/discovery/discovery_screen_detail.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
@@ -67,6 +67,7 @@ class Routes {
   static const String home = "/home";
   static const String main = "/home";
   static const String discovery = "/discovery";
+  static const String discoveryDetail = "/discoveryDetail";
   static const String wishList = "/wishList";
   static const String account = "/account";
   static const String signIn = "/signIn";
@@ -132,6 +133,7 @@ class Routes {
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
   static const String wasteCalendar = "/wasteCalendar";
+  static const String rsag = "/rsag";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -315,17 +317,10 @@ class Routes {
           },
         );
 
-      case imprint:
+      case rsag:
         return MaterialPageRoute(
           builder: (context) {
-            return const ImprintScreen();
-          },
-        );
-
-      case privacy:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const PrivacyScreen();
+            return const RsagScreen();
           },
         );
 
@@ -535,6 +530,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return WasteCalendar();
+          },
+        );
+
+      case discoveryDetail:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return DiscoveryScreenDetail(arguments: arguments);
           },
         );
 

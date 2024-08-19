@@ -18,4 +18,19 @@ class ServiceManager {
             ))
         .toList();
   }
+
+  static Future<List<CitizenServiceModel>> initializeServices6() async {
+    String configPath = dotenv.env['SERVICES_CONFIG_6']!;
+    String jsonData = await rootBundle.loadString(configPath);
+    List<dynamic> data = jsonDecode(jsonData);
+
+    return data
+        .map((item) => CitizenServiceModel(
+              imageUrl: item['imageUrl'],
+              imageLink: item['imageLink'],
+              arguments: item['arguments'],
+              categoryId: item['categoryId'],
+            ))
+        .toList();
+  }
 }

@@ -27,6 +27,7 @@ class LinkManager {
   }
 
   static String? getServiceLink(String serviceId) {
+    // ignore: collection_methods_unrelated_type
     return serviceLinks?[serviceId];
   }
 }

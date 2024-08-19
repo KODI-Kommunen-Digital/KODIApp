@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LegalScreen extends StatefulWidget {
-  const LegalScreen({Key? key}) : super(key: key);
+  const LegalScreen({super.key});
 
   @override
   State<LegalScreen> createState() => _LegalScreenState();
@@ -81,6 +82,23 @@ class _LegalScreenState extends State<LegalScreen> {
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
                 _makeAction(dotenv.env['TERMS_OF_USE_URL']!);
+              },
+              trailing: Row(
+                children: <Widget>[
+                  RotatedBox(
+                    quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    child: const Icon(
+                      Icons.keyboard_arrow_right,
+                      textDirection: TextDirection.ltr,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            AppListTitle(
+              title: Translate.of(context).translate('rsag'),
+              onPressed: () {
+                Navigator.pushNamed(context, Routes.rsag);
               },
               trailing: Row(
                 children: <Widget>[
