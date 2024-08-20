@@ -28,6 +28,16 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     List<CategoryModel> categories = [];
     List<CategoryModel> subCategories = [];
 
+    Map<String, dynamic>? productDetails;
+    if (product != null) {
+      productDetails = await getProductDetails(product);
+      selectedCategory = productDetails?['category'];
+      selectedSubCategory = productDetails?['subCategory'];
+      cityId = product.cityId;
+      storeId = product.shopId;
+      categoryId = product.categoryId;
+    }
+
     if (cityId != null) {
       final list = await ContainerRepository.loadStores(cityId, null);
       if (list != null) {
@@ -44,10 +54,6 @@ class CreateProductCubit extends Cubit<CreateProductState> {
           subCategories = subCategoryResponse ?? [];
         }
       }
-    }
-    Map<String, dynamic>? productDetails;
-    if (product != null) {
-      productDetails = await getProductDetails(product);
     }
     emit(CreateProductState.loaded(
         cities,

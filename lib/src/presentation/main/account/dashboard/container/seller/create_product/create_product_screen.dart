@@ -191,7 +191,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _textDescriptionController.text = widget.product!.description;
       _textPriceController.text = widget.product!.price.toString();
       _textTaxController.text = widget.product!.tax.toString();
-      _textInventoryController.text = widget.product!.inventory.toString();
+      //_textInventoryController.text = widget.product!.inventory.toString();
       _textMinCountController.text = widget.product!.minCount.toString();
     }
   }
@@ -217,17 +217,23 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             storeId: widget.product!.shopId,
             productId: widget.product!.id,
             title: _textTitleController.text,
+            description: _textDescriptionController.text,
             price: double.parse(_textPriceController.text),
             tax: double.parse(_textTaxController.text),
-            inventory: int.parse(_textInventoryController.text),
+            inventory: (_textInventoryController.text != '')
+                ? int.parse(_textInventoryController.text)
+                : 0,
             minCount: int.parse(_textMinCountController.text),
-            isActive: isActive);
+            isActive: isActive,
+            localProduct: widget.product!);
       }
 
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content:
-                Text(Translate.of(context).translate('add_product_success'))));
+            content: Text(Translate.of(context).translate(
+                (widget.product == null)
+                    ? 'add_product_success'
+                    : 'edit_product_success'))));
         Navigator.pop(context);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -274,7 +280,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         type: ValidateType.tax, allowEmpty: false);
 
     _errorInventory = UtilValidator.validate(_textInventoryController.text,
-        type: ValidateType.number, allowEmpty: false);
+        type: ValidateType.number,
+        allowEmpty: (widget.product != null) ? true : false);
 
     _errorMinCount = UtilValidator.validate(_textMinCountController.text,
         type: ValidateType.number, allowEmpty: false);
@@ -540,7 +547,10 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                     ),
                     const SizedBox(height: 16),
                     AppTextInput(
-                      hintText: Translate.of(context).translate('inventory'),
+                      hintText: Translate.of(context).translate(
+                          (widget.product == null)
+                              ? 'inventory'
+                              : 'add_inventory'),
                       maxLines: 1,
                       maxLength: 10,
                       errorText: _errorInventory,

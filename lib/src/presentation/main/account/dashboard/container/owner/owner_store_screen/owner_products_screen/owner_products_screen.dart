@@ -106,7 +106,7 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                 SimpleDialogOption(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    //Edit store
+                    updateProduct(item);
                   },
                   child: ListTile(
                     leading: const Icon(Icons.edit),
@@ -125,6 +125,12 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                 ),
               ]);
         });
+  }
+
+  void updateProduct(ContainerProductModel item) async {
+    await Navigator.pushNamed(context, Routes.createProductScreen,
+        arguments: {'product': item, 'sellerId': item.sellerId});
+    context.read<OwnerProductsCubit>().onLoad(false);
   }
 
   Future<void> showDeleteConfirmation(ContainerProductModel item) async {
@@ -222,7 +228,11 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                   if (index < products.length) {
                     ContainerProductModel item = products[index];
                     return InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, Routes.containerProductDetailScreen,
+                            arguments: {'product': item});
+                      },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Stack(

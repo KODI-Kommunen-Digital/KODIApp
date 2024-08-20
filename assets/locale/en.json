@@ -554,6 +554,7 @@
   "min_count": "Minimal Inventory",
   "max_count": "Maximal Inventory",
   "add_product_success": "Success adding product",
+  "edit_product_success": "Success updating product",
   "delete_product_success": "Success deleting product",
   "max_smaller_min": "Maximal inventory smaller than minimal inventory",
   "order_details": "Order Details",
@@ -581,5 +582,7 @@
   "request_approved": "Request got approved",
   "store_not_found": "Store could not be found",
   "name_required": "Name required",
-  "success": "Success"
+  "success": "Success",
+  "add_inventory": "Add to inventory",
+  "product": "Product"
 }

@@ -556,6 +556,7 @@
   "min_count": "Minimaler Bestand",
   "max_count": "Maximaler Bestand",
   "add_product_success": "Produkt erfolgreich hinzugefügt",
+  "edit_product_success": "Produkt erfolgreich aktualisiert",
   "delete_product_success": "Produkt erfolgreich gelöscht",
   "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand",
   "order_details": "Bestelldetails",
@@ -583,5 +584,7 @@
   "request_approved": "Anfrage wurde genehmigt",
   "store_not_found": "Laden nicht gefunden",
   "name_required": "Name erforderlich",
-  "success": "Erfolg"
+  "success": "Erfolg",
+  "add_inventory": "Zu bestehendem Bestand hinzufügen",
+  "product": "Produkt"
 }

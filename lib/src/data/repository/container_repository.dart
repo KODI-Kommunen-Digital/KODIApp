@@ -24,7 +24,7 @@ class ContainerRepository {
     final response = await Api.getAllStores(cityId, pageNo);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return StoreModel.fromJson(item);
+        return StoreModel.fromJson(item, cityId: cityId);
       }).toList();
       return list;
     } else {
@@ -278,18 +278,37 @@ class ContainerRepository {
       required double tax,
       required int inventory,
       required int minCount,
-      String? meta,
+      required ContainerProductModel localProduct,
       required bool isActive}) async {
-    Map<String, dynamic> params = {
-      "title": title,
-      "description": description,
-      "price": price,
-      "tax": tax,
-      "inventory": inventory,
-      "minCount": minCount,
-      "meta": meta,
-      "isActive": isActive
-    };
+    Map<String, dynamic> params = {};
+
+    if (title != localProduct.title) {
+      params['title'] = title;
+    }
+
+    if (description != localProduct.description) {
+      params['description'] = description;
+    }
+
+    if (price != localProduct.price) {
+      params['price'] = price;
+    }
+
+    if (tax != localProduct.tax) {
+      params['tax'] = tax;
+    }
+
+    if (inventory != 0) {
+      params['inventory'] = inventory;
+    }
+
+    if (minCount != localProduct.minCount) {
+      params['minCount'] = minCount;
+    }
+
+    if (isActive != localProduct.isActive) {
+      params['isActive'] = isActive;
+    }
 
     final response =
         await Api.updateProductStore(cityId, storeId, productId, params);

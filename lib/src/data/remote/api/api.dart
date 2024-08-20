@@ -789,7 +789,7 @@ class Api {
       cityId, storeId, productId, params) async {
     var list = '/cities/$cityId/store/$storeId/product/$productId';
     final result =
-        await HTTPManager(apiType: 'container').patch(url: list, data: params);
+        await HTTPManager(apiType: 'container').patch(url: list, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 
