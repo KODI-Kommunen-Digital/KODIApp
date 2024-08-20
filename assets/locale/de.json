@@ -238,7 +238,7 @@
   "error": "Fehler",
   "error_message": "Es ist ein Fehler aufgetreten, versuchen Sie es später erneut.",
   "register_success": "Erfolgreich registriert",
-  "save_data_success": "Daten erfolgreich speichern",
+  "save_data_success": "Daten erfolgreich gespeichert",
   "cannot_make_action": "Keine Aktion mit Daten möglich",
   "remove": "Entfernen",
   "share": "Teilen",
@@ -580,5 +580,8 @@
   "add_shelf_success": "Regal erfolgreich hinzugefügt",
   "approve": "Genehmigen",
   "seller_approved": "Verkäufer wurde genehmigt",
-  "request_approved": "Anfrage wurde genehmigt"
+  "request_approved": "Anfrage wurde genehmigt",
+  "store_not_found": "Laden nicht gefunden",
+  "name_required": "Name erforderlich",
+  "success": "Erfolg"
 }

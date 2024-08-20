@@ -81,7 +81,7 @@ class ContainerRepository {
   static Future<StoreModel?> loadStore(int cityId, int storeId) async {
     final response = await Api.getStoreDetails(cityId, storeId);
     if (response.success) {
-      final storeDetails = StoreModel.fromJson(response.data);
+      final storeDetails = StoreModel.fromJson(response.data, cityId: cityId);
       return storeDetails;
     } else {
       logError('Error loading stores: ${response.data} ${response.message}');
@@ -100,10 +100,16 @@ class ContainerRepository {
     Map<String, dynamic> params = {
       'name': name,
       'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
       'description': description
     };
+
+    if (longitude != null) {
+      params['longitude'] = double.parse(longitude);
+    }
+
+    if (latitude != null) {
+      params['latitude'] = double.parse(latitude);
+    }
 
     final response = await Api.editStoreDetails(cityId, storeId, params);
     if (response.success) {

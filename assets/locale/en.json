@@ -241,7 +241,7 @@
   "[jwt_auth] incorrect_password": "The username or password is incorrect",
   "auth_register_error": "Email already exists, Please use other email",
   "register_success": "Register Successfully",
-  "save_data_success": "Save data successfully",
+  "save_data_success": "Saved data successfully",
   "cannot_make_action": "Can't make action with data",
   "remove": "Remove",
   "share": "Share",
@@ -578,5 +578,8 @@
   "add_shelf_success": "Shelf added successfully",
   "approve": "Approve",
   "seller_approved": "Seller got approved",
-  "request_approved": "Request got approved"
+  "request_approved": "Request got approved",
+  "store_not_found": "Store could not be found",
+  "name_required": "Name required",
+  "success": "Success"
 }

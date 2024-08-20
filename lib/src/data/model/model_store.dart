@@ -20,12 +20,12 @@ class StoreModel {
     this.latitude,
     this.longitude});
 
-  factory StoreModel.fromJson(Map<String, dynamic> json) {
+  factory StoreModel.fromJson(Map<String, dynamic> json, {int? cityId}) {
     return StoreModel(
         id: json['id'],
         name: json['name'],
         description: json['description'],
-        cityId: json['cityId'],
+        cityId: json['cityId'] ?? cityId,
         createdAt: json['createdAt'],
         address: json['address'],
         latitude: json['latitude']?.toString(),

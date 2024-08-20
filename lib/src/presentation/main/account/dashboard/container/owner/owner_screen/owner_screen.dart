@@ -273,7 +273,7 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                 SimpleDialogOption(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    //Edit store
+                    editStore(item);
                   },
                   child: ListTile(
                     leading: const Icon(Icons.edit),
@@ -282,6 +282,12 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                 ),
               ]);
         });
+  }
+
+  void editStore(StoreModel item) async {
+    await Navigator.pushNamed(context, Routes.editStoreScreen,
+        arguments: {'storeId': item.id, 'cityId': item.cityId});
+    context.read<OwnerCubit>().onLoad(false);
   }
 }
 
