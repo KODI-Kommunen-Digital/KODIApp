@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.3';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.0';
                         });
                       }
                     },
@@ -460,54 +460,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (item.id == 5) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const FullScreenWebView()));
-      /*
-      final webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
-
-      await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(
-                    controller: webViewController,
-                    gestureRecognizers: gestureRecognizers,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");*/
+    }
+    if (item.id == 6) {
+      Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       // Handle other cases as before
       await launchUrl(Uri.parse(getServiceUrl(item.id)),
@@ -637,7 +592,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (item.id == 4 ||
                     item.id == 5 ||
                     item.id == 6 ||
-                    item.id == 7 ||
                     item.id == 8) {
                   _onService(item);
                 } else {
