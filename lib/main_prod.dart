@@ -5,12 +5,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
+import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -55,7 +56,8 @@ Future<void> main() async {
         'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envTroisdorf");
+  await dotenv.load(fileName: "assets/env/.envRatingen");
+  await CategoryManager.loadCategories();
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -114,22 +116,26 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: Scaffold(
-                      body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                        builder: (context, state) {
-                          if (state == const ApplicationState.loaded()) {
+                    home: FutureBuilder<String?>(
+                      future: _getStoredLocation(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          final location = snapshot.data;
+                          if (location != null) {
                             return const MainScreen();
+                          } else {
+                            return const IntroPage();
                           }
-                          if (state == const ApplicationState.loading()) {
-                            return const SplashScreen();
-                          }
-                          return const MainScreen();
-                        },
-                      ),
+                        }
+                      },
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -144,5 +150,10 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+
+  Future<String?> _getStoredLocation() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }
 }
