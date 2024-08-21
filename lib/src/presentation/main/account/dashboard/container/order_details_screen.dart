@@ -61,127 +61,130 @@ class OrderDetailsScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final product = order!.shelves[index].product;
                             final shelf = order!.shelves[index];
-                            return Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 4),
-                              child: Stack(
-                                children: [
-                                  Row(
-                                    children: <Widget>[
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: CachedNetworkImage(
-                                          imageUrl: ((product!.productImages ??
-                                                      [])
-                                                  .isNotEmpty)
-                                              ? '${Application.picturesURL}${product.productImages!.first}'
-                                              : '${Application.picturesURL}admin/News.jpeg',
-                                          cacheManager: memoryCacheManager,
-                                          placeholder: (context, url) {
-                                            return AppPlaceholder(
-                                              child: Container(
-                                                height: 140,
-                                                width: 120,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.white,
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Container(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: Stack(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: CachedNetworkImage(
+                                            imageUrl: ((product!.productImages ??
+                                                        [])
+                                                    .isNotEmpty)
+                                                ? '${Application.picturesURL}${product.productImages!.first}'
+                                                : '${Application.picturesURL}admin/News.jpeg',
+                                            cacheManager: memoryCacheManager,
+                                            placeholder: (context, url) {
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  height: 140,
+                                                  width: 120,
+                                                  decoration: const BoxDecoration(
+                                                    color: Colors.white,
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
-                                          imageBuilder:
-                                              (context, imageProvider) {
-                                            return Container(
-                                              width: 120,
-                                              height: 140,
-                                              decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.fitHeight,
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          errorWidget: (context, url, error) {
-                                            return AppPlaceholder(
-                                              child: Container(
+                                              );
+                                            },
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
                                                 width: 120,
                                                 height: 140,
-                                                decoration: const BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                      BorderRadius.only(
-                                                    topLeft: Radius.circular(8),
-                                                    bottomLeft:
-                                                        Radius.circular(8),
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.fitHeight,
                                                   ),
                                                 ),
-                                                child: const Icon(Icons.error),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            const SizedBox(
-                                              height: 24,
-                                            ),
-                                            Text(
-                                              "${Translate.of(context).translate('name')}: ${product.title}",
-                                              maxLines: 2,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .titleMedium!
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            Text(
-                                              product.description,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.normal,
-                                                  ),
-                                            ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                              "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Container(
-                                                  decoration: BoxDecoration(
+                                              );
+                                            },
+                                            errorWidget: (context, url, error) {
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration: const BoxDecoration(
+                                                    color: Colors.white,
                                                     borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                        BorderRadius.only(
+                                                      topLeft: Radius.circular(8),
+                                                      bottomLeft:
+                                                          Radius.circular(8),
+                                                    ),
                                                   ),
+                                                  child: const Icon(Icons.error),
                                                 ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 8),
-                                            const SizedBox(height: 4),
-                                          ],
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      )
-                                    ],
-                                  ),
-                                ],
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                height: 24,
+                                              ),
+                                              Text(
+                                                "${Translate.of(context).translate('name')}: ${product.title}",
+                                                maxLines: 2,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .titleMedium!
+                                                    .copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                product.description,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight: FontWeight.normal,
+                                                    ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 8),
+                                              const SizedBox(height: 4),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           }),
