@@ -52,6 +52,7 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:matomo_tracker/matomo_tracker.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -134,6 +135,11 @@ class Routes {
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
+        if (arguments['type'] == "category" ||
+            arguments['type'] == "categoryService") {
+          trackMatomoEvent(
+              "category", arguments['type'], arguments['categoryId']);
+        }
         return MaterialPageRoute(
           builder: (context) {
             return ListProductScreen(arguments: arguments);
@@ -143,8 +149,9 @@ class Routes {
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
-            return ProductDetailScreen(
-                item: settings.arguments as ProductModel);
+            ProductModel product = settings.arguments as ProductModel;
+            trackMatomoEvent('listing', product.title, product.id);
+            return ProductDetailScreen(item: product);
           },
         );
 
@@ -499,9 +506,7 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return FilterScreen(
-              multiFilter: arguments["multifilter"]
-            );
+            return FilterScreen(multiFilter: arguments["multifilter"]);
           },
         );
 
@@ -519,6 +524,40 @@ class Routes {
           fullscreenDialog: true,
         );
     }
+  }
+
+  static void trackMatomoEvent(String category, String name, int id) {
+    if (category == 'category') {
+      name = _getCategoryName(id) ?? 'category';
+    }
+    MatomoTracker.instance.trackEvent(
+      eventInfo: EventInfo(
+        category: category,
+        name: name,
+        action: id.toString(),
+        value: 1,
+      ),
+    );
+  }
+
+  static String? _getCategoryName(int id) {
+    Map<int, String> categories = {
+      1: "News",
+      3: "Events",
+      4: "Vereine",
+      5: "Produkte",
+      6: "Biete/Suche",
+      7: "Bürgerinfo",
+      9: "Fundbüro",
+      10: "Unternehmen",
+      11: "Mitfahrbank",
+      12: "Angebote",
+      13: "Essen & Trinken",
+      14: "Rathaus",
+      15: "Mitteilungsblatt",
+      16: "Mitteilung",
+    };
+    return categories[id];
   }
 
   ///Singleton factory
