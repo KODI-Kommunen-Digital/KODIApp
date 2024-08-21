@@ -91,13 +91,8 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
                     );
                   } else {
                     return (isLoadingMore)
-                        ? const Positioned(
-                            bottom: 20,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
+                        ? const Center(
+                            child: CircularProgressIndicator.adaptive(),
                           )
                         : Container();
                   }
