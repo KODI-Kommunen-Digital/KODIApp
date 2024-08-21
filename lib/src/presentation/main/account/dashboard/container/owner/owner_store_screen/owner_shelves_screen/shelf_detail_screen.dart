@@ -125,6 +125,30 @@ class ShelfDetailsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
+                      Translate.of(context).translate('product'),
+                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    Text(
+                      product.title,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              if (product != null)
+                const SizedBox(
+                  height: 8,
+                ),
+              if (product != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
                       Translate.of(context).translate('category'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.bold,
@@ -320,7 +344,7 @@ class ShelfDetailsScreen extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-              Translate.of(context).translate('group_delete_confirmation')),
+              Translate.of(context).translate('remove_product')),
           content: Text(
               Translate.of(context).translate('are_you_sure_remove_product')),
           actions: <Widget>[
