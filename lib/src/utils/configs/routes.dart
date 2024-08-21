@@ -138,7 +138,7 @@ class Routes {
         if (arguments['type'] == "category" ||
             arguments['type'] == "categoryService") {
           trackMatomoEvent(
-              "category", arguments['type'], arguments['categoryId']);
+              true, null, arguments['categoryId'] ?? arguments['id'], null);
         }
         return MaterialPageRoute(
           builder: (context) {
@@ -150,7 +150,10 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             ProductModel product = settings.arguments as ProductModel;
-            trackMatomoEvent('listing', product.title, product.id);
+            if (product.city?.id != null || product.cityId != null) {
+              trackMatomoEvent(false, product.title, product.id,
+                  product.cityId ?? product.city?.id);
+            }
             return ProductDetailScreen(item: product);
           },
         );
@@ -526,21 +529,26 @@ class Routes {
     }
   }
 
-  static void trackMatomoEvent(String category, String name, int id) {
-    if (category == 'category') {
-      name = _getCategoryName(id) ?? 'category';
+  static void trackMatomoEvent(
+      bool isCategory, String? name, int id, int? cityId) {
+    late String eventName;
+    if (isCategory) {
+      name = _getCategoryName(id);
+      eventName = "category_${name}_${id.toString()}";
+    } else {
+      eventName = "${name}_${id.toString()}_${cityId.toString()}";
     }
     MatomoTracker.instance.trackEvent(
       eventInfo: EventInfo(
-        category: category,
-        name: name,
-        action: id.toString(),
+        category: (isCategory) ? 'category' : 'listing',
+        name: eventName,
+        action: 'click',
         value: 1,
       ),
     );
   }
 
-  static String? _getCategoryName(int id) {
+  static String _getCategoryName(int id) {
     Map<int, String> categories = {
       1: "News",
       3: "Events",
@@ -557,7 +565,7 @@ class Routes {
       15: "Mitteilungsblatt",
       16: "Mitteilung",
     };
-    return categories[id];
+    return categories[id] ?? '';
   }
 
   ///Singleton factory
