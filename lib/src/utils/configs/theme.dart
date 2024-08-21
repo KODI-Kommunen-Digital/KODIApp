@@ -20,7 +20,7 @@ class AppTheme {
   ///Default Theme
   static final ThemeModel defaultTheme = ThemeModel.fromJson({
     "name": "default",
-    "primary": '#008CFF',
+    "primary": '#e30613',
     "secondary": "#FF0000",
   });
 

@@ -63,6 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1084962010221',
     projectId: 'troisdorf-204e4',
     storageBucket: 'troisdorf-204e4.appspot.com',
-    iosBundleId: 'com.troisdorf.app',
+    iosBundleId: 'com.ratingen.test',
   );
 }

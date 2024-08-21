@@ -2,14 +2,6 @@
     "status": "success",
     "data": [ 
         {
-            "id": 3,
-            "name": "Events",
-            "noOfSubcategories": 0,
-            "icon": "far fa-calendar-check",
-            "color": "#a569bd",
-            "categoryType" : "category"
-        },
-        {
             "id": 1,
             "name": "News",
             "noOfSubcategories": 8,
@@ -18,35 +10,51 @@
             "categoryType" : "category"
         },
         {
-            "id": 5,
-            "name": "Mobilität",
+            "id": 3,
+            "name": "Events",
             "noOfSubcategories": 0,
-            "icon": "fas fa-location-dot",
-            "color": "#497E76",
+            "icon": "far fa-calendar-check",
+            "color": "#a569bd",
             "categoryType" : "category"
         },
         {
-            "id": 6,
-            "name": "Online-Dienste",
+            "id": 5,
+            "name": "Parken",
             "noOfSubcategories": 0,
-            "icon": "fas fa-globe",
+            "icon": "fas fa-location-dot",
             "color": "#84C3BE",
             "categoryType" : "category"
         },
         {
-            "id": 7,
-            "name": "Stadtwerke",
+            "id": 6,
+            "name": "Abfall",
             "noOfSubcategories": 0,
-            "icon": "fas fa-bolt",
+            "icon": "fas fa-trash",
+            "color": "#497E76",
+            "categoryType" : "category"
+        },
+        {
+            "id": 14,
+            "name": "Coupons",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-ticket",
             "color": "#4C9141",
             "categoryType" : "category"
         },
         {
             "id": 8,
-            "name": "Sehenswertes",
+            "name": "RatingenCard",
             "noOfSubcategories": 0,
-            "icon": "fas fa-eye",
+            "icon": "fas fa-id-card",
             "color": "#826C34",
+            "categoryType" : "category"
+        },
+        {
+            "id": 9,
+            "name": "EK-Gutschein",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-gift",
+            "color": "#36454F",
             "categoryType" : "category"
         }
     ]
