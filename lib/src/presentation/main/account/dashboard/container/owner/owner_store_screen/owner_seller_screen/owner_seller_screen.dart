@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_cubit.dart';
@@ -157,39 +158,34 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                       const SizedBox(
                                         height: 24,
                                       ),
-                                      Text(
-                                        "${item.user?.firstname} ${item.user?.lastname}",
-                                        maxLines: 2,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(item.description ?? '',
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        child: Text(
+                                          "${item.user?.firstname} ${item.user?.lastname}",
+                                          maxLines: 2,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall!),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "ID: ${item.id.toString()}",
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                              .titleMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
-                                      Text(
-                                        item.formatDate(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                      Html(
+                                        data: item.description ?? '',
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                                        child: Text(
+                                          "ID: ${item.id.toString()}",
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       ),
                                       const SizedBox(height: 4),
                                       Text(

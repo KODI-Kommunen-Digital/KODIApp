@@ -86,188 +86,189 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return (requests.isNotEmpty)
-        ? Scaffold(
-            appBar: AppBar(
-              title: Text(Translate.of(context).translate('requests_seller')),
-              centerTitle: true,
-            ),
-            body: ListView.separated(
-              separatorBuilder: (context, index) {
-                return const Divider();
-              },
-              controller: _scrollController,
-              itemBuilder: (context, index) {
-                if (index < requests.length) {
-                  SellerRequestModel request = requests[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 8.0, horizontal: 16.0),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(
-                            context, Routes.sellerRequestDetailsScreen,
-                            arguments: {
-                              'request': request,
-                              'isOwner': widget.isOwner
-                            }).then((approved) {
-                          if (approved != null && approved == true) {
-                            context
-                                .read<SellerRequestsViewCubit>()
-                                .onLoad(false);
-                          }
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: Stack(
-                          children: [
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      Text(
-                                        request.title,
-                                        maxLines: 2,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleMedium!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(request.description,
+    return Scaffold(
+        appBar: AppBar(
+          title: Text(Translate.of(context).translate('requests_seller')),
+          centerTitle: true,
+        ),
+        body: (requests.isNotEmpty)
+            ? ListView.separated(
+                separatorBuilder: (context, index) {
+                  return const Divider();
+                },
+                controller: _scrollController,
+                itemBuilder: (context, index) {
+                  if (index < requests.length) {
+                    SellerRequestModel request = requests[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 8.0, horizontal: 16.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, Routes.sellerRequestDetailsScreen,
+                              arguments: {
+                                'request': request,
+                                'isOwner': widget.isOwner
+                              }).then((approved) {
+                            if (approved != null && approved == true) {
+                              context
+                                  .read<SellerRequestsViewCubit>()
+                                  .onLoad(false);
+                            }
+                          });
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: Stack(
+                            children: [
+                              Row(
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        const SizedBox(
+                                          height: 24,
+                                        ),
+                                        Text(
+                                          request.title,
+                                          maxLines: 2,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodySmall!),
-                                      const SizedBox(height: 16),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
+                                              .titleMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(request.description,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!),
+                                        const SizedBox(height: 16),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                                Translate.of(context)
+                                                    .translate('owes'),
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                            Text("${request.paymentOwed ?? 0}€",
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    )),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
                                               Translate.of(context)
-                                                  .translate('owes'),
+                                                  .translate('request_seller'),
+                                              overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall!
                                                   .copyWith(
                                                     fontWeight: FontWeight.bold,
-                                                  )),
-                                          Text("${request.paymentOwed ?? 0}€",
+                                                  ),
+                                            ),
+                                            Text(
+                                              request.id.toString(),
+                                              overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall!
                                                   .copyWith(
                                                     fontWeight: FontWeight.bold,
-                                                  )),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            Translate.of(context)
-                                                .translate('request_seller'),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            request.id.toString(),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            Translate.of(context)
-                                                .translate('maccount'),
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                          Text(
-                                            "${request.user?.firstname ?? ''} ${request.user?.lastname ?? ''}",
-                                            overflow: TextOverflow.ellipsis,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const SizedBox(height: 4),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              Translate.of(context)
+                                                  .translate('maccount'),
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                            Text(
+                                              "${request.user?.firstname ?? ''} ${request.user?.lastname ?? ''}",
+                                              overflow: TextOverflow.ellipsis,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const SizedBox(height: 4),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
+                    );
+                  } else {
+                    return (isLoadingMore)
+                        ? const Positioned(
+                            bottom: 20,
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          )
+                        : Container();
+                  }
+                },
+                itemCount: requests.length + 1,
+              )
+            : Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.sentiment_satisfied),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        Translate.of(context).translate('list_is_empty'),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
                     ),
-                  );
-                } else {
-                  return (isLoadingMore)
-                      ? const Positioned(
-                          bottom: 20,
-                          left: 0,
-                          right: 0,
-                          child: Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
-                        )
-                      : Container();
-                }
-              },
-              itemCount: requests.length + 1,
-            ),
-          )
-        : Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const Icon(Icons.sentiment_satisfied),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Text(
-                    Translate.of(context).translate('list_is_empty'),
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
+                  ],
                 ),
-              ],
-            ),
-          );
+              ));
   }
 }
 
