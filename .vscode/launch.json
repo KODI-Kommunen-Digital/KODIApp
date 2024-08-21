@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "smarT:app",
+            "name": "Ratingen",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "smarT:app (profile mode)",
+            "name": "Ratingen (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "smarT:app (release mode)",
+            "name": "Ratingen (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
