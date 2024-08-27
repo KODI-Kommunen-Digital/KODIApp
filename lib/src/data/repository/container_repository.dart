@@ -454,7 +454,6 @@ class ContainerRepository {
       "minCount": minCount,
       "categoryId": categoryId,
       "subCategoryId": subCategoryId,
-      "meta": meta ?? ''
     };
 
     final response = await Api.addProduct(cityId, storeId, params);
