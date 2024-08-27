@@ -369,7 +369,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
               top: false,
               bottom: false,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
                   children: <Widget>[
                     if (widget.product == null)
@@ -418,79 +418,168 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                     const SizedBox(height: 16),
                     if (selectedStore != null)
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              selectedStore!.name,
-                              style: Theme.of(context).textTheme.titleSmall!,
-                            ),
-                            if (widget.product == null)
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedStore = null;
-                                    });
-                                  },
-                                  icon: const Icon(Icons.close))
-                          ],
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20),
+                              color: Theme.of(context)
+                                  .appBarTheme
+                                  .backgroundColor),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Text(
+                                selectedStore!.name,
+                                style: (widget.product == null)
+                                    ? Theme.of(context).textTheme.titleSmall!
+                                    : Theme.of(context).textTheme.titleMedium!,
+                              ),
+                              if (widget.product == null)
+                                IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        selectedStore = null;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.close))
+                            ],
+                          ),
                         ),
                       ),
-                    if (selectedStore != null) const SizedBox(height: 64),
+                    if (selectedStore != null) const SizedBox(height: 32),
+                    if (selectedStore != null)
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                text:
+                                    Translate.of(context).translate('category'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                                children: const <TextSpan>[
+                                  TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
                     if (selectedStore != null)
                       widget.categories.isEmpty
                           ? const LinearProgressIndicator()
-                          : DropdownButton(
-                              isExpanded: false,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_category')),
-                              value: selectedCategory,
-                              items: widget.categories.map((category) {
-                                return DropdownMenuItem(
-                                    value: category,
-                                    child: Text(category.title));
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedCategory = value;
-                                });
-                                context.read<CreateProductCubit>().onLoad(
-                                    cityId: selectedCityId,
-                                    storeId: selectedStore?.id,
-                                    selectedStore: selectedStore,
-                                    categoryId: selectedCategory?.id,
-                                    selectedCategory: selectedCategory);
-                              },
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                DropdownButton(
+                                  isExpanded: false,
+                                  menuMaxHeight: 200,
+                                  hint: Text(Translate.of(context)
+                                      .translate('input_category')),
+                                  value: selectedCategory,
+                                  items: widget.categories.map((category) {
+                                    return DropdownMenuItem(
+                                        value: category,
+                                        child: Text(category.title));
+                                  }).toList(),
+                                  onChanged: (value) {
+                                    setState(() {
+                                      selectedCategory = value;
+                                    });
+                                    context.read<CreateProductCubit>().onLoad(
+                                        cityId: selectedCityId,
+                                        storeId: selectedStore?.id,
+                                        selectedStore: selectedStore,
+                                        categoryId: selectedCategory?.id,
+                                        selectedCategory: selectedCategory);
+                                  },
+                                ),
+                              ],
                             ),
                     const SizedBox(height: 16),
                     if ((widget.subCategories ?? []).isNotEmpty)
-                      DropdownButton(
-                        isExpanded: false,
-                        menuMaxHeight: 200,
-                        hint: Text(
-                            Translate.of(context).translate('subCategory')),
-                        value: selectedSubCategory,
-                        items: widget.subCategories!.map((subCategory) {
-                          return DropdownMenuItem(
-                              value: subCategory,
-                              child: Text(subCategory.title));
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedSubCategory = value;
-                          });
-                          context.read<CreateProductCubit>().onLoad(
-                              cityId: selectedCityId,
-                              storeId: selectedStore?.id,
-                              selectedStore: selectedStore,
-                              categoryId: selectedCategory?.id,
-                              selectedCategory: selectedCategory,
-                              selectedSubCategory: selectedSubCategory);
-                        },
+                      Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text.rich(
+                              TextSpan(
+                                text: Translate.of(context)
+                                    .translate('subCategory'),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium!
+                                    .copyWith(fontWeight: FontWeight.bold),
+                                children: const <TextSpan>[
+                                  TextSpan(
+                                    text: ' *',
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ]),
+                    if ((widget.subCategories ?? []).isNotEmpty)
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          DropdownButton(
+                            isExpanded: false,
+                            menuMaxHeight: 200,
+                            hint: Text(
+                                Translate.of(context).translate('subCategory')),
+                            value: selectedSubCategory,
+                            items: widget.subCategories!.map((subCategory) {
+                              return DropdownMenuItem(
+                                  value: subCategory,
+                                  child: Text(subCategory.title));
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedSubCategory = value;
+                              });
+                              context.read<CreateProductCubit>().onLoad(
+                                  cityId: selectedCityId,
+                                  storeId: selectedStore?.id,
+                                  selectedStore: selectedStore,
+                                  categoryId: selectedCategory?.id,
+                                  selectedCategory: selectedCategory,
+                                  selectedSubCategory: selectedSubCategory);
+                            },
+                          ),
+                        ],
                       ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: Translate.of(context).translate('title'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate('title'),
                       controller: _textTitleController,
@@ -503,6 +592,29 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: Translate.of(context)
+                                  .translate('description'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate('description'),
                       maxLines: 6,
@@ -517,6 +629,28 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: Translate.of(context).translate('price'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate('price'),
                       maxLines: 1,
@@ -531,6 +665,28 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: Translate.of(context).translate('tax'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate('tax'),
                       maxLines: 1,
@@ -546,6 +702,20 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text:
+                                  Translate.of(context).translate('inventory'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate(
                           (widget.product == null)
@@ -564,6 +734,29 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text:
+                                  Translate.of(context).translate('min_count'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
                     AppTextInput(
                       hintText: Translate.of(context).translate('min_count'),
                       maxLines: 1,
