@@ -195,6 +195,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget? _buildSubmit() {
     return FloatingActionButton(
+      shape: const CircleBorder(),
       backgroundColor: Theme.of(context).primaryColor,
       onPressed: _onSubmit,
       child: const Icon(
@@ -219,8 +220,9 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
+      height: 64,
+      color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
       child: SizedBox(
-        height: 56,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
