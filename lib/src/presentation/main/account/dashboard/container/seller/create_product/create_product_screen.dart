@@ -210,6 +210,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
           tax: double.parse(_textTaxController.text),
           inventory: int.parse(_textInventoryController.text),
           minCount: int.parse(_textMinCountController.text),
+          categoryId: selectedCategory!.id,
+          subCategoryId: selectedSubCategory!.id
         );
       } else {
         success = await ContainerRepository.editProduct(

@@ -442,6 +442,8 @@ class ContainerRepository {
       required double tax,
       required int inventory,
       required int minCount,
+      required int categoryId,
+      required int subCategoryId,
       String? meta}) async {
     Map<String, dynamic> params = {
       "title": title,
@@ -450,6 +452,8 @@ class ContainerRepository {
       "tax": tax,
       "inventory": inventory,
       "minCount": minCount,
+      "categoryId": categoryId,
+      "subCategoryId": subCategoryId,
       "meta": meta ?? ''
     };
 
