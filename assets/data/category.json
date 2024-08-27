@@ -43,6 +43,14 @@
             "categoryType" : "category"
         },
         {
+            "id": 8,
+            "name": "Sehenswertes",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-eye",
+            "color": "#826C34",
+            "categoryType" : "category"
+        },
+        {
             "id": 9,
             "name": "Fundbüro",
             "noOfSubcategories": 0,
