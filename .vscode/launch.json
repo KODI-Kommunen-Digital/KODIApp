@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Coburg",
+            "name": "Rodachtal",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Coburg (profile mode)",
+            "name": "Rodachtal (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Coburg (release mode)",
+            "name": "Rodachtal (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
