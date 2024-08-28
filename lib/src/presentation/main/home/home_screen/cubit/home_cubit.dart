@@ -55,21 +55,21 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
-    final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
-    categoryCount =
-        List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
+    // final categoryCountRequestResponse =
+    //     await Api.requestCategoryCount(savedCity?.id);
+    // categoryCount =
+    //     List.from(categoryCountRequestResponse.data ?? []).map((item) {
+    //   return CategoryModel.fromJson(item);
+    // }).toList();
 
     const banner = Images.slider;
 
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
+    // List<CategoryModel> formattedCategories =
+    //     await formatCategoriesList(category, categoryCount, savedCity?.id);
 
     emit(HomeStateLoaded(
       banner,
-      formattedCategories,
+      category,
       location,
       recent,
       isRefreshLoader,
@@ -83,10 +83,10 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<String> getIgnoreAppVersion() async {
     final prefs = await Preferences.openBox();
-    String ignoreVersion = await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+    String ignoreVersion =
+        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
     return ignoreVersion;
   }
-
 
   Future<bool> doesUserExist() async {
     final int userId = await UserRepository.getLoggedUserId();
