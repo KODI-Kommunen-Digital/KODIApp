@@ -165,8 +165,8 @@ class ContainerRepository {
   }
 
   static Future<List<ShelfModel>?> getStoreShelves(
-      int cityId, int storeId, int? pageNo) async {
-    final response = await Api.getShelves(cityId, storeId, pageNo);
+      int cityId, int storeId, int? pageNo, {bool loading = false}) async {
+    final response = await Api.getShelves(cityId, storeId, pageNo, loading);
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {

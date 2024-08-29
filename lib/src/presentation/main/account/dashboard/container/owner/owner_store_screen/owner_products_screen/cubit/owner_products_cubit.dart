@@ -33,7 +33,7 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
     }
 
     final requests = await ContainerRepository.getStoreProductRequests(
-        cityId: store.cityId, storeId: store.id, pageNo: 1);
+        cityId: store.cityId, storeId: store.id, pageNo: 1, status: 0);
 
     emit(OwnerProductsState.loaded(
         products ?? [], requests ?? [], categories ?? [], subCategories));
@@ -47,13 +47,13 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
 
   Future<List<ProductRequestModel>> newRequests(int pageNo) async {
     final newRequests = await ContainerRepository.getStoreProductRequests(
-        cityId: store.cityId, storeId: store.id, pageNo: pageNo);
+        cityId: store.cityId, storeId: store.id, pageNo: pageNo, status: 0);
     return newRequests ?? [];
   }
 
   Future<List<ShelfModel>> getShelves() async {
     final shelves =
-        await ContainerRepository.getStoreShelves(store.cityId, store.id, null);
+        await ContainerRepository.getStoreShelves(store.cityId, store.id, null, loading: true);
     return shelves ?? [];
   }
 

@@ -706,11 +706,11 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getShelves(cityId, storeId, pageNo) async {
+  static Future<ResultApiModel> getShelves(cityId, storeId, pageNo, loading) async {
     var list = (pageNo == null)
         ? '/cities/$cityId/store/$storeId/shelves'
         : '/cities/$cityId/store/$storeId/shelves?pageNumber=$pageNo';
-    final result = await HTTPManager(apiType: 'container').get(url: list);
+    final result = await HTTPManager(apiType: 'container').get(url: list, loading: loading);
     return ResultApiModel.fromJson(result);
   }
 
