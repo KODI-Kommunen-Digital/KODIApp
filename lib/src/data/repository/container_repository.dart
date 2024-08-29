@@ -556,7 +556,7 @@ class ContainerRepository {
   }
 
   static Future<bool> acceptProductRequest(ProductRequestModel request) async {
-    final params = {'storeId': request.shopId, 'accepted': true};
+    final params = {'storeId': request.shopId, 'statusId': 1};
     final response = await Api.patchProductRequest(request.id, params);
     if (response.success) {
       return true;
