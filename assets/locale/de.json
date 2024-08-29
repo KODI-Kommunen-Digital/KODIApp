@@ -138,8 +138,8 @@
   "more": "Mehr",
   "popular_location": "Weiteres",
   "let_find_interesting": "Es gibt so vieles zu entdecken",
-  "recent_listings": "Aktuelle Beiträge",
-  "what_happen": "Hier siehst du alles was kürzlich neu hochgeladen wurde",
+  "recent_listings": "Aktuelles",
+  "what_happen": "Was passiert in deiner Umgebung",
   "shopping": "Das Einkaufen",
   "shopping_intro": "Lieblingsmarken und heißeste Trends.",
   "payment": "Zahlung",
@@ -552,6 +552,8 @@
   "add_to_calendar": "Zum Kalendar hinzufügen",
   "rsag": "RSAG App",
   "views": "Aufrufe",
-  "geo_permission_needed": "GPS Berechtigung erforderlich"
+  "geo_permission_needed": "GPS Berechtigung erforderlich",
+  "your_categories": "Deine Kategorien",
+  "all_in_app": "Alles in deiner Ratingen App"
 }
 
