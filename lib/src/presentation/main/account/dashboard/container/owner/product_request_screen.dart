@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
@@ -67,10 +69,11 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
                   if (index < requests.length) {
                     ProductRequestModel item = requests[index];
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        final shelves = await context.read<OwnerProductsCubit>().getShelves();
                         Navigator.pushNamed(
                             context, Routes.productRequestDetailScreen,
-                            arguments: {'request': item}).then((approved) {
+                            arguments: {'request': item, 'shelves': shelves}).then((approved) {
                           if (approved != null) {
                             if (approved == true) {
                               setState(() {

@@ -165,7 +165,7 @@ class ContainerRepository {
   }
 
   static Future<List<ShelfModel>?> getStoreShelves(
-      int cityId, int storeId, int pageNo) async {
+      int cityId, int storeId, int? pageNo) async {
     final response = await Api.getShelves(cityId, storeId, pageNo);
 
     if (response.success) {
@@ -555,8 +555,13 @@ class ContainerRepository {
     }
   }
 
-  static Future<bool> acceptProductRequest(ProductRequestModel request) async {
-    final params = {'storeId': request.shopId, 'statusId': 1};
+  static Future<bool> acceptProductRequest(
+      ProductRequestModel request, List<int> shelfIds) async {
+    final params = {
+      'storeId': request.shopId,
+      'statusId': 1,
+      'shelfIds': shelfIds
+    };
     final response = await Api.patchProductRequest(request.id, params);
     if (response.success) {
       return true;

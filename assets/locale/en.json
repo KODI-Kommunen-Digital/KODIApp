@@ -584,5 +584,6 @@
   "name_required": "Name required",
   "success": "Success",
   "add_inventory": "Add to inventory",
-  "product": "Product"
+  "product": "Product",
+  "choose_shelves_product": "Choose shelves for product"
 }

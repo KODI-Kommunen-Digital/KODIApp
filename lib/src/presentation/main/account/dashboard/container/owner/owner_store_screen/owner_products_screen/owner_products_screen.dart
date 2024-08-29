@@ -133,6 +133,12 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
     context.read<OwnerProductsCubit>().onLoad(false);
   }
 
+  void updateRequest() async {
+    Navigator.pushNamed(context, Routes.productRequestScreen,
+        arguments: {"requests": widget.requests});
+    context.read<OwnerProductsCubit>().onLoad(false);
+  }
+
   Future<void> showDeleteConfirmation(ContainerProductModel item) async {
     final result = await showDialog(
       context: context,
@@ -216,8 +222,7 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
           actions: [
             AppButton(Translate.of(context).translate('requests'),
                 type: ButtonType.text, onPressed: () {
-              Navigator.pushNamed(context, Routes.productRequestScreen,
-                  arguments: {"requests": widget.requests});
+              updateRequest();
             })
           ],
         ),

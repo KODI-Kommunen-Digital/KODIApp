@@ -586,5 +586,6 @@
   "name_required": "Name erforderlich",
   "success": "Erfolg",
   "add_inventory": "Zu bestehendem Bestand hinzufügen",
-  "product": "Produkt"
+  "product": "Produkt",
+  "choose_shelves_product": "Wähle Regale für das Produkt aus"
 }

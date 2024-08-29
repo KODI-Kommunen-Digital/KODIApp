@@ -59,7 +59,7 @@ class ContainerProductModel {
         title: json['title'],
         description: json['description'],
         price: json['price'].toDouble(),
-        tax: json['tax'].toDouble(),
+        tax: (json['tax'] ?? 0).toDouble(),
         inventory: json['inventory'] ?? 0,
         maxCount: json['maxCount'] ?? 0,
         minCount: json['minCount'] ?? 0,

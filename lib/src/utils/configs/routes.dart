@@ -729,6 +729,7 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return ProductRequestDetailScreen(
               request: arguments['request'],
+              shelves: arguments['shelves'],
             );
           },
         );

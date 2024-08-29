@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_state.dart';
@@ -48,6 +49,12 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
     final newRequests = await ContainerRepository.getStoreProductRequests(
         cityId: store.cityId, storeId: store.id, pageNo: pageNo);
     return newRequests ?? [];
+  }
+
+  Future<List<ShelfModel>> getShelves() async {
+    final shelves =
+        await ContainerRepository.getStoreShelves(store.cityId, store.id, null);
+    return shelves ?? [];
   }
 
   Future<bool> deleteProduct(ContainerProductModel product) async {
