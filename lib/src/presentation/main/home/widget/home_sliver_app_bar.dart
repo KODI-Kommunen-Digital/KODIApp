@@ -27,10 +27,10 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           images: banners,
           height: expandedHeight,
         ),
-        Container(
-          height: 25,
-          color: Theme.of(context).colorScheme.surface,
-        ),
+        //Container(
+        //  height: 25,
+        //  color: Theme.of(context).colorScheme.surface,
+        //),
         // CitiesDropDown(
         //   hintText: hintText,
         //   cityTitlesList: cityTitlesList,

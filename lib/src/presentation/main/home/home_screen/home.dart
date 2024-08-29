@@ -289,6 +289,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       }),
                   pinned: true,
                 ),
+                const SliverToBoxAdapter(
+                  child: SizedBox(height: 25,),
+                ),
                 CupertinoSliverRefreshControl(
                   onRefresh: _onRefresh,
                 ),
