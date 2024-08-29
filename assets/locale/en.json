@@ -544,6 +544,7 @@
   "apple_calendar": "Apple Calendar",
   "add_to_calendar": "Add to calendar",
   "views": "Views",
-
-  "geo_permission_needed": "GPS permission needed"
+  "geo_permission_needed": "GPS permission needed",
+  "your_categories": "Your categories",
+  "all_in_app": "Everything in your Ratingen App"
 }

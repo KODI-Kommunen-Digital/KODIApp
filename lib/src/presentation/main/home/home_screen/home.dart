@@ -610,7 +610,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Container(
       padding: const EdgeInsets.all(8),
-      child: content,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            Translate.of(context).translate('your_categories'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+          ),
+          Text(
+            Translate.of(context).translate(
+              'all_in_app',
+            ),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+          const SizedBox(height: 16,),
+          content
+        ],
+      ),
     );
   }
 
@@ -771,7 +790,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+                    .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
               ),
               Text(
                 Translate.of(context).translate(
