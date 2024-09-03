@@ -447,7 +447,7 @@ class ImageListModel {
       }
       bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
       bool isNaN = image ==
-          'https://einbeck1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
+          'https://mitwitz1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
 
       if (isEcmapsDomain) {
         final urlRegex = RegExp(r"https.*\.(jpg|png)");
