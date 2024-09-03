@@ -617,14 +617,14 @@ class _HomeScreenState extends State<HomeScreen> {
             Translate.of(context).translate('your_categories'),
             style: Theme.of(context)
                 .textTheme
-                .titleMedium!
+                .titleLarge!
                 .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
           ),
           Text(
             Translate.of(context).translate(
               'all_in_app',
             ),
-            style: Theme.of(context).textTheme.bodyMedium,
+            style: Theme.of(context).textTheme.titleMedium,
           ),
           const SizedBox(height: 16,),
           content
@@ -789,14 +789,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleMedium!
+                    .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
               ),
               Text(
                 Translate.of(context).translate(
                   'what_happen',
                 ),
-                style: Theme.of(context).textTheme.bodyMedium,
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),
