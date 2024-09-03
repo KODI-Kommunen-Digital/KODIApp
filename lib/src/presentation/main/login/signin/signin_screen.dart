@@ -223,8 +223,8 @@ class _SignInLoadedState extends State<SignInLoaded> {
                                       const SizedBox(height: 16),
                                       RichText(
                                         text: TextSpan(
-                                          style:
-                                              DefaultTextStyle.of(context).style,
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
                                           children: const <TextSpan>[
                                             TextSpan(
                                               text: 'Schritt 1:',
@@ -301,8 +301,9 @@ class _SignInLoadedState extends State<SignInLoaded> {
                         },
                         child: Text(
                           Translate.of(context).translate('info'),
-                          style: const TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ],
