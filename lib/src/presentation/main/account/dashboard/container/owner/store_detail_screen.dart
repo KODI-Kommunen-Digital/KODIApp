@@ -61,6 +61,7 @@ class StoreDetailScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               GridView.count(
+                physics: const ScrollPhysics(),
                 shrinkWrap: true,
                 crossAxisCount: 2,
                 padding: const EdgeInsets.all(16.0),
