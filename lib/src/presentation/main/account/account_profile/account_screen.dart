@@ -211,6 +211,23 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         ],
                       ),
                     ),
+                    AppListTitle(
+                      title: Translate.of(context).translate('trader_area'),
+                      onPressed: () {
+
+                      },
+                      trailing: Row(
+                        children: <Widget>[
+                          RotatedBox(
+                            quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                            child: const Icon(
+                              Icons.keyboard_arrow_right,
+                              textDirection: TextDirection.ltr,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                     // AppListTitle(
                     //   title: Translate.of(context).translate('faq'),
                     //   onPressed: () {
