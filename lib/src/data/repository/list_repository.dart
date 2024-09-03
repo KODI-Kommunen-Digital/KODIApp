@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -206,19 +207,38 @@ class ListRepository {
 
   Future<List<ProductModel>> loadUserListings(id, pageNo) async {
     List<ProductModel> userList = [];
-    final listResponse = await Api.requestMyListings(1);
-    if (listResponse.success) {
-      final responseData = listResponse.data;
-      if (responseData != []) {
-        userList = List.from(responseData ?? []).map((item) {
-          return ProductModel.fromJson(item);
-        }).toList();
+
+    final loggedInUserId = await UserRepository.getLoggedUserId();
+    if (loggedInUserId == id) {
+      final listResponse = await Api.requestMyListings(1);
+      if (listResponse.success) {
+        final responseData = listResponse.data;
+        if (responseData != []) {
+          userList = List.from(responseData ?? []).map((item) {
+            return ProductModel.fromJson(item);
+          }).toList();
+        } else {
+          logError('Load User Listings Error');
+        }
       } else {
         logError('Load User Listings Error');
       }
     } else {
-      logError('Load User Listings Error');
+      final listResponse = await Api.requestUserListings(id, 1);
+      if (listResponse.success) {
+        final responseData = listResponse.data;
+        if (responseData != []) {
+          userList = List.from(responseData ?? []).map((item) {
+            return ProductModel.fromJson(item);
+          }).toList();
+        } else {
+          logError('Load User Listings Error');
+        }
+      } else {
+        logError('Load User Listings Error');
+      }
     }
+
     return userList;
   }
 
