@@ -77,70 +77,69 @@ class ProductModel {
 
   int? timeless;
 
-  ProductModel({
-    required this.id,
-    required this.title,
-    required this.image,
-    this.pdf,
-    this.videoURL,
-    this.category,
-    required this.expiryDate,
-    required this.startDate,
-    required this.endDate,
-    required this.createDate,
-    this.username,
-    this.firstname,
-    this.lastname,
-    this.profileImage,
-    this.dateEstablish,
-    this.rate,
-    this.numRate,
-    this.rateText,
-    this.status,
-    required this.favorite,
-    required this.address,
-    this.zipCode,
-    required this.phone,
-    this.fax,
-    required this.email,
-    required this.website,
-    required this.externalId,
-    required this.description,
-    this.color,
-    this.icon,
-    this.tags,
-    this.price,
-    this.priceMin,
-    this.priceMax,
-    this.country,
-    this.city,
-    this.state,
-    this.author,
-    this.galleries,
-    this.features,
-    this.related,
-    this.latest,
-    this.openHours,
-    this.socials,
-    this.location,
-    this.attachments,
-    this.link,
-    this.bookingUse,
-    this.bookingStyle,
-    this.priceDisplay,
-    this.categoryId,
-    this.subcategoryId,
-    required this.userId,
-    this.cityId,
-    this.villageId,
-    this.statusId,
-    this.timeless,
-    this.sourceId,
-    this.imageLists,
-    this.showExternal,
-    this.pollOptions,
-    this.viewCount
-  });
+  ProductModel(
+      {required this.id,
+      required this.title,
+      required this.image,
+      this.pdf,
+      this.videoURL,
+      this.category,
+      required this.expiryDate,
+      required this.startDate,
+      required this.endDate,
+      required this.createDate,
+      this.username,
+      this.firstname,
+      this.lastname,
+      this.profileImage,
+      this.dateEstablish,
+      this.rate,
+      this.numRate,
+      this.rateText,
+      this.status,
+      required this.favorite,
+      required this.address,
+      this.zipCode,
+      required this.phone,
+      this.fax,
+      required this.email,
+      required this.website,
+      required this.externalId,
+      required this.description,
+      this.color,
+      this.icon,
+      this.tags,
+      this.price,
+      this.priceMin,
+      this.priceMax,
+      this.country,
+      this.city,
+      this.state,
+      this.author,
+      this.galleries,
+      this.features,
+      this.related,
+      this.latest,
+      this.openHours,
+      this.socials,
+      this.location,
+      this.attachments,
+      this.link,
+      this.bookingUse,
+      this.bookingStyle,
+      this.priceDisplay,
+      this.categoryId,
+      this.subcategoryId,
+      required this.userId,
+      this.cityId,
+      this.villageId,
+      this.statusId,
+      this.timeless,
+      this.sourceId,
+      this.imageLists,
+      this.showExternal,
+      this.pollOptions,
+      this.viewCount});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -168,6 +167,8 @@ class ProductModel {
     String priceDisplay = '';
     int? timeless;
     String description = '';
+    String imageUrl =
+        'admin/News/Defaultimage${json['id'].toString().substring(json['id'].toString().length - 1)}.png';
 
     if (json['author'] != null) {
       author = UserModel.fromJson(json['author']);
@@ -267,71 +268,93 @@ class ProductModel {
       }).toList();
     }
 
+    if (json['logo'] != null) {
+      var image = json['logo'];
+      if (image is List<dynamic> && json['logo'].isNotEmpty) {
+        image = json['logo'][0]?.toString();
+      } else {
+        image = json['logo']?.toString();
+      }
+      bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
+      bool isNaN = image ==
+          'https://mitwitz1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
+
+      if (isEcmapsDomain) {
+        final urlRegex = RegExp(r"https.*\.(jpg|png)");
+        final match = urlRegex.firstMatch(image);
+        final extractedUrl = match?.group(0);
+        if (extractedUrl != null) {
+          final parsedUrl =
+              extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+          imageUrl = parsedUrl;
+        }
+      } else if (!isNaN) {
+        imageUrl = image;
+      }
+    }
+
     return ProductModel(
-      id: json['id'],
-      userId: json['userId'] ?? 0,
-      title: json['title'] ?? '',
-      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
-          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
-          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
-      videoURL: videoURL,
-      category: category ?? '',
-      createDate: createDate,
-      expiryDate: expiryDate,
-      timeless: timeless,
-      startDate: startDate,
-      endDate: endDate,
-      username: json['username'],
-      firstname: json['firstname'],
-      lastname: json['lastname'],
-      profileImage: json['image'] ?? '',
-      pdf: json['pdf'] ?? '',
-      rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
-      numRate: json['rating_count'] ?? 0,
-      rateText: json['post_status'] ?? '',
-      status: status,
-      favorite: json['wishlist'] ?? false,
-      address: json['address'] ?? '',
-      zipCode: json['zip_code'] ?? '',
-      phone: json['phone'] ?? '',
-      fax: json['fax'] ?? '',
-      email: json['email'] ?? '',
-      website: json['website'] ?? '',
-      externalId: externalId ?? '',
-      description: json['description'],
-      color: json['color'] ?? '',
-      categoryId: json['categoryId'] ?? 1,
-      subcategoryId: json['subcategoryId'] ?? 1,
-      cityId: cityId ?? int.parse(json['cityId']?.toString() ?? '0'),
-      villageId: json['villageId'] ?? 0,
-      statusId: json['statusId'] ?? 0,
-      sourceId: json['sourceId'] ?? 1,
-      showExternal: json['showExternal'] ?? 0,
-      icon: json['icon'] ?? '',
-      tags: tags,
-      price: json['booking_price'] ?? '',
-      priceMin: priceMin,
-      priceMax: priceMax,
-      country: country,
-      state: state,
-      city: city,
-      features: features,
-      author: author,
-      galleries: galleries,
-      related: listRelated,
-      latest: listLatest,
-      openHours: openHours,
-      socials: socials,
-      location: location,
-      attachments: attachments,
-      link: json['guid'] ?? '',
-      bookingUse: bookingUse,
-      bookingStyle: json['booking_style'] ?? '',
-      priceDisplay: priceDisplay,
-      imageLists: imagesList,
-      pollOptions: pollOptions,
-      viewCount: json['viewCount'] ?? 0
-    );
+        id: json['id'],
+        userId: json['userId'] ?? 0,
+        title: json['title'] ?? '',
+        image: imageUrl,
+        videoURL: videoURL,
+        category: category ?? '',
+        createDate: createDate,
+        expiryDate: expiryDate,
+        timeless: timeless,
+        startDate: startDate,
+        endDate: endDate,
+        username: json['username'],
+        firstname: json['firstname'],
+        lastname: json['lastname'],
+        profileImage: json['image'] ?? '',
+        pdf: json['pdf'] ?? '',
+        rate: double.tryParse('${json['rating_avg']}') ?? 0.0,
+        numRate: json['rating_count'] ?? 0,
+        rateText: json['post_status'] ?? '',
+        status: status,
+        favorite: json['wishlist'] ?? false,
+        address: json['address'] ?? '',
+        zipCode: json['zip_code'] ?? '',
+        phone: json['phone'] ?? '',
+        fax: json['fax'] ?? '',
+        email: json['email'] ?? '',
+        website: json['website'] ?? '',
+        externalId: externalId ?? '',
+        description: json['description'],
+        color: json['color'] ?? '',
+        categoryId: json['categoryId'] ?? 1,
+        subcategoryId: json['subcategoryId'] ?? 1,
+        cityId: cityId ?? int.parse(json['cityId']?.toString() ?? '0'),
+        villageId: json['villageId'] ?? 0,
+        statusId: json['statusId'] ?? 0,
+        sourceId: json['sourceId'] ?? 1,
+        showExternal: json['showExternal'] ?? 0,
+        icon: json['icon'] ?? '',
+        tags: tags,
+        price: json['booking_price'] ?? '',
+        priceMin: priceMin,
+        priceMax: priceMax,
+        country: country,
+        state: state,
+        city: city,
+        features: features,
+        author: author,
+        galleries: galleries,
+        related: listRelated,
+        latest: listLatest,
+        openHours: openHours,
+        socials: socials,
+        location: location,
+        attachments: attachments,
+        link: json['guid'] ?? '',
+        bookingUse: bookingUse,
+        bookingStyle: json['booking_style'] ?? '',
+        priceDisplay: priceDisplay,
+        imageLists: imagesList,
+        pollOptions: pollOptions,
+        viewCount: json['viewCount'] ?? 0);
   }
 
   factory ProductModel.fromNotification(Map<String, dynamic> json) {
@@ -413,10 +436,36 @@ class ImageListModel {
   ImageListModel({this.id, this.imageOrder, this.listingId, this.logo});
 
   ImageListModel.fromJson(Map<String, dynamic> json) {
+    String imageUrl = '';
+
+    if (json['logo'] != null) {
+      var image = json['logo'];
+      if (image is List<dynamic> && json['logo'].isNotEmpty) {
+        image = json['logo'][0]?.toString();
+      } else {
+        image = json['logo']?.toString();
+      }
+      bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
+      bool isNaN = image ==
+          'https://einbeck1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
+
+      if (isEcmapsDomain) {
+        final urlRegex = RegExp(r"https.*\.(jpg|png)");
+        final match = urlRegex.firstMatch(image);
+        final extractedUrl = match?.group(0);
+        if (extractedUrl != null) {
+          final parsedUrl =
+              extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+          imageUrl = parsedUrl;
+        }
+      } else if (!isNaN) {
+        imageUrl = image;
+      }
+    }
     id = json['id'];
     imageOrder = json['imageOrder'];
     listingId = json['listingId'];
-    logo = json['logo'];
+    logo = imageUrl;
   }
 
   Map<String, dynamic> toJson() {
