@@ -61,7 +61,7 @@
             "id": 25,
             "name": "Umfrage",
             "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
+            "icon": "fas fa-comment",
             "color": "#027148",
             "categoryType" : "category"
         }
