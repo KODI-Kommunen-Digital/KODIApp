@@ -69,6 +69,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _focusWebsite = FocusNode();
   final _focusPrice = FocusNode();
 
+  final String cityName = 'Gotham'; //TODO CHANGE into Ratingen!!
+
   bool _processing = false;
   String? _errorTitle;
   String? _errorContent;
@@ -80,13 +82,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorStatus;
   String? _errorSDate;
   String? _errorCategory;
-  String? selectedCity;
-  int? cityId;
   int? statusId;
   int? villageId;
   int? categoryId;
   int? subCategoryId;
-  List listCity = [];
   List listVillage = [];
   List listCategory = [];
   List listSubCategory = [];
@@ -235,8 +234,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _onProcess() async {
-    final loadCitiesResponse =
-        await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
@@ -251,18 +248,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
-      if (currentCity != null && currentCity != 0) {
-        for (var cityData in loadCitiesResponse!.data) {
-          if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
-          }
-        }
-      } else {
-        selectedCity = loadCitiesResponse!.data.first['name'];
-      }
       selectedSubCategory = loadCategoryResponse?.data.first['name'];
-      listCity = loadCitiesResponse.data;
       selectedCategory = selectedSubCategory;
       _processing = true;
     });
@@ -292,10 +278,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
           (element) => element["id"] == widget.item!.categoryId)["name"];
       selectedSubCategory = listSubCategory.firstWhere(
           (element) => element["id"] == widget.item!.subcategoryId)["name"];
-
-      final city = listCity
-          .firstWhere((element) => element['id'] == widget.item?.cityId);
-      selectedCity = city['name'];
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
@@ -360,16 +342,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
         });
       }
     } else {
-      if (currentCity != null && currentCity != 0) {
-        for (var cityData in loadCitiesResponse?.data) {
-          if (cityData['id'] == currentCity) {
-            selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
-          }
-        }
-      } else {
-        selectedCity = loadCitiesResponse?.data.first['name'];
-      }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
         if (selectedCategory?.toLowerCase() == "news" ||
@@ -643,9 +615,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           isLoading = true;
         });
         final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
+              cityId: 1,
               title: _textTitleController.text,
-              city: selectedCity,
+              city: cityName,
               place: _textPlaceController.text,
               description: _textContentController.text,
               address: _textAddressController.text,
@@ -695,7 +667,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         services: serviceEntries,
         openHours: timeSlots,
         holidays: [],
-        city: selectedCity ?? "");
+        city: cityName);
   }
 
   bool _validData() {
@@ -1076,7 +1048,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             if (selectedCategory?.toLowerCase() == "news" ||
                 selectedCategory == null)
               const SizedBox(height: 8),
-            const SizedBox(height: 8),
+            /*const SizedBox(height: 8),
             Text.rich(
               TextSpan(
                 text: Translate.of(context).translate('city'),
@@ -1141,8 +1113,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               : null),
                 ),
               ],
-            ),
-            const SizedBox(height: 6),
+            ),*/
+            const SizedBox(height: 8),
             if (selectedCategory?.toLowerCase() == "news")
               Padding(
                 padding: const EdgeInsets.only(left: 0),
