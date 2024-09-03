@@ -477,6 +477,11 @@
   "subcategory_local": "Lokales",
   "subcategory_club_news": "Vereinsneuigkeiten",
   "subcategory_official_notification": "Amtliche Bekanntmachungen",
+  "category_polls": "Umfrage",
+  "poll_options": "Umfrage Optionen",
+  "question": "Frage",
+  "input_question": "Eingabe Frage",
+  "your_vote": "your_vote",
   "subcategory_road": "Straßenarbeiten/Verkehr",
   "subcategory_timeless_news": "Zeitlose News",
   "delete_Account": "Lösche den Account", 
@@ -555,6 +560,8 @@
   "geo_permission_needed": "GPS Berechtigung erforderlich",
   "your_categories": "Deine Kategorien",
   "all_in_app": "Alles in deiner Ratingen App",
-  "trader_area": "Händlerbereich"
+  "trader_area": "Händlerbereich",
+  "vote_submit_successful": "Stimme erfolgreich abgegeben",
+  "vote_submit_fail": "Fehler beim Abstimmen"
 }
 

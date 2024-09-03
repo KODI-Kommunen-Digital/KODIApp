@@ -6,6 +6,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_file.dart';
 import 'package:heidi/src/data/model/model_image.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
@@ -73,6 +74,7 @@ class ProductModel {
   final String? priceDisplay;
   final int? viewCount;
   List<ImageListModel>? imageLists;
+  List<PollOptionModel>? pollOptions;
 
   int? timeless;
 
@@ -137,7 +139,8 @@ class ProductModel {
       this.sourceId,
       this.imageLists,
       this.showExternal,
-      this.viewCount});
+      this.viewCount,
+      this.pollOptions});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -244,6 +247,8 @@ class ProductModel {
       category = "Terminbuchung";
     } else if (json['categoryId'] == 19) {
       category = "Mängelmelder";
+    } else if (json['categoryId'] == 25) {
+      category = "Umfrage";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
@@ -268,6 +273,13 @@ class ProductModel {
     final bookingUse = json['booking_use'] == true;
     if (bookingUse) {
       priceDisplay = json['booking_price_display'];
+    }
+
+    List<PollOptionModel>? pollOptions;
+    if (json['categoryId'] == 25) {
+      pollOptions = List.from(json['pollOptions'] ?? []).map((item) {
+        return PollOptionModel.fromJson(item);
+      }).toList();
     }
 
     return ProductModel(
@@ -332,7 +344,8 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
-      viewCount: json['viewCount']
+      viewCount: json['viewCount'],
+      pollOptions: pollOptions,
     );
   }
 

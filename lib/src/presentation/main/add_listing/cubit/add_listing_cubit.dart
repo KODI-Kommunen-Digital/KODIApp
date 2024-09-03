@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_appointment_service.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/appointment_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -62,33 +63,34 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? endTime,
     List<File>? imagesList,
     isImageChanged,
+    List<PollOptionModel>? pollOptions, // New parameter for poll options
   }) async {
     try {
       final response = await _repo.saveProduct(
-        title,
-        description,
-        place,
-        country,
-        state,
-        city,
-        statusId,
-        sourceId,
-        address,
-        zipcode,
-        phone,
-        email,
-        website,
-        status,
-        expiryDate,
-        startDate,
-        endDate,
-        expiryTime,
-        timeless,
-        startTime,
-        endTime,
-        imagesList,
-        isImageChanged,
-      );
+          title,
+          description,
+          place,
+          country,
+          state,
+          city,
+          statusId,
+          sourceId,
+          address,
+          zipcode,
+          phone,
+          email,
+          website,
+          status,
+          expiryDate,
+          startDate,
+          endDate,
+          expiryTime,
+          timeless,
+          startTime,
+          endTime,
+          imagesList,
+          isImageChanged,
+          pollOptions);
 
       if (response.success) {
         return true;
@@ -137,6 +139,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? endTime,
     required bool isImageChanged,
     List<File>? imagesList,
+    List<PollOptionModel>? pollOptions, // New parameter for poll options
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -167,7 +170,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           timeless,
           startTime,
           endTime,
-          imagesList);
+          imagesList,
+          pollOptions);
       if (response.success) {
         return true;
       } else {

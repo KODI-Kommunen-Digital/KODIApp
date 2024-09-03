@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
+import 'package:heidi/src/data/model/model_poll.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -314,6 +315,7 @@ class ListRepository {
     TimeOfDay? endTime,
     List<File>? imagesList,
     bool isImageChanged,
+    List<PollOptionModel>? pollOptions,
   ) async {
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -395,7 +397,10 @@ class ListRepository {
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
-      "timeless": timeless
+      "timeless": timeless,
+      "pollOptions": pollOptions
+          ?.map((e) => e.toJson())
+          .toList(), // Add poll options to params
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
@@ -465,6 +470,7 @@ class ListRepository {
     TimeOfDay? startTime,
     TimeOfDay? endTime,
     List<File>? imagesList,
+    List<PollOptionModel>? pollOptions, // Add poll options parameter
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
@@ -562,6 +568,9 @@ class ListRepository {
         }
       ],
       "cityId": cityId,
+      "pollOptions": pollOptions
+          ?.map((e) => e.toJson())
+          .toList(), // Add poll options to params
     };
 
     final response =
@@ -710,6 +719,12 @@ class ListRepository {
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
+  }
+
+  static Future<ResultApiModel> saveVote(
+      int cityId, Map<String, dynamic> params, int listingId) async {
+    final response = await Api.requestSaveVote(cityId, params, listingId);
+    return response;
   }
 
   void clearSubCategory() async {
