@@ -56,6 +56,14 @@
             "icon": "fas fa-gift",
             "color": "#36454F",
             "categoryType" : "category"
+        },
+        {
+            "id": 25,
+            "name": "Umfrage",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-utensils",
+            "color": "#027148",
+            "categoryType" : "category"
         }
     ]
 }

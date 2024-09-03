@@ -779,6 +779,18 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Save Vote
+  static Future<ResultApiModel> requestSaveVote(
+      cityId, params, listingId) async {
+    final filePath = '/cities/$cityId/listings/$listingId/vote';
+    final result = await HTTPManager(apiType: APIType.defaultAPI).post(
+      url: filePath,
+      data: params,
+      loading: true,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

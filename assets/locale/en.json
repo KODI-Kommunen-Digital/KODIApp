@@ -547,5 +547,7 @@
   "geo_permission_needed": "GPS permission needed",
   "your_categories": "Your categories",
   "all_in_app": "Everything in your Ratingen App",
-  "trader_area": "Trader Area"
+  "trader_area": "Trader Area",
+  "vote_submit_successful": "Vote submitted successfully",
+  "vote_submit_fail": "Failed to save vote"
 }
