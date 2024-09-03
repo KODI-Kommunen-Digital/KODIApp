@@ -106,7 +106,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                   const SizedBox(height: 8),
                   AppTextInput(
                     hintText: Translate.of(context).translate(
-                      'input_information',
+                      'input_defect',
                     ),
                     errorText: _errorInfo,
                     focusNode: _focusInfo,

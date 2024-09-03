@@ -31,7 +31,7 @@
             "name": "Regionale Produkte",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
-            "color": "#4a90a4",
+            "color": "#000099",
             "categoryType" : "category"
         },
         {
@@ -47,7 +47,7 @@
             "name": "Fundbüro",
             "noOfSubcategories": 0,
             "icon": "fas fa-search",
-            "color": "#58d68d",
+            "color": "#CC6600",
             "categoryType" : "category"
         },
         {
@@ -78,7 +78,7 @@
             "id": 25,
             "name": "Umfrage",
             "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
+            "icon": "fas fa-square-poll-vertical",
             "color": "#027148",
             "categoryType" : "category"
         }

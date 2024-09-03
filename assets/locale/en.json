@@ -79,6 +79,7 @@
   "input_email": "Email",
   "information": "Information",
   "input_information": "Input your information",
+  "input_defect": "Please write in your defect here",
   "value_not_empty": "Input is empty",
   "value_not_valid_range": "Input not valid range",
   "value_not_valid_email": "Input not valid email",
