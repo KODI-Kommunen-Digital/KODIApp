@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+
 // import 'package:heidi/src/data/remote/local/link_manager.dart';
 import 'package:heidi/src/data/remote/local/service_manager.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -190,7 +191,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "13": "https://www.stadtwerke-troisdorf.de/",
       "14": "https://www.jeti-line.de/",
       "15":
-          "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/"
+          "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/",
+      "16": "https://www.google.com",
+      "17": "https://www.google.com"
     };
     return serviceLinks[imageLink];
   }

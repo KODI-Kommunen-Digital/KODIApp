@@ -227,7 +227,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
     //   return shouldLaunch;
     // }
-
     Future<void> launchContestPage(
         BuildContext context, String imageLink) async {
       // Show the contest rules dialog
@@ -255,7 +254,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "12" ||
         service.imageLink == "13" ||
         service.imageLink == "14" ||
-        service.imageLink == "15") {
+        service.imageLink == "15" ||
+        service.imageLink == "16" ||
+        service.imageLink == "17") {
       await launchUrl(
           Uri.parse(
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
@@ -288,16 +289,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
   }
 
-  // void _onSubmit() async {
-  //   if (AppBloc.userCubit.state == null) {
-  //     final result = await Navigator.pushNamed(
-  //       context,
-  //       Routes.signIn,
-  //       arguments: Routes.submit,
-  //     );
-  //     if (result == null) return;
-  //   }
-  //   if (!mounted) return;
-  //   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  // }
+// void _onSubmit() async {
+//   if (AppBloc.userCubit.state == null) {
+//     final result = await Navigator.pushNamed(
+//       context,
+//       Routes.signIn,
+//       arguments: Routes.submit,
+//     );
+//     if (result == null) return;
+//   }
+//   if (!mounted) return;
+//   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+// }
 }
