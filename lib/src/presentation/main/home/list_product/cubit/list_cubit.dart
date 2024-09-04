@@ -32,7 +32,10 @@ class ListCubit extends Cubit<ListState> {
   String? searchTerm;
   ProductFilter? eventFilter;
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad(cityId, resetPageNo) async {
+    if (resetPageNo) {
+      emit(const ListState.loading());
+    }
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -61,7 +64,7 @@ class ListCubit extends Cubit<ListState> {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
     if (cityId != null) {
-      onLoad(cityId);
+      onLoad(cityId, false);
     }
   }
 
@@ -72,12 +75,11 @@ class ListCubit extends Cubit<ListState> {
     final type = prefs.getKeyValue(Preferences.type, '');
 
     final result = await ListRepository.loadList(
-      categoryId: (categoryId == 0) ? "" : categoryId,
-      type: type,
-      pageNo: pageNo,
-      cityId: city,
-      eventFilter: eventFilter
-    );
+        categoryId: (categoryId == 0) ? "" : categoryId,
+        type: type,
+        pageNo: pageNo,
+        cityId: city,
+        eventFilter: eventFilter);
 
     final listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
@@ -147,7 +149,7 @@ class ListCubit extends Cubit<ListState> {
     isSearching = true;
     searchTerm = "";
     pageNo = 0;
-    onLoad(cityId);
+    onLoad(cityId, true);
   }
 
   Future<List?> getCityList() async {
