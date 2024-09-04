@@ -79,7 +79,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.arguments['id']);
+    await context.read<ListCubit>().onLoad(widget.arguments['id'], false);
   }
 
   void _onAddGroup() async {

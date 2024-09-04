@@ -33,7 +33,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
-  int pageNo = 1;
 
   @override
   void initState() {
@@ -43,7 +42,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.arguments['id']);
+    await context.read<ListCubit>().onLoad(widget.arguments['id'], false);
   }
 
   MultiFilter whatCanFilter(bool isEvent) {
@@ -64,7 +63,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (filter?.hasProductEventFilter ?? false) {
       context.read<ListCubit>().eventFilter =
           filter!.currentProductEventFilter;
-      context.read<ListCubit>().onLoad(widget.arguments['id']);
+      context.read<ListCubit>().onLoad(widget.arguments['id'], true);
     }
   }
 
@@ -305,7 +304,7 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
+    await context.read<ListCubit>().onLoad(widget.selectedId, false);
     setState(() {
       isLoading = false;
     });
