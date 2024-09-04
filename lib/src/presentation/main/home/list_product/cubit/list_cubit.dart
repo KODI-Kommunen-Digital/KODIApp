@@ -255,6 +255,7 @@ class ListCubit extends Cubit<ListState> {
       15: "category_newsletter",
       16: "category_official_notification",
       18: "category_appointment",
+      25: "category_polls"
     };
     return categories[categoryId];
   }

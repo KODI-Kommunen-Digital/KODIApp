@@ -321,7 +321,7 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
-    final cityId = await getCityId(city);
+    const cityId = 1;
     String? combinedStartDateTime;
     String? combinedEndDateTime;
     String? combinedExpiryDateTime;
