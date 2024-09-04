@@ -550,5 +550,9 @@
   "trader_area": "Trader Area",
   "vote_submit_successful": "Vote submitted successfully",
   "vote_submit_fail": "Failed to save vote",
-  "today": "Today"
+  "today": "Today",
+  "add_option": "Add option",
+  "option_title": "Option title",
+  "error_poll": "At least 2 options needed",
+  "error_poll_option_title": "Poll option title required"
 }
