@@ -265,6 +265,26 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
+          ChoiceChip(
+            label: Wrap(
+              spacing: 4.0,
+              children: [
+                Text(Translate.of(context).translate('today')),
+                Icon(
+                  Icons.today,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                  size: 18,
+                )
+              ],
+            ),
+            selected: currentProductEventFilter == ProductFilter.today,
+            onSelected: (selected) {
+              setState(() {
+                currentProductEventFilter = ProductFilter.today;
+              });
+            },
+          ),
         ]),
       )
     ];
