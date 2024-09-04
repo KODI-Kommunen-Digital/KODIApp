@@ -567,6 +567,7 @@
   "add_option": "Option hinzufügen",
   "option_title": "Optionstitel",
   "error_poll": "Mindestens 2 Optionen benötigt",
-  "error_poll_option_title": "Titel für Option benötigt"
+  "error_poll_option_title": "Titel für Option benötigt",
+  "error_poll_option_same_title": "Titel für Optionen kann nicht gleich sein"
 }
 

@@ -70,7 +70,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _focusWebsite = FocusNode();
   final _focusPrice = FocusNode();
 
-  final String cityName = 'Gotham'; //TODO CHANGE into Ratingen!!
+  final String cityName = 'Ratingen';
 
   bool _processing = false;
   String? _errorTitle;
@@ -759,10 +759,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
     } else if (selectedCategory?.toLowerCase() == "polls" &&
         pollOptions.length >= 2) {
       _errorPoll = null;
+      PollOptionModel? prevOption;
       for (var option in pollOptions) {
         if (option.title == '') {
           _errorPoll = 'error_poll_option_title';
         }
+        if (prevOption != null) {
+          if (option.title == prevOption.title) {
+            _errorPoll = 'error_poll_option_same_title';
+          }
+        }
+        prevOption = option;
       }
     } else {
       _errorPoll = null;

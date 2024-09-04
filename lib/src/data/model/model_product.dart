@@ -219,34 +219,18 @@ class ProductModel {
       } else {
         endDate = "";
       }
-    } else if (json['categoryId'] == 4) {
-      category = "Mängelmelder";
     } else if (json['categoryId'] == 5) {
-      category = "Regionale Produkte";
+      category = "Parken";
     } else if (json['categoryId'] == 6) {
-      category = "Biete/Suche";
-    } else if (json['categoryId'] == 7) {
-      category = "Bürgerinfo";
+      category = "Abfall";
+    } else if (json['categoryId'] == 26) {
+      category = "Tanken";
+    } else if (json['categoryId'] == 43) {
+      category = "Coupons";
+    } else if (json['categoryId'] == 8) {
+      category = "RatingenCard";
     } else if (json['categoryId'] == 9) {
-      category = "Verloren gefunden";
-    } else if (json['categoryId'] == 10) {
-      category = "Firmenporträts";
-    } else if (json['categoryId'] == 11) {
-      category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
-    } else if (json['categoryId'] == 12) {
-      category = "Angebote";
-    } else if (json['categoryId'] == 13) {
-      category = "Essen & Trinken";
-    } else if (json['categoryId'] == 14) {
-      category = "Rathaus";
-    } else if (json['categoryId'] == 15) {
-      category = "Mitteilungsblatt";
-    } else if (json['categoryId'] == 16) {
-      category = "Amtliche Mitteilung";
-    } else if (json['categoryId'] == 18) {
-      category = "Terminbuchung";
-    } else if (json['categoryId'] == 19) {
-      category = "Mängelmelder";
+      category = "EK-Gutschein";
     } else if (json['categoryId'] == 25) {
       category = "Umfrage";
     }
