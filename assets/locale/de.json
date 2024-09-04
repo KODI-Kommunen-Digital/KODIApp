@@ -563,6 +563,10 @@
   "trader_area": "Händlerbereich",
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
   "vote_submit_fail": "Fehler beim Abstimmen",
-  "today": "Heute"
+  "today": "Heute",
+  "add_option": "Option hinzufügen",
+  "option_title": "Optionstitel",
+  "error_poll": "Mindestens 2 Optionen benötigt",
+  "error_poll_option_title": "Titel für Option benötigt"
 }
 
