@@ -303,15 +303,34 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 const SizedBox(
                                                   height: 24,
                                                 ),
-                                                Text(
-                                                  item.category ?? '',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
+                                                Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      item.category ?? '',
+                                                      style: Theme.of(context)
+                                                          .textTheme
+                                                          .bodySmall!
+                                                          .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                    ),
+                                                    if (item.viewCount != null)
+                                                      Text(
+                                                        "${Translate.of(context).translate('views')}: ${item.viewCount!.toString()}",
+                                                        style: Theme.of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
                                                       ),
+                                                  ],
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Text(
@@ -363,10 +382,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 .circular(10),
                                                       ),
                                                       child: ElevatedButton(
-                                                        style: ElevatedButton.styleFrom(
-                                                          backgroundColor: Theme.of(context).primaryColor,
-                                                          shape: RoundedRectangleBorder(
-                                                            borderRadius: BorderRadius.circular(8),
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
                                                           ),
                                                         ),
                                                         onPressed: () async {
