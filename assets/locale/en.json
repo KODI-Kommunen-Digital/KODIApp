@@ -549,5 +549,6 @@
   "all_in_app": "Everything in your Ratingen App",
   "trader_area": "Trader Area",
   "vote_submit_successful": "Vote submitted successfully",
-  "vote_submit_fail": "Failed to save vote"
+  "vote_submit_fail": "Failed to save vote",
+  "today": "Today"
 }

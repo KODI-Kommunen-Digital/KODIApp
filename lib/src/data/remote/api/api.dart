@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
@@ -504,17 +505,33 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
+  static Future<ResultApiModel> requestCatList(params, cityId, pageNo,
+      {eventFilter}) async {
     if (params == 3) {
+      String filter = '';
+      switch (eventFilter) {
+        case ProductFilter.week:
+          filter = '&dateFilter=week';
+          break;
+        case ProductFilter.month:
+          filter = '&dateFilter=month';
+          break;
+        case ProductFilter.today:
+          filter = '&dateFilter=today';
+          break;
+        default:
+          filter = '';
+          break;
+      }
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1$filter&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1$filter&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
         return ResultApiModel.fromJson(result);
