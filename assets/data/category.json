@@ -6,7 +6,7 @@
             "name": "News",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
-            "color": "#ff8a65",
+            "color": "#2377e6",
             "categoryType" : "category"
         },
         {
@@ -14,7 +14,7 @@
             "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#a569bd",
+            "color": "#0cc0df",
             "categoryType" : "category"
         },
         {
@@ -22,7 +22,7 @@
             "name": "Parken",
             "noOfSubcategories": 0,
             "icon": "fas fa-location-dot",
-            "color": "#84C3BE",
+            "color": "#7ed957",
             "categoryType" : "category"
         },
         {
@@ -34,11 +34,19 @@
             "categoryType" : "category"
         },
         {
+            "id": 26,
+            "name": "Tanken",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-gas-pump",
+            "color": "#00bf63",
+            "categoryType" : "category"
+        },
+        {
             "id": 14,
             "name": "Coupons",
             "noOfSubcategories": 0,
             "icon": "fas fa-ticket",
-            "color": "#4C9141",
+            "color": "#a570f1",
             "categoryType" : "category"
         },
         {
@@ -46,7 +54,7 @@
             "name": "RatingenCard",
             "noOfSubcategories": 0,
             "icon": "fas fa-id-card",
-            "color": "#826C34",
+            "color": "#ffde59",
             "categoryType" : "category"
         },
         {
@@ -54,14 +62,14 @@
             "name": "EK-Gutschein",
             "noOfSubcategories": 0,
             "icon": "fas fa-gift",
-            "color": "#36454F",
+            "color": "#ff914d",
             "categoryType" : "category"
         },
         {
             "id": 25,
             "name": "Umfrage",
             "noOfSubcategories": 0,
-            "icon": "fas fa-comment",
+            "icon": "fas fa-square-poll-vertical",
             "color": "#027148",
             "categoryType" : "category"
         }
