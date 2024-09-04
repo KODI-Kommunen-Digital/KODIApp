@@ -10,6 +10,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'cubit.dart';
 
 enum ProductFilter {
+  today,
   week,
   month,
 }
@@ -29,6 +30,7 @@ class ListCubit extends Cubit<ListState> {
   List listCity = [];
   bool isSearching = false;
   String? searchTerm;
+  ProductFilter? eventFilter;
 
   Future<void> onLoad(cityId) async {
     pageNo = 1;
@@ -37,11 +39,11 @@ class ListCubit extends Cubit<ListState> {
     final type = prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     final result = await ListRepository.loadList(
-      categoryId: categoryId,
-      type: type,
-      pageNo: pageNo,
-      cityId: cityId,
-    );
+        categoryId: categoryId,
+        type: type,
+        pageNo: pageNo,
+        cityId: cityId,
+        eventFilter: eventFilter);
     if (result != null) {
       list = result[0];
       pagination = result[1];
@@ -74,6 +76,7 @@ class ListCubit extends Cubit<ListState> {
       type: type,
       pageNo: pageNo,
       cityId: city,
+      eventFilter: eventFilter
     );
 
     final listUpdated = result?[0] ?? [];
@@ -147,56 +150,6 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList) {
-    final currentDate = DateTime.now();
-    if (type == ProductFilter.month) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startMonth = startDate.month;
-          final currentMonth = currentDate.month;
-          return startMonth == currentMonth;
-        }
-        return false;
-      }).toList();
-
-      emit(ListStateUpdated(filteredList, listCity));
-    } else if (type == ProductFilter.week) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
-          return startWeek == currentWeek;
-        }
-        return false;
-      }).toList();
-
-      emit(ListStateUpdated(filteredList, listCity));
-    } else {
-      emit(ListStateUpdated(loadedList, listCity));
-    }
-  }
-
-  DateTime? _parseDate(String dateTimeString) {
-    try {
-      final dateAndTimeParts = dateTimeString.split(' ');
-      if (dateAndTimeParts.isNotEmpty) {
-        final datePart = dateAndTimeParts[0];
-        final dateParts = datePart.split('.');
-        if (dateParts.length == 3) {
-          final day = int.parse(dateParts[0]);
-          final month = int.parse(dateParts[1]);
-          final year = int.parse(dateParts[2]);
-          return DateTime(year, month, day);
-        }
-      }
-    } catch (e) {
-      logError("Error parsing date: $dateTimeString");
-    }
-    return null;
-  }
-
   Future<List?> getCityList() async {
     ResultApiModel? loadCitiesResponse;
     try {
@@ -217,12 +170,6 @@ class ListCubit extends Cubit<ListState> {
       return city["name"];
     }
     return "";
-  }
-
-  int _getWeekNumber(DateTime date) {
-    final startOfYear = DateTime(date.year, 1, 1);
-    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
-    return (daysSinceStartOfYear / 7).ceil();
   }
 
   Future<bool?> categoryPreferencesCall() async {

@@ -58,16 +58,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   void _updateSelectedFilter(MultiFilter? filter) {
-    selectedFilter = filter;
-    final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
-      if (filter?.hasProductEventFilter ?? false) {
-        context.read<ListCubit>().onDateProductFilter(
-              filter?.currentProductEventFilter,
-              loadedList,
-            );
-      }
+      selectedFilter = filter;
     });
+    if (filter?.hasProductEventFilter ?? false) {
+      context.read<ListCubit>().eventFilter =
+          filter!.currentProductEventFilter;
+      context.read<ListCubit>().onLoad(widget.arguments['id']);
+    }
   }
 
   @override

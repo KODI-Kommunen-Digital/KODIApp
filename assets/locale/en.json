@@ -543,6 +543,6 @@
   "apple_calendar": "Apple Calendar",
   "add_to_calendar": "Add to calendar",
   "views": "Views",
-
-  "geo_permission_needed": "GPS permission needed"
+  "geo_permission_needed": "GPS permission needed",
+  "today": "Today"
 }
