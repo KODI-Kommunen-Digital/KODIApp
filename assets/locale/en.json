@@ -554,5 +554,6 @@
   "add_option": "Add option",
   "option_title": "Option title",
   "error_poll": "At least 2 options needed",
-  "error_poll_option_title": "Poll option title required"
+  "error_poll_option_title": "Poll option title required",
+  "error_poll_option_same_title": "Poll option titles can't be the same"
 }

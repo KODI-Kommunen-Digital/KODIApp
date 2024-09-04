@@ -176,22 +176,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<String?> getServiceLink(String imageLink) async {
     Map<String, String> serviceLinks = {
-      "3": "https://termin.troisdorf.de/",
-      "4": "https://onlinedienste.troisdorf.de/",
-      "5":
-          "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
-      "6": "https://troisdorf.dksr.city/map/",
-      "7": "https://web.troisdorf.de/chatbot/",
-      "8":
-          "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show",
-      "9": "https://geoportal.troisdorf.de/app.php/application/mobile",
-      "11":
-          "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/",
-      "12": "https://www.aggua.de/",
-      "13": "https://www.stadtwerke-troisdorf.de/",
-      "14": "https://www.jeti-line.de/",
-      "15":
-          "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/",
+      "6": "https:/www.google.com",
       "16": "https://www.google.com",
       "17": "https://www.google.com"
     };

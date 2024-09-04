@@ -290,7 +290,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   pinned: true,
                 ),
                 const SliverToBoxAdapter(
-                  child: SizedBox(height: 25,),
+                  child: SizedBox(
+                    height: 25,
+                  ),
                 ),
                 CupertinoSliverRefreshControl(
                   onRefresh: _onRefresh,
@@ -396,7 +398,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       return HomeCategoryItem(
                         item: item,
                         onPressed: (item) {
-                          _onCategory(item, listBuild);
+                          _onCategoryItem(item, listBuild);
                           return false;
                         },
                         // _onCategory,
@@ -461,15 +463,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onService(CategoryModel item) async {
     if (item.id == 5) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
+      /*Navigator.push(context,
+          MaterialPageRoute(builder: (context) => const FullScreenWebView()));*/
     }
     if (item.id == 6) {
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       // Handle other cases as before
-      await launchUrl(Uri.parse(getServiceUrl(item.id)),
-          mode: LaunchMode.inAppWebView);
+      /*await launchUrl(Uri.parse(getServiceUrl(item.id)),
+          mode: LaunchMode.inAppWebView);*/
     }
   }
 
@@ -559,6 +561,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  _onCategoryItem(CategoryModel item, List<CategoryModel> category) {
+    if (item.id == 4 ||
+        item.id == 5 ||
+        item.id == 6 ||
+        item.id == 8 ||
+        item.id == 9 ||
+        item.id == 26) {
+      _onService(item);
+    } else {
+      _onCategory(item, category);
+    }
+    return false;
+  }
+
   Widget _buildCategory(List<CategoryModel>? category) {
     Widget content = Wrap(
       runSpacing: 8,
@@ -592,15 +608,7 @@ class _HomeScreenState extends State<HomeScreen> {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
-                if (item.id == 4 ||
-                    item.id == 5 ||
-                    item.id == 6 ||
-                    item.id == 8) {
-                  _onService(item);
-                } else {
-                  _onCategory(item, category);
-                }
-                return false;
+                _onCategoryItem(item, category);
               },
             );
           },
@@ -615,10 +623,9 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             Translate.of(context).translate('your_categories'),
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor),
           ),
           Text(
             Translate.of(context).translate(
@@ -626,7 +633,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          const SizedBox(height: 16,),
+          const SizedBox(
+            height: 16,
+          ),
           content
         ],
       ),
@@ -787,10 +796,9 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               Text(
                 Translate.of(context).translate('recent_listings'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
+                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
               ),
               Text(
                 Translate.of(context).translate(
