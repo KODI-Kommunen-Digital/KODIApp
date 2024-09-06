@@ -19,21 +19,42 @@ mixin _$SellerState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<SellerOrderModel> orderSold) loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
+    required TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)
+        loadedProducts,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult? Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult? Function()? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult Function()? error,
     required TResult orElse(),
   }) =>
@@ -41,21 +62,24 @@ mixin _$SellerState {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SellerStateLoading value) loading,
-    required TResult Function(SellerStateLoaded value) loaded,
+    required TResult Function(SellerStateLoadedOrders value) loadedOrders,
+    required TResult Function(SellerStateLoadedProducts value) loadedProducts,
     required TResult Function(SellerStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SellerStateLoading value)? loading,
-    TResult? Function(SellerStateLoaded value)? loaded,
+    TResult? Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult? Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult? Function(SellerStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SellerStateLoading value)? loading,
-    TResult Function(SellerStateLoaded value)? loaded,
+    TResult Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult Function(SellerStateError value)? error,
     required TResult orElse(),
   }) =>
@@ -119,7 +143,14 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<SellerOrderModel> orderSold) loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
+    required TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)
+        loadedProducts,
     required TResult Function() error,
   }) {
     return loading();
@@ -129,7 +160,14 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult? Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult? Function()? error,
   }) {
     return loading?.call();
@@ -139,7 +177,14 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -153,7 +198,8 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SellerStateLoading value) loading,
-    required TResult Function(SellerStateLoaded value) loaded,
+    required TResult Function(SellerStateLoadedOrders value) loadedOrders,
+    required TResult Function(SellerStateLoadedProducts value) loadedProducts,
     required TResult Function(SellerStateError value) error,
   }) {
     return loading(this);
@@ -163,7 +209,8 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SellerStateLoading value)? loading,
-    TResult? Function(SellerStateLoaded value)? loaded,
+    TResult? Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult? Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult? Function(SellerStateError value)? error,
   }) {
     return loading?.call(this);
@@ -173,7 +220,8 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SellerStateLoading value)? loading,
-    TResult Function(SellerStateLoaded value)? loaded,
+    TResult Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult Function(SellerStateError value)? error,
     required TResult orElse(),
   }) {
@@ -189,20 +237,22 @@ abstract class SellerStateLoading implements SellerState {
 }
 
 /// @nodoc
-abstract class _$$SellerStateLoadedImplCopyWith<$Res> {
-  factory _$$SellerStateLoadedImplCopyWith(_$SellerStateLoadedImpl value,
-          $Res Function(_$SellerStateLoadedImpl) then) =
-      __$$SellerStateLoadedImplCopyWithImpl<$Res>;
+abstract class _$$SellerStateLoadedOrdersImplCopyWith<$Res> {
+  factory _$$SellerStateLoadedOrdersImplCopyWith(
+          _$SellerStateLoadedOrdersImpl value,
+          $Res Function(_$SellerStateLoadedOrdersImpl) then) =
+      __$$SellerStateLoadedOrdersImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<SellerOrderModel> orderSold});
 }
 
 /// @nodoc
-class __$$SellerStateLoadedImplCopyWithImpl<$Res>
-    extends _$SellerStateCopyWithImpl<$Res, _$SellerStateLoadedImpl>
-    implements _$$SellerStateLoadedImplCopyWith<$Res> {
-  __$$SellerStateLoadedImplCopyWithImpl(_$SellerStateLoadedImpl _value,
-      $Res Function(_$SellerStateLoadedImpl) _then)
+class __$$SellerStateLoadedOrdersImplCopyWithImpl<$Res>
+    extends _$SellerStateCopyWithImpl<$Res, _$SellerStateLoadedOrdersImpl>
+    implements _$$SellerStateLoadedOrdersImplCopyWith<$Res> {
+  __$$SellerStateLoadedOrdersImplCopyWithImpl(
+      _$SellerStateLoadedOrdersImpl _value,
+      $Res Function(_$SellerStateLoadedOrdersImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -210,7 +260,7 @@ class __$$SellerStateLoadedImplCopyWithImpl<$Res>
   $Res call({
     Object? orderSold = null,
   }) {
-    return _then(_$SellerStateLoadedImpl(
+    return _then(_$SellerStateLoadedOrdersImpl(
       null == orderSold
           ? _value._orderSold
           : orderSold // ignore: cast_nullable_to_non_nullable
@@ -221,8 +271,8 @@ class __$$SellerStateLoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SellerStateLoadedImpl implements SellerStateLoaded {
-  const _$SellerStateLoadedImpl(final List<SellerOrderModel> orderSold)
+class _$SellerStateLoadedOrdersImpl implements SellerStateLoadedOrders {
+  const _$SellerStateLoadedOrdersImpl(final List<SellerOrderModel> orderSold)
       : _orderSold = orderSold;
 
   final List<SellerOrderModel> _orderSold;
@@ -235,14 +285,14 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
 
   @override
   String toString() {
-    return 'SellerState.loaded(orderSold: $orderSold)';
+    return 'SellerState.loadedOrders(orderSold: $orderSold)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$SellerStateLoadedImpl &&
+            other is _$SellerStateLoadedOrdersImpl &&
             const DeepCollectionEquality()
                 .equals(other._orderSold, _orderSold));
   }
@@ -254,40 +304,61 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SellerStateLoadedImplCopyWith<_$SellerStateLoadedImpl> get copyWith =>
-      __$$SellerStateLoadedImplCopyWithImpl<_$SellerStateLoadedImpl>(
-          this, _$identity);
+  _$$SellerStateLoadedOrdersImplCopyWith<_$SellerStateLoadedOrdersImpl>
+      get copyWith => __$$SellerStateLoadedOrdersImplCopyWithImpl<
+          _$SellerStateLoadedOrdersImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<SellerOrderModel> orderSold) loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
+    required TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)
+        loadedProducts,
     required TResult Function() error,
   }) {
-    return loaded(orderSold);
+    return loadedOrders(orderSold);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult? Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult? Function()? error,
   }) {
-    return loaded?.call(orderSold);
+    return loadedOrders?.call(orderSold);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult Function()? error,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded(orderSold);
+    if (loadedOrders != null) {
+      return loadedOrders(orderSold);
     }
     return orElse();
   }
@@ -296,45 +367,311 @@ class _$SellerStateLoadedImpl implements SellerStateLoaded {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SellerStateLoading value) loading,
-    required TResult Function(SellerStateLoaded value) loaded,
+    required TResult Function(SellerStateLoadedOrders value) loadedOrders,
+    required TResult Function(SellerStateLoadedProducts value) loadedProducts,
     required TResult Function(SellerStateError value) error,
   }) {
-    return loaded(this);
+    return loadedOrders(this);
   }
 
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SellerStateLoading value)? loading,
-    TResult? Function(SellerStateLoaded value)? loaded,
+    TResult? Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult? Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult? Function(SellerStateError value)? error,
   }) {
-    return loaded?.call(this);
+    return loadedOrders?.call(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SellerStateLoading value)? loading,
-    TResult Function(SellerStateLoaded value)? loaded,
+    TResult Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult Function(SellerStateError value)? error,
     required TResult orElse(),
   }) {
-    if (loaded != null) {
-      return loaded(this);
+    if (loadedOrders != null) {
+      return loadedOrders(this);
     }
     return orElse();
   }
 }
 
-abstract class SellerStateLoaded implements SellerState {
-  const factory SellerStateLoaded(final List<SellerOrderModel> orderSold) =
-      _$SellerStateLoadedImpl;
+abstract class SellerStateLoadedOrders implements SellerState {
+  const factory SellerStateLoadedOrders(
+      final List<SellerOrderModel> orderSold) = _$SellerStateLoadedOrdersImpl;
 
   List<SellerOrderModel> get orderSold;
   @JsonKey(ignore: true)
-  _$$SellerStateLoadedImplCopyWith<_$SellerStateLoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$SellerStateLoadedOrdersImplCopyWith<_$SellerStateLoadedOrdersImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$SellerStateLoadedProductsImplCopyWith<$Res> {
+  factory _$$SellerStateLoadedProductsImplCopyWith(
+          _$SellerStateLoadedProductsImpl value,
+          $Res Function(_$SellerStateLoadedProductsImpl) then) =
+      __$$SellerStateLoadedProductsImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {List<ContainerProductModel>? products,
+      List<CategoryModel>? categories,
+      List<CategoryModel>? subCategories,
+      List<StoreModel> stores,
+      StoreModel? selectedStore});
+}
+
+/// @nodoc
+class __$$SellerStateLoadedProductsImplCopyWithImpl<$Res>
+    extends _$SellerStateCopyWithImpl<$Res, _$SellerStateLoadedProductsImpl>
+    implements _$$SellerStateLoadedProductsImplCopyWith<$Res> {
+  __$$SellerStateLoadedProductsImplCopyWithImpl(
+      _$SellerStateLoadedProductsImpl _value,
+      $Res Function(_$SellerStateLoadedProductsImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? products = freezed,
+    Object? categories = freezed,
+    Object? subCategories = freezed,
+    Object? stores = null,
+    Object? selectedStore = freezed,
+  }) {
+    return _then(_$SellerStateLoadedProductsImpl(
+      freezed == products
+          ? _value._products
+          : products // ignore: cast_nullable_to_non_nullable
+              as List<ContainerProductModel>?,
+      freezed == categories
+          ? _value._categories
+          : categories // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>?,
+      freezed == subCategories
+          ? _value._subCategories
+          : subCategories // ignore: cast_nullable_to_non_nullable
+              as List<CategoryModel>?,
+      null == stores
+          ? _value._stores
+          : stores // ignore: cast_nullable_to_non_nullable
+              as List<StoreModel>,
+      freezed == selectedStore
+          ? _value.selectedStore
+          : selectedStore // ignore: cast_nullable_to_non_nullable
+              as StoreModel?,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
+  const _$SellerStateLoadedProductsImpl(
+      final List<ContainerProductModel>? products,
+      final List<CategoryModel>? categories,
+      final List<CategoryModel>? subCategories,
+      final List<StoreModel> stores,
+      this.selectedStore)
+      : _products = products,
+        _categories = categories,
+        _subCategories = subCategories,
+        _stores = stores;
+
+  final List<ContainerProductModel>? _products;
+  @override
+  List<ContainerProductModel>? get products {
+    final value = _products;
+    if (value == null) return null;
+    if (_products is EqualUnmodifiableListView) return _products;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<CategoryModel>? _categories;
+  @override
+  List<CategoryModel>? get categories {
+    final value = _categories;
+    if (value == null) return null;
+    if (_categories is EqualUnmodifiableListView) return _categories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<CategoryModel>? _subCategories;
+  @override
+  List<CategoryModel>? get subCategories {
+    final value = _subCategories;
+    if (value == null) return null;
+    if (_subCategories is EqualUnmodifiableListView) return _subCategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<StoreModel> _stores;
+  @override
+  List<StoreModel> get stores {
+    if (_stores is EqualUnmodifiableListView) return _stores;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_stores);
+  }
+
+  @override
+  final StoreModel? selectedStore;
+
+  @override
+  String toString() {
+    return 'SellerState.loadedProducts(products: $products, categories: $categories, subCategories: $subCategories, stores: $stores, selectedStore: $selectedStore)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SellerStateLoadedProductsImpl &&
+            const DeepCollectionEquality().equals(other._products, _products) &&
+            const DeepCollectionEquality()
+                .equals(other._categories, _categories) &&
+            const DeepCollectionEquality()
+                .equals(other._subCategories, _subCategories) &&
+            const DeepCollectionEquality().equals(other._stores, _stores) &&
+            (identical(other.selectedStore, selectedStore) ||
+                other.selectedStore == selectedStore));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_products),
+      const DeepCollectionEquality().hash(_categories),
+      const DeepCollectionEquality().hash(_subCategories),
+      const DeepCollectionEquality().hash(_stores),
+      selectedStore);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SellerStateLoadedProductsImplCopyWith<_$SellerStateLoadedProductsImpl>
+      get copyWith => __$$SellerStateLoadedProductsImplCopyWithImpl<
+          _$SellerStateLoadedProductsImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
+    required TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)
+        loadedProducts,
+    required TResult Function() error,
+  }) {
+    return loadedProducts(
+        products, categories, subCategories, stores, selectedStore);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loading,
+    TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult? Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
+    TResult? Function()? error,
+  }) {
+    return loadedProducts?.call(
+        products, categories, subCategories, stores, selectedStore);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
+    TResult Function()? error,
+    required TResult orElse(),
+  }) {
+    if (loadedProducts != null) {
+      return loadedProducts(
+          products, categories, subCategories, stores, selectedStore);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SellerStateLoading value) loading,
+    required TResult Function(SellerStateLoadedOrders value) loadedOrders,
+    required TResult Function(SellerStateLoadedProducts value) loadedProducts,
+    required TResult Function(SellerStateError value) error,
+  }) {
+    return loadedProducts(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SellerStateLoading value)? loading,
+    TResult? Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult? Function(SellerStateLoadedProducts value)? loadedProducts,
+    TResult? Function(SellerStateError value)? error,
+  }) {
+    return loadedProducts?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SellerStateLoading value)? loading,
+    TResult Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult Function(SellerStateLoadedProducts value)? loadedProducts,
+    TResult Function(SellerStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (loadedProducts != null) {
+      return loadedProducts(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SellerStateLoadedProducts implements SellerState {
+  const factory SellerStateLoadedProducts(
+      final List<ContainerProductModel>? products,
+      final List<CategoryModel>? categories,
+      final List<CategoryModel>? subCategories,
+      final List<StoreModel> stores,
+      final StoreModel? selectedStore) = _$SellerStateLoadedProductsImpl;
+
+  List<ContainerProductModel>? get products;
+  List<CategoryModel>? get categories;
+  List<CategoryModel>? get subCategories;
+  List<StoreModel> get stores;
+  StoreModel? get selectedStore;
+  @JsonKey(ignore: true)
+  _$$SellerStateLoadedProductsImplCopyWith<_$SellerStateLoadedProductsImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -376,7 +713,14 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<SellerOrderModel> orderSold) loaded,
+    required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
+    required TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)
+        loadedProducts,
     required TResult Function() error,
   }) {
     return error();
@@ -386,7 +730,14 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult? Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult? Function()? error,
   }) {
     return error?.call();
@@ -396,7 +747,14 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<SellerOrderModel> orderSold)? loaded,
+    TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
+    TResult Function(
+            List<ContainerProductModel>? products,
+            List<CategoryModel>? categories,
+            List<CategoryModel>? subCategories,
+            List<StoreModel> stores,
+            StoreModel? selectedStore)?
+        loadedProducts,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -410,7 +768,8 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SellerStateLoading value) loading,
-    required TResult Function(SellerStateLoaded value) loaded,
+    required TResult Function(SellerStateLoadedOrders value) loadedOrders,
+    required TResult Function(SellerStateLoadedProducts value) loadedProducts,
     required TResult Function(SellerStateError value) error,
   }) {
     return error(this);
@@ -420,7 +779,8 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SellerStateLoading value)? loading,
-    TResult? Function(SellerStateLoaded value)? loaded,
+    TResult? Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult? Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult? Function(SellerStateError value)? error,
   }) {
     return error?.call(this);
@@ -430,7 +790,8 @@ class _$SellerStateErrorImpl implements SellerStateError {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SellerStateLoading value)? loading,
-    TResult Function(SellerStateLoaded value)? loaded,
+    TResult Function(SellerStateLoadedOrders value)? loadedOrders,
+    TResult Function(SellerStateLoadedProducts value)? loadedProducts,
     TResult Function(SellerStateError value)? error,
     required TResult orElse(),
   }) {

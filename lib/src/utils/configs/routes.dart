@@ -30,10 +30,12 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_products_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_request_details.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_requests_view_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_select_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -145,8 +147,10 @@ class Routes {
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
   static const String containerScreen = "/containerScreen";
+  static const String sellerSelectScreen = "/sellerSelectScreen";
   static const String sellerRequest = "/sellerRequest";
-  static const String sellerScreen = "/sellerScreen";
+  static const String sellerOrderScreen = "/sellerOrderScreen";
+  static const String sellerProductsScreen = "/sellerProductsScreen";
   static const String productRequestScreen = "/productRequestScreen";
   static const String customerScreen = "/customerScreen";
   static const String createProductScreen = "/createProductScreen";
@@ -563,12 +567,30 @@ class Routes {
           },
         );
 
-      case sellerScreen:
+      case sellerSelectScreen:
+        final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return SellerSelectScreen(user: arguments['user']);
+          },
+        );
+
+      case sellerOrderScreen:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
-            return SellerScreen(user: arguments['user']);
+            return SellerOrderScreen(user: arguments['user']);
+          },
+        );
+
+      case sellerProductsScreen:
+        final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return SellerProductsScreen(user: arguments['user']);
           },
         );
 

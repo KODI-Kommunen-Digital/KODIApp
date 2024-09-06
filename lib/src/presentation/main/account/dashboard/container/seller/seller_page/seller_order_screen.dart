@@ -9,19 +9,19 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class SellerScreen extends StatefulWidget {
+class SellerOrderScreen extends StatefulWidget {
   final UserModel user;
 
-  const SellerScreen({super.key, required this.user});
+  const SellerOrderScreen({super.key, required this.user});
 
   @override
-  State<SellerScreen> createState() => _SellerScreenState();
+  State<SellerOrderScreen> createState() => _SellerOrderScreenState();
 }
 
-class _SellerScreenState extends State<SellerScreen> {
+class _SellerOrderScreenState extends State<SellerOrderScreen> {
   @override
   void initState() {
-    context.read<SellerCubit>().onLoad(false);
+    context.read<SellerCubit>().onLoad(false, false);
     super.initState();
   }
 
@@ -29,8 +29,8 @@ class _SellerScreenState extends State<SellerScreen> {
   Widget build(BuildContext context) {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
-          loading: () => const SellerLoading(),
-          loaded: (soldOrders) => SellerLoaded(
+          loading: () => const SellerOrdersLoading(),
+          loadedOrders: (soldOrders) => SellerOrdersLoaded(
                 soldOrders: soldOrders,
                 user: widget.user,
               ),
@@ -39,17 +39,17 @@ class _SellerScreenState extends State<SellerScreen> {
   }
 }
 
-class SellerLoaded extends StatefulWidget {
+class SellerOrdersLoaded extends StatefulWidget {
   final List<SellerOrderModel> soldOrders;
   final UserModel user;
 
-  const SellerLoaded({super.key, required this.soldOrders, required this.user});
+  const SellerOrdersLoaded({super.key, required this.soldOrders, required this.user});
 
   @override
-  State<SellerLoaded> createState() => _SellerLoadedState();
+  State<SellerOrdersLoaded> createState() => _SellerLoadedState();
 }
 
-class _SellerLoadedState extends State<SellerLoaded> {
+class _SellerLoadedState extends State<SellerOrdersLoaded> {
   List<SellerOrderModel> soldOrders = [];
   int pageNo = 1;
 
@@ -85,26 +85,12 @@ class _SellerLoadedState extends State<SellerLoaded> {
             });
           },
           pageNo: pageNo),
-      floatingActionButton: FloatingActionButton(
-        shape: const CircleBorder(),
-        backgroundColor: Theme.of(context).primaryColor,
-        onPressed: () {
-          Navigator.pushNamed(context, Routes.createProductScreen,
-              arguments: {'sellerId': widget.user.id});
-        },
-        child: const Center(
-          child: Icon(
-            Icons.add,
-            color: Colors.white,
-          ),
-        ),
-      ),
     );
   }
 }
 
-class SellerLoading extends StatelessWidget {
-  const SellerLoading({super.key});
+class SellerOrdersLoading extends StatelessWidget {
+  const SellerOrdersLoading({super.key});
 
   @override
   Widget build(BuildContext context) {

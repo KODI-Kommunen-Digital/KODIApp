@@ -1,25 +1,73 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
+import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'seller_state.dart';
 
 class SellerCubit extends Cubit<SellerState> {
   SellerCubit() : super(const SellerState.loading());
 
-  Future<void> onLoad(bool isRefreshLoader) async {
+  StoreModel? store;
+
+  Future<void> onLoad(bool isRefreshLoader, bool isProducts) async {
     if (!isRefreshLoader) {
       emit(const SellerState.loading());
     }
 
-    final List<SellerOrderModel>? soldOrders =
-        await ContainerRepository.getSellerOrders(1);
+    if (isProducts) {
+      final List<StoreModel>? stores =
+          await ContainerRepository.loadStoresOwner(null); //TODO Once new endpoint, call loadStoresSeller
+      if (stores == null) {
+        emit(const SellerState.error());
+        return;
+      }
+      if (store != null) {
+        final products = await ContainerRepository.getStoreProducts(
+            cityId: store!.cityId, storeId: store!.id, pageNo: 1);
 
-    emit(SellerState.loaded(soldOrders ?? []));
+        final categories = await ContainerRepository.loadStoreCategories(
+            store!.cityId, store!.id);
+
+        List<CategoryModel> subCategories = [];
+        if (categories != null) {
+          for (var category in categories) {
+            final subCategory =
+                await ContainerRepository.loadStoreSubCategories(
+                    store!.cityId, store!.id, category.id);
+            if (subCategory != null) {
+              subCategories.addAll(subCategory);
+            }
+          }
+        }
+        emit(SellerState.loadedProducts(
+            products ?? [], categories ?? [], subCategories, stores, store));
+      } else {
+        emit(SellerState.loadedProducts(null, null, null, stores, store));
+      }
+    } else {
+      final List<SellerOrderModel>? soldOrders =
+          await ContainerRepository.getSellerOrders(1);
+
+      emit(SellerState.loadedOrders(soldOrders ?? []));
+    }
   }
 
   Future<List<SellerOrderModel>> newOrders(int pageNo) async {
     final List<SellerOrderModel>? newSoldOrders =
         await ContainerRepository.getSellerOrders(pageNo);
     return newSoldOrders ?? [];
+  }
+
+  Future<List<ContainerProductModel>> newProducts(int pageNo) async {
+    if(store != null) {
+      final newProducts = await ContainerRepository.getStoreProducts(
+          cityId: store!.cityId, storeId: store!.id, pageNo: pageNo);
+      if(newProducts != null) {
+        return newProducts;
+      }
+    }
+    return [];
   }
 }
