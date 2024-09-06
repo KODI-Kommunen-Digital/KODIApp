@@ -280,9 +280,9 @@ class ProductModel {
         image = json['logo']?.toString();
       }
       bool isEcmapsDomain = image.startsWith('img.ecmaps.de/remote/.jpg?');
+      bool isDataImage = image.contains('data:image');
       bool isNaN = image ==
           'https://troisdorf1heidi.obs.eu-de.otc.t-systems.com/admin/eatOrDrink/DefaultimageNaN.png';
-
       if (isEcmapsDomain) {
         final urlRegex = RegExp(r"https.*\.(jpg|png)");
         final match = urlRegex.firstMatch(image);
@@ -292,7 +292,7 @@ class ProductModel {
               extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
           imageUrl = parsedUrl;
         }
-      } else if (!isNaN) {
+      } else if (!isNaN && !isDataImage) {
         imageUrl = image;
       }
     }
