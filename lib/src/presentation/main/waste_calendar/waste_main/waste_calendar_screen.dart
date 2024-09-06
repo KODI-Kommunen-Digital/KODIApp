@@ -464,9 +464,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
               );
             },
             suggestionsCallback: (pattern) {
-              return locations;
-              //return locations.where((item) =>
-              //                   item.name.toLowerCase().contains(pattern.toLowerCase()))
+              return locations.where((item) =>
+                                 item.name.toLowerCase().startsWith(pattern.toLowerCase())).toList();
             },
             onSelected: (WasteLocation suggestion) async {
               typeAheadController.text = suggestion.name;
