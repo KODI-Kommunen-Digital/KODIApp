@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -310,7 +312,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                       ),
                                       IconButton(
                                           onPressed: () {
-                                            //_openStoreActionPopUp(item);
+                                            _openStoreActionPopUp(item);
                                           },
                                           icon: const Icon(Icons.more_vert))
                                     ],
@@ -366,6 +368,40 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         ),
       ),
     );
+  }
+
+  void _openStoreActionPopUp(ContainerProductModel item) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+              title: Center(
+                child: Text(Translate.of(context).translate('options'),
+                    style: TextStyle(
+                      color: Theme.of(context).textTheme.bodyLarge?.color ??
+                          Colors.white,
+                      fontWeight: FontWeight.bold,
+                    )),
+              ),
+              children: [
+                SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    updateProduct(item);
+                  },
+                  child: ListTile(
+                    leading: const Icon(Icons.edit),
+                    title: Text(Translate.of(context).translate('edit')),
+                  ),
+                ),
+              ]);
+        });
+  }
+
+  void updateProduct(ContainerProductModel item) async {
+    await Navigator.pushNamed(context, Routes.createProductScreen,
+        arguments: {'product': item, 'sellerId': widget.user.id});
+    context.read<SellerCubit>().onLoad(false, true);
   }
 
   String getCategoryTranslation(int id) {
