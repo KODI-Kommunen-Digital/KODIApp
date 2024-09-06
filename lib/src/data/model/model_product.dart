@@ -266,13 +266,23 @@ class ProductModel {
       }).toList();
     }
 
+    late String logo;
+
+    if(json['logo'] is List<dynamic> && json['logo'].isNotEmpty) {
+      logo = json['logo'][0]?.toString() ?? 'admin/News.jpeg';
+    } else {
+      logo = json['logo']?.toString() ?? 'admin/News.jpeg';
+    }
+
+    if(logo.contains('admin/undefined')) {
+      logo = 'admin/News.jpeg';
+    }
+
     return ProductModel(
       id: json['id'],
       userId: json['userId'] ?? 0,
       title: json['title'] ?? '',
-      image: (json['logo'] is List<dynamic> && json['logo'].isNotEmpty)
-          ? json['logo'][0]?.toString() ?? 'admin/News.jpeg'
-          : (json['logo']?.toString() ?? 'admin/News.jpeg'),
+      image: logo,
       videoURL: videoURL,
       category: category ?? '',
       createDate: createDate,
