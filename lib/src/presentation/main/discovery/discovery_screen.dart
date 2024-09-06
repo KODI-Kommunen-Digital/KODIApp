@@ -227,23 +227,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
     //   return shouldLaunch;
     // }
-    Future<void> launchContestPage(
-        BuildContext context, String imageLink) async {
-      // Show the contest rules dialog
-      // bool shouldLaunch = await showContestRules(context);
-
-      // If the user clicks OK, launch the URL
-      // if (shouldLaunch) {
-      String? serviceLink =
-          await AppBloc.discoveryCubit.getServiceLink(imageLink);
-      if (serviceLink != null && serviceLink.isNotEmpty) {
-        await launchUrl(
-          Uri.parse(serviceLink),
-          mode: LaunchMode.inAppWebView,
-        );
-        // }
-      }
-    }
 
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
@@ -262,8 +245,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
-    }
-    else if (service.imageLink == "10") {
+    } else if (service.imageLink == "10") {
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       AppBloc.discoveryCubit
