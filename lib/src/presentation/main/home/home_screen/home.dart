@@ -623,7 +623,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: [
           Text(
             Translate.of(context).translate('your_categories'),
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
                 fontWeight: FontWeight.bold,
                 color: Theme.of(context).primaryColor),
           ),
@@ -631,7 +631,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Translate.of(context).translate(
               'all_in_app',
             ),
-            style: Theme.of(context).textTheme.titleMedium,
+            style: Theme.of(context).textTheme.titleSmall,
           ),
           const SizedBox(
             height: 16,
@@ -796,7 +796,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               Text(
                 Translate.of(context).translate('recent_listings'),
-                style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).primaryColor),
               ),
@@ -804,7 +804,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate(
                   'what_happen',
                 ),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
           ),
