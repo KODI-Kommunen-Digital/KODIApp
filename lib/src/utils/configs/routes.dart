@@ -55,6 +55,7 @@ import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
+import 'package:matomo_tracker/matomo_tracker.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -146,6 +147,11 @@ class Routes {
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
+        if (arguments['type'] == "category" ||
+            arguments['type'] == "categoryService") {
+          trackMatomoEvent(
+              true, null, arguments['categoryId'] ?? arguments['id'], null);
+        }
         return MaterialPageRoute(
           builder: (context) {
             return ListProductScreen(arguments: arguments);
@@ -160,8 +166,12 @@ class Routes {
       case productDetail:
         return MaterialPageRoute(
           builder: (context) {
-            return ProductDetailScreen(
-                item: settings.arguments as ProductModel);
+            ProductModel product = settings.arguments as ProductModel;
+            if (product.city?.id != null || product.cityId != null) {
+              trackMatomoEvent(false, product.title, product.id,
+                  product.cityId ?? product.city?.id);
+            }
+            return ProductDetailScreen(item: product);
           },
         );
 
@@ -556,6 +566,37 @@ class Routes {
           fullscreenDialog: true,
         );
     }
+  }
+
+  static void trackMatomoEvent(
+      bool isCategory, String? name, int id, int? cityId) {
+    late String eventName;
+    if (isCategory) {
+      name = _getCategoryName(id);
+      eventName = "category_${name}_${id.toString()}";
+    } else {
+      eventName = "${name}_${id.toString()}_${cityId.toString()}";
+    }
+    MatomoTracker.instance.trackEvent(
+      eventInfo: EventInfo(
+        category: (isCategory) ? 'category' : 'listing',
+        name: eventName,
+        action: 'click',
+        value: 1,
+      ),
+    );
+  }
+
+  static String _getCategoryName(int id) {
+    Map<int, String> categories = {
+      1: "News",
+      3: "Events",
+      5: "Mobilität",
+      6: "Online-Dienste",
+      7: "Stadtwerke",
+      8: "Sehenswertes",
+    };
+    return categories[id] ?? '';
   }
 
   ///Singleton factory
