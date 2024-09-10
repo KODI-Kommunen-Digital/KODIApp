@@ -425,8 +425,12 @@ class _HomeScreenState extends State<HomeScreen> {
         prefs.setKeyValue(Preferences.categoryId, item.id);
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': selectedCityId, 'title': ''});
+        Navigator.pushNamed(context, Routes.listProduct, arguments: {
+          'id': selectedCityId,
+          'title': '',
+          'type': 'category',
+          'categoryId': item.id
+        });
       }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
@@ -457,6 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   Future<void> _onService(CategoryModel item) async {
+    Routes.trackMatomoEvent(true, null, item.id, null);
     if (item.id == 5) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const FullScreenWebView()));
