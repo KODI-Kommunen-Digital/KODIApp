@@ -202,17 +202,16 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       late bool success;
       if (widget.product == null) {
         success = await ContainerRepository.addStoreProduct(
-          cityId: selectedCityId,
-          storeId: selectedStore!.id,
-          title: _textTitleController.text,
-          description: _textDescriptionController.text,
-          price: double.parse(_textPriceController.text),
-          tax: double.parse(_textTaxController.text),
-          inventory: int.parse(_textInventoryController.text),
-          minCount: int.parse(_textMinCountController.text),
-          categoryId: selectedCategory!.id,
-          subCategoryId: selectedSubCategory!.id
-        );
+            cityId: selectedCityId,
+            storeId: selectedStore!.id,
+            title: _textTitleController.text,
+            description: _textDescriptionController.text,
+            price: double.parse(_textPriceController.text),
+            tax: double.parse(_textTaxController.text),
+            inventory: int.parse(_textInventoryController.text),
+            minCount: int.parse(_textMinCountController.text),
+            categoryId: selectedCategory!.id,
+            subCategoryId: selectedSubCategory!.id);
       } else {
         success = await ContainerRepository.editProduct(
             cityId: widget.product!.cityId,
@@ -338,6 +337,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         parent: AlwaysScrollableScrollPhysics(),
       ),
       slivers: <Widget>[
+        if(widget.product == null)
         SliverPersistentHeader(
           delegate: AppBarHomeSliver(
               cityTitlesList: cityTitles,
@@ -347,22 +347,20 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                   : Translate.of(context).translate('hselect_location'),
               expandedHeight: MediaQuery.of(context).size.height * 0.3,
               banners: Images.slider,
-              setLocationCallback: (widget.product == null)
-                  ? (data) async {
-                      for (final city in widget.cities) {
-                        if (city.title == data) {
-                          setState(() {
-                            selectedCityTitle = data;
-                            selectedCityId = city.id;
-                          });
-                          context.read<CreateProductCubit>().onLoad(
-                              cityId: city.id,
-                              storeId: selectedStore?.id,
-                              categoryId: selectedCategory?.id);
-                        }
-                      }
-                    }
-                  : null),
+              setLocationCallback: (data) async {
+                for (final city in widget.cities) {
+                  if (city.title == data) {
+                    setState(() {
+                      selectedCityTitle = data;
+                      selectedCityId = city.id;
+                    });
+                    context.read<CreateProductCubit>().onLoad(
+                        cityId: city.id,
+                        storeId: selectedStore?.id,
+                        categoryId: selectedCategory?.id);
+                  }
+                }
+              }),
           pinned: true,
         ),
         SliverList(
