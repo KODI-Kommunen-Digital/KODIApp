@@ -45,7 +45,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  double get minExtent => 120;
+  double get minExtent => 20;
 
   @override
   bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
