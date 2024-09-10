@@ -658,20 +658,20 @@ class Api {
   }
 
   static Future<ResultApiModel> getSellerRequests(pageNo) async {
-    var list = '/seller/requests?pageNumber=$pageNo';
+    var list = '/seller/requests?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> getSellerSoldOrders(pageNo) async {
-    var list = '/seller/orderSold?pageNumber=$pageNo';
+    var list = '/seller/orderSold?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> getAllStores(cityId, pageNo) async {
     var list = (pageNo != null)
-        ? '/cities/$cityId/store?pageNumber=$pageNo'
+        ? '/cities/$cityId/store?pageNumber=$pageNo&pageSize=10'
         : '/cities/$cityId/store';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
@@ -679,7 +679,7 @@ class Api {
 
   static Future<ResultApiModel> getOwnerStores(pageNo) async {
     var list = (pageNo != null)
-        ? '/owners/getStores?pageNo=$pageNo'
+        ? '/owners/getStores?pageNo=$pageNo&pageSize=10'
         : '/owners/getStores';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
@@ -687,7 +687,7 @@ class Api {
 
   static Future<ResultApiModel> getSellerStores(pageNo) async {
     var list = (pageNo != null)
-        ? '/seller/getStores?pageNo=$pageNo'
+        ? '/seller/getStores?pageNo=$pageNo&pageSize=10'
         : '/seller/getStores';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
@@ -718,7 +718,7 @@ class Api {
       cityId, storeId, pageNo, loading) async {
     var list = (pageNo == null)
         ? '/cities/$cityId/store/$storeId/shelves'
-        : '/cities/$cityId/store/$storeId/shelves?pageNumber=$pageNo';
+        : '/cities/$cityId/store/$storeId/shelves?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container')
         .get(url: list, loading: loading);
     return ResultApiModel.fromJson(result);
@@ -748,8 +748,8 @@ class Api {
   static Future<ResultApiModel> getStoreSellers(
       {cityId, storeId, pageNo}) async {
     var list = (storeId != null)
-        ? '/cities/$cityId/store/$storeId/sellers?pageNumber=$pageNo'
-        : '/cities/$cityId/owners/getSellers?pageNumber=$pageNo';
+        ? '/cities/$cityId/store/$storeId/sellers?pageNumber=$pageNo&pageSize=10'
+        : '/cities/$cityId/owners/getSellers?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -757,7 +757,7 @@ class Api {
   static Future<ResultApiModel> getSellerRequestsOwner(
       pageNo, cityId, storeId) async {
     var list =
-        'owners/getSellers?pageNumber=$pageNo&cityId=$cityId&storeId=$storeId&status=0';
+        'owners/getSellers?pageNumber=$pageNo&pageSize=10&cityId=$cityId&storeId=$storeId&status=0';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -791,7 +791,7 @@ class Api {
   }
 
   static Future<ResultApiModel> getStoreOrders(cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/orders?pageNumber=$pageNo';
+    var list = '/cities/$cityId/store/$storeId/orders?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -823,8 +823,8 @@ class Api {
   static Future<ResultApiModel> getProductRequests(
       {cityId, storeId, pageNo, reqType, status}) async {
     var list = (cityId != null && storeId != null)
-        ? '/cities/$cityId/store/$storeId/productRequest?pageNumber=$pageNo$reqType$status'
-        : '/owners/productRequests?pageNumber=$pageNo$reqType$status';
+        ? '/cities/$cityId/store/$storeId/productRequest?pageNumber=$pageNo&pageSize=10$reqType$status'
+        : '/owners/productRequests?pageNumber=$pageNo&pageSize=10$reqType$status';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -872,7 +872,7 @@ class Api {
   }
 
   static Future<ResultApiModel> getCustomerOrders(userId, pageNo) async {
-    var list = '/users/$userId/orders?pageNumber=$pageNo';
+    var list = '/users/$userId/orders?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -885,7 +885,7 @@ class Api {
 
   static Future<ResultApiModel> getCustomerTransactions(
       userId, cardId, pageNo) async {
-    var list = '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo';
+    var list = '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -927,7 +927,7 @@ class Api {
       sort,
       sortDesc}) async {
     var list =
-        '/cities/$cityId/store/$storeId/products?pageNumber=$pageNo$category$subCategory$search$sort$sortDesc';
+        '/cities/$cityId/store/$storeId/products?pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
