@@ -12,7 +12,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 
-class ShelfDetailsScreen extends StatelessWidget {
+class ShelfDetailsScreen extends StatefulWidget {
   final ShelfModel shelf;
   final List<CategoryModel> categories;
   final List<CategoryModel>? subCategories;
@@ -24,12 +24,20 @@ class ShelfDetailsScreen extends StatelessWidget {
       this.subCategories});
 
   @override
+  State<ShelfDetailsScreen> createState() => _ShelfDetailsScreenState();
+}
+
+class _ShelfDetailsScreenState extends State<ShelfDetailsScreen> {
+  bool expandTitle = false;
+  bool expandDescription = false;
+
+  @override
   Widget build(BuildContext context) {
-    final ContainerProductModel? product = shelf.product;
+    final ContainerProductModel? product = widget.shelf.product;
     final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('order_details')),
+        title: Text(Translate.of(context).translate('shelf_details')),
         centerTitle: true,
       ),
       body: Padding(
@@ -37,10 +45,11 @@ class ShelfDetailsScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              if (shelf.product != null)
+              if (widget.shelf.product != null)
                 CachedNetworkImage(
-                  imageUrl: ((shelf.product!.productImages ?? []).isNotEmpty)
-                      ? '${Application.picturesURL}${shelf.product!.productImages!.first}'
+                  imageUrl: ((widget.shelf.product!.productImages ?? [])
+                          .isNotEmpty)
+                      ? '${Application.picturesURL}${widget.shelf.product!.productImages!.first}'
                       : '${Application.picturesURL}admin/News.jpeg',
                   cacheManager: memoryCacheManager,
                   placeholder: (context, url) {
@@ -86,36 +95,65 @@ class ShelfDetailsScreen extends StatelessWidget {
               const SizedBox(
                 height: 16,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    shelf.title ??
-                        product?.title ??
-                        Translate.of(context).translate('undefined'),
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    expandTitle = !expandTitle;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.shelf.title ??
+                            product?.title ??
+                            Translate.of(context).translate('undefined'),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                        overflow: (expandTitle)
+                            ? TextOverflow.clip
+                            : TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon((expandTitle)
+                        ? Icons.arrow_drop_up
+                        : Icons.arrow_drop_down)
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    shelf.description ??
-                        product?.description ??
-                        Translate.of(context).translate('undefined'),
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    expandDescription = !expandDescription;
+                  });
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        widget.shelf.description ??
+                            product?.description ??
+                            Translate.of(context).translate('undefined'),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        overflow: (expandDescription)
+                            ? TextOverflow.clip
+                            : TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon((expandDescription)
+                        ? Icons.arrow_drop_up
+                        : Icons.arrow_drop_down)
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 16,
@@ -127,8 +165,8 @@ class ShelfDetailsScreen extends StatelessWidget {
                     Text(
                       Translate.of(context).translate('product'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -205,7 +243,7 @@ class ShelfDetailsScreen extends StatelessWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    "${shelf.pricePerQuantity ?? product?.price ?? Translate.of(context).translate('undefined')}${(shelf.pricePerQuantity == null && product == null) ? '' : '€'}",
+                    "${widget.shelf.pricePerQuantity ?? product?.price ?? Translate.of(context).translate('undefined')}${(widget.shelf.pricePerQuantity == null && product == null) ? '' : '€'}",
                     style: Theme.of(context).textTheme.bodyMedium!,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -315,7 +353,7 @@ class ShelfDetailsScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    shelf.formatDate(),
+                    widget.shelf.formatDate(),
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -343,15 +381,15 @@ class ShelfDetailsScreen extends StatelessWidget {
       context: buildContext,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-              Translate.of(context).translate('remove_product')),
+          title: Text(Translate.of(context).translate('remove_product')),
           content: Text(
               Translate.of(context).translate('are_you_sure_remove_product')),
           actions: <Widget>[
             TextButton(
               onPressed: () async {
                 final bool success =
-                    await ContainerRepository.removeProductFromShelf(shelf.id);
+                    await ContainerRepository.removeProductFromShelf(
+                        widget.shelf.id);
                 if (success) {
                   Navigator.pop(context);
                   Navigator.pop(context, true);
@@ -382,7 +420,7 @@ class ShelfDetailsScreen extends StatelessWidget {
   String? getCategoryTranslation(int id) {
     try {
       CategoryModel? category =
-          categories.firstWhere((element) => element.id == id);
+          widget.categories.firstWhere((element) => element.id == id);
       return category.title;
     } catch (e) {
       return null;
@@ -391,9 +429,9 @@ class ShelfDetailsScreen extends StatelessWidget {
 
   String? getSubCategoryTranslation(int id) {
     try {
-      if (subCategories != null) {
+      if (widget.subCategories != null) {
         CategoryModel? category =
-            subCategories!.firstWhere((element) => element.id == id);
+            widget.subCategories!.firstWhere((element) => element.id == id);
         return category.title;
       }
       return null;

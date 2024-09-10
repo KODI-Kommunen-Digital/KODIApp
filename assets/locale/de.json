@@ -570,7 +570,7 @@
   "store": "Laden",
   "shelves": "Regale",
   "undefined": "Nicht definiert",
-  "remove_product": "Produkt entfernen",
+  "remove_product": "Produkt vom Regal entfernen",
   "are_you_sure_remove_product": "Bist du sicher, dass du das Produkt vom Regal entfernen möchtest?",
   "are_you_sure_delete_product": "Bist du sicher, dass du das Produkt löschen möchtest?",
   "are_you_sure_remove_seller": "Bist du sicher, dass du diesen Verkäufer löschen möchtest?",
@@ -588,5 +588,6 @@
   "success": "Erfolg",
   "add_inventory": "Zu bestehendem Bestand hinzufügen",
   "product": "Produkt",
-  "choose_shelves_product": "Wähle Regale für das Produkt aus"
+  "choose_shelves_product": "Wähle Regale für das Produkt aus",
+  "shelf_details": "Regaldetails"
 }

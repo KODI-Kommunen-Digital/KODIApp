@@ -568,7 +568,7 @@
   "store": "Store",
   "shelves": "Shelves",
   "undefined": "Undefined",
-  "remove_product": "Remove product",
+  "remove_product": "Remove product from shelf",
   "are_you_sure_remove_product": "Are you sure to remove the product from the shelf?",
   "are_you_sure_delete_product": "Are you sure to delete this product?",
   "are_you_sure_remove_seller": "Are you sure to delete the seller?",
@@ -586,5 +586,6 @@
   "success": "Success",
   "add_inventory": "Add to inventory",
   "product": "Product",
-  "choose_shelves_product": "Choose shelves for product"
+  "choose_shelves_product": "Choose shelves for product",
+  "shelf_details": "Shelf details"
 }
