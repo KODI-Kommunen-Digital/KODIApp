@@ -449,6 +449,26 @@ class ContainerRepository {
     }
   }
 
+  static Future<List<SellerRequestModel>?> getSellerRequestsOwner(int pageNo, int cityId, int storeId) async {
+    final response = await Api.getSellerRequestsOwner(pageNo, cityId, storeId);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return SellerRequestModel.fromJson(item);
+      }).toList();
+
+      for (var request in list) {
+        UserModel? user = await UserRepository.fetchUser(request.userId);
+        if (user != null) request.user = user;
+      }
+      return list;
+    } else {
+      logError(
+          'Error getting seller requests: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
   static Future<bool> addStoreProduct(
       {required int cityId,
       required int storeId,

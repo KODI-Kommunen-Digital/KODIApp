@@ -661,6 +661,7 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return SellerRequestsViewScreen(
               isOwner: arguments['isOwner'],
+              store: arguments['store'],
             );
           },
         );

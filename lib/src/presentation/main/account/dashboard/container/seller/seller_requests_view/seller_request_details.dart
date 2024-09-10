@@ -1,10 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:html/dom.dart' as dom;
 
 class SellerRequestDetails extends StatelessWidget {
   final SellerRequestModel request;
@@ -40,18 +42,13 @@ class SellerRequestDetails extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                request.title,
+                dom.DocumentFragment.html(request.title).text ?? request.title,
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
               ),
               const SizedBox(height: 16.0),
-              Text(
-                request.description,
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
+              Html(data: request.description),
               const SizedBox(height: 8.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

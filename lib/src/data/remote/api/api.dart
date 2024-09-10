@@ -714,11 +714,13 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getShelves(cityId, storeId, pageNo, loading) async {
+  static Future<ResultApiModel> getShelves(
+      cityId, storeId, pageNo, loading) async {
     var list = (pageNo == null)
         ? '/cities/$cityId/store/$storeId/shelves'
         : '/cities/$cityId/store/$storeId/shelves?pageNumber=$pageNo';
-    final result = await HTTPManager(apiType: 'container').get(url: list, loading: loading);
+    final result = await HTTPManager(apiType: 'container')
+        .get(url: list, loading: loading);
     return ResultApiModel.fromJson(result);
   }
 
@@ -748,6 +750,14 @@ class Api {
     var list = (storeId != null)
         ? '/cities/$cityId/store/$storeId/sellers?pageNumber=$pageNo'
         : '/cities/$cityId/owners/getSellers?pageNumber=$pageNo';
+    final result = await HTTPManager(apiType: 'container').get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getSellerRequestsOwner(
+      pageNo, cityId, storeId) async {
+    var list =
+        'owners/getSellers?pageNumber=$pageNo&cityId=$cityId&storeId=$storeId&status=0';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }

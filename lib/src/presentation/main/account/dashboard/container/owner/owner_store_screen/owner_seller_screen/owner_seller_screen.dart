@@ -127,7 +127,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
             AppButton(Translate.of(context).translate('requests'),
                 type: ButtonType.text, onPressed: () {
               Navigator.pushNamed(context, Routes.sellerRequestsViewScreen,
-                      arguments: {'isOwner': true})
+                      arguments: {'isOwner': true, 'store': context.read<OwnerSellerCubit>().store})
                   .then((a) => context.read<OwnerSellerCubit>().onLoad(false));
             })
           ],

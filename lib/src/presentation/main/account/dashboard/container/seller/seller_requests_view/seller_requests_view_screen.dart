@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
+import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/cubit/seller_requests_view_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/cubit/seller_requests_view_state.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:html/dom.dart' as dom;
 
 class SellerRequestsViewScreen extends StatefulWidget {
+  final StoreModel? store;
   final bool isOwner;
 
-  const SellerRequestsViewScreen({super.key, this.isOwner = false});
+  const SellerRequestsViewScreen({super.key, this.isOwner = false, this.store});
 
   @override
   State<SellerRequestsViewScreen> createState() =>
@@ -20,6 +24,8 @@ class _SellerRequestsViewScreenState extends State<SellerRequestsViewScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<SellerRequestsViewCubit>().isOwner = widget.isOwner;
+    context.read<SellerRequestsViewCubit>().store = widget.store;
     context.read<SellerRequestsViewCubit>().onLoad(false);
   }
 
@@ -133,7 +139,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                           height: 24,
                                         ),
                                         Text(
-                                          request.title,
+                                          dom.DocumentFragment.html(request.title).text ?? request.title,
                                           maxLines: 2,
                                           style: Theme.of(context)
                                               .textTheme
@@ -142,10 +148,9 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                                   fontWeight: FontWeight.bold),
                                         ),
                                         const SizedBox(height: 8),
-                                        Text(request.description,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!),
+                                        Html(
+                                          data: request.description,
+                                        ),
                                         const SizedBox(height: 16),
                                         Row(
                                           mainAxisAlignment:
