@@ -28,6 +28,7 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
   ContainerProductModel? selectedProduct;
 
   String? _errorTitle;
+  String? _errorDescription;
   String? _errorProduct;
 
   @override
@@ -72,15 +73,22 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
                   Utils.fieldFocusChange(
                       context, _titleFocus, _descriptionFocus);
                 },
+                onChanged: (text) => setState(() {}),
+                showCharacters: true,
+                characterLimit: 255,
               ),
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('description'),
                 controller: _descriptionController,
+                errorText: _errorDescription,
                 focusNode: _descriptionFocus,
                 maxLines: 4,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.text,
+                onChanged: (text) => setState(() {}),
+                showCharacters: true,
+                characterLimit: 255,
               ),
               const SizedBox(height: 8),
               TypeAheadField<ContainerProductModel>(
@@ -149,6 +157,18 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
       _errorTitle = null;
     }
 
+    if (_titleController.text.length > 255) {
+      _errorTitle = 'title_long';
+    } else {
+      _errorTitle = null;
+    }
+
+    if (_descriptionController.text.length > 255) {
+      _errorDescription = 'value_user_desc_limit_exceeded';
+    } else {
+      _errorDescription = null;
+    }
+
     if (selectedProduct == null) {
       _errorProduct = 'product_empty';
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -157,7 +177,9 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
       _errorProduct = null;
     }
 
-    if (_errorTitle == null && _errorProduct == null) {
+    if (_errorTitle == null &&
+        _errorProduct == null &&
+        _errorDescription == null) {
       final bool success = await ContainerRepository.saveShelf(
           cityId: widget.store.cityId,
           storeId: widget.store.id,
