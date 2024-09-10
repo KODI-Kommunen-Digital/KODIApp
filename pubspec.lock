@@ -1205,6 +1205,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.8.0"
+  matomo_tracker:
+    dependency: "direct main"
+    description:
+      name: matomo_tracker
+      sha256: "8706ca29389b836929415a52c3e6e94aaf8e37ceca23407ee215716fdb83466d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.1.0"
   meta:
     dependency: transitive
     description:
@@ -2083,5 +2091,5 @@ packages:
     source: hosted
     version: "3.1.2"
 sdks:
-  dart: ">=3.4.0 <4.0.0"
+  dart: ">=3.4.1 <4.0.0"
   flutter: ">=3.22.0"
