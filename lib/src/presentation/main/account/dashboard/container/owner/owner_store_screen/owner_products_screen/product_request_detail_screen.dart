@@ -1,12 +1,14 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+import 'package:html/dom.dart' as dom;
 
 class ProductRequestDetailScreen extends StatefulWidget {
   final ProductRequestModel request;
@@ -47,7 +49,7 @@ class _ProductRequestDetailScreenState
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    widget.request.title,
+                    dom.DocumentFragment.html(widget.request.title).text ?? widget.request.title,
                     style: Theme.of(context).textTheme.titleLarge!.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -59,17 +61,7 @@ class _ProductRequestDetailScreenState
               const SizedBox(
                 height: 8,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.request.description,
-                    style: Theme.of(context).textTheme.bodyMedium,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
+              Html(data: widget.request.description),
               const SizedBox(
                 height: 16,
               ),

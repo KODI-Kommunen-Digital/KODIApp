@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:html/dom.dart' as dom;
 
 class ProductRequestScreen extends StatefulWidget {
   final List<ProductRequestModel> requests;
@@ -84,8 +85,8 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
                         });
                       },
                       child: AppListTitle(
-                        title: item.title,
-                        subtitle: item.description,
+                        title: dom.DocumentFragment.html(item.title).text ?? '',
+                        subtitle: dom.DocumentFragment.html(item.description).text ?? '',
                         trailing: Text("${item.price.toString()}€"),
                         leading: Text((item.sellerId != null)
                             ? item.sellerId.toString()
