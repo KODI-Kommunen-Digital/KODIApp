@@ -30,6 +30,7 @@ class _ProductRequestDetailScreenState
   @override
   void initState() {
     super.initState();
+    //shelves.addAll(widget.shelves.where((shelf) => shelf.productId == null));
     shelves.addAll(widget.shelves);
   }
 
