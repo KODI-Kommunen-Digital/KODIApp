@@ -18,7 +18,7 @@ class SellerCubit extends Cubit<SellerState> {
 
     if (isProducts) {
       final List<StoreModel>? stores =
-          await ContainerRepository.loadStoresOwner(null); //TODO Once new endpoint, call loadStoresSeller
+          await ContainerRepository.loadStoresSeller(null);
       if (stores == null) {
         emit(const SellerState.error());
         return;

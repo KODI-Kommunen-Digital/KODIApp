@@ -42,7 +42,21 @@ class ContainerRepository {
       return list;
     } else {
       logError(
-          'Error loading onwer stores: ${response.data} ${response.message}');
+          'Error loading owner stores: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<StoreModel>?> loadStoresSeller(int? pageNo) async {
+    final response = await Api.getSellerStores(pageNo);
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return StoreModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading seller stores: ${response.data} ${response.message}');
       return null;
     }
   }
