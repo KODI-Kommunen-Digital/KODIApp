@@ -63,7 +63,7 @@ class _SellerLoadedState extends State<SellerOrdersLoaded> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('seller')),
+        title: Text(Translate.of(context).translate('orders')),
         centerTitle: true,
         actions: [
           AppButton(
@@ -96,7 +96,7 @@ class SellerOrdersLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('seller')),
+        title: Text(Translate.of(context).translate('orders')),
         centerTitle: true,
       ),
       body: const Center(

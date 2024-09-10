@@ -119,7 +119,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
     final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('seller')),
+        title: Text(Translate.of(context).translate('products')),
         centerTitle: true,
         actions: [
           AppButton(
@@ -432,7 +432,7 @@ class SellerProductsLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Translate.of(context).translate('seller')),
+        title: Text(Translate.of(context).translate('products')),
         centerTitle: true,
       ),
       body: const Center(
