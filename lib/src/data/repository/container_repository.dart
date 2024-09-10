@@ -179,7 +179,8 @@ class ContainerRepository {
   }
 
   static Future<List<ShelfModel>?> getStoreShelves(
-      int cityId, int storeId, int? pageNo, {bool loading = false}) async {
+      int cityId, int storeId, int? pageNo,
+      {bool loading = false}) async {
     final response = await Api.getShelves(cityId, storeId, pageNo, loading);
 
     if (response.success) {
@@ -194,9 +195,10 @@ class ContainerRepository {
               await getProductDetails(cityId, storeId, shelf.productId!);
           if (product != null) {
             updatedShelves.add(ShelfModel.updateProduct(product, shelf));
+          } else {
+            updatedShelves.add(shelf);
           }
         }
-        updatedShelves.add(shelf);
       }
 
       return updatedShelves;
