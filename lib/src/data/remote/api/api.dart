@@ -762,8 +762,11 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getStoreCategories(cityId, storeId) async {
-    var list = '/cities/$cityId/store/$storeId/categories';
+  static Future<ResultApiModel> getStoreCategories(
+      cityId, storeId, pageNo) async {
+    var list = (pageNo == null)
+        ? '/cities/$cityId/store/$storeId/categories'
+        : '/cities/$cityId/store/$storeId/categories?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -772,6 +775,20 @@ class Api {
       cityId, storeId, categoryId) async {
     var list =
         '/cities/$cityId/store/$storeId/category/$categoryId/subcategories';
+    final result = await HTTPManager(apiType: 'container').get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getCategoriesGlobal(pageNo) async {
+    var list = '/owners/globalCategories?pageNumber=$pageNo&pageSize=10';
+    final result = await HTTPManager(apiType: 'container').get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getSubCategoriesGlobal(
+      categoryId, pageNo) async {
+    var list =
+        '/owners/globalCategory/$categoryId/subCategories?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -791,7 +808,8 @@ class Api {
   }
 
   static Future<ResultApiModel> getStoreOrders(cityId, storeId, pageNo) async {
-    var list = '/cities/$cityId/store/$storeId/orders?pageNumber=$pageNo&pageSize=10';
+    var list =
+        '/cities/$cityId/store/$storeId/orders?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -885,7 +903,8 @@ class Api {
 
   static Future<ResultApiModel> getCustomerTransactions(
       userId, cardId, pageNo) async {
-    var list = '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo&pageSize=10';
+    var list =
+        '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -951,8 +970,36 @@ class Api {
   }
 
   static Future<ResultApiModel> getUserContainerPermission(userId) async {
-    final filePath = 'users/$userId';
+    final filePath = '/users/$userId';
     final result = await HTTPManager(apiType: 'container').get(url: filePath);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> addCategoryToStore(params) async {
+    const filePath = '/owners/category';
+    final result = await HTTPManager(apiType: 'container')
+        .post(url: filePath, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> addSubCategoryToStore(params) async {
+    const filePath = '/owners/subCategory';
+    final result = await HTTPManager(apiType: 'container')
+        .post(url: filePath, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> removeCategoryFromStore(params) async {
+    const filePath = '/owners/category';
+    final result = await HTTPManager(apiType: 'container')
+        .delete(url: filePath, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> removeSubCategoryFromStore(params) async {
+    const filePath = '/owners/subCategory';
+    final result = await HTTPManager(apiType: 'container')
+        .delete(url: filePath, data: params, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

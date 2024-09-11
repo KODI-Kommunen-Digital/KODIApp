@@ -9,6 +9,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/cubit/customer_card_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/edit_store/cubit/edit_store_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_category_screen/cubit/owner_category_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/cubit/owner_orders_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_cubit.dart';
@@ -69,6 +70,7 @@ class AppBloc {
   static final ownerProductsCubit = OwnerProductsCubit();
   static final ownerSellerCubit = OwnerSellerCubit();
   static final editStoreCubit = EditStoreCubit();
+  static final ownerCategoryCubit = OwnerCategoryCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -172,6 +174,9 @@ class AppBloc {
     ),
     BlocProvider<EditStoreCubit>(
       create: (context) => editStoreCubit,
+    ),
+    BlocProvider<OwnerCategoryCubit>(
+      create: (context) => ownerCategoryCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,

@@ -62,8 +62,9 @@ class ContainerRepository {
   }
 
   static Future<List<CategoryModel>?> loadStoreCategories(
-      int cityId, int storeId) async {
-    final response = await Api.getStoreCategories(cityId, storeId);
+      int cityId, int storeId,
+      {int? pageNo}) async {
+    final response = await Api.getStoreCategories(cityId, storeId, pageNo);
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
         return CategoryModel.fromJson(item);
@@ -88,6 +89,35 @@ class ContainerRepository {
     } else {
       logError(
           'Error loading store categories: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<CategoryModel>?> loadCategoriesGlobal(int pageNo) async {
+    final response = await Api.getCategoriesGlobal(pageNo);
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading Categories: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<CategoryModel>?> loadSubCategoriesGlobal(
+      int categoryId, int pageNo) async {
+    final response = await Api.getSubCategoriesGlobal(categoryId, pageNo);
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+      return list;
+    } else {
+      logError(
+          'Error loading subCategories: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -773,5 +803,72 @@ class ContainerRepository {
       logError('Error updating seller: ${response.data} ${response.message}');
       return false;
     }
+  }
+
+  static Future<ResultApiModel> addCategoryToStore(
+      int storeId, int categoryId) async {
+    Map<String, int> params = {'storeId': storeId, 'categoryId': categoryId};
+
+    final response = await Api.addCategoryToStore(params);
+
+    if (!response.success) {
+      logError(
+          'Error adding category to store: ${response.data} ${response.message}');
+    }
+    return response;
+  }
+
+  static Future<ResultApiModel> removeCategoryFromStore(
+      int storeId, int categoryId) async {
+    Map<String, int> params = {'storeId': storeId, 'categoryId': categoryId};
+
+    final response = await Api.removeCategoryFromStore(params);
+
+    if (!response.success) {
+      logError(
+          'Error removing category from store: ${response.data} ${response.message}');
+    }
+    return response;
+  }
+
+  static Future<ResultApiModel> addSubCategoryToStore(
+      int storeId, int categoryId) async {
+    Map<String, int> params = {'storeId': storeId, 'subCategoryId': categoryId};
+
+    final response = await Api.addSubCategoryToStore(params);
+
+    if (!response.success) {
+      logError(
+          'Error adding subcategory to store: ${response.data} ${response.message}');
+    }
+    return response;
+  }
+
+  static Future<ResultApiModel> removeSubCategoryFromStore(
+      int storeId, int categoryId) async {
+    Map<String, int> params = {'storeId': storeId, 'subCategoryId': categoryId};
+
+    final response = await Api.removeSubCategoryFromStore(params);
+
+    if (!response.success) {
+      logError(
+          'Error removing subcategory from store: ${response.data} ${response.message}');
+    }
+    return response;
+  }
+
+  static Future<bool?> doesStoreHaveCategory(
+      int cityId, int storeId, int categoryId) async {
+    final categories = await loadStoreCategories(cityId, storeId);
+
+    if (categories != null) {
+      for (var category in categories) {
+        if (category.id == categoryId) {
+          return true;
+        }
+      }
+      return false;
+    }
+    return null;
   }
 }

@@ -7,6 +7,7 @@ enum CategoryType { category, location, feature }
 class CategoryModel {
   final int id;
   final String title;
+  final String? description;
   final int? count;
   final String image;
   final IconData? icon;
@@ -18,6 +19,7 @@ class CategoryModel {
   CategoryModel(
       {required this.id,
       required this.title,
+      this.description,
       this.count,
       required this.image,
       this.icon,
@@ -45,6 +47,7 @@ class CategoryModel {
     return CategoryModel(
       id: json['id'] ?? json['id'] ?? json["categoryId"] ?? 0,
       title: json['name'] ?? 'Unknown',
+      description: json['description'],
       count: json['count'] ?? json["totalCount"] ?? 0,
       image: json['image'] ?? '',
       icon: icon,

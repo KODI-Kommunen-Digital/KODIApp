@@ -19,6 +19,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/customer
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/edit_store/edit_store_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/owner_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_category_screen/owner_category_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/owner_orders_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/container_product_detail_screen.dart';
@@ -165,6 +166,7 @@ class Routes {
   static const String ownerSellerScreen = "/ownerSellerScreen";
   static const String ownerShelvesScreen = "/ownerShelvesScreen";
   static const String ownerProductsScreen = "/ownerProductsScreen";
+  static const String ownerCategoryScreen = "/ownerCategoryScreen";
   static const String shelfDetailScreen = "/shelfDetailScreen";
   static const String addShelfScreen = "/addShelfScreen";
   static const String productRequestDetailScreen =
@@ -569,7 +571,7 @@ class Routes {
 
       case sellerSelectScreen:
         final Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
             return SellerSelectScreen(user: arguments['user']);
@@ -587,7 +589,7 @@ class Routes {
 
       case sellerProductsScreen:
         final Map<String, dynamic> arguments =
-        settings.arguments as Map<String, dynamic>;
+            settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
             return SellerProductsScreen(user: arguments['user']);
@@ -700,6 +702,15 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return OwnerProductsScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerCategoryScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerCategoryScreen(stores: arguments['stores'],);
           },
         );
 
