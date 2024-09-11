@@ -16,6 +16,7 @@ import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class CreateProductScreen extends StatefulWidget {
   final ContainerProductModel? product;
@@ -128,6 +129,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   String? _errorMinCount;
   String? _errorCategory;
   String? _errorSubCategory;
+  String? _errorBarcode;
 
   final _textTitleController = TextEditingController();
   final _textDescriptionController = TextEditingController();
@@ -135,12 +137,14 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   final _textTaxController = TextEditingController();
   final _textInventoryController = TextEditingController();
   final _textMinCountController = TextEditingController();
+  final _textBarcodeController = TextEditingController();
   final _focusTitle = FocusNode();
   final _focusDescription = FocusNode();
   final _focusPrice = FocusNode();
   final _focusTax = FocusNode();
   final _focusInventory = FocusNode();
   final _focusMinCount = FocusNode();
+  final _focusBarcode = FocusNode();
 
   @override
   void dispose() {
@@ -193,6 +197,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _textTaxController.text = widget.product!.tax.toString();
       //_textInventoryController.text = widget.product!.inventory.toString();
       _textMinCountController.text = widget.product!.minCount.toString();
+      _textBarcodeController.text = widget.product!.barcode ?? ''; //TODO remove null check
     }
   }
 
@@ -211,7 +216,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             inventory: int.parse(_textInventoryController.text),
             minCount: int.parse(_textMinCountController.text),
             categoryId: selectedCategory!.id,
-            subCategoryId: selectedSubCategory!.id);
+            subCategoryId: selectedSubCategory!.id,
+            barcode: _textBarcodeController.text);
       } else {
         success = await ContainerRepository.editProduct(
             cityId: widget.product!.cityId,
@@ -226,7 +232,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                 : 0,
             minCount: int.parse(_textMinCountController.text),
             isActive: isActive,
-            localProduct: widget.product!);
+            localProduct: widget.product!,
+        barcode: _textBarcodeController.text);
       }
 
       if (success) {
@@ -259,6 +266,14 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _errorStore = "store_missing";
     } else {
       _errorStore = null;
+    }
+
+    if (_textBarcodeController.text.length < 12) {
+      _errorBarcode = 'barcode_required';
+    } else if (!_textBarcodeController.text.contains(RegExp(r'^\d+$'))) {
+      _errorBarcode = 'value_not_barcode';
+    } else {
+      _errorBarcode = null;
     }
 
     if (selectedCategory == null) {
@@ -296,7 +311,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _errorInventory,
       _errorMinCount,
       _errorCategory,
-      _errorSubCategory
+      _errorSubCategory,
+      _errorBarcode
     ];
 
     if (_errorTitle != null ||
@@ -307,7 +323,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         _errorInventory != null ||
         _errorMinCount != null ||
         _errorCategory != null ||
-        _errorSubCategory != null) {
+        _errorSubCategory != null ||
+        _errorBarcode != null) {
       String errorMessage = "";
       for (var element in errors) {
         if (element != null &&
@@ -337,32 +354,32 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         parent: AlwaysScrollableScrollPhysics(),
       ),
       slivers: <Widget>[
-        if(widget.product == null)
-        SliverPersistentHeader(
-          delegate: AppBarHomeSliver(
-              cityTitlesList: cityTitles,
-              hintText: Translate.of(context).translate('hselect_location'),
-              selectedOption: (selectedCityId != 0)
-                  ? selectedCityTitle
-                  : Translate.of(context).translate('hselect_location'),
-              expandedHeight: MediaQuery.of(context).size.height * 0.3,
-              banners: Images.slider,
-              setLocationCallback: (data) async {
-                for (final city in widget.cities) {
-                  if (city.title == data) {
-                    setState(() {
-                      selectedCityTitle = data;
-                      selectedCityId = city.id;
-                    });
-                    context.read<CreateProductCubit>().onLoad(
-                        cityId: city.id,
-                        storeId: selectedStore?.id,
-                        categoryId: selectedCategory?.id);
+        if (widget.product == null)
+          SliverPersistentHeader(
+            delegate: AppBarHomeSliver(
+                cityTitlesList: cityTitles,
+                hintText: Translate.of(context).translate('hselect_location'),
+                selectedOption: (selectedCityId != 0)
+                    ? selectedCityTitle
+                    : Translate.of(context).translate('hselect_location'),
+                expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                banners: Images.slider,
+                setLocationCallback: (data) async {
+                  for (final city in widget.cities) {
+                    if (city.title == data) {
+                      setState(() {
+                        selectedCityTitle = data;
+                        selectedCityId = city.id;
+                      });
+                      context.read<CreateProductCubit>().onLoad(
+                          cityId: city.id,
+                          storeId: selectedStore?.id,
+                          categoryId: selectedCategory?.id);
+                    }
                   }
-                }
-              }),
-          pinned: true,
-        ),
+                }),
+            pinned: true,
+          ),
         SliverList(
           delegate: SliverChildListDelegate([
             SafeArea(
@@ -625,7 +642,52 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       textInputAction: TextInputAction.next,
                       onSubmitted: (text) {
                         Utils.fieldFocusChange(
-                            context, _focusDescription, _focusPrice);
+                            context, _focusDescription, _focusBarcode);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              text: Translate.of(context).translate('barcode'),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                              children: const <TextSpan>[
+                                TextSpan(
+                                  text: ' *',
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                    AppTextInput(
+                      hintText:
+                          Translate.of(context).translate('enter_barcode'),
+                      maxLines: 1,
+                      maxLength: 13,
+                      errorText: _errorBarcode,
+                      controller: _textBarcodeController,
+                      focusNode: _focusBarcode,
+                      hasDelete: false,
+                      trailing: IconButton(
+                        icon: const Icon(Icons.document_scanner),
+                        onPressed: () {
+                          scanBarcode();
+                        },
+                      ),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.number,
+                      onSubmitted: (text) {
+                        Utils.fieldFocusChange(
+                            context, _focusBarcode, _focusPrice);
                       },
                     ),
                     const SizedBox(height: 16),
@@ -793,6 +855,18 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
         )
       ],
     );
+  }
+
+  void scanBarcode() async {
+    var code = await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => const SimpleBarcodeScannerPage()));
+    setState(() {
+      if (code is String && code != "" && code != "-1") {
+        _textBarcodeController.text = code;
+      }
+    });
   }
 }
 

@@ -297,7 +297,8 @@ class ContainerRepository {
       required int inventory,
       required int minCount,
       required ContainerProductModel localProduct,
-      required bool isActive}) async {
+      required bool isActive,
+      required String barcode}) async {
     Map<String, dynamic> params = {};
 
     if (title != localProduct.title) {
@@ -315,6 +316,10 @@ class ContainerRepository {
     if (tax != localProduct.tax) {
       params['tax'] = tax;
     }
+
+    /*if (barcode != localProduct.barcode) {
+      params['barcode'] = barcode;
+    }*/
 
     if (inventory != 0) {
       params['inventory'] = inventory;
@@ -451,7 +456,8 @@ class ContainerRepository {
     }
   }
 
-  static Future<List<SellerRequestModel>?> getSellerRequestsOwner(int pageNo, int cityId, int storeId) async {
+  static Future<List<SellerRequestModel>?> getSellerRequestsOwner(
+      int pageNo, int cityId, int storeId) async {
     final response = await Api.getSellerRequestsOwner(pageNo, cityId, storeId);
 
     if (response.success) {
@@ -482,7 +488,7 @@ class ContainerRepository {
       required int minCount,
       required int categoryId,
       required int subCategoryId,
-      String? meta}) async {
+      required String barcode}) async {
     Map<String, dynamic> params = {
       "title": title,
       "description": description,
@@ -492,6 +498,7 @@ class ContainerRepository {
       "minCount": minCount,
       "categoryId": categoryId,
       "subCategoryId": subCategoryId,
+      //"barcode": barcode
     };
 
     final response = await Api.addProduct(cityId, storeId, params);

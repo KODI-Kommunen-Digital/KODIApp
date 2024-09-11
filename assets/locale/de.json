@@ -589,5 +589,9 @@
   "add_inventory": "Zu bestehendem Bestand hinzufügen",
   "product": "Produkt",
   "choose_shelves_product": "Wähle Regale für das Produkt aus",
-  "shelf_details": "Regaldetails"
+  "shelf_details": "Regaldetails",
+  "barcode": "Barcode",
+  "enter_barcode": "Barcode scannen oder manuell angeben",
+  "barcode_required": "Barcode ist erforderlich",
+  "value_not_barcode": "Eingabe kein Barcode"
 }

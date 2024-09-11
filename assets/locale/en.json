@@ -587,5 +587,9 @@
   "add_inventory": "Add to inventory",
   "product": "Product",
   "choose_shelves_product": "Choose shelves for product",
-  "shelf_details": "Shelf details"
+  "shelf_details": "Shelf details",
+  "barcode": "Barcode",
+  "enter_barcode": "Scan barcode or enter manually",
+  "barcode_required": "Barcode is required",
+  "value_not_barcode": "Value not barcode"
 }

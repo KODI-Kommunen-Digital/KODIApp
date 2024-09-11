@@ -25,6 +25,7 @@ class ContainerProductModel {
   final bool isArchived;
   final int? deletedBy;
   final List<String>? productImages;
+  final String? barcode; //TODO make not nullable once backend integrated
 
   ContainerProductModel(
       {required this.id,
@@ -47,7 +48,8 @@ class ContainerProductModel {
       required this.isActive,
       required this.isArchived,
       required this.deletedBy,
-      required this.productImages});
+      required this.productImages,
+      required this.barcode});
 
   factory ContainerProductModel.fromJson(Map<String, dynamic> json, int cityId) {
     return ContainerProductModel(
@@ -71,6 +73,7 @@ class ContainerProductModel {
         isActive: (json['isActive'] ?? 0) == 1,
         isArchived: (json['isArchived'] ?? 0) == 1,
         deletedBy: json['deletedBy'],
+        barcode: json['barcode'],
         productImages: (json['productImages'] ?? []).cast<String>());
   }
 
