@@ -61,8 +61,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       selectedFilter = filter;
     });
     if (filter?.hasProductEventFilter ?? false) {
-      context.read<ListCubit>().eventFilter =
-          filter!.currentProductEventFilter;
+      context.read<ListCubit>().eventFilter = filter!.currentProductEventFilter;
       context.read<ListCubit>().onLoad(widget.arguments['id'], true);
     }
   }
@@ -166,6 +165,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       builder: (BuildContext context) {
         return PopScope(
           onPopInvoked: (pop) async {
+            if (pop) return;
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
           },
           child: SimpleDialog(
