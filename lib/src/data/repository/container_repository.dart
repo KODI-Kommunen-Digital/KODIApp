@@ -198,6 +198,8 @@ class ContainerRepository {
           } else {
             updatedShelves.add(shelf);
           }
+        } else {
+          updatedShelves.add(shelf);
         }
       }
 
