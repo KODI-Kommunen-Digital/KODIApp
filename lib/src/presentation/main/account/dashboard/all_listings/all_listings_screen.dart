@@ -484,8 +484,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          onPopInvoked: (pop) async {
-            Navigator.pop(context, searchTerm);
+          onPopInvokedWithResult: (bool didPop, dynamic result) {
+            if (!didPop) {
+              Navigator.pop(context, searchTerm);
+            }
           },
           child: SimpleDialog(
               title: Center(
