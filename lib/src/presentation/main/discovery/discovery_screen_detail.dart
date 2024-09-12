@@ -40,7 +40,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (value) {
+      onPopInvokedWithResult: (bool didPop, dynamic result) {
         context.read<DiscoveryCubit>().onLoad();
       },
       child: Scaffold(
@@ -163,7 +163,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
   }
 
- /* void _showCitySelectionPopup(BuildContext context) {
+  /* void _showCitySelectionPopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
