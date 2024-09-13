@@ -39,8 +39,10 @@ class _FilterScreenState extends State<FilterScreen> {
             title: const Text("Filter"),
           ),
           body: SingleChildScrollView(
-            child: WillPopScope(
-              onWillPop: () async {
+            child: PopScope(
+              canPop: false,
+              onPopInvoked: (pop) async {
+                if (pop) return;
                 Navigator.pop(
                     context,
                     MultiFilter(
@@ -57,7 +59,6 @@ class _FilterScreenState extends State<FilterScreen> {
                         widget.multiFilter.hasListingStatusFilter,
                         hasCategoryFilter: widget.multiFilter.hasCategoryFilter
                     ));
-                return false;
               },
               child: Column(
                 children: [
@@ -113,7 +114,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
@@ -351,7 +352,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 });
               },
             );
-          }).toList(),
+          }),
         ]),
       )
     ];
