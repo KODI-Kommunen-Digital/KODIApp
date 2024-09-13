@@ -46,15 +46,16 @@ class _AllListingsScreenState extends State<AllListingsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AllListingsCubit, AllListingsState>(
-        builder: (context, state) => state.maybeWhen(
-            loading: () => const AllListingsLoading(),
-            loaded: (posts, currentListingFilter, currentCityFilter) =>
-                AllListingsLoaded(
-                    user: widget.user,
-                    posts: posts,
-                    currentListingFilter: currentListingFilter,
-                    currentCityFilter: currentCityFilter),
-            orElse: () => ErrorWidget("Failed to load listings.")));
+        builder: (context, state) =>
+            state.maybeWhen(
+                loading: () => const AllListingsLoading(),
+                loaded: (posts, currentListingFilter, currentCityFilter) =>
+                    AllListingsLoaded(
+                        user: widget.user,
+                        posts: posts,
+                        currentListingFilter: currentListingFilter,
+                        currentCityFilter: currentCityFilter),
+                orElse: () => ErrorWidget("Failed to load listings.")));
   }
 }
 
@@ -80,12 +81,11 @@ class AllListingsLoaded extends StatefulWidget {
   final int currentListingFilter;
   final int currentCityFilter;
 
-  const AllListingsLoaded(
-      {required this.user,
-      this.posts,
-      super.key,
-      required this.currentListingFilter,
-      required this.currentCityFilter});
+  const AllListingsLoaded({required this.user,
+    this.posts,
+    super.key,
+    required this.currentListingFilter,
+    required this.currentCityFilter});
 
   @override
   State<AllListingsLoaded> createState() => _AllListingsLoadedState();
@@ -130,348 +130,365 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     final memoryCacheManager = DefaultCacheManager();
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Translate.of(context).translate('all_listings'),
-        ),
-        actions: [
-          Row(
-            children: [
-              AppFilterButton(
-                  multiFilter: MultiFilter(
-                      hasListingStatusFilter: true,
-                      hasLocationFilter: true,
-                      currentListingStatus: currentListingFilter,
-                      cities: AppBloc.homeCubit.location,
-                      currentLocation: currentCityFilter),
-                  filterCallBack: (filter) async {
-                    await AppBloc.allListingsCubit
-                        .setCurrentCityFilter(filter.currentLocation ?? 0);
-                    await AppBloc.allListingsCubit
-                        .setCurrentStatus(filter.currentListingStatus ?? 0);
-                    await _onRefresh();
-                  }),
-              IconButton(
-                  onPressed: () {
-                    _searchListings();
-                  },
-                  icon: const Icon(Icons.search))
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              Translate.of(context).translate('all_listings'),
+            ),
+            actions: [
+              Row(
+                children: [
+                  AppFilterButton(
+                      multiFilter: MultiFilter(
+                          hasListingStatusFilter: true,
+                          hasLocationFilter: true,
+                          currentListingStatus: currentListingFilter,
+                          cities: AppBloc.homeCubit.location,
+                          currentLocation: currentCityFilter),
+                      filterCallBack: (filter) async {
+                        await AppBloc.allListingsCubit
+                            .setCurrentCityFilter(filter.currentLocation ?? 0);
+                        await AppBloc.allListingsCubit
+                            .setCurrentStatus(filter.currentListingStatus ?? 0);
+                        await _onRefresh();
+                      }),
+                  IconButton(
+                      onPressed: () {
+                        _searchListings();
+                      },
+                      icon: const Icon(Icons.search))
+                ],
+              ),
             ],
           ),
-        ],
-      ),
-      body: Stack(children: [
-        (posts?.isNotEmpty ?? false)
-            ? Padding(
-                padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
-                child: CustomScrollView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
+          body: Stack(children: [
+            (posts?.isNotEmpty ?? false)
+                ? Padding(
+              padding: const EdgeInsets.fromLTRB(8, 8, 4, 0),
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
+                ),
+                controller: _scrollController,
+                slivers: <Widget>[
+                  CupertinoSliverRefreshControl(
+                    onRefresh: _onRefreshLoader,
                   ),
-                  controller: _scrollController,
-                  slivers: <Widget>[
-                    CupertinoSliverRefreshControl(
-                      onRefresh: _onRefreshLoader,
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (BuildContext context, int index) {
-                          if (index < posts!.length) {
-                            final item = posts![index];
-                            return Slidable(
-                              endActionPane: ActionPane(
-                                motion: const ScrollMotion(),
-                                children: [
-                                  SlidableAction(
-                                    onPressed: (aContext) {
-                                      Navigator.pushNamed(
-                                          context, Routes.submit, arguments: {
-                                        'item': item,
-                                        'isNewList': false,
-                                        'isAdmin': true
-                                      }).then((value) async {
-                                        await _onRefresh();
-                                      });
-                                    },
-                                    backgroundColor: Colors.blue,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.edit,
-                                    label:
-                                        Translate.of(context).translate('edit'),
-                                  ),
-                                  SlidableAction(
-                                    onPressed: (aContext) async {
-                                      bool response =
-                                          await showDeleteConfirmation(
-                                              context, item);
-                                      if (response) {
-                                        await AppBloc.homeCubit
-                                            .onLoad(false)
-                                            .then((value) => _onRefresh());
-                                      }
-                                    },
-                                    backgroundColor: Colors.red,
-                                    foregroundColor: Colors.white,
-                                    icon: Icons.delete,
-                                    label: Translate.of(context)
-                                        .translate('delete'),
-                                  ),
-                                ],
-                              ),
-                              key:
-                                  Key(item.id.toString() + isSwiped.toString()),
-                              child: InkWell(
-                                onTap: () {
-                                  _onProductDetail(item);
-                                },
-                                child: Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 4),
-                                  child: Stack(
-                                    children: [
-                                      Row(
-                                        children: <Widget>[
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: CachedNetworkImage(
-                                              imageUrl: item.sourceId == 2 &&
-                                                      item.image != null &&
-                                                      item.image !=
-                                                          'admin/News.jpeg'
-                                                  ? item.image
-                                                  : item.sourceId == 3 &&
-                                                          item.image != null
-                                                      ? (item.image.startsWith(
-                                                              'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : item.image)
-                                                      : item.image != null &&
-                                                              item.image
-                                                                  .startsWith(
-                                                                      'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : "${Application.picturesURL}${item.image}",
-                                              cacheManager: memoryCacheManager,
-                                              placeholder: (context, url) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                );
-                                              },
-                                              imageBuilder:
-                                                  (context, imageProvider) {
-                                                return Container(
+                  SliverList(
+                    delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                        if (index < posts!.length) {
+                          final item = posts![index];
+                          return Slidable(
+                            endActionPane: ActionPane(
+                              motion: const ScrollMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (aContext) {
+                                    Navigator.pushNamed(
+                                        context, Routes.submit, arguments: {
+                                      'item': item,
+                                      'isNewList': false,
+                                      'isAdmin': true
+                                    }).then((value) async {
+                                      await _onRefresh();
+                                    });
+                                  },
+                                  backgroundColor: Colors.blue,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.edit,
+                                  label:
+                                  Translate.of(context).translate('edit'),
+                                ),
+                                SlidableAction(
+                                  onPressed: (aContext) async {
+                                    bool response =
+                                    await showDeleteConfirmation(
+                                        context, item);
+                                    if (response) {
+                                      await AppBloc.homeCubit
+                                          .onLoad(false)
+                                          .then((value) => _onRefresh());
+                                    }
+                                  },
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  icon: Icons.delete,
+                                  label: Translate.of(context)
+                                      .translate('delete'),
+                                ),
+                              ],
+                            ),
+                            key:
+                            Key(item.id.toString() + isSwiped.toString()),
+                            child: InkWell(
+                              onTap: () {
+                                _onProductDetail(item);
+                              },
+                              child: Container(
+                                padding:
+                                const EdgeInsets.symmetric(horizontal: 4),
+                                child: Stack(
+                                  children: [
+                                    Row(
+                                      children: <Widget>[
+                                        ClipRRect(
+                                          borderRadius:
+                                          BorderRadius.circular(12),
+                                          child: CachedNetworkImage(
+                                            imageUrl: item.sourceId == 2 &&
+                                                item.image != null &&
+                                                item.image !=
+                                                    'admin/News.jpeg'
+                                                ? item.image
+                                                : item.sourceId == 3 &&
+                                                item.image != null
+                                                ? (item.image.startsWith(
+                                                'admin')
+                                                ? "${Application
+                                                .picturesURL}${item.image}"
+                                                : item.image)
+                                                : item.image != null &&
+                                                item.image
+                                                    .startsWith(
+                                                    'admin')
+                                                ? "${Application
+                                                .picturesURL}${item.image}"
+                                                : "${Application
+                                                .picturesURL}${item.image}",
+                                            cacheManager: memoryCacheManager,
+                                            placeholder: (context, url) {
+                                              return AppPlaceholder(
+                                                child: Container(
                                                   width: 120,
                                                   height: 140,
-                                                  decoration: BoxDecoration(
-                                                    image: DecorationImage(
-                                                      image: imageProvider,
-                                                      fit: BoxFit.fitHeight,
+                                                  decoration:
+                                                  const BoxDecoration(
+                                                    color: Colors.white,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            imageBuilder:
+                                                (context, imageProvider) {
+                                              return Container(
+                                                width: 120,
+                                                height: 140,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.fitHeight,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            errorWidget:
+                                                (context, url, error) {
+                                              return AppPlaceholder(
+                                                child: Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration:
+                                                  const BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                    BorderRadius.only(
+                                                      topLeft:
+                                                      Radius.circular(8),
+                                                      bottomLeft:
+                                                      Radius.circular(8),
                                                     ),
                                                   ),
-                                                );
-                                              },
-                                              errorWidget:
-                                                  (context, url, error) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(8),
-                                                        bottomLeft:
-                                                            Radius.circular(8),
-                                                      ),
-                                                    ),
-                                                    child:
-                                                        const Icon(Icons.error),
-                                                  ),
-                                                );
-                                              },
-                                            ),
+                                                  child:
+                                                  const Icon(Icons.error),
+                                                ),
+                                              );
+                                            },
                                           ),
-                                          const SizedBox(width: 8),
-                                          Expanded(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: <Widget>[
-                                                const SizedBox(
-                                                  height: 24,
+                                        ),
+                                        const SizedBox(width: 8),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: <Widget>[
+                                              const SizedBox(
+                                                height: 24,
+                                              ),
+                                              Text(
+                                                item.category ?? '',
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                  fontWeight:
+                                                  FontWeight.bold,
                                                 ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Text(
+                                                item.title,
+                                                maxLines: 2,
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .titleSmall!
+                                                    .copyWith(
+                                                    fontWeight:
+                                                    FontWeight.bold),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                item.categoryId == 3
+                                                    ? (item.endDate != ""
+                                                    ? "${item
+                                                    .startDate} ${Translate.of(
+                                                    context).translate(
+                                                    'to')} ${item.endDate}"
+                                                    : item.startDate)
+                                                    : item.createDate,
+                                                style: Theme
+                                                    .of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                  fontWeight:
+                                                  FontWeight.bold,
+                                                ),
+                                              ),
+                                              if (item.sourceId == 3)
                                                 Text(
-                                                  item.category ?? '',
-                                                  style: Theme.of(context)
+                                                  "${Translate.of(context)
+                                                      .translate(
+                                                      'quelle')} ${item
+                                                      .externalId}",
+                                                  style: Theme
+                                                      .of(context)
                                                       .textTheme
                                                       .bodySmall!
                                                       .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                      fontWeight:
+                                                      FontWeight
+                                                          .w600),
+                                                  maxLines: 1,
                                                 ),
-                                                const SizedBox(height: 8),
-                                                Text(
-                                                  item.title,
-                                                  maxLines: 2,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .titleSmall!
-                                                      .copyWith(
+                                              // if (item.sourceId == 2)
+                                              //   Text(
+                                              //     "${Translate.of(context).translate('quelle')} ${item.website}",
+                                              //     style: Theme.of(context)
+                                              //         .textTheme
+                                              //         .bodySmall!
+                                              //         .copyWith(
+                                              //             fontWeight:
+                                              //                 FontWeight
+                                              //                     .w600),
+                                              //     maxLines: 1,
+                                              //   ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment
+                                                    .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius
+                                                          .circular(10),
+                                                    ),
+                                                    child: ElevatedButton(
+                                                      onPressed: () async {
+                                                        _openListingStatusActionPopUp(
+                                                            item);
+                                                      },
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                        minimumSize:
+                                                        const Size(
+                                                            80, 30),
+                                                      ),
+                                                      child: Text(
+                                                        Translate.of(context)
+                                                            .translate(
+                                                            getStatusTanslation(
+                                                                item.statusId ??
+                                                                    0,
+                                                                null)),
+                                                        style:
+                                                        Theme
+                                                            .of(context)
+                                                            .textTheme
+                                                            .bodySmall!
+                                                            .copyWith(
                                                           fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                                const SizedBox(height: 4),
-                                                Text(
-                                                  item.categoryId == 3
-                                                      ? (item.endDate != ""
-                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                          : item.startDate)
-                                                      : item.createDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                if (item.sourceId == 3)
-                                                  Text(
-                                                    "${Translate.of(context).translate('quelle')} ${item.externalId}",
-                                                    style: Theme.of(context)
-                                                        .textTheme
-                                                        .bodySmall!
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w600),
-                                                    maxLines: 1,
-                                                  ),
-                                                // if (item.sourceId == 2)
-                                                //   Text(
-                                                //     "${Translate.of(context).translate('quelle')} ${item.website}",
-                                                //     style: Theme.of(context)
-                                                //         .textTheme
-                                                //         .bodySmall!
-                                                //         .copyWith(
-                                                //             fontWeight:
-                                                //                 FontWeight
-                                                //                     .w600),
-                                                //     maxLines: 1,
-                                                //   ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: ElevatedButton(
-                                                        onPressed: () async {
-                                                          _openListingStatusActionPopUp(
-                                                              item);
-                                                        },
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          minimumSize:
-                                                              const Size(
-                                                                  80, 30),
-                                                        ),
-                                                        child: Text(
-                                                          Translate.of(context)
-                                                              .translate(
-                                                                  getStatusTanslation(
-                                                                      item.statusId ??
-                                                                          0,
-                                                                      null)),
-                                                          style:
-                                                              Theme.of(context)
-                                                                  .textTheme
-                                                                  .bodySmall!
-                                                                  .copyWith(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                  ),
+                                                          FontWeight
+                                                              .bold,
                                                         ),
                                                       ),
                                                     ),
-                                                    IconButton(
-                                                        onPressed: () {
-                                                          _openListingActionPopUp(
-                                                              item);
-                                                        },
-                                                        icon: const Icon(
-                                                            Icons.more_vert))
-                                                  ],
-                                                ),
-                                                const SizedBox(height: 8),
-                                                const SizedBox(height: 4),
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                                                  ),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        _openListingActionPopUp(
+                                                            item);
+                                                      },
+                                                      icon: const Icon(
+                                                          Icons.more_vert))
+                                                ],
+                                              ),
+                                              const SizedBox(height: 8),
+                                              const SizedBox(height: 4),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            );
-                          } else {
-                            (isLoadingMore)
-                                ? const Positioned(
-                                    bottom: 20,
-                                    left: 0,
-                                    right: 0,
-                                    child: Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
-                                  )
-                                : Container();
-                          }
-                          return null;
-                        },
-                        childCount: posts!.length + 1,
-                      ),
+                            ),
+                          );
+                        } else {
+                          (isLoadingMore)
+                              ? const Positioned(
+                            bottom: 20,
+                            left: 0,
+                            right: 0,
+                            child: Center(
+                              child:
+                              CircularProgressIndicator.adaptive(),
+                            ),
+                          )
+                              : Container();
+                        }
+                        return null;
+                      },
+                      childCount: posts!.length + 1,
                     ),
-                  ],
-                ),
-              )
-            : Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(Icons.sentiment_satisfied),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-      ]),
-    ));
+            )
+                : Center(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.sentiment_satisfied),
+                  Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      Translate.of(context).translate('list_is_empty'),
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyLarge,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ]),
+        ));
   }
 
   Future<String?> openSearchDialog() async {
@@ -555,7 +572,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     switch (chosen) {
       case 1:
         Navigator.pushNamed(context, Routes.submit,
-                arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
+            arguments: {'item': item, 'isNewList': false, 'isAdmin': true})
             .then((value) async {
           await _onRefresh();
         });
@@ -576,17 +593,19 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return BlocBuilder<AddListingCubit, AddListingState>(
-            builder: (context, state) => state.maybeWhen(loading: () {
+            builder: (context, state) =>
+                state.maybeWhen(loading: () {
                   return const CircularProgressIndicator();
                 }, loaded: () {
                   return SimpleDialog(
                       title: Center(
                         child: Text(Translate.of(context).translate('options'),
                             style: TextStyle(
-                              color: Theme.of(context)
-                                      .textTheme
-                                      .bodyLarge
-                                      ?.color ??
+                              color: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .bodyLarge
+                                  ?.color ??
                                   Colors.white,
                               fontWeight: FontWeight.bold,
                             )),
@@ -600,7 +619,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                           child: ListTile(
                             leading: const Icon(Icons.edit),
                             title:
-                                Text(Translate.of(context).translate('edit')),
+                            Text(Translate.of(context).translate('edit')),
                           ),
                         ),
                         SimpleDialogOption(
@@ -611,7 +630,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                           child: ListTile(
                             leading: const Icon(Icons.delete),
                             title:
-                                Text(Translate.of(context).translate('delete')),
+                            Text(Translate.of(context).translate('delete')),
                           ),
                         ),
                       ]);
@@ -633,7 +652,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return BlocBuilder<AddListingCubit, AddListingState>(
-            builder: (context, state) => state.maybeWhen(loading: () {
+            builder: (context, state) =>
+                state.maybeWhen(loading: () {
                   return const CircularProgressIndicator();
                 }, loaded: () {
                   return SimpleDialog(
@@ -720,8 +740,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     }
   }
 
-  Future<bool> showDeleteConfirmation(
-      BuildContext context, ProductModel item) async {
+  Future<bool> showDeleteConfirmation(BuildContext context,
+      ProductModel item) async {
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -747,10 +767,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     if (result == true) {
       if (!mounted) return false;
       final deleteResponse =
-          await context.read<AllListingsCubit>().deleteUserList(
-                item.cityId,
-                item.id,
-              );
+      await context.read<AllListingsCubit>().deleteUserList(
+        item.cityId,
+        item.id,
+      );
       return deleteResponse;
     }
     return false;
@@ -846,7 +866,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               ),
               SizedBox(
                 height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                MediaQuery
+                    .of(context)
+                    .size
+                    .height - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
