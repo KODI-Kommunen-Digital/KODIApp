@@ -503,100 +503,102 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               },
               child: Column(
                 children: [
-                  Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      CarouselSlider(
-                        options: CarouselOptions(
-                          aspectRatio:
-                              1 / MediaQuery.of(context).devicePixelRatio,
-                          height: carouselHeight,
-                          viewportFraction: 1.0,
-                          enlargeCenterPage: false,
-                          enableInfiniteScroll: product.imageLists!.length > 1,
-                          onPageChanged: (index, reason) {
-                            setState(() {
-                              currentImageIndex = index;
-                            });
-                          },
-                        ),
-                        items: product.imageLists?.map((imageUrl) {
-                          return Builder(
-                            builder: (BuildContext context) {
-                              String? imageUrlString = product.sourceId == 2 &&
-                                      imageUrl.logo != null &&
-                                      imageUrl.logo != 'admin/News.jpeg'
-                                  ? imageUrl.logo
-                                  : product.sourceId == 3 &&
-                                          imageUrl.logo != null
-                                      ? (imageUrl.logo!.startsWith('admin')
-                                          ? "${Application.picturesURL}${imageUrl.logo}"
-                                          : imageUrl.logo)
-                                      : imageUrl.logo != null &&
-                                              imageUrl.logo!.startsWith('admin')
-                                          ? "${Application.picturesURL}${imageUrl.logo}"
-                                          : "${Application.picturesURL}${imageUrl.logo}";
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                decoration: const BoxDecoration(
-                                  color: Colors.black,
-                                ),
-                                child: Image.network(
-                                  imageUrlString!,
-                                  fit: BoxFit.fitHeight,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          width: 120,
-                                          height: 140,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              bottomLeft: Radius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.error),
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                              );
+                  Expanded(
+                    child: Stack(
+                      alignment: Alignment.bottomCenter,
+                      children: [
+                        CarouselSlider(
+                          options: CarouselOptions(
+                            aspectRatio:
+                                1 / MediaQuery.of(context).devicePixelRatio,
+                            height: carouselHeight,
+                            viewportFraction: 1.0,
+                            enlargeCenterPage: false,
+                            enableInfiniteScroll: product.imageLists!.length > 1,
+                            onPageChanged: (index, reason) {
+                              setState(() {
+                                currentImageIndex = index;
+                              });
                             },
-                          );
-                        }).toList(),
-                      ),
-                      if (product.imageLists!.length > 1)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: product.imageLists!.map((url) {
-                              int index = product.imageLists!.indexOf(url);
-                              return Container(
-                                width: 10.0,
-                                height: 10.0,
-                                margin:
-                                    const EdgeInsets.symmetric(horizontal: 2.0),
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: currentImageIndex == index
-                                      ? Colors.blueAccent
-                                      : Colors.grey,
-                                ),
-                              );
-                            }).toList(),
                           ),
+                          items: product.imageLists?.map((imageUrl) {
+                            return Builder(
+                              builder: (BuildContext context) {
+                                String? imageUrlString = product.sourceId == 2 &&
+                                        imageUrl.logo != null &&
+                                        imageUrl.logo != 'admin/News.jpeg'
+                                    ? imageUrl.logo
+                                    : product.sourceId == 3 &&
+                                            imageUrl.logo != null
+                                        ? (imageUrl.logo!.startsWith('admin')
+                                            ? "${Application.picturesURL}${imageUrl.logo}"
+                                            : imageUrl.logo)
+                                        : imageUrl.logo != null &&
+                                                imageUrl.logo!.startsWith('admin')
+                                            ? "${Application.picturesURL}${imageUrl.logo}"
+                                            : "${Application.picturesURL}${imageUrl.logo}";
+                                return Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 5.0),
+                                  decoration: const BoxDecoration(
+                                    color: Colors.black,
+                                  ),
+                                  child: Image.network(
+                                    imageUrlString!,
+                                    fit: BoxFit.fitHeight,
+                                    loadingBuilder: (BuildContext context,
+                                        Widget child,
+                                        ImageChunkEvent? loadingProgress) {
+                                      if (loadingProgress == null) {
+                                        return child;
+                                      } else {
+                                        return AppPlaceholder(
+                                          child: Container(
+                                            width: 120,
+                                            height: 140,
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(8),
+                                                bottomLeft: Radius.circular(8),
+                                              ),
+                                            ),
+                                            child: const Icon(Icons.error),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                  ),
+                                );
+                              },
+                            );
+                          }).toList(),
                         ),
-                    ],
+                        if (product.imageLists!.length > 1)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: product.imageLists!.map((url) {
+                                int index = product.imageLists!.indexOf(url);
+                                return Container(
+                                  width: 10.0,
+                                  height: 10.0,
+                                  margin:
+                                      const EdgeInsets.symmetric(horizontal: 2.0),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: currentImageIndex == index
+                                        ? Colors.blueAccent
+                                        : Colors.grey,
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -1108,6 +1110,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               child: AppUserInfo(
                 user: userDetail,
+                showEmail: false,
                 onPressed: () async {
                   final loggedInUserId = await context
                       .read<ProductDetailCubit>()
@@ -1154,8 +1157,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       controller: _scrollController,
       slivers: <Widget>[
         SliverAppBar(
-          expandedHeight: MediaQuery.of(context).size.height * 0.27,
-          pinned: true,
+          expandedHeight: Platform.isAndroid
+              ? MediaQuery.of(context).size.height * 0.19
+              : MediaQuery.of(context).size.height * 0.27,
+          pinned: false,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),
           flexibleSpace: FlexibleSpaceBar(

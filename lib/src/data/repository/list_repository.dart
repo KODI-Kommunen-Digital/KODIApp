@@ -14,6 +14,8 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:http_parser/http_parser.dart';
 
+import '../../presentation/cubit/app_bloc.dart';
+
 class ListRepository {
   final Preferences prefs;
 
@@ -170,8 +172,11 @@ class ListRepository {
     });
     if (profile) {
       await prefs.setPickedFile(formData);
-      // final response = await Api.requestUploadImage(formData);
-      // return response;
+      final response = await Api.requestUploadImage(formData);
+      if (response.success) {
+        AppBloc.userCubit.onFetchUser();
+      }
+      return response;
     } else if (!profile) {
       await prefs.setPickedFile(formData);
     }

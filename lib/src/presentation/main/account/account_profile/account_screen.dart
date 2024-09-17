@@ -122,6 +122,7 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ],
                     ),
                     child: AppUserInfo(
+                      showEmail: true,
                       user: user,
                       type: UserViewType.information,
                       onPressed: () {

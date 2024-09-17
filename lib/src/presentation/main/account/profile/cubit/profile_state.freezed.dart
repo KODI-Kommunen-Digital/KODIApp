@@ -12,7 +12,7 @@ part of 'profile_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ProfileState {
@@ -78,28 +78,34 @@ class _$ProfileStateCopyWithImpl<$Res, $Val extends ProfileState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$ProfileStateLoadingCopyWith<$Res> {
-  factory _$$ProfileStateLoadingCopyWith(_$ProfileStateLoading value,
-          $Res Function(_$ProfileStateLoading) then) =
-      __$$ProfileStateLoadingCopyWithImpl<$Res>;
+abstract class _$$ProfileStateLoadingImplCopyWith<$Res> {
+  factory _$$ProfileStateLoadingImplCopyWith(_$ProfileStateLoadingImpl value,
+          $Res Function(_$ProfileStateLoadingImpl) then) =
+      __$$ProfileStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ProfileStateLoadingCopyWithImpl<$Res>
-    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateLoading>
-    implements _$$ProfileStateLoadingCopyWith<$Res> {
-  __$$ProfileStateLoadingCopyWithImpl(
-      _$ProfileStateLoading _value, $Res Function(_$ProfileStateLoading) _then)
+class __$$ProfileStateLoadingImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateLoadingImpl>
+    implements _$$ProfileStateLoadingImplCopyWith<$Res> {
+  __$$ProfileStateLoadingImplCopyWithImpl(_$ProfileStateLoadingImpl _value,
+      $Res Function(_$ProfileStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$ProfileStateLoading implements ProfileStateLoading {
-  const _$ProfileStateLoading();
+class _$ProfileStateLoadingImpl implements ProfileStateLoading {
+  const _$ProfileStateLoadingImpl();
 
   @override
   String toString() {
@@ -107,9 +113,10 @@ class _$ProfileStateLoading implements ProfileStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ProfileStateLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$ProfileStateLoadingImpl);
   }
 
   @override
@@ -185,32 +192,34 @@ class _$ProfileStateLoading implements ProfileStateLoading {
 }
 
 abstract class ProfileStateLoading implements ProfileState {
-  const factory ProfileStateLoading() = _$ProfileStateLoading;
+  const factory ProfileStateLoading() = _$ProfileStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ProfileStateLoadedCopyWith<$Res> {
-  factory _$$ProfileStateLoadedCopyWith(_$ProfileStateLoaded value,
-          $Res Function(_$ProfileStateLoaded) then) =
-      __$$ProfileStateLoadedCopyWithImpl<$Res>;
+abstract class _$$ProfileStateLoadedImplCopyWith<$Res> {
+  factory _$$ProfileStateLoadedImplCopyWith(_$ProfileStateLoadedImpl value,
+          $Res Function(_$ProfileStateLoadedImpl) then) =
+      __$$ProfileStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call({List<ProductModel> userListings});
 }
 
 /// @nodoc
-class __$$ProfileStateLoadedCopyWithImpl<$Res>
-    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateLoaded>
-    implements _$$ProfileStateLoadedCopyWith<$Res> {
-  __$$ProfileStateLoadedCopyWithImpl(
-      _$ProfileStateLoaded _value, $Res Function(_$ProfileStateLoaded) _then)
+class __$$ProfileStateLoadedImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateLoadedImpl>
+    implements _$$ProfileStateLoadedImplCopyWith<$Res> {
+  __$$ProfileStateLoadedImplCopyWithImpl(_$ProfileStateLoadedImpl _value,
+      $Res Function(_$ProfileStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? userListings = null,
   }) {
-    return _then(_$ProfileStateLoaded(
+    return _then(_$ProfileStateLoadedImpl(
       null == userListings
           ? _value._userListings
           : userListings // ignore: cast_nullable_to_non_nullable
@@ -221,8 +230,8 @@ class __$$ProfileStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProfileStateLoaded implements ProfileStateLoaded {
-  const _$ProfileStateLoaded(final List<ProductModel> userListings)
+class _$ProfileStateLoadedImpl implements ProfileStateLoaded {
+  const _$ProfileStateLoadedImpl(final List<ProductModel> userListings)
       : _userListings = userListings;
 
   final List<ProductModel> _userListings;
@@ -239,10 +248,10 @@ class _$ProfileStateLoaded implements ProfileStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProfileStateLoaded &&
+            other is _$ProfileStateLoadedImpl &&
             const DeepCollectionEquality()
                 .equals(other._userListings, _userListings));
   }
@@ -251,11 +260,13 @@ class _$ProfileStateLoaded implements ProfileStateLoaded {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_userListings));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProfileStateLoadedCopyWith<_$ProfileStateLoaded> get copyWith =>
-      __$$ProfileStateLoadedCopyWithImpl<_$ProfileStateLoaded>(
+  _$$ProfileStateLoadedImplCopyWith<_$ProfileStateLoadedImpl> get copyWith =>
+      __$$ProfileStateLoadedImplCopyWithImpl<_$ProfileStateLoadedImpl>(
           this, _$identity);
 
   @override
@@ -329,37 +340,42 @@ class _$ProfileStateLoaded implements ProfileStateLoaded {
 
 abstract class ProfileStateLoaded implements ProfileState {
   const factory ProfileStateLoaded(final List<ProductModel> userListings) =
-      _$ProfileStateLoaded;
+      _$ProfileStateLoadedImpl;
 
   List<ProductModel> get userListings;
-  @JsonKey(ignore: true)
-  _$$ProfileStateLoadedCopyWith<_$ProfileStateLoaded> get copyWith =>
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProfileStateLoadedImplCopyWith<_$ProfileStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ProfileStateErrorCopyWith<$Res> {
-  factory _$$ProfileStateErrorCopyWith(
-          _$ProfileStateError value, $Res Function(_$ProfileStateError) then) =
-      __$$ProfileStateErrorCopyWithImpl<$Res>;
+abstract class _$$ProfileStateErrorImplCopyWith<$Res> {
+  factory _$$ProfileStateErrorImplCopyWith(_$ProfileStateErrorImpl value,
+          $Res Function(_$ProfileStateErrorImpl) then) =
+      __$$ProfileStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$ProfileStateErrorCopyWithImpl<$Res>
-    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateError>
-    implements _$$ProfileStateErrorCopyWith<$Res> {
-  __$$ProfileStateErrorCopyWithImpl(
-      _$ProfileStateError _value, $Res Function(_$ProfileStateError) _then)
+class __$$ProfileStateErrorImplCopyWithImpl<$Res>
+    extends _$ProfileStateCopyWithImpl<$Res, _$ProfileStateErrorImpl>
+    implements _$$ProfileStateErrorImplCopyWith<$Res> {
+  __$$ProfileStateErrorImplCopyWithImpl(_$ProfileStateErrorImpl _value,
+      $Res Function(_$ProfileStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$ProfileStateError(
+    return _then(_$ProfileStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -370,8 +386,8 @@ class __$$ProfileStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProfileStateError implements ProfileStateError {
-  const _$ProfileStateError(this.error);
+class _$ProfileStateErrorImpl implements ProfileStateError {
+  const _$ProfileStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -382,21 +398,24 @@ class _$ProfileStateError implements ProfileStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProfileStateError &&
+            other is _$ProfileStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProfileStateErrorCopyWith<_$ProfileStateError> get copyWith =>
-      __$$ProfileStateErrorCopyWithImpl<_$ProfileStateError>(this, _$identity);
+  _$$ProfileStateErrorImplCopyWith<_$ProfileStateErrorImpl> get copyWith =>
+      __$$ProfileStateErrorImplCopyWithImpl<_$ProfileStateErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -468,10 +487,13 @@ class _$ProfileStateError implements ProfileStateError {
 }
 
 abstract class ProfileStateError implements ProfileState {
-  const factory ProfileStateError(final String error) = _$ProfileStateError;
+  const factory ProfileStateError(final String error) = _$ProfileStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
-  _$$ProfileStateErrorCopyWith<_$ProfileStateError> get copyWith =>
+
+  /// Create a copy of ProfileState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProfileStateErrorImplCopyWith<_$ProfileStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -15,6 +15,7 @@ class FilterScreen extends StatefulWidget {
 
 class _FilterScreenState extends State<FilterScreen> {
   int? currentCity;
+  List<int> currentCities = [];
   int? currentCategory;
   int? currentListingStatus;
   ProductFilter? currentProductEventFilter;
@@ -23,7 +24,11 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    currentCity = widget.multiFilter.currentLocation;
+    if (widget.multiFilter.multipleCityFilter) {
+      currentCities = widget.multiFilter.currentLocation.cast<int>();
+    } else {
+      currentCity = widget.multiFilter.currentLocation;
+    }
     currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
@@ -34,49 +39,50 @@ class _FilterScreenState extends State<FilterScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: const Text("Filter"),
-          ),
-          body: SingleChildScrollView(
-            child: PopScope(
-              canPop: false,
-              onPopInvokedWithResult: (bool didPop, dynamic result) async {
-                if (didPop) return;
-                Navigator.pop(
-                    context,
-                    MultiFilter(
-                        currentLocation: currentCity,
-                        currentProductEventFilter: currentProductEventFilter,
-                        currentListingStatus: currentListingStatus,
-                        currentForumGroupFilter: currentForumGroupFilter,
-                        currentCategory: currentCategory,
-                        hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
-                        hasProductEventFilter:
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text("Filter"),
+      ),
+      body: SingleChildScrollView(
+        child: PopScope(
+          canPop: false,
+          onPopInvokedWithResult: (bool didPop, dynamic result) async {
+            if (didPop) return;
+            Navigator.pop(
+                context,
+                MultiFilter(
+                    currentLocation: (widget.multiFilter.multipleCityFilter)
+                        ? currentCities
+                        : currentCity,
+                    currentProductEventFilter: currentProductEventFilter,
+                    currentListingStatus: currentListingStatus,
+                    currentForumGroupFilter: currentForumGroupFilter,
+                    currentCategory: currentCategory,
+                    hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
+                    hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
-                        hasLocationFilter: widget.multiFilter.hasLocationFilter,
-                        hasListingStatusFilter:
+                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
+                    hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
-                        hasCategoryFilter: widget.multiFilter.hasCategoryFilter
-                    ));
-              },
-              child: Column(
-                children: [
-                  if (widget.multiFilter.hasLocationFilter == true)
-                    ..._buildLocationFilter(),
-                  if (widget.multiFilter.hasProductEventFilter == true)
-                    ..._buildProductEventFilter(),
-                  if (widget.multiFilter.hasListingStatusFilter == true)
-                    ..._buildListingStatusFilter(),
-                  if (widget.multiFilter.hasForumGroupFilter == true)
-                    ..._buildForumGroupFilter(),
-                  if (widget.multiFilter.hasCategoryFilter == true)
-                    ..._buildCategoryFilter(),
-                ],
-              ),
-            ),
+                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
+          },
+          child: Column(
+            children: [
+              if (widget.multiFilter.hasLocationFilter == true)
+                ..._buildLocationFilter(),
+              if (widget.multiFilter.hasProductEventFilter == true)
+                ..._buildProductEventFilter(),
+              if (widget.multiFilter.hasListingStatusFilter == true)
+                ..._buildListingStatusFilter(),
+              if (widget.multiFilter.hasForumGroupFilter == true)
+                ..._buildForumGroupFilter(),
+              if (widget.multiFilter.hasCategoryFilter == true)
+                ..._buildCategoryFilter(),
+            ],
           ),
-        ));
+        ),
+      ),
+    ));
   }
 
   List<Widget> _buildLocationFilter() {
@@ -86,34 +92,62 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_city'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_city'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
-          ChoiceChip(
-            label: Text(Translate.of(context).translate('select_location')),
-            selected: 0 == currentCity,
-            onSelected: (selected) {
-              setState(() {
-                currentCity = 0;
-              });
-            },
-          ),
+          (widget.multiFilter.multipleCityFilter)
+              ? ChoiceChip(
+                  label:
+                      Text(Translate.of(context).translate('select_location')),
+                  selected: currentCities.contains(0),
+                  onSelected: (selected) {
+                    setState(() {
+                      currentCities = [];
+                      currentCities.add(0);
+                    });
+                  },
+                )
+              : ChoiceChip(
+                  label:
+                      Text(Translate.of(context).translate('select_location')),
+                  selected: 0 == currentCity,
+                  onSelected: (selected) {
+                    setState(() {
+                      currentCity = 0;
+                    });
+                  },
+                ),
           ...widget.multiFilter.cities!.map((city) {
-            return ChoiceChip(
-              label: Text(city.title),
-              selected: city.id == currentCity,
-              onSelected: (selected) {
-                setState(() {
-                  currentCity = city.id;
-                });
-              },
-            );
+            return (widget.multiFilter.multipleCityFilter)
+                ? ChoiceChip(
+                    label: Text(city.title),
+                    selected: currentCities.contains(city.id),
+                    onSelected: (selected) {
+                      setState(() {
+                        if (currentCities.contains(city.id)) {
+                          currentCities.remove(city.id);
+                        } else {
+                          currentCities.add(city.id);
+                          currentCities.remove(0);
+                        }
+                      });
+                    },
+                  )
+                : ChoiceChip(
+                    label: Text(city.title),
+                    selected: city.id == currentCity,
+                    onSelected: (selected) {
+                      setState(() {
+                        currentCity = city.id;
+                      });
+                    },
+                  );
           }),
         ]),
       )
@@ -127,12 +161,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_listing_status'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_listing_status'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -184,12 +218,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_forum'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_forum'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -254,12 +288,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('choose_time_period'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('choose_time_period'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -324,12 +358,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('input_category'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('input_category'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [

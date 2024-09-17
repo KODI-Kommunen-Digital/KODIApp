@@ -12,7 +12,7 @@ part of 'post_detail_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$PostDetailState {
@@ -90,28 +90,34 @@ class _$PostDetailStateCopyWithImpl<$Res, $Val extends PostDetailState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$PostDetailInitialCopyWith<$Res> {
-  factory _$$PostDetailInitialCopyWith(
-          _$PostDetailInitial value, $Res Function(_$PostDetailInitial) then) =
-      __$$PostDetailInitialCopyWithImpl<$Res>;
+abstract class _$$PostDetailInitialImplCopyWith<$Res> {
+  factory _$$PostDetailInitialImplCopyWith(_$PostDetailInitialImpl value,
+          $Res Function(_$PostDetailInitialImpl) then) =
+      __$$PostDetailInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PostDetailInitialCopyWithImpl<$Res>
-    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailInitial>
-    implements _$$PostDetailInitialCopyWith<$Res> {
-  __$$PostDetailInitialCopyWithImpl(
-      _$PostDetailInitial _value, $Res Function(_$PostDetailInitial) _then)
+class __$$PostDetailInitialImplCopyWithImpl<$Res>
+    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailInitialImpl>
+    implements _$$PostDetailInitialImplCopyWith<$Res> {
+  __$$PostDetailInitialImplCopyWithImpl(_$PostDetailInitialImpl _value,
+      $Res Function(_$PostDetailInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$PostDetailInitial implements PostDetailInitial {
-  const _$PostDetailInitial();
+class _$PostDetailInitialImpl implements PostDetailInitial {
+  const _$PostDetailInitialImpl();
 
   @override
   String toString() {
@@ -119,9 +125,9 @@ class _$PostDetailInitial implements PostDetailInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PostDetailInitial);
+        (other.runtimeType == runtimeType && other is _$PostDetailInitialImpl);
   }
 
   @override
@@ -209,29 +215,32 @@ class _$PostDetailInitial implements PostDetailInitial {
 }
 
 abstract class PostDetailInitial implements PostDetailState {
-  const factory PostDetailInitial() = _$PostDetailInitial;
+  const factory PostDetailInitial() = _$PostDetailInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$PostDetailLoadingCopyWith<$Res> {
-  factory _$$PostDetailLoadingCopyWith(
-          _$PostDetailLoading value, $Res Function(_$PostDetailLoading) then) =
-      __$$PostDetailLoadingCopyWithImpl<$Res>;
+abstract class _$$PostDetailLoadingImplCopyWith<$Res> {
+  factory _$$PostDetailLoadingImplCopyWith(_$PostDetailLoadingImpl value,
+          $Res Function(_$PostDetailLoadingImpl) then) =
+      __$$PostDetailLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$PostDetailLoadingCopyWithImpl<$Res>
-    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailLoading>
-    implements _$$PostDetailLoadingCopyWith<$Res> {
-  __$$PostDetailLoadingCopyWithImpl(
-      _$PostDetailLoading _value, $Res Function(_$PostDetailLoading) _then)
+class __$$PostDetailLoadingImplCopyWithImpl<$Res>
+    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailLoadingImpl>
+    implements _$$PostDetailLoadingImplCopyWith<$Res> {
+  __$$PostDetailLoadingImplCopyWithImpl(_$PostDetailLoadingImpl _value,
+      $Res Function(_$PostDetailLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$PostDetailLoading implements PostDetailLoading {
-  const _$PostDetailLoading();
+class _$PostDetailLoadingImpl implements PostDetailLoading {
+  const _$PostDetailLoadingImpl();
 
   @override
   String toString() {
@@ -239,9 +248,9 @@ class _$PostDetailLoading implements PostDetailLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$PostDetailLoading);
+        (other.runtimeType == runtimeType && other is _$PostDetailLoadingImpl);
   }
 
   @override
@@ -329,27 +338,29 @@ class _$PostDetailLoading implements PostDetailLoading {
 }
 
 abstract class PostDetailLoading implements PostDetailState {
-  const factory PostDetailLoading() = _$PostDetailLoading;
+  const factory PostDetailLoading() = _$PostDetailLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$PostDetailLoadedCopyWith<$Res> {
-  factory _$$PostDetailLoadedCopyWith(
-          _$PostDetailLoaded value, $Res Function(_$PostDetailLoaded) then) =
-      __$$PostDetailLoadedCopyWithImpl<$Res>;
+abstract class _$$PostDetailLoadedImplCopyWith<$Res> {
+  factory _$$PostDetailLoadedImplCopyWith(_$PostDetailLoadedImpl value,
+          $Res Function(_$PostDetailLoadedImpl) then) =
+      __$$PostDetailLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {UserModel? userDetail, String userImage, int userId, bool isAdmin});
 }
 
 /// @nodoc
-class __$$PostDetailLoadedCopyWithImpl<$Res>
-    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailLoaded>
-    implements _$$PostDetailLoadedCopyWith<$Res> {
-  __$$PostDetailLoadedCopyWithImpl(
-      _$PostDetailLoaded _value, $Res Function(_$PostDetailLoaded) _then)
+class __$$PostDetailLoadedImplCopyWithImpl<$Res>
+    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailLoadedImpl>
+    implements _$$PostDetailLoadedImplCopyWith<$Res> {
+  __$$PostDetailLoadedImplCopyWithImpl(_$PostDetailLoadedImpl _value,
+      $Res Function(_$PostDetailLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -358,7 +369,7 @@ class __$$PostDetailLoadedCopyWithImpl<$Res>
     Object? userId = null,
     Object? isAdmin = null,
   }) {
-    return _then(_$PostDetailLoaded(
+    return _then(_$PostDetailLoadedImpl(
       freezed == userDetail
           ? _value.userDetail
           : userDetail // ignore: cast_nullable_to_non_nullable
@@ -381,8 +392,8 @@ class __$$PostDetailLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PostDetailLoaded implements PostDetailLoaded {
-  const _$PostDetailLoaded(
+class _$PostDetailLoadedImpl implements PostDetailLoaded {
+  const _$PostDetailLoadedImpl(
       this.userDetail, this.userImage, this.userId, this.isAdmin);
 
   @override
@@ -400,10 +411,10 @@ class _$PostDetailLoaded implements PostDetailLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PostDetailLoaded &&
+            other is _$PostDetailLoadedImpl &&
             (identical(other.userDetail, userDetail) ||
                 other.userDetail == userDetail) &&
             (identical(other.userImage, userImage) ||
@@ -416,11 +427,14 @@ class _$PostDetailLoaded implements PostDetailLoaded {
   int get hashCode =>
       Object.hash(runtimeType, userDetail, userImage, userId, isAdmin);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PostDetailLoadedCopyWith<_$PostDetailLoaded> get copyWith =>
-      __$$PostDetailLoadedCopyWithImpl<_$PostDetailLoaded>(this, _$identity);
+  _$$PostDetailLoadedImplCopyWith<_$PostDetailLoadedImpl> get copyWith =>
+      __$$PostDetailLoadedImplCopyWithImpl<_$PostDetailLoadedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -508,40 +522,45 @@ abstract class PostDetailLoaded implements PostDetailState {
       final UserModel? userDetail,
       final String userImage,
       final int userId,
-      final bool isAdmin) = _$PostDetailLoaded;
+      final bool isAdmin) = _$PostDetailLoadedImpl;
 
   UserModel? get userDetail;
   String get userImage;
   int get userId;
   bool get isAdmin;
-  @JsonKey(ignore: true)
-  _$$PostDetailLoadedCopyWith<_$PostDetailLoaded> get copyWith =>
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PostDetailLoadedImplCopyWith<_$PostDetailLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$PostDetailErrorCopyWith<$Res> {
-  factory _$$PostDetailErrorCopyWith(
-          _$PostDetailError value, $Res Function(_$PostDetailError) then) =
-      __$$PostDetailErrorCopyWithImpl<$Res>;
+abstract class _$$PostDetailErrorImplCopyWith<$Res> {
+  factory _$$PostDetailErrorImplCopyWith(_$PostDetailErrorImpl value,
+          $Res Function(_$PostDetailErrorImpl) then) =
+      __$$PostDetailErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$PostDetailErrorCopyWithImpl<$Res>
-    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailError>
-    implements _$$PostDetailErrorCopyWith<$Res> {
-  __$$PostDetailErrorCopyWithImpl(
-      _$PostDetailError _value, $Res Function(_$PostDetailError) _then)
+class __$$PostDetailErrorImplCopyWithImpl<$Res>
+    extends _$PostDetailStateCopyWithImpl<$Res, _$PostDetailErrorImpl>
+    implements _$$PostDetailErrorImplCopyWith<$Res> {
+  __$$PostDetailErrorImplCopyWithImpl(
+      _$PostDetailErrorImpl _value, $Res Function(_$PostDetailErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$PostDetailError(
+    return _then(_$PostDetailErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -552,8 +571,8 @@ class __$$PostDetailErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$PostDetailError implements PostDetailError {
-  const _$PostDetailError(this.error);
+class _$PostDetailErrorImpl implements PostDetailError {
+  const _$PostDetailErrorImpl(this.error);
 
   @override
   final String error;
@@ -564,21 +583,24 @@ class _$PostDetailError implements PostDetailError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PostDetailError &&
+            other is _$PostDetailErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PostDetailErrorCopyWith<_$PostDetailError> get copyWith =>
-      __$$PostDetailErrorCopyWithImpl<_$PostDetailError>(this, _$identity);
+  _$$PostDetailErrorImplCopyWith<_$PostDetailErrorImpl> get copyWith =>
+      __$$PostDetailErrorImplCopyWithImpl<_$PostDetailErrorImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -662,10 +684,13 @@ class _$PostDetailError implements PostDetailError {
 }
 
 abstract class PostDetailError implements PostDetailState {
-  const factory PostDetailError(final String error) = _$PostDetailError;
+  const factory PostDetailError(final String error) = _$PostDetailErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
-  _$$PostDetailErrorCopyWith<_$PostDetailError> get copyWith =>
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$PostDetailErrorImplCopyWith<_$PostDetailErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

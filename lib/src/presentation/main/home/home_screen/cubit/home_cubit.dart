@@ -19,6 +19,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic recent;
   dynamic sliders;
   dynamic categoryCount;
+  dynamic selectedCity;
   bool calledExternally = false;
   bool doesScroll = false;
 
@@ -45,9 +46,10 @@ class HomeCubit extends Cubit<HomeState> {
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    CategoryModel? savedCity = await checkSavedCity(location);
-    if (savedCity != null) {
-      final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
+    selectedCity = await checkSavedCity(location);
+    if (selectedCity != null) {
+      final listingsRequestResponse =
+          await Api.requestLocList(selectedCity.id, 1);
       recent = List.from(listingsRequestResponse.data ?? []).map((item) {
         return ProductModel.fromJson(item);
       }).toList();
@@ -58,7 +60,7 @@ class HomeCubit extends Cubit<HomeState> {
       }).toList();
     }
     final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
+        await Api.requestCategoryCount(selectedCity?.id);
     categoryCount =
         List.from(categoryCountRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
@@ -67,15 +69,10 @@ class HomeCubit extends Cubit<HomeState> {
     const banner = Images.slider;
 
     List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
+        await formatCategoriesList(category, categoryCount, selectedCity?.id);
 
-    emit(HomeStateLoaded(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-      isRefreshLoader,
-    ));
+    emit(HomeStateLoaded(banner, formattedCategories, location, recent,
+        isRefreshLoader, selectedCity));
   }
 
   Future<void> saveIgnoreAppVersion(String version) async {
@@ -124,20 +121,7 @@ class HomeCubit extends Cubit<HomeState> {
     emit(const HomeStateLoading());
     const banner = Images.slider;
     emit(HomeStateLoaded(
-      banner,
-      category,
-      location,
-      recent,
-      false,
-    ));
-  }
-
-  bool getCalledExternally() {
-    return calledExternally;
-  }
-
-  void setCalledExternally(bool called) {
-    calledExternally = called;
+        banner, category, location, recent, false, selectedCity));
   }
 
   bool getDoesScroll() {

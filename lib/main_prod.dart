@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -21,6 +22,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:upgrader/upgrader.dart';
 
+
 Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
@@ -36,6 +38,17 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
+
+  await Upgrader.clearSavedSettings();
+  /*
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();*/
+  //TODO enable once linked to Firebase app
+
+  runApp(HeidiApp(prefBox));
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
@@ -72,6 +85,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -89,6 +105,7 @@ class _HeidiAppState extends State<HeidiApp> {
                           : UpgradeDialogStyle.material),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
+                    navigatorKey: globalNavKey,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,

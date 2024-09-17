@@ -1,18 +1,27 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_comment.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_forum_status.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_request_member.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
+import 'package:heidi/src/utils/configs/key_helper.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:http_parser/http_parser.dart';
+import 'dart:async';
+import 'package:encrypt/encrypt.dart' as encrypt;
+import 'package:pointycastle/pointycastle.dart';
+
+import '../model/model_chat_message.dart';
 
 class ForumRepository {
   final Preferences prefs;
@@ -118,16 +127,171 @@ class ForumRepository {
     }
   }
 
-  Future<ResultApiModel?> requestGroupDetails(forumId, cityId) async {
+  bool isPrivate = false;
+
+  Future<ResultApiModel?> requestGroupDetails(int forumId, int cityId) async {
     int prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    prefs.getKeyValue(Preferences.userId, 0);
     final response = await Api.requestGroupDetails(
-        forumId, cityId != 0 ? cityId : prefCityId);
+      forumId,
+      cityId != 0 ? cityId : prefCityId,
+    );
     if (response.success) {
+      handleGroupChatSubscription(forumId, true);
+      isPrivate = false;
+      try {
+        final chatMessagesResponse = await requestChatMessages(forumId, 0, 1);
+        if (chatMessagesResponse != null && chatMessagesResponse.success) {
+          response.data['chatMessages'] = chatMessagesResponse.data;
+        } else {
+          logError('Failed to fetch chat messages',
+              chatMessagesResponse?.message ?? 'Unknown error');
+        }
+      } catch (e) {
+        logError('Exception while fetching chat messages', e.toString());
+      }
       return response;
     } else {
       logError('Request Group Detail Response Failed', response.message);
       return null;
     }
+  }
+
+  Future<ResultApiModel?> requestChatMessages(
+      forumId, lastMessageId, offset) async {
+    int prefCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final userId = prefs.getKeyValue(Preferences.userId, 0);
+
+    // Fetch chat messages
+    final response = await Api.getForumChatMessages(
+        forumId: forumId,
+        cityId: prefCityId,
+        lastMessageId: lastMessageId,
+        offset: offset);
+
+    if (response.success) {
+      if (isPrivate) {
+        return await decryptPrivateMessages(response, forumId, userId);
+      } else {
+        return response;
+      }
+    } else {
+      logError('Request Chat Messages Failed', response.message);
+      return null;
+    }
+  }
+
+  Future<ResultApiModel?> decryptPrivateMessages(
+      ResultApiModel response, int forumId, int userId) async {
+    final List<ChatMessageModel> messages = [];
+    final storedForumKeyVersion =
+    await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+
+    if (storedForumKeyVersion == null) {
+      await fetchUserGroupKeys(forumId);
+    }
+
+    for (var messageData in response.data) {
+      final encryptedMessage = messageData['message'];
+      final groupKeyVersion = messageData['groupKeyVersion'];
+      String? groupKeyData = await KeyHelper.getForumKey(
+        forumId: forumId.toString(),
+        groupKeyVersion: groupKeyVersion,
+      );
+
+      if (groupKeyData == null) {
+        await fetchUserGroupKeys(forumId, version: [groupKeyVersion]);
+        groupKeyData = await KeyHelper.getForumKey(
+          forumId: forumId.toString(),
+          groupKeyVersion: groupKeyVersion,
+        );
+        if (groupKeyData == null) continue;
+      }
+
+      final decrypted = await decryptData(encryptedMessage, groupKeyData);
+      final actualMessageJson = jsonDecode(decrypted);
+      final actualMessage = actualMessageJson['message'];
+
+      messages.add(ChatMessageModel(
+        id: messageData['id'],
+        forumId: messageData['forumId'],
+        userId: messageData['userId'],
+        decryptedMessage: actualMessage,
+        createdAt: messageData['createdAt'],
+      ));
+    }
+
+    return ResultApiModel(
+        success: true,
+        data: messages,
+        pagination: response.pagination,
+        message: response.message);
+  }
+
+  Future<void> fetchUserGroupKeys(int forumId, {List<int>? version}) async {
+    final int userId = prefs.getKeyValue(Preferences.userId, 0);
+    final int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+
+    try {
+      final ResultApiModel response = await Api.getForumKeys(
+        forumId: forumId,
+        userId: userId,
+        cityId: cityId,
+        params: {'groupKeyversions': version},
+      );
+
+      if (response.success) {
+        List<dynamic> groupKeyData = response.data;
+        for (var element in groupKeyData) {
+          String decryptedGroupKeyData = await decryptGroupKey(
+            userId,
+            element["encryptedForumAesKey"],
+          );
+          int groupKeyVersion = element['groupKeyVersion'] as int;
+
+          await KeyHelper.storeForumKey(
+            forumId: forumId.toString(),
+            groupKeyVersion: groupKeyVersion.toString(),
+            encryptedForumAesKey: decryptedGroupKeyData,
+          );
+        }
+      } else {
+        throw Exception('Failed to fetch group keys: ${response.message}');
+      }
+    } catch (e) {
+      logError('Error fetching group keys', e.toString());
+      throw Exception('Failed to fetch group keys');
+    }
+  }
+
+  Future<String> decryptGroupKey(int userId, String encryptedValue) async {
+    final privateKeyPem = await KeyHelper.getPrivateKey(userId.toString());
+    final parser = encrypt.RSAKeyParser();
+    final privateKey = parser.parse(privateKeyPem) as RSAPrivateKey;
+
+    final encrypter = encrypt.Encrypter(encrypt.RSA(
+        privateKey: privateKey, encoding: encrypt.RSAEncoding.OAEP));
+
+    final encrypted = encrypt.Encrypted(base64Decode(encryptedValue));
+    final decrypted = encrypter.decrypt(encrypted);
+    return decrypted;
+  }
+
+  Future<String> decryptData(String encryptedData, String keyString) async {
+    final parts = encryptedData.split(':');
+    final ivBytes = base64Decode(parts[0]);
+    final data = base64Decode(parts[1]);
+    final iv = encrypt.IV(ivBytes);
+    final key = base64Decode(keyString);
+
+    final encrypter = encrypt.Encrypter(
+        encrypt.AES(encrypt.Key(key), mode: encrypt.AESMode.cbc));
+    final decrypted = encrypter.decrypt(
+      encrypt.Encrypted(data),
+      iv: iv,
+    );
+
+    return decrypted;
   }
 
   Future<bool> removeUserFromGroup(forumId, memberId) async {
@@ -323,7 +487,7 @@ class ForumRepository {
     await Api.deleteImage(cityId, listingId);
   }
 
-  static Future<ProductModel?> loadProduct(cityId, id) async {
+  Future<ProductModel?> loadProduct(cityId, id) async {
     final response = await Api.requestProduct(cityId, id);
     if (response.success) {
       UtilLogger.log('ErrorReason', response.data);
@@ -355,6 +519,7 @@ class ForumRepository {
   ) async {
     final cityId = await getCityId(city);
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    prefs.getKeyValue(Preferences.userId, 0);
     final image = prefs.getKeyValue(Preferences.path, null);
     bool isPrivate = false;
     if (type == 'public') {
@@ -393,6 +558,7 @@ class ForumRepository {
     final response = await Api.requestDeleteForum(
         cityId == 0 ? cityIdPref : cityId, forumId);
     if (response.success) {
+      handleGroupChatSubscription(forumId, false);
       return response;
     } else {
       logError('Delete Forum Failed', response.message);
@@ -556,6 +722,33 @@ class ForumRepository {
     } else {
       logError('Get Comment Replies Failed', response.message);
       return [];
+    }
+  }
+
+  Future<void> handleGroupChatSubscription(int forumId, bool subscribe) async {
+    final prefs = await Preferences.openBox();
+    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
+
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    final firebaseApi = FirebaseApi(navigatorKey, prefs);
+    final topic = "groupChat_city_${cityId}_forum_$forumId";
+
+    List<String> forumChatTopics = prefs.getForumChatTopics();
+
+    if (subscribe) {
+      await firebaseApi.subscribeToTopic(topic);
+
+      if (!forumChatTopics.contains(topic)) {
+        forumChatTopics.add(topic);
+        await prefs.setForumChatTopics(forumChatTopics);
+      }
+    } else {
+      await firebaseApi.unsubscribeFromTopic(topic);
+
+      if (forumChatTopics.contains(topic)) {
+        forumChatTopics.remove(topic);
+        await prefs.setForumChatTopics(forumChatTopics);
+      }
     }
   }
 }
