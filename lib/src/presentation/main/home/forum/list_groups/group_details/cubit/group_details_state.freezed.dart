@@ -12,7 +12,7 @@ part of 'group_details_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$GroupDetailsState {
@@ -23,6 +23,9 @@ mixin _$GroupDetailsState {
     required TResult Function(List<GroupPostsModel> list,
             ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -33,6 +36,9 @@ mixin _$GroupDetailsState {
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -43,6 +49,9 @@ mixin _$GroupDetailsState {
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -52,6 +61,8 @@ mixin _$GroupDetailsState {
     required TResult Function(GroupDetailsStateInitial value) initial,
     required TResult Function(GroupDetailsStateLoading value) loading,
     required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
     required TResult Function(GroupDetailsStateError value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -60,6 +71,7 @@ mixin _$GroupDetailsState {
     TResult? Function(GroupDetailsStateInitial value)? initial,
     TResult? Function(GroupDetailsStateLoading value)? loading,
     TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult? Function(GroupDetailsStateError value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -68,6 +80,7 @@ mixin _$GroupDetailsState {
     TResult Function(GroupDetailsStateInitial value)? initial,
     TResult Function(GroupDetailsStateLoading value)? loading,
     TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult Function(GroupDetailsStateError value)? error,
     required TResult orElse(),
   }) =>
@@ -90,28 +103,37 @@ class _$GroupDetailsStateCopyWithImpl<$Res, $Val extends GroupDetailsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateInitialCopyWith<$Res> {
-  factory _$$GroupDetailsStateInitialCopyWith(_$GroupDetailsStateInitial value,
-          $Res Function(_$GroupDetailsStateInitial) then) =
-      __$$GroupDetailsStateInitialCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateInitialImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateInitialImplCopyWith(
+          _$GroupDetailsStateInitialImpl value,
+          $Res Function(_$GroupDetailsStateInitialImpl) then) =
+      __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GroupDetailsStateInitialCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateInitial>
-    implements _$$GroupDetailsStateInitialCopyWith<$Res> {
-  __$$GroupDetailsStateInitialCopyWithImpl(_$GroupDetailsStateInitial _value,
-      $Res Function(_$GroupDetailsStateInitial) _then)
+class __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res,
+        _$GroupDetailsStateInitialImpl>
+    implements _$$GroupDetailsStateInitialImplCopyWith<$Res> {
+  __$$GroupDetailsStateInitialImplCopyWithImpl(
+      _$GroupDetailsStateInitialImpl _value,
+      $Res Function(_$GroupDetailsStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
-  const _$GroupDetailsStateInitial();
+class _$GroupDetailsStateInitialImpl implements GroupDetailsStateInitial {
+  const _$GroupDetailsStateInitialImpl();
 
   @override
   String toString() {
@@ -119,10 +141,10 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateInitial);
+            other is _$GroupDetailsStateInitialImpl);
   }
 
   @override
@@ -136,6 +158,9 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     required TResult Function(List<GroupPostsModel> list,
             ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -149,6 +174,9 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -162,6 +190,9 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -177,6 +208,8 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     required TResult Function(GroupDetailsStateInitial value) initial,
     required TResult Function(GroupDetailsStateLoading value) loading,
     required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
     required TResult Function(GroupDetailsStateError value) error,
   }) {
     return initial(this);
@@ -188,6 +221,7 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult? Function(GroupDetailsStateInitial value)? initial,
     TResult? Function(GroupDetailsStateLoading value)? loading,
     TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult? Function(GroupDetailsStateError value)? error,
   }) {
     return initial?.call(this);
@@ -199,6 +233,7 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
     TResult Function(GroupDetailsStateInitial value)? initial,
     TResult Function(GroupDetailsStateLoading value)? loading,
     TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult Function(GroupDetailsStateError value)? error,
     required TResult orElse(),
   }) {
@@ -210,29 +245,35 @@ class _$GroupDetailsStateInitial implements GroupDetailsStateInitial {
 }
 
 abstract class GroupDetailsStateInitial implements GroupDetailsState {
-  const factory GroupDetailsStateInitial() = _$GroupDetailsStateInitial;
+  const factory GroupDetailsStateInitial() = _$GroupDetailsStateInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateLoadingCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadingCopyWith(_$GroupDetailsStateLoading value,
-          $Res Function(_$GroupDetailsStateLoading) then) =
-      __$$GroupDetailsStateLoadingCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateLoadingImplCopyWith(
+          _$GroupDetailsStateLoadingImpl value,
+          $Res Function(_$GroupDetailsStateLoadingImpl) then) =
+      __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$GroupDetailsStateLoadingCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoading>
-    implements _$$GroupDetailsStateLoadingCopyWith<$Res> {
-  __$$GroupDetailsStateLoadingCopyWithImpl(_$GroupDetailsStateLoading _value,
-      $Res Function(_$GroupDetailsStateLoading) _then)
+class __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res,
+        _$GroupDetailsStateLoadingImpl>
+    implements _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
+  __$$GroupDetailsStateLoadingImplCopyWithImpl(
+      _$GroupDetailsStateLoadingImpl _value,
+      $Res Function(_$GroupDetailsStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
-  const _$GroupDetailsStateLoading();
+class _$GroupDetailsStateLoadingImpl implements GroupDetailsStateLoading {
+  const _$GroupDetailsStateLoadingImpl();
 
   @override
   String toString() {
@@ -240,10 +281,10 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoading);
+            other is _$GroupDetailsStateLoadingImpl);
   }
 
   @override
@@ -257,6 +298,9 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     required TResult Function(List<GroupPostsModel> list,
             ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -270,6 +314,9 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -283,6 +330,9 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -298,6 +348,8 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     required TResult Function(GroupDetailsStateInitial value) initial,
     required TResult Function(GroupDetailsStateLoading value) loading,
     required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
     required TResult Function(GroupDetailsStateError value) error,
   }) {
     return loading(this);
@@ -309,6 +361,7 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult? Function(GroupDetailsStateInitial value)? initial,
     TResult? Function(GroupDetailsStateLoading value)? loading,
     TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult? Function(GroupDetailsStateError value)? error,
   }) {
     return loading?.call(this);
@@ -320,6 +373,7 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
     TResult Function(GroupDetailsStateInitial value)? initial,
     TResult Function(GroupDetailsStateLoading value)? loading,
     TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult Function(GroupDetailsStateError value)? error,
     required TResult orElse(),
   }) {
@@ -331,14 +385,15 @@ class _$GroupDetailsStateLoading implements GroupDetailsStateLoading {
 }
 
 abstract class GroupDetailsStateLoading implements GroupDetailsState {
-  const factory GroupDetailsStateLoading() = _$GroupDetailsStateLoading;
+  const factory GroupDetailsStateLoading() = _$GroupDetailsStateLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateLoadedCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadedCopyWith(_$GroupDetailsStateLoaded value,
-          $Res Function(_$GroupDetailsStateLoaded) then) =
-      __$$GroupDetailsStateLoadedCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateLoadedImplCopyWith(
+          _$GroupDetailsStateLoadedImpl value,
+          $Res Function(_$GroupDetailsStateLoadedImpl) then) =
+      __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {List<GroupPostsModel> list,
@@ -348,13 +403,16 @@ abstract class _$$GroupDetailsStateLoadedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoaded>
-    implements _$$GroupDetailsStateLoadedCopyWith<$Res> {
-  __$$GroupDetailsStateLoadedCopyWithImpl(_$GroupDetailsStateLoaded _value,
-      $Res Function(_$GroupDetailsStateLoaded) _then)
+class __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoadedImpl>
+    implements _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
+  __$$GroupDetailsStateLoadedImplCopyWithImpl(
+      _$GroupDetailsStateLoadedImpl _value,
+      $Res Function(_$GroupDetailsStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -363,7 +421,7 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
     Object? isAdmin = null,
     Object? userId = null,
   }) {
-    return _then(_$GroupDetailsStateLoaded(
+    return _then(_$GroupDetailsStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
@@ -386,8 +444,8 @@ class __$$GroupDetailsStateLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
-  const _$GroupDetailsStateLoaded(final List<GroupPostsModel> list,
+class _$GroupDetailsStateLoadedImpl implements GroupDetailsStateLoaded {
+  const _$GroupDetailsStateLoadedImpl(final List<GroupPostsModel> list,
       this.arguments, this.isAdmin, this.userId)
       : _list = list;
 
@@ -412,10 +470,10 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoaded &&
+            other is _$GroupDetailsStateLoadedImpl &&
             const DeepCollectionEquality().equals(other._list, _list) &&
             (identical(other.arguments, arguments) ||
                 other.arguments == arguments) &&
@@ -427,12 +485,14 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
   int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_list), arguments, isAdmin, userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateLoadedCopyWith<_$GroupDetailsStateLoaded> get copyWith =>
-      __$$GroupDetailsStateLoadedCopyWithImpl<_$GroupDetailsStateLoaded>(
-          this, _$identity);
+  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
+      get copyWith => __$$GroupDetailsStateLoadedImplCopyWithImpl<
+          _$GroupDetailsStateLoadedImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -442,6 +502,9 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     required TResult Function(List<GroupPostsModel> list,
             ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
     required TResult Function(String error) error,
   }) {
     return loaded(list, arguments, isAdmin, userId);
@@ -455,6 +518,9 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(list, arguments, isAdmin, userId);
@@ -468,6 +534,9 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -483,6 +552,8 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     required TResult Function(GroupDetailsStateInitial value) initial,
     required TResult Function(GroupDetailsStateLoading value) loading,
     required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
     required TResult Function(GroupDetailsStateError value) error,
   }) {
     return loaded(this);
@@ -494,6 +565,7 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult? Function(GroupDetailsStateInitial value)? initial,
     TResult? Function(GroupDetailsStateLoading value)? loading,
     TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult? Function(GroupDetailsStateError value)? error,
   }) {
     return loaded?.call(this);
@@ -505,6 +577,7 @@ class _$GroupDetailsStateLoaded implements GroupDetailsStateLoaded {
     TResult Function(GroupDetailsStateInitial value)? initial,
     TResult Function(GroupDetailsStateLoading value)? loading,
     TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult Function(GroupDetailsStateError value)? error,
     required TResult orElse(),
   }) {
@@ -520,40 +593,277 @@ abstract class GroupDetailsStateLoaded implements GroupDetailsState {
       final List<GroupPostsModel> list,
       final ForumGroupModel arguments,
       final bool isAdmin,
-      final int userId) = _$GroupDetailsStateLoaded;
+      final int userId) = _$GroupDetailsStateLoadedImpl;
 
   List<GroupPostsModel> get list;
   ForumGroupModel get arguments;
   bool get isAdmin;
   int get userId;
-  @JsonKey(ignore: true)
-  _$$GroupDetailsStateLoadedCopyWith<_$GroupDetailsStateLoaded> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateErrorCopyWith<$Res> {
-  factory _$$GroupDetailsStateErrorCopyWith(_$GroupDetailsStateError value,
-          $Res Function(_$GroupDetailsStateError) then) =
-      __$$GroupDetailsStateErrorCopyWithImpl<$Res>;
+abstract class _$$GroupDetailsStateMessagesLoadedImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateMessagesLoadedImplCopyWith(
+          _$GroupDetailsStateMessagesLoadedImpl value,
+          $Res Function(_$GroupDetailsStateMessagesLoadedImpl) then) =
+      __$$GroupDetailsStateMessagesLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call(
+      {List<ChatMessageModel> messages,
+      ForumGroupModel arguments,
+      bool isAdmin,
+      int userId});
+}
+
+/// @nodoc
+class __$$GroupDetailsStateMessagesLoadedImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res,
+        _$GroupDetailsStateMessagesLoadedImpl>
+    implements _$$GroupDetailsStateMessagesLoadedImplCopyWith<$Res> {
+  __$$GroupDetailsStateMessagesLoadedImplCopyWithImpl(
+      _$GroupDetailsStateMessagesLoadedImpl _value,
+      $Res Function(_$GroupDetailsStateMessagesLoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? messages = null,
+    Object? arguments = null,
+    Object? isAdmin = null,
+    Object? userId = null,
+  }) {
+    return _then(_$GroupDetailsStateMessagesLoadedImpl(
+      null == messages
+          ? _value._messages
+          : messages // ignore: cast_nullable_to_non_nullable
+              as List<ChatMessageModel>,
+      null == arguments
+          ? _value.arguments
+          : arguments // ignore: cast_nullable_to_non_nullable
+              as ForumGroupModel,
+      null == isAdmin
+          ? _value.isAdmin
+          : isAdmin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      null == userId
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$GroupDetailsStateMessagesLoadedImpl
+    implements GroupDetailsStateMessagesLoaded {
+  const _$GroupDetailsStateMessagesLoadedImpl(
+      final List<ChatMessageModel> messages,
+      this.arguments,
+      this.isAdmin,
+      this.userId)
+      : _messages = messages;
+
+  final List<ChatMessageModel> _messages;
+  @override
+  List<ChatMessageModel> get messages {
+    if (_messages is EqualUnmodifiableListView) return _messages;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_messages);
+  }
+
+  @override
+  final ForumGroupModel arguments;
+  @override
+  final bool isAdmin;
+  @override
+  final int userId;
+
+  @override
+  String toString() {
+    return 'GroupDetailsState.messagesLoaded(messages: $messages, arguments: $arguments, isAdmin: $isAdmin, userId: $userId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GroupDetailsStateMessagesLoadedImpl &&
+            const DeepCollectionEquality().equals(other._messages, _messages) &&
+            (identical(other.arguments, arguments) ||
+                other.arguments == arguments) &&
+            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
+            (identical(other.userId, userId) || other.userId == userId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_messages),
+      arguments,
+      isAdmin,
+      userId);
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GroupDetailsStateMessagesLoadedImplCopyWith<
+          _$GroupDetailsStateMessagesLoadedImpl>
+      get copyWith => __$$GroupDetailsStateMessagesLoadedImplCopyWithImpl<
+          _$GroupDetailsStateMessagesLoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<GroupPostsModel> list,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
+    required TResult Function(String error) error,
+  }) {
+    return messagesLoaded(messages, arguments, isAdmin, userId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
+    TResult? Function(String error)? error,
+  }) {
+    return messagesLoaded?.call(messages, arguments, isAdmin, userId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
+    TResult Function(String error)? error,
+    required TResult orElse(),
+  }) {
+    if (messagesLoaded != null) {
+      return messagesLoaded(messages, arguments, isAdmin, userId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GroupDetailsStateInitial value) initial,
+    required TResult Function(GroupDetailsStateLoading value) loading,
+    required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
+    required TResult Function(GroupDetailsStateError value) error,
+  }) {
+    return messagesLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(GroupDetailsStateInitial value)? initial,
+    TResult? Function(GroupDetailsStateLoading value)? loading,
+    TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
+    TResult? Function(GroupDetailsStateError value)? error,
+  }) {
+    return messagesLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GroupDetailsStateInitial value)? initial,
+    TResult Function(GroupDetailsStateLoading value)? loading,
+    TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
+    TResult Function(GroupDetailsStateError value)? error,
+    required TResult orElse(),
+  }) {
+    if (messagesLoaded != null) {
+      return messagesLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GroupDetailsStateMessagesLoaded implements GroupDetailsState {
+  const factory GroupDetailsStateMessagesLoaded(
+      final List<ChatMessageModel> messages,
+      final ForumGroupModel arguments,
+      final bool isAdmin,
+      final int userId) = _$GroupDetailsStateMessagesLoadedImpl;
+
+  List<ChatMessageModel> get messages;
+  ForumGroupModel get arguments;
+  bool get isAdmin;
+  int get userId;
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GroupDetailsStateMessagesLoadedImplCopyWith<
+          _$GroupDetailsStateMessagesLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GroupDetailsStateErrorImplCopyWith<$Res> {
+  factory _$$GroupDetailsStateErrorImplCopyWith(
+          _$GroupDetailsStateErrorImpl value,
+          $Res Function(_$GroupDetailsStateErrorImpl) then) =
+      __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$GroupDetailsStateErrorCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateError>
-    implements _$$GroupDetailsStateErrorCopyWith<$Res> {
-  __$$GroupDetailsStateErrorCopyWithImpl(_$GroupDetailsStateError _value,
-      $Res Function(_$GroupDetailsStateError) _then)
+class __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>
+    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateErrorImpl>
+    implements _$$GroupDetailsStateErrorImplCopyWith<$Res> {
+  __$$GroupDetailsStateErrorImplCopyWithImpl(
+      _$GroupDetailsStateErrorImpl _value,
+      $Res Function(_$GroupDetailsStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$GroupDetailsStateError(
+    return _then(_$GroupDetailsStateErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -564,8 +874,8 @@ class __$$GroupDetailsStateErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GroupDetailsStateError implements GroupDetailsStateError {
-  const _$GroupDetailsStateError(this.error);
+class _$GroupDetailsStateErrorImpl implements GroupDetailsStateError {
+  const _$GroupDetailsStateErrorImpl(this.error);
 
   @override
   final String error;
@@ -576,22 +886,24 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateError &&
+            other is _$GroupDetailsStateErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateErrorCopyWith<_$GroupDetailsStateError> get copyWith =>
-      __$$GroupDetailsStateErrorCopyWithImpl<_$GroupDetailsStateError>(
-          this, _$identity);
+  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
+      get copyWith => __$$GroupDetailsStateErrorImplCopyWithImpl<
+          _$GroupDetailsStateErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -601,6 +913,9 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     required TResult Function(List<GroupPostsModel> list,
             ForumGroupModel arguments, bool isAdmin, int userId)
         loaded,
+    required TResult Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)
+        messagesLoaded,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -614,6 +929,9 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult? Function(List<ChatMessageModel> messages,
+            ForumGroupModel arguments, bool isAdmin, int userId)?
+        messagesLoaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -627,6 +945,9 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
             bool isAdmin, int userId)?
         loaded,
+    TResult Function(List<ChatMessageModel> messages, ForumGroupModel arguments,
+            bool isAdmin, int userId)?
+        messagesLoaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -642,6 +963,8 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     required TResult Function(GroupDetailsStateInitial value) initial,
     required TResult Function(GroupDetailsStateLoading value) loading,
     required TResult Function(GroupDetailsStateLoaded value) loaded,
+    required TResult Function(GroupDetailsStateMessagesLoaded value)
+        messagesLoaded,
     required TResult Function(GroupDetailsStateError value) error,
   }) {
     return error(this);
@@ -653,6 +976,7 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult? Function(GroupDetailsStateInitial value)? initial,
     TResult? Function(GroupDetailsStateLoading value)? loading,
     TResult? Function(GroupDetailsStateLoaded value)? loaded,
+    TResult? Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult? Function(GroupDetailsStateError value)? error,
   }) {
     return error?.call(this);
@@ -664,6 +988,7 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
     TResult Function(GroupDetailsStateInitial value)? initial,
     TResult Function(GroupDetailsStateLoading value)? loading,
     TResult Function(GroupDetailsStateLoaded value)? loaded,
+    TResult Function(GroupDetailsStateMessagesLoaded value)? messagesLoaded,
     TResult Function(GroupDetailsStateError value)? error,
     required TResult orElse(),
   }) {
@@ -676,10 +1001,13 @@ class _$GroupDetailsStateError implements GroupDetailsStateError {
 
 abstract class GroupDetailsStateError implements GroupDetailsState {
   const factory GroupDetailsStateError(final String error) =
-      _$GroupDetailsStateError;
+      _$GroupDetailsStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
-  _$$GroupDetailsStateErrorCopyWith<_$GroupDetailsStateError> get copyWith =>
-      throw _privateConstructorUsedError;
+
+  /// Create a copy of GroupDetailsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

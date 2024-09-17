@@ -147,22 +147,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Future<void> _setSavedCity(List<CategoryModel> location) async {
-    final savedCity = await AppBloc.homeCubit.checkSavedCity(location);
-    if (savedCity != null) {
-      setState(() {
-        selectedCityId = savedCity.id;
-        selectedCityTitle = savedCity.title;
-      });
-    } else {
-      await AppBloc.homeCubit.saveCityId(0);
-      setState(() {
-        selectedCityId = 0;
-      });
-    }
-    //AppBloc.homeCubit.onLoad(true);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -174,7 +158,11 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 _searchListings();
               },
-              icon: const Icon(Icons.search))
+              icon: Icon(
+                Icons.search,
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white,
+              ))
         ],
       ),
       extendBodyBehindAppBar: true,
@@ -199,16 +187,21 @@ class _HomeScreenState extends State<HomeScreen> {
             isRefreshLoader = true;
             categoryLoading = false;
 
+            if (state.selectedCity != null) {
+              selectedCityTitle = state.selectedCity!.title;
+              selectedCityId = state.selectedCity!.id;
+            } else {
+              selectedCityTitle =
+                  Translate.of(context).translate('select_location');
+              selectedCityId = 0;
+            }
+
             if (location != null) {
               for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
               }
               if (checkSavedCity) {
                 checkSavedCity = false;
-                _setSavedCity(location!);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location!);
-                AppBloc.homeCubit.setCalledExternally(false);
               }
             }
             if (AppBloc.homeCubit.getDoesScroll()) {
@@ -223,10 +216,6 @@ class _HomeScreenState extends State<HomeScreen> {
             if (location!.isNotEmpty) {
               for (final ids in location!) {
                 cityTitles.add(ids.title.toString());
-              }
-              if (checkSavedCity) {
-                checkSavedCity = false;
-                _setSavedCity(location!);
               }
             }
           }
@@ -295,11 +284,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .translate('select_location')) {
                             setState(() {
                               selectedCityId = 0;
+                              selectedCityTitle = Translate.of(context)
+                                  .translate('select_location');
                             });
-                            _onUpdateCategory();
-                            AppBloc.homeCubit.saveCityId(selectedCityId);
+                            await AppBloc.homeCubit.saveCityId(selectedCityId);
                             await AppBloc.discoveryCubit
                                 .onLocationFilter(selectedCityId, false);
+                            _onUpdateCategory();
                             break;
                           }
                         }
@@ -757,7 +748,7 @@ class _HomeScreenState extends State<HomeScreen> {
       itemCount: 8,
     );
 
-    if (recent != null) {
+    if (recent != null && recent.isNotEmpty) {
       content = ListView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(0),
@@ -795,6 +786,20 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         itemCount: recent.length,
       );
+    } else {
+      content = Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          const Icon(Icons.sentiment_satisfied),
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: Text(
+              Translate.of(context).translate('list_is_empty'),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+        ],
+      );
     }
 
     return Column(
@@ -812,15 +817,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
-              Text(
-                Translate.of(context).translate(
-                  'what_happen',
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
             ],
           ),
         ),
+        if (recent != null && recent.isEmpty)
+          const SizedBox(
+            height: 64,
+          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: content,

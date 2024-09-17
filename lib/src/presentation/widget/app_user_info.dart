@@ -11,6 +11,7 @@ class AppUserInfo extends StatelessWidget {
   final VoidCallback? onPressed;
   final UserViewType type;
   final bool showDirectionIcon;
+  final bool showEmail;
 
   const AppUserInfo({
     super.key,
@@ -18,6 +19,7 @@ class AppUserInfo extends StatelessWidget {
     this.onPressed,
     this.type = UserViewType.basic,
     required this.showDirectionIcon,
+    required this.showEmail
   });
 
   @override
@@ -113,12 +115,13 @@ class AppUserInfo extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     // description,
-                    const SizedBox(height: 4),
-                    Text(
-                      user!.email,
-                      maxLines: 2,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    if (showEmail) const SizedBox(height: 4),
+                    if (showEmail)
+                      if (showEmail)
+                        Text(
+                          user!.email,
+                          style: Theme.of(context).textTheme.bodySmall,
+                        )
                   ],
                 ),
               ),

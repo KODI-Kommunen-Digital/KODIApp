@@ -87,6 +87,18 @@ dependencies:
   comment_tree: ^0.3.0
   path_provider: ^2.0.9
   html: ^0.15.4
+  flutter_dotenv: ^5.1.0
+  firebase_remote_config: ^5.0.1
+  table_calendar: ^3.0.9
+  flutter_typeahead: ^4.0.0
+  shared_preferences: ^2.2.3
+  pointycastle: ^3.3.0
+  rsa_encrypt: ^2.0.0
+  encrypt: ^5.0.0
+  web_socket_channel: ^2.1.0
+  flutter_secure_storage: ^9.2.2
+  fast_rsa: ^3.6.3
+  calendar_date_picker2: ^1.1.5
 
 dev_dependencies:
   flutter_test:

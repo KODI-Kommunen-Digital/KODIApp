@@ -31,6 +31,9 @@ class ListProductScreen extends StatefulWidget {
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   MultiFilter? selectedFilter;
   int pageNo = 1;
@@ -65,8 +68,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
-          cities: AppBloc.discoveryCubit.location);
+              selectedFilter?.currentLocation ?? [widget.arguments['id']],
+          cities: AppBloc.discoveryCubit.location,
+          multipleCityFilter: true);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
@@ -76,26 +80,27 @@ class _ListProductScreenState extends State<ListProductScreen> {
     }
   }
 
-  void _updateSelectedFilter(MultiFilter? filter) {
+  void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
-    final loadedList = context.read<ListCubit>().getLoadedList();
-    setState(() {
-      if (filter?.hasProductEventFilter ?? false) {
-        context.read<ListCubit>().onDateProductFilter(
-            filter?.currentProductEventFilter,
-            loadedList,
-            filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
-      } else if (filter?.hasLocationFilter ?? false) {
-        loadListingsList();
-      }
-      if (filter?.hasCategoryFilter ?? false) {
-        context.read<ListCubit>().setCategoryFilter(
-            filter?.currentCategory ?? 0,
-            selectedFilter?.currentLocation ?? widget.arguments['id']);
-      }
-    });
+    dynamic loadedList = context.read<ListCubit>().getLoadedList();
+    if (filter?.hasProductEventFilter ?? false) {
+      loadedList = await context
+          .read<ListCubit>()
+          .updateLoadedList(filter!.currentLocation);
+      context.read<ListCubit>().onDateProductFilter(
+          filter.currentProductEventFilter,
+          loadedList,
+          filter.hasLocationFilter,
+          filter.currentLocation);
+    } else if (filter?.hasLocationFilter ?? false) {
+      loadListingsList();
+    }
+    if (filter?.hasCategoryFilter ?? false) {
+      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -130,15 +135,27 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   return Row(
                     children: [
                       AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent),
-                          filterCallBack: (filter) {
-                            _updateSelectedFilter(filter);
-                          }),
+                        voidCallback: () {
+                          MultiFilter multiFilter = whatCanFilter(isEvent);
+                          Navigator.pushNamed(context, Routes.filterScreen,
+                              arguments: {
+                                "multifilter": multiFilter
+                              }).then((filter) => {
+                            if (filter != null)
+                              {_updateSelectedFilter(filter as MultiFilter)}
+                          });
+                        },
+                      ),
                       IconButton(
                           onPressed: () {
                             _searchListings();
                           },
-                          icon: const Icon(Icons.search))
+                          icon: Icon(
+                            Icons.search,
+                            color:
+                            Theme.of(context).textTheme.bodyLarge?.color ??
+                                Colors.white,
+                          ))
                     ],
                   );
                 }
@@ -197,7 +214,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       builder: (BuildContext context) {
         return PopScope(
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
-            if(didPop) return;
+            if (didPop) return;
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
           },
           child: SimpleDialog(
@@ -255,7 +272,7 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
-  final int selectedId;
+  final dynamic selectedId;
   final List listCity;
   final bool updated;
 
