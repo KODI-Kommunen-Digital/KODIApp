@@ -203,7 +203,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          onPopInvoked: (pop) async {
+          onPopInvokedWithResult: (pop, result) async {
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
           },
           child: SimpleDialog(

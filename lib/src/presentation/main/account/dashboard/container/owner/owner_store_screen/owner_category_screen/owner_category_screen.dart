@@ -113,7 +113,7 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
         ),
         body: PopScope(
           canPop: !widget.isSubCategory,
-          onPopInvoked: (pop) async {
+          onPopInvokedWithResult: (pop, result) async {
             pageNo = 1;
             context.read<OwnerCategoryCubit>().categoryId = null;
             context.read<OwnerCategoryCubit>().onLoadCategories();
