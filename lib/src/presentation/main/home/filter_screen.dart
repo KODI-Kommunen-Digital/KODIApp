@@ -17,6 +17,7 @@ class _FilterScreenState extends State<FilterScreen> {
   int? currentCity;
   int? currentCategory;
   int? currentListingStatus;
+  bool? isContainerProductsBySeller;
   ProductFilter? currentProductEventFilter;
   GroupFilter? currentForumGroupFilter;
 
@@ -28,6 +29,8 @@ class _FilterScreenState extends State<FilterScreen> {
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
     currentForumGroupFilter = widget.multiFilter.currentForumGroupFilter;
+    isContainerProductsBySeller =
+        widget.multiFilter.isContainerProductsBySeller;
   }
 
   @override
@@ -40,6 +43,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       body: SingleChildScrollView(
         child: PopScope(
+          canPop: false,
           onPopInvokedWithResult: (pop, result) async {
             Navigator.pop(
                 context,
@@ -55,7 +59,10 @@ class _FilterScreenState extends State<FilterScreen> {
                     hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
-                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
+                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
+                    hasContainerSellerFilter:
+                        widget.multiFilter.hasContainerSellerFilter,
+                    isContainerProductsBySeller: isContainerProductsBySeller));
           },
           child: Column(
             children: [
@@ -69,6 +76,8 @@ class _FilterScreenState extends State<FilterScreen> {
                 ..._buildForumGroupFilter(),
               if (widget.multiFilter.hasCategoryFilter == true)
                 ..._buildCategoryFilter(),
+              if(widget.multiFilter.hasContainerSellerFilter == true)
+                ..._buildContainerSellerFilter()
             ],
           ),
         ),
@@ -306,6 +315,45 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 currentProductEventFilter = ProductFilter.week;
+              });
+            },
+          ),
+        ]),
+      )
+    ];
+  }
+
+  List<Widget> _buildContainerSellerFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+            Translate.of(context).translate('container_seller_filter'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('all')),
+            selected: isContainerProductsBySeller == false,
+            onSelected: (selected) {
+              setState(() {
+                isContainerProductsBySeller = false;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('created_by_me')),
+            selected: isContainerProductsBySeller == true,
+            onSelected: (selected) {
+              setState(() {
+                isContainerProductsBySeller = true;
               });
             },
           ),

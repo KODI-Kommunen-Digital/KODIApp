@@ -233,7 +233,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             minCount: int.parse(_textMinCountController.text),
             isActive: isActive,
             localProduct: widget.product!,
-        barcode: _textBarcodeController.text);
+            barcode: _textBarcodeController.text);
       }
 
       if (success) {
@@ -270,7 +270,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
 
     if (_textBarcodeController.text.length < 12) {
       _errorBarcode = 'barcode_required';
-    } else if (!_textBarcodeController.text.contains(RegExp(r'^\d+$'))) {
+    } else if (!ContainerRepository.isValidBarcode(_textBarcodeController.text)) {
       _errorBarcode = 'value_not_barcode';
     } else {
       _errorBarcode = null;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_user.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_grid_item.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -14,6 +15,16 @@ class SellerSelectScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('seller')),
         centerTitle: true,
+        actions: [
+          AppButton(
+            Translate.of(context).translate('requests'),
+            type: ButtonType.text,
+            onPressed: () {
+              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen,
+                  arguments: {'isOwner': false});
+            },
+          )
+        ],
       ),
       body: Center(
         child: GridView.count(

@@ -555,10 +555,13 @@
   "inventory": "Inventory",
   "min_count": "Minimal Inventory",
   "max_count": "Maximal Inventory",
+  "enter_max_count": "Enter maximal inventory",
+  "check_max_count": "The maximal inventory must be a number",
   "add_product_success": "Success adding product",
   "edit_product_success": "Success updating product",
   "delete_product_success": "Success deleting product",
   "max_smaller_min": "Maximal inventory smaller than minimal inventory",
+  "inventory_bigger_max": "Inventory is higher than the maximum",
   "order_details": "Order Details",
   "order": "Order",
   "products": "Products",
@@ -608,5 +611,8 @@
   "category_already_added": "Category already added",
   "subcategory_already_removed": "Subcategory already removed",
   "subcategory_already_added": "Subcategory already added",
-  "category_missing_subcategory": "The category for this subcategory is missing"
+  "category_missing_subcategory": "The category for this subcategory is missing",
+  "isActive": "Is active",
+  "container_seller_filter": "Which products do you want to view?",
+  "created_by_me": "Created by me"
 }

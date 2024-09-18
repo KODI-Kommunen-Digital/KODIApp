@@ -557,10 +557,13 @@
   "inventory": "Bestand",
   "min_count": "Minimaler Bestand",
   "max_count": "Maximaler Bestand",
+  "enter_max_count": "Gebe maximalen Bestand ein",
+  "check_max_count": "Der maximale Bestand muss eine Zahl sein",
   "add_product_success": "Produkt erfolgreich hinzugefügt",
   "edit_product_success": "Produkt erfolgreich aktualisiert",
   "delete_product_success": "Produkt erfolgreich gelöscht",
   "max_smaller_min": "Maximaler Bestand kleiner als minimaler Bestand",
+  "inventory_bigger_max": "Bestand ist höher als Maximum",
   "order_details": "Bestelldetails",
   "order": "Bestellung",
   "products": "Produkte",
@@ -610,5 +613,8 @@
   "category_already_added": "Kategorie bereits hinzugefügt",
   "subcategory_already_removed": "Unterkategorie bereits entfernt",
   "subcategory_already_added": "Unterkategorie bereits hinzugefügt",
-  "category_missing_subcategory": "Die Kategorie dieser Unterkategorie fehlt"
+  "category_missing_subcategory": "Die Kategorie dieser Unterkategorie fehlt",
+  "isActive": "Ist aktiv",
+  "container_seller_filter": "Welche Produkte möchtest du sehen?",
+  "created_by_me": "Von mir erstellte"
 }

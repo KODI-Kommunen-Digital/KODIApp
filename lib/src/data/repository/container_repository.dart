@@ -347,9 +347,9 @@ class ContainerRepository {
       params['tax'] = tax;
     }
 
-    /*if (barcode != localProduct.barcode) {
+    if (barcode != localProduct.barcode) {
       params['barcode'] = barcode;
-    }*/
+    }
 
     if (inventory != 0) {
       params['inventory'] = inventory;
@@ -528,7 +528,7 @@ class ContainerRepository {
       "minCount": minCount,
       "categoryId": categoryId,
       "subCategoryId": subCategoryId,
-      //"barcode": barcode
+      "barcode": barcode
     };
 
     final response = await Api.addProduct(cityId, storeId, params);
@@ -608,6 +608,72 @@ class ContainerRepository {
     }
   }
 
+  static Future<List<ContainerProductModel>?> getSellerProducts({
+    required int storeId,
+    required int pageNo,
+    required int cityId,
+    int? categoryId,
+    int? subCategoryId,
+    String? search,
+    String? sort,
+    bool sortDesc = false,
+  }) async {
+    List<String> validSort = [
+      "price",
+      "title",
+      "createdAt",
+      "updatedAt",
+      "quantity",
+      "categoryId",
+      "subCategoryId"
+    ];
+
+    String categoryQuery = "";
+    String subCategoryQuery = "";
+    String searchQuery = "";
+    String sortQuery = "";
+    String sortDescQuery = "";
+
+    if (categoryId != null) {
+      categoryQuery = "&categoryId=$categoryId";
+    }
+
+    if (subCategoryId != null) {
+      subCategoryQuery = "&subCategoryId=$subCategoryId";
+    }
+
+    if (search != null) {
+      searchQuery = "&search=$search";
+    }
+
+    if (sort != null && validSort.contains(sort)) {
+      sortQuery = "&sort=$sort";
+    }
+
+    if (sortDesc == true) {
+      sortDescQuery = "&sortDesc=true";
+    }
+
+    final response = await Api.getSellerProducts(
+        storeId: storeId,
+        pageNo: pageNo,
+        category: categoryQuery,
+        subCategory: subCategoryQuery,
+        search: searchQuery,
+        sort: sortQuery,
+        sortDesc: sortDescQuery);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ContainerProductModel.fromJson(item, cityId);
+      }).toList();
+      return list;
+    } else {
+      logError('Error getting products: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
   static Future<CategoryModel?> loadStoreCategory(
       int cityId, int storeId, int categoryId) async {
     final response = await Api.getStoreCategory(cityId, storeId, categoryId);
@@ -631,11 +697,12 @@ class ContainerRepository {
   }
 
   static Future<bool> acceptProductRequest(
-      ProductRequestModel request, List<int> shelfIds) async {
+      ProductRequestModel request, List<int> shelfIds, int maxCount) async {
     final params = {
       'storeId': request.shopId,
       'statusId': 1,
-      'shelfIds': shelfIds
+      'shelfIds': shelfIds,
+      'maxCount': maxCount
     };
     final response = await Api.patchProductRequest(request.id, params);
     if (response.success) {
@@ -870,5 +937,50 @@ class ContainerRepository {
       return false;
     }
     return null;
+  }
+
+  static bool isValidBarcode(String barcode) {
+    final length = barcode.length;
+
+    switch (length) {
+      case 8: // EAN-8
+        int check = int.parse(barcode[7]);
+        int val = (10 -
+            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) +
+                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6])) *
+                    3) % 10)) % 10;
+        return check == val;
+      case 10: // ISBN
+        int check = int.parse(barcode[9]);
+        int sum = 0;
+        for (int i = 0; i < 9; i++) {
+          sum += int.parse(barcode[i]) * (i + 1);
+        }
+        int val = sum % 11;
+        return val == 10 ? barcode[9].toLowerCase() == 'x' : check == val;
+      case 12: // UPC
+        int check = int.parse(barcode[11]);
+        int val = (10 -
+            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) +
+                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10])) *
+                    3) % 10)) % 10;
+        return check == val;
+      case 13: // EAN-13
+        int check = int.parse(barcode[12]);
+        int val = (10 -
+            ((int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10]) +
+                (int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) + int.parse(barcode[11])) *
+                    3) % 10)) % 10;
+        return check == val;
+      case 14: // EAN-14
+        int check = int.parse(barcode[13]);
+        int val = (10 -
+            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) + int.parse(barcode[11]) +
+                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10]) + int.parse(barcode[12])) *
+                    3) % 10)) % 10;
+        return check == val;
+      default:
+        return false;
+    }
   }
 }

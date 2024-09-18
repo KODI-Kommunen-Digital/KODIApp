@@ -10,6 +10,7 @@ class SellerCubit extends Cubit<SellerState> {
   SellerCubit() : super(const SellerState.loading());
 
   StoreModel? store;
+  bool? loadMyProducts;
 
   Future<void> onLoad(bool isRefreshLoader, bool isProducts) async {
     if (!isRefreshLoader) {
@@ -24,8 +25,14 @@ class SellerCubit extends Cubit<SellerState> {
         return;
       }
       if (store != null) {
-        final products = await ContainerRepository.getStoreProducts(
-            cityId: store!.cityId, storeId: store!.id, pageNo: 1);
+        List<ContainerProductModel>? products;
+        if (loadMyProducts ?? false) {
+          products = await ContainerRepository.getSellerProducts(
+              cityId: store!.cityId, storeId: store!.id, pageNo: 1);
+        } else {
+          products = await ContainerRepository.getStoreProducts(
+              cityId: store!.cityId, storeId: store!.id, pageNo: 1);
+        }
 
         final categories = await ContainerRepository.loadStoreCategories(
             store!.cityId, store!.id);
@@ -61,10 +68,16 @@ class SellerCubit extends Cubit<SellerState> {
   }
 
   Future<List<ContainerProductModel>> newProducts(int pageNo) async {
-    if(store != null) {
-      final newProducts = await ContainerRepository.getStoreProducts(
-          cityId: store!.cityId, storeId: store!.id, pageNo: pageNo);
-      if(newProducts != null) {
+    if (store != null) {
+      List<ContainerProductModel>? newProducts;
+      if (loadMyProducts ?? false) {
+        newProducts = await ContainerRepository.getSellerProducts(
+            cityId: store!.cityId, storeId: store!.id, pageNo: pageNo);
+      } else {
+        newProducts = await ContainerRepository.getStoreProducts(
+            cityId: store!.cityId, storeId: store!.id, pageNo: pageNo);
+      }
+      if (newProducts != null) {
         return newProducts;
       }
     }

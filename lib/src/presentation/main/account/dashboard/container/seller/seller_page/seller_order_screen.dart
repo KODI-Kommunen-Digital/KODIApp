@@ -5,8 +5,6 @@ import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
-import 'package:heidi/src/presentation/widget/app_button.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class SellerOrderScreen extends StatefulWidget {
@@ -65,15 +63,6 @@ class _SellerLoadedState extends State<SellerOrdersLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('orders')),
         centerTitle: true,
-        actions: [
-          AppButton(
-            Translate.of(context).translate('requests'),
-            type: ButtonType.text,
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen, arguments: {'isOwner': false});
-            },
-          )
-        ],
       ),
       body: OrderListScreen(
           sellerOrders: soldOrders,

@@ -12,11 +12,14 @@ class ProductRequestModel {
   final double price;
   final int count;
   final int threshold;
+  final int? minCount;
   final int? maxCount;
+  final int? inventory;
   final int status;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
+  final String? barcode; //TODO make not nullable once backend ready
 
   ProductRequestModel(
       {required this.id,
@@ -29,11 +32,14 @@ class ProductRequestModel {
       required this.price,
       required this.count,
       required this.threshold,
+      required this.minCount,
       required this.maxCount,
+      required this.inventory,
       required this.status,
       required this.createdAt,
       required this.updatedAt,
-      required this.deletedAt});
+      required this.deletedAt,
+      required this.barcode});
 
   factory ProductRequestModel.fromJson(Map<String, dynamic> json) {
     return ProductRequestModel(
@@ -47,11 +53,14 @@ class ProductRequestModel {
         price: json["price"].toDouble(),
         count: json["count"],
         threshold: json["threshold"],
+        minCount: json["minCount"],
         maxCount: json["maxCount"],
+        inventory: json["inventory"],
         status: json["status"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
-        deletedAt: json["deletedAt"]);
+        deletedAt: json["deletedAt"],
+        barcode: json["barcode"]);
   }
 
   String formatDate() {

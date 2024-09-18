@@ -2,7 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 
 class ContainerProductDetailScreen extends StatelessWidget {
   final ContainerProductModel product;
@@ -102,8 +104,8 @@ class ContainerProductDetailScreen extends StatelessWidget {
                     Text(
                       Translate.of(context).translate('tax'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -124,8 +126,8 @@ class ContainerProductDetailScreen extends StatelessWidget {
                     Text(
                       Translate.of(context).translate('inventory'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -146,8 +148,8 @@ class ContainerProductDetailScreen extends StatelessWidget {
                     Text(
                       Translate.of(context).translate('min_count'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                            fontWeight: FontWeight.bold,
+                          ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -210,7 +212,7 @@ class ContainerProductDetailScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      Translate.of(context).translate('isActive'),
+                      Translate.of(context).translate('status'),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -218,7 +220,8 @@ class ContainerProductDetailScreen extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                     ),
                     Text(
-                      product.isActive.toString(),
+                      Translate.of(context).translate(
+                          (product.isActive) ? 'active' : 'inactive'),
                       style: Theme.of(context).textTheme.bodyMedium!,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -242,6 +245,20 @@ class ContainerProductDetailScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                if (ContainerRepository.isValidBarcode(product.barcode ?? ''))
+                  const SizedBox(
+                    height: 64,
+                  ),
+                if (ContainerRepository.isValidBarcode(product.barcode ?? ''))
+                  SizedBox(
+                      height: 120,
+                      width: 400,
+                      child: SfBarcodeGenerator(
+                        value: product.barcode,
+                        showValue: true,
+                        symbology:
+                            (product.barcode!.length == 12) ? UPCA() : EAN13(),
+                      ))
               ],
             )),
       ),

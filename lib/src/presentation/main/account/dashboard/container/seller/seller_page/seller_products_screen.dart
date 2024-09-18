@@ -6,12 +6,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
 
-import 'package:heidi/src/presentation/widget/app_button.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -76,6 +77,7 @@ class SellerProductsLoaded extends StatefulWidget {
 
 class _SellerLoadedState extends State<SellerProductsLoaded> {
   final ScrollController _scrollController = ScrollController();
+  late MultiFilter filter;
   List<ContainerProductModel> products = [];
   int pageNo = 1;
   bool isLoadingMore = false;
@@ -89,6 +91,9 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
     if (widget.selectedStore != null) {
       selectedStore = widget.selectedStore!.id;
     }
+    filter = MultiFilter(
+        hasContainerSellerFilter: true, isContainerProductsBySeller: context.read<SellerCubit>().loadMyProducts ?? false);
+    context.read<SellerCubit>().loadMyProducts = false;
   }
 
   @override
@@ -122,14 +127,15 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         title: Text(Translate.of(context).translate('products')),
         centerTitle: true,
         actions: [
-          AppButton(
-            Translate.of(context).translate('requests'),
-            type: ButtonType.text,
-            onPressed: () {
-              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen,
-                  arguments: {'isOwner': false});
-            },
-          )
+          AppFilterButton(
+              multiFilter: filter,
+              filterCallBack: (newFilter) {
+                setState(() {
+                  filter = newFilter;
+                });
+                context.read<SellerCubit>().loadMyProducts = filter.isContainerProductsBySeller;
+                context.read<SellerCubit>().onLoad(false, true);
+              })
         ],
       ),
       body: Padding(
@@ -159,7 +165,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
             ),
             (products.isNotEmpty)
                 ? Expanded(
-                  child: ListView.builder(
+                    child: ListView.builder(
                       controller: _scrollController,
                       itemBuilder: (context, int index) {
                         if (index < products.length) {
@@ -171,7 +177,8 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                   arguments: {'product': item});
                             },
                             child: Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 4),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 4),
                               child: Stack(
                                 children: [
                                   Row(
@@ -197,7 +204,8 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                               ),
                                             );
                                           },
-                                          imageBuilder: (context, imageProvider) {
+                                          imageBuilder:
+                                              (context, imageProvider) {
                                             return Container(
                                               width: 120,
                                               height: 140,
@@ -216,7 +224,8 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                                 height: 140,
                                                 decoration: const BoxDecoration(
                                                   color: Colors.white,
-                                                  borderRadius: BorderRadius.only(
+                                                  borderRadius:
+                                                      BorderRadius.only(
                                                     topLeft: Radius.circular(8),
                                                     bottomLeft:
                                                         Radius.circular(8),
@@ -297,12 +306,14 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceBetween,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
                                                 Container(
                                                   decoration: BoxDecoration(
                                                     borderRadius:
-                                                        BorderRadius.circular(10),
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
                                                 ),
                                               ],
@@ -334,7 +345,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                       },
                       itemCount: products.length + 1,
                     ),
-                )
+                  )
                 : Center(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
