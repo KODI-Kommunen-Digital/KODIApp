@@ -571,15 +571,22 @@ class Routes {
   static void trackMatomoEvent(
       bool isCategory, String? name, int id, int? cityId) {
     late String eventName;
+    late String type;
     if (isCategory) {
       name = _getCategoryName(id);
       eventName = "category_${name}_${id.toString()}";
-    } else {
+      type = 'category';
+    } else if (isCategory && name != null) {
       eventName = "${name}_${id.toString()}_${cityId.toString()}";
+      type = 'listing';
+    } else {
+      name = _getServiceName(id);
+      eventName = "service_${name}_${id.toString()}";
+      type = 'service';
     }
     MatomoTracker.instance.trackEvent(
       eventInfo: EventInfo(
-        category: (isCategory) ? 'category' : 'listing',
+        category: type,
         name: eventName,
         action: 'click',
         value: 1,
@@ -595,6 +602,22 @@ class Routes {
       6: "Online-Dienste",
       7: "Stadtwerke",
       8: "Sehenswertes",
+    };
+    return categories[id] ?? '';
+  }
+
+  static String _getServiceName(int id) {
+    Map<int, String> categories = {
+      3: "Terminbuchung_Bürgerbüro",
+      5: "Bürger:innenbeteiligung",
+      62: "Parken",
+      7: "Chatbot",
+      8: "Mängelmelder",
+      10: "Abfallkalender",
+      11: "Neubürger:innen",
+      12: "Aggua",
+      14: "Jeti-Line-Glasfaser",
+      15: "Virtuelles_Beratungsbüro"
     };
     return categories[id] ?? '';
   }

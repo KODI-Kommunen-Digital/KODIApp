@@ -261,7 +261,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
+      if (service.imageLink == "4" || service.imageLink == "9" || service.imageLink == "13") {
+        Routes.trackMatomoEvent(
+            true, null, int.parse(service.imageLink), null);
+      } else {
+        Routes.trackMatomoEvent(
+            false, null, int.parse(service.imageLink), null);
+      }
     } else if (service.imageLink == "11") {
+      Routes.trackMatomoEvent(
+          false, null, int.parse(service.imageLink), null);
       await launchContestPage(context, service.imageLink);
     } else if (service.imageLink == "6") {
       await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
@@ -272,6 +281,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   _onSubmit();
     // }
     else if (service.imageLink == "10") {
+      Routes.trackMatomoEvent(
+          false, null, int.parse(service.imageLink), null);
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else {
       AppBloc.discoveryCubit
@@ -288,16 +299,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
   }
 
-  // void _onSubmit() async {
-  //   if (AppBloc.userCubit.state == null) {
-  //     final result = await Navigator.pushNamed(
-  //       context,
-  //       Routes.signIn,
-  //       arguments: Routes.submit,
-  //     );
-  //     if (result == null) return;
-  //   }
-  //   if (!mounted) return;
-  //   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  // }
+// void _onSubmit() async {
+//   if (AppBloc.userCubit.state == null) {
+//     final result = await Navigator.pushNamed(
+//       context,
+//       Routes.signIn,
+//       arguments: Routes.submit,
+//     );
+//     if (result == null) return;
+//   }
+//   if (!mounted) return;
+//   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+// }
 }
