@@ -134,8 +134,8 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
   }
 
   void updateRequest() async {
-    Navigator.pushNamed(context, Routes.productRequestScreen,
-        arguments: {"requests": widget.requests});
+    await Navigator.pushNamed(context, Routes.productRequestScreen,
+        arguments: {"requests": widget.requests, "isOwner": true});
     context.read<OwnerProductsCubit>().onLoad(false);
   }
 

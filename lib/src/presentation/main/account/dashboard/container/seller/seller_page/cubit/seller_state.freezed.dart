@@ -22,6 +22,7 @@ mixin _$SellerState {
     required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
     required TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -36,6 +37,7 @@ mixin _$SellerState {
     TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult? Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -50,6 +52,7 @@ mixin _$SellerState {
     TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -146,6 +149,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
     required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
     required TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -163,6 +167,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
     TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult? Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -180,6 +185,7 @@ class _$SellerStateLoadingImpl implements SellerStateLoading {
     TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -315,6 +321,7 @@ class _$SellerStateLoadedOrdersImpl implements SellerStateLoadedOrders {
     required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
     required TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -332,6 +339,7 @@ class _$SellerStateLoadedOrdersImpl implements SellerStateLoadedOrders {
     TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult? Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -349,6 +357,7 @@ class _$SellerStateLoadedOrdersImpl implements SellerStateLoadedOrders {
     TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -420,6 +429,7 @@ abstract class _$$SellerStateLoadedProductsImplCopyWith<$Res> {
   @useResult
   $Res call(
       {List<ContainerProductModel>? products,
+      List<ProductRequestModel>? productRequests,
       List<CategoryModel>? categories,
       List<CategoryModel>? subCategories,
       List<StoreModel> stores,
@@ -439,6 +449,7 @@ class __$$SellerStateLoadedProductsImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? products = freezed,
+    Object? productRequests = freezed,
     Object? categories = freezed,
     Object? subCategories = freezed,
     Object? stores = null,
@@ -449,6 +460,10 @@ class __$$SellerStateLoadedProductsImplCopyWithImpl<$Res>
           ? _value._products
           : products // ignore: cast_nullable_to_non_nullable
               as List<ContainerProductModel>?,
+      freezed == productRequests
+          ? _value._productRequests
+          : productRequests // ignore: cast_nullable_to_non_nullable
+              as List<ProductRequestModel>?,
       freezed == categories
           ? _value._categories
           : categories // ignore: cast_nullable_to_non_nullable
@@ -474,11 +489,13 @@ class __$$SellerStateLoadedProductsImplCopyWithImpl<$Res>
 class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
   const _$SellerStateLoadedProductsImpl(
       final List<ContainerProductModel>? products,
+      final List<ProductRequestModel>? productRequests,
       final List<CategoryModel>? categories,
       final List<CategoryModel>? subCategories,
       final List<StoreModel> stores,
       this.selectedStore)
       : _products = products,
+        _productRequests = productRequests,
         _categories = categories,
         _subCategories = subCategories,
         _stores = stores;
@@ -489,6 +506,16 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
     final value = _products;
     if (value == null) return null;
     if (_products is EqualUnmodifiableListView) return _products;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<ProductRequestModel>? _productRequests;
+  @override
+  List<ProductRequestModel>? get productRequests {
+    final value = _productRequests;
+    if (value == null) return null;
+    if (_productRequests is EqualUnmodifiableListView) return _productRequests;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -526,7 +553,7 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
 
   @override
   String toString() {
-    return 'SellerState.loadedProducts(products: $products, categories: $categories, subCategories: $subCategories, stores: $stores, selectedStore: $selectedStore)';
+    return 'SellerState.loadedProducts(products: $products, productRequests: $productRequests, categories: $categories, subCategories: $subCategories, stores: $stores, selectedStore: $selectedStore)';
   }
 
   @override
@@ -535,6 +562,8 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
         (other.runtimeType == runtimeType &&
             other is _$SellerStateLoadedProductsImpl &&
             const DeepCollectionEquality().equals(other._products, _products) &&
+            const DeepCollectionEquality()
+                .equals(other._productRequests, _productRequests) &&
             const DeepCollectionEquality()
                 .equals(other._categories, _categories) &&
             const DeepCollectionEquality()
@@ -548,6 +577,7 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(_products),
+      const DeepCollectionEquality().hash(_productRequests),
       const DeepCollectionEquality().hash(_categories),
       const DeepCollectionEquality().hash(_subCategories),
       const DeepCollectionEquality().hash(_stores),
@@ -567,6 +597,7 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
     required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
     required TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -574,8 +605,8 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
         loadedProducts,
     required TResult Function() error,
   }) {
-    return loadedProducts(
-        products, categories, subCategories, stores, selectedStore);
+    return loadedProducts(products, productRequests, categories, subCategories,
+        stores, selectedStore);
   }
 
   @override
@@ -585,6 +616,7 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
     TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult? Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -592,8 +624,8 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
         loadedProducts,
     TResult? Function()? error,
   }) {
-    return loadedProducts?.call(
-        products, categories, subCategories, stores, selectedStore);
+    return loadedProducts?.call(products, productRequests, categories,
+        subCategories, stores, selectedStore);
   }
 
   @override
@@ -603,6 +635,7 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
     TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -612,8 +645,8 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
     required TResult orElse(),
   }) {
     if (loadedProducts != null) {
-      return loadedProducts(
-          products, categories, subCategories, stores, selectedStore);
+      return loadedProducts(products, productRequests, categories,
+          subCategories, stores, selectedStore);
     }
     return orElse();
   }
@@ -659,12 +692,14 @@ class _$SellerStateLoadedProductsImpl implements SellerStateLoadedProducts {
 abstract class SellerStateLoadedProducts implements SellerState {
   const factory SellerStateLoadedProducts(
       final List<ContainerProductModel>? products,
+      final List<ProductRequestModel>? productRequests,
       final List<CategoryModel>? categories,
       final List<CategoryModel>? subCategories,
       final List<StoreModel> stores,
       final StoreModel? selectedStore) = _$SellerStateLoadedProductsImpl;
 
   List<ContainerProductModel>? get products;
+  List<ProductRequestModel>? get productRequests;
   List<CategoryModel>? get categories;
   List<CategoryModel>? get subCategories;
   List<StoreModel> get stores;
@@ -716,6 +751,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
     required TResult Function(List<SellerOrderModel> orderSold) loadedOrders,
     required TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -733,6 +769,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
     TResult? Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult? Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,
@@ -750,6 +787,7 @@ class _$SellerStateErrorImpl implements SellerStateError {
     TResult Function(List<SellerOrderModel> orderSold)? loadedOrders,
     TResult Function(
             List<ContainerProductModel>? products,
+            List<ProductRequestModel>? productRequests,
             List<CategoryModel>? categories,
             List<CategoryModel>? subCategories,
             List<StoreModel> stores,

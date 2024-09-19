@@ -3,16 +3,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:html/dom.dart' as dom;
 
 class ProductRequestScreen extends StatefulWidget {
+  final bool isOwner;
   final List<ProductRequestModel> requests;
 
-  const ProductRequestScreen({super.key, required this.requests});
+  const ProductRequestScreen(
+      {super.key, required this.requests, required this.isOwner});
 
   @override
   State<ProductRequestScreen> createState() => _ProductRequestScreenState();
@@ -32,8 +36,13 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
         setState(() {
           isLoadingMore = true;
         });
-        final List<ProductRequestModel> newRequests =
-            await context.read<OwnerProductsCubit>().newRequests(++pageNo);
+        late List<ProductRequestModel> newRequests;
+        if (widget.isOwner) {
+          newRequests =
+              await context.read<OwnerProductsCubit>().newRequests(++pageNo);
+        } else {
+          newRequests = await context.read<SellerCubit>().newRequests(++pageNo);
+        }
         requests.addAll(newRequests);
         setState(() {
           isLoadingMore = false;
@@ -71,26 +80,14 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
                     ProductRequestModel item = requests[index];
                     return InkWell(
                       onTap: () async {
-                        final shelves = await context.read<OwnerProductsCubit>().getShelves();
-                        Navigator.pushNamed(
-                            context, Routes.productRequestDetailScreen,
-                            arguments: {'request': item, 'shelves': shelves}).then((approved) {
-                          if (approved != null) {
-                            if (approved == true) {
-                              setState(() {
-                                requests.remove(item);
-                              });
-                            }
-                          }
-                        });
+                        navigateToDetail(item);
                       },
                       child: AppListTitle(
                         title: dom.DocumentFragment.html(item.title).text ?? '',
-                        subtitle: dom.DocumentFragment.html(item.description).text ?? '',
+                        subtitle:
+                            dom.DocumentFragment.html(item.description).text ??
+                                '',
                         trailing: Text("${item.price.toString()}€"),
-                        leading: Text((item.sellerId != null)
-                            ? item.sellerId.toString()
-                            : ''),
                       ),
                     );
                   } else {
@@ -118,5 +115,26 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
                   ],
                 ),
               ));
+  }
+
+  void navigateToDetail(ProductRequestModel item) async {
+    List<ShelfModel>? shelves;
+    if (widget.isOwner) {
+      shelves = await context.read<OwnerProductsCubit>().getShelves();
+    }
+    await Navigator.pushNamed(context, Routes.productRequestDetailScreen,
+        arguments: {
+          'request': item,
+          'shelves': shelves,
+          'isOwner': widget.isOwner
+        }).then((approvedOrDeleted) {
+      if (approvedOrDeleted != null) {
+        if (approvedOrDeleted == true) {
+          setState(() {
+            requests.remove(item);
+          });
+        }
+      }
+    });
   }
 }

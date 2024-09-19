@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_card.dart';
@@ -14,6 +17,7 @@ import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ContainerRepository {
   final Preferences prefs;
@@ -328,7 +332,9 @@ class ContainerRepository {
       required int minCount,
       required ContainerProductModel localProduct,
       required bool isActive,
-      required String barcode}) async {
+      required String barcode,
+      File? image,
+      bool isImageChanged = false}) async {
     Map<String, dynamic> params = {};
 
     if (title != localProduct.title) {
@@ -367,6 +373,31 @@ class ContainerRepository {
         await Api.updateProductStore(cityId, storeId, productId, params);
 
     if (response.success) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      var formData = FormData();
+
+      if (pickedFile != null && pickedFile.files.isNotEmpty) {
+        if (image != null) {
+          var file = image;
+          var fileExtension = file.path.split('.').last.toLowerCase();
+          var fileName = '$image.$fileExtension';
+
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              file.path,
+              filename: fileName,
+              contentType: MediaType(
+                  'image', fileExtension), // Set the correct content type
+            ),
+          ));
+          final result = await Api.requestContainerProductUploadMedia(
+              productId, cityId, storeId, formData);
+          logError(result?.message);
+        }
+      }
+      prefs.deleteKey('pickedFile');
       return true;
     } else {
       logError('Error updating product: ${response.data} ${response.message}');
@@ -518,7 +549,9 @@ class ContainerRepository {
       required int minCount,
       required int categoryId,
       required int subCategoryId,
-      required String barcode}) async {
+      required String barcode,
+      File? image,
+      bool isImageChanged = false}) async {
     Map<String, dynamic> params = {
       "title": title,
       "description": description,
@@ -534,6 +567,32 @@ class ContainerRepository {
     final response = await Api.addProduct(cityId, storeId, params);
 
     if (response.success) {
+      final prefs = await Preferences.openBox();
+      FormData? pickedFile = prefs.getPickedFile();
+      var formData = FormData();
+      final productId = response.data['id'];
+
+      if (pickedFile != null && pickedFile.files.isNotEmpty) {
+        if (image != null) {
+          var file = image;
+          var fileExtension = file.path.split('.').last.toLowerCase();
+          var fileName = '$image.$fileExtension';
+
+          formData.files.add(MapEntry(
+            'image',
+            await MultipartFile.fromFile(
+              file.path,
+              filename: fileName,
+              contentType: MediaType(
+                  'image', fileExtension), // Set the correct content type
+            ),
+          ));
+          final result = await Api.requestContainerProductUploadMedia(
+              productId, cityId, storeId, formData);
+          logError(result?.message);
+        }
+      }
+      prefs.deleteKey('pickedFile');
       return true;
     } else {
       logError('Error posting product: ${response.data} ${response.message}');
@@ -703,6 +762,21 @@ class ContainerRepository {
       'statusId': 1,
       'shelfIds': shelfIds,
       'maxCount': maxCount
+    };
+    final response = await Api.patchProductRequest(request.id, params);
+    if (response.success) {
+      return true;
+    } else {
+      logError(
+          'Error accepting product request: ${response.data} ${response.message}');
+      return false;
+    }
+  }
+
+  static Future<bool> declineProductRequest(ProductRequestModel request) async {
+    final params = {
+      'storeId': request.shopId,
+      'statusId': 2,
     };
     final response = await Api.patchProductRequest(request.id, params);
     if (response.success) {
@@ -946,9 +1020,16 @@ class ContainerRepository {
       case 8: // EAN-8
         int check = int.parse(barcode[7]);
         int val = (10 -
-            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) +
-                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6])) *
-                    3) % 10)) % 10;
+                ((int.parse(barcode[1]) +
+                        int.parse(barcode[3]) +
+                        int.parse(barcode[5]) +
+                        (int.parse(barcode[0]) +
+                                int.parse(barcode[2]) +
+                                int.parse(barcode[4]) +
+                                int.parse(barcode[6])) *
+                            3) %
+                    10)) %
+            10;
         return check == val;
       case 10: // ISBN
         int check = int.parse(barcode[9]);
@@ -961,23 +1042,59 @@ class ContainerRepository {
       case 12: // UPC
         int check = int.parse(barcode[11]);
         int val = (10 -
-            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) +
-                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10])) *
-                    3) % 10)) % 10;
+                ((int.parse(barcode[1]) +
+                        int.parse(barcode[3]) +
+                        int.parse(barcode[5]) +
+                        int.parse(barcode[7]) +
+                        int.parse(barcode[9]) +
+                        (int.parse(barcode[0]) +
+                                int.parse(barcode[2]) +
+                                int.parse(barcode[4]) +
+                                int.parse(barcode[6]) +
+                                int.parse(barcode[8]) +
+                                int.parse(barcode[10])) *
+                            3) %
+                    10)) %
+            10;
         return check == val;
       case 13: // EAN-13
         int check = int.parse(barcode[12]);
         int val = (10 -
-            ((int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10]) +
-                (int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) + int.parse(barcode[11])) *
-                    3) % 10)) % 10;
+                ((int.parse(barcode[0]) +
+                        int.parse(barcode[2]) +
+                        int.parse(barcode[4]) +
+                        int.parse(barcode[6]) +
+                        int.parse(barcode[8]) +
+                        int.parse(barcode[10]) +
+                        (int.parse(barcode[1]) +
+                                int.parse(barcode[3]) +
+                                int.parse(barcode[5]) +
+                                int.parse(barcode[7]) +
+                                int.parse(barcode[9]) +
+                                int.parse(barcode[11])) *
+                            3) %
+                    10)) %
+            10;
         return check == val;
       case 14: // EAN-14
         int check = int.parse(barcode[13]);
         int val = (10 -
-            ((int.parse(barcode[1]) + int.parse(barcode[3]) + int.parse(barcode[5]) + int.parse(barcode[7]) + int.parse(barcode[9]) + int.parse(barcode[11]) +
-                (int.parse(barcode[0]) + int.parse(barcode[2]) + int.parse(barcode[4]) + int.parse(barcode[6]) + int.parse(barcode[8]) + int.parse(barcode[10]) + int.parse(barcode[12])) *
-                    3) % 10)) % 10;
+                ((int.parse(barcode[1]) +
+                        int.parse(barcode[3]) +
+                        int.parse(barcode[5]) +
+                        int.parse(barcode[7]) +
+                        int.parse(barcode[9]) +
+                        int.parse(barcode[11]) +
+                        (int.parse(barcode[0]) +
+                                int.parse(barcode[2]) +
+                                int.parse(barcode[4]) +
+                                int.parse(barcode[6]) +
+                                int.parse(barcode[8]) +
+                                int.parse(barcode[10]) +
+                                int.parse(barcode[12])) *
+                            3) %
+                    10)) %
+            10;
         return check == val;
       default:
         return false;

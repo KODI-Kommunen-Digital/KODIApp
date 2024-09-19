@@ -952,14 +952,13 @@ class Api {
   }
 
   static Future<ResultApiModel> getSellerProducts(
-      {
-        required storeId,
-        required pageNo,
-        category,
-        subCategory,
-        search,
-        sort,
-        sortDesc}) async {
+      {required storeId,
+      required pageNo,
+      category,
+      subCategory,
+      search,
+      sort,
+      sortDesc}) async {
     var list =
         '/seller/products?storeId=$storeId&pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=10';
     final result = await HTTPManager(apiType: 'container').get(url: list);
@@ -1016,6 +1015,20 @@ class Api {
     final result = await HTTPManager(apiType: 'container')
         .delete(url: filePath, data: params, loading: true);
     return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel?> requestContainerProductUploadMedia(
+      productId, cityId, storeId, pickedFile) async {
+    var filePath = '/cities/$cityId/store/$storeId/imageUpload/$productId';
+
+    if (pickedFile?.files.length != 0) {
+      final result = await HTTPManager(apiType: '').post(
+        url: filePath,
+        formData: pickedFile,
+      );
+      return ResultApiModel.fromJson(result);
+    }
+    return null;
   }
 
   /*static Future<ResultApiModel> addUserCredit(userId, params) async {

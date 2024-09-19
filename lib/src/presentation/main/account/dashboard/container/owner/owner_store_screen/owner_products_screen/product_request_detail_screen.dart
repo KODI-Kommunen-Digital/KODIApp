@@ -14,10 +14,14 @@ import 'package:html/dom.dart' as dom;
 
 class ProductRequestDetailScreen extends StatefulWidget {
   final ProductRequestModel request;
-  final List<ShelfModel> shelves;
+  final List<ShelfModel>? shelves;
+  final bool isOwner;
 
   const ProductRequestDetailScreen(
-      {super.key, required this.request, required this.shelves});
+      {super.key,
+      required this.request,
+      required this.shelves,
+      required this.isOwner});
 
   @override
   State<ProductRequestDetailScreen> createState() =>
@@ -36,7 +40,9 @@ class _ProductRequestDetailScreenState
   void initState() {
     super.initState();
     //shelves.addAll(widget.shelves.where((shelf) => shelf.productId == null));
-    shelves.addAll(widget.shelves);
+    if (widget.isOwner) {
+      shelves.addAll(widget.shelves!);
+    }
   }
 
   @override
@@ -168,29 +174,6 @@ class _ProductRequestDetailScreenState
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      Translate.of(context).translate('max_count'),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      widget.request.maxCount?.toString() ??
-                          Translate.of(context).translate('undefined'),
-                      style: Theme.of(context).textTheme.bodyMedium!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
                       'ID',
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             fontWeight: FontWeight.bold,
@@ -232,29 +215,6 @@ class _ProductRequestDetailScreenState
                   height: 8,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      Translate.of(context).translate('barcode'),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    Text(
-                      widget.request.barcode ??
-                          Translate.of(context).translate('undefined'),
-                      style: Theme.of(context).textTheme.bodyMedium!,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     Text(
@@ -268,130 +228,210 @@ class _ProductRequestDetailScreenState
                     ),
                   ],
                 ),
-                const SizedBox(
-                  height: 64,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      Translate.of(context).translate('choose_shelves_product'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-                MultiSelectDropDown(
-                    //isExpanded: true,
-                    fieldBackgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                    borderColor: Theme.of(context).textTheme.bodyLarge?.color ??
-                        Colors.white,
-                    optionsBackgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                    dropdownBackgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                    optionTextStyle: TextStyle(
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white),
-                    selectedOptionBackgroundColor:
-                        Theme.of(context).scaffoldBackgroundColor,
-                    dropdownHeight: 200,
-                    clearIcon: null,
-                    hint: Translate.of(context)
-                        .translate('choose_shelves_product'),
-                    options: shelves.map((shelf) {
-                      return ValueItem(
-                          value: shelf.id,
-                          label: shelf.title ?? shelf.id.toString());
-                    }).toList(),
-                    onOptionRemoved: (index, ValueItem option) {
-                      setState(() {
-                        shelves.add(selectedShelves
-                            .firstWhere((shelf) => option.value == shelf.id));
-                        selectedShelves
-                            .removeWhere((shelf) => shelf.id == option.value);
-                      });
-                    },
-                    onOptionSelected: (List<ValueItem> selectedOptions) async {
-                      for (var option in selectedOptions) {
+                if (widget.isOwner)
+                  const SizedBox(
+                    height: 64,
+                  ),
+                if (widget.isOwner)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        Translate.of(context)
+                            .translate('choose_shelves_product'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                if (widget.isOwner)
+                  MultiSelectDropDown(
+                      //isExpanded: true,
+                      fieldBackgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      borderColor:
+                          Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white,
+                      optionsBackgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      dropdownBackgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      optionTextStyle: TextStyle(
+                          color: Theme.of(context).textTheme.bodyLarge?.color ??
+                              Colors.white),
+                      selectedOptionBackgroundColor:
+                          Theme.of(context).scaffoldBackgroundColor,
+                      dropdownHeight: 200,
+                      clearIcon: null,
+                      hint: Translate.of(context)
+                          .translate('choose_shelves_product'),
+                      options: shelves.map((shelf) {
+                        return ValueItem(
+                            value: shelf.id,
+                            label: shelf.title ?? shelf.id.toString());
+                      }).toList(),
+                      onOptionRemoved: (index, ValueItem option) {
                         setState(() {
-                          selectedShelves.add(shelves
+                          shelves.add(selectedShelves
                               .firstWhere((shelf) => option.value == shelf.id));
-                          shelves
+                          selectedShelves
                               .removeWhere((shelf) => shelf.id == option.value);
                         });
-                      }
-                    }),
+                      },
+                      onOptionSelected:
+                          (List<ValueItem> selectedOptions) async {
+                        for (var option in selectedOptions) {
+                          setState(() {
+                            selectedShelves.add(shelves.firstWhere(
+                                (shelf) => option.value == shelf.id));
+                            shelves.removeWhere(
+                                (shelf) => shelf.id == option.value);
+                          });
+                        }
+                      }),
+                if (widget.isOwner)
+                  const SizedBox(
+                    height: 32,
+                  ),
+                if (widget.isOwner)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        Translate.of(context).translate('enter_max_count'),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                if (widget.isOwner)
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('max_count'),
+                    maxLines: 1,
+                    maxLength: 20,
+                    keyboardType: TextInputType.number,
+                    errorText: _errorMaxCount,
+                    controller: _textMaxCountController,
+                    textInputAction: TextInputAction.done,
+                    onChanged: (text) {
+                      checkValidMaxCount();
+                    },
+                  ),
                 const SizedBox(
-                  height: 32,
+                  height: 16,
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      Translate.of(context).translate('enter_max_count'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
+                    if (selectedShelves.isNotEmpty &&
+                        validMaxCount &&
+                        widget.isOwner)
+                      AppButton(Translate.of(context).translate('approve'),
+                          onPressed: () async {
+                        acceptRequest();
+                      }),
+                    if (selectedShelves.isNotEmpty &&
+                        validMaxCount &&
+                        widget.isOwner)
+                      const SizedBox(
+                        width: 8,
+                      ),
+                    AppButton(Translate.of(context).translate('delete'),
+                        onPressed: () {
+                      showDeleteConfirmation();
+                    })
                   ],
-                ),
-                AppTextInput(
-                  hintText: Translate.of(context).translate('max_count'),
-                  maxLines: 1,
-                  maxLength: 20,
-                  keyboardType: TextInputType.number,
-                  errorText: _errorMaxCount,
-                  controller: _textMaxCountController,
-                  textInputAction: TextInputAction.done,
-                  onChanged: (text) {
-                    checkValidMaxCount();
-                  },
-                ),
-                if (selectedShelves.isNotEmpty && validMaxCount)
-                  AppButton(Translate.of(context).translate('approve'),
-                      onPressed: () async {
-                    if (selectedShelves.isNotEmpty) {
-                      List<int> shelfIds = [];
-                      for (var shelf in selectedShelves) {
-                        shelfIds.add(shelf.id);
-                      }
-                      int? maxCount;
-                      try {
-                        maxCount = int.parse(_textMaxCountController.text);
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(Translate.of(context)
-                                .translate('error_message'))));
-                        return;
-                      }
-                      final bool success =
-                          await ContainerRepository.acceptProductRequest(
-                              widget.request, shelfIds, maxCount);
-                      if (success) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(Translate.of(context)
-                                .translate('request_approved'))));
-                        Navigator.pop(context, true);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(Translate.of(context)
-                                .translate('error_message'))));
-                      }
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(Translate.of(context)
-                              .translate('choose_shelves_product'))));
-                    }
-                  })
+                )
               ],
             )),
       ),
     );
+  }
+
+  void acceptRequest() async {
+    if (!mounted) return;
+    if (selectedShelves.isNotEmpty) {
+      List<int> shelfIds = [];
+      for (var shelf in selectedShelves) {
+        shelfIds.add(shelf.id);
+      }
+      int? maxCount;
+      try {
+        maxCount = int.parse(_textMaxCountController.text);
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(Translate.of(context).translate('error_message'))));
+        return;
+      }
+      final bool success = await ContainerRepository.acceptProductRequest(
+          widget.request, shelfIds, maxCount);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content:
+                Text(Translate.of(context).translate('request_approved'))));
+        Navigator.pop(context, true);
+        return;
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(Translate.of(context).translate('error_message'))));
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text(Translate.of(context).translate('choose_shelves_product'))));
+    }
+  }
+
+  Future<void> showDeleteConfirmation() async {
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('delete_Confirmation')),
+          content: Text(Translate.of(context)
+              .translate('are_you_sure_delete_product_request')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+    if (result == true) {
+      if (!mounted) return;
+      final bool success =
+          await ContainerRepository.declineProductRequest(widget.request);
+      if (success) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              Translate.of(context).translate("delete_product_request_success"),
+            ),
+          ),
+        );
+        Navigator.pop(context, true);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              Translate.of(context).translate("error_message"),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   void checkValidMaxCount() {
@@ -415,13 +455,11 @@ class _ProductRequestDetailScreenState
         _errorMaxCount = 'check_max_count';
       }
     }
-    if (_errorMaxCount == null) {
+
+    bool isValid = _errorMaxCount == null;
+    if (isValid != validMaxCount) {
       setState(() {
-        validMaxCount = true;
-      });
-    } else {
-      setState(() {
-        validMaxCount = false;
+        validMaxCount = isValid;
       });
     }
   }

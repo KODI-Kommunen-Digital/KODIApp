@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
@@ -9,6 +11,10 @@ import 'create_product_state.dart';
 
 class CreateProductCubit extends Cubit<CreateProductState> {
   CreateProductCubit() : super(const CreateProductState.loading());
+
+  File? selectedImage;
+  File? downloadedImage;
+  bool isImageChanged = false;
 
   Future<void> onLoad(
       {int? cityId,
@@ -90,5 +96,11 @@ class CreateProductCubit extends Cubit<CreateProductState> {
       'subcategory': subcategory,
       'store': shop
     };
+  }
+
+  void clearImages() {
+    selectedImage = null;
+    downloadedImage = null;
+    isImageChanged = false;
   }
 }

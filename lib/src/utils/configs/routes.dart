@@ -601,7 +601,10 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return ProductRequestScreen(requests: arguments["requests"]);
+            return ProductRequestScreen(
+              requests: arguments["requests"],
+              isOwner: arguments["isOwner"],
+            );
           },
         );
 
@@ -710,7 +713,9 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return OwnerCategoryScreen(stores: arguments['stores'],);
+            return OwnerCategoryScreen(
+              stores: arguments['stores'],
+            );
           },
         );
 
@@ -764,6 +769,7 @@ class Routes {
             return ProductRequestDetailScreen(
               request: arguments['request'],
               shelves: arguments['shelves'],
+              isOwner: arguments['isOwner']
             );
           },
         );

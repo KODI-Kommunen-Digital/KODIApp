@@ -30,6 +30,8 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final int imageLimit;
+  final bool allowPdf;
 
   const AppUploadImage({
     super.key,
@@ -40,6 +42,8 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.imageLimit = 8,
+    this.allowPdf = true
   });
 
   @override
@@ -294,6 +298,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
           return SimpleDialog(
             title: Text(Translate.of(context).translate('Choose_File_Type')),
             children: [
+              if(widget.allowPdf)
               SimpleDialogOption(
                 onPressed: () async {
                   Navigator.pop(context);
@@ -363,7 +368,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     FilePickerResult? result =
                         await FilePicker.platform.pickFiles(
                       type: FileType.image,
-                      allowMultiple: true,
+                      allowMultiple: widget.imageLimit > 1,
                     );
                     if (result != null) {
                       _file = File('');
@@ -559,9 +564,15 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      resultList = await _picker.pickMultiImage(
-        limit: 8,
-      );
+      if(widget.imageLimit == 1) {
+        XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+        if(image != null) resultList = [image];
+      } else {
+        resultList = await _picker.pickMultiImage(
+          limit: widget.imageLimit,
+        );
+      }
+
       selectedAssets = resultList;
       if (resultList.isNotEmpty) {
         if (!mounted) return;

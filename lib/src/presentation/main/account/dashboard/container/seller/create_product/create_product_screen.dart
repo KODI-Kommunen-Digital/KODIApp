@@ -1,5 +1,4 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -9,11 +8,11 @@ import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/cubit/create_product_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/cubit/create_product_state.dart';
-import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
+import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
+import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -32,7 +31,13 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<CreateProductCubit>().clearImages();
     context.read<CreateProductCubit>().onLoad(product: widget.product);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -197,7 +202,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _textTaxController.text = widget.product!.tax.toString();
       //_textInventoryController.text = widget.product!.inventory.toString();
       _textMinCountController.text = widget.product!.minCount.toString();
-      _textBarcodeController.text = widget.product!.barcode ?? ''; //TODO remove null check
+      _textBarcodeController.text =
+          widget.product!.barcode ?? ''; //TODO remove null check
     }
   }
 
@@ -217,7 +223,9 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             minCount: int.parse(_textMinCountController.text),
             categoryId: selectedCategory!.id,
             subCategoryId: selectedSubCategory!.id,
-            barcode: _textBarcodeController.text);
+            barcode: _textBarcodeController.text,
+            image: context.read<CreateProductCubit>().selectedImage,
+            isImageChanged: context.read<CreateProductCubit>().isImageChanged);
       } else {
         success = await ContainerRepository.editProduct(
             cityId: widget.product!.cityId,
@@ -233,7 +241,9 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             minCount: int.parse(_textMinCountController.text),
             isActive: isActive,
             localProduct: widget.product!,
-            barcode: _textBarcodeController.text);
+            barcode: _textBarcodeController.text,
+            image: context.read<CreateProductCubit>().selectedImage,
+            isImageChanged: context.read<CreateProductCubit>().isImageChanged);
       }
 
       if (success) {
@@ -270,7 +280,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
 
     if (_textBarcodeController.text.length < 12) {
       _errorBarcode = 'barcode_required';
-    } else if (!ContainerRepository.isValidBarcode(_textBarcodeController.text)) {
+    } else if (!ContainerRepository.isValidBarcode(
+        _textBarcodeController.text)) {
       _errorBarcode = 'value_not_barcode';
     } else {
       _errorBarcode = null;
@@ -349,238 +360,182 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(
-        parent: AlwaysScrollableScrollPhysics(),
-      ),
-      slivers: <Widget>[
-        if (widget.product == null)
-          SliverPersistentHeader(
-            delegate: AppBarHomeSliver(
-                cityTitlesList: cityTitles,
-                hintText: Translate.of(context).translate('hselect_location'),
-                selectedOption: (selectedCityId != 0)
-                    ? selectedCityTitle
-                    : Translate.of(context).translate('hselect_location'),
-                expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                banners: Images.slider,
-                setLocationCallback: (data) async {
-                  for (final city in widget.cities) {
-                    if (city.title == data) {
-                      setState(() {
-                        selectedCityTitle = data;
-                        selectedCityId = city.id;
-                      });
-                      context.read<CreateProductCubit>().onLoad(
-                          cityId: city.id,
-                          storeId: selectedStore?.id,
-                          categoryId: selectedCategory?.id);
-                    }
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+              const SizedBox(
+                height: 16,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: SizedBox(
+                  height: 180,
+                  child: AppUploadImage(
+                    title:
+                        Translate.of(context).translate('upload_feature_image'),
+                    image:
+                        context.read<CreateProductCubit>().selectedImage?.path,
+                    profile: false,
+                    forumGroup: false,
+                    allowPdf: false,
+                    imageLimit: 1,
+                    onDelete: () {
+                      if (context.read<CreateProductCubit>().selectedImage !=
+                          null) {
+                        setState(() {
+                          // downloadedImages.removeAt(0);
+                          context.read<CreateProductCubit>().selectedImage =
+                              null;
+                          context.read<CreateProductCubit>().isImageChanged =
+                              true;
+                        });
+                      }
+                    },
+                    onChange: (result) {
+                      if (result.isNotEmpty) {
+                        setState(() {
+                          context.read<CreateProductCubit>().selectedImage =
+                              null;
+                          if (context
+                                      .read<CreateProductCubit>()
+                                      .downloadedImage !=
+                                  null &&
+                              context
+                                  .read<CreateProductCubit>()
+                                  .downloadedImage!
+                                  .path
+                                  .contains('Defaultimage')) {
+                            context.read<CreateProductCubit>().selectedImage =
+                                context
+                                    .read<CreateProductCubit>()
+                                    .downloadedImage;
+                          }
+                          if (result.isNotEmpty) {
+                            context.read<CreateProductCubit>().selectedImage =
+                                result.first;
+                          }
+                        });
+                      } else {
+                        setState(() {
+                          context.read<CreateProductCubit>().selectedImage =
+                              null;
+                        });
+                      }
+                      context.read<CreateProductCubit>().isImageChanged = true;
+                    },
+                  ),
+                ),
+              ),
+            const SizedBox(
+              height: 16,
+            ),
+            CitiesDropDown(
+              setLocationCallback: (data) async {
+                for (final city in widget.cities) {
+                  if (city.title == data) {
+                    setState(() {
+                      selectedCityTitle = data;
+                      selectedCityId = city.id;
+                    });
+                    context.read<CreateProductCubit>().onLoad(
+                        cityId: city.id,
+                        storeId: selectedStore?.id,
+                        categoryId: selectedCategory?.id);
                   }
-                }),
-            pinned: true,
-          ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            SafeArea(
-              top: false,
-              bottom: false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24),
-                child: Column(
-                  children: <Widget>[
-                    if (widget.product == null)
-                      TypeAheadField<StoreModel>(
-                        builder: (context, controller, focusNode) {
-                          return AppTextInput(
-                            controller: controller,
-                            focusNode: focusNode,
-                            autofocus: true,
-                            hintText:
-                                Translate.of(context).translate('city_stores'),
-                          );
-                        },
-                        itemBuilder: (context, store) {
-                          return ListTile(
-                            title: Text(store.name),
-                            subtitle: Text(
-                              store.description,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium
-                                  ?.copyWith(overflow: TextOverflow.ellipsis),
-                            ),
-                          );
-                        },
-                        onSelected: (store) {
-                          setState(() {
-                            selectedStore = store;
-                          });
-                          context.read<CreateProductCubit>().onLoad(
-                              cityId: selectedCityId,
-                              storeId: selectedStore?.id,
-                              categoryId: selectedCategory?.id,
-                              selectedStore: store);
-                        },
-                        suggestionsCallback: (String search) {
-                          final result = widget.stores.where((element) {
-                            return formattedSearchString(element.name)
-                                    .contains(formattedSearchString(search)) ||
-                                formattedSearchString(element.description)
-                                    .contains(formattedSearchString(search));
-                          }).toList();
-                          return result;
-                        },
-                      ),
-                    const SizedBox(height: 16),
-                    if (selectedStore != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20),
-                              color: Theme.of(context)
-                                  .appBarTheme
-                                  .backgroundColor),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                selectedStore!.name,
-                                style: (widget.product == null)
-                                    ? Theme.of(context).textTheme.titleSmall!
-                                    : Theme.of(context).textTheme.titleMedium!,
-                              ),
-                              if (widget.product == null)
-                                IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        selectedStore = null;
-                                      });
-                                    },
-                                    icon: const Icon(Icons.close))
-                            ],
+                }
+              },
+              cityTitlesList: cityTitles,
+              hintText: Translate.of(context).translate('hselect_location'),
+              selectedOption: (selectedCityId != 0)
+                  ? selectedCityTitle
+                  : Translate.of(context).translate('hselect_location'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24),
+              child: Column(
+                children: <Widget>[
+                  if (widget.product == null)
+                    TypeAheadField<StoreModel>(
+                      builder: (context, controller, focusNode) {
+                        return AppTextInput(
+                          controller: controller,
+                          focusNode: focusNode,
+                          autofocus: false,
+                          hintText:
+                              Translate.of(context).translate('city_stores'),
+                        );
+                      },
+                      itemBuilder: (context, store) {
+                        return ListTile(
+                          title: Text(store.name),
+                          subtitle: Text(
+                            store.description,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium
+                                ?.copyWith(overflow: TextOverflow.ellipsis),
                           ),
+                        );
+                      },
+                      onSelected: (store) {
+                        setState(() {
+                          selectedStore = store;
+                        });
+                        context.read<CreateProductCubit>().onLoad(
+                            cityId: selectedCityId,
+                            storeId: selectedStore?.id,
+                            categoryId: selectedCategory?.id,
+                            selectedStore: store);
+                      },
+                      suggestionsCallback: (String search) {
+                        final result = widget.stores.where((element) {
+                          return formattedSearchString(element.name)
+                                  .contains(formattedSearchString(search)) ||
+                              formattedSearchString(element.description)
+                                  .contains(formattedSearchString(search));
+                        }).toList();
+                        return result;
+                      },
+                    ),
+                  const SizedBox(height: 16),
+                  if (selectedStore != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color:
+                                Theme.of(context).appBarTheme.backgroundColor),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          children: [
+                            Text(
+                              selectedStore!.name,
+                              style: (widget.product == null)
+                                  ? Theme.of(context).textTheme.titleSmall!
+                                  : Theme.of(context).textTheme.titleMedium!,
+                            ),
+                            if (widget.product == null)
+                              IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      selectedStore = null;
+                                    });
+                                  },
+                                  icon: const Icon(Icons.close))
+                          ],
                         ),
                       ),
-                    if (selectedStore != null) const SizedBox(height: 32),
-                    if (selectedStore != null)
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                text:
-                                    Translate.of(context).translate('category'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                                children: const <TextSpan>[
-                                  TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ]),
-                    if (selectedStore != null)
-                      widget.categories.isEmpty
-                          ? const LinearProgressIndicator()
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                DropdownButton(
-                                  isExpanded: false,
-                                  menuMaxHeight: 200,
-                                  hint: Text(Translate.of(context)
-                                      .translate('input_category')),
-                                  value: selectedCategory,
-                                  items: widget.categories.map((category) {
-                                    return DropdownMenuItem(
-                                        value: category,
-                                        child: Text(category.title));
-                                  }).toList(),
-                                  onChanged: (value) {
-                                    setState(() {
-                                      selectedCategory = value;
-                                    });
-                                    context.read<CreateProductCubit>().onLoad(
-                                        cityId: selectedCityId,
-                                        storeId: selectedStore?.id,
-                                        selectedStore: selectedStore,
-                                        categoryId: selectedCategory?.id,
-                                        selectedCategory: selectedCategory);
-                                  },
-                                ),
-                              ],
-                            ),
-                    const SizedBox(height: 16),
-                    if ((widget.subCategories ?? []).isNotEmpty)
-                      Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text.rich(
-                              TextSpan(
-                                text: Translate.of(context)
-                                    .translate('subCategory'),
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
-                                children: const <TextSpan>[
-                                  TextSpan(
-                                    text: ' *',
-                                    style: TextStyle(
-                                      color: Colors.red,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ]),
-                    if ((widget.subCategories ?? []).isNotEmpty)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          DropdownButton(
-                            isExpanded: false,
-                            menuMaxHeight: 200,
-                            hint: Text(
-                                Translate.of(context).translate('subCategory')),
-                            value: selectedSubCategory,
-                            items: widget.subCategories!.map((subCategory) {
-                              return DropdownMenuItem(
-                                  value: subCategory,
-                                  child: Text(subCategory.title));
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedSubCategory = value;
-                              });
-                              context.read<CreateProductCubit>().onLoad(
-                                  cityId: selectedCityId,
-                                  storeId: selectedStore?.id,
-                                  selectedStore: selectedStore,
-                                  categoryId: selectedCategory?.id,
-                                  selectedCategory: selectedCategory,
-                                  selectedSubCategory: selectedSubCategory);
-                            },
-                          ),
-                        ],
-                      ),
-                    const SizedBox(height: 16),
+                    ),
+                  if (selectedStore != null) const SizedBox(height: 32),
+                  if (selectedStore != null)
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text.rich(
                             TextSpan(
-                              text: Translate.of(context).translate('title'),
+                              text: Translate.of(context).translate('category'),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -597,25 +552,46 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                             ),
                           ),
                         ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('title'),
-                      controller: _textTitleController,
-                      errorText: _errorTitle,
-                      focusNode: _focusTitle,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusTitle, _focusDescription);
-                      },
-                    ),
-                    const SizedBox(height: 16),
+                  if (selectedStore != null)
+                    widget.categories.isEmpty
+                        ? const LinearProgressIndicator()
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              DropdownButton(
+                                isExpanded: false,
+                                menuMaxHeight: 200,
+                                hint: Text(Translate.of(context)
+                                    .translate('input_category')),
+                                value: selectedCategory,
+                                items: widget.categories.map((category) {
+                                  return DropdownMenuItem(
+                                      value: category,
+                                      child: Text(category.title));
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectedCategory = value;
+                                  });
+                                  context.read<CreateProductCubit>().onLoad(
+                                      cityId: selectedCityId,
+                                      storeId: selectedStore?.id,
+                                      selectedStore: selectedStore,
+                                      categoryId: selectedCategory?.id,
+                                      selectedCategory: selectedCategory);
+                                },
+                              ),
+                            ],
+                          ),
+                  const SizedBox(height: 16),
+                  if ((widget.subCategories ?? []).isNotEmpty)
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text.rich(
                             TextSpan(
                               text: Translate.of(context)
-                                  .translate('description'),
+                                  .translate('subCategory'),
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium!
@@ -632,228 +608,311 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                             ),
                           ),
                         ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('description'),
-                      maxLines: 6,
-                      maxLength: 1000,
-                      errorText: _errorDescription,
-                      controller: _textDescriptionController,
-                      focusNode: _focusDescription,
-                      textInputAction: TextInputAction.next,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusDescription, _focusBarcode);
-                      },
-                    ),
-                    const SizedBox(height: 16),
+                  if ((widget.subCategories ?? []).isNotEmpty)
                     Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text: Translate.of(context).translate('barcode'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        DropdownButton(
+                          isExpanded: false,
+                          menuMaxHeight: 200,
+                          hint: Text(
+                              Translate.of(context).translate('subCategory')),
+                          value: selectedSubCategory,
+                          items: widget.subCategories!.map((subCategory) {
+                            return DropdownMenuItem(
+                                value: subCategory,
+                                child: Text(subCategory.title));
+                          }).toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedSubCategory = value;
+                            });
+                            context.read<CreateProductCubit>().onLoad(
+                                cityId: selectedCityId,
+                                storeId: selectedStore?.id,
+                                selectedStore: selectedStore,
+                                categoryId: selectedCategory?.id,
+                                selectedCategory: selectedCategory,
+                                selectedSubCategory: selectedSubCategory);
+                          },
+                        ),
+                      ],
+                    ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('title'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ]),
-                    AppTextInput(
-                      hintText:
-                          Translate.of(context).translate('enter_barcode'),
-                      maxLines: 1,
-                      maxLength: 13,
-                      errorText: _errorBarcode,
-                      controller: _textBarcodeController,
-                      focusNode: _focusBarcode,
-                      hasDelete: false,
-                      trailing: IconButton(
-                        icon: const Icon(Icons.document_scanner),
-                        onPressed: () {
-                          scanBarcode();
-                        },
-                      ),
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusBarcode, _focusPrice);
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text: Translate.of(context).translate('price'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('title'),
+                    controller: _textTitleController,
+                    errorText: _errorTitle,
+                    focusNode: _focusTitle,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                          context, _focusTitle, _focusDescription);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text:
+                                Translate.of(context).translate('description'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('price'),
-                      maxLines: 1,
-                      maxLength: 100,
-                      errorText: _errorPrice,
-                      controller: _textPriceController,
-                      focusNode: _focusPrice,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(context, _focusPrice, _focusTax);
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text: Translate.of(context).translate('tax'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('description'),
+                    maxLines: 6,
+                    maxLength: 1000,
+                    errorText: _errorDescription,
+                    controller: _textDescriptionController,
+                    focusNode: _focusDescription,
+                    textInputAction: TextInputAction.next,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                          context, _focusDescription, _focusBarcode);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('barcode'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('tax'),
-                      maxLines: 1,
-                      maxLength: 10,
-                      errorText: _errorTax,
-                      controller: _textTaxController,
-                      focusNode: _focusTax,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusTax, _focusInventory);
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('enter_barcode'),
+                    maxLines: 1,
+                    maxLength: 13,
+                    errorText: _errorBarcode,
+                    controller: _textBarcodeController,
+                    focusNode: _focusBarcode,
+                    hasDelete: false,
+                    trailing: IconButton(
+                      icon: const Icon(Icons.document_scanner),
+                      onPressed: () {
+                        scanBarcode();
                       },
                     ),
-                    const SizedBox(height: 16),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text:
-                                  Translate.of(context).translate('inventory'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                        ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate(
-                          (widget.product == null)
-                              ? 'inventory'
-                              : 'add_inventory'),
-                      maxLines: 1,
-                      maxLength: 10,
-                      errorText: _errorInventory,
-                      controller: _textInventoryController,
-                      focusNode: _focusInventory,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                      onSubmitted: (text) {
-                        Utils.fieldFocusChange(
-                            context, _focusInventory, _focusMinCount);
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              text:
-                                  Translate.of(context).translate('min_count'),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
-                              children: const <TextSpan>[
-                                TextSpan(
-                                  text: ' *',
-                                  style: TextStyle(
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                          context, _focusBarcode, _focusPrice);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('price'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
                                 ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ]),
-                    AppTextInput(
-                      hintText: Translate.of(context).translate('min_count'),
-                      maxLines: 1,
-                      maxLength: 10,
-                      errorText: _errorMinCount,
-                      controller: _textMinCountController,
-                      focusNode: _focusMinCount,
-                      textInputAction: TextInputAction.next,
-                      keyboardType: TextInputType.number,
-                    ),
-                    const SizedBox(height: 16),
-                    if (widget.product != null)
-                      CheckboxListTile(
-                          value: isActive,
-                          title:
-                              Text(Translate.of(context).translate('active')),
-                          onChanged: (newValue) {
-                            if (newValue != null) {
-                              setState(() {
-                                isActive = newValue;
-                              });
-                            }
-                          }),
-                    if (widget.product != null) const SizedBox(height: 16),
-                    AppButton(Translate.of(context).translate('submit'),
-                        onPressed: () {
-                      _onSubmit();
-                    })
-                  ],
-                ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('price'),
+                    maxLines: 1,
+                    maxLength: 100,
+                    errorText: _errorPrice,
+                    controller: _textPriceController,
+                    focusNode: _focusPrice,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(context, _focusPrice, _focusTax);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('tax'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('tax'),
+                    maxLines: 1,
+                    maxLength: 10,
+                    errorText: _errorTax,
+                    controller: _textTaxController,
+                    focusNode: _focusTax,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                          context, _focusTax, _focusInventory);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('inventory'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate(
+                        (widget.product == null)
+                            ? 'inventory'
+                            : 'add_inventory'),
+                    maxLines: 1,
+                    maxLength: 10,
+                    errorText: _errorInventory,
+                    controller: _textInventoryController,
+                    focusNode: _focusInventory,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                    onSubmitted: (text) {
+                      Utils.fieldFocusChange(
+                          context, _focusInventory, _focusMinCount);
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            text: Translate.of(context).translate('min_count'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                            children: const <TextSpan>[
+                              TextSpan(
+                                text: ' *',
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
+                  AppTextInput(
+                    hintText: Translate.of(context).translate('min_count'),
+                    maxLines: 1,
+                    maxLength: 10,
+                    errorText: _errorMinCount,
+                    controller: _textMinCountController,
+                    focusNode: _focusMinCount,
+                    textInputAction: TextInputAction.next,
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(height: 16),
+                  if (widget.product != null)
+                    CheckboxListTile(
+                        value: isActive,
+                        title: Text(Translate.of(context).translate('active')),
+                        onChanged: (newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              isActive = newValue;
+                            });
+                          }
+                        }),
+                  if (widget.product != null) const SizedBox(height: 16),
+                  AppButton(Translate.of(context).translate('submit'),
+                      onPressed: () {
+                    _onSubmit();
+                  })
+                ],
               ),
-            )
-          ]),
-        )
-      ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 

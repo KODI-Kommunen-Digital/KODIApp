@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
@@ -34,6 +35,10 @@ class SellerCubit extends Cubit<SellerState> {
               cityId: store!.cityId, storeId: store!.id, pageNo: 1);
         }
 
+        final List<ProductRequestModel>? productRequests =
+            await ContainerRepository.getStoreProductRequests(
+                cityId: store!.cityId, storeId: store!.id, pageNo: 1);
+
         final categories = await ContainerRepository.loadStoreCategories(
             store!.cityId, store!.id);
 
@@ -48,10 +53,10 @@ class SellerCubit extends Cubit<SellerState> {
             }
           }
         }
-        emit(SellerState.loadedProducts(
-            products ?? [], categories ?? [], subCategories, stores, store));
+        emit(SellerState.loadedProducts(products ?? [], productRequests ?? [],
+            categories ?? [], subCategories, stores, store));
       } else {
-        emit(SellerState.loadedProducts(null, null, null, stores, store));
+        emit(SellerState.loadedProducts(null, null, null, null, stores, store));
       }
     } else {
       final List<SellerOrderModel>? soldOrders =
@@ -82,5 +87,11 @@ class SellerCubit extends Cubit<SellerState> {
       }
     }
     return [];
+  }
+
+  Future<List<ProductRequestModel>> newRequests(int pageNo) async {
+    final newRequests = await ContainerRepository.getStoreProductRequests(
+        cityId: store!.cityId, storeId: store!.id, pageNo: pageNo, status: 0);
+    return newRequests ?? [];
   }
 }

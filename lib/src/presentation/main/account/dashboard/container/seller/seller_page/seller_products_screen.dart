@@ -7,10 +7,12 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
+import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 
 import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -39,16 +41,17 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
           loading: () => const SellerProductsLoading(),
-          loadedProducts:
-              (products, categories, subCategories, stores, selectedStore) =>
-                  SellerProductsLoaded(
-                    products: products ?? [],
-                    categories: categories ?? [],
-                    subCategories: subCategories ?? [],
-                    stores: stores,
-                    selectedStore: selectedStore,
-                    user: widget.user,
-                  ),
+          loadedProducts: (products, productRequests, categories, subCategories,
+                  stores, selectedStore) =>
+              SellerProductsLoaded(
+                products: products ?? [],
+                productRequests: productRequests ?? [],
+                categories: categories ?? [],
+                subCategories: subCategories ?? [],
+                stores: stores,
+                selectedStore: selectedStore,
+                user: widget.user,
+              ),
           orElse: () => ErrorWidget("Failed to load listings.")),
     );
   }
@@ -56,6 +59,7 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
 
 class SellerProductsLoaded extends StatefulWidget {
   final List<ContainerProductModel> products;
+  final List<ProductRequestModel> productRequests;
   final UserModel user;
   final List<CategoryModel> categories;
   final List<CategoryModel> subCategories;
@@ -65,6 +69,7 @@ class SellerProductsLoaded extends StatefulWidget {
   const SellerProductsLoaded(
       {super.key,
       required this.products,
+      required this.productRequests,
       required this.user,
       required this.categories,
       required this.subCategories,
@@ -92,7 +97,9 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
       selectedStore = widget.selectedStore!.id;
     }
     filter = MultiFilter(
-        hasContainerSellerFilter: true, isContainerProductsBySeller: context.read<SellerCubit>().loadMyProducts ?? false);
+        hasContainerSellerFilter: true,
+        isContainerProductsBySeller:
+            context.read<SellerCubit>().loadMyProducts ?? false);
     context.read<SellerCubit>().loadMyProducts = false;
   }
 
@@ -127,15 +134,23 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         title: Text(Translate.of(context).translate('products')),
         centerTitle: true,
         actions: [
+          AppButton(
+            Translate.of(context).translate('requests'),
+            onPressed: () {
+              updateRequest();
+            },
+            type: ButtonType.text,
+          ),
           AppFilterButton(
               multiFilter: filter,
               filterCallBack: (newFilter) {
                 setState(() {
                   filter = newFilter;
                 });
-                context.read<SellerCubit>().loadMyProducts = filter.isContainerProductsBySeller;
+                context.read<SellerCubit>().loadMyProducts =
+                    filter.isContainerProductsBySeller;
                 context.read<SellerCubit>().onLoad(false, true);
-              })
+              }),
         ],
       ),
       body: Padding(
@@ -412,6 +427,12 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
   void updateProduct(ContainerProductModel item) async {
     await Navigator.pushNamed(context, Routes.createProductScreen,
         arguments: {'product': item, 'sellerId': widget.user.id});
+    context.read<SellerCubit>().onLoad(false, true);
+  }
+
+  void updateRequest() async {
+    await Navigator.pushNamed(context, Routes.productRequestScreen,
+        arguments: {"requests": widget.productRequests, "isOwner": false});
     context.read<SellerCubit>().onLoad(false, true);
   }
 
