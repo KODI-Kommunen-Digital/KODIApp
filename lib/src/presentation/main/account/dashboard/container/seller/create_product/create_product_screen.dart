@@ -364,95 +364,92 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-              const SizedBox(
-                height: 16,
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: SizedBox(
-                  height: 180,
-                  child: AppUploadImage(
-                    title:
-                        Translate.of(context).translate('upload_feature_image'),
-                    image:
-                        context.read<CreateProductCubit>().selectedImage?.path,
-                    profile: false,
-                    forumGroup: false,
-                    allowPdf: false,
-                    imageLimit: 1,
-                    onDelete: () {
-                      if (context.read<CreateProductCubit>().selectedImage !=
-                          null) {
-                        setState(() {
-                          // downloadedImages.removeAt(0);
-                          context.read<CreateProductCubit>().selectedImage =
-                              null;
-                          context.read<CreateProductCubit>().isImageChanged =
-                              true;
-                        });
-                      }
-                    },
-                    onChange: (result) {
-                      if (result.isNotEmpty) {
-                        setState(() {
-                          context.read<CreateProductCubit>().selectedImage =
-                              null;
-                          if (context
-                                      .read<CreateProductCubit>()
-                                      .downloadedImage !=
-                                  null &&
-                              context
-                                  .read<CreateProductCubit>()
-                                  .downloadedImage!
-                                  .path
-                                  .contains('Defaultimage')) {
-                            context.read<CreateProductCubit>().selectedImage =
-                                context
-                                    .read<CreateProductCubit>()
-                                    .downloadedImage;
-                          }
-                          if (result.isNotEmpty) {
-                            context.read<CreateProductCubit>().selectedImage =
-                                result.first;
-                          }
-                        });
-                      } else {
-                        setState(() {
-                          context.read<CreateProductCubit>().selectedImage =
-                              null;
-                        });
-                      }
-                      context.read<CreateProductCubit>().isImageChanged = true;
-                    },
-                  ),
-                ),
-              ),
-            if(widget.product == null)
             const SizedBox(
               height: 16,
             ),
-            if(widget.product == null)
-            CitiesDropDown(
-              setLocationCallback: (data) async {
-                for (final city in widget.cities) {
-                  if (city.title == data) {
-                    setState(() {
-                      selectedCityTitle = data;
-                      selectedCityId = city.id;
-                    });
-                    context.read<CreateProductCubit>().onLoad(
-                        cityId: city.id,
-                        storeId: selectedStore?.id,
-                        categoryId: selectedCategory?.id,);
-                  }
-                }
-              },
-              cityTitlesList: cityTitles,
-              hintText: Translate.of(context).translate('hselect_location'),
-              selectedOption: (selectedCityId != 0)
-                  ? selectedCityTitle
-                  : Translate.of(context).translate('hselect_location'),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: SizedBox(
+                height: 180,
+                child: AppUploadImage(
+                  title:
+                      Translate.of(context).translate('upload_feature_image'),
+                  image: context.read<CreateProductCubit>().selectedImage?.path,
+                  profile: false,
+                  forumGroup: false,
+                  allowPdf: false,
+                  imageLimit: 1,
+                  onDelete: () {
+                    if (context.read<CreateProductCubit>().selectedImage !=
+                        null) {
+                      setState(() {
+                        // downloadedImages.removeAt(0);
+                        context.read<CreateProductCubit>().selectedImage = null;
+                        context.read<CreateProductCubit>().isImageChanged =
+                            true;
+                      });
+                    }
+                  },
+                  onChange: (result) {
+                    if (result.isNotEmpty) {
+                      setState(() {
+                        context.read<CreateProductCubit>().selectedImage = null;
+                        if (context
+                                    .read<CreateProductCubit>()
+                                    .downloadedImage !=
+                                null &&
+                            context
+                                .read<CreateProductCubit>()
+                                .downloadedImage!
+                                .path
+                                .contains('Defaultimage')) {
+                          context.read<CreateProductCubit>().selectedImage =
+                              context
+                                  .read<CreateProductCubit>()
+                                  .downloadedImage;
+                        }
+                        if (result.isNotEmpty) {
+                          context.read<CreateProductCubit>().selectedImage =
+                              result.first;
+                        }
+                      });
+                    } else {
+                      setState(() {
+                        context.read<CreateProductCubit>().selectedImage = null;
+                      });
+                    }
+                    context.read<CreateProductCubit>().isImageChanged = true;
+                  },
+                ),
+              ),
             ),
+            if (widget.product == null)
+              const SizedBox(
+                height: 16,
+              ),
+            if (widget.product == null)
+              CitiesDropDown(
+                setLocationCallback: (data) async {
+                  for (final city in widget.cities) {
+                    if (city.title == data) {
+                      setState(() {
+                        selectedCityTitle = data;
+                        selectedCityId = city.id;
+                      });
+                      context.read<CreateProductCubit>().onLoad(
+                            cityId: city.id,
+                            storeId: selectedStore?.id,
+                            categoryId: selectedCategory?.id,
+                          );
+                    }
+                  }
+                },
+                cityTitlesList: cityTitles,
+                hintText: Translate.of(context).translate('hselect_location'),
+                selectedOption: (selectedCityId != 0)
+                    ? selectedCityTitle
+                    : Translate.of(context).translate('hselect_location'),
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Column(
@@ -561,28 +558,33 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               DropdownButton(
-                                isExpanded: false,
-                                menuMaxHeight: 200,
-                                hint: Text(Translate.of(context)
-                                    .translate('input_category')),
-                                value: selectedCategory,
-                                items: widget.categories.map((category) {
-                                  return DropdownMenuItem(
-                                      value: category,
-                                      child: Text(category.title));
-                                }).toList(),
-                                onChanged: (value) {
-                                  setState(() {
-                                    selectedCategory = value;
-                                  });
-                                  context.read<CreateProductCubit>().onLoad(
-                                      cityId: selectedCityId,
-                                      storeId: selectedStore?.id,
-                                      selectedStore: selectedStore,
-                                      categoryId: selectedCategory?.id,
-                                      selectedCategory: selectedCategory);
-                                },
-                              ),
+                                  isExpanded: false,
+                                  menuMaxHeight: 200,
+                                  hint: Text(Translate.of(context)
+                                      .translate('input_category')),
+                                  value: selectedCategory,
+                                  items: widget.categories.map((category) {
+                                    return DropdownMenuItem(
+                                        value: category,
+                                        child: Text(category.title));
+                                  }).toList(),
+                                  onChanged: (widget.product == null)
+                                      ? (CategoryModel? value) {
+                                          setState(() {
+                                            selectedCategory = value;
+                                          });
+                                          context
+                                              .read<CreateProductCubit>()
+                                              .onLoad(
+                                                  cityId: selectedCityId,
+                                                  storeId: selectedStore?.id,
+                                                  selectedStore: selectedStore,
+                                                  categoryId:
+                                                      selectedCategory?.id,
+                                                  selectedCategory:
+                                                      selectedCategory);
+                                        }
+                                      : null),
                             ],
                           ),
                   const SizedBox(height: 16),
@@ -615,29 +617,23 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         DropdownButton(
-                          isExpanded: false,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('subCategory')),
-                          value: selectedSubCategory,
-                          items: widget.subCategories!.map((subCategory) {
-                            return DropdownMenuItem(
-                                value: subCategory,
-                                child: Text(subCategory.title));
-                          }).toList(),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedSubCategory = value;
-                            });
-                            context.read<CreateProductCubit>().onLoad(
-                                cityId: selectedCityId,
-                                storeId: selectedStore?.id,
-                                selectedStore: selectedStore,
-                                categoryId: selectedCategory?.id,
-                                selectedCategory: selectedCategory,
-                                selectedSubCategory: selectedSubCategory);
-                          },
-                        ),
+                            isExpanded: false,
+                            menuMaxHeight: 200,
+                            hint: Text(
+                                Translate.of(context).translate('subCategory')),
+                            value: selectedSubCategory,
+                            items: widget.subCategories!.map((subCategory) {
+                              return DropdownMenuItem(
+                                  value: subCategory,
+                                  child: Text(subCategory.title));
+                            }).toList(),
+                            onChanged: (widget.product == null)
+                                ? (CategoryModel? value) {
+                                    setState(() {
+                                      selectedSubCategory = value;
+                                    });
+                                  }
+                                : null),
                       ],
                     ),
                   const SizedBox(height: 16),
