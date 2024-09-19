@@ -427,9 +427,11 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                   ),
                 ),
               ),
+            if(widget.product == null)
             const SizedBox(
               height: 16,
             ),
+            if(widget.product == null)
             CitiesDropDown(
               setLocationCallback: (data) async {
                 for (final city in widget.cities) {
@@ -441,7 +443,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                     context.read<CreateProductCubit>().onLoad(
                         cityId: city.id,
                         storeId: selectedStore?.id,
-                        categoryId: selectedCategory?.id);
+                        categoryId: selectedCategory?.id,);
                   }
                 }
               },
