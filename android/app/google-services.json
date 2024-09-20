@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "241988975776",
-    "project_id": "geseke-app-df8ca",
-    "storage_bucket": "geseke-app-df8ca.appspot.com"
+    "project_number": "339509071249",
+    "project_id": "salzkotten-app",
+    "storage_bucket": "salzkotten-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241988975776:android:a3d635e126c5c193b19dc5",
+        "mobilesdk_app_id": "1:339509071249:android:6b4311f35fbc3b0cec1e30",
         "android_client_info": {
-          "package_name": "com.geseketest"
+          "package_name": "com.salzkottenapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA"
+          "current_key": "AIzaSyClNtoLzwVtiz8S_AWSnv2HYGHOB7mb8rs"
         }
       ],
       "services": {

@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyBt91UklC0sCKh6tfNXfXd6DF45SOguCY4</string>
+	<string>AIzaSyCaepuiM7VP7n8t_kk4oL_Ve2vEVY0k-YM</string>
 	<key>GCM_SENDER_ID</key>
-	<string>241988975776</string>
+	<string>339509071249</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>salzkottenapp</string>
+	<string>Salzkotten-App</string>
 	<key>PROJECT_ID</key>
-	<string>geseke-app-df8ca</string>
+	<string>salzkotten-app</string>
 	<key>STORAGE_BUCKET</key>
-	<string>geseke-app-df8ca.appspot.com</string>
+	<string>salzkotten-app.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:241988975776:ios:a8cccbffaf984429b19dc5</string>
+	<string>1:339509071249:ios:57fdeb0b37780af3ec1e30</string>
 </dict>
 </plist>
