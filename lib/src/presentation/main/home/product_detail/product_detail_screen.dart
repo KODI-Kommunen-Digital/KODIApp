@@ -50,13 +50,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
-    _loadAdData();
+    // _loadAdData();
   }
 
-  void _loadAdData() async {
-    _adData = await ProductDetailCubit.loadAdData(widget.item.cityId);
-    setState(() {});
-  }
+  // void _loadAdData() async {
+  //   _adData = await ProductDetailCubit.loadAdData(widget.item.cityId);
+  //   setState(() {});
+  // }
 
   @override
   void dispose() {
@@ -514,7 +514,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             height: carouselHeight,
                             viewportFraction: 1.0,
                             enlargeCenterPage: false,
-                            enableInfiniteScroll: product.imageLists!.length > 1,
+                            enableInfiniteScroll:
+                                product.imageLists!.length > 1,
                             onPageChanged: (index, reason) {
                               setState(() {
                                 currentImageIndex = index;
@@ -524,7 +525,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           items: product.imageLists?.map((imageUrl) {
                             return Builder(
                               builder: (BuildContext context) {
-                                String? imageUrlString = product.sourceId == 2 &&
+                                String? imageUrlString = product.sourceId ==
+                                            2 &&
                                         imageUrl.logo != null &&
                                         imageUrl.logo != 'admin/News.jpeg'
                                     ? imageUrl.logo
@@ -534,13 +536,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                             ? "${Application.picturesURL}${imageUrl.logo}"
                                             : imageUrl.logo)
                                         : imageUrl.logo != null &&
-                                                imageUrl.logo!.startsWith('admin')
+                                                imageUrl.logo!
+                                                    .startsWith('admin')
                                             ? "${Application.picturesURL}${imageUrl.logo}"
                                             : "${Application.picturesURL}${imageUrl.logo}";
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 5.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 5.0),
                                   decoration: const BoxDecoration(
                                     color: Colors.black,
                                   ),
@@ -585,8 +588,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 return Container(
                                   width: 10.0,
                                   height: 10.0,
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 2.0),
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 2.0),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: currentImageIndex == index
