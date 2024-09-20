@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA',
-    appId: '1:241988975776:android:a3d635e126c5c193b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
+    apiKey: 'AIzaSyClNtoLzwVtiz8S_AWSnv2HYGHOB7mb8rs',
+    appId: '1:339509071249:android:6b4311f35fbc3b0cec1e30',
+    messagingSenderId: '339509071249',
+    projectId: 'salzkotten-app',
+    storageBucket: 'salzkotten-app.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBt91UklC0sCKh6tfNXfXd6DF45SOguCY4',
-    appId: '1:241988975776:ios:a8cccbffaf984429b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'geseke-app-df8ca',
-    storageBucket: 'geseke-app-df8ca.appspot.com',
-    iosBundleId: 'salzkottenapp',
+    apiKey: 'AIzaSyCaepuiM7VP7n8t_kk4oL_Ve2vEVY0k-YM',
+    appId: '1:339509071249:ios:57fdeb0b37780af3ec1e30',
+    messagingSenderId: '339509071249',
+    projectId: 'salzkotten-app',
+    storageBucket: 'salzkotten-app.appspot.com',
+    iosBundleId: 'Salzkotten-App',
   );
+
 }

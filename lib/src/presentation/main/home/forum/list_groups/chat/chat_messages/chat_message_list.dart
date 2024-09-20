@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:intl/intl.dart';
@@ -16,7 +17,6 @@ class ChatMessageList extends StatefulWidget {
   });
 
   @override
-  // ignore: library_private_types_in_public_api
   _ChatMessageListState createState() => _ChatMessageListState();
 }
 
@@ -56,6 +56,13 @@ class _ChatMessageListState extends State<ChatMessageList> {
     final dateTime = DateTime.parse(dateStr).add(const Duration(hours: 2));
     return DateFormat('EEE, d. MMM yyyy, HH:mm \'Uhr\'', 'de_DE')
         .format(dateTime);
+  }
+
+  void _copyToClipboard(BuildContext context, String message) {
+    Clipboard.setData(ClipboardData(text: message));
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Nachricht in die Zwischenablage kopiert')),
+    );
   }
 
   @override
@@ -113,26 +120,31 @@ class _ChatMessageListState extends State<ChatMessageList> {
                                 ),
                               ),
                             ),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 14),
-                            constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width * 0.7,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isMe
-                                  ? const Color(0xFFe5634d)
-                                  : const Color(0xFF202123),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Text(
-                              message.message ?? 'No message',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w500,
-                                color: Colors.white,
+                          GestureDetector(
+                            onLongPress: () => _copyToClipboard(
+                                context, message.message ?? 'No message'),
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 14),
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7,
                               ),
-                              softWrap: true,
+                              decoration: BoxDecoration(
+                                color: isMe
+                                    ? const Color(0xFFe5634d)
+                                    : const Color(0xFF202123),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                message.message ?? 'No message',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white,
+                                ),
+                                softWrap: true,
+                              ),
                             ),
                           ),
                           Text(

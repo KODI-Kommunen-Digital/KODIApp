@@ -1,23 +1,21 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:encrypt/encrypt.dart' as encrypt;
 import 'package:fast_rsa/fast_rsa.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_chat_message.dart';
+import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_members.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
-import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/key_helper.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:loggy/loggy.dart';
 import 'package:intl/intl.dart';
-
+import 'package:loggy/loggy.dart';
 import 'group_details_state.dart';
 
 enum RemoveUser { error, removed, onlyAdmin, onlyUser }
@@ -34,7 +32,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     forumId = arguments.id ?? 1;
     isPrivate = false;
 
-    //     isPrivate = arguments.isPrivate == 1;
+    isPrivate = arguments.isPrivate == 1;
     onLoad(forumId);
   }
 
@@ -171,7 +169,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final prefs = await Preferences.openBox();
     int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final requestGroupMembersResponse =
-    await repo.getGroupMembers(forumId, cityId);
+        await repo.getGroupMembers(forumId, cityId);
     final groupMembersList = <GroupMembersModel>[];
 
     if (requestGroupMembersResponse?.data != null) {
@@ -263,8 +261,9 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
               data['message'], forumId, data['groupKeyVersion']);
         }
       } catch (e) {
-        decryptedMessage = "Decryption failed";
+        // decryptedMessage = "Decryption failed";
         logError('Failed to decrypt message ${data['id']}', e.toString());
+        continue;
       }
 
       processedMessages.add(
@@ -272,7 +271,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           username: user?.username ?? "Unknown",
           avatarUrl: user?.image ?? "admin/ProfilePicture.png",
           message:
-          decryptedMessage.isNotEmpty ? decryptedMessage : "No message",
+              decryptedMessage.isNotEmpty ? decryptedMessage : "No message",
         ),
       );
     }
@@ -298,7 +297,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     if (groupKeyData != null) {
       try {
         final decrypted =
-        KeyHelper.decryptMessage(encryptedMessage, groupKeyData);
+            KeyHelper.decryptMessage(encryptedMessage, groupKeyData);
         final decryptedJson = jsonDecode(decrypted);
         return decryptedJson['message'];
       } catch (e) {
@@ -308,7 +307,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
       await fetchUserGroupKeys(forumId);
 
       final latestGroupKeyVersion =
-      await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+          await KeyHelper.getStoredForumKeyVersion(forumId.toString());
       if (latestGroupKeyVersion != null) {
         groupKeyData = await KeyHelper.getForumKey(
           forumId: forumId.toString(),
@@ -318,7 +317,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         if (groupKeyData != null) {
           try {
             final decrypted =
-            KeyHelper.decryptMessage(encryptedMessage, groupKeyData);
+                KeyHelper.decryptMessage(encryptedMessage, groupKeyData);
             final decryptedJson = jsonDecode(decrypted);
             return decryptedJson['message'];
           } catch (e) {
@@ -364,7 +363,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
 
     // Fetching group members to map users
     final requestGroupMembersResponse =
-    await repo.getGroupMembers(forumId, cityId);
+        await repo.getGroupMembers(forumId, cityId);
     final groupMembersList = <GroupMembersModel>[];
 
     if (requestGroupMembersResponse?.data != null) {
@@ -395,7 +394,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
 
     if (response.data != null && (response.data as List).isNotEmpty) {
       final newMessages =
-      await Future.wait((response.data as List).map((messageData) async {
+          await Future.wait((response.data as List).map((messageData) async {
         final message = ChatMessageModel.fromJson(messageData);
         final user = userMap[message.senderId];
 
@@ -403,7 +402,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         if (isPrivate) {
           try {
             decryptedMessage =
-            await decryptPrivateMessage(messageData['message'], forumId);
+                await decryptPrivateMessage(messageData['message'], forumId);
           } catch (e) {
             logError('Decryption failed for message ${messageData['message']}',
                 e.toString());
@@ -432,13 +431,13 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
   Future<String> decryptPrivateMessage(
       String encryptedMessage, int forumId) async {
     final storedForumKeyVersion =
-    await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+        await KeyHelper.getStoredForumKeyVersion(forumId.toString());
     if (storedForumKeyVersion == null) {
       await fetchUserGroupKeys(forumId);
     }
 
     final updatedForumKeyVersion =
-    await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+        await KeyHelper.getStoredForumKeyVersion(forumId.toString());
     if (updatedForumKeyVersion == null) {
       throw Exception('No forum key version found');
     }
@@ -507,7 +506,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         }),
         latestGroupKey);
     final groupKeyVersion =
-    await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+        await KeyHelper.getStoredForumKeyVersion(forumId.toString());
     final request = jsonEncode({
       'message': encryptedMessage,
       'groupKeyVersion': groupKeyVersion,
@@ -530,7 +529,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
               }),
               latestGroupKey);
           final groupKeyVersion =
-          await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+              await KeyHelper.getStoredForumKeyVersion(forumId.toString());
           final retryRequest = jsonEncode({
             'message': encryptedMessage,
             'groupKeyVersion': groupKeyVersion,
@@ -546,7 +545,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                   content:
-                  Text('Failed to send message: ${retryResponse.message}')),
+                      Text('Failed to send message: ${retryResponse.message}')),
             );
           }
         } else {
@@ -569,7 +568,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
   Future<String?> _getLatestGroupKey(int forumId) async {
     String? latestGroupKey;
     final storedForumKeyVersion =
-    await KeyHelper.getStoredForumKeyVersion(forumId.toString());
+        await KeyHelper.getStoredForumKeyVersion(forumId.toString());
 
     if (storedForumKeyVersion != null) {
       latestGroupKey = await KeyHelper.getForumKey(
@@ -584,7 +583,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     final iv = encrypt.IV.fromSecureRandom(16);
     final key = encrypt.Key(base64Decode(groupKey));
     final encrypter =
-    encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
+        encrypt.Encrypter(encrypt.AES(key, mode: encrypt.AESMode.cbc));
 
     final encrypted = encrypter.encrypt(message, iv: iv);
     return "${iv.base64}:${encrypted.base64}";

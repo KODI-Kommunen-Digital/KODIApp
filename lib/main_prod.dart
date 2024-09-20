@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
@@ -22,7 +25,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:upgrader/upgrader.dart';
 
-
 Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
@@ -40,13 +42,12 @@ Future<void> main() async {
   final prefBox = await Preferences.openBox();
 
   await Upgrader.clearSavedSettings();
-  /*
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseApi(globalNavKey, prefBox).initNotifications();*/
-  //TODO enable once linked to Firebase app
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
   runApp(HeidiApp(prefBox));
 
