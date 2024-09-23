@@ -1022,7 +1022,7 @@ class Api {
     var filePath = '/cities/$cityId/store/$storeId/imageUpload/$productId';
 
     if (pickedFile?.files.length != 0) {
-      final result = await HTTPManager(apiType: '').post(
+      final result = await HTTPManager(apiType: 'container').post(
         url: filePath,
         formData: pickedFile,
       );
