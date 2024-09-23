@@ -245,7 +245,7 @@ class AppCategory extends StatelessWidget {
         }
 
         return SizedBox(
-          width: 120,
+          width: 130,
           child: GestureDetector(
             onTap: onPressed,
             child: Card(
@@ -266,7 +266,7 @@ class AppCategory extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                         colorFilter: ColorFilter.mode(
                             Colors.black.withOpacity(0.3), BlendMode.darken),
                       ),

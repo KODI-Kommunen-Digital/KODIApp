@@ -222,7 +222,7 @@ class ProductModel {
     } else if (json['categoryId'] == 10) {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
-      category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
+      category = "Fahrgemeinschaft/ÖPNV";
     } else if (json['categoryId'] == 12) {
       category = "Angebote";
     } else if (json['categoryId'] == 13) {
