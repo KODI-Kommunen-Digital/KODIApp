@@ -87,7 +87,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                       imageUrl: ((firstProduct?.productImages ??
                                                   [])
                                               .isNotEmpty)
-                                          ? '${Application.picturesURL}${firstProduct.productImages!.first}'
+                                          ? '${Application.picturesURL}${firstProduct.productImages!.last}'
                                           : '${Application.picturesURL}admin/News.jpeg',
                                       cacheManager: memoryCacheManager,
                                       placeholder: (context, url) {

@@ -17,7 +17,6 @@ import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:http_parser/http_parser.dart';
 
 class ContainerRepository {
   final Preferences prefs;
@@ -581,8 +580,6 @@ class ContainerRepository {
             await MultipartFile.fromFile(
               file.path,
               filename: fileName,
-              contentType: MediaType(
-                  'image', fileExtension), // Set the correct content type
             ),
           ));
           final result = await Api.requestContainerProductUploadMedia(

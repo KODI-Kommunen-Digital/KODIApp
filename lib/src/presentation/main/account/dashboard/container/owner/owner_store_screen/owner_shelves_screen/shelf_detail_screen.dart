@@ -50,7 +50,7 @@ class _ShelfDetailsScreenState extends State<ShelfDetailsScreen> {
                   CachedNetworkImage(
                     imageUrl: ((widget.shelf.product!.productImages ?? [])
                             .isNotEmpty)
-                        ? '${Application.picturesURL}${widget.shelf.product!.productImages!.first}'
+                        ? '${Application.picturesURL}${widget.shelf.product!.productImages!.last}'
                         : '${Application.picturesURL}admin/News.jpeg',
                     cacheManager: memoryCacheManager,
                     placeholder: (context, url) {

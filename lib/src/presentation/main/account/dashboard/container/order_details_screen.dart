@@ -76,7 +76,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                             imageUrl: ((product!.productImages ??
                                                         [])
                                                     .isNotEmpty)
-                                                ? '${Application.picturesURL}${product.productImages!.first}'
+                                                ? '${Application.picturesURL}${product.productImages!.last}'
                                                 : '${Application.picturesURL}admin/News.jpeg',
                                             cacheManager: memoryCacheManager,
                                             placeholder: (context, url) {
