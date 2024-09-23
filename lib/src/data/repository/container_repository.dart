@@ -388,8 +388,6 @@ class ContainerRepository {
             await MultipartFile.fromFile(
               file.path,
               filename: fileName,
-              contentType: MediaType(
-                  'image', fileExtension), // Set the correct content type
             ),
           ));
           final result = await Api.requestContainerProductUploadMedia(

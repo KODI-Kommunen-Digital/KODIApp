@@ -205,7 +205,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                         child: CachedNetworkImage(
                                           imageUrl: ((item.productImages ?? [])
                                                   .isNotEmpty)
-                                              ? '${Application.picturesURL}${item.productImages!.first}'
+                                              ? '${Application.picturesURL}${item.productImages!.last}'
                                               : '${Application.picturesURL}admin/News.jpeg',
                                           cacheManager: memoryCacheManager,
                                           placeholder: (context, url) {

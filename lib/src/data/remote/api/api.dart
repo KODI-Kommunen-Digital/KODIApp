@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
@@ -1025,6 +1026,9 @@ class Api {
       final result = await HTTPManager(apiType: 'container').post(
         url: filePath,
         formData: pickedFile,
+        options: Options(
+          contentType: 'multipart/form-data',
+        )
       );
       return ResultApiModel.fromJson(result);
     }
