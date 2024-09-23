@@ -319,6 +319,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                   children: [
                                                     Text(
                                                       item.category ?? '',
+                                                      maxLines: 2,
                                                       style: Theme.of(context)
                                                           .textTheme
                                                           .bodySmall!
