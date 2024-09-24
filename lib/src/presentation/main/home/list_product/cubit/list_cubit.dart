@@ -99,7 +99,7 @@ class ListCubit extends Cubit<ListState> {
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasCategoryFilter: true,
-        hasLocationFilter: true,
+        hasLocationFilter: false,
         currentLocation: cityId,
         currentCategory: categoryId);
 

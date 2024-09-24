@@ -1,11 +1,11 @@
 {
-    "name": "Mitwiz App",
-    "short_name": "Mitwiz App",
+    "name": "Mitwitz App",
+    "short_name": "Mitwitz App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Mitwiz App",
+    "description": "Mitwitz App",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

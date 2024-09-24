@@ -54,7 +54,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             builder: (context, state) => state.maybeWhen(
                 loaded: (list) => AppFilterButton(
                       multiFilter: MultiFilter(
-                        hasLocationFilter: true,
+                        hasLocationFilter: false,
                         currentLocation:
                             context.read<DiscoveryCubit>().currentCity ?? 0,
                         cities: context.read<DiscoveryCubit>().location,
@@ -182,7 +182,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
-      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+      const cityId = 1;
       if (cityId != 0) {
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listGroups,

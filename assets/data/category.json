@@ -43,27 +43,11 @@
             "categoryType" : "category"
         },
         {
-            "id": 9,
-            "name": "Fundbüro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-search",
-            "color": "#CC6600",
-            "categoryType" : "category"
-        },
-        {
             "id": 10,
             "name": "Unternehmen",
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
             "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        {
-            "id": 11,
-            "name": "Mitfahrbank",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-bus",
-            "color": "#ff8a65",
             "categoryType" : "category"
         },
         {
