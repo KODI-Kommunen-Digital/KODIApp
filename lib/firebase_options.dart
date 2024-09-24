@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDVYPcTzVQOcKjjJGHW_BOlW2nfLbLhT18',
-    appId: '1:660123882783:android:8259bab2e595c4fbb1cc2a',
-    messagingSenderId: '660123882783',
-    projectId: 'smart-region-1ce64',
-    storageBucket: 'smart-region-1ce64.appspot.com',
+    apiKey: 'AIzaSyBmF7c4-uqyP7nugYg1sYHGbtgDEbA4KRk',
+    appId: '1:1081371753755:android:f68e90ea3bb8ca3a7e27be',
+    messagingSenderId: '1081371753755',
+    projectId: 'mitwiz-b102d',
+    storageBucket: 'mitwiz-b102d.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAF7sEOfWwKCe5HXFkjBRF4utW0TxOsAzc',
-    appId: '1:660123882783:ios:2a1331f5b1e82fe6b1cc2a',
-    messagingSenderId: '660123882783',
-    projectId: 'smart-region-1ce64',
-    storageBucket: 'smart-region-1ce64.appspot.com',
-    iosClientId: '660123882783-3gi7uh3v72s0e46p3dmr5k1l3cs1tur5.apps.googleusercontent.com',
-    iosBundleId: 'com.smartregion',
+    apiKey: 'AIzaSyA5G4TRb1epT_RXtmSqZ5oi3LVkfL0mNFg',
+    appId: '1:1081371753755:ios:cff44d0d326de6da7e27be',
+    messagingSenderId: '1081371753755',
+    projectId: 'mitwiz-b102d',
+    storageBucket: 'mitwiz-b102d.appspot.com',
+    iosBundleId: 'com.hasslachtal.mitwiz',
   );
+
 }

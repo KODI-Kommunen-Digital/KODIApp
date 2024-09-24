@@ -32,6 +32,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
   late bool isCategoryService;
+  late bool isCategory;
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
@@ -42,6 +43,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     super.initState();
     isCity = widget.arguments['type'] == 'location';
     isCategoryService = widget.arguments['type'] == 'categoryService';
+    isCategory = widget.arguments['type'] == 'category';
     loadListingsList();
   }
 
@@ -67,13 +69,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
       return MultiFilter(
           hasProductEventFilter: true,
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
-          hasLocationFilter: true,
+          hasLocationFilter: false,
           currentLocation:
               selectedFilter?.currentLocation ?? widget.arguments['id'],
           cities: AppBloc.discoveryCubit.location);
     } else {
       return MultiFilter(
-          hasLocationFilter: true,
+          hasLocationFilter: false,
           currentLocation:
               selectedFilter?.currentLocation ?? widget.arguments['id'],
           cities: AppBloc.discoveryCubit.location);
@@ -134,7 +136,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      if (!isCategoryService)
+                      if (!isCategoryService && !isCategory)
                         AppFilterButton(
                             multiFilter: whatCanFilter(isEvent),
                             filterCallBack: (filter) {

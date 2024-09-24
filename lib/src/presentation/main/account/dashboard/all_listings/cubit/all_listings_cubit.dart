@@ -96,7 +96,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     int currentCityFilter = await getCurrentCityFilter();
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
-        hasLocationFilter: true,
+        hasLocationFilter: false,
         hasListingStatusFilter: true,
         currentListingStatus: currentListingFilter,
         currentLocation: currentCityFilter);

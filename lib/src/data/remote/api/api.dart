@@ -64,14 +64,11 @@ class Api {
     final result = await HTTPManager(forum: false).get(
         url:
             'users/$userId/listings?pageNo=$pageNo&pageSize=5&showExternalListings=$showExternalListings');
-
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> requestMyListings(pageNo) async {
-    final result = await HTTPManager(forum: false).get(
-        url:
-        'users/myListings');
+    final result = await HTTPManager(forum: false).get(url: 'users/myListings');
     return ResultApiModel.fromJson(result);
   }
 
@@ -101,9 +98,17 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestToJoinGroup(forumId, cityId) async {
+  // static Future<ResultApiModel> requestToJoinGroup(forumId, cityId) async {
+  //   final filepath = "cities/$cityId/forums/$forumId/memberRequests";
+  //   final result = await HTTPManager(forum: true).post(url: filepath);
+  //   return ResultApiModel.fromJson(result);
+  // }
+
+  static Future<ResultApiModel> requestToJoinGroup(
+      forumId, cityId, params) async {
     final filepath = "cities/$cityId/forums/$forumId/memberRequests";
-    final result = await HTTPManager(forum: true).post(url: filepath);
+    final result =
+        await HTTPManager(forum: true).post(url: filepath, data: params);
     return ResultApiModel.fromJson(result);
   }
 
@@ -495,7 +500,8 @@ class Api {
       if (cityId != 0 && cityId != null) {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
-        final result = await HTTPManager(forum: false).get(url: list);
+        final result =
+            await HTTPManager(forum: false).get(url: list, loading: true);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
@@ -651,7 +657,58 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  ///Save Vote
+  static Future<ResultApiModel> getForumKeys(
+      {required int forumId,
+      required int userId,
+      required int cityId,
+      required Map<String, dynamic> params}) async {
+    final String filepath =
+        "/cities/$cityId/forums/$forumId/members/get-forum-keys";
+    final result =
+        await HTTPManager(forum: true).post(url: filepath, data: params);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> updateForumKeys(
+      {required Map<String, dynamic> params}) async {
+    const String filepath = "/users/update-key";
+    final result = await HTTPManager(forum: true).post(
+      url: filepath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getForumChatMessages(
+      {required int forumId,
+      required int cityId,
+      required int? lastMessageId,
+      required int offset}) async {
+    String filepath =
+        "/cities/$cityId/forums/$forumId/chat/v2?pageNo=$offset&pageSize=15";
+
+    if (lastMessageId != null && lastMessageId > 0) {
+      filepath += "&lastMessageId=$lastMessageId";
+    }
+
+    final result = await HTTPManager(forum: true).get(
+      url: filepath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> sendChatMessage(
+      {required int forumId,
+      required int cityId,
+      required String params}) async {
+    final String filepath = "/cities/$cityId/forums/$forumId/chat/v2";
+    final result = await HTTPManager(forum: true).post(
+      url: filepath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> requestSaveVote(
       cityId, params, listingId) async {
     final filePath = '/cities/$cityId/listings/$listingId/vote';

@@ -141,7 +141,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               AppFilterButton(
                   multiFilter: MultiFilter(
                       hasListingStatusFilter: true,
-                      hasLocationFilter: true,
+                      hasLocationFilter: false,
                       currentListingStatus: currentListingFilter,
                       cities: AppBloc.homeCubit.location,
                       currentLocation: currentCityFilter),
