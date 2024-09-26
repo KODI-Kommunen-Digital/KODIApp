@@ -283,8 +283,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
           (element) => element["id"] == widget.item!.categoryId)["name"];
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
-        //selectedSubCategory = listSubCategory.firstWhere(
-        //    (element) => element["id"] == widget.item!.subcategoryId)["name"];
+        selectedSubCategory = listSubCategory.firstWhere(
+            (element) => element["id"] == widget.item!.subcategoryId)["name"];
       }
 
       final city = listCity
@@ -989,11 +989,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ],
             ),
             if ((selectedCategory?.toLowerCase() == "news" ||
-                    selectedCategory == null) &&
+                    selectedCategory == null) ||
                 selectedSubCategory != null)
               const SizedBox(height: 8),
             if ((selectedCategory?.toLowerCase() == "news" ||
-                    selectedCategory == null) &&
+                    selectedCategory == null) ||
                 selectedSubCategory != null)
               Text.rich(
                 TextSpan(
@@ -1016,7 +1016,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory?.toLowerCase() == "news" &&
+                if (selectedCategory?.toLowerCase() == "news" ||
                     selectedSubCategory != null)
                   Expanded(
                     child: listSubCategory.isEmpty

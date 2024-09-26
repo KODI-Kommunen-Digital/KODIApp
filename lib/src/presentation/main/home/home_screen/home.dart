@@ -290,6 +290,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             await AppBloc.homeCubit.saveCityId(selectedCityId);
                             await AppBloc.discoveryCubit
                                 .onLocationFilter(selectedCityId, false);
+
                             _onUpdateCategory();
                             break;
                           }
@@ -355,8 +356,10 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
+          canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
-            Navigator.pop(context, searchTerm);
+            if (didPop) return;
+            Navigator.pop(context, null);
           },
           child: SimpleDialog(
               title: Center(

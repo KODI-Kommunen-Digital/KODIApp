@@ -326,7 +326,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
                       });
                     },
                     child: Container(
-                      color: const Color(0xFFe30613),
+                      color: const Color(0xFFFECC00),
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       width: double.infinity,
                       child: Stack(
