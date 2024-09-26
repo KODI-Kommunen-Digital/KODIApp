@@ -133,14 +133,14 @@ class _ChatMessageListState extends State<ChatMessageList> {
                               ),
                               decoration: BoxDecoration(
                                 color: isMe
-                                    ? const Color(0xFFe5634d)
+                                    ? const Color(0xFFFECC00)
                                     : const Color(0xFF202123),
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Text(
                                 message.message ?? 'No message',
                                 style: const TextStyle(
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                   color: Colors.white,
                                 ),
                                 softWrap: true,
@@ -149,9 +149,8 @@ class _ChatMessageListState extends State<ChatMessageList> {
                           ),
                           Text(
                             formatDate(message.createdAt!),
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Theme.of(context).shadowColor,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.normal,
                             ),
                           ),
                         ],
