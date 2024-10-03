@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:syncfusion_flutter_barcodes/barcodes.dart';
 import 'dart:math' as math;
@@ -75,7 +76,9 @@ class _ContainerProductDetailScreenState
                     height: getCarouselHeight() + 50,
                     child: InkWell(
                       onTap: () {
-                        //Implement Image Zoom later
+                        Navigator.pushNamed(context, Routes.forumImageZoom,
+                            arguments:
+                                "${Application.picturesURL}${widget.product.productImages![currentImageIndex]}");
                       },
                       child: Column(
                         children: [
