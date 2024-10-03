@@ -187,9 +187,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                           ContainerProductModel item = products[index];
                           return InkWell(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, Routes.containerProductDetailScreen,
-                                  arguments: {'product': item});
+                              openProductDetails(item);
                             },
                             child: Container(
                               padding:
@@ -394,6 +392,12 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         ),
       ),
     );
+  }
+
+  Future<void> openProductDetails(ContainerProductModel item) async {
+    await Navigator.pushNamed(context, Routes.containerProductDetailScreen,
+        arguments: {'product': item});
+    await context.read<SellerCubit>().onLoad(false, true);
   }
 
   void _openStoreActionPopUp(ContainerProductModel item) {

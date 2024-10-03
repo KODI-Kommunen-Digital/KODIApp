@@ -234,9 +234,7 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                     ContainerProductModel item = products[index];
                     return InkWell(
                       onTap: () {
-                        Navigator.pushNamed(
-                            context, Routes.containerProductDetailScreen,
-                            arguments: {'product': item});
+                        openProductDetails(item);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 4),
@@ -413,6 +411,12 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                   ],
                 ),
               ));
+  }
+
+  Future<void> openProductDetails(ContainerProductModel item) async {
+    await Navigator.pushNamed(context, Routes.containerProductDetailScreen,
+        arguments: {'product': item});
+    await context.read<OwnerProductsCubit>().onLoad(false);
   }
 }
 

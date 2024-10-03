@@ -1095,4 +1095,18 @@ class ContainerRepository {
         return false;
     }
   }
+
+  static Future<bool> deleteContainerImage(
+      int cityId, int storeId, int product, String imageUrl) async {
+    Map<String, String> params = {'url': imageUrl};
+
+    final response =
+        await Api.removeContainerImage(cityId, storeId, product, params);
+
+    if (!response.success) {
+      logError(
+          'Error removing image from product: ${response.data} ${response.message}');
+    }
+    return response.success;
+  }
 }

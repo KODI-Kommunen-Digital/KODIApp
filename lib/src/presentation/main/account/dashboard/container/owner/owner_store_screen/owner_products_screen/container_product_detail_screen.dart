@@ -106,46 +106,65 @@ class _ContainerProductDetailScreenState
                                     builder: (BuildContext context) {
                                       String? imageUrlString =
                                           '${Application.picturesURL}$imageUrl';
-                                      return Container(
-                                        width:
-                                            MediaQuery.of(context).size.width,
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 5.0),
-                                        decoration: const BoxDecoration(
-                                          color: Colors.black,
-                                        ),
-                                        child: Image.network(
-                                          imageUrlString,
-                                          fit: BoxFit.fitHeight,
-                                          loadingBuilder: (BuildContext context,
-                                              Widget child,
-                                              ImageChunkEvent?
-                                                  loadingProgress) {
-                                            if (loadingProgress == null) {
-                                              return child;
-                                            } else {
-                                              return AppPlaceholder(
-                                                child: Container(
-                                                  width: 120,
-                                                  height: 140,
-                                                  decoration:
-                                                      const BoxDecoration(
-                                                    color: Colors.black,
-                                                    borderRadius:
-                                                        BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(8),
-                                                      bottomLeft:
-                                                          Radius.circular(8),
+                                      return Stack(
+                                        children: [
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 5.0),
+                                            decoration: const BoxDecoration(
+                                              color: Colors.black,
+                                            ),
+                                            child: Image.network(
+                                              imageUrlString,
+                                              fit: BoxFit.fitHeight,
+                                              loadingBuilder:
+                                                  (BuildContext context,
+                                                      Widget child,
+                                                      ImageChunkEvent?
+                                                          loadingProgress) {
+                                                if (loadingProgress == null) {
+                                                  return child;
+                                                } else {
+                                                  return AppPlaceholder(
+                                                    child: Container(
+                                                      width: 120,
+                                                      height: 140,
+                                                      decoration:
+                                                          const BoxDecoration(
+                                                        color: Colors.black,
+                                                        borderRadius:
+                                                            BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                          bottomLeft:
+                                                              Radius.circular(
+                                                                  8),
+                                                        ),
+                                                      ),
+                                                      child: const Icon(
+                                                          Icons.error),
                                                     ),
-                                                  ),
-                                                  child:
-                                                      const Icon(Icons.error),
-                                                ),
-                                              );
-                                            }
-                                          },
-                                        ),
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                          Align(
+                                              alignment: Alignment.topRight,
+                                              child: IconButton(
+                                                  onPressed: () {
+                                                    showDeleteConfirmation();
+                                                  },
+                                                  icon: const Icon(
+                                                    Icons.delete,
+                                                    size: 30,
+                                                    color: Colors.red,
+                                                  )))
+                                        ],
                                       );
                                     },
                                   );
@@ -424,5 +443,48 @@ class _ContainerProductDetailScreenState
             )),
       ),
     );
+  }
+
+  Future<void> showDeleteConfirmation() async {
+    String message = Translate.of(context).translate('error_message');
+    final result = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('delete_Confirmation')),
+          content: Text(
+              Translate.of(context).translate('are_you_sure_remove_image')),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(Translate.of(context).translate('yes')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(Translate.of(context).translate('no')),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (result == true) {
+      bool success = await ContainerRepository.deleteContainerImage(
+          widget.product.cityId,
+          widget.product.shopId,
+          widget.product.id,
+          widget.product.productImages![currentImageIndex]);
+      if (success) {
+        message = Translate.of(context).translate('success');
+        Navigator.pop(context);
+      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+        ),
+      );
+    }
   }
 }

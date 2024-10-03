@@ -1024,15 +1024,23 @@ class Api {
 
     if (pickedFile?.files.length != 0) {
       final result = await HTTPManager(apiType: 'container').post(
-        url: filePath,
-        formData: pickedFile,
-        options: Options(
-          contentType: 'multipart/form-data',
-        )
-      );
+          url: filePath,
+          formData: pickedFile,
+          options: Options(
+            contentType: 'multipart/form-data',
+          ));
       return ResultApiModel.fromJson(result);
     }
     return null;
+  }
+
+  static Future<ResultApiModel> removeContainerImage(
+      cityId, storeId, productId, params) async {
+    var filePath =
+        '/cities/$cityId/store/$storeId/product/$productId/imageDelete';
+    final result = await HTTPManager(apiType: 'container')
+        .delete(url: filePath, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
   }
 
   /*static Future<ResultApiModel> addUserCredit(userId, params) async {
