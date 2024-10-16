@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -36,6 +40,16 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
+
+  await Upgrader.clearSavedSettings();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+
+  runApp(HeidiApp(prefBox));
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
@@ -72,6 +86,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -89,6 +106,7 @@ class _HeidiAppState extends State<HeidiApp> {
                           : UpgradeDialogStyle.material),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
+                    navigatorKey: globalNavKey,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,
@@ -115,7 +133,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaleFactor: theme.textScaleFactor,
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,

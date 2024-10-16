@@ -156,7 +156,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                   onPressed: () {
                     _searchListings();
                   },
-                  icon: const Icon(Icons.search))
+                  icon: Icon(
+                    Icons.search,
+                    color: Theme.of(context).textTheme.bodyLarge?.color ??
+                        Colors.white,
+                  ))
             ],
           ),
         ],
@@ -384,16 +388,23 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 .circular(10),
                                                       ),
                                                       child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
+                                                        ),
                                                         onPressed: () async {
                                                           _openListingStatusActionPopUp(
                                                               item);
                                                         },
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          minimumSize:
-                                                              const Size(
-                                                                  80, 30),
-                                                        ),
                                                         child: Text(
                                                           Translate.of(context)
                                                               .translate(
@@ -478,10 +489,9 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
+        return PopScope(
+          onPopInvokedWithResult: (bool didPop, dynamic result) async {
             Navigator.pop(context, searchTerm);
-            return false;
           },
           child: SimpleDialog(
               title: Center(
@@ -639,11 +649,14 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                 }, loaded: () {
                   return SimpleDialog(
                       title: Center(
-                        child: Text(Translate.of(context).translate('status'),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            )),
+                        child: Text(
+                          Translate.of(context).translate('status'),
+                          style: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white,
+                          ),
+                        ),
                       ),
                       children: [
                         SimpleDialogOption(

@@ -12,7 +12,7 @@ part of 'product_detail_state.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
 mixin _$ProductDetailState {
@@ -94,28 +94,34 @@ class _$ProductDetailStateCopyWithImpl<$Res, $Val extends ProductDetailState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
-abstract class _$$ProductDetailInitialCopyWith<$Res> {
-  factory _$$ProductDetailInitialCopyWith(_$ProductDetailInitial value,
-          $Res Function(_$ProductDetailInitial) then) =
-      __$$ProductDetailInitialCopyWithImpl<$Res>;
+abstract class _$$ProductDetailInitialImplCopyWith<$Res> {
+  factory _$$ProductDetailInitialImplCopyWith(_$ProductDetailInitialImpl value,
+          $Res Function(_$ProductDetailInitialImpl) then) =
+      __$$ProductDetailInitialImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ProductDetailInitialCopyWithImpl<$Res>
-    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailInitial>
-    implements _$$ProductDetailInitialCopyWith<$Res> {
-  __$$ProductDetailInitialCopyWithImpl(_$ProductDetailInitial _value,
-      $Res Function(_$ProductDetailInitial) _then)
+class __$$ProductDetailInitialImplCopyWithImpl<$Res>
+    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailInitialImpl>
+    implements _$$ProductDetailInitialImplCopyWith<$Res> {
+  __$$ProductDetailInitialImplCopyWithImpl(_$ProductDetailInitialImpl _value,
+      $Res Function(_$ProductDetailInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$ProductDetailInitial implements ProductDetailInitial {
-  const _$ProductDetailInitial();
+class _$ProductDetailInitialImpl implements ProductDetailInitial {
+  const _$ProductDetailInitialImpl();
 
   @override
   String toString() {
@@ -123,9 +129,10 @@ class _$ProductDetailInitial implements ProductDetailInitial {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ProductDetailInitial);
+        (other.runtimeType == runtimeType &&
+            other is _$ProductDetailInitialImpl);
   }
 
   @override
@@ -217,29 +224,32 @@ class _$ProductDetailInitial implements ProductDetailInitial {
 }
 
 abstract class ProductDetailInitial implements ProductDetailState {
-  const factory ProductDetailInitial() = _$ProductDetailInitial;
+  const factory ProductDetailInitial() = _$ProductDetailInitialImpl;
 }
 
 /// @nodoc
-abstract class _$$ProductDetailLoadingCopyWith<$Res> {
-  factory _$$ProductDetailLoadingCopyWith(_$ProductDetailLoading value,
-          $Res Function(_$ProductDetailLoading) then) =
-      __$$ProductDetailLoadingCopyWithImpl<$Res>;
+abstract class _$$ProductDetailLoadingImplCopyWith<$Res> {
+  factory _$$ProductDetailLoadingImplCopyWith(_$ProductDetailLoadingImpl value,
+          $Res Function(_$ProductDetailLoadingImpl) then) =
+      __$$ProductDetailLoadingImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ProductDetailLoadingCopyWithImpl<$Res>
-    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailLoading>
-    implements _$$ProductDetailLoadingCopyWith<$Res> {
-  __$$ProductDetailLoadingCopyWithImpl(_$ProductDetailLoading _value,
-      $Res Function(_$ProductDetailLoading) _then)
+class __$$ProductDetailLoadingImplCopyWithImpl<$Res>
+    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailLoadingImpl>
+    implements _$$ProductDetailLoadingImplCopyWith<$Res> {
+  __$$ProductDetailLoadingImplCopyWithImpl(_$ProductDetailLoadingImpl _value,
+      $Res Function(_$ProductDetailLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$ProductDetailLoading implements ProductDetailLoading {
-  const _$ProductDetailLoading();
+class _$ProductDetailLoadingImpl implements ProductDetailLoading {
+  const _$ProductDetailLoadingImpl();
 
   @override
   String toString() {
@@ -247,9 +257,10 @@ class _$ProductDetailLoading implements ProductDetailLoading {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ProductDetailLoading);
+        (other.runtimeType == runtimeType &&
+            other is _$ProductDetailLoadingImpl);
   }
 
   @override
@@ -341,14 +352,14 @@ class _$ProductDetailLoading implements ProductDetailLoading {
 }
 
 abstract class ProductDetailLoading implements ProductDetailState {
-  const factory ProductDetailLoading() = _$ProductDetailLoading;
+  const factory ProductDetailLoading() = _$ProductDetailLoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$ProductDetailLoadedCopyWith<$Res> {
-  factory _$$ProductDetailLoadedCopyWith(_$ProductDetailLoaded value,
-          $Res Function(_$ProductDetailLoaded) then) =
-      __$$ProductDetailLoadedCopyWithImpl<$Res>;
+abstract class _$$ProductDetailLoadedImplCopyWith<$Res> {
+  factory _$$ProductDetailLoadedImplCopyWith(_$ProductDetailLoadedImpl value,
+          $Res Function(_$ProductDetailLoadedImpl) then) =
+      __$$ProductDetailLoadedImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {ProductModel product,
@@ -359,13 +370,15 @@ abstract class _$$ProductDetailLoadedCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$ProductDetailLoadedCopyWithImpl<$Res>
-    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailLoaded>
-    implements _$$ProductDetailLoadedCopyWith<$Res> {
-  __$$ProductDetailLoadedCopyWithImpl(
-      _$ProductDetailLoaded _value, $Res Function(_$ProductDetailLoaded) _then)
+class __$$ProductDetailLoadedImplCopyWithImpl<$Res>
+    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailLoadedImpl>
+    implements _$$ProductDetailLoadedImplCopyWith<$Res> {
+  __$$ProductDetailLoadedImplCopyWithImpl(_$ProductDetailLoadedImpl _value,
+      $Res Function(_$ProductDetailLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -375,7 +388,7 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
     Object? isLoggedIn = null,
     Object? isDarkMode = null,
   }) {
-    return _then(_$ProductDetailLoaded(
+    return _then(_$ProductDetailLoadedImpl(
       null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
@@ -402,8 +415,8 @@ class __$$ProductDetailLoadedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProductDetailLoaded implements ProductDetailLoaded {
-  const _$ProductDetailLoaded(
+class _$ProductDetailLoadedImpl implements ProductDetailLoaded {
+  const _$ProductDetailLoadedImpl(
       this.product,
       final List<FavoriteModel>? favoritesList,
       this.userDetail,
@@ -436,10 +449,10 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProductDetailLoaded &&
+            other is _$ProductDetailLoadedImpl &&
             (identical(other.product, product) || other.product == product) &&
             const DeepCollectionEquality()
                 .equals(other._favoritesList, _favoritesList) &&
@@ -460,11 +473,13 @@ class _$ProductDetailLoaded implements ProductDetailLoaded {
       isLoggedIn,
       isDarkMode);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
-      __$$ProductDetailLoadedCopyWithImpl<_$ProductDetailLoaded>(
+  _$$ProductDetailLoadedImplCopyWith<_$ProductDetailLoadedImpl> get copyWith =>
+      __$$ProductDetailLoadedImplCopyWithImpl<_$ProductDetailLoadedImpl>(
           this, _$identity);
 
   @override
@@ -559,41 +574,46 @@ abstract class ProductDetailLoaded implements ProductDetailState {
       final List<FavoriteModel>? favoritesList,
       final UserModel? userDetail,
       final bool isLoggedIn,
-      final bool isDarkMode) = _$ProductDetailLoaded;
+      final bool isDarkMode) = _$ProductDetailLoadedImpl;
 
   ProductModel get product;
   List<FavoriteModel>? get favoritesList;
   UserModel? get userDetail;
   bool get isLoggedIn;
   bool get isDarkMode;
-  @JsonKey(ignore: true)
-  _$$ProductDetailLoadedCopyWith<_$ProductDetailLoaded> get copyWith =>
+
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProductDetailLoadedImplCopyWith<_$ProductDetailLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$ProductDetailErrorCopyWith<$Res> {
-  factory _$$ProductDetailErrorCopyWith(_$ProductDetailError value,
-          $Res Function(_$ProductDetailError) then) =
-      __$$ProductDetailErrorCopyWithImpl<$Res>;
+abstract class _$$ProductDetailErrorImplCopyWith<$Res> {
+  factory _$$ProductDetailErrorImplCopyWith(_$ProductDetailErrorImpl value,
+          $Res Function(_$ProductDetailErrorImpl) then) =
+      __$$ProductDetailErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String error});
 }
 
 /// @nodoc
-class __$$ProductDetailErrorCopyWithImpl<$Res>
-    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailError>
-    implements _$$ProductDetailErrorCopyWith<$Res> {
-  __$$ProductDetailErrorCopyWithImpl(
-      _$ProductDetailError _value, $Res Function(_$ProductDetailError) _then)
+class __$$ProductDetailErrorImplCopyWithImpl<$Res>
+    extends _$ProductDetailStateCopyWithImpl<$Res, _$ProductDetailErrorImpl>
+    implements _$$ProductDetailErrorImplCopyWith<$Res> {
+  __$$ProductDetailErrorImplCopyWithImpl(_$ProductDetailErrorImpl _value,
+      $Res Function(_$ProductDetailErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? error = null,
   }) {
-    return _then(_$ProductDetailError(
+    return _then(_$ProductDetailErrorImpl(
       null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
@@ -604,8 +624,8 @@ class __$$ProductDetailErrorCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ProductDetailError implements ProductDetailError {
-  const _$ProductDetailError(this.error);
+class _$ProductDetailErrorImpl implements ProductDetailError {
+  const _$ProductDetailErrorImpl(this.error);
 
   @override
   final String error;
@@ -616,21 +636,23 @@ class _$ProductDetailError implements ProductDetailError {
   }
 
   @override
-  bool operator ==(dynamic other) {
+  bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ProductDetailError &&
+            other is _$ProductDetailErrorImpl &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$ProductDetailErrorCopyWith<_$ProductDetailError> get copyWith =>
-      __$$ProductDetailErrorCopyWithImpl<_$ProductDetailError>(
+  _$$ProductDetailErrorImplCopyWith<_$ProductDetailErrorImpl> get copyWith =>
+      __$$ProductDetailErrorImplCopyWithImpl<_$ProductDetailErrorImpl>(
           this, _$identity);
 
   @override
@@ -719,10 +741,14 @@ class _$ProductDetailError implements ProductDetailError {
 }
 
 abstract class ProductDetailError implements ProductDetailState {
-  const factory ProductDetailError(final String error) = _$ProductDetailError;
+  const factory ProductDetailError(final String error) =
+      _$ProductDetailErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
-  _$$ProductDetailErrorCopyWith<_$ProductDetailError> get copyWith =>
+
+  /// Create a copy of ProductDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ProductDetailErrorImplCopyWith<_$ProductDetailErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

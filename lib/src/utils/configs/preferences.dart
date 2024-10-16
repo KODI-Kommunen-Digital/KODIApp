@@ -39,6 +39,9 @@ class Preferences {
       "pushNotificationsPermission";
   static const String receiveNotification = "receiveNotification";
   static const String allListingCityFilter = "allListingCityFilter";
+  static const String keyboardHeight = "0.0";
+
+  static const String forumChatTopics = 'forumChatTopics';
 
   Preferences._(this._box);
 
@@ -75,4 +78,10 @@ class Preferences {
       );
 
   bool getRestoredPurchasedProductsHistory() => _getValue('isRestored', false);
+
+  Future<void> setForumChatTopics(List<String> topics) =>
+      _setValue<List<String>>(forumChatTopics, topics);
+
+  List<String> getForumChatTopics() =>
+      _getValue<List<String>>(forumChatTopics, <String>[]);
 }

@@ -27,10 +27,10 @@ class AddListingScreen extends StatefulWidget {
   final bool isNewList;
 
   const AddListingScreen({
-    Key? key,
+    super.key,
     this.item,
     required this.isNewList,
-  }) : super(key: key);
+  });
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
@@ -46,7 +46,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _textPhoneController = TextEditingController();
   final _textFaxController = TextEditingController();
   final _textEmailController = TextEditingController();
-  final _textWebsiteController = TextEditingController();
+  final _textWebsiteController = TextEditingController(text: 'https://');
   final _textStatusController = TextEditingController();
   final _textPriceController = TextEditingController();
   final _textPriceMinController = TextEditingController();
@@ -390,7 +390,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final DateTime initialDate = _expiryDate != null
         ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
         : now.add(const Duration(days: 14));
-    final DateTime firstDate = DateTime(now.year - 5);
+    final DateTime firstDate = now;
     final DateTime lastDate = DateTime(now.year + 5);
 
     final DateTime? picked = await showDatePicker(
@@ -583,6 +583,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
         setState(() {
           isLoading = true;
         });
+        final website = (_textWebsiteController.text == 'https://')
+            ? null
+            : _textWebsiteController.text;
         final result = await context.read<AddListingCubit>().onEdit(
               cityId: widget.item?.cityId,
               categoryId: widget.item!.categoryId,
@@ -593,7 +596,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
+              website: website,
               price: _textPriceController.text,
               expiryDate: submitExpiryDate,
               expiryTime: submitExpiryTime,
@@ -623,6 +626,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
         setState(() {
           isLoading = true;
         });
+        final website = (_textWebsiteController.text == 'https://')
+            ? null
+            : _textWebsiteController.text;
         final result = await context.read<AddListingCubit>().onSubmit(
               cityId: cityId ?? 1,
               title: _textTitleController.text,
@@ -632,7 +638,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
-              website: _textWebsiteController.text,
+              website: website,
               expiryDate: submitExpiryDate,
               startDate: _startDate,
               endDate: _endDate,
@@ -689,10 +695,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
     //   allowEmpty: true,
     // );
 
-    _errorWebsite = UtilValidator.validate(
-      _textWebsiteController.text,
-      allowEmpty: true,
-    );
+    _errorWebsite = (_textWebsiteController.text == 'https://')
+        ? null
+        : UtilValidator.validate(
+            _textWebsiteController.text,
+            allowEmpty: true,
+            type: ValidateType.website,
+          );
 
     _errorStatus = UtilValidator.validate(
       _textStatusController.text,
@@ -979,11 +988,13 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 )
               ],
             ),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
+            if ((selectedCategory?.toLowerCase() == "news" ||
+                    selectedCategory == null) ||
+                selectedSubCategory != null)
               const SizedBox(height: 8),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
+            if ((selectedCategory?.toLowerCase() == "news" ||
+                    selectedCategory == null) ||
+                selectedSubCategory != null)
               Text.rich(
                 TextSpan(
                   text: Translate.of(context).translate('subCategory'),
@@ -1005,7 +1016,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             Row(
               children: [
-                if (selectedCategory?.toLowerCase() == "news")
+                if (selectedCategory?.toLowerCase() == "news" ||
+                    selectedSubCategory != null)
                   Expanded(
                     child: listSubCategory.isEmpty
                         ? const LinearProgressIndicator()
@@ -1322,10 +1334,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
               textInputAction: TextInputAction.done,
               onChanged: (text) {
                 setState(() {
-                  _errorWebsite = UtilValidator.validate(
+                  if (_textWebsiteController.text == 'https://') {
+                    _errorWebsite = null;
+                  } else {
+                    _errorWebsite = UtilValidator.validate(
                       _textWebsiteController.text,
                       allowEmpty: true,
-                      type: ValidateType.website);
+                      type: ValidateType.website,
+                    );
+                  }
                 });
               },
               leading: Icon(
@@ -1542,12 +1559,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
     context
         .read<AddListingCubit>()
         .setCategoryId(selectedCategory.toLowerCase());
-    context
-        .read<AddListingCubit>()
-        .setSubCategoryId(subCategoryResponse?.data.last['name']);
+    if (subCategoryResponse?.data.isNotEmpty) {
+      context
+          .read<AddListingCubit>()
+          .setSubCategoryId(subCategoryResponse?.data.last['name']);
+    }
     setState(() {
       listSubCategory = subCategoryResponse!.data;
-      selectedSubCategory = subCategoryResponse.data.last['name'];
+      if (subCategoryResponse.data.isNotEmpty) {
+        context
+            .read<AddListingCubit>()
+            .setSubCategoryId(subCategoryResponse.data.last['name']);
+      }
     });
   }
 }

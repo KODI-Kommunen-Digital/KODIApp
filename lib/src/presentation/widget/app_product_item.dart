@@ -14,14 +14,13 @@ import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem(
-      {Key? key,
+      {super.key,
       this.item,
       this.onPressed,
       required this.type,
       this.trailing,
       required this.isRefreshLoader,
-      this.cityName})
-      : super(key: key);
+      this.cityName});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -126,7 +125,7 @@ class AppProductItem extends StatelessWidget {
                       maxLines: 2,
                       style: Theme.of(context)
                           .textTheme
-                          .bodyLarge!
+                          .bodySmall!
                           .copyWith(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 2),
@@ -137,7 +136,7 @@ class AppProductItem extends StatelessWidget {
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.w500),
                     ),
                     const SizedBox(height: 2),
                     Visibility(
@@ -145,7 +144,7 @@ class AppProductItem extends StatelessWidget {
                           item!.endDate.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white30,
+                          color: Theme.of(context).shadowColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -155,7 +154,9 @@ class AppProductItem extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
-                                .copyWith(fontWeight: FontWeight.bold),
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                           ),
                         ),
                       ),
@@ -165,7 +166,7 @@ class AppProductItem extends StatelessWidget {
                           item!.startDate.isNotEmpty && item!.endDate == "",
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white30,
+                          color: Theme.of(context).shadowColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -175,7 +176,9 @@ class AppProductItem extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
-                                .copyWith(fontWeight: FontWeight.bold),
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                           ),
                         ),
                       ),
@@ -184,7 +187,7 @@ class AppProductItem extends StatelessWidget {
                       visible: item?.categoryId == 1,
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.white30,
+                          color: Theme.of(context).shadowColor,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Padding(
@@ -194,7 +197,9 @@ class AppProductItem extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
-                                .copyWith(fontWeight: FontWeight.bold),
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
                           ),
                         ),
                       ),
@@ -474,7 +479,7 @@ class AppProductItem extends StatelessWidget {
                           Container(
                             padding: const EdgeInsets.all(3.5),
                             decoration: BoxDecoration(
-                              color: Colors.white30,
+                              color: Theme.of(context).shadowColor,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -486,6 +491,7 @@ class AppProductItem extends StatelessWidget {
                                   .bodySmall!
                                   .copyWith(
                                     fontWeight: FontWeight.bold,
+                                    color: Colors.white,
                                   ),
                             ),
                           ),

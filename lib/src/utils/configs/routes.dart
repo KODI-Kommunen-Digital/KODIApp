@@ -33,6 +33,7 @@ import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_grou
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/add_post_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/add_new_post/cubit/add_post_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/list_groups/chat/chat_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/forum_image_zoom/forum_image_zoom_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
@@ -114,6 +115,7 @@ class Routes {
   static const String listGroups = "/listGroups";
   static const String myGroups = "/myGroups";
   static const String groupDetails = "/groupDetails";
+  static const String groupChat = "/groupChat";
   static const String groupMembersDetails = "/groupMembersDetails";
   static const String memberRequestDetails = "/memberRequestDetails";
   static const String postDetails = "/postDetails";
@@ -405,6 +407,21 @@ class Routes {
               create: (context) => GroupDetailsCubit(context.read(), arguments),
               child: const GroupDetailsScreen(),
             );
+          },
+          fullscreenDialog: true,
+        );
+
+      case groupChat:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return BlocProvider(
+                create: (context) =>
+                    GroupDetailsCubit(context.read(), arguments['group']),
+                child: ChatScreen(
+                  isAdmin: true,
+                ));
           },
           fullscreenDialog: true,
         );

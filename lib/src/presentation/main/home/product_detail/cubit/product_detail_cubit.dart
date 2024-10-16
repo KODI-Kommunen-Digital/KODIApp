@@ -1,9 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
-import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -120,12 +118,5 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
       }
       await AppBloc.wishListCubit.onLoad();
     }
-  }
-
-  static Future<AdDataModel> loadAdData(cityId) async {
-    final response = await Api.requestAdData(cityId);
-    final responseData = response.data;
-    return AdDataModel(
-        link: responseData['link'], image: responseData['image']);
   }
 }
