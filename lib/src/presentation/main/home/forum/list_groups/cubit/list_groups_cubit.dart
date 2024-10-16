@@ -172,7 +172,9 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
 
   Future<void> onGroupFilter(
       GroupFilter? type, List<ForumGroupModel> loadedList) async {
+    emit(const ListGroupsState.loading());
     final userId = await getLoggedInUserId();
+    await Future.delayed(const Duration(milliseconds: 1));
     if (type == GroupFilter.myGroups) {
       filteredList = loadedList.where((product) {
         return product.isJoined == true;
