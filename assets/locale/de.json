@@ -61,7 +61,8 @@
   "confirm_your_password": "Bestätigen Sie Ihr Passwort",
   "confirm": "Speichern",
   "newPass": "Neues Passwort",
-  "type_something": "Schreibe etwas...",
+  "type_something": "Schreibe etwas...", 
+  "type_message": "Nachricht eingeben...",
   "location": "Standort",
   "apply": "Anwenden",
   "contact_us": "Kontaktiere uns",
@@ -520,6 +521,10 @@
   "choose_time_period": "Zeitraum auswählen",
   "choose_listing_status": "Beitragsstatus auswählen",
   "choose_forum": "Forum auswählen",
-  "all": "Alle"
+  "all": "Alle",
+  "welcomeForum": "Hier können Sie mit dem roten Plus-Symbol neue Gruppen erstellen. Sie können private und öffentliche Gruppen erstellen. Mitglieder können jederzeit öffentlichen Gruppen beitreten und eine Anfrage für private Gruppen stellen. Viel Spaß!",
+  "views": "Aufrufe",
+  "group_name": "Gruppenname",
+  "new_message": "Neue Nachricht"
 }
 

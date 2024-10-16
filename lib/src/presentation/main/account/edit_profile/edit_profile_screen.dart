@@ -10,7 +10,7 @@ import 'package:heidi/src/utils/validate.dart';
 import 'package:image_picker/image_picker.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -87,7 +87,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         email: _textEmailController.text,
         url: _textWebsiteController.text,
         description: _textInfoController.text,
-        image: _image,
       );
 
       if (result) {
@@ -127,8 +126,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           image: _image,
                           onChange: (result) {
                             setState(() {
-                              if(result.isNotEmpty){
-                                // _image = result[0];
+                              if (result.isNotEmpty) {
+                                if (result[0].path.contains('profilePic')) {
+                                  _image = result[0].path;
+                                }
                               }
                             });
                           },

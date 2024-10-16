@@ -17,21 +17,40 @@ class FirebaseApi {
 
   Future<void> handleMessageOnUserInteraction(RemoteMessage? message) async {
     if (message != null) {
-      final item = await ListRepository.loadProduct(
-          int.parse(message.data["cityId"]), int.parse(message.data["id"]));
-      if (item != null) {
-        navigatorKey.currentState
-            ?.pushNamed(Routes.productDetail, arguments: item);
+      if (message.data["forumId"] != null) {
+        final int cityId = int.parse(message.data["cityId"]);
+
+        navigatorKey.currentState?.pushNamed(
+          Routes.listGroups,
+          arguments: {'id': cityId, 'title': 'Gruppen'},
+        );
+      } else {
+        final item = await ListRepository.loadProduct(
+            int.parse(message.data["cityId"]), int.parse(message.data["id"]));
+        if (item != null) {
+          navigatorKey.currentState
+              ?.pushNamed(Routes.productDetail, arguments: item);
+        }
       }
     }
   }
 
   Future<void> handleForegroundNotification(RemoteMessage message) async {
-    logInfo(
-        "Notification received in foreground: ${message.notification?.title}");
+    await _firebaseMessaging.setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
   }
 
   Future<void> initNotifications() async {
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: false,
+      badge: false,
+      sound: false,
+    );
+
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
       alert: true,
       badge: true,
@@ -52,8 +71,9 @@ class FirebaseApi {
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      await _subscribeToAllForumChats();
     } else {
+      await _unsubscribeFromAllForumChats();
       await _firebaseMessaging.unsubscribeFromTopic("warnings");
     }
 
@@ -63,14 +83,21 @@ class FirebaseApi {
       if (token != null) uploadToken(uId, token);
     }
 
-    await FirebaseMessaging.instance
-        .setForegroundNotificationPresentationOptions(
-            alert: true, badge: true, sound: true);
+    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+        alert: false, badge: false, sound: false);
 
     _firebaseMessaging.getInitialMessage().then(handleMessageOnUserInteraction);
     FirebaseMessaging.onMessage.listen(handleForegroundNotification);
     FirebaseMessaging.onMessageOpenedApp.listen(handleMessageOnUserInteraction);
     FirebaseMessaging.onBackgroundMessage(handleBackgroundMessage);
+  }
+
+  Future<void> subscribeToTopic(String topic) async {
+    await _firebaseMessaging.subscribeToTopic(topic);
+  }
+
+  Future<void> unsubscribeFromTopic(String topic) async {
+    await _firebaseMessaging.unsubscribeFromTopic(topic);
   }
 
   Future<void> refreshNotifications() async {
@@ -81,10 +108,33 @@ class FirebaseApi {
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      await _subscribeToAllForumChats();
     } else {
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      await _unsubscribeFromAllForumChats();
     }
+  }
+
+  Future<void> _unsubscribeFromAllForumChats() async {
+    final List<String> forumChatTopics = await _getForumChatTopics();
+    for (String topic in forumChatTopics) {
+      await _firebaseMessaging.unsubscribeFromTopic(topic);
+      logInfo("Unsubscribed from forum chat topic: $topic");
+    }
+  }
+
+  Future<void> _subscribeToAllForumChats() async {
+    final List<String> forumChatTopics = await _getForumChatTopics();
+    for (String topic in forumChatTopics) {
+      await _firebaseMessaging.subscribeToTopic(topic);
+      logInfo("Subscribed to forum chat topic: $topic");
+    }
+  }
+
+  Future<List<String>> _getForumChatTopics() async {
+    final prefs = await Preferences.openBox();
+    final List<String>? forumChatTopics =
+    prefs.getKeyValue(Preferences.forumChatTopics, <String>[]);
+    return forumChatTopics ?? <String>[];
   }
 
   Future<void> uploadToken(int userId, String token) async {
