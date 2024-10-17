@@ -248,14 +248,9 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                     );
                   } else {
                     return (isLoadingMore)
-                        ? const Positioned(
-                            bottom: 20,
-                            left: 0,
-                            right: 0,
-                            child: Center(
+                        ? const Center(
                               child: CircularProgressIndicator.adaptive(),
-                            ),
-                          )
+                            )
                         : Container();
                   }
                 },
