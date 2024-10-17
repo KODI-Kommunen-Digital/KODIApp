@@ -228,15 +228,6 @@ class _FilterScreenState extends State<FilterScreen> {
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
           ChoiceChip(
-            label: Text(Translate.of(context).translate('all')),
-            selected: currentForumGroupFilter == null,
-            onSelected: (selected) {
-              setState(() {
-                currentForumGroupFilter = null;
-              });
-            },
-          ),
-          ChoiceChip(
             label: Wrap(
               spacing: 4.0,
               children: [
