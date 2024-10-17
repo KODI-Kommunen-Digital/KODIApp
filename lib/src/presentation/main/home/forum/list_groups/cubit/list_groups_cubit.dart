@@ -29,6 +29,7 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   List<RequestMemberModel> requestMemberList = [];
   List<ForumStatusModel> forumsWithStatusResponse = [];
   var userJoinedGroupsList = <UserJoinedGroupsModel>[];
+  GroupFilter currentFilter = GroupFilter.allGroups;
 
   Future<void> onLoad() async {
     listLoaded.clear();
@@ -36,9 +37,13 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     pageNo = 1;
     bool joined = false;
     bool requested = false;
-    final result = await repo.loadForumsList(
-      pageNo: pageNo,
-    );
+    final result = (currentFilter == GroupFilter.allGroups)
+        ? await repo.loadForumsList(
+            pageNo: pageNo,
+          )
+        : await repo.loadMyForumsList(
+            pageNo: pageNo,
+          );
     if (AppBloc.userCubit.state == null) {
       if (result != null) {
         groupsList = result[1];
@@ -62,39 +67,41 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
     } else {
       if (result != null) {
         groupsList = result[1];
-        pagination = result[2];
-        forumsWithStatusResponse = result[3];
+        if (currentFilter == GroupFilter.allGroups) {
+          pagination = result[2];
+          forumsWithStatusResponse = result[3];
 
-        for (final list in groupsList) {
-          int index = forumsWithStatusResponse
-              .indexWhere((element) => element.forumIds == list.id);
-          if (forumsWithStatusResponse[index].statusId == 0) {
-            joined = false;
-            requested = false;
-          } else if (forumsWithStatusResponse[index].statusId == 1) {
-            requested = true;
-            joined = false;
-          } else if (forumsWithStatusResponse[index].statusId == 2) {
-            joined = true;
-            requested = false;
-          }
-          int? cityId = 0;
-          for (final userGroup in userJoinedGroupsList) {
-            if (userGroup.forumId == list.id) {
-              cityId = userGroup.cityId;
+          for (final list in groupsList) {
+            int index = forumsWithStatusResponse
+                .indexWhere((element) => element.forumIds == list.id);
+            if (forumsWithStatusResponse[index].statusId == 0) {
+              joined = false;
+              requested = false;
+            } else if (forumsWithStatusResponse[index].statusId == 1) {
+              requested = true;
+              joined = false;
+            } else if (forumsWithStatusResponse[index].statusId == 2) {
+              joined = true;
+              requested = false;
             }
-          }
+            int? cityId = 0;
+            for (final userGroup in userJoinedGroupsList) {
+              if (userGroup.forumId == list.id) {
+                cityId = userGroup.cityId;
+              }
+            }
 
-          listLoaded.add(ForumGroupModel(
-              id: list.id,
-              forumName: list.forumName,
-              createdAt: list.createdAt,
-              description: list.description,
-              image: list.image,
-              isPrivate: list.isPrivate,
-              cityId: cityId,
-              isJoined: joined,
-              isRequested: requested));
+            listLoaded.add(ForumGroupModel(
+                id: list.id,
+                forumName: list.forumName,
+                createdAt: list.createdAt,
+                description: list.description,
+                image: list.image,
+                isPrivate: list.isPrivate,
+                cityId: cityId,
+                isJoined: joined,
+                isRequested: requested));
+          }
         }
 
         emit(ListGroupsStateLoaded(
@@ -108,9 +115,13 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   Future<List<ForumGroupModel>> newListings(int pageNo) async {
     bool joined = false;
     bool requested = false;
-    final result = await repo.loadForumsList(
-      pageNo: pageNo,
-    );
+    final result = (currentFilter == GroupFilter.allGroups)
+        ? await repo.loadForumsList(
+            pageNo: pageNo,
+          )
+        : await repo.loadMyForumsList(
+            pageNo: pageNo,
+          );
 
     if (result != null) {
       groupsList = result[1];
@@ -169,21 +180,4 @@ class ListGroupsCubit extends Cubit<ListGroupsState> {
   }
 
   List<ForumGroupModel> getLoadedList() => listLoaded.reversed.toList();
-
-  Future<void> onGroupFilter(
-      GroupFilter? type, List<ForumGroupModel> loadedList) async {
-    emit(const ListGroupsState.loading());
-    final userId = await getLoggedInUserId();
-    await Future.delayed(const Duration(milliseconds: 1));
-    if (type == GroupFilter.myGroups) {
-      filteredList = loadedList.where((product) {
-        return product.isJoined == true;
-      }).toList();
-      emit(ListGroupsStateUpdated(filteredList, userId));
-    } else if (type == GroupFilter.allGroups) {
-      emit(ListGroupsStateUpdated(loadedList, userId));
-    } else {
-      emit(ListGroupsStateUpdated(loadedList, userId));
-    }
-  }
 }

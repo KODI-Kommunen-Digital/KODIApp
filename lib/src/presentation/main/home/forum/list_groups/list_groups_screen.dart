@@ -27,7 +27,6 @@ class ListGroupScreen extends StatefulWidget {
 }
 
 class _ListGroupScreenState extends State<ListGroupScreen> {
-  GroupFilter? selectedFilter;
   int pageNo = 1;
 
   @override
@@ -65,11 +64,10 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   }
 
   void _updateSelectedFilter(GroupFilter? filter) {
-    final loadedList = context.read<ListGroupsCubit>().getLoadedList();
-    setState(() {
-      selectedFilter = filter;
-      context.read<ListGroupsCubit>().onGroupFilter(filter, loadedList);
-    });
+    if(filter != null) {
+      context.read<ListGroupsCubit>().currentFilter = filter;
+      context.read<ListGroupsCubit>().onLoad();
+    }
   }
 
   @override
@@ -85,7 +83,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
             AppFilterButton(
                 multiFilter: MultiFilter(
                     hasForumGroupFilter: true,
-                    currentForumGroupFilter: selectedFilter),
+                    currentForumGroupFilter: context.read<ListGroupsCubit>().currentFilter),
                 filterCallBack: (filter) {
                   _updateSelectedFilter(filter.currentForumGroupFilter);
                 }),
@@ -112,6 +110,8 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
         ),
         body: BlocConsumer<ListGroupsCubit, ListGroupsState>(
           listener: (context, state) {
+            setState(() {
+            });
             state.maybeWhen(
               error: (msg) => ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text(msg))),
