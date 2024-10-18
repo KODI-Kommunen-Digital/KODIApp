@@ -81,10 +81,11 @@ class AppTheme {
       brightness: colorScheme.brightness,
       primaryColor: colorScheme.primary,
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.white.withAlpha(30),
-        foregroundColor: isDark ? Colors.white : Colors.black,
-        shadowColor: isDark ? null : colorScheme.onSurface.withOpacity(0.2),
-      ),
+          backgroundColor:
+              isDark ? Colors.white.withAlpha(30) : const Color(0xFFe1e1e1),
+          foregroundColor: isDark ? Colors.white : Colors.black,
+          shadowColor: isDark ? null : colorScheme.onSurface.withOpacity(0.2),
+          iconTheme: IconThemeData(color: colorScheme.primary)),
       canvasColor: colorScheme.surface,
       scaffoldBackgroundColor: colorScheme.surface,
       // bottomAppBarColor: colorScheme.surface,
@@ -93,6 +94,7 @@ class AppTheme {
       dialogBackgroundColor: colorScheme.surface,
       indicatorColor: indicatorColor,
       applyElevationOverlayColor: isDark,
+      shadowColor: const Color(0xFFa39f94),
 
       ///Custom
       fontFamily: font,
