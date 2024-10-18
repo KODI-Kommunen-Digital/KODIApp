@@ -809,7 +809,7 @@ class ForumRepository {
 
     final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
-    final topic = "groupChat_city_${cityId}_forum_$forumId";
+    final topic = "groupChat_city_1_forum_$forumId";
 
     List<String> forumChatTopics = prefs.getForumChatTopics();
 

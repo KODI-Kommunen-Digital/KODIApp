@@ -125,6 +125,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                 ],
               ),
               child: AppUserInfo(
+                showEmail: false,
                 user: widget.user,
                 type: UserViewType.information,
                 showDirectionIcon: false,

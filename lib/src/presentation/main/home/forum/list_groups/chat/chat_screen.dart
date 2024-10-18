@@ -11,7 +11,6 @@ import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/chat/chat_messages/chat_message_list.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_cubit.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/cubit/group_details_state.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -94,7 +93,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
   void initState() {
     super.initState();
     _fetchMessages(isInitialLoad: true);
-    _connectWebsocket(widget.group.cityId ?? 1, widget.group.id);
+    _connectWebsocket(1, widget.group.id);
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     _scrollController.addListener(_onScroll);
   }
@@ -130,14 +129,12 @@ class _ChatLoadedState extends State<ChatLoaded> {
   }
 
   Future<void> _connectWebsocket(int? cityId, int? forumId) async {
-    final wsUrl = Uri.parse('wss://app.einbeck.de/websocket/ws');
+    final wsUrl = Uri.parse('ws://app.mitwiz.de:4000/ws');
     channel = WebSocketChannel.connect(wsUrl);
     await channel?.ready;
-    final prefs = await Preferences.openBox();
-    int cityId = prefs.getKeyValue(Preferences.cityId, 0);
     channel?.sink.add(jsonEncode({
       "type": "subscribe",
-      "channelId": "city_${cityId}_forum_$forumId",
+      "channelId": "city_1_forum_$forumId",
     }));
 
     channel?.stream.listen((event) {
@@ -164,7 +161,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
         await context.read<GroupDetailsCubit>().receivePublicMessages(
               context,
               widget.group.id ?? 1,
-              widget.group.cityId == 0 ? 1 : widget.group.cityId,
+              1,
               isInitialLoad,
             );
 
@@ -245,18 +242,12 @@ class _ChatLoadedState extends State<ChatLoaded> {
                     Navigator.pushNamed(
                       context,
                       Routes.groupMembersDetails,
-                      arguments: {
-                        'groupId': widget.group.id,
-                        'cityId': widget.group.cityId
-                      },
+                      arguments: {'groupId': widget.group.id, 'cityId': 1},
                     );
                   } else if (choice ==
                       Translate.of(context).translate('member_requests')) {
                     Navigator.pushNamed(context, Routes.memberRequestDetails,
-                        arguments: {
-                          'groupId': widget.group.id,
-                          'cityId': widget.group.cityId
-                        });
+                        arguments: {'groupId': widget.group.id, 'cityId': 1});
                   } else if (choice ==
                       Translate.of(context).translate('delete_group')) {
                     showDeleteGroupConfirmation(context);
@@ -266,10 +257,11 @@ class _ChatLoadedState extends State<ChatLoaded> {
                       'isNewGroup': false,
                       'forumDetails': widget.group
                     }).then((value) async {
-                      await context
-                          .read<GroupDetailsCubit>()
-                          .onLoad(widget.group.id);
-                      setState(() {});
+                      if (value == true) {
+                        await context
+                            .read<GroupDetailsCubit>()
+                            .onLoad(widget.group.id);
+                      }
                     });
                   }
                 },
@@ -407,7 +399,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
               onPressed: () async {
                 await buildContext
                     .read<GroupDetailsCubit>()
-                    .removeGroupMember(widget.group.id, widget.group.cityId)
+                    .removeGroupMember(widget.group.id, 1)
                     .then((isRemoved) {
                   if (isRemoved == RemoveUser.removed) {
                     if (!mounted) return;
@@ -461,7 +453,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
               onPressed: () async {
                 await buildContext
                     .read<GroupDetailsCubit>()
-                    .requestDeleteGroup(widget.group.id, widget.group.cityId);
+                    .requestDeleteGroup(widget.group.id, 1);
                 if (!mounted) return;
                 Navigator.pop(context);
                 Navigator.pop(context);
