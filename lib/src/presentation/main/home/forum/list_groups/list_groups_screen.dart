@@ -138,14 +138,13 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
                 height: 40.0,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.blue,
+                  color: Color.fromARGB(5, 227, 6, 6),
                 ),
                 child: IconButton(
                   padding: EdgeInsets.zero,
                   onPressed: _onAddGroup,
                   icon: const Icon(
                     Icons.add,
-                    color: Colors.white,
                   ),
                 ),
               ),
@@ -292,8 +291,8 @@ class _ListLoadedState extends State<ListLoaded> {
           userId: widget.userId,
           onPressed: (value) async {
             if (value) {
-              Navigator.pushNamed(context, Routes.groupDetails, arguments: item)
-                  .then((value) async {
+              Navigator.pushNamed(context, Routes.groupChat,
+                  arguments: {'group': item}).then((value) async {
                 await context.read<ListGroupsCubit>().onLoad();
                 //setState(() {});
               });

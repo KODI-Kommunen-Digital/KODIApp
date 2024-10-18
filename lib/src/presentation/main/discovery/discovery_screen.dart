@@ -191,6 +191,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
+    } else if (service.imageLink == "15") {
+      const cityId = 1;
+      if (cityId != 0) {
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.defectReport,
+            arguments: {'id': service.arguments, 'title': 'forums'});
+      } else {
+        if (!mounted) return;
+        _showCitySelectionPopup(context);
+      }
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

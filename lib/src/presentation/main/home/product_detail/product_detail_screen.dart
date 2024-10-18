@@ -1207,6 +1207,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ],
               ),
               child: AppUserInfo(
+                showEmail: false,
                 user: userDetail,
                 onPressed: () async {
                   final loggedInUserId = await context

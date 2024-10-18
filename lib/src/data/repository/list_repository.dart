@@ -28,11 +28,11 @@ class ListRepository {
     cityId,
   }) async {
     final prefs = await Preferences.openBox();
-    int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int selectedCityId = 1;
 
     if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo);
+      final response = await Api.requestCatList(params, 1, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -54,7 +54,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo);
+      final response = await Api.requestCatList(params, 1, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

@@ -32,7 +32,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
   late bool isCategoryService;
-  late bool isCategory;
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory(() => EagerGestureRecognizer())
+  };
 
   //ProductFilter? selectedFilter;
   MultiFilter? selectedFilter;
@@ -43,7 +45,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
     super.initState();
     isCity = widget.arguments['type'] == 'location';
     isCategoryService = widget.arguments['type'] == 'categoryService';
-    isCategory = widget.arguments['type'] == 'category';
     loadListingsList();
   }
 
@@ -69,39 +70,102 @@ class _ListProductScreenState extends State<ListProductScreen> {
       return MultiFilter(
           hasProductEventFilter: true,
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
-          hasLocationFilter: false,
+          hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
-          cities: AppBloc.discoveryCubit.location);
+              selectedFilter?.currentLocation ?? [widget.arguments['id']],
+          cities: AppBloc.discoveryCubit.location,
+          multipleCityFilter: true);
     } else {
       return MultiFilter(
-          hasLocationFilter: false,
+          hasLocationFilter: true,
           currentLocation:
               selectedFilter?.currentLocation ?? widget.arguments['id'],
           cities: AppBloc.discoveryCubit.location);
     }
   }
 
-  void _updateSelectedFilter(MultiFilter? filter) {
+  void _updateSelectedFilter(MultiFilter? filter) async {
     selectedFilter = filter;
-    final loadedList = context.read<ListCubit>().getLoadedList();
-    setState(() {
-      if (filter?.hasProductEventFilter ?? false) {
-        context.read<ListCubit>().onDateProductFilter(
-            filter?.currentProductEventFilter,
-            loadedList,
-            filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
-      } else if (filter?.hasLocationFilter ?? false) {
-        loadListingsList();
-      }
+    dynamic loadedList = context.read<ListCubit>().getLoadedList();
+    if (filter?.hasProductEventFilter ?? false) {
+      loadedList = await context
+          .read<ListCubit>()
+          .updateLoadedList(filter!.currentLocation);
+      context.read<ListCubit>().onDateProductFilter(
+          filter.currentProductEventFilter,
+          loadedList,
+          filter.hasLocationFilter,
+          filter.currentLocation);
+    } else if (filter?.hasLocationFilter ?? false) {
+      loadListingsList();
+    }
 
-      if (filter?.hasCategoryFilter ?? false) {
-        context.read<ListCubit>().setCategoryFilter(
-            filter?.currentCategory ?? 0,
-            selectedFilter?.currentLocation ?? widget.arguments['id']);
-      }
-    });
+    if (filter?.hasCategoryFilter ?? false) {
+      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? widget.arguments['id']);
+    }
+  }
+
+  void _makeAction(String link) async {
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        link,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(
+                        Icons.close,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -136,17 +200,40 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      if (!isCategoryService && !isCategory)
-                        AppFilterButton(
-                            multiFilter: whatCanFilter(isEvent),
-                            filterCallBack: (filter) {
-                              _updateSelectedFilter(filter);
-                            }),
+                      if (isEvent)
+                        IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            _makeAction(
+                                "https://pages.destination.one/de/einbeck/default/announce/Event/edit");
+                          },
+                          icon: const Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
+                      AppFilterButton(
+                        voidCallback: () {
+                          MultiFilter multiFilter = whatCanFilter(isEvent);
+                          Navigator.pushNamed(context, Routes.filterScreen,
+                              arguments: {
+                                "multifilter": multiFilter
+                              }).then((filter) => {
+                                if (filter != null)
+                                  {_updateSelectedFilter(filter as MultiFilter)}
+                              });
+                        },
+                      ),
                       IconButton(
                           onPressed: () {
                             _searchListings();
                           },
-                          icon: const Icon(Icons.search))
+                          icon: Icon(
+                            Icons.search,
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white,
+                          ))
                     ],
                   );
                 }
@@ -205,6 +292,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
+          canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
             if (didPop) return;
             Navigator.pop(context, context.read<ListCubit>().searchTerm);
@@ -264,7 +352,7 @@ class ListLoading extends StatelessWidget {
 
 class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
-  final int selectedId;
+  final dynamic selectedId;
   final List listCity;
   final bool updated;
 
