@@ -129,7 +129,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
   }
 
   Future<void> _connectWebsocket(int? cityId, int? forumId) async {
-    final wsUrl = Uri.parse('ws://app.mitwiz.de:4000/ws');
+    final wsUrl = Uri.parse('ws://app.mitwiz.de:3040/ws');
     channel = WebSocketChannel.connect(wsUrl);
     await channel?.ready;
     channel?.sink.add(jsonEncode({
