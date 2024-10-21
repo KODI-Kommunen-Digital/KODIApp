@@ -41,7 +41,7 @@ class _ChatInputState extends State<ChatInput> {
           ),
           IconButton(
             icon: const Icon(Icons.send),
-            color: const Color(0xFFe5634d),
+            color: const Color(0xFF2c99ff),
             onPressed: () {
               if (_controller.text.isNotEmpty) {
                 widget.onSend(_controller.text);

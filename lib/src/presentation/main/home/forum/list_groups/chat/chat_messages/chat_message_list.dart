@@ -196,7 +196,7 @@ class _ChatMessageListState extends State<ChatMessageList> {
                               ),
                               decoration: BoxDecoration(
                                 color: isMe
-                                    ? const Color(0xFFe5634d)
+                                    ? const Color(0xFF2c99ff)
                                     : const Color(0xFF202123),
                                 borderRadius: BorderRadius.circular(20),
                               ),

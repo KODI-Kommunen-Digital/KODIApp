@@ -25,7 +25,8 @@ class _DefectReportSuccessScreenState extends State<DefectReportSuccessScreen> {
   ///On Add More
   void _onSuccess() {
     Navigator.pop(context);
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
+    Navigator.pushNamed(context, Routes.defectReport,
+        arguments: {'isNewList': true});
   }
 
   @override
