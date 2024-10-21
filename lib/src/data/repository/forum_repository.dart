@@ -578,7 +578,7 @@ class ForumRepository {
     String? city,
     String? type,
   ) async {
-    final cityId = await getCityId(city);
+    final cityId = await getCityId();
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final userId = prefs.getKeyValue(Preferences.userId, 0);
     final image = prefs.getKeyValue(Preferences.path, null);
@@ -653,7 +653,7 @@ class ForumRepository {
     forumId,
     String createdDate,
   ) async {
-    final cityId = await getCityId(city);
+    final cityId = await getCityId();
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
     final image = prefs.getKeyValue(Preferences.path, null);
     bool isPrivate = false;
@@ -721,13 +721,8 @@ class ForumRepository {
     await prefs.setKeyValue(Preferences.path, imagePath);
   }
 
-  Future<int> getCityId(cityName) async {
-    final response = await Api.requestSubmitCities();
-    var jsonCategory = response.data;
-    final item = jsonCategory.firstWhere((item) => item['name'] == cityName);
-    final itemId = item['id'];
-    final cityId = itemId;
-    return cityId;
+  Future<int> getCityId() async {
+    return 1;
   }
 
   Future<int> getCategoryId() async {

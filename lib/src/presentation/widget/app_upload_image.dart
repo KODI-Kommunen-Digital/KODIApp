@@ -2,6 +2,7 @@
 
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info/device_info.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
@@ -31,6 +32,7 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final bool defect;
 
   const AppUploadImage({
     super.key,
@@ -41,6 +43,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.defect = false,
   });
 
   @override
@@ -112,9 +115,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return InkWell(
       onTap: widget.profile
           ? _uploadImage
-          : selectedAssets.length > 1
+          : widget.defect
               ? selectImages
-              : showChooseFileTypeDialog,
+              : selectedAssets.length > 1
+                  ? selectImages
+                  : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -434,6 +439,50 @@ class _AppUploadImageState extends State<AppUploadImage> {
               ),
             ));
       }
+    } else if (image != null && image!.contains('profilePic')) {
+      return SizedBox(
+          width: double.infinity,
+          height: 400,
+          child: RawGestureDetector(
+              gestures: {
+                AllowMultipleGestureRecognizer:
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(),
+                  (AllowMultipleGestureRecognizer instance) {
+                    instance.onTap = () => showChooseFileTypeDialog();
+                  },
+                )
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(200),
+                child: CachedNetworkImage(
+                  imageUrl:
+                      "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
+                  fit: BoxFit.fill,
+                ),
+              )));
+    } else if (image != null && image!.contains('forum')) {
+      return SizedBox(
+          width: double.infinity,
+          height: 400,
+          child: RawGestureDetector(
+            gestures: {
+              AllowMultipleGestureRecognizer:
+                  GestureRecognizerFactoryWithHandlers<
+                      AllowMultipleGestureRecognizer>(
+                () => AllowMultipleGestureRecognizer(),
+                (AllowMultipleGestureRecognizer instance) {
+                  instance.onTap = () => showChooseFileTypeDialog();
+                },
+              )
+            },
+            child: CachedNetworkImage(
+              imageUrl:
+                  "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
+              fit: BoxFit.fill,
+            ),
+          ));
     }
     switch (widget.type) {
       case UploadImageType.circle:
@@ -560,9 +609,18 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      resultList = await _picker.pickMultiImage(
-        limit: 8,
-      );
+      if (widget.defect) {
+        final XFile? pickedFile =
+            await _picker.pickImage(source: ImageSource.gallery);
+        if (pickedFile != null) {
+          resultList = [pickedFile];
+        } else {
+          return;
+        }
+      } else {
+        resultList = await _picker.pickMultiImage(limit: 8);
+      }
+
       selectedAssets = resultList;
       if (resultList.isNotEmpty) {
         if (!mounted) return;
@@ -640,8 +698,24 @@ class _AppUploadImageState extends State<AppUploadImage> {
           }
         }
       }
+
+      if (widget.defect) {
+        final XFile asset = resultList.first;
+        final Uint8List imageData = await asset.readAsBytes();
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/${asset.name}';
+
+        final imageFile = File(filePath);
+        await imageFile.writeAsBytes(imageData);
+
+        setState(() {
+          _file = imageFile;
+          images = [imageFile];
+          widget.onChange(images);
+        });
+      }
     } on Exception catch (e) {
-      logError('Error Selecting Multiple Images', e);
+      logError('Error Selecting Images', e);
     }
   }
 }

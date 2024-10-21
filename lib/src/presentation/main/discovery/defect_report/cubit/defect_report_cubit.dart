@@ -29,6 +29,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
       if (result.success) {
         emit(state.copyWith(
           isSubmitting: false,
+          isSubmitSuccessful: true,
         ));
       } else {
         emit(state.copyWith(

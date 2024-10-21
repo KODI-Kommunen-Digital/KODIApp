@@ -8,7 +8,6 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
@@ -99,30 +98,30 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
   }
 
   void _onProcess() async {
-    final loadCitiesResponse = await context.read<AddGroupCubit>().loadCities();
+    // final loadCitiesResponse = await context.read<AddGroupCubit>().loadCities();
     if (!mounted) return;
-    final prefs = await Preferences.openBox();
-    final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
+    // final prefs = await Preferences.openBox();
+    // final cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
 
     if (widget.item != null) {
-      final selectedCityDetails = loadCitiesResponse!.firstWhere(
-        (element) =>
-            element['id'] ==
-            (widget.item?.cityId == 0 ? cityIdPref : widget.item?.cityId),
-      );
-      if (!mounted) return;
+      // final selectedCityDetails = loadCitiesResponse!.firstWhere(
+      //   (element) =>
+      //       element['id'] ==
+      //       (widget.item?.cityId == 0 ? cityIdPref : widget.item?.cityId),
+      // );
+      // if (!mounted) return;
       _textTitleController.text = widget.item!.forumName ?? '';
       _textContentController.text = widget.item!.description ?? '';
       _featureImage = widget.item?.image;
       cityId = widget.item?.cityId ?? 1;
       selectedPrivacy = widget.item!.isPrivate == 1 ? 'private' : 'public';
-      selectedCity = selectedCityDetails['name'];
+      // selectedCity = selectedCityDetails['name'];
     } else {
-      selectedCity = loadCitiesResponse?.first['name'];
+      // selectedCity = loadCitiesResponse?.first['name'];
       selectedPrivacy = 'public';
     }
     setState(() {
-      listCity = loadCitiesResponse!;
+      // listCity = loadCitiesResponse!;
       _processing = true;
     });
 
@@ -131,16 +130,16 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
       params['post_id'] = widget.item!.id;
     }
 
-    if (currentCity != null && currentCity != 0) {
-      for (var cityData in loadCitiesResponse!) {
-        if (cityData['id'] == currentCity) {
-          selectedCity = cityData['name'];
-          break;
-        }
-      }
-    } else {
-      // selectedCity = loadCitiesResponse?.first['name'];
-    }
+    // if (currentCity != null && currentCity != 0) {
+    //   for (var cityData in loadCitiesResponse!) {
+    //     if (cityData['id'] == currentCity) {
+    //       selectedCity = cityData['name'];
+    //       break;
+    //     }
+    //   }
+    // } else {
+    //   // selectedCity = loadCitiesResponse?.first['name'];
+    // }
 
     setState(() {
       _processing = false;
@@ -362,56 +361,56 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
               ],
             ),
             const SizedBox(height: 8),
-            Text.rich(
-              TextSpan(
-                text: Translate.of(context).translate('city'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-                children: const <TextSpan>[
-                  TextSpan(
-                    text: ' *',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 8),
-            Row(
-              children: [
-                Expanded(
-                  child: listCity.isEmpty
-                      ? const LinearProgressIndicator()
-                      : DropdownButton(
-                          isExpanded: true,
-                          menuMaxHeight: 200,
-                          hint: Text(
-                              Translate.of(context).translate('input_city')),
-                          value: selectedCity ?? listCity.first['name'],
-                          items: listCity.map((city) {
-                            return DropdownMenuItem(
-                                value: city['name'], child: Text(city['name']));
-                          }).toList(),
-                          onChanged: widget.item == null
-                              ? (value) async {
-                                  setState(() {
-                                    selectedCity = value as String?;
-                                    for (var element in listCity) {
-                                      if (element["name"] == value) {
-                                        cityId = element["id"];
-                                      }
-                                    }
-                                  });
-                                }
-                              : null,
-                        ),
-                ),
-              ],
-            ),
+            // Text.rich(
+            //   TextSpan(
+            //     text: Translate.of(context).translate('city'),
+            //     style: Theme.of(context)
+            //         .textTheme
+            //         .titleMedium!
+            //         .copyWith(fontWeight: FontWeight.bold),
+            //     children: const <TextSpan>[
+            //       TextSpan(
+            //         text: ' *',
+            //         style: TextStyle(
+            //           color: Colors.red,
+            //           fontWeight: FontWeight.bold,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
+            // const SizedBox(height: 8),
+            // Row(
+            //   children: [
+            //     Expanded(
+            //       child: listCity.isEmpty
+            //           ? const LinearProgressIndicator()
+            //           : DropdownButton(
+            //               isExpanded: true,
+            //               menuMaxHeight: 200,
+            //               hint: Text(
+            //                   Translate.of(context).translate('input_city')),
+            //               value: selectedCity ?? listCity.first['name'],
+            //               items: listCity.map((city) {
+            //                 return DropdownMenuItem(
+            //                     value: city['name'], child: Text(city['name']));
+            //               }).toList(),
+            //               onChanged: widget.item == null
+            //                   ? (value) async {
+            //                       setState(() {
+            //                         selectedCity = value as String?;
+            //                         for (var element in listCity) {
+            //                           if (element["name"] == value) {
+            //                             cityId = element["id"];
+            //                           }
+            //                         }
+            //                       });
+            //                     }
+            //                   : null,
+            //             ),
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 16),
           ],
         ),

@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
-import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'cubit/defect_report_cubit.dart';
 import 'cubit/defect_report_state.dart';
@@ -32,12 +32,30 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => DefectReportCubit(),
-      child: BlocBuilder<DefectReportCubit, DefectReportState>(
+      child: BlocConsumer<DefectReportCubit, DefectReportState>(
+        listener: (context, state) {
+          if (state.isSubmitSuccessful) {
+            Navigator.pushNamed(context, Routes.defectSubmitSuccess);
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
               centerTitle: true,
-              title: Text(Translate.of(context).translate('report_defect')),
+              title: Text(
+                  Translate.of(context).translate('category_defect_report')),
+              actions: [
+                TextButton(
+                  onPressed:
+                      state.isSubmitting ? null : () => _onSubmit(context),
+                  child: Text(
+                    Translate.of(context).translate('add'),
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                  ),
+                ),
+              ],
             ),
             body: SafeArea(
               child: SingleChildScrollView(
@@ -49,7 +67,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       height: 180,
                       child: AppUploadImage(
                         profile: false,
-                        forumGroup: true,
+                        forumGroup: false,
+                        defect: true,
                         title: Translate.of(context)
                             .translate('upload_feature_image'),
                         image: _selectedImage?.path,
@@ -65,11 +84,20 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                     const SizedBox(height: 16),
                     Text.rich(
                       TextSpan(
-                        text: Translate.of(context).translate('input_content'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context)
+                                .translate('input_content'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 8),
@@ -82,12 +110,20 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                     const SizedBox(height: 16),
                     Text.rich(
                       TextSpan(
-                        text: Translate.of(context)
-                            .translate('input_description'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context)
+                                .translate('input_description'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -98,27 +134,6 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       maxLines: 5,
                     ),
                     const SizedBox(height: 24),
-                    AppButton(
-                      Translate.of(context).translate('submit_report'),
-                      onPressed: state.isSubmitting
-                          ? () {}
-                          : () {
-                              if (_selectedImage != null) {
-                                context.read<DefectReportCubit>().submitReport(
-                                      title: _titleController.text,
-                                      description: _descriptionController.text,
-                                      image: _selectedImage!,
-                                    );
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                      content: Text(Translate.of(context)
-                                          .translate('image_required'))),
-                                );
-                              }
-                            },
-                      mainAxisSize: MainAxisSize.max,
-                    ),
                   ],
                 ),
               ),
@@ -127,5 +142,31 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
         },
       ),
     );
+  }
+
+  void _onSubmit(BuildContext context) {
+    final title = _titleController.text.trim();
+    final description = _descriptionController.text.trim();
+
+    if (title.isEmpty || description.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(Translate.of(context)
+              .translate('title_and_description_required')),
+        ),
+      );
+    } else if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Bitte laden Sie ein Bild hoch.'),
+        ),
+      );
+    } else {
+      context.read<DefectReportCubit>().submitReport(
+            title: title,
+            description: description,
+            image: _selectedImage!,
+          );
+    }
   }
 }
