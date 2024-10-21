@@ -29,6 +29,7 @@ import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/discovery/defect_report/defect_report_screen.dart';
+import 'package:heidi/src/presentation/main/discovery/defect_report/defect_report_success/defect_report_success.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
@@ -126,6 +127,7 @@ class Routes {
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
   static const String defectReport = "/defectReport";
+  static const String defectSubmitSuccess = "/defectSubmitSuccess";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -524,6 +526,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const DefectReportScreen();
+          },
+        );
+
+      case defectSubmitSuccess:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const DefectReportSuccessScreen();
           },
         );
 
