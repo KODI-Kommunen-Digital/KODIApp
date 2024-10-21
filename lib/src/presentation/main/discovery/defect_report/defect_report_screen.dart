@@ -35,7 +35,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       child: BlocConsumer<DefectReportCubit, DefectReportState>(
         listener: (context, state) {
           if (state.isSubmitSuccessful) {
-            Navigator.pushNamed(context, Routes.defectSubmitSuccess);
+            Navigator.pushReplacementNamed(context, Routes.defectSubmitSuccess);
           }
         },
         builder: (context, state) {
@@ -105,7 +105,6 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       hintText:
                           Translate.of(context).translate('input_content'),
                       controller: _titleController,
-                      trailing: const Icon(Icons.clear),
                     ),
                     const SizedBox(height: 16),
                     Text.rich(

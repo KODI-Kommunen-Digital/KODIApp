@@ -166,7 +166,6 @@ class _ChatLoadedState extends State<ChatLoaded> {
             );
 
     if (!isInitialLoad) {
-      // Check if any of the new messages are from other users
       bool hasMessagesFromOthers =
           newMessages.any((message) => message.senderId != widget.userId);
 
@@ -177,7 +176,6 @@ class _ChatLoadedState extends State<ChatLoaded> {
         });
         _startBannerTimer();
       } else if (_isScrolledToBottom()) {
-        // Reset the banner if scrolled to bottom
         setState(() {
           _unreadMessageCount = 0;
           _showNewMessageBanner = false;
