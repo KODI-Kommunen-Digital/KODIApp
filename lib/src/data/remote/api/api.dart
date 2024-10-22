@@ -126,8 +126,8 @@ class Api {
   }
 
   static Future<ResultApiModel> uploadToken(userId, params) async {
-    final filePath = '/users/$userId/storeFirebaseUserToken';
-    final result = await HTTPManager(apiType: 'forum').post(
+    final filePath = '/users/$userId/notificationToken';
+    final result = await HTTPManager(apiType: 'container').post(
       url: filePath,
       data: params,
     );
