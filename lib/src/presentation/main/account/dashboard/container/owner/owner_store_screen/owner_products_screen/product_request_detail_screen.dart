@@ -327,16 +327,12 @@ class _ProductRequestDetailScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (selectedShelves.isNotEmpty &&
-                        validMaxCount &&
-                        widget.isOwner)
+                    if(widget.isOwner)
                       AppButton(Translate.of(context).translate('approve'),
                           onPressed: () async {
-                        acceptRequest();
+                        checkRequest();
                       }),
-                    if (selectedShelves.isNotEmpty &&
-                        validMaxCount &&
-                        widget.isOwner)
+                    if(widget.isOwner)
                       const SizedBox(
                         width: 8,
                       ),
@@ -350,6 +346,27 @@ class _ProductRequestDetailScreenState
             )),
       ),
     );
+  }
+
+  void checkRequest() async {
+    String? msg;
+    if (selectedShelves.isNotEmpty &&
+        validMaxCount &&
+        widget.isOwner) {
+      acceptRequest();
+    } else {
+      if (!validMaxCount) {
+        msg = Translate.of(context)
+            .translate('invalid_max_count');
+      } else if (selectedShelves.isEmpty) {
+        msg = Translate.of(context)
+            .translate('choose_shelves_product');
+      } else {
+        msg = Translate.of(context).translate('error');
+      }
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(msg)));
+    }
   }
 
   void acceptRequest() async {

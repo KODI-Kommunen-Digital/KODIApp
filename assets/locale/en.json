@@ -557,6 +557,7 @@
   "max_count": "Maximal Inventory",
   "enter_max_count": "Enter maximal inventory",
   "check_max_count": "The maximal inventory must be a number",
+  "invalid_max_count": "Invalid maximal inventory",
   "add_product_success": "Success adding product",
   "edit_product_success": "Success updating product",
   "delete_product_success": "Success deleting product",

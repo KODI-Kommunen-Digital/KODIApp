@@ -559,6 +559,7 @@
   "max_count": "Maximaler Bestand",
   "enter_max_count": "Gebe maximalen Bestand ein",
   "check_max_count": "Der maximale Bestand muss eine Zahl sein",
+  "invalid_max_count": "Ungültiger maximaler Bestand",
   "add_product_success": "Produkt erfolgreich hinzugefügt",
   "edit_product_success": "Produkt erfolgreich aktualisiert",
   "delete_product_success": "Produkt erfolgreich gelöscht",
