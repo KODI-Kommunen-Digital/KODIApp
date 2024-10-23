@@ -141,7 +141,11 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                           height: 24,
                                         ),
                                         Text(
-                                          dom.DocumentFragment.html(request.title).text ?? request.title,
+                                          dom.DocumentFragment.html(
+                                                      request.title)
+                                                  .text ??
+                                              request.title,
+                                          overflow: TextOverflow.ellipsis,
                                           maxLines: 2,
                                           style: Theme.of(context)
                                               .textTheme
@@ -161,6 +165,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                             Text(
                                                 Translate.of(context)
                                                     .translate('owes'),
+                                                overflow: TextOverflow.ellipsis,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall!
@@ -169,6 +174,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                                           FontWeight.bold,
                                                     )),
                                             Text("${request.paymentOwed ?? 0}€",
+                                                overflow: TextOverflow.ellipsis,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodySmall!
@@ -211,26 +217,31 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              Translate.of(context)
-                                                  .translate('maccount'),
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            Expanded(
+                                              child: Text(
+                                                Translate.of(context)
+                                                    .translate('maccount'),
+                                                overflow: TextOverflow.ellipsis,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
                                             ),
-                                            Text(
-                                              "${request.user?.firstname ?? ''} ${request.user?.lastname ?? ''}",
-                                              overflow: TextOverflow.ellipsis,
-                                              style: Theme.of(context)
-                                                  .textTheme
-                                                  .bodySmall!
-                                                  .copyWith(
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                            Expanded(
+                                              child: Text(
+                                                "${request.user?.firstname ?? ''} ${request.user?.lastname ?? ''}",
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 2,
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .bodySmall!
+                                                    .copyWith(
+                                                      fontWeight: FontWeight.bold,
+                                                    ),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -249,8 +260,8 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                   } else {
                     return (isLoadingMore)
                         ? const Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            )
+                            child: CircularProgressIndicator.adaptive(),
+                          )
                         : Container();
                   }
                 },

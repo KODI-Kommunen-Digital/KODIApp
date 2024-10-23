@@ -73,17 +73,21 @@ class SellerRequestDetails extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        Translate.of(context).translate('maccount'),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                      Expanded(
+                        child: Text(
+                          Translate.of(context).translate('maccount'),
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
-                      Text(
-                        "${request.user!.firstname} ${request.user!.lastname}",
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
+                      Expanded(
+                        child: Text(
+                          "${request.user!.firstname} ${request.user!.lastname}",
+                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                        ),
                       ),
                     ],
                   ),
