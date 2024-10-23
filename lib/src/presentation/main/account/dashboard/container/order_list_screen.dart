@@ -151,7 +151,7 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          "${Translate.of(context).translate('quantity')}: ${item.amount.toString()}",
+                                          "${Translate.of(context).translate('amount')}: ${item.amount.toString()}€",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!
@@ -160,8 +160,9 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                               ),
                                         ),
                                         const SizedBox(height: 4),
+                                        if(item.discount != null)
                                         Text(
-                                          "${Translate.of(context).translate('price')}: ${item.getTotalPrice().toString()}€",
+                                          "${Translate.of(context).translate('discount')}: ${item.discount!.toString()}€",
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!

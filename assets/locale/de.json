@@ -619,5 +619,7 @@
   "category_missing_subcategory": "Die Kategorie dieser Unterkategorie fehlt",
   "isActive": "Ist aktiv",
   "container_seller_filter": "Welche Produkte möchtest du sehen?",
-  "created_by_me": "Von mir erstellte"
+  "created_by_me": "Von mir erstellte",
+  "amount": "Menge",
+  "discount": "Angebot"
 }

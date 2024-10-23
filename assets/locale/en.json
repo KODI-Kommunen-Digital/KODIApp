@@ -617,5 +617,7 @@
   "category_missing_subcategory": "The category for this subcategory is missing",
   "isActive": "Is active",
   "container_seller_filter": "Which products do you want to view?",
-  "created_by_me": "Created by me"
+  "created_by_me": "Created by me",
+  "amount": "Amount",
+  "discount": "Discount"
 }
