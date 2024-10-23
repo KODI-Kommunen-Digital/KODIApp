@@ -13,7 +13,7 @@ class SellerModel {
   final String? createdAt;
   final String? deletedAt;
   final String? updatedAt;
-  final UserModel? user;
+  UserModel? user;
 
   SellerModel(
       {required this.id,

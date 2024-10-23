@@ -763,10 +763,10 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getSellerRequestsOwner(
-      pageNo, cityId, storeId) async {
+  static Future<ResultApiModel> getSellersOwner(
+      pageNo, cityId, storeId, status) async {
     var list =
-        'owners/getSellers?pageNumber=$pageNo&pageSize=10&cityId=$cityId&storeId=$storeId&status=0';
+        'owners/getSellers?pageNumber=$pageNo&pageSize=10&cityId=$cityId&storeId=$storeId&status=$status';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }

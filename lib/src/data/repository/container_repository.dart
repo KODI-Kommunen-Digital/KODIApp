@@ -547,7 +547,7 @@ class ContainerRepository {
 
   static Future<List<SellerRequestModel>?> getSellerRequestsOwner(
       int pageNo, int cityId, int storeId) async {
-    final response = await Api.getSellerRequestsOwner(pageNo, cityId, storeId);
+    final response = await Api.getSellersOwner(pageNo, cityId, storeId, 0);
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
@@ -562,6 +562,27 @@ class ContainerRepository {
     } else {
       logError(
           'Error getting seller requests: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
+  static Future<List<SellerModel>?> getSellersOwner(
+      int pageNo, int cityId, int storeId, int status) async {
+    final response = await Api.getSellersOwner(pageNo, cityId, storeId, status);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return SellerModel.fromJson(item);
+      }).toList();
+
+      for (var seller in list) {
+        UserModel? user = await UserRepository.fetchUser(seller.userId);
+        if (user != null) seller.user = user;
+      }
+      return list;
+    } else {
+      logError(
+          'Error getting seller: ${response.data} ${response.message}');
       return null;
     }
   }

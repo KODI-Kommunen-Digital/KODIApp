@@ -14,13 +14,14 @@ class OwnerSellerCubit extends Cubit<OwnerSellerState> {
       emit(const OwnerSellerState.loading());
     }
     final seller =
-        await ContainerRepository.getStoreSellers(store.cityId, store.id, 1);
+        //await ContainerRepository.getStoreSellers(store.cityId, store.id, 1);
+        await ContainerRepository.getSellersOwner(1, store.cityId, store.id, 1);
     emit(OwnerSellerState.loaded(seller ?? []));
   }
 
   Future<List<SellerModel>> newSeller(int pageNo) async {
-    final newSeller = await ContainerRepository.getStoreSellers(
-        store.cityId, store.id, pageNo);
+    final newSeller = await ContainerRepository.getSellersOwner(
+        pageNo, store.cityId, store.id, 1);
     return newSeller ?? [];
   }
 
