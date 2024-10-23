@@ -243,6 +243,37 @@ class ContainerRepository {
     }
   }
 
+  static Future<List<ShelfModel>?> getEmptyStoreShelves(
+      int cityId, int storeId, {bool loading = true}) async {
+    final response = await Api.getEmptyShelves(cityId, storeId, loading);
+
+    if (response.success) {
+      final list = List.from(response.data ?? []).map((item) {
+        return ShelfModel.fromJson(item, cityId);
+      }).toList();
+
+      List<ShelfModel> updatedShelves = [];
+      for (var shelf in list) {
+        if (shelf.productId != null) {
+          ContainerProductModel? product =
+          await getProductDetails(cityId, storeId, shelf.productId!);
+          if (product != null) {
+            updatedShelves.add(ShelfModel.updateProduct(product, shelf));
+          } else {
+            updatedShelves.add(shelf);
+          }
+        } else {
+          updatedShelves.add(shelf);
+        }
+      }
+
+      return updatedShelves;
+    } else {
+      logError('Error loading shelves: ${response.data} ${response.message}');
+      return null;
+    }
+  }
+
   static Future<List<SellerModel>?> getStoreSellers(
       int cityId, int storeId, int pageNo) async {
     final response = await Api.getStoreSellers(

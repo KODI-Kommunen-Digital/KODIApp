@@ -725,6 +725,14 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> getEmptyShelves(
+      cityId, storeId, loading) async {
+    var list = '/cities/$cityId/store/$storeId/shelves?product=empty';
+    final result = await HTTPManager(apiType: 'container')
+        .get(url: list, loading: loading);
+    return ResultApiModel.fromJson(result);
+  }
+
   static Future<ResultApiModel> addShelf(cityId, storeId, params) async {
     var list = '/cities/$cityId/store/$storeId/shelves';
     final result = await HTTPManager(apiType: 'container')

@@ -53,7 +53,7 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
 
   Future<List<ShelfModel>> getShelves() async {
     final shelves =
-        await ContainerRepository.getStoreShelves(store.cityId, store.id, null, loading: true);
+        await ContainerRepository.getEmptyStoreShelves(store.cityId, store.id, loading: true);
     return shelves ?? [];
   }
 

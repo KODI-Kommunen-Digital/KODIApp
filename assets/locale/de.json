@@ -598,6 +598,7 @@
   "add_inventory": "Zu bestehendem Bestand hinzufügen",
   "product": "Produkt",
   "choose_shelves_product": "Wähle Regale für das Produkt aus",
+  "all_shelves_full": "Alle Regale sind voll",
   "shelf_details": "Regaldetails",
   "barcode": "Barcode",
   "enter_barcode": "Barcode scannen oder manuell angeben",

@@ -247,50 +247,59 @@ class _ProductRequestDetailScreenState
                     ],
                   ),
                 if (widget.isOwner)
-                  MultiSelectDropDown(
-                      //isExpanded: true,
-                      fieldBackgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      borderColor:
-                          Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
-                      optionsBackgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      dropdownBackgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      optionTextStyle: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white),
-                      selectedOptionBackgroundColor:
-                          Theme.of(context).scaffoldBackgroundColor,
-                      dropdownHeight: 200,
-                      clearIcon: null,
-                      hint: Translate.of(context)
-                          .translate('choose_shelves_product'),
-                      options: shelves.map((shelf) {
-                        return ValueItem(
-                            value: shelf.id,
-                            label: shelf.title ?? shelf.id.toString());
-                      }).toList(),
-                      onOptionRemoved: (index, ValueItem option) {
-                        setState(() {
-                          shelves.add(selectedShelves
-                              .firstWhere((shelf) => option.value == shelf.id));
-                          selectedShelves
-                              .removeWhere((shelf) => shelf.id == option.value);
-                        });
-                      },
-                      onOptionSelected:
-                          (List<ValueItem> selectedOptions) async {
-                        for (var option in selectedOptions) {
+                  IgnorePointer(
+                    ignoring: (widget.shelves == null ||
+                        (widget.shelves ?? []).isEmpty),
+                    child: MultiSelectDropDown(
+                        //isExpanded: true,
+                        fieldBackgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        borderColor:
+                            Theme.of(context).textTheme.bodyLarge?.color ??
+                                Colors.white,
+                        optionsBackgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        dropdownBackgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        optionTextStyle: TextStyle(
+                            color:
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white),
+                        selectedOptionBackgroundColor:
+                            Theme.of(context).scaffoldBackgroundColor,
+                        dropdownHeight: 200,
+                        clearIcon: null,
+                        hint: (widget.shelves != null &&
+                                (widget.shelves ?? []).isNotEmpty)
+                            ? Translate.of(context)
+                                .translate('choose_shelves_product')
+                            : Translate.of(context)
+                                .translate('all_shelves_full'),
+                        options: shelves.map((shelf) {
+                          return ValueItem(
+                              value: shelf.id,
+                              label: shelf.title ?? shelf.id.toString());
+                        }).toList(),
+                        onOptionRemoved: (index, ValueItem option) {
                           setState(() {
-                            selectedShelves.add(shelves.firstWhere(
+                            shelves.add(selectedShelves.firstWhere(
                                 (shelf) => option.value == shelf.id));
-                            shelves.removeWhere(
+                            selectedShelves.removeWhere(
                                 (shelf) => shelf.id == option.value);
                           });
-                        }
-                      }),
+                        },
+                        onOptionSelected:
+                            (List<ValueItem> selectedOptions) async {
+                          for (var option in selectedOptions) {
+                            setState(() {
+                              selectedShelves.add(shelves.firstWhere(
+                                  (shelf) => option.value == shelf.id));
+                              shelves.removeWhere(
+                                  (shelf) => shelf.id == option.value);
+                            });
+                          }
+                        }),
+                  ),
                 if (widget.isOwner)
                   const SizedBox(
                     height: 32,
@@ -327,12 +336,12 @@ class _ProductRequestDetailScreenState
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if(widget.isOwner)
+                    if (widget.isOwner)
                       AppButton(Translate.of(context).translate('approve'),
                           onPressed: () async {
                         checkRequest();
                       }),
-                    if(widget.isOwner)
+                    if (widget.isOwner)
                       const SizedBox(
                         width: 8,
                       ),
@@ -350,22 +359,17 @@ class _ProductRequestDetailScreenState
 
   void checkRequest() async {
     String? msg;
-    if (selectedShelves.isNotEmpty &&
-        validMaxCount &&
-        widget.isOwner) {
+    if (selectedShelves.isNotEmpty && validMaxCount && widget.isOwner) {
       acceptRequest();
     } else {
       if (!validMaxCount) {
-        msg = Translate.of(context)
-            .translate('invalid_max_count');
+        msg = Translate.of(context).translate('invalid_max_count');
       } else if (selectedShelves.isEmpty) {
-        msg = Translate.of(context)
-            .translate('choose_shelves_product');
+        msg = Translate.of(context).translate('choose_shelves_product');
       } else {
         msg = Translate.of(context).translate('error');
       }
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(msg)));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
     }
   }
 

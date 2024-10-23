@@ -596,6 +596,7 @@
   "add_inventory": "Add to inventory",
   "product": "Product",
   "choose_shelves_product": "Choose shelves for product",
+  "all_shelves_full": "All shelves are full",
   "shelf_details": "Shelf details",
   "barcode": "Barcode",
   "enter_barcode": "Scan barcode or enter manually",
