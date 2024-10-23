@@ -45,16 +45,13 @@ class CustomerCardCubit extends Cubit<CustomerCardState> {
   Future<List<ContainerTransactionModel>> loadMoreTransactions(
       int cardId, int pageNo) async {
     final UserModel? user = await UserRepository.loadUser();
-    List<ContainerTransactionModel> transactions = [];
+    List<ContainerTransactionModel>? transactions;
     if (user != null) {
-      final List<ContainerTransactionModel>? userTransactions =
+      transactions =
           await ContainerRepository.getCustomerTransactions(
               user.id, cardId, pageNo);
-      if (userTransactions != null) {
-        transactions = userTransactions;
-      }
     }
-    return transactions;
+    return transactions ?? [];
   }
 
 /*Future<List<OrderModel>> newOrders(int pageNo) async {

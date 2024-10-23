@@ -60,7 +60,7 @@ class CustomerCardLoaded extends StatefulWidget {
 
 class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
   final ScrollController _scrollController = ScrollController();
-  List<ContainerTransactionModel>? transactions;
+  List<ContainerTransactionModel> transactions = [];
   int pageNo = 1;
   bool isLoadingMore = false;
 
@@ -68,14 +68,14 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
         int? card = context.read<CustomerCardCubit>().selectedCard;
-        if (transactions != null && card != null) {
+        if (card != null) {
           setState(() {
             isLoadingMore = true;
           });
           final List<ContainerTransactionModel> newTransactions = await context
               .read<CustomerCardCubit>()
               .loadMoreTransactions(card, ++pageNo);
-          transactions!.addAll(newTransactions);
+          transactions.addAll(newTransactions);
           setState(() {
             isLoadingMore = false;
           });
@@ -88,7 +88,7 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    transactions = widget.transactions;
+    transactions.addAll(widget.transactions ?? []);
   }
 
   @override
@@ -140,49 +140,61 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
           const SizedBox(
             height: 32,
           ),
-          if (transactions != null)
-            (transactions!.isNotEmpty)
-                ? Expanded(
-                    child: ListView.separated(
-                      separatorBuilder: (context, index) {
-                        return const Divider();
-                      },
-                      itemBuilder: (context, index) {
-                        if (index < transactions!.length) {
-                          ContainerTransactionModel transaction =
-                              transactions![index];
-                          return Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 32),
-                            child: Stack(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: <Widget>[
-                                    Text(
-                                      transaction.id.toString(),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    const SizedBox(height: 8),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          '${Translate.of(context).translate('card')}: ${transaction.cardId}',
-                                          maxLines: 2,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleSmall!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
+          (transactions.isNotEmpty)
+              ? Expanded(
+                  child: ListView.separated(
+                    separatorBuilder: (context, index) {
+                      return const Divider();
+                    },
+                    controller: _scrollController,
+                    itemBuilder: (context, index) {
+                      if (index < transactions.length) {
+                        ContainerTransactionModel transaction =
+                            transactions[index];
+                        return Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 32),
+                          child: Stack(
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Text(
+                                    transaction.id.toString(),
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                          fontWeight: FontWeight.bold,
                                         ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Column(
+                                    children: [
+                                      Text(
+                                        '${Translate.of(context).translate('card')}: ${transaction.cardId}',
+                                        maxLines: 2,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleSmall!
+                                            .copyWith(
+                                                fontWeight: FontWeight.bold),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${Translate.of(context).translate('quantity')}: ${transaction.amount}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      if (transaction.createdAt != null)
                                         const SizedBox(height: 4),
+                                      if (transaction.createdAt != null)
                                         Text(
-                                          '${Translate.of(context).translate('quantity')}: ${transaction.amount}',
+                                          transaction.formatDate(),
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!
@@ -190,54 +202,37 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
                                                 fontWeight: FontWeight.bold,
                                               ),
                                         ),
-                                        if (transaction.createdAt != null)
-                                          const SizedBox(height: 4),
-                                        if (transaction.createdAt != null)
-                                          Text(
-                                            transaction.formatDate(),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .copyWith(
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                          ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return (isLoadingMore)
-                              ? const Positioned(
-                                  bottom: 20,
-                                  left: 0,
-                                  right: 0,
-                                  child: Center(
-                                    child: CircularProgressIndicator.adaptive(),
+                                    ],
                                   ),
-                                )
-                              : Container();
-                        }
-                      },
-                      itemCount: transactions!.length + 1,
-                    ),
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      const Icon(Icons.sentiment_satisfied),
-                      Padding(
-                        padding: const EdgeInsets.all(4.0),
-                        child: Text(
-                          Translate.of(context).translate('list_is_empty'),
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                      ),
-                    ],
+                                ],
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return (isLoadingMore)
+                            ? const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                              )
+                            : Container();
+                      }
+                    },
+                    itemCount: transactions.length + 1,
                   ),
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.sentiment_satisfied),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        Translate.of(context).translate('list_is_empty'),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ],
+                ),
         ],
       ),
     );
