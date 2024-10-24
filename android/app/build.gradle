@@ -34,8 +34,13 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
  }
 
+ ext {
+    buildToolsVersion = "34.0.0"
+}
+
 android {
-    compileSdkVersion flutter.compileSdkVersion
+    namespace "com.hasslachtal.mitwiz"
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -57,7 +62,7 @@ android {
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 24
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 34
         versionCode 1
         versionName flutterVersionName
         //Change for Daniel
@@ -77,6 +82,11 @@ android {
            signingConfig signingConfigs.release
        }
    }
+
+   lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
 
 }
 

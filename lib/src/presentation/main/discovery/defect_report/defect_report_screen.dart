@@ -133,6 +133,26 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       maxLines: 5,
                     ),
                     const SizedBox(height: 24),
+                    Text(
+                      Translate.of(context).translate('email'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[900],
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: const Text(
+                        'schadensmelder@vgem-mitwitz.de',
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                   ],
                 ),
               ),

@@ -73,7 +73,7 @@
   "input_email": "Email",
   "information": "Information",
   "input_information": "Gib hier dein Feedback ein",
-  "input_defect": "Bitte tragen Sie hier Ihren Defekt ein",
+  "input_defect": "Welchen Mangel möchtest du melden?",
   "value_not_empty": "Eingabe ist leer",
   "value_not_valid_range": "Eingabe ungültiger Bereich",
   "value_not_valid_email": "Eingabe ungültige E-Mail",
@@ -251,7 +251,7 @@
   "back": "Zurück",
   "sort": "Sortieren",
   "add": "Hinzufügen",
-  "input_description": "Eingabebeschreibung",
+  "input_description": "Mängel melden",
   "contact": "Mängelmelder",
   "input_content": "Beschreibung",
   "choose_person_message": "Bitte wählen Sie Personen",
@@ -536,6 +536,7 @@
   "welcomeForum": "Hier können über das blaue Plusicon neue Gruppen von dir erstellt werden. Du kannst private und öffentliche Gruppen erstellen. Mitglieder können jederzeit bei öffentlichen Gruppen beitreten und bei privaten Gruppen eine Anfrage stellen. Viel Spaß!",
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
   "vote_submit_fail": "Fehler beim Abstimmen",
-  "views": "Aufrufe"
+  "views": "Aufrufe",
+  "local_profile": "Ortssteckbrief"
 }
 

@@ -183,9 +183,11 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ),
                     if (user != null)
                       AppListTitle(
-                        title: Translate.of(context).translate('contact'),
+                        title: Translate.of(context)
+                            .translate('category_defect_report'),
                         onPressed: () {
-                          _onNavigate(Routes.contactUs);
+                          Navigator.pushNamed(context, Routes.defectReport,
+                              arguments: {'id': 15, 'title': 'defect_report'});
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,
@@ -195,6 +197,24 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
+                    AppListTitle(
+                      title: Translate.of(context).translate('local_profile'),
+                      onPressed: () {
+                        Navigator.pushNamed(
+                          context,
+                          Routes.localProfile,
+                        ).then((value) {
+                          setState(() {});
+                        });
+                      },
+                      trailing: RotatedBox(
+                        quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                        child: const Icon(
+                          Icons.keyboard_arrow_right,
+                          textDirection: TextDirection.ltr,
+                        ),
+                      ),
+                    ),
                     // AppListTitle(
                     //   title: Translate.of(context).translate('faq'),
                     //   onPressed: () {
@@ -230,11 +250,5 @@ class _AccountLoadedState extends State<AccountLoaded> {
 
   void _onLogin() async {
     Navigator.pushNamed(context, Routes.signIn);
-  }
-
-  void _onNavigate(String route) {
-    Navigator.pushNamed(context, route).then((value) {
-      setState(() {});
-    });
   }
 }

@@ -212,18 +212,21 @@ class _ListProductScreenState extends State<ListProductScreen> {
                             color: Colors.white,
                           ),
                         ),
-                      AppFilterButton(
-                        voidCallback: () {
-                          MultiFilter multiFilter = whatCanFilter(isEvent);
-                          Navigator.pushNamed(context, Routes.filterScreen,
-                              arguments: {
-                                "multifilter": multiFilter
-                              }).then((filter) => {
-                                if (filter != null)
-                                  {_updateSelectedFilter(filter as MultiFilter)}
-                              });
-                        },
-                      ),
+                      if (isCity) // Only show filter button if it's a city/location
+                        AppFilterButton(
+                          voidCallback: () {
+                            MultiFilter multiFilter = whatCanFilter(isEvent);
+                            Navigator.pushNamed(context, Routes.filterScreen,
+                                    arguments: {"multifilter": multiFilter})
+                                .then((filter) => {
+                                      if (filter != null)
+                                        {
+                                          _updateSelectedFilter(
+                                              filter as MultiFilter)
+                                        }
+                                    });
+                          },
+                        ),
                       IconButton(
                           onPressed: () {
                             _searchListings();

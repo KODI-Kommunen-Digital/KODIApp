@@ -22,6 +22,7 @@ import 'package:heidi/src/presentation/main/account/faq/faq_screen.dart';
 import 'package:heidi/src/presentation/main/account/legal/imprint/imprint.dart';
 import 'package:heidi/src/presentation/main/account/legal/legal.dart';
 import 'package:heidi/src/presentation/main/account/legal/privacy_policy/privacy.dart';
+import 'package:heidi/src/presentation/main/account/local_profile/local_profile.dart';
 import 'package:heidi/src/presentation/main/account/profile/cubit/profile_cubit.dart';
 import 'package:heidi/src/presentation/main/account/profile/profile_screen.dart';
 import 'package:heidi/src/presentation/main/account/profile_settings/profile_settings_screen.dart';
@@ -128,6 +129,7 @@ class Routes {
   static const String filterScreen = "/filterScreen";
   static const String defectReport = "/defectReport";
   static const String defectSubmitSuccess = "/defectSubmitSuccess";
+  static const String localProfile = "/localProfile";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -533,6 +535,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const DefectReportSuccessScreen();
+          },
+        );
+
+      case localProfile:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const LocalProfileScreen();
           },
         );
 
