@@ -1,11 +1,11 @@
 {
-    "name": "Mitwitz App",
-    "short_name": "Mitwitz App",
+    "name": "Schneckenlohe",
+    "short_name": "Schneckenlohe",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Mitwitz App",
+    "description": "Schneckenlohe",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

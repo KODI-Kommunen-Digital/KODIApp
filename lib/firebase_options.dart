@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBmF7c4-uqyP7nugYg1sYHGbtgDEbA4KRk',
-    appId: '1:1081371753755:android:f68e90ea3bb8ca3a7e27be',
-    messagingSenderId: '1081371753755',
-    projectId: 'mitwiz-b102d',
-    storageBucket: 'mitwiz-b102d.appspot.com',
+    apiKey: 'AIzaSyAn92dYjgObEZX6f6ZU86XjhSJIwXjW9zI',
+    appId: '1:363023604244:android:c0eff2c9682596bef2a501',
+    messagingSenderId: '363023604244',
+    projectId: 'schneckenlohe-21773',
+    storageBucket: 'schneckenlohe-21773.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyA5G4TRb1epT_RXtmSqZ5oi3LVkfL0mNFg',
-    appId: '1:1081371753755:ios:cff44d0d326de6da7e27be',
-    messagingSenderId: '1081371753755',
-    projectId: 'mitwiz-b102d',
-    storageBucket: 'mitwiz-b102d.appspot.com',
-    iosBundleId: 'com.hasslachtal.mitwiz',
+    apiKey: 'AIzaSyCEK00-DHN6C68UKBBJl23_bk0ANxw5ePE',
+    appId: '1:363023604244:ios:f6f45e35497ad531f2a501',
+    messagingSenderId: '363023604244',
+    projectId: 'schneckenlohe-21773',
+    storageBucket: 'schneckenlohe-21773.appspot.com',
+    iosBundleId: 'com.hasslachtal.schneckenlohe',
   );
 
 }
