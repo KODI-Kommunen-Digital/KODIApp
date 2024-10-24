@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mitwitz App",
+            "name": "Pressig-App",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Mitwitz App (profile mode)",
+            "name": "Pressig-App (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Mitwitz App (release mode)",
+            "name": "Pressig-App (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
