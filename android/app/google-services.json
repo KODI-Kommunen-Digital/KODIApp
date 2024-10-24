@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1081371753755",
-    "project_id": "mitwiz-b102d",
-    "storage_bucket": "mitwiz-b102d.appspot.com"
+    "project_number": "363023604244",
+    "project_id": "schneckenlohe-21773",
+    "storage_bucket": "schneckenlohe-21773.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1081371753755:android:f68e90ea3bb8ca3a7e27be",
+        "mobilesdk_app_id": "1:363023604244:android:c0eff2c9682596bef2a501",
         "android_client_info": {
-          "package_name": "com.hasslachtal.mitwiz"
+          "package_name": "com.hasslachtal.schneckenlohe"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBmF7c4-uqyP7nugYg1sYHGbtgDEbA4KRk"
+          "current_key": "AIzaSyAn92dYjgObEZX6f6ZU86XjhSJIwXjW9zI"
         }
       ],
       "services": {

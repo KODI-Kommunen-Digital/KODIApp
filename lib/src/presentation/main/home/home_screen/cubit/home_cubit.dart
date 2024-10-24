@@ -44,8 +44,8 @@ class HomeCubit extends Cubit<HomeState> {
     ));
     location.add(CategoryModel(
       id: ++maxId,
-      title: 'Schneckenlohe',
-      image: 'admin/City3.png',
+      title: 'Mitwiz',
+      image: 'admin/City1.png',
     ));
     location.add(CategoryModel(
       id: ++maxId,

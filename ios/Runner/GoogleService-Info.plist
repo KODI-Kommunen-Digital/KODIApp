@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyA5G4TRb1epT_RXtmSqZ5oi3LVkfL0mNFg</string>
+	<string>AIzaSyCEK00-DHN6C68UKBBJl23_bk0ANxw5ePE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1081371753755</string>
+	<string>363023604244</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.hasslachtal.mitwiz</string>
+	<string>com.hasslachtal.schneckenlohe</string>
 	<key>PROJECT_ID</key>
-	<string>mitwiz-b102d</string>
+	<string>schneckenlohe-21773</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mitwiz-b102d.appspot.com</string>
+	<string>schneckenlohe-21773.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1081371753755:ios:cff44d0d326de6da7e27be</string>
+	<string>1:363023604244:ios:f6f45e35497ad531f2a501</string>
 </dict>
 </plist>
