@@ -49,8 +49,8 @@ class HomeCubit extends Cubit<HomeState> {
     ));
     location.add(CategoryModel(
       id: ++maxId,
-      title: 'Stockheim',
-      image: 'admin/City4.png',
+      title: 'Mitwitz',
+      image: 'admin/City1.png',
     ));
     if (!calledExternally && !isRefreshLoader) {
       await AppBloc.discoveryCubit.onLoad();

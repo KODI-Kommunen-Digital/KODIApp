@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyA5G4TRb1epT_RXtmSqZ5oi3LVkfL0mNFg</string>
+	<string>AIzaSyD_N2MD2NFcYh08gEhWEr5YQgd1bDm0Gas</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1081371753755</string>
+	<string>1095876213046</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.hasslachtal.mitwiz</string>
+	<string>com.hasslachtal.stockheim</string>
 	<key>PROJECT_ID</key>
-	<string>mitwiz-b102d</string>
+	<string>stockheim-6b6a7</string>
 	<key>STORAGE_BUCKET</key>
-	<string>mitwiz-b102d.appspot.com</string>
+	<string>stockheim-6b6a7.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1081371753755:ios:cff44d0d326de6da7e27be</string>
+	<string>1:1095876213046:ios:e0aaa2c9952363870cdb97</string>
 </dict>
 </plist>
