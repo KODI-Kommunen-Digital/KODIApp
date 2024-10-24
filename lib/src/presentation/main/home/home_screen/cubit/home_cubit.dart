@@ -39,8 +39,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     location.add(CategoryModel(
       id: ++maxId,
-      title: 'Pressig',
-      image: 'admin/City2.png',
+      title: 'Mitwitz',
+      image: 'admin/City1.png',
     ));
     location.add(CategoryModel(
       id: ++maxId,
