@@ -148,7 +148,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       child: const Text(
-                        'schadensmelder@vgem-mitwitz.de',
+                        'gemeinde@stockheim.bayern.de',
                         style: TextStyle(color: Colors.white, fontSize: 17),
                       ),
                     ),

@@ -17,7 +17,7 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl =
-        !forum ? 'http://5.75.161.217:3001/' : 'http://5.75.161.217:3002/';
+        !forum ? 'http://5.75.161.217:6001/' : 'http://5.75.161.217:6002/';
 
     _dio = Dio(
       BaseOptions(
