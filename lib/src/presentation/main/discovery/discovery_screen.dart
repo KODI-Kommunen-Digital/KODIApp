@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
-import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
-import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -48,28 +46,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(Translate.of(context).translate('cust_services')),
-        actions: [
-          BlocConsumer<DiscoveryCubit, DiscoveryState>(
-            listener: (context, state) {},
-            builder: (context, state) => state.maybeWhen(
-                loaded: (list) => AppFilterButton(
-                      multiFilter: MultiFilter(
-                        hasLocationFilter: false,
-                        currentLocation:
-                            context.read<DiscoveryCubit>().currentCity ?? 0,
-                        cities: context.read<DiscoveryCubit>().location,
-                      ),
-                      filterCallBack: (filter) async {
-                        if (filter.currentLocation != null) {
-                          context
-                              .read<DiscoveryCubit>()
-                              .onLocationFilter(filter.currentLocation!, true);
-                        }
-                      },
-                    ),
-                orElse: () => Container()),
-          )
-        ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
         listener: (context, state) {

@@ -63,7 +63,7 @@
             "name": "Umfrage",
             "noOfSubcategories": 0,
             "icon": "fas fa-square-poll-vertical",
-            "color": "#027148",
+            "color": "#A020F0",
             "categoryType" : "category"
         }
     ]

@@ -49,10 +49,10 @@ dependencies:
 
 
   ### Device Permission
-  device_info: 2.0.3
+  device_info_plus: ^11.1.0
   permission_handler: ^11.0.1
   url_launcher: ^6.3.1
-  connectivity: ^3.0.6
+  connectivity_plus: ^6.1.0
   device_calendar: ^4.3.2
 
   ### Location
@@ -218,3 +218,8 @@ flutter:
         - asset: assets/fonts/Merriweather-Regular.ttf
   uses-material-design: true
 
+dependency_overrides:
+  flutter_svprogresshud:
+    git:
+      url: https://github.com/leanflutter/flutter_svprogresshud.git
+      ref: master  # or try 'master' if 'main' doesn't work
