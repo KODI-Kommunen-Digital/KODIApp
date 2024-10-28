@@ -1,4 +1,4 @@
-package com.smartauf
+package com.hasslachtal.pressig
 
 import io.flutter.embedding.android.FlutterActivity
 
