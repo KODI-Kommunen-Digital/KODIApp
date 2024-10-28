@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://app.coburg.it/ImprintPage');
+                _makeAction('https://rodachtal.info/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('https://app.coburg.it/PrivacyPolicy');
+                _makeAction('https://rodachtal.info/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +79,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('https://app.coburg.it/TermsOfUse');
+                _makeAction('https://rodachtal.info/TermsOfUse');
               },
               trailing: Row(
                 children: <Widget>[

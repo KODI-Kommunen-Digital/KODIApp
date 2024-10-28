@@ -17,11 +17,7 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl =
-        !forum ? 'http://116.203.2.158:8002/' : 'http:/116.203.2.158:8003/';
-    // ? 'http://localhost:3001/'
-    //     : 'http://localhost:3002/';
-    //? 'https://app.geseke.it/api/'
-    //: 'https://app.geseke.it/forumapi/';
+        !forum ? 'https://rodachtal.info/api/' : 'https://rodachtal.info/api/';
 
     _dio = Dio(
       BaseOptions(
