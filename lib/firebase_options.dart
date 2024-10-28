@@ -63,7 +63,6 @@ class DefaultFirebaseOptions {
     messagingSenderId: '363023604244',
     projectId: 'schneckenlohe-21773',
     storageBucket: 'schneckenlohe-21773.appspot.com',
-    iosBundleId: 'com.hasslachtal.schneckenlohe',
+    iosBundleId: 'com.hasslachtal.schneckenlohe.heidi',
   );
-
 }
