@@ -16,8 +16,9 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl =
-        !forum ? 'http://5.75.161.217:4001/' : 'http://5.75.161.217:4002/';
+    _baseUrl = !forum
+        ? 'https://appcms.pressig.de/api/'
+        : 'https://appcms.pressig.de/forumapi/';
 
     _dio = Dio(
       BaseOptions(
