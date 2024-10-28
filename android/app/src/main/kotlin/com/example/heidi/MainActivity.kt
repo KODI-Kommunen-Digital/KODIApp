@@ -1,4 +1,4 @@
-package com.smartauf
+package com.hasslachtal.schneckenlohe
 
 import io.flutter.embedding.android.FlutterActivity
 
