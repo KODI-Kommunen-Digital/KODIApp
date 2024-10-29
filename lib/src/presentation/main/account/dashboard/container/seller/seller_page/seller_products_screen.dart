@@ -115,6 +115,9 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         final newProducts =
             await context.read<SellerCubit>().newProducts(++pageNo);
         products.addAll(newProducts);
+        if(newProducts.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         setState(() {
           isLoadingMore = false;
         });

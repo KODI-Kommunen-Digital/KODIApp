@@ -41,7 +41,8 @@ class SellerOrdersLoaded extends StatefulWidget {
   final List<SellerOrderModel> soldOrders;
   final UserModel user;
 
-  const SellerOrdersLoaded({super.key, required this.soldOrders, required this.user});
+  const SellerOrdersLoaded(
+      {super.key, required this.soldOrders, required this.user});
 
   @override
   State<SellerOrdersLoaded> createState() => _SellerLoadedState();
@@ -50,6 +51,7 @@ class SellerOrdersLoaded extends StatefulWidget {
 class _SellerLoadedState extends State<SellerOrdersLoaded> {
   List<SellerOrderModel> soldOrders = [];
   int pageNo = 1;
+  bool finishedLoading = false;
 
   @override
   void initState() {
@@ -68,11 +70,15 @@ class _SellerLoadedState extends State<SellerOrdersLoaded> {
           sellerOrders: soldOrders,
           loadMore: (page) async {
             final newOrders = await context.read<SellerCubit>().newOrders(page);
+            if (newOrders.isEmpty) {
+              finishedLoading = true;
+            }
             setState(() {
               soldOrders.addAll(newOrders);
               pageNo++;
             });
           },
+          finishedLoading: finishedLoading,
           pageNo: pageNo),
     );
   }

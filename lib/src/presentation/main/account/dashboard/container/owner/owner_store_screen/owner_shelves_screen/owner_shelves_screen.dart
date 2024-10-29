@@ -79,6 +79,9 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
         final newShelves =
             await context.read<OwnerShelvesCubit>().newShelves(++pageNo);
         shelves.addAll(newShelves);
+        if(newShelves.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         setState(() {
           isLoadingMore = false;
         });

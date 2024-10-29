@@ -81,6 +81,9 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
               await context.read<OwnerCategoryCubit>().newCategories(++pageNo);
         }
         categories.addAll(newCategories);
+        if(newCategories.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         setState(() {
           isLoadingMore = false;
         });

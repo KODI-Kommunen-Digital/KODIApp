@@ -46,6 +46,7 @@ class CustomerLoaded extends StatefulWidget {
 class _CustomerLoadedState extends State<CustomerLoaded> {
   List<OrderModel> orders = [];
   int pageNo = 1;
+  bool finishedLoading = false;
 
   @override
   void initState() {
@@ -72,11 +73,15 @@ class _CustomerLoadedState extends State<CustomerLoaded> {
           loadMore: (page) async {
             final newOrders =
                 await context.read<CustomerCubit>().newOrders(page);
+            if(newOrders.isEmpty) {
+              finishedLoading = true;
+            }
             setState(() {
               orders.addAll(newOrders);
               pageNo++;
             });
           },
+          finishedLoading: finishedLoading,
           pageNo: pageNo),
     );
   }

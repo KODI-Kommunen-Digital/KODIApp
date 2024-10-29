@@ -46,6 +46,7 @@ class OwnerOrdersLoaded extends StatefulWidget {
 class _OwnerOrdersLoadedState extends State<OwnerOrdersLoaded> {
   List<OrderModel> orders = [];
   int pageNo = 1;
+  bool finishedLoading = false;
 
   @override
   void initState() {
@@ -65,11 +66,15 @@ class _OwnerOrdersLoadedState extends State<OwnerOrdersLoaded> {
           loadMore: (page) async {
             final newOrders =
                 await context.read<OwnerOrdersCubit>().newOrders(page);
+            if(newOrders.isEmpty) {
+              finishedLoading = true;
+            }
             setState(() {
               orders.addAll(newOrders);
               pageNo++;
             });
           },
+          finishedLoading: finishedLoading,
           pageNo: pageNo),
     );
   }

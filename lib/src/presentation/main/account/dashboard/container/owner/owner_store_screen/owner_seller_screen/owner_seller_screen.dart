@@ -65,6 +65,9 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
         final newSeller =
             await context.read<OwnerSellerCubit>().newSeller(++pageNo);
         seller.addAll(newSeller);
+        if(newSeller.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         setState(() {
           isLoadingMore = false;
         });

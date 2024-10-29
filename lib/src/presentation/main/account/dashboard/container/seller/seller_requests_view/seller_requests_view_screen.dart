@@ -70,6 +70,9 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
         });
         final newRequests =
             await context.read<SellerRequestsViewCubit>().newOrders(++pageNo);
+        if(newRequests.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         setState(() {
           requests.addAll(newRequests);
           isLoadingMore = false;

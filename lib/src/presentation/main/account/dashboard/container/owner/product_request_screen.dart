@@ -41,6 +41,9 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
         } else {
           newRequests = await context.read<SellerCubit>().newRequests(++pageNo);
         }
+        if(newRequests.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
+        }
         requests.addAll(newRequests);
         setState(() {
           isLoadingMore = false;

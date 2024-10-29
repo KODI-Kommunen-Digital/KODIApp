@@ -13,13 +13,15 @@ class OrderListScreen extends StatefulWidget {
   final List<SellerOrderModel>? sellerOrders;
   final int pageNo;
   final Function(int) loadMore;
+  final bool finishedLoading;
 
   const OrderListScreen(
       {super.key,
       this.orders,
       this.sellerOrders,
       required this.loadMore,
-      required this.pageNo});
+      required this.pageNo,
+      required this.finishedLoading});
 
   @override
   State<OrderListScreen> createState() => _OrderListScreenState();
@@ -30,11 +32,15 @@ class _OrderListScreenState extends State<OrderListScreen> {
   bool isLoadingMore = false;
 
   Future _scrollListener() async {
-    if (_scrollController.position.atEdge) {
+    if (_scrollController.position.atEdge && !widget.finishedLoading) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
           widget.loadMore(widget.pageNo);
+        });
+        await Future.delayed(const Duration(seconds: 2));
+        setState(() {
+          isLoadingMore = false;
         });
       }
     }
