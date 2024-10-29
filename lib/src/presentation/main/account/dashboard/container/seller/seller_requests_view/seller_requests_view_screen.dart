@@ -191,7 +191,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                           children: [
                                             Text(
                                               Translate.of(context)
-                                                  .translate('request_seller'),
+                                                  .translate('maccount'),
                                               overflow: TextOverflow.ellipsis,
                                               style: Theme.of(context)
                                                   .textTheme
@@ -201,47 +201,15 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                                   ),
                                             ),
                                             Text(
-                                              request.id.toString(),
+                                              request.user?.username ?? '',
                                               overflow: TextOverflow.ellipsis,
+                                              maxLines: 2,
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall!
                                                   .copyWith(
                                                     fontWeight: FontWeight.bold,
                                                   ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                Translate.of(context)
-                                                    .translate('maccount'),
-                                                overflow: TextOverflow.ellipsis,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                              ),
-                                            ),
-                                            Expanded(
-                                              child: Text(
-                                                "${request.user?.firstname ?? ''} ${request.user?.lastname ?? ''}",
-                                                overflow: TextOverflow.ellipsis,
-                                                maxLines: 2,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      fontWeight: FontWeight.bold,
-                                                    ),
-                                              ),
                                             ),
                                           ],
                                         ),
