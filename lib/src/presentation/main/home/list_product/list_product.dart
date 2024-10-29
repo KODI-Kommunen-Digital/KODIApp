@@ -200,18 +200,18 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      if (isEvent)
-                        IconButton(
-                          padding: EdgeInsets.zero,
-                          onPressed: () {
-                            _makeAction(
-                                "https://pages.destination.one/de/einbeck/default/announce/Event/edit");
-                          },
-                          icon: const Icon(
-                            Icons.add,
-                            color: Colors.white,
-                          ),
-                        ),
+                      // if (isEvent)
+                      //   IconButton(
+                      //     padding: EdgeInsets.zero,
+                      //     onPressed: () {
+                      //       _makeAction(
+                      //           "https://pages.destination.one/de/einbeck/default/announce/Event/edit");
+                      //     },
+                      //     icon: const Icon(
+                      //       Icons.add,
+                      //       color: Colors.white,
+                      //     ),
+                      //   ),
                       if (isCity) // Only show filter button if it's a city/location
                         AppFilterButton(
                           voidCallback: () {
