@@ -32,11 +32,8 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
       }
     }
 
-    final requests = await ContainerRepository.getStoreProductRequests(
-        cityId: store.cityId, storeId: store.id, pageNo: 1, status: 0);
-
     emit(OwnerProductsState.loaded(
-        products ?? [], requests ?? [], categories ?? [], subCategories));
+        products ?? [], categories ?? [], subCategories));
   }
 
   Future<List<ContainerProductModel>> newProducts(int pageNo) async {

@@ -13,10 +13,8 @@ import 'package:html/dom.dart' as dom;
 
 class ProductRequestScreen extends StatefulWidget {
   final bool isOwner;
-  final List<ProductRequestModel> requests;
 
-  const ProductRequestScreen(
-      {super.key, required this.requests, required this.isOwner});
+  const ProductRequestScreen({super.key, required this.isOwner});
 
   @override
   State<ProductRequestScreen> createState() => _ProductRequestScreenState();
@@ -55,7 +53,6 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    requests.addAll(widget.requests);
   }
 
   @override
@@ -65,6 +62,17 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
     super.dispose();
   }
 
+  Future<List<ProductRequestModel>> getInitialRequests() async {
+    late List<ProductRequestModel> newRequests;
+    if (widget.isOwner) {
+      newRequests =
+      await context.read<OwnerProductsCubit>().newRequests(1);
+    } else {
+      newRequests = await context.read<SellerCubit>().newRequests(1);
+    }
+    return newRequests;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,49 +80,64 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
           title: Text(Translate.of(context).translate('product_request')),
           centerTitle: true,
         ),
-        body: (requests.isNotEmpty)
-            ? ListView.builder(
-                controller: _scrollController,
-                itemBuilder: (context, index) {
-                  if (index < requests.length) {
-                    ProductRequestModel item = requests[index];
-                    return InkWell(
-                      onTap: () async {
-                        navigateToDetail(item);
-                      },
-                      child: AppListTitle(
-                        title: dom.DocumentFragment.html(item.title).text ?? '',
-                        subtitle:
-                            dom.DocumentFragment.html(item.description).text ??
-                                '',
-                        trailing: Text("${item.price.toString()}€"),
-                      ),
-                    );
-                  } else {
-                    return (isLoadingMore)
-                        ? const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          )
-                        : Container();
-                  }
-                },
-                itemCount: requests.length + 1,
-              )
-            : Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const Icon(Icons.sentiment_satisfied),
-                    Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        Translate.of(context).translate('list_is_empty'),
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      ),
-                    ),
-                  ],
-                ),
-              ));
+        body: FutureBuilder(
+            future: getInitialRequests(),
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                requests.addAll(snapshot.data ?? []);
+                return (requests.isNotEmpty)
+                    ? ListView.builder(
+                        controller: _scrollController,
+                        itemBuilder: (context, index) {
+                          if (index < requests.length) {
+                            ProductRequestModel item = requests[index];
+                            return InkWell(
+                              onTap: () async {
+                                navigateToDetail(item);
+                              },
+                              child: AppListTitle(
+                                title: dom.DocumentFragment.html(item.title)
+                                        .text ??
+                                    '',
+                                subtitle:
+                                    dom.DocumentFragment.html(item.description)
+                                            .text ??
+                                        '',
+                                trailing: Text("${item.price.toString()}€"),
+                              ),
+                            );
+                          } else {
+                            return (isLoadingMore)
+                                ? const Center(
+                                    child: CircularProgressIndicator.adaptive(),
+                                  )
+                                : Container();
+                          }
+                        },
+                        itemCount: requests.length + 1,
+                      )
+                    : Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            const Icon(Icons.sentiment_satisfied),
+                            Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                Translate.of(context)
+                                    .translate('list_is_empty'),
+                                style: Theme.of(context).textTheme.bodyLarge,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }));
   }
 
   void navigateToDetail(ProductRequestModel item) async {

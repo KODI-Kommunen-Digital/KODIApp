@@ -35,10 +35,6 @@ class SellerCubit extends Cubit<SellerState> {
               cityId: store!.cityId, storeId: store!.id, pageNo: 1);
         }
 
-        final List<ProductRequestModel>? productRequests =
-            await ContainerRepository.getStoreProductRequests(
-                cityId: store!.cityId, storeId: store!.id, pageNo: 1);
-
         final categories = await ContainerRepository.loadStoreCategories(
             store!.cityId, store!.id);
 
@@ -53,10 +49,10 @@ class SellerCubit extends Cubit<SellerState> {
             }
           }
         }
-        emit(SellerState.loadedProducts(products ?? [], productRequests ?? [],
+        emit(SellerState.loadedProducts(products ?? [],
             categories ?? [], subCategories, stores, store));
       } else {
-        emit(SellerState.loadedProducts(null, null, null, null, stores, store));
+        emit(SellerState.loadedProducts(null, null, null, stores, store));
       }
     } else {
       final List<SellerOrderModel>? soldOrders =

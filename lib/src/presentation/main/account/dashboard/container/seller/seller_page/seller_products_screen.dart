@@ -7,7 +7,6 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
-import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
@@ -41,11 +40,10 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
           loading: () => const SellerProductsLoading(),
-          loadedProducts: (products, productRequests, categories, subCategories,
+          loadedProducts: (products, categories, subCategories,
                   stores, selectedStore) =>
               SellerProductsLoaded(
                 products: products ?? [],
-                productRequests: productRequests ?? [],
                 categories: categories ?? [],
                 subCategories: subCategories ?? [],
                 stores: stores,
@@ -59,7 +57,6 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
 
 class SellerProductsLoaded extends StatefulWidget {
   final List<ContainerProductModel> products;
-  final List<ProductRequestModel> productRequests;
   final UserModel user;
   final List<CategoryModel> categories;
   final List<CategoryModel> subCategories;
@@ -69,7 +66,6 @@ class SellerProductsLoaded extends StatefulWidget {
   const SellerProductsLoaded(
       {super.key,
       required this.products,
-      required this.productRequests,
       required this.user,
       required this.categories,
       required this.subCategories,
@@ -436,7 +432,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
 
   void updateRequest() async {
     await Navigator.pushNamed(context, Routes.productRequestScreen,
-        arguments: {"requests": widget.productRequests, "isOwner": false});
+        arguments: {"isOwner": false});
     context.read<SellerCubit>().onLoad(false, true);
   }
 

@@ -602,7 +602,6 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return ProductRequestScreen(
-              requests: arguments["requests"],
               isOwner: arguments["isOwner"],
             );
           },
