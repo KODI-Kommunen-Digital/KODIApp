@@ -182,7 +182,7 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '${Translate.of(context).translate('quantity')}: ${transaction.amount}',
+                                        '${Translate.of(context).translate('amount')}: ${transaction.amount}',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
