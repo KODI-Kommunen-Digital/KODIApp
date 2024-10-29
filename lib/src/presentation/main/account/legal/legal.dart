@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:3000/ImprintPage');
+                _makeAction('https://appcms.schneckenlohe.de/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:3000/PrivacyPolicy');
+                _makeAction('https://appcms.schneckenlohe.de/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +79,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:3000/TermsOfUse');
+                _makeAction('https://appcms.schneckenlohe.de/TermsOfUse');
               },
               trailing: Row(
                 children: <Widget>[
