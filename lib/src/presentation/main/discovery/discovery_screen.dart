@@ -261,16 +261,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
                   ""),
           mode: LaunchMode.inAppWebView);
-      if (service.imageLink == "4" || service.imageLink == "9" || service.imageLink == "13") {
-        Routes.trackMatomoEvent(
-            true, null, int.parse(service.imageLink), null);
+      if (service.imageLink == "4" ||
+          service.imageLink == "9" ||
+          service.imageLink == "13") {
+        Routes.trackMatomoEvent(true, null, int.parse(service.imageLink), null);
       } else {
         Routes.trackMatomoEvent(
             false, null, int.parse(service.imageLink), null);
       }
     } else if (service.imageLink == "11") {
-      Routes.trackMatomoEvent(
-          false, null, int.parse(service.imageLink), null);
+      Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       await launchContestPage(context, service.imageLink);
     } else if (service.imageLink == "6") {
       await Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
@@ -281,9 +281,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     //   _onSubmit();
     // }
     else if (service.imageLink == "10") {
-      Routes.trackMatomoEvent(
-          false, null, int.parse(service.imageLink), null);
+      Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       Navigator.pushNamed(context, Routes.wasteCalendar);
+    } else if (service.imageLink == "16") {
+      Navigator.pushNamed(context, Routes.trolleyMaker);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

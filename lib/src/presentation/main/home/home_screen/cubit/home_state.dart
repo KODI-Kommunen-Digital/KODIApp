@@ -20,7 +20,7 @@ class HomeState with _$HomeState {
     List<CategoryModel> location,
     List<ProductModel> recent,
     bool isRefreshLoader,
-      List<CitizenServiceModel> services,
+    List<CitizenServiceModel> services,
   ) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;

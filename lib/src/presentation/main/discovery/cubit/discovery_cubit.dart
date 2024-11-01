@@ -31,6 +31,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       services = await ServiceManager.initializeServices();
     } else if (id == 6) {
       services = await ServiceManager.initializeServices6();
+    } else if (id == 16) {
+       services = await ServiceManager.initializeServices16();
     }
 
     List<CitizenServiceModel> servicesCopy = List.from(services);

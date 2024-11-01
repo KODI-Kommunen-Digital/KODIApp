@@ -54,6 +54,11 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/cards/trolley_maker_cards_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/my_credit/trolley_maker_my_credit_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/partner/trolley_maker_partner_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker_register_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
 
@@ -135,6 +140,12 @@ class Routes {
   static const String appointmentRequests = "/appointmentRequests";
   static const String wasteCalendar = "/wasteCalendar";
   static const String rsag = "/rsag";
+  static const String trolleyMaker = "/trolleyMaker";
+  static const String trolleyMakerCards = "/trolleyMakerCards";
+  static const String trolleyMakerMyCredit = "/trolleyMakerMyCredit";
+  static const String trolleyMakerPartner = "/trolleyMakerPartner";
+  static const String trolleyMakerSignUp = 'trolleyMakerSignUp';
+
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -549,6 +560,39 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return DiscoveryScreenDetail(arguments: arguments);
+          },
+        );
+
+      case trolleyMaker:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerSigninScreen();
+          },
+        );
+
+      case trolleyMakerCards:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerCardsScreen();
+          },
+        );
+      case trolleyMakerMyCredit:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerMyCreditScreen();
+          },
+        );
+
+      case trolleyMakerPartner:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerPartnerScreen();
+          },
+        );
+      case trolleyMakerSignUp:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerRegisterScreen();
           },
         );
 

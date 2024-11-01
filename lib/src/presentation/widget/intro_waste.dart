@@ -139,8 +139,11 @@ class IntroPageState extends State<IntroPage> {
                 },
                 suggestionsCallback: (pattern) {
                   //return locations;
-                  return locations.where((item) =>
-                                         item.name.toLowerCase().startsWith(pattern.toLowerCase())).toList();
+                  return locations
+                      .where((item) => item.name
+                          .toLowerCase()
+                          .startsWith(pattern.toLowerCase()))
+                      .toList();
                 },
                 itemBuilder: (context, WasteLocation suggestion) {
                   return ListTile(

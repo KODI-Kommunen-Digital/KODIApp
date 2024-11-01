@@ -17,8 +17,7 @@ class MultiFilter {
   final bool hasCategoryFilter;
 
   MultiFilter(
-      {
-      this.categories,
+      {this.categories,
       this.currentForumGroupFilter,
       this.currentListingStatus,
       this.currentProductEventFilter,
