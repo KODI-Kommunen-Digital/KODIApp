@@ -6,8 +6,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
+import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
@@ -99,6 +101,9 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
         RepositoryProvider(
           create: (context) => ForumRepository(widget.prefBox),
+        ),
+        RepositoryProvider(
+          create: (context) => TrolleyMakerRepository(widget.prefBox, TrolleyMakerClientInitializer.get()),
         )
       ],
       child: MultiBlocProvider(
@@ -140,7 +145,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,

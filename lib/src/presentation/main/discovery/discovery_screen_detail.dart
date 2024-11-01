@@ -28,10 +28,6 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   @override
   void initState() {
     super.initState();
-    int id = widget.arguments['id'];
-    if (id == 6) {
-      context.read<DiscoveryCubit>().onLoad(6);
-    }
     loadLocationList();
   }
 
@@ -164,8 +160,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.arguments == 61) {
-      Routes.trackMatomoEvent(
-          true, null, 5, null);
+      Routes.trackMatomoEvent(true, null, 5, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
@@ -228,8 +223,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await webViewController.runJavaScript(
           "document.querySelector('.flex').style.display = 'none';");
     } else if (service.arguments == 62) {
-      Routes.trackMatomoEvent(
-          false, null, 62, null);
+      Routes.trackMatomoEvent(false, null, 62, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse(
@@ -292,6 +286,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
       await webViewController.runJavaScript(
           "document.querySelector('.flex').style.display = 'none';");
+    } else if (service.arguments == 161) {
+      Navigator.pushNamed(context, Routes.trolleyMakerMyCredit);
+    } else if (service.arguments == 162) {
+      Navigator.pushNamed(context, Routes.trolleyMakerCards);
+    } else if (service.arguments == 163) {
+      Navigator.pushNamed(context, Routes.trolleyMakerPartner);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
