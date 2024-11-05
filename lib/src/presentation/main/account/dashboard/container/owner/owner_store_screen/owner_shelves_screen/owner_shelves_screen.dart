@@ -223,7 +223,8 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                                       ),
                                       Text(
                                         item.title ?? product?.title ?? '',
-                                        maxLines: 2,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .titleMedium!
@@ -237,6 +238,8 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                                                     product.categoryId) ??
                                                 ''
                                             : '',
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
@@ -249,6 +252,8 @@ class _OwnerShelvesLoadedState extends State<OwnerShelvesLoaded> {
                                           item.description ??
                                               product?.description ??
                                               '',
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodySmall!),
