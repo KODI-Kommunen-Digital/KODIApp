@@ -59,6 +59,7 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
   final FocusNode _addressFocus = FocusNode();
 
   String? nameError;
+  String? descError;
 
   @override
   void initState() {
@@ -90,12 +91,17 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
       nameError = null;
     }
 
-    String? description;
+    if (_descController.text.trim() == '') {
+      setState(() {
+        descError = Translate.of(context).translate('description_empty');
+      });
+      return;
+    } else {
+      descError = null;
+    }
+
     String? address;
 
-    if (_descController.text != '') {
-      description = _descController.text;
-    }
     if (_addressController.text != '') {
       address = _addressController.text;
     }
@@ -105,7 +111,7 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
         address: address,
         longitude: widget.store.longitude,
         latitude: widget.store.latitude,
-        description: description);
+        description: _descController.text);
   }
 
   @override
@@ -169,12 +175,22 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                               .textTheme
                               .titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
+                          children: const <TextSpan>[
+                            TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ]),
                 const SizedBox(height: 8),
                 AppTextInput(
                   hintText: Translate.of(context).translate('input_content'),
+                  errorText: descError,
                   controller: _descController,
                   focusNode: _descFocus,
                   textInputAction: TextInputAction.next,
