@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/services.dart';
+import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transaction_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_error_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_response.dart';
@@ -112,6 +113,25 @@ class TrolleyMakerRepository {
       getRegistrationValues() async {
     try {
       final result = await api.getRegistrationFormValues();
+      return Right(result);
+    } on DioException catch (exception) {
+      try {
+        final responseMap =
+            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+        return Left(errorResponse);
+      } catch (e) {
+        return Left(TrolleyMakerErrorResponse.unknownError());
+      }
+    } catch (e) {
+      return Left(TrolleyMakerErrorResponse.unknownError());
+    }
+  }
+
+  Future<Either<TrolleyMakerErrorResponse, CardBalanceAndTransactionResponse>>
+      getCardBalanceAndTransactions() async {
+    try {
+      final result = await api.getCardBalanceAndTransactions();
       return Right(result);
     } on DioException catch (exception) {
       try {
