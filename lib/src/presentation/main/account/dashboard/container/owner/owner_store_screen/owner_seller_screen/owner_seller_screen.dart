@@ -164,7 +164,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                                         child: Text(
-                                          "${item.user?.firstname} ${item.user?.lastname}",
+                                          item.user?.username ?? '',
                                           maxLines: 2,
                                           style: Theme.of(context)
                                               .textTheme
