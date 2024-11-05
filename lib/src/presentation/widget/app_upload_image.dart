@@ -150,6 +150,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (selectedAssets.length > 1) {
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
+                    images.removeWhere((element) => element.path == _file?.path);
                     _file = null;
                     if (images.isNotEmpty) {
                       _file ??= File(images[0].path);
