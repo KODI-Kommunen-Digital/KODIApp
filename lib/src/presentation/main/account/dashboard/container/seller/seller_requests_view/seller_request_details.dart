@@ -43,7 +43,8 @@ class SellerRequestDetails extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  dom.DocumentFragment.html(request.title).text ?? request.title,
+                  dom.DocumentFragment.html(request.title).text ??
+                      request.title,
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -73,21 +74,17 @@ class SellerRequestDetails extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                        child: Text(
-                          Translate.of(context).translate('maccount'),
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
+                      Text(
+                        Translate.of(context).translate('maccount'),
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
-                      Expanded(
-                        child: Text(
-                          "${request.user!.firstname} ${request.user!.lastname}",
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                        ),
+                      Text(
+                        request.user?.username ?? '',
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                     ],
                   ),
