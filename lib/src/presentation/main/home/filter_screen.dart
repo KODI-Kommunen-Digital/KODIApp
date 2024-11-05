@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -20,6 +21,7 @@ class _FilterScreenState extends State<FilterScreen> {
   bool? isContainerProductsBySeller;
   ProductFilter? currentProductEventFilter;
   GroupFilter? currentForumGroupFilter;
+  DateFilter? currentContainerDateFilter;
 
   @override
   void initState() {
@@ -29,6 +31,7 @@ class _FilterScreenState extends State<FilterScreen> {
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
     currentForumGroupFilter = widget.multiFilter.currentForumGroupFilter;
+    currentContainerDateFilter = widget.multiFilter.currentContainerDateFilter;
     isContainerProductsBySeller =
         widget.multiFilter.isContainerProductsBySeller;
   }
@@ -53,6 +56,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     currentListingStatus: currentListingStatus,
                     currentForumGroupFilter: currentForumGroupFilter,
                     currentCategory: currentCategory,
+                    currentContainerDateFilter: currentContainerDateFilter,
                     hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
                     hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
@@ -62,6 +66,8 @@ class _FilterScreenState extends State<FilterScreen> {
                     hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
                     hasContainerSellerFilter:
                         widget.multiFilter.hasContainerSellerFilter,
+                    hasContainerDateFilter:
+                        widget.multiFilter.hasContainerDateFilter,
                     isContainerProductsBySeller: isContainerProductsBySeller));
           },
           child: Column(
@@ -76,8 +82,10 @@ class _FilterScreenState extends State<FilterScreen> {
                 ..._buildForumGroupFilter(),
               if (widget.multiFilter.hasCategoryFilter == true)
                 ..._buildCategoryFilter(),
-              if(widget.multiFilter.hasContainerSellerFilter == true)
-                ..._buildContainerSellerFilter()
+              if (widget.multiFilter.hasContainerSellerFilter == true)
+                ..._buildContainerSellerFilter(),
+              if (widget.multiFilter.hasContainerDateFilter == true)
+                ..._buildContainerDateFilter()
             ],
           ),
         ),
@@ -330,12 +338,12 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('container_seller_filter'),
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(fontWeight: FontWeight.bold),
-          )),
+        Translate.of(context).translate('container_seller_filter'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
@@ -354,6 +362,63 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 isContainerProductsBySeller = true;
+              });
+            },
+          ),
+        ]),
+      )
+    ];
+  }
+
+  List<Widget> _buildContainerDateFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+        Translate.of(context).translate('choose_date'),
+        style: Theme.of(context)
+            .textTheme
+            .titleMedium!
+            .copyWith(fontWeight: FontWeight.bold),
+      )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('today')),
+            selected: currentContainerDateFilter == DateFilter.today,
+            onSelected: (selected) {
+              setState(() {
+                currentContainerDateFilter = DateFilter.today;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('this_week')),
+            selected: currentContainerDateFilter == DateFilter.week,
+            onSelected: (selected) {
+              setState(() {
+                currentContainerDateFilter = DateFilter.week;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('this_month')),
+            selected: currentContainerDateFilter == DateFilter.month,
+            onSelected: (selected) {
+              setState(() {
+                currentContainerDateFilter = DateFilter.month;
+              });
+            },
+          ),
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('this_year')),
+            selected: currentContainerDateFilter == DateFilter.year,
+            onSelected: (selected) {
+              setState(() {
+                currentContainerDateFilter = DateFilter.year;
               });
             },
           ),

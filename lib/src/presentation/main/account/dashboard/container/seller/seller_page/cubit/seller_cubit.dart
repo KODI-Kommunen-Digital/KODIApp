@@ -5,6 +5,7 @@ import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
 import 'seller_state.dart';
 
 class SellerCubit extends Cubit<SellerState> {
@@ -12,6 +13,7 @@ class SellerCubit extends Cubit<SellerState> {
 
   StoreModel? store;
   bool? loadMyProducts;
+  DateFilter currentDateFilter = DateFilter.today;
 
   Future<void> onLoad(bool isRefreshLoader, bool isProducts) async {
     if (!isRefreshLoader) {
@@ -56,7 +58,7 @@ class SellerCubit extends Cubit<SellerState> {
       }
     } else {
       final List<SellerOrderModel>? soldOrders =
-          await ContainerRepository.getSellerOrders(1);
+          await ContainerRepository.getSellerOrders(1, currentDateFilter);
 
       emit(SellerState.loadedOrders(soldOrders ?? []));
     }
@@ -64,7 +66,7 @@ class SellerCubit extends Cubit<SellerState> {
 
   Future<List<SellerOrderModel>> newOrders(int pageNo) async {
     final List<SellerOrderModel>? newSoldOrders =
-        await ContainerRepository.getSellerOrders(pageNo);
+        await ContainerRepository.getSellerOrders(pageNo, currentDateFilter);
     return newSoldOrders ?? [];
   }
 

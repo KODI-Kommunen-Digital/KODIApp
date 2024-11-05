@@ -15,6 +15,7 @@ import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
@@ -243,8 +244,8 @@ class ContainerRepository {
     }
   }
 
-  static Future<List<ShelfModel>?> getEmptyStoreShelves(
-      int cityId, int storeId, {bool loading = true}) async {
+  static Future<List<ShelfModel>?> getEmptyStoreShelves(int cityId, int storeId,
+      {bool loading = true}) async {
     final response = await Api.getEmptyShelves(cityId, storeId, loading);
 
     if (response.success) {
@@ -256,7 +257,7 @@ class ContainerRepository {
       for (var shelf in list) {
         if (shelf.productId != null) {
           ContainerProductModel? product =
-          await getProductDetails(cityId, storeId, shelf.productId!);
+              await getProductDetails(cityId, storeId, shelf.productId!);
           if (product != null) {
             updatedShelves.add(ShelfModel.updateProduct(product, shelf));
           } else {
@@ -581,8 +582,7 @@ class ContainerRepository {
       }
       return list;
     } else {
-      logError(
-          'Error getting seller: ${response.data} ${response.message}');
+      logError('Error getting seller: ${response.data} ${response.message}');
       return null;
     }
   }
@@ -875,8 +875,10 @@ class ContainerRepository {
     return permissions;
   }
 
-  static Future<List<SellerOrderModel>?> getSellerOrders(pageNo) async {
-    final response = await Api.getSellerSoldOrders(pageNo);
+  static Future<List<SellerOrderModel>?> getSellerOrders(
+      pageNo, DateFilter period) async {
+    final response =
+        await Api.getSellerSoldOrders(pageNo, getStringFromDateFilter(period));
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
@@ -1160,5 +1162,24 @@ class ContainerRepository {
           'Error removing image from product: ${response.data} ${response.message}');
     }
     return response.success;
+  }
+
+  static String getStringFromDateFilter(DateFilter filter) {
+    String datePeriod = '';
+    switch (filter) {
+      case DateFilter.today:
+        datePeriod = 'today';
+        break;
+      case DateFilter.week:
+        datePeriod = 'this-week';
+        break;
+      case DateFilter.month:
+        datePeriod = 'this-month';
+        break;
+      case DateFilter.year:
+        datePeriod = 'this-year';
+        break;
+    }
+    return datePeriod;
   }
 }

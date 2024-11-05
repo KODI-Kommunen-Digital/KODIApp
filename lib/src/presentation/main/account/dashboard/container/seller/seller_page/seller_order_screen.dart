@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_state.dart';
+import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/utils/translate.dart';
+
+enum DateFilter { today, week, month, year }
 
 class SellerOrderScreen extends StatefulWidget {
   final UserModel user;
@@ -65,6 +69,20 @@ class _SellerLoadedState extends State<SellerOrdersLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('orders')),
         centerTitle: true,
+        actions: [
+          AppFilterButton(
+              multiFilter: MultiFilter(
+                  hasContainerDateFilter: true,
+                  currentContainerDateFilter:
+                      context.read<SellerCubit>().currentDateFilter),
+              filterCallBack: (filter) {
+                setState(() {
+                  context.read<SellerCubit>().currentDateFilter =
+                      filter.currentContainerDateFilter!;
+                  context.read<SellerCubit>().onLoad(false, false);
+                });
+              })
+        ],
       ),
       body: OrderListScreen(
           sellerOrders: soldOrders,
