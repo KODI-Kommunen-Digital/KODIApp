@@ -41,7 +41,7 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
         } else {
           newRequests = await context.read<SellerCubit>().newRequests(++pageNo);
         }
-        if(newRequests.isEmpty) {
+        if (newRequests.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         requests.addAll(newRequests);
@@ -66,14 +66,16 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   }
 
   Future<List<ProductRequestModel>> getInitialRequests() async {
-    late List<ProductRequestModel> newRequests;
-    if (widget.isOwner) {
-      newRequests =
-      await context.read<OwnerProductsCubit>().newRequests(1);
-    } else {
-      newRequests = await context.read<SellerCubit>().newRequests(1);
+    if (requests.isEmpty) {
+      late List<ProductRequestModel> newRequests;
+      if (widget.isOwner) {
+        newRequests = await context.read<OwnerProductsCubit>().newRequests(1);
+      } else {
+        newRequests = await context.read<SellerCubit>().newRequests(1);
+      }
+      return newRequests;
     }
-    return newRequests;
+    return [];
   }
 
   @override
