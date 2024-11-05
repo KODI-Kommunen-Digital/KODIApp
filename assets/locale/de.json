@@ -620,7 +620,7 @@
   "category_already_added": "Kategorie bereits hinzugefügt",
   "subcategory_already_removed": "Unterkategorie bereits entfernt",
   "subcategory_already_added": "Unterkategorie bereits hinzugefügt",
-  "category_missing_subcategory": "Die Kategorie dieser Unterkategorie fehlt",
+  "category_missing_subcategory": "Die Oberkategorie dieser Unterkategorie fehlt",
   "isActive": "Ist aktiv",
   "container_seller_filter": "Welche Produkte möchtest du sehen?",
   "created_by_me": "Von mir erstellte",

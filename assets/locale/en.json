@@ -618,7 +618,7 @@
   "category_already_added": "Category already added",
   "subcategory_already_removed": "Subcategory already removed",
   "subcategory_already_added": "Subcategory already added",
-  "category_missing_subcategory": "The category for this subcategory is missing",
+  "category_missing_subcategory": "The main category for this subcategory is missing",
   "isActive": "Is active",
   "container_seller_filter": "Which products do you want to view?",
   "created_by_me": "Created by me",
