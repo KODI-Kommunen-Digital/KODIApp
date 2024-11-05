@@ -177,29 +177,6 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                       Html(
                                         data: item.description ?? '',
                                       ),
-                                      const SizedBox(height: 4),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text(
-                                          "ID: ${item.id.toString()}",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        item.formatDate(),
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
