@@ -143,13 +143,11 @@ class _TrolleyMakerRegisterScreenState
           listener: (context, state) {
             state.maybeWhen(
               success: () {
-                //todo - login with email and password
-                Navigator.pop(context);
+                  _showSuccessDialog();
               },
               error: (msg) {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(msg)));
-                _showSuccessDialog();
               },
               orElse: () {},
             );
