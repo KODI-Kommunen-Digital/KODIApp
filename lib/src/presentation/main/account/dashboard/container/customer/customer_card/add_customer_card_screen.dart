@@ -41,7 +41,7 @@ class _AddCustomerCardScreenState extends State<AddCustomerCardScreen> {
     });
 
     try {
-      cardId = int.parse(_textPinController.text);
+      pin = int.parse(_textPinController.text);
     } catch (e) {
       setState(() {
         _errorNumberPin = Translate.of(context).translate('value_not_number');
