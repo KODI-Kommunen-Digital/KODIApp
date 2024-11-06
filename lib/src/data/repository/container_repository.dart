@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_card.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
@@ -9,7 +10,6 @@ import 'package:heidi/src/data/model/model_container_transaction.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
-import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
 import 'package:heidi/src/data/model/model_store.dart';
@@ -875,14 +875,14 @@ class ContainerRepository {
     return permissions;
   }
 
-  static Future<List<SellerOrderModel>?> getSellerOrders(
+  static Future<List<CartItemModel>?> getSellerOrders(
       pageNo, DateFilter period) async {
     final response =
         await Api.getSellerSoldOrders(pageNo, getStringFromDateFilter(period));
 
     if (response.success) {
       final list = List.from(response.data ?? []).map((item) {
-        return SellerOrderModel.fromJson(item);
+        return CartItemModel.fromJson(item);
       }).toList();
       return list;
     } else {

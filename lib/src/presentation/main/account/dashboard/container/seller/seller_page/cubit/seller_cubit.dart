@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
-import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
@@ -57,15 +57,15 @@ class SellerCubit extends Cubit<SellerState> {
         emit(SellerState.loadedProducts(null, null, null, stores, store));
       }
     } else {
-      final List<SellerOrderModel>? soldOrders =
+      final List<CartItemModel>? soldOrders =
           await ContainerRepository.getSellerOrders(1, currentDateFilter);
 
       emit(SellerState.loadedOrders(soldOrders ?? []));
     }
   }
 
-  Future<List<SellerOrderModel>> newOrders(int pageNo) async {
-    final List<SellerOrderModel>? newSoldOrders =
+  Future<List<CartItemModel>> newOrders(int pageNo) async {
+    final List<CartItemModel>? newSoldOrders =
         await ContainerRepository.getSellerOrders(pageNo, currentDateFilter);
     return newSoldOrders ?? [];
   }

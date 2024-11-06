@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_order.dart';
-import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -10,7 +10,7 @@ import 'package:heidi/src/utils/translate.dart';
 
 class OrderListScreen extends StatefulWidget {
   final List<OrderModel>? orders;
-  final List<SellerOrderModel>? sellerOrders;
+  final List<CartItemModel>? sellerOrders;
   final int pageNo;
   final Function(int) loadMore;
   final bool finishedLoading;
@@ -166,16 +166,16 @@ class _OrderListScreenState extends State<OrderListScreen> {
                                               ),
                                         ),
                                         const SizedBox(height: 4),
-                                        if(item.discount != null)
-                                        Text(
-                                          "${Translate.of(context).translate('discount')}: ${item.discount!.toString()}€",
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodySmall!
-                                              .copyWith(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                        ),
+                                        if (item.discount != null)
+                                          Text(
+                                            "${Translate.of(context).translate('discount')}: ${item.discount!.toString()}€",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .copyWith(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
                                         const SizedBox(height: 4),
                                         Text(
                                           item.formatDate(),
@@ -243,87 +243,81 @@ class _OrderListScreenState extends State<OrderListScreen> {
                 },
                 itemBuilder: (context, index) {
                   if (index < widget.sellerOrders!.length) {
-                    SellerOrderModel item = widget.sellerOrders![index];
-                    return InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.orderDetailsScreen,
-                            arguments: {'sellerOrder': item});
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 32),
-                        child: Stack(
-                          children: [
-                            Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      Text(
-                                        'Order: ${item.id}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        '${Translate.of(context).translate('total')}: ${item.getTotalPrice().toString()}€',
-                                        maxLines: 2,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .titleSmall!
-                                            .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        '${Translate.of(context).translate('products')}: ${item.cartItems.length}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
+                    CartItemModel item = widget.sellerOrders![index];
+                    return Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Stack(
+                        children: [
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    const SizedBox(
+                                      height: 24,
+                                    ),
+                                    Text(
+                                      'Order: ${item.name}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      const SizedBox(height: 8),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      '${Translate.of(context).translate('total')}: ${item.totalPrice.toString()}€',
+                                      maxLines: 2,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '${Translate.of(context).translate('quantity')}: ${item.quantity}',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                        '${Translate.of(context).translate('price_per_quantity')}: ${item.pricePerQuantity}€',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 8),
+                                    const SizedBox(height: 8),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ],
                       ),
                     );
                   } else {
                     return (isLoadingMore)
-                        ? const Positioned(
-                            bottom: 20,
-                            left: 0,
-                            right: 0,
-                            child: Center(
-                              child: CircularProgressIndicator.adaptive(),
-                            ),
+                        ? const Center(
+                            child: CircularProgressIndicator.adaptive(),
                           )
                         : Container();
                   }

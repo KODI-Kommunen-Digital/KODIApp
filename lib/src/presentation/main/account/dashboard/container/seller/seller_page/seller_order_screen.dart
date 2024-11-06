@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
-import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
@@ -42,7 +42,7 @@ class _SellerOrderScreenState extends State<SellerOrderScreen> {
 }
 
 class SellerOrdersLoaded extends StatefulWidget {
-  final List<SellerOrderModel> soldOrders;
+  final List<CartItemModel> soldOrders;
   final UserModel user;
 
   const SellerOrdersLoaded(
@@ -53,8 +53,8 @@ class SellerOrdersLoaded extends StatefulWidget {
 }
 
 class _SellerLoadedState extends State<SellerOrdersLoaded> {
-  List<SellerOrderModel> soldOrders = [];
-  int pageNo = 1;
+  List<CartItemModel> soldOrders = [];
+  int pageNo = 2;
   bool finishedLoading = false;
 
   @override

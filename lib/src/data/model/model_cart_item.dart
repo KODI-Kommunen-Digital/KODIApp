@@ -16,8 +16,12 @@ class CartItemModel {
 
   factory CartItemModel.fromJson(Map<String, dynamic> json) {
     return CartItemModel(
-        id: json['cartItemId'],
-        quantity: json['quantity'],
+        id: json['cartItemId'] ?? 0,
+        quantity: (json['quantity'] == null)
+            ? (json['totalQuantity'] != null)
+                ? int.parse(json['totalQuantity'])
+                : 0
+            : json['quantity'],
         productId: json['productId'],
         totalPrice: json['totalPrice'].toDouble(),
         name: json['productName'],

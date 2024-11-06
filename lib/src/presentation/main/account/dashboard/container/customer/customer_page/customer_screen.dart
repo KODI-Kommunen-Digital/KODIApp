@@ -45,7 +45,7 @@ class CustomerLoaded extends StatefulWidget {
 
 class _CustomerLoadedState extends State<CustomerLoaded> {
   List<OrderModel> orders = [];
-  int pageNo = 1;
+  int pageNo = 2;
   bool finishedLoading = false;
 
   @override

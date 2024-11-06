@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
-import 'package:heidi/src/data/model/model_seller_order.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 
 part 'seller_state.freezed.dart';
@@ -10,7 +10,7 @@ part 'seller_state.freezed.dart';
 class SellerState with _$SellerState {
   const factory SellerState.loading() = SellerStateLoading;
 
-  const factory SellerState.loadedOrders(List<SellerOrderModel> orderSold) =
+  const factory SellerState.loadedOrders(List<CartItemModel> orderSold) =
       SellerStateLoadedOrders;
 
   const factory SellerState.loadedProducts(
