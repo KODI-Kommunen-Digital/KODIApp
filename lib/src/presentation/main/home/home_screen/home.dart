@@ -1,7 +1,6 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
 
 import 'dart:async';
-import 'dart:io';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -13,19 +12,16 @@ import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
-import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
-import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
-import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -214,107 +210,56 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          return UpgradeAlert(
-            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
-                ? null
-                : Upgrader(
-                    debugLogging: true,
-                    debugDisplayAlways: true,
-                    countryCode: 'DE',
-                    showLater: false,
-                    shouldPopScope: () => true,
-                    canDismissDialog: true,
-                    durationUntilAlertAgain: const Duration(seconds: 30),
-                    dialogStyle: Platform.isIOS
-                        ? UpgradeDialogStyle.cupertino
-                        : UpgradeDialogStyle.material,
-                    willDisplayUpgrade: (
-                        {String? appStoreVersion,
-                        bool? display,
-                        String? installedVersion,
-                        String? minAppVersion}) {
-                      if (display != null) {
-                        setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.4';
-                        });
-                      }
-                    },
-                    onUpdate: () {
-                      return true;
-                    },
-                    onIgnore: () {
-                      AppBloc.homeCubit
-                          .saveIgnoreAppVersion(latestAppStoreVersion);
-                      return true;
-                    }),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
+            controller: _scrollController,
+            slivers: <Widget>[
+              CupertinoSliverRefreshControl(
+                onRefresh: _onRefresh,
               ),
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  delegate: AppBarHomeSliver(
-                      cityTitlesList: cityTitles,
-                      hintText:
-                          Translate.of(context).translate('hselect_location'),
-                      selectedOption: (selectedCityId > 0)
-                          ? selectedCityTitle
-                          : Translate.of(context).translate('select_location'),
-                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                      banners: banner,
-                      setLocationCallback: (data) async {
-                        for (final list in location!) {
-                          if (list.title == data) {
-                            _onUpdateCategory();
-                            setState(() {
-                              selectedCityTitle = data;
-                              selectedCityId = list.id;
-                            });
-                            await AppBloc.homeCubit
-                                .onLocationFilter(selectedCityId, false);
-                          } else if (data ==
-                              Translate.of(context)
-                                  .translate('select_location')) {
-                            setState(() {
-                              selectedCityId = 0;
-                            });
-                            _onUpdateCategory();
-                            AppBloc.homeCubit.saveCityId(selectedCityId);
-                            await AppBloc.homeCubit
-                                .onLocationFilter(selectedCityId, false);
-                            break;
-                          }
-                        }
-                      }),
-                  pinned: true,
-                ),
-                CupertinoSliverRefreshControl(
-                  onRefresh: _onRefresh,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    SafeArea(
-                      top: false,
-                      bottom: false,
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 24, vertical: 48),
                       child: Column(
                         children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          // _buildServices(services),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              StreamBuilder(
+                                  stream: Stream.periodic(
+                                      const Duration(seconds: 1)),
+                                  builder: (context, snapshot) {
+                                    return Text(
+                                      DateFormat('dd.MM.yyyy, HH:mm:ss')
+                                          .format(DateTime.now()),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(
+                                              fontWeight: FontWeight.bold),
+                                    );
+                                  }),
+                            ],
+                          ),
+                          const SizedBox(height: 12,),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
                           const SizedBox(height: 50),
                         ],
                       ),
-                    )
-                  ]),
-                )
-              ],
-            ),
+                    ),
+                  )
+                ]),
+              )
+            ],
           );
         },
       ),
@@ -752,90 +697,53 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
       List<CategoryModel>? cities) {
-    Widget content = ListView.builder(
-      padding: const EdgeInsets.all(0),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
-        );
-      },
-      itemCount: 8,
-    );
-
-    if (recent != null) {
-      content = ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final item = recent[index];
-          return selectedCityId != 0
-              ? Visibility(
-                  visible: recent[index].cityId == selectedCity,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: AppProductItem(
-                        onPressed: () {
-                          _onProductDetail(item);
-                        },
-                        item: item,
-                        type: ProductViewType.small,
-                        isRefreshLoader: isRefreshLoader,
-                        cityName: AppBloc.homeCubit
-                            .getCityName(cities, item.cityId ?? 0)),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: AppProductItem(
-                      onPressed: () {
-                        _onProductDetail(item);
-                      },
-                      isRefreshLoader: isRefreshLoader,
-                      item: item,
-                      type: ProductViewType.small,
-                      cityName: AppBloc.homeCubit
-                          .getCityName(cities, item.cityId ?? 0)),
-                );
-        },
-        itemCount: recent.length,
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
+    return Container(
+      height: 200,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              padding: const EdgeInsets.all(2),
+              child: Text(
                 Translate.of(context).translate('recent_listings'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
               ),
-              Text(
-                Translate.of(context).translate(
-                  'what_happen',
-                ),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
+            ),
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: content,
-        ),
-      ],
+          Expanded(
+            child: Row(
+              children: [
+                Icon(Icons.arrow_back_ios, color: Theme.of(context).scaffoldBackgroundColor),
+                Expanded(
+                  child: ListView.builder(
+                    physics: const ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: 15,
+                    itemBuilder: (BuildContext context, int index) => const Card(
+                      child: Center(child: Text('Dummy Card Text')),
+                    ),
+                  ),
+                ),
+                Icon(Icons.arrow_forward_ios, color: Theme.of(context).scaffoldBackgroundColor),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
+
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {

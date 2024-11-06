@@ -88,7 +88,7 @@ class AppTheme {
       canvasColor: colorScheme.surface,
       scaffoldBackgroundColor: colorScheme.surface,
       // bottomAppBarColor: colorScheme.surface,
-      cardColor: colorScheme.surface,
+      cardColor: const Color(0xFFe4e4e4),
       dividerColor: colorScheme.onSurface.withOpacity(0.12),
       dialogBackgroundColor: colorScheme.surface,
       indicatorColor: indicatorColor,
