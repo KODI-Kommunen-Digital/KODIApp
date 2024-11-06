@@ -955,7 +955,7 @@ class Api {
       sort,
       sortDesc}) async {
     var list =
-        '/cities/$cityId/store/$storeId/products?pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=10';
+        '/cities/$cityId/store/$storeId/products?pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=8';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -969,7 +969,7 @@ class Api {
       sort,
       sortDesc}) async {
     var list =
-        '/seller/products?storeId=$storeId&pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=10';
+        '/seller/products?storeId=$storeId&pageNumber=$pageNo$category$subCategory$search$sort$sortDesc&pageSize=8';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
