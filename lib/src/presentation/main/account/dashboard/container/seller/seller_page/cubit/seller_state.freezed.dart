@@ -402,8 +402,8 @@ class _$SellerStateLoadedOrdersImpl implements SellerStateLoadedOrders {
 }
 
 abstract class SellerStateLoadedOrders implements SellerState {
-  const factory SellerStateLoadedOrders(
-      final List<CartItemModel> orderSold) = _$SellerStateLoadedOrdersImpl;
+  const factory SellerStateLoadedOrders(final List<CartItemModel> orderSold) =
+      _$SellerStateLoadedOrdersImpl;
 
   List<CartItemModel> get orderSold;
   @JsonKey(ignore: true)

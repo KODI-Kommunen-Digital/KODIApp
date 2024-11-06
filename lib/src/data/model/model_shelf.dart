@@ -6,6 +6,7 @@ class ShelfModel {
   final int id;
   final int? shopId;
   final int? productId;
+  final String? productName;
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
@@ -24,7 +25,8 @@ class ShelfModel {
     required this.title,
     required this.description,
     required this.pricePerQuantity,
-    required this.product,
+    required this.productName,
+    this.product,
   });
 
   factory ShelfModel.fromJson(Map<String, dynamic> json, int cityId) {
@@ -39,6 +41,7 @@ class ShelfModel {
         id: json['id'],
         shopId: json['shopId'],
         productId: json['productId'],
+        productName: productJson?['title'],
         createdAt: json['createdAt'],
         updatedAt: json['updatedAt'],
         deletedAt: json['deletedAt'],
@@ -48,20 +51,6 @@ class ShelfModel {
             ? json['pricePerQuantity'].toDouble()
             : null,
         product: productModel);
-  }
-
-  factory ShelfModel.updateProduct(
-      ContainerProductModel product, ShelfModel shelf) {
-    return ShelfModel(
-        id: shelf.id,
-        productId: product.id,
-        createdAt: shelf.createdAt,
-        updatedAt: shelf.updatedAt,
-        deletedAt: shelf.deletedAt,
-        title: shelf.title,
-        description: shelf.description,
-        pricePerQuantity: shelf.pricePerQuantity,
-        product: product);
   }
 
   String formatDate() {

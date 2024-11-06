@@ -743,8 +743,6 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return ShelfDetailsScreen(
               shelf: arguments['shelf'],
-              categories: arguments['categories'],
-              subCategories: arguments['subCategories'],
             );
           },
         );

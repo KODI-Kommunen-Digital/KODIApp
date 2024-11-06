@@ -222,22 +222,7 @@ class ContainerRepository {
         return ShelfModel.fromJson(item, cityId);
       }).toList();
 
-      List<ShelfModel> updatedShelves = [];
-      for (var shelf in list) {
-        if (shelf.productId != null) {
-          ContainerProductModel? product =
-              await getProductDetails(cityId, storeId, shelf.productId!);
-          if (product != null) {
-            updatedShelves.add(ShelfModel.updateProduct(product, shelf));
-          } else {
-            updatedShelves.add(shelf);
-          }
-        } else {
-          updatedShelves.add(shelf);
-        }
-      }
-
-      return updatedShelves;
+      return list;
     } else {
       logError('Error loading shelves: ${response.data} ${response.message}');
       return null;
@@ -253,22 +238,7 @@ class ContainerRepository {
         return ShelfModel.fromJson(item, cityId);
       }).toList();
 
-      List<ShelfModel> updatedShelves = [];
-      for (var shelf in list) {
-        if (shelf.productId != null) {
-          ContainerProductModel? product =
-              await getProductDetails(cityId, storeId, shelf.productId!);
-          if (product != null) {
-            updatedShelves.add(ShelfModel.updateProduct(product, shelf));
-          } else {
-            updatedShelves.add(shelf);
-          }
-        } else {
-          updatedShelves.add(shelf);
-        }
-      }
-
-      return updatedShelves;
+      return list;
     } else {
       logError('Error loading shelves: ${response.data} ${response.message}');
       return null;
@@ -310,16 +280,7 @@ class ContainerRepository {
         return OrderModel.fromJson(item, cityId);
       }).toList();
 
-      List<OrderModel> detailList = [];
-
-      for (var order in list) {
-        final detailOrder = await getOrderDetails(cityId, storeId, order.id);
-        if (detailOrder != null) {
-          detailList.add(detailOrder);
-        }
-      }
-
-      return detailList;
+      return list;
     } else {
       logError('Error loading orders: ${response.data} ${response.message}');
       return null;
