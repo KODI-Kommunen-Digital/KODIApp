@@ -494,11 +494,6 @@ class ContainerRepository {
       final list = List.from(response.data ?? []).map((item) {
         return SellerRequestModel.fromJson(item);
       }).toList();
-
-      for (var request in list) {
-        UserModel? user = await UserRepository.fetchUser(request.userId);
-        if (user != null) request.user = user;
-      }
       return list;
     } else {
       logError(
@@ -516,10 +511,6 @@ class ContainerRepository {
         return SellerRequestModel.fromJson(item);
       }).toList();
 
-      for (var request in list) {
-        UserModel? user = await UserRepository.fetchUser(request.userId);
-        if (user != null) request.user = user;
-      }
       return list;
     } else {
       logError(
@@ -537,10 +528,6 @@ class ContainerRepository {
         return SellerModel.fromJson(item);
       }).toList();
 
-      for (var seller in list) {
-        UserModel? user = await UserRepository.fetchUser(seller.userId);
-        if (user != null) seller.user = user;
-      }
       return list;
     } else {
       logError('Error getting seller: ${response.data} ${response.message}');

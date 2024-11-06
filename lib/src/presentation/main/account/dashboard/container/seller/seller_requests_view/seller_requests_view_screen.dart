@@ -204,7 +204,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                                   ),
                                             ),
                                             Text(
-                                              request.user?.username ?? '',
+                                              request.username ?? Translate.of(context).translate('undefined'),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
                                               style: Theme.of(context)

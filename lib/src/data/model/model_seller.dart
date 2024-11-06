@@ -13,7 +13,7 @@ class SellerModel {
   final String? createdAt;
   final String? deletedAt;
   final String? updatedAt;
-  UserModel? user;
+  final String? username;
 
   SellerModel(
       {required this.id,
@@ -25,7 +25,7 @@ class SellerModel {
       required this.createdAt,
       required this.deletedAt,
       required this.updatedAt,
-      this.user});
+      required this.username});
 
   factory SellerModel.fromJson(Map<String, dynamic> json) {
     return SellerModel(
@@ -37,7 +37,8 @@ class SellerModel {
         status: json['status'],
         createdAt: json['createdAt'],
         deletedAt: json['deletedAt'],
-        updatedAt: json['updatedAt']);
+        updatedAt: json['updatedAt'],
+        username: json['username']);
   }
 
   factory SellerModel.updateUser(SellerModel seller, UserModel user) {
@@ -51,7 +52,7 @@ class SellerModel {
         createdAt: seller.createdAt,
         deletedAt: seller.deletedAt,
         updatedAt: seller.updatedAt,
-        user: user);
+        username: seller.username);
   }
 
   String formatDate() {

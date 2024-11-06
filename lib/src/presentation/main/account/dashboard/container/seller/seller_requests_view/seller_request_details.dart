@@ -70,7 +70,6 @@ class SellerRequestDetails extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8.0),
-                if (request.user != null)
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -81,7 +80,7 @@ class SellerRequestDetails extends StatelessWidget {
                             ),
                       ),
                       Text(
-                        request.user?.username ?? '',
+                        request.username ?? Translate.of(context).translate('undefined'),
                         style: Theme.of(context).textTheme.bodySmall!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),

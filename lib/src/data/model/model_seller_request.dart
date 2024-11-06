@@ -1,4 +1,3 @@
-import 'package:heidi/src/data/model/model_user.dart';
 
 class SellerRequestModel {
   final int id;
@@ -11,7 +10,7 @@ class SellerRequestModel {
   final String description;
   final int status;
   final int? paymentOwed;
-  UserModel? user;
+  final String? username;
 
   SellerRequestModel(
       {required this.id,
@@ -24,7 +23,7 @@ class SellerRequestModel {
       required this.description,
       required this.status,
       required this.paymentOwed,
-      this.user});
+      required this.username});
 
   factory SellerRequestModel.fromJson(Map<String, dynamic> json) {
     return SellerRequestModel(
@@ -38,6 +37,7 @@ class SellerRequestModel {
       description: json['description'] ?? '',
       status: json['status'],
       paymentOwed: json['paymentOwed'],
+      username: json['username']
     );
   }
 }

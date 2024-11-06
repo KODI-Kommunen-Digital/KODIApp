@@ -13,12 +13,14 @@ class OwnerOrdersCubit extends Cubit<OwnerOrdersState> {
     if (!isRefreshLoader) {
       emit(const OwnerOrdersState.loading());
     }
-    final orders = await ContainerRepository.getStoreOrders(store.cityId, store.id, 1);
+    final orders =
+        await ContainerRepository.getStoreOrders(store.cityId, store.id, 1);
     emit(OwnerOrdersState.loaded(orders ?? []));
   }
 
   Future<List<OrderModel>> newOrders(int pageNo) async {
-    final newOrders = await ContainerRepository.getStoreOrders(store.cityId, store.id, pageNo);
+    final newOrders = await ContainerRepository.getStoreOrders(
+        store.cityId, store.id, pageNo);
     return newOrders ?? [];
   }
 }

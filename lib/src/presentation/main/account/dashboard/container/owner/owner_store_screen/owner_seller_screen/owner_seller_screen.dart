@@ -65,7 +65,7 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
         final newSeller =
             await context.read<OwnerSellerCubit>().newSeller(++pageNo);
         seller.addAll(newSeller);
-        if(newSeller.isEmpty) {
+        if (newSeller.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         setState(() {
@@ -129,9 +129,11 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
           actions: [
             AppButton(Translate.of(context).translate('requests'),
                 type: ButtonType.text, onPressed: () {
-              Navigator.pushNamed(context, Routes.sellerRequestsViewScreen,
-                      arguments: {'isOwner': true, 'store': context.read<OwnerSellerCubit>().store})
-                  .then((a) => context.read<OwnerSellerCubit>().onLoad(false));
+              Navigator.pushNamed(
+                  context, Routes.sellerRequestsViewScreen, arguments: {
+                'isOwner': true,
+                'store': context.read<OwnerSellerCubit>().store
+              }).then((a) => context.read<OwnerSellerCubit>().onLoad(false));
             })
           ],
         ),
@@ -150,54 +152,69 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: Stack(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: <Widget>[
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      const SizedBox(
-                                        height: 24,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                        child: Text(
-                                          item.user?.username ?? '',
-                                          maxLines: 2,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .titleMedium!
-                                              .copyWith(
-                                                  fontWeight: FontWeight.bold),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        const SizedBox(
+                                          height: 8,
                                         ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Html(
-                                        data: item.description ?? '',
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
+                                        Text(
+                                            item.title ?? '',
+                                            maxLines: 2,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .titleMedium!
+                                                .copyWith(
+                                                    fontWeight: FontWeight.bold),
                                           ),
-                                        ],
-                                      ),
-                                    ],
+                                        const SizedBox(height: 4),
+                                        Html(
+                                          data: item.description ?? '',
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              Translate.of(context)
+                                                  .translate('maccount'),
+                                              maxLines: 2,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall!
+                                                  .copyWith(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                            ),
+                                            Text(
+                                              item.username ??
+                                                  Translate.of(context)
+                                                      .translate('undefined'),
+                                              maxLines: 2,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodySmall,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                                IconButton(
-                                    onPressed: () {
-                                      showDeleteConfirmation(context, item);
-                                    },
-                                    icon: const Icon(Icons.delete))
-                              ],
+                                  IconButton(
+                                      onPressed: () {
+                                        showDeleteConfirmation(context, item);
+                                      },
+                                      icon: const Icon(Icons.delete))
+                                ],
+                              ),
                             ),
                           ],
                         ),
