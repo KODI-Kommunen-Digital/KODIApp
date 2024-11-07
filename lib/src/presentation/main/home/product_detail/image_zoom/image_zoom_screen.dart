@@ -147,7 +147,7 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
               left: 10,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
                 onPressed: () {
                   Navigator.pop(context);
                 },

@@ -207,6 +207,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
+              color: Theme.of(context).primaryColor,
               onPressed: () => Navigator.of(context).pop(),
             ),
             title: Row(

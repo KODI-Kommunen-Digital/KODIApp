@@ -92,6 +92,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
           SliverAppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 Navigator.of(context).pop();
               },
