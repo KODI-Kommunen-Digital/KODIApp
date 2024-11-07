@@ -33,6 +33,14 @@ class TrolleyMakerErrorResponse {
   }
 
   static TrolleyMakerErrorResponse unknownError() {
-    return TrolleyMakerErrorResponse(errorMessage:"Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut.", errorStatusCode: "unknwon_error", httpStatusCode: 520);
+    return TrolleyMakerErrorResponse(
+        errorMessage:
+            "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut.",
+        errorStatusCode: "unknwon_error",
+        httpStatusCode: 520);
+  }
+
+  bool isInvalidToken() {
+    return errorStatusCode == "invalid_token";
   }
 }

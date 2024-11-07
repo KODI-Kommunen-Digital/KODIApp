@@ -24,7 +24,7 @@ abstract class TrolleyMakerClientApi {
   @GET('/customer-registration-form-values')
   Future<TrolleyMakerSignUpValues> getRegistrationFormValues();
 
-  @GET('/customers/transactions-balances')
+  @GET('/api/v1//customers/transactions-balances')
   Future<CardBalanceAndTransactionResponse> getCardBalanceAndTransactions();
 
 }

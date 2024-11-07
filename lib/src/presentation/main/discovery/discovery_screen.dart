@@ -284,7 +284,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else if (service.imageLink == "16") {
-      Navigator.pushNamed(context, Routes.trolleyMaker);
+      Navigator.pushNamed(context, Routes.trolleyMakerSignIn);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
