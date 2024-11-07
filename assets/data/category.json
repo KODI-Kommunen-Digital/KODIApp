@@ -27,14 +27,6 @@
             "categoryType" : "category"
         },
         {
-            "id": 5,
-            "name": "Regionale Produkte",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#000099",
-            "categoryType" : "category"
-        },
-        {
             "id": 6,
             "name": "Suche/Biete",
             "noOfSubcategories": 0,
@@ -64,6 +56,14 @@
             "noOfSubcategories": 0,
             "icon": "fas fa-square-poll-vertical",
             "color": "#A020F0",
+            "categoryType" : "category"
+        },
+        {
+            "id": 100,
+            "name": "Ortsinfo",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-city",
+            "color": "#99FFCC",
             "categoryType" : "category"
         }
     ]
