@@ -28,7 +28,7 @@
         },
         {
             "id": 6,
-            "name": "Suche/Biete",
+            "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
             "color": "#58d68d",
@@ -55,7 +55,7 @@
             "name": "Umfrage",
             "noOfSubcategories": 0,
             "icon": "fas fa-square-poll-vertical",
-            "color": "#A020F0",
+            "color": "#CC0000",
             "categoryType" : "category"
         },
         {
