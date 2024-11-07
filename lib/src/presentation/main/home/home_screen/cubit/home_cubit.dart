@@ -197,7 +197,7 @@ class HomeCubit extends Cubit<HomeState> {
       if (!hasContent) {
         element.hide = true;
       }
-      if (element.id == 17) {
+      if (element.id == 17 || element.id == 100) {
         element.hide = false;
       }
     }
