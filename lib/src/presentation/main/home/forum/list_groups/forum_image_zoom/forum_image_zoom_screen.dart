@@ -49,7 +49,7 @@ class ForumImageZoomScreen extends StatelessWidget {
               left: 10,
               child: IconButton(
                 icon: const Icon(Icons.arrow_back),
-                color: Colors.white,
+                color: Theme.of(context).primaryColor,
                 onPressed: () {
                   Navigator.pop(
                       context); // Navigate back when the button is pressed

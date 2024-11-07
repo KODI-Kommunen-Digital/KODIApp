@@ -85,6 +85,7 @@ class _PostDetailsLoadedState extends State<PostDetailsLoaded> {
           SliverAppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
+              color: Theme.of(context).primaryColor,
               onPressed: () {
                 Navigator.of(context).pop();
               },
