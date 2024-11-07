@@ -118,7 +118,7 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
     )
             .compose(
               _dio.options,
-              '/customers/transactions-balances',
+              '/api/v1//customers/transactions-balances',
               queryParameters: queryParameters,
               data: _data,
             )

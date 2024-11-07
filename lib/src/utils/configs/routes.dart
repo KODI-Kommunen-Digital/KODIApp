@@ -140,7 +140,7 @@ class Routes {
   static const String appointmentRequests = "/appointmentRequests";
   static const String wasteCalendar = "/wasteCalendar";
   static const String rsag = "/rsag";
-  static const String trolleyMaker = "/trolleyMaker";
+  static const String trolleyMakerSignIn = "/trolleyMaker";
   static const String trolleyMakerCards = "/trolleyMakerCards";
   static const String trolleyMakerMyCredit = "/trolleyMakerMyCredit";
   static const String trolleyMakerPartner = "/trolleyMakerPartner";
@@ -154,6 +154,7 @@ class Routes {
           builder: (context) {
             return MainScreen();
           },
+          settings: settings
         );
       case listProduct:
         final Map<String, dynamic> arguments =
@@ -205,7 +206,7 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ForgotPasswordScreen();
-          },
+          },settings: settings
         );
 
       case editProfile:
@@ -563,7 +564,7 @@ class Routes {
           },
         );
 
-      case trolleyMaker:
+      case trolleyMakerSignIn:
         return MaterialPageRoute(
           builder: (context) {
             return TrolleyMakerSigninScreen();

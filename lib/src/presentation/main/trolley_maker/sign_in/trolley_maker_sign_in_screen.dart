@@ -202,11 +202,12 @@ class _SignInLoadedState extends State<SignInLoaded> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      AppButton(
-                        Translate.of(context).translate('forgot_password'),
-                        onPressed: _forgotPassword,
-                        type: ButtonType.text,
-                      ),
+                      // AppButton(
+                      //   Translate.of(context).translate('forgot_password'),
+                      //   onPressed: _forgotPassword,
+                      //   type: ButtonType.text,
+                      // ),
+                      const SizedBox(width: 10,),
                       AppButton(
                         Translate.of(context).translate('sign_up'),
                         onPressed: _signUp,
@@ -214,21 +215,21 @@ class _SignInLoadedState extends State<SignInLoaded> {
                       ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      TextButton(
-                        onPressed: () {
-                          _showInfoDialog();
-                        },
-                        child: Text(
-                          Translate.of(context).translate('info'),
-                          style: const TextStyle(
-                              color: Colors.blue, fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: <Widget>[
+                  //     TextButton(
+                  //       onPressed: () {
+                  //         _showInfoDialog();
+                  //       },
+                  //       child: Text(
+                  //         Translate.of(context).translate('info'),
+                  //         style: const TextStyle(
+                  //             color: Colors.blue, fontWeight: FontWeight.bold),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                 ],
               ),
             ),

@@ -601,6 +601,11 @@
   "registration_success_title": "Registrierung erfolgreich",
   "registration_success_content": "Ihre Registrierung war erfolgreich. Bitte melden Sie sich an, um fortzufahren.",
   "go_to_login_button": "Zum Login",
-   "error_message_api": "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut."
+  "error_message_api": "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut.",
+  "card_balance": "Mein Guthaben",
+  "card_number" : "Kartennummer",
+  "credit" : "Guthaben",
+  "transaction_overview": "Buchungsübersicht",
+  "transaction_overview_info":"Aktuelle Buchungen erscheinen nach ca. 5 Minuten in der Übersicht"
 }
 

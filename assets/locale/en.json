@@ -593,5 +593,10 @@
   "registration_success_title": "Registration Successful",
   "registration_success_content": "Your registration was successful. Please log in to continue.",
   "go_to_login_button": "Go to Login",
-  "error_message_api": "Something went wrong. Please try again later."
+  "error_message_api": "Something went wrong. Please try again later.",
+  "card_balance": "My balance",
+  "card_number" : "Card Number",
+  "credit" : "Credit",
+  "transaction_overview": "Transaction overview",
+  "transaction_overview_info":"Current transactions appear in the overview after approx. 5 minutes"
 }

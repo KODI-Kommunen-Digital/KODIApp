@@ -103,7 +103,10 @@ class _HeidiAppState extends State<HeidiApp> {
           create: (context) => ForumRepository(widget.prefBox),
         ),
         RepositoryProvider(
-          create: (context) => TrolleyMakerRepository(widget.prefBox, TrolleyMakerClientInitializer.get()),
+          create: (context) => TrolleyMakerRepository(
+              widget.prefBox,
+              TrolleyMakerClientInitializer.get(
+                  widget.prefBox, _getTrolleyMakerTokenExpiryCallback())),
         )
       ],
       child: MultiBlocProvider(
@@ -166,5 +169,14 @@ class _HeidiAppState extends State<HeidiApp> {
   Future<String?> _getStoredLocation() async {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.selectedLocationName, null);
+  }
+
+  VoidCallback _getTrolleyMakerTokenExpiryCallback() {
+    return () {
+      globalNavKey.currentState?.popUntil((route) {
+        return route.settings.name == Routes.main;
+      });
+      globalNavKey.currentState?.pushNamed(Routes.trolleyMakerSignIn);
+    };
   }
 }

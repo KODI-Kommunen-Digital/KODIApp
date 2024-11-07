@@ -1,10 +1,10 @@
-
 class CardBalanceAndTransactionResponse {
   final Map<String, CardTransactionData> cards;
 
   CardBalanceAndTransactionResponse({required this.cards});
 
-  factory CardBalanceAndTransactionResponse.fromJson(Map<String, dynamic> json) {
+  factory CardBalanceAndTransactionResponse.fromJson(
+      Map<String, dynamic> json) {
     return CardBalanceAndTransactionResponse(
       cards: json.map(
         (key, value) => MapEntry(key, CardTransactionData.fromJson(value)),
