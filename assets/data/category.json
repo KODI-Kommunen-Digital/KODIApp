@@ -65,6 +65,14 @@
             "icon": "fas fa-square-poll-vertical",
             "color": "#A020F0",
             "categoryType" : "category"
+        },
+        {
+            "id": 100,
+            "name": "Ortsinfo",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-city",
+            "color": "#99FFCC",
+            "categoryType" : "category"
         }
     ]
 }
