@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.salzkottenapp">
+    package="com.rodgau.app">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -13,7 +13,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Salzkotten-App"
+        android:label="63Inside"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"

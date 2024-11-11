@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyClNtoLzwVtiz8S_AWSnv2HYGHOB7mb8rs',
-    appId: '1:339509071249:android:6b4311f35fbc3b0cec1e30',
-    messagingSenderId: '339509071249',
-    projectId: 'salzkotten-app',
-    storageBucket: 'salzkotten-app.appspot.com',
+    apiKey: 'AIzaSyDTXtPKqLIlSzjkjbifX79hM47wWA7Psqo',
+    appId: '1:96328404128:android:33e97eaa48632ea4df4dc5',
+    messagingSenderId: '96328404128',
+    projectId: 'rodgau-199f9',
+    storageBucket: 'rodgau-199f9.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCaepuiM7VP7n8t_kk4oL_Ve2vEVY0k-YM',
-    appId: '1:339509071249:ios:57fdeb0b37780af3ec1e30',
-    messagingSenderId: '339509071249',
-    projectId: 'salzkotten-app',
-    storageBucket: 'salzkotten-app.appspot.com',
-    iosBundleId: 'Salzkotten-App',
+    apiKey: 'AIzaSyDoIuWQp-f3zAozjOqXJoQy9zj3uUSn2EY',
+    appId: '1:96328404128:ios:a8710e4deea01b2cdf4dc5',
+    messagingSenderId: '96328404128',
+    projectId: 'rodgau-199f9',
+    storageBucket: 'rodgau-199f9.firebasestorage.app',
+    iosBundleId: 'com.rodgau.app',
   );
 
 }

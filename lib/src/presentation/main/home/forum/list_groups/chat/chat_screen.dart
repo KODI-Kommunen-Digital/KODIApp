@@ -130,7 +130,7 @@ class _ChatLoadedState extends State<ChatLoaded> {
   }
 
   Future<void> _connectWebsocket(int? cityId, int? forumId) async {
-    final wsUrl = Uri.parse('wss://app.salzkotten.de/websocket/ws');
+    final wsUrl = Uri.parse('wss://app.rodgau.de/websocket/ws');
     channel = WebSocketChannel.connect(wsUrl);
     await channel?.ready;
     final prefs = await Preferences.openBox();
