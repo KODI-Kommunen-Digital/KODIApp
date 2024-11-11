@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "339509071249",
-    "project_id": "salzkotten-app",
-    "storage_bucket": "salzkotten-app.appspot.com"
+    "project_number": "96328404128",
+    "project_id": "rodgau-199f9",
+    "storage_bucket": "rodgau-199f9.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:339509071249:android:6b4311f35fbc3b0cec1e30",
+        "mobilesdk_app_id": "1:96328404128:android:33e97eaa48632ea4df4dc5",
         "android_client_info": {
-          "package_name": "com.salzkottenapp"
+          "package_name": "com.rodgau.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyClNtoLzwVtiz8S_AWSnv2HYGHOB7mb8rs"
+          "current_key": "AIzaSyDTXtPKqLIlSzjkjbifX79hM47wWA7Psqo"
         }
       ],
       "services": {

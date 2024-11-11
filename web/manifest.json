@@ -1,11 +1,11 @@
 {
-    "name": "Salzkotten-App",
-    "short_name": "Salzkotten-App",
+    "name": "63Inside",
+    "short_name": "63Inside",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Salzkotten-App",
+    "description": "63Inside",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

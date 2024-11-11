@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Salzkotten-App",
+            "name": "63Inside",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Salzkotten-App (profile mode)",
+            "name": "63Inside (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Salzkotten-App (release mode)",
+            "name": "63Inside (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
