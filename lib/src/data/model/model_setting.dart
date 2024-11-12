@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_sort.dart';
 
-enum ProductViewType { small, grid, list, block, card }
+enum ProductViewType { small, grid, list, block, card, terminal }
 
 enum DetailViewType { basic }
 
@@ -12,6 +12,7 @@ final mapListMode = {
   'grid': ProductViewType.grid,
   'block': ProductViewType.block,
   'card': ProductViewType.card,
+  'terminal': ProductViewType.terminal
 };
 
 final detailMode = {

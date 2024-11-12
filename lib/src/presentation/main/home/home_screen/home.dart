@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'package:connectivity/connectivity.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +11,11 @@ import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
+import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/app_terminal_container.dart';
 
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -105,7 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading = false;
           });
         }).catchError(
-          (error, stackTrace) async {
+              (error, stackTrace) async {
             setState(() {
               isLoading = false;
             });
@@ -125,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
         curve: Curves.fastOutSlowIn //scroll type
-        );
+    );
   }
 
   Future<void> _onRefresh() async {
@@ -157,10 +159,11 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           state.maybeWhen(
-            error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(Translate.of(context).translate('no_internet')),
-              duration: const Duration(seconds: 4),
-            )),
+            error: (msg) =>
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(Translate.of(context).translate('no_internet')),
+                  duration: const Duration(seconds: 4),
+                )),
             orElse: () {},
           );
         },
@@ -210,56 +213,38 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          return CustomScrollView(
-            physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics(),
-            ),
-            controller: _scrollController,
-            slivers: <Widget>[
-              CupertinoSliverRefreshControl(
-                onRefresh: _onRefresh,
+          return SafeArea(
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+              child: Column(
+                children: [
+                  StreamBuilder(
+                      stream: Stream.periodic(const Duration(seconds: 1)),
+                      builder: (context, snapshot) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              DateFormat('dd.MM.yyyy, HH:mm:ss')
+                                  .format(DateTime.now()),
+                              style: Theme
+                                  .of(context)
+                                  .textTheme
+                                  .titleLarge!
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        );
+                      }),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _buildRecent(
+                      recent, selectedCityId, location, categoryLoading),
+                ],
               ),
-              SliverList(
-                delegate: SliverChildListDelegate([
-                  SafeArea(
-                    top: false,
-                    bottom: false,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 24, vertical: 48),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              StreamBuilder(
-                                  stream: Stream.periodic(
-                                      const Duration(seconds: 1)),
-                                  builder: (context, snapshot) {
-                                    return Text(
-                                      DateFormat('dd.MM.yyyy, HH:mm:ss')
-                                          .format(DateTime.now()),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .titleLarge!
-                                          .copyWith(
-                                              fontWeight: FontWeight.bold),
-                                    );
-                                  }),
-                            ],
-                          ),
-                          const SizedBox(height: 12,),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
-                    ),
-                  )
-                ]),
-              )
-            ],
+            ),
           );
         },
       ),
@@ -269,16 +254,18 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onPopUpCatError() {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(Translate.of(context).translate('categorization')),
-        content: Text(Translate.of(context).translate("category_coming_soon")),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: Text(Translate.of(context).translate('categorization')),
+            content: Text(
+                Translate.of(context).translate("category_coming_soon")),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.pop(context, 'OK'),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
@@ -308,8 +295,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _onCategory(
-      CategoryModel item, List<CategoryModel> listBuild) async {
+  Future<void> _onCategory(CategoryModel item,
+      List<CategoryModel> listBuild) async {
     if (item.id == -1) {
       showModalBottomSheet<void>(
         context: context,
@@ -334,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: listBuild.map(
-                    (item) {
+                        (item) {
                       return HomeCategoryItem(
                         item: item,
                         onPressed: (item) {
@@ -528,7 +515,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                MediaQuery
+                    .of(context)
+                    .size
+                    .height - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -556,7 +546,7 @@ class _HomeScreenState extends State<HomeScreen> {
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: List.generate(8, (index) => index).map(
-        (item) {
+            (item) {
           return const HomeCategoryItem();
         },
       ).toList(),
@@ -580,7 +570,7 @@ class _HomeScreenState extends State<HomeScreen> {
         runSpacing: 8,
         alignment: WrapAlignment.center,
         children: listBuild.map(
-          (item) {
+              (item) {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
@@ -696,54 +686,77 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
-      List<CategoryModel>? cities) {
-    return Container(
-      height: 200,
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 4),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
-                borderRadius: BorderRadius.circular(4),
+      List<CategoryModel>? cities, bool isLoading) {
+    return AppTerminalContainer(
+      height: ((recent ?? []).isEmpty || isLoading) ? 100 : 180,
+      round: true,
+      title: Translate.of(context).translate('recent_listings'),
+      widgets: [
+        ((recent ?? []).isNotEmpty)
+            ? Expanded(
+          child: Row(
+            children: [
+              const SizedBox(
+                width: 2,
               ),
-              padding: const EdgeInsets.all(2),
-              child: Text(
-                Translate.of(context).translate('recent_listings'),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold)
-              ),
-            ),
-          ),
-          Expanded(
-            child: Row(
-              children: [
-                Icon(Icons.arrow_back_ios, color: Theme.of(context).scaffoldBackgroundColor),
-                Expanded(
-                  child: ListView.builder(
+              Icon(Icons.arrow_back_ios,
+                  color: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor),
+              Expanded(
+                child: ListView.builder(
                     physics: const ClampingScrollPhysics(),
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    itemCount: 15,
-                    itemBuilder: (BuildContext context, int index) => const Card(
-                      child: Center(child: Text('Dummy Card Text')),
-                    ),
-                  ),
-                ),
-                Icon(Icons.arrow_forward_ios, color: Theme.of(context).scaffoldBackgroundColor),
-              ],
-            ),
+                    itemCount: recent!.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      ProductModel product = recent[index];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4),
+                        child: AppProductItem(type: ProductViewType.terminal,
+                          isRefreshLoader: isRefreshLoader,
+                          item: product,),
+                      );
+                    }),
+              ),
+              Icon(Icons.arrow_forward_ios,
+                  color: Theme
+                      .of(context)
+                      .scaffoldBackgroundColor),
+              const SizedBox(
+                width: 2,
+              ),
+            ],
           ),
-        ],
-      ),
+        )
+            : (isLoading)
+            ? const Center(
+          child: CircularProgressIndicator(),
+        )
+            : Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.sentiment_satisfied,
+                color: Colors.black,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Text(
+                  Translate.of(context).translate('list_is_empty'),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .bodyLarge!
+                      .copyWith(color: Colors.black),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
-
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
@@ -778,8 +791,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "8") {
       _onSubmit();
-    } else if (service.imageLink == "10") {
-    } else {
+    } else if (service.imageLink == "10") {} else {
       AppBloc.homeCubit.setServiceValue(Preferences.type, service.type, null);
       if (service.categoryId != null) {
         AppBloc.homeCubit
@@ -837,7 +849,7 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
           logError('Error getting current position: $e');
         }
       } else if ((permission == LocationPermission.unableToDetermine ||
-              permission == LocationPermission.denied) &&
+          permission == LocationPermission.denied) &&
           openSettings == true) {
         await Geolocator.requestPermission();
         openSettings = false;
@@ -868,44 +880,44 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
               body: SafeArea(
                 child: (!hasPermission)
                     ? Center(
-                        child: Text(Translate.of(context)
-                            .translate('geo_permission_needed')),
-                      )
+                  child: Text(Translate.of(context)
+                      .translate('geo_permission_needed')),
+                )
                     : Column(
-                        children: [
-                          Expanded(
-                              child: InAppWebView(
-                                  initialUrlRequest: URLRequest(
-                                      url: Uri.parse(
-                                          'https://troisdorf.dksr.city/map/')),
-                                  androidOnGeolocationPermissionsShowPrompt:
-                                      (InAppWebViewController controller,
-                                          String origin) async {
-                                    return GeolocationPermissionShowPromptResponse(
-                                        origin: origin,
-                                        allow: true,
-                                        retain: true);
-                                  },
-                                  initialOptions: InAppWebViewGroupOptions(
-                                    android: AndroidInAppWebViewOptions(
-                                      useWideViewPort: true,
-                                      geolocationEnabled: true,
-                                    ),
-                                    ios: IOSInAppWebViewOptions(
-                                      allowsInlineMediaPlayback: true,
-                                    ),
-                                  ),
-                                  androidOnPermissionRequest:
-                                      (InAppWebViewController controller,
-                                          String origin,
-                                          List<String> resources) async {
-                                    return PermissionRequestResponse(
-                                        resources: resources,
-                                        action: PermissionRequestResponseAction
-                                            .GRANT);
-                                  })),
-                        ],
-                      ),
+                  children: [
+                    Expanded(
+                        child: InAppWebView(
+                            initialUrlRequest: URLRequest(
+                                url: Uri.parse(
+                                    'https://troisdorf.dksr.city/map/')),
+                            androidOnGeolocationPermissionsShowPrompt:
+                                (InAppWebViewController controller,
+                                String origin) async {
+                              return GeolocationPermissionShowPromptResponse(
+                                  origin: origin,
+                                  allow: true,
+                                  retain: true);
+                            },
+                            initialOptions: InAppWebViewGroupOptions(
+                              android: AndroidInAppWebViewOptions(
+                                useWideViewPort: true,
+                                geolocationEnabled: true,
+                              ),
+                              ios: IOSInAppWebViewOptions(
+                                allowsInlineMediaPlayback: true,
+                              ),
+                            ),
+                            androidOnPermissionRequest:
+                                (InAppWebViewController controller,
+                                String origin,
+                                List<String> resources) async {
+                              return PermissionRequestResponse(
+                                  resources: resources,
+                                  action: PermissionRequestResponseAction
+                                      .GRANT);
+                            })),
+                  ],
+                ),
               ),
             );
           }

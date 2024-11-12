@@ -502,6 +502,141 @@ class AppProductItem extends StatelessWidget {
           ),
         );
 
+      case ProductViewType.terminal:
+        return InkWell(
+          onTap: () async {
+            onPressed!();
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              CachedNetworkImage(
+                imageUrl: item?.sourceId == 2 &&
+                        item?.image != null &&
+                        item?.image != 'admin/News.jpeg'
+                    ? item!.image
+                    : item?.sourceId == 3 && item?.image != null
+                        ? (item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : item!.image)
+                        : item?.image != null && item!.image.startsWith('admin')
+                            ? "${Application.picturesURL}${item!.image}"
+                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                cacheManager: memoryCacheManager,
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(8),
+                      ),
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.all(4),
+                              child: Icon(
+                                item!.favorite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border,
+                                color: Colors.white,
+                              ),
+                            )
+                          ],
+                        )
+                      ],
+                    ),
+                  );
+                },
+                placeholder: (context, url) {
+                  return AppPlaceholder(
+                    child: Container(
+                      height: 120,
+                      width: 120,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                        color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
+                errorWidget: (context, url, error) {
+                  return AppPlaceholder(
+                    child: Container(
+                      height: 120,
+                      width: 120,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(8),
+                        ),
+                      ),
+                      child: const Icon(Icons.error),
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              SizedBox(
+                width: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          borderRadius: BorderRadius.circular(4)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          item?.category ?? '',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      item!.title,
+                      maxLines: 2,
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall!
+                          .copyWith(fontWeight: FontWeight.bold)
+                          .copyWith(color: Colors.black),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item!.description,
+                      maxLines: 2,
+                      overflow: TextOverflow.fade,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
+
       default:
         return Container(width: 160.0);
     }
