@@ -7,7 +7,7 @@ project(runner LANGUAGES CXX)
 set(BINARY_NAME "heidi")
 # The unique GTK application identifier for this application. See:
 # https://wiki.gnome.org/HowDoI/ChooseApplicationID
-set(APPLICATION_ID "63Inside
+set(APPLICATION_ID "63InsideTest
 ")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
