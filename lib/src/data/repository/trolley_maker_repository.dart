@@ -25,7 +25,7 @@ class TrolleyMakerRepository {
         TrolleyMakerLoginRequest(cardID: email, password: password);
     try {
       final result = await api.login(loginRequest);
-      prefs.setKeyValue(Preferences.trolleyMakerApiToken, result.xApiToken);
+      await _saveLoginResult(result);
       return Right(result);
     } on DioException catch (exception) {
       try {
@@ -144,6 +144,28 @@ class TrolleyMakerRepository {
       }
     } catch (e) {
       return Left(TrolleyMakerErrorResponse.unknownError());
+    }
+  }
+
+  Future<void> _saveLoginResult(TrolleyMakerLoginResponse result) async {
+    await prefs.setKeyValue(Preferences.trolleyMakerApiToken, result.xApiToken);
+    await prefs.setKeyValue(Preferences.trolleyMakerCardName, result.cardName);
+    await prefs.setKeyValue(Preferences.trolleyMakerCardList, result.cardIDs);
+  }
+
+  Future<String?> getCachedCardName() async {
+    try {
+      return await prefs.getKeyValue(Preferences.trolleyMakerCardName, "");
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<List<int>?> getCachedCards() async {
+    try {
+      return await prefs.getKeyValue(Preferences.trolleyMakerCardList, []);
+    } catch (e) {
+      return null;
     }
   }
 }
