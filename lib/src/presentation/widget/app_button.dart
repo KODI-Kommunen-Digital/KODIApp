@@ -13,18 +13,20 @@ class AppButton extends StatelessWidget {
   final Widget? icon;
   final MainAxisSize mainAxisSize;
   final ButtonSize size;
+  final Color? color;
+  final Color? outlineColor;
 
-  const AppButton(
-    this.text, {
-    super.key,
-    required this.onPressed,
-    this.icon,
-    this.loading = false,
-    this.disabled = false,
-    this.type = ButtonType.normal,
-    this.mainAxisSize = MainAxisSize.min,
-    this.size = ButtonSize.large,
-  });
+  const AppButton(this.text,
+      {super.key,
+      required this.onPressed,
+      this.icon,
+      this.loading = false,
+      this.disabled = false,
+      this.type = ButtonType.normal,
+      this.mainAxisSize = MainAxisSize.min,
+      this.size = ButtonSize.large,
+      this.color,
+      this.outlineColor});
 
   @override
   Widget build(BuildContext context) {
@@ -146,11 +148,14 @@ class AppButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: disabled ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: color ?? Theme.of(context).primaryColor,
             minimumSize: buttonSize,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+                borderRadius: BorderRadius.circular(8),
+                side: BorderSide(
+                    color: (outlineColor != null)
+                        ? outlineColor!
+                        : Colors.transparent)),
           ),
           child: Row(
             mainAxisSize: mainAxisSize,

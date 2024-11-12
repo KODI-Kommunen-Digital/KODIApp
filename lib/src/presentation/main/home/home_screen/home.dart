@@ -6,13 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_terminal_container.dart';
 
@@ -21,7 +20,6 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -56,6 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CitizenServiceModel>? services = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
+  String mapLink = 'https://troisdorf.dksr.city/map/';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -257,17 +256,25 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       }),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   _buildItems(news, categoryLoading, true),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
                   _buildItems(events, categoryLoading, false),
                   const SizedBox(
-                    height: 16,
+                    height: 8,
                   ),
-                  _buildMap()
+                  _buildMap(),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  _buildStatistics(),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  _buildQRCodes()
                 ],
               ),
             ),
@@ -363,8 +370,194 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Widget _buildQRCodes() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        AppTerminalContainer(
+          width: 100,
+          height: 100,
+          round: true,
+          centerWidgets: true,
+          widgets: [
+            Image.network(
+                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+          ],
+        ),
+        AppTerminalContainer(
+          width: 100,
+          height: 100,
+          round: true,
+          centerWidgets: true,
+          widgets: [
+            Image.network(
+                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+          ],
+        ),
+        AppTerminalContainer(
+          width: 100,
+          height: 100,
+          round: true,
+          centerWidgets: true,
+          widgets: [
+            Image.network(
+                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatistics() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        AppTerminalContainer(
+          backgroundColor: const Color(0xFF97c3c5),
+          height: 150,
+          width: 170,
+          round: true,
+          centerWidgets: true,
+          widgets: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.directions_walk,
+                  size: 50,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Text(
+                  "111",
+                  style: Theme.of(context).textTheme.titleLarge,
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 75,
+                    child: Text(
+                      "Wieviele Menschen sind heute zu Fuß unterwegs?",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(fontSize: 10),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+        AppTerminalContainer(
+          backgroundColor: const Color(0xFF9abb8f),
+          height: 150,
+          width: 170,
+          round: true,
+          centerWidgets: true,
+          widgets: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.directions_bike,
+                  size: 50,
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Text(
+                  "58",
+                  style: Theme.of(context).textTheme.titleLarge,
+                )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 75,
+                    child: Text(
+                      "Wieviele Menschen sind heute mit dem Rad unterwegs?",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(fontSize: 10),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                ],
+              ),
+            )
+          ],
+        ),
+      ],
+    );
+  }
+
   Widget _buildMap() {
-    return Container();
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(mapLink));
+    return Expanded(
+      child: Column(
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: WebViewWidget(
+                controller: webViewController,
+                gestureRecognizers: gestureRecognizers,
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: AppButton(Translate.of(context).translate('mobility'),
+                    color: (mapLink == 'https://troisdorf.dksr.city/map/')
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).scaffoldBackgroundColor,
+                    outlineColor: Colors.white, onPressed: () {
+                  setState(() {
+                    mapLink = 'https://troisdorf.dksr.city/map/';
+                  });
+                }),
+              ),
+              const SizedBox(
+                width: 16,
+              ),
+              Expanded(
+                child: AppButton('POI',
+                    color: (mapLink == 'https://troisdorf.dksr.city/poimap/')
+                        ? Theme.of(context).primaryColor
+                        : Theme.of(context).scaffoldBackgroundColor,
+                    outlineColor: Colors.white, onPressed: () {
+                  setState(() {
+                    mapLink = 'https://troisdorf.dksr.city/poimap/';
+                  });
+                }),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Widget _buildItems(
@@ -516,111 +709,5 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  }
-}
-
-class FullScreenWebView extends StatefulWidget {
-  const FullScreenWebView({super.key});
-
-  @override
-  State<FullScreenWebView> createState() => _FullScreenWebViewState();
-}
-
-class _FullScreenWebViewState extends State<FullScreenWebView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<bool> requestGeoPermission() async {
-    bool permissionGranted = false;
-    bool openSettings = true;
-    bool exit = false;
-
-    while (!permissionGranted) {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.always ||
-          permission == LocationPermission.whileInUse) {
-        try {
-          await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          permissionGranted = true;
-        } catch (e) {
-          logError('Error getting current position: $e');
-        }
-      } else if ((permission == LocationPermission.unableToDetermine ||
-              permission == LocationPermission.denied) &&
-          openSettings == true) {
-        await Geolocator.requestPermission();
-        openSettings = false;
-      } else {
-        if (exit == false) {
-          await openAppSettings();
-          exit = true;
-        } else {
-          return false;
-        }
-      }
-    }
-    return permissionGranted;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: requestGeoPermission(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            bool hasPermission = snapshot.data ?? false;
-            return Scaffold(
-              body: SafeArea(
-                child: (!hasPermission)
-                    ? Center(
-                        child: Text(Translate.of(context)
-                            .translate('geo_permission_needed')),
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                              child: InAppWebView(
-                                  initialUrlRequest: URLRequest(
-                                      url: Uri.parse(
-                                          'https://troisdorf.dksr.city/map/')),
-                                  androidOnGeolocationPermissionsShowPrompt:
-                                      (InAppWebViewController controller,
-                                          String origin) async {
-                                    return GeolocationPermissionShowPromptResponse(
-                                        origin: origin,
-                                        allow: true,
-                                        retain: true);
-                                  },
-                                  initialOptions: InAppWebViewGroupOptions(
-                                    android: AndroidInAppWebViewOptions(
-                                      useWideViewPort: true,
-                                      geolocationEnabled: true,
-                                    ),
-                                    ios: IOSInAppWebViewOptions(
-                                      allowsInlineMediaPlayback: true,
-                                    ),
-                                  ),
-                                  androidOnPermissionRequest:
-                                      (InAppWebViewController controller,
-                                          String origin,
-                                          List<String> resources) async {
-                                    return PermissionRequestResponse(
-                                        resources: resources,
-                                        action: PermissionRequestResponseAction
-                                            .GRANT);
-                                  })),
-                        ],
-                      ),
-              ),
-            );
-          }
-        });
   }
 }
