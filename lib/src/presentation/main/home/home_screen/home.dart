@@ -13,7 +13,6 @@ import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_terminal_container.dart';
 
@@ -40,16 +39,20 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
-  int pageNo = 1;
+  int newsPageNo = 1;
+  int eventsPageNo = 1;
   late bool checkSavedCity;
-  final _scrollController = ScrollController();
-  bool isLoading = false;
+  final _newsScrollController = ScrollController();
+  final _eventsScrollController = ScrollController();
+  bool isLoadingNews = false;
+  bool isLoadingEvents = false;
   bool categoryLoading = false;
   bool isRefreshLoader = false;
   String? banner;
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
-  List<ProductModel>? recent = [];
+  List<ProductModel>? news = [];
+  List<ProductModel>? events = [];
   List<CitizenServiceModel>? services = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
@@ -60,7 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
+    _newsScrollController.addListener(_newsScrollListener);
+    _eventsScrollController.addListener(_eventsScrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
@@ -84,8 +88,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-    _scrollController.removeListener(_scrollListener);
-    _scrollController.dispose();
+    _newsScrollController.removeListener(_newsScrollListener);
+    _eventsScrollController.removeListener(_eventsScrollListener);
+    _newsScrollController.dispose();
+    _eventsScrollController.dispose();
   }
 
   Future<void> checkUserExist() async {
@@ -95,22 +101,23 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
+  Future<void> _newsScrollListener() async {
+    if (_newsScrollController.position.atEdge) {
+      if (_newsScrollController.position.pixels != 0) {
         setState(() {
-          isLoading = true;
+          isLoadingNews = true;
         });
-        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
+        news =
+            await AppBloc.homeCubit.newListings(++newsPageNo, true).then((_) {
           setState(() {
-            isLoading = false;
+            isLoadingNews = false;
           });
         }).catchError(
           (error, stackTrace) async {
             setState(() {
-              isLoading = false;
+              isLoadingNews = false;
             });
-            logError('Error loading new listings: $error');
+            logError('Error loading new news: $error');
             await Sentry.captureException(error, stackTrace: stackTrace);
           },
         );
@@ -118,22 +125,36 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onUpdateCategory() async {
-    await AppBloc.homeCubit.onLoad(false);
+  Future<void> _eventsScrollListener() async {
+    if (_eventsScrollController.position.atEdge) {
+      if (_eventsScrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingEvents = true;
+        });
+        events = await AppBloc.homeCubit
+            .newListings(++eventsPageNo, false)
+            .then((_) {
+          setState(() {
+            isLoadingEvents = false;
+          });
+        }).catchError(
+          (error, stackTrace) async {
+            setState(() {
+              isLoadingEvents = false;
+            });
+            logError('Error loading new events: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+          },
+        );
+      }
+    }
   }
 
   void scrollUp() {
-    _scrollController.animateTo(0,
+    _newsScrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
         curve: Curves.fastOutSlowIn //scroll type
         );
-  }
-
-  Future<void> _onRefresh() async {
-    await AppBloc.homeCubit.onLoad(true);
-    setState(() {
-      pageNo = 1;
-    });
   }
 
   Future<void> _setSavedCity(List<CategoryModel> location) async {
@@ -174,7 +195,8 @@ class _HomeScreenState extends State<HomeScreen> {
             banner = state.banner;
             category = state.category;
             location = state.location;
-            recent = state.recent;
+            news = state.news;
+            events = state.events;
             services = state.services;
             isRefreshLoader = true;
             categoryLoading = false;
@@ -237,8 +259,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  _buildRecent(
-                      recent, selectedCityId, location, categoryLoading),
+                  _buildItems(news, categoryLoading, true),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _buildItems(events, categoryLoading, false),
                 ],
               ),
             ),
@@ -246,205 +271,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
-  }
-
-  void _onPopUpCatError() {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text(Translate.of(context).translate('categorization')),
-        content: Text(Translate.of(context).translate("category_coming_soon")),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showCitySelectionPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate('input_city')),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translate.of(context).translate('please_select_city')),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _onCategory(
-      CategoryModel item, List<CategoryModel> listBuild) async {
-    if (item.id == -1) {
-      showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        Translate.of(context).translate('all_Categories'),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-                Wrap(
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: listBuild.map(
-                    (item) {
-                      return HomeCategoryItem(
-                        item: item,
-                        onPressed: (item) {
-                          _onCategory(item, listBuild);
-                          return false;
-                        },
-                        // _onCategory,
-                      );
-                    },
-                  ).toList(),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-      return;
-    }
-
-    if (item.id != -1) {
-      if (item.id == 17) {
-        final cityId = await context.read<HomeCubit>().getCitySelected();
-        if (cityId != 0) {
-          if (!mounted) return;
-          Navigator.pushNamed(context, Routes.listGroups,
-              arguments: {'id': item.id, 'title': 'Gruppen'});
-        } else {
-          if (!mounted) return;
-          _showCitySelectionPopup(context);
-        }
-      } else {
-        final prefs = await Preferences.openBox();
-        prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.type, "category");
-        if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listProduct, arguments: {
-          'id': selectedCityId,
-          'title': '',
-          'type': 'category',
-          'categoryId': item.id
-        });
-      }
-    } else if (item.id != -1 && !item.hasChild) {
-      _onPopUpCatError();
-    }
-  }
-
-  // Future<void> _onService(CategoryModel item) async {
-  //   if (item.id == 4) {
-  //     await launchUrl(
-  //         Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
-  //         mode: LaunchMode.inAppWebView);
-  //   } else if (item.id == 5) {
-  //     await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
-  //         mode: LaunchMode.inAppWebView);
-  //   } else if (item.id == 6) {
-  //     await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
-  //         mode: LaunchMode.inAppWebView);
-  //   } else if (item.id == 7) {
-  //     await launchUrl(Uri.parse("https://www.stadtwerke-troisdorf.de/"),
-  //         mode: LaunchMode.inAppWebView);
-  //   } else if (item.id == 8) {
-  //     await launchUrl(
-  //         Uri.parse(
-  //             "https://geoportal.troisdorf.de/app.php/application/mobile"),
-  //         mode: LaunchMode.inAppWebView);
-  //   }
-  //   return;
-  // }
-
-  Future<void> _onService(CategoryModel item) async {
-    Routes.trackMatomoEvent(true, null, item.id, null);
-    if (item.id == 5) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
-      /*
-      final webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
-
-      await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(
-                    controller: webViewController,
-                    gestureRecognizers: gestureRecognizers,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");*/
-    } else {
-      // Handle other cases as before
-      await launchUrl(Uri.parse(getServiceUrl(item.id)),
-          mode: LaunchMode.inAppWebView);
-    }
   }
 
   String getServiceUrl(int id) {
@@ -533,158 +359,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _buildCategory(List<CategoryModel>? category) {
-    Widget content = Wrap(
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: List.generate(8, (index) => index).map(
-        (item) {
-          return const HomeCategoryItem();
-        },
-      ).toList(),
-    );
-
-    if (category != null) {
-      List<CategoryModel> listBuild = category;
-      final more = CategoryModel.fromJson({
-        "id": -1,
-        "name": Translate.of(context).translate("more"),
-        "icon": "fas fa-ellipsis",
-        "color": "#36454F",
-      });
-
-      if (category.length >= 8) {
-        listBuild = category.take(7).toList();
-        listBuild.add(more);
-      }
-
-      content = Wrap(
-        runSpacing: 8,
-        alignment: WrapAlignment.center,
-        children: listBuild.map(
-          (item) {
-            return HomeCategoryItem(
-              item: item,
-              onPressed: (item) {
-                if (item.id == 4 ||
-                    item.id == 5 ||
-                    item.id == 6 ||
-                    item.id == 7 ||
-                    item.id == 8) {
-                  _onService(item);
-                } else {
-                  _onCategory(item, category);
-                }
-                return false;
-              },
-            );
-          },
-        ).toList(),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: content,
-    );
-  }
-
-  // Widget _buildServices(List<CitizenServiceModel>? services) {
-  //   Widget content = ListView.builder(
-  //     scrollDirection: Axis.horizontal,
-  //     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //     itemBuilder: (context, index) {
-  //       return const Padding(
-  //         padding: EdgeInsets.symmetric(horizontal: 8),
-  //         child: AppCategory(
-  //           type: CategoryView.cardLarge,
-  //         ),
-  //       );
-  //     },
-  //     itemCount: List.generate(8, (index) => index).length,
-  //   );
-  //   if (services != null) {
-  //     content = ListView.builder(
-  //       scrollDirection: Axis.horizontal,
-  //       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-  //       itemBuilder: (context, index) {
-  //         return selectedCityId != 0
-  //             ? Padding(
-  //                 padding: const EdgeInsets.symmetric(horizontal: 8),
-  //                 child: InkWell(
-  //                   onTap: () {
-  //                     navigateToLink(services[index]);
-  //                   },
-  //                   child: ClipRRect(
-  //                     borderRadius: BorderRadius.circular(15.0),
-  //                     child: Image.asset(
-  //                       services[index].imageUrl,
-  //                       fit: BoxFit.cover,
-  //                     ),
-  //                   ),
-  //                 ))
-  //             : Padding(
-  //                 padding: const EdgeInsets.symmetric(horizontal: 8),
-  //                 child: InkWell(
-  //                   onTap: () {
-  //                     navigateToLink(services[index]);
-  //                   },
-  //                   child: ClipRRect(
-  //                     borderRadius: BorderRadius.circular(15.0),
-  //                     child: Image.asset(
-  //                       services[index].imageUrl,
-  //                       fit: BoxFit.cover,
-  //                     ),
-  //                   ),
-  //                 ));
-  //       },
-  //       itemCount: services.length,
-  //     );
-  //   }
-
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       const SizedBox(height: 8),
-  //       Padding(
-  //         padding: const EdgeInsets.symmetric(horizontal: 16),
-  //         child: Column(
-  //           crossAxisAlignment: CrossAxisAlignment.start,
-  //           children: [
-  //             Text(
-  //               'Services',
-  //               style: Theme.of(context)
-  //                   .textTheme
-  //                   .titleLarge!
-  //                   .copyWith(fontWeight: FontWeight.bold),
-  //             ),
-  //             /*
-  //             Text(
-  //               Translate.of(context).translate(
-  //                 'let_find_interesting',
-  //               ),
-  //               style: Theme.of(context).textTheme.bodyLarge,
-  //             ),*/
-  //           ],
-  //         ),
-  //       ),
-  //       Container(
-  //         height: 180,
-  //         padding: const EdgeInsets.only(top: 4),
-  //         child: content,
-  //       ),
-  //     ],
-  //   );
-  // }
-
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
-      List<CategoryModel>? cities, bool isLoadingRecent) {
+  Widget _buildItems(
+      List<ProductModel>? items, bool isLoadingInit, bool isNews) {
     return AppTerminalContainer(
-      height: ((recent ?? []).isEmpty || isLoadingRecent) ? 100 : 180,
+      height: ((items ?? []).isEmpty || isLoadingInit) ? 100 : 160,
       round: true,
-      title: Translate.of(context).translate('recent_listings'),
+      title: Translate.of(context)
+          .translate((isNews) ? 'recent_listings' : 'category_events'),
       widgets: [
-        ((recent ?? []).isNotEmpty)
+        ((items ?? []).isNotEmpty)
             ? Expanded(
                 child: Row(
                   children: [
@@ -698,16 +381,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           physics: const ClampingScrollPhysics(),
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
-                          controller: _scrollController,
-                          itemCount: recent!.length + 1,
+                          controller: (isNews)
+                              ? _newsScrollController
+                              : _eventsScrollController,
+                          itemCount: items!.length + 1,
                           itemBuilder: (BuildContext context, int index) {
-                            if (index < recent.length) {
-                              ProductModel product = recent[index];
+                            if (index < items.length) {
+                              ProductModel product = items[index];
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 child: AppProductItem(
                                   type: ProductViewType.terminal,
+                                  categoryTitle:
+                                      Translate.of(context).translate('recent'),
                                   isRefreshLoader: isRefreshLoader,
                                   item: product,
                                   onPressed: () {
@@ -716,7 +403,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               );
                             } else {
-                              return (isLoading)
+                              return ((isNews)
+                                      ? isLoadingNews
+                                      : isLoadingEvents)
                                   ? const Center(
                                       child: CircularProgressIndicator(),
                                     )
@@ -732,7 +421,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               )
-            : (isLoadingRecent)
+            : (isLoadingInit)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )

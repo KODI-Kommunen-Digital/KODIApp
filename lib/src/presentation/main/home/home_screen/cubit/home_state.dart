@@ -18,7 +18,8 @@ class HomeState with _$HomeState {
     String banner,
     List<CategoryModel> category,
     List<CategoryModel> location,
-    List<ProductModel> recent,
+    List<ProductModel> news,
+    List<ProductModel> events,
     bool isRefreshLoader,
       List<CitizenServiceModel> services,
   ) = HomeStateLoaded;

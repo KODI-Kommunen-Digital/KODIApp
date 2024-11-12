@@ -17,7 +17,8 @@ import 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   dynamic category;
   dynamic location;
-  dynamic recent;
+  dynamic news;
+  dynamic events;
   dynamic sliders;
   dynamic categoryCount;
   final List<CitizenServiceModel> hiddenServices = [];
@@ -49,17 +50,16 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
     CategoryModel? savedCity = await checkSavedCity(location);
-    if (savedCity != null) {
-      final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    } else {
-      final listingsRequestResponse = await Api.requestRecentListings(1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    }
+    final newsListingsRequestResponse = await Api.requestCatList(1, 1, 1);
+    news = List.from(newsListingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+
+    final eventsListingsRequestResponse = await Api.requestCatList(3, 1, 1);
+    events = List.from(eventsListingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
     categoryCount =
@@ -87,7 +87,7 @@ class HomeCubit extends Cubit<HomeState> {
 
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
-    emit(HomeStateLoaded(banner, formattedCategories, location, recent,
+    emit(HomeStateLoaded(banner, formattedCategories, location, news, events,
         isRefreshLoader, services));
   }
 
@@ -136,7 +136,7 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(banner, category, location, recent, false, services));
+    emit(HomeStateLoaded(banner, category, location, news, events, false, services));
   }
 
   bool getCalledExternally() {
@@ -232,17 +232,26 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
-  Future<dynamic> newListings(int pageNo) async {
+  Future<dynamic> newListings(int pageNo, bool isNews) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
-
-    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
-    final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
+    dynamic listingsRequestResponse;
+    if(isNews) {
+      listingsRequestResponse = await Api.requestCatList(1, 1, pageNo);
+    } else {
+      listingsRequestResponse = await Api.requestCatList(3, 1, pageNo);
+    }
+    final newListings = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
-    recent.addAll(newRecent);
-    return recent;
+
+    if(isNews) {
+      news.addAll(newListings);
+    } else {
+      events.addAll(newListings);
+    }
+    return newListings;
   }
 
   Future<void> onLocationFilter(int locationId, bool calledExternal) async {

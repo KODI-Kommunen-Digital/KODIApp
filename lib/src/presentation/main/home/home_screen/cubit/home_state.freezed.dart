@@ -25,7 +25,8 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
@@ -41,7 +42,8 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -57,7 +59,8 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -157,7 +160,8 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
@@ -176,7 +180,8 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -195,7 +200,8 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -298,7 +304,8 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
@@ -317,7 +324,8 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -336,7 +344,8 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -477,7 +486,8 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
@@ -496,7 +506,8 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -515,7 +526,8 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -589,7 +601,8 @@ abstract class _$$HomeStateLoadedImplCopyWith<$Res> {
       {String banner,
       List<CategoryModel> category,
       List<CategoryModel> location,
-      List<ProductModel> recent,
+      List<ProductModel> news,
+      List<ProductModel> events,
       bool isRefreshLoader,
       List<CitizenServiceModel> services});
 }
@@ -608,7 +621,8 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
     Object? banner = null,
     Object? category = null,
     Object? location = null,
-    Object? recent = null,
+    Object? news = null,
+    Object? events = null,
     Object? isRefreshLoader = null,
     Object? services = null,
   }) {
@@ -625,9 +639,13 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
           ? _value._location
           : location // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
-      null == recent
-          ? _value._recent
-          : recent // ignore: cast_nullable_to_non_nullable
+      null == news
+          ? _value._news
+          : news // ignore: cast_nullable_to_non_nullable
+              as List<ProductModel>,
+      null == events
+          ? _value._events
+          : events // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
       null == isRefreshLoader
           ? _value.isRefreshLoader
@@ -648,12 +666,14 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
       this.banner,
       final List<CategoryModel> category,
       final List<CategoryModel> location,
-      final List<ProductModel> recent,
+      final List<ProductModel> news,
+      final List<ProductModel> events,
       this.isRefreshLoader,
       final List<CitizenServiceModel> services)
       : _category = category,
         _location = location,
-        _recent = recent,
+        _news = news,
+        _events = events,
         _services = services;
 
   @override
@@ -674,12 +694,20 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
     return EqualUnmodifiableListView(_location);
   }
 
-  final List<ProductModel> _recent;
+  final List<ProductModel> _news;
   @override
-  List<ProductModel> get recent {
-    if (_recent is EqualUnmodifiableListView) return _recent;
+  List<ProductModel> get news {
+    if (_news is EqualUnmodifiableListView) return _news;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_recent);
+    return EqualUnmodifiableListView(_news);
+  }
+
+  final List<ProductModel> _events;
+  @override
+  List<ProductModel> get events {
+    if (_events is EqualUnmodifiableListView) return _events;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_events);
   }
 
   @override
@@ -694,7 +722,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
 
   @override
   String toString() {
-    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, recent: $recent, isRefreshLoader: $isRefreshLoader, services: $services)';
+    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, news: $news, events: $events, isRefreshLoader: $isRefreshLoader, services: $services)';
   }
 
   @override
@@ -705,7 +733,8 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             (identical(other.banner, banner) || other.banner == banner) &&
             const DeepCollectionEquality().equals(other._category, _category) &&
             const DeepCollectionEquality().equals(other._location, _location) &&
-            const DeepCollectionEquality().equals(other._recent, _recent) &&
+            const DeepCollectionEquality().equals(other._news, _news) &&
+            const DeepCollectionEquality().equals(other._events, _events) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
                 other.isRefreshLoader == isRefreshLoader) &&
             const DeepCollectionEquality().equals(other._services, _services));
@@ -717,7 +746,8 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
       banner,
       const DeepCollectionEquality().hash(_category),
       const DeepCollectionEquality().hash(_location),
-      const DeepCollectionEquality().hash(_recent),
+      const DeepCollectionEquality().hash(_news),
+      const DeepCollectionEquality().hash(_events),
       isRefreshLoader,
       const DeepCollectionEquality().hash(_services));
 
@@ -738,14 +768,15 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
     required TResult Function(String error) error,
   }) {
     return loaded(
-        banner, category, location, recent, isRefreshLoader, services);
+        banner, category, location, news, events, isRefreshLoader, services);
   }
 
   @override
@@ -758,14 +789,15 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(
-        banner, category, location, recent, isRefreshLoader, services);
+        banner, category, location, news, events, isRefreshLoader, services);
   }
 
   @override
@@ -778,7 +810,8 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -787,7 +820,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
   }) {
     if (loaded != null) {
       return loaded(
-          banner, category, location, recent, isRefreshLoader, services);
+          banner, category, location, news, events, isRefreshLoader, services);
     }
     return orElse();
   }
@@ -838,14 +871,16 @@ abstract class HomeStateLoaded implements HomeState {
       final String banner,
       final List<CategoryModel> category,
       final List<CategoryModel> location,
-      final List<ProductModel> recent,
+      final List<ProductModel> news,
+      final List<ProductModel> events,
       final bool isRefreshLoader,
       final List<CitizenServiceModel> services) = _$HomeStateLoadedImpl;
 
   String get banner;
   List<CategoryModel> get category;
   List<CategoryModel> get location;
-  List<ProductModel> get recent;
+  List<ProductModel> get news;
+  List<ProductModel> get events;
   bool get isRefreshLoader;
   List<CitizenServiceModel> get services;
   @JsonKey(ignore: true)
@@ -925,7 +960,8 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)
         loaded,
@@ -944,7 +980,8 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,
@@ -963,7 +1000,8 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<ProductModel> news,
+            List<ProductModel> events,
             bool isRefreshLoader,
             List<CitizenServiceModel> services)?
         loaded,

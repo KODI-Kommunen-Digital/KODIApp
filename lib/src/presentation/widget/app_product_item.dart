@@ -20,7 +20,8 @@ class AppProductItem extends StatelessWidget {
       required this.type,
       this.trailing,
       required this.isRefreshLoader,
-      this.cityName});
+      this.cityName,
+      this.categoryTitle});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -28,6 +29,7 @@ class AppProductItem extends StatelessWidget {
   final Widget? trailing;
   final bool isRefreshLoader;
   final String? cityName;
+  final String? categoryTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -602,7 +604,7 @@ class AppProductItem extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: Text(
-                          item?.category ?? '',
+                          categoryTitle ?? item?.category ?? '',
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
