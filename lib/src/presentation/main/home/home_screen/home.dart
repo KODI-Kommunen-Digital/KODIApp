@@ -17,7 +17,6 @@ import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart'
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_terminal_container.dart';
 
-// import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -107,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             isLoading = false;
           });
         }).catchError(
-              (error, stackTrace) async {
+          (error, stackTrace) async {
             setState(() {
               isLoading = false;
             });
@@ -127,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
         curve: Curves.fastOutSlowIn //scroll type
-    );
+        );
   }
 
   Future<void> _onRefresh() async {
@@ -159,11 +158,10 @@ class _HomeScreenState extends State<HomeScreen> {
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
           state.maybeWhen(
-            error: (msg) =>
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text(Translate.of(context).translate('no_internet')),
-                  duration: const Duration(seconds: 4),
-                )),
+            error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(Translate.of(context).translate('no_internet')),
+              duration: const Duration(seconds: 4),
+            )),
             orElse: () {},
           );
         },
@@ -216,7 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return SafeArea(
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
               child: Column(
                 children: [
                   StreamBuilder(
@@ -228,8 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Text(
                               DateFormat('dd.MM.yyyy, HH:mm:ss')
                                   .format(DateTime.now()),
-                              style: Theme
-                                  .of(context)
+                              style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
                                   .copyWith(fontWeight: FontWeight.bold),
@@ -254,18 +251,16 @@ class _HomeScreenState extends State<HomeScreen> {
   void _onPopUpCatError() {
     showDialog<String>(
       context: context,
-      builder: (BuildContext context) =>
-          AlertDialog(
-            title: Text(Translate.of(context).translate('categorization')),
-            content: Text(
-                Translate.of(context).translate("category_coming_soon")),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () => Navigator.pop(context, 'OK'),
-                child: const Text('OK'),
-              ),
-            ],
+      builder: (BuildContext context) => AlertDialog(
+        title: Text(Translate.of(context).translate('categorization')),
+        content: Text(Translate.of(context).translate("category_coming_soon")),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.pop(context, 'OK'),
+            child: const Text('OK'),
           ),
+        ],
+      ),
     );
   }
 
@@ -295,8 +290,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future<void> _onCategory(CategoryModel item,
-      List<CategoryModel> listBuild) async {
+  Future<void> _onCategory(
+      CategoryModel item, List<CategoryModel> listBuild) async {
     if (item.id == -1) {
       showModalBottomSheet<void>(
         context: context,
@@ -321,7 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: listBuild.map(
-                        (item) {
+                    (item) {
                       return HomeCategoryItem(
                         item: item,
                         onPressed: (item) {
@@ -515,10 +510,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 height:
-                MediaQuery
-                    .of(context)
-                    .size
-                    .height - kToolbarHeight - 30,
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -546,7 +538,7 @@ class _HomeScreenState extends State<HomeScreen> {
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: List.generate(8, (index) => index).map(
-            (item) {
+        (item) {
           return const HomeCategoryItem();
         },
       ).toList(),
@@ -570,7 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
         runSpacing: 8,
         alignment: WrapAlignment.center,
         children: listBuild.map(
-              (item) {
+          (item) {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
@@ -686,75 +678,85 @@ class _HomeScreenState extends State<HomeScreen> {
   // }
 
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
-      List<CategoryModel>? cities, bool isLoading) {
+      List<CategoryModel>? cities, bool isLoadingRecent) {
     return AppTerminalContainer(
-      height: ((recent ?? []).isEmpty || isLoading) ? 100 : 180,
+      height: ((recent ?? []).isEmpty || isLoadingRecent) ? 100 : 180,
       round: true,
       title: Translate.of(context).translate('recent_listings'),
       widgets: [
         ((recent ?? []).isNotEmpty)
             ? Expanded(
-          child: Row(
-            children: [
-              const SizedBox(
-                width: 2,
-              ),
-              Icon(Icons.arrow_back_ios,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor),
-              Expanded(
-                child: ListView.builder(
-                    physics: const ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: recent!.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      ProductModel product = recent[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 4),
-                        child: AppProductItem(type: ProductViewType.terminal,
-                          isRefreshLoader: isRefreshLoader,
-                          item: product,),
-                      );
-                    }),
-              ),
-              Icon(Icons.arrow_forward_ios,
-                  color: Theme
-                      .of(context)
-                      .scaffoldBackgroundColor),
-              const SizedBox(
-                width: 2,
-              ),
-            ],
-          ),
-        )
-            : (isLoading)
-            ? const Center(
-          child: CircularProgressIndicator(),
-        )
-            : Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Icon(
-                Icons.sentiment_satisfied,
-                color: Colors.black,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(4.0),
-                child: Text(
-                  Translate.of(context).translate('list_is_empty'),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .bodyLarge!
-                      .copyWith(color: Colors.black),
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 2,
+                    ),
+                    Icon(Icons.arrow_back_ios,
+                        color: Theme.of(context).scaffoldBackgroundColor),
+                    Expanded(
+                      child: ListView.builder(
+                          physics: const ClampingScrollPhysics(),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          controller: _scrollController,
+                          itemCount: recent!.length + 1,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index < recent.length) {
+                              ProductModel product = recent[index];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 4),
+                                child: AppProductItem(
+                                  type: ProductViewType.terminal,
+                                  isRefreshLoader: isRefreshLoader,
+                                  item: product,
+                                  onPressed: () {
+                                    _onProductDetail(product);
+                                  },
+                                ),
+                              );
+                            } else {
+                              return (isLoading)
+                                  ? const Center(
+                                      child: CircularProgressIndicator(),
+                                    )
+                                  : Container();
+                            }
+                          }),
+                    ),
+                    Icon(Icons.arrow_forward_ios,
+                        color: Theme.of(context).scaffoldBackgroundColor),
+                    const SizedBox(
+                      width: 2,
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ),
+              )
+            : (isLoadingRecent)
+                ? const Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        const Icon(
+                          Icons.sentiment_satisfied,
+                          color: Colors.black,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            Translate.of(context).translate('list_is_empty'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .copyWith(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
       ],
     );
   }
@@ -791,7 +793,8 @@ class _HomeScreenState extends State<HomeScreen> {
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "8") {
       _onSubmit();
-    } else if (service.imageLink == "10") {} else {
+    } else if (service.imageLink == "10") {
+    } else {
       AppBloc.homeCubit.setServiceValue(Preferences.type, service.type, null);
       if (service.categoryId != null) {
         AppBloc.homeCubit
@@ -849,7 +852,7 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
           logError('Error getting current position: $e');
         }
       } else if ((permission == LocationPermission.unableToDetermine ||
-          permission == LocationPermission.denied) &&
+              permission == LocationPermission.denied) &&
           openSettings == true) {
         await Geolocator.requestPermission();
         openSettings = false;
@@ -880,44 +883,44 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
               body: SafeArea(
                 child: (!hasPermission)
                     ? Center(
-                  child: Text(Translate.of(context)
-                      .translate('geo_permission_needed')),
-                )
+                        child: Text(Translate.of(context)
+                            .translate('geo_permission_needed')),
+                      )
                     : Column(
-                  children: [
-                    Expanded(
-                        child: InAppWebView(
-                            initialUrlRequest: URLRequest(
-                                url: Uri.parse(
-                                    'https://troisdorf.dksr.city/map/')),
-                            androidOnGeolocationPermissionsShowPrompt:
-                                (InAppWebViewController controller,
-                                String origin) async {
-                              return GeolocationPermissionShowPromptResponse(
-                                  origin: origin,
-                                  allow: true,
-                                  retain: true);
-                            },
-                            initialOptions: InAppWebViewGroupOptions(
-                              android: AndroidInAppWebViewOptions(
-                                useWideViewPort: true,
-                                geolocationEnabled: true,
-                              ),
-                              ios: IOSInAppWebViewOptions(
-                                allowsInlineMediaPlayback: true,
-                              ),
-                            ),
-                            androidOnPermissionRequest:
-                                (InAppWebViewController controller,
-                                String origin,
-                                List<String> resources) async {
-                              return PermissionRequestResponse(
-                                  resources: resources,
-                                  action: PermissionRequestResponseAction
-                                      .GRANT);
-                            })),
-                  ],
-                ),
+                        children: [
+                          Expanded(
+                              child: InAppWebView(
+                                  initialUrlRequest: URLRequest(
+                                      url: Uri.parse(
+                                          'https://troisdorf.dksr.city/map/')),
+                                  androidOnGeolocationPermissionsShowPrompt:
+                                      (InAppWebViewController controller,
+                                          String origin) async {
+                                    return GeolocationPermissionShowPromptResponse(
+                                        origin: origin,
+                                        allow: true,
+                                        retain: true);
+                                  },
+                                  initialOptions: InAppWebViewGroupOptions(
+                                    android: AndroidInAppWebViewOptions(
+                                      useWideViewPort: true,
+                                      geolocationEnabled: true,
+                                    ),
+                                    ios: IOSInAppWebViewOptions(
+                                      allowsInlineMediaPlayback: true,
+                                    ),
+                                  ),
+                                  androidOnPermissionRequest:
+                                      (InAppWebViewController controller,
+                                          String origin,
+                                          List<String> resources) async {
+                                    return PermissionRequestResponse(
+                                        resources: resources,
+                                        action: PermissionRequestResponseAction
+                                            .GRANT);
+                                  })),
+                        ],
+                      ),
               ),
             );
           }
