@@ -11,7 +11,6 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -122,7 +121,8 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<String?>(
+                    home: const MainScreen(),
+                    /*FutureBuilder<String?>(
                       future: _getStoredLocation(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
@@ -137,10 +137,11 @@ class _HeidiAppState extends State<HeidiApp> {
                           }
                         }
                       },
-                    ),
+                    ),*/
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -157,8 +158,8 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
-  Future<String?> _getStoredLocation() async {
+  /*Future<String?> _getStoredLocation() async {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.selectedLocationName, null);
-  }
+  }*/
 }

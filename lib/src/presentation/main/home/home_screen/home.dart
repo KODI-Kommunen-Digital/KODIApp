@@ -264,6 +264,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 16,
                   ),
                   _buildItems(events, categoryLoading, false),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  _buildMap()
                 ],
               ),
             ),
@@ -357,6 +361,10 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     }
+  }
+
+  Widget _buildMap() {
+    return Container();
   }
 
   Widget _buildItems(
