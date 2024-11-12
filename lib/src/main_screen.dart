@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
-import 'package:heidi/src/utils/translate.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -43,7 +41,6 @@ class _MainScreenState extends State<MainScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: _buildBottomMenu(),
       // floatingActionButton: _buildSubmit(),
       floatingActionButtonLocation: submitPosition,
     );
@@ -97,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  void _onItemTapped(String route) async {
+  /*void _onItemTapped(String route) async {
     if (AppBloc.userCubit.state == null && _requireAuth(route)) {
       final result = await Navigator.pushNamed(
         context,
@@ -125,8 +122,9 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.discoveryCubit.scrollUp();
         break;
     }
-  }
+  }*/
 
+  /*
   Widget _buildMenuItem(String route) {
     Color? color;
     String title = Translate.of(context).translate(
@@ -191,7 +189,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
-  }
+  }*/
 
   // Widget? _buildSubmit() {
   //   return FloatingActionButton(
@@ -218,7 +216,7 @@ class _MainScreenState extends State<MainScreen> {
   //   Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
   // }
 
-  Widget _buildBottomMenu() {
+  /*Widget _buildBottomMenu() {
     return BottomAppBar(
       height: 64,
       color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
@@ -235,5 +233,5 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
     );
-  }
+  }*/
 }
