@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('https://app.salzkotten.de/ImprintPage');
+                _makeAction('http://116.203.166.183:3000/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('https://app.salzkotten.de/PrivacyPolicy');
+                _makeAction('http://116.203.166.183:3000/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +79,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('https://app.salzkotten.de/TermsOfUse');
+                _makeAction('http://116.203.166.183:3000/TermsOfUse');
               },
               trailing: Row(
                 children: <Widget>[

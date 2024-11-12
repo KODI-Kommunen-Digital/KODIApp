@@ -156,15 +156,15 @@ class HomeCubit extends Cubit<HomeState> {
       categories.insert(6, forum);
     }
     // Hide tag on empty categories
-    for (var element in categories) {
-      bool hasContent = await categoryHasContent(element.id, cityId);
-      if (!hasContent) {
-        element.hide = true;
-      }
-      if (element.id == 14) {
-        element.hide = false;
-      }
-    }
+    // for (var element in categories) {
+    //   bool hasContent = await categoryHasContent(element.id, cityId);
+    //   if (!hasContent) {
+    //     element.hide = true;
+    //   }
+    //   if (element.id == 14) {
+    //     element.hide = false;
+    //   }
+    // }
 
     return categories;
   }

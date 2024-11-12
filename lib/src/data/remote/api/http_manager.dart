@@ -17,11 +17,8 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
-        ? 'https://app.salzkotten.de/api/'
-        : 'https://app.salzkotten.de/forumapi/';
-    // // _baseUrl = !forum
-    //      ? 'https://test.smartregion-auf.de/api/'
-    //      : 'https://test.smartregion-auf.de/forumapi/';
+        ? 'http://116.203.166.183:3001/'
+        : 'http://116.203.166.183:3001/';
 
     _dio = Dio(
       BaseOptions(
