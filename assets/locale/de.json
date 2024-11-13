@@ -607,6 +607,7 @@
   "credit" : "Guthaben",
   "transaction_overview": "Buchungsübersicht",
   "transaction_overview_info":"Aktuelle Buchungen erscheinen nach ca. 5 Minuten in der Übersicht",
-  "title_card": "Karte"
+  "title_card": "Karte",
+  "title_partner": "Partner"
 }
 
