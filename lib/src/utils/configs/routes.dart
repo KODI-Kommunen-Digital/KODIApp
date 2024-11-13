@@ -587,7 +587,7 @@ class Routes {
       case trolleyMakerPartner:
         return MaterialPageRoute(
           builder: (context) {
-            return TrolleyMakerPartnerScreen();
+            return TrolleyMakerPartnersScreen();
           },
         );
       case trolleyMakerSignUp:
