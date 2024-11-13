@@ -599,5 +599,6 @@
   "credit" : "Credit",
   "transaction_overview": "Transaction overview",
   "transaction_overview_info": "Current transactions appear in the overview after approx. 5 minutes",
-  "title_card": "Card"
+  "title_card": "Card",
+  "title_partner": "Partner"
 }
