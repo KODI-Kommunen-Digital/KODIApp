@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transaction_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_response.dart';
+import 'package:heidi/src/data/model/model_trolley_maker_partners.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_sign_up_values.dart';
@@ -24,7 +25,10 @@ abstract class TrolleyMakerClientApi {
   @GET('/customer-registration-form-values')
   Future<TrolleyMakerSignUpValues> getRegistrationFormValues();
 
-  @GET('/api/v1//customers/transactions-balances')
+  @GET('/api/v1/customers/transactions-balances')
   Future<CardBalanceAndTransactionResponse> getCardBalanceAndTransactions();
+
+    @GET('/api/v1/partners')
+  Future<List<TrolleyMakerPartners>> getPartnersList();
 
 }

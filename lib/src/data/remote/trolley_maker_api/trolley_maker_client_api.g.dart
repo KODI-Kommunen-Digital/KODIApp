@@ -118,7 +118,7 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
     )
             .compose(
               _dio.options,
-              '/api/v1//customers/transactions-balances',
+              '/api/v1/customers/transactions-balances',
               queryParameters: queryParameters,
               data: _data,
             )
@@ -128,6 +128,36 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
               baseUrl,
             ))));
     final value = CardBalanceAndTransactionResponse.fromJson(_result.data!);
+    return value;
+  }
+
+  @override
+  Future<List<TrolleyMakerPartners>> getPartnersList() async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _result = await _dio.fetch<List<dynamic>>(
+        _setStreamType<List<TrolleyMakerPartners>>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+            .compose(
+              _dio.options,
+              '/api/v1/partners',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(
+                baseUrl: _combineBaseUrls(
+              _dio.options.baseUrl,
+              baseUrl,
+            ))));
+    var value = _result.data!
+        .map((dynamic i) =>
+            TrolleyMakerPartners.fromJson(i as Map<String, dynamic>))
+        .toList();
     return value;
   }
 
