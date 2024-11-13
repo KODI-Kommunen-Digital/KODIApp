@@ -260,19 +260,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   _buildItems(news, categoryLoading, true),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   _buildItems(events, categoryLoading, false),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   _buildMap(),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   _buildStatistics(),
                   const SizedBox(
-                    height: 8,
+                    height: 16,
                   ),
                   _buildQRCodes()
                 ],
