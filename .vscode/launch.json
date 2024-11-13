@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "63InsideTest",
+            "name": "sixtythreeinsidetestapp",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "63InsideTest (profile mode)",
+            "name": "sixtythreeinsidetestapp (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "63InsideTest (release mode)",
+            "name": "sixtythreeinsidetestapp (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

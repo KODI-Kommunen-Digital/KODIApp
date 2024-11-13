@@ -32,10 +32,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     for (var element in servicesCopy) {
       if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
+        // bool hasContent = await element.hasContent();
+        // if (!hasContent) {
+        //   hiddenServices.add(element);
+        // }
       }
     }
 
@@ -136,6 +136,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           imageLink: "9",
           arguments: 9,
           categoryId: 6),
+      CitizenServiceModel(
+          imageUrl: Images.service11,
+          imageLink: "11",
+          arguments: 11,
+          categoryId: 5),
       // CitizenServiceModel(
       //   imageUrl: Images.service10,
       //   imageLink: "10",
