@@ -9,45 +9,12 @@
             "color": "#ff8a65",
             "categoryType" : "category"
         },
-        
         {
             "id": 3,
             "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
             "color": "#a569bd",
-            "categoryType" : "category"
-        },
-        {
-            "id": 4,
-            "name": "Vereine",
-            "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#5dade2",
-            "categoryType" : "category"
-        },
-        {
-            "id": 5,
-            "name": "Regionale Produkte",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#000099",
-            "categoryType" : "category"
-        },
-        {
-            "id": 6,
-            "name": "Biete/Suche",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-magnifying-glass",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 10,
-            "name": "Unternehmen",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#fdc60a",
             "categoryType" : "category"
         },
         {
@@ -64,6 +31,30 @@
             "noOfSubcategories": 0,
             "icon": "fas fa-square-poll-vertical",
             "color": "#CC0000",
+            "categoryType" : "category"
+        },
+        {
+            "id": 4,
+            "name": "Vereine",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#5dade2",
+            "categoryType" : "category"
+        },
+        {
+            "id": 10,
+            "name": "Unternehmen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-briefcase",
+            "color": "#fdc60a",
+            "categoryType" : "category"
+        },
+        {
+            "id": 6,
+            "name": "Biete/Suche",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-magnifying-glass",
+            "color": "#58d68d",
             "categoryType" : "category"
         },
         {
