@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transactio
 import 'package:heidi/src/data/model/model_trolley_maker_error_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_response.dart';
+import 'package:heidi/src/data/model/model_trolley_maker_partner_details.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_partners.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_response.dart';
@@ -174,6 +175,25 @@ class TrolleyMakerRepository {
       getPartnersList() async {
     try {
       final result = await api.getPartnersList();
+      return Right(result);
+    } on DioException catch (exception) {
+      try {
+        final responseMap =
+            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+        return Left(errorResponse);
+      } catch (e) {
+        return Left(TrolleyMakerErrorResponse.unknownError());
+      }
+    } catch (e) {
+      return Left(TrolleyMakerErrorResponse.unknownError());
+    }
+  }
+
+  Future<Either<TrolleyMakerErrorResponse, TrolleyMakerPartnerDetailsInfo>>
+      getPartnerDetails(String gguid) async {
+    try {
+      final result = await api.getPartnerDetails(gguid);
       return Right(result);
     } on DioException catch (exception) {
       try {

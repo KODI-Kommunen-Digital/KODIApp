@@ -57,6 +57,7 @@ import 'package:heidi/src/presentation/main/account/contact_us/contact_us_succes
 import 'package:heidi/src/presentation/main/trolley_maker/cards/trolley_maker_cards_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/my_credit/trolley_maker_my_credit_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/partner/trolley_maker_partner_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/partner_details/trolley_maker_partner_details_screen_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker_register_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
@@ -144,18 +145,18 @@ class Routes {
   static const String trolleyMakerCards = "/trolleyMakerCards";
   static const String trolleyMakerMyCredit = "/trolleyMakerMyCredit";
   static const String trolleyMakerPartner = "/trolleyMakerPartner";
-  static const String trolleyMakerSignUp = 'trolleyMakerSignUp';
-
+  static const String trolleyMakerSignUp = '/trolleyMakerSignUp';
+  static const String trolleyMakerPartnerDetails =
+      "/trolleyMakerPartnerDetails";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case main:
         return MaterialPageRoute(
-          builder: (context) {
-            return MainScreen();
-          },
-          settings: settings
-        );
+            builder: (context) {
+              return MainScreen();
+            },
+            settings: settings);
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
@@ -204,10 +205,10 @@ class Routes {
 
       case forgotPassword:
         return MaterialPageRoute(
-          builder: (context) {
-            return const ForgotPasswordScreen();
-          },settings: settings
-        );
+            builder: (context) {
+              return const ForgotPasswordScreen();
+            },
+            settings: settings);
 
       case editProfile:
         return MaterialPageRoute(
@@ -594,6 +595,17 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return TrolleyMakerRegisterScreen();
+          },
+        );
+
+      case trolleyMakerPartnerDetails:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        var gguid = arguments["gguid"];
+        var companyName = arguments["company_name"];
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerPartnerDetailsScreen(gguid, companyName);
           },
         );
 
