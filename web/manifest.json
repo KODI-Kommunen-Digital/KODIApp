@@ -1,11 +1,11 @@
 {
-    "name": "63InsideTest",
-    "short_name": "63InsideTest",
+    "name": "sixtythreeinsidetestapp",
+    "short_name": "sixtythreeinsidetestapp",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "63InsideTest",
+    "description": "sixtythreeinsidetestapp",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
