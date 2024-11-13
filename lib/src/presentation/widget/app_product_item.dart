@@ -21,7 +21,9 @@ class AppProductItem extends StatelessWidget {
       this.trailing,
       required this.isRefreshLoader,
       this.cityName,
-      this.categoryTitle});
+      this.categoryTitle,
+      this.screenWidth,
+      this.screenHeigth});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -30,9 +32,15 @@ class AppProductItem extends StatelessWidget {
   final bool isRefreshLoader;
   final String? cityName;
   final String? categoryTitle;
+  final double? screenWidth;
+  final double? screenHeigth;
 
   @override
   Widget build(BuildContext context) {
+    double? screenAverage;
+    if (screenHeigth != null && screenWidth != null) {
+      screenAverage = (screenHeigth! + screenWidth!) / 2;
+    }
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
@@ -527,8 +535,9 @@ class AppProductItem extends StatelessWidget {
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
-                    height: 120,
-                    width: 120,
+                    height:
+                        (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                    width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
                         Radius.circular(8),
@@ -562,8 +571,9 @@ class AppProductItem extends StatelessWidget {
                 placeholder: (context, url) {
                   return AppPlaceholder(
                     child: Container(
-                      height: 120,
-                      width: 120,
+                      height:
+                          (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                      width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
                           Radius.circular(8),
@@ -576,8 +586,9 @@ class AppProductItem extends StatelessWidget {
                 errorWidget: (context, url, error) {
                   return AppPlaceholder(
                     child: Container(
-                      height: 120,
-                      width: 120,
+                      height:
+                          (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                      width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.all(
@@ -593,7 +604,7 @@ class AppProductItem extends StatelessWidget {
                 width: 8,
               ),
               SizedBox(
-                width: 200,
+                width: (screenWidth == null) ? 200 : screenWidth! * 0.2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -608,7 +619,14 @@ class AppProductItem extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
-                              .copyWith(fontWeight: FontWeight.bold),
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: (screenAverage == null)
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .fontSize
+                                      : screenAverage * 0.0125),
                         ),
                       ),
                     ),
@@ -616,21 +634,29 @@ class AppProductItem extends StatelessWidget {
                     Text(
                       item!.title,
                       maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
                           .titleSmall!
                           .copyWith(fontWeight: FontWeight.bold)
-                          .copyWith(color: Colors.black),
+                          .copyWith(
+                              color: Colors.black,
+                              fontSize: (screenAverage == null)
+                                  ? Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .fontSize
+                                  : screenAverage * 0.0125),
                     ),
-                    const SizedBox(height: 8),
                     Text(
                       item!.description,
                       maxLines: 2,
-                      overflow: TextOverflow.fade,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black),
+                      overflow: TextOverflow.ellipsis,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          color: Colors.black,
+                          fontSize: (screenAverage == null)
+                              ? Theme.of(context).textTheme.bodySmall!.fontSize
+                              : screenAverage * 0.0115),
                     ),
                   ],
                 ),

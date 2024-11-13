@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class AppTerminalContainer extends StatelessWidget {
   final double? height;
   final double? width;
+  final double? screenAverage;
   final bool? round;
   final String? title;
   final List<Widget>? widgets;
@@ -14,6 +15,7 @@ class AppTerminalContainer extends StatelessWidget {
       this.height,
       this.width,
       this.round,
+      this.screenAverage,
       this.title,
       this.widgets,
       this.backgroundColor,
@@ -47,10 +49,11 @@ class AppTerminalContainer extends StatelessWidget {
                 ),
                 padding: const EdgeInsets.all(2),
                 child: Text(title!,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold)),
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: (screenAverage == null)
+                            ? Theme.of(context).textTheme.bodyMedium!.fontSize
+                            : screenAverage! * 0.015)),
               ),
             ),
           ...?widgets

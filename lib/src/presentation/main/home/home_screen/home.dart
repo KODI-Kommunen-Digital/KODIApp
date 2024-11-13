@@ -54,6 +54,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<CitizenServiceModel>? services = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
+  late double screenHeight;
+  late double screenWidth;
+  late double screenAverage;
   String mapLink = 'https://troisdorf.dksr.city/map/';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -174,6 +177,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    screenAverage = (screenHeight + screenWidth) / 2;
     return Scaffold(
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -372,11 +378,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildQRCodes() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
         AppTerminalContainer(
-          width: 100,
-          height: 100,
+          width: screenAverage * 0.15,
+          height: screenAverage * 0.15,
           round: true,
           centerWidgets: true,
           widgets: [
@@ -385,8 +391,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         AppTerminalContainer(
-          width: 100,
-          height: 100,
+          width: screenAverage * 0.15,
+          height: screenAverage * 0.15,
           round: true,
           centerWidgets: true,
           widgets: [
@@ -395,8 +401,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
         AppTerminalContainer(
-          width: 100,
-          height: 100,
+          width: screenAverage * 0.15,
+          height: screenAverage * 0.15,
           round: true,
           centerWidgets: true,
           widgets: [
@@ -414,24 +420,24 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         AppTerminalContainer(
           backgroundColor: const Color(0xFF97c3c5),
-          height: 150,
-          width: 170,
+          height: screenHeight * 0.1,
+          width: screenWidth * 0.4,
           round: true,
           centerWidgets: true,
           widgets: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.directions_walk,
-                  size: 50,
-                ),
+                Icon(Icons.directions_walk, size: screenAverage * 0.05),
                 const SizedBox(
                   width: 16,
                 ),
                 Text(
                   "111",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: screenAverage * 0.03),
                 )
               ],
             ),
@@ -441,13 +447,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 75,
+                    width: screenWidth * 0.2,
                     child: Text(
                       "Wieviele Menschen sind heute zu Fuß unterwegs?",
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: screenAverage * 0.015),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -459,24 +465,27 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         AppTerminalContainer(
           backgroundColor: const Color(0xFF9abb8f),
-          height: 150,
-          width: 170,
+          height: screenHeight * 0.1,
+          width: screenWidth * 0.4,
           round: true,
           centerWidgets: true,
           widgets: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
+                Icon(
                   Icons.directions_bike,
-                  size: 50,
+                  size: screenAverage * 0.05,
                 ),
                 const SizedBox(
                   width: 16,
                 ),
                 Text(
                   "58",
-                  style: Theme.of(context).textTheme.titleLarge,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge!
+                      .copyWith(fontSize: screenAverage * 0.03),
                 )
               ],
             ),
@@ -486,13 +495,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   SizedBox(
-                    width: 75,
+                    width: screenWidth * 0.2,
                     child: Text(
                       "Wieviele Menschen sind heute mit dem Rad unterwegs?",
                       style: Theme.of(context)
                           .textTheme
                           .bodySmall!
-                          .copyWith(fontSize: 10),
+                          .copyWith(fontSize: screenAverage * 0.015),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -563,8 +572,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildItems(
       List<ProductModel>? items, bool isLoadingInit, bool isNews) {
     return AppTerminalContainer(
-      height: ((items ?? []).isEmpty || isLoadingInit) ? 100 : 160,
+      height: screenHeight * 0.12,
       round: true,
+      screenAverage: screenAverage,
       title: Translate.of(context)
           .translate((isNews) ? 'recent_listings' : 'category_events'),
       widgets: [
@@ -594,6 +604,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     const EdgeInsets.symmetric(horizontal: 4),
                                 child: AppProductItem(
                                   type: ProductViewType.terminal,
+                                  screenWidth: screenWidth,
+                                  screenHeigth: screenHeight,
                                   categoryTitle:
                                       Translate.of(context).translate('recent'),
                                   isRefreshLoader: isRefreshLoader,
@@ -641,7 +653,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
-                                .copyWith(color: Colors.black),
+                                .copyWith(
+                                    color: Colors.black,
+                                    fontSize: screenAverage * 0.02),
                           ),
                         ),
                       ],
