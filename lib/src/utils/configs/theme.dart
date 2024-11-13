@@ -64,6 +64,7 @@ class AppTheme {
         colorScheme = ColorScheme.dark(
           primary: theme.primary,
           secondary: theme.secondary,
+          surface: const Color(0xFF5d5f5d)
         );
         break;
       default:
