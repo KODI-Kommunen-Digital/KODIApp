@@ -600,5 +600,17 @@
   "transaction_overview": "Transaction overview",
   "transaction_overview_info": "Current transactions appear in the overview after approx. 5 minutes",
   "title_card": "Card",
-  "title_partner": "Partner"
+  "title_partner": "Partner",
+  "monday": "Monday",
+  "tuesday": "Tuesday",
+  "wednesday": "Wednesday",
+  "thursday": "Thursday",
+  "friday": "Friday",
+  "saturday": "Saturday",
+  "sunday": "Sunday",
+  "action_error_message": "Something went wrong. The action could not be completed.",
+  "start_navigation": "Start Navigation",
+  "opening_hours": "Opening Hours",
+  "telephone": "Phone",
+  "email_partner_details": "E-mail"
 }
