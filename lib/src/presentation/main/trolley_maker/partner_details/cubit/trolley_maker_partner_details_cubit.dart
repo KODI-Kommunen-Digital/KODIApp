@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/partner_details/cubit/trolley_maker_partner_details_state.dart';
@@ -17,7 +18,11 @@ class TrolleyMakerPartnerDetailsCubit
           (responseModel) {
         emit(PartnerDetailsSuccess(responseModel));
       });
-    } catch (error) {
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
       emit(const LoadFailure(
           "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut."));
     }
