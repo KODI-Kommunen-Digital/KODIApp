@@ -63,7 +63,7 @@ class HomeCategoryItem extends StatelessWidget {
               child: FaIcon(
                 item!.icon,
                 size: 18,
-                color: Colors.white,
+                color: const Color(0xFF1D1D1B),
               ),
             ),
             const SizedBox(height: 4),

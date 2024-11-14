@@ -200,7 +200,7 @@ class _MainScreenState extends State<MainScreen> {
       onPressed: _onSubmit,
       child: const Icon(
         Icons.add,
-        color: Colors.white,
+        color: Color(0xFF1D1D1B),
       ),
     );
   }
