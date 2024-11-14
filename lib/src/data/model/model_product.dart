@@ -210,10 +210,18 @@ class ProductModel {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
+    } else if (json['categoryId'] == 12) {
+      category = "Angebote";
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
     } else if (json['categoryId'] == 17) {
       category = "Freizeit";
+    } else if (json['categoryId'] == 29) {
+      category = "Handel";
+    } else if (json['categoryId'] == 43) {
+      category = "Gastro";
+    } else if (json['categoryId'] == 44) {
+      category = "Jobbörse";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
@@ -257,7 +265,7 @@ class ProductModel {
         final extractedUrl = match?.group(0);
         if (extractedUrl != null) {
           final parsedUrl =
-          extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+              extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
           imageUrl = parsedUrl;
         }
       } else if (!isNaN) {
@@ -426,7 +434,7 @@ class ImageListModel {
         final extractedUrl = match?.group(0);
         if (extractedUrl != null) {
           final parsedUrl =
-          extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
+              extractedUrl.replaceAll("%3A", ":").replaceAll("%2F", "/");
           imageUrl = parsedUrl;
         }
       } else if (!isNaN) {

@@ -2,20 +2,19 @@
     "status": "success",
     "data": [ 
         {
-            "id": 1,
-            "name": "News",
-            "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
-            "color": "#ff8a65",
-            "categoryType" : "category"
-        },
-        
-        {
             "id": 3,
             "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#a569bd",
+            "color": "#ECFB04",
+            "categoryType" : "category"
+        },
+        {
+            "id": 1,
+            "name": "News",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#ECFB04",
             "categoryType" : "category"
         },
         {
@@ -23,63 +22,39 @@
             "name": "Vereine",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#5dade2",
+            "color": "#ECFB04",
             "categoryType" : "category"
         },
         {
-            "id": 5,
-            "name": "Regionale Produkte",
+            "id": 29,
+            "name": "Handel",
             "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#4a90a4",
+            "icon": "fas fa-business-time",
+            "color": "#ECFB04",
             "categoryType" : "category"
         },
         {
-            "id": 6,
-            "name": "Suche/Biete",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-magnifying-glass",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 9,
-            "name": "Fundbüro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-search",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 10,
-            "name": "Unternehmen",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#fdc60a",
-            "categoryType" : "category"
-        },
-        {
-            "id": 11,
-            "name": "Mitfahrbank",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-bus",
-            "color": "#ff8a65",
-            "categoryType" : "category"
-        },
-        {
-            "id": 13,
-            "name": "Essen & Trinken",
+            "id": 43,
+            "name": "Gastro",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
-            "color": "#027148",
+            "color": "#ECFB04",
             "categoryType" : "category"
         },
         {
-            "id": 17,
-            "name": "Freizeit",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-umbrella-beach",
-            "color": "#fdc60a",
+            "id": 44,
+            "name": "Jobbörse",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-briefcase",
+            "color": "#ECFB04",
+            "categoryType" : "category"
+        },
+        {
+            "id": 12,
+            "name": "Angebote",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-gift",
+            "color": "#ECFB04",
             "categoryType" : "category"
         }
     ]

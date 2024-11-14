@@ -323,7 +323,10 @@ class ListCubit extends Cubit<ListState> {
       10: "category_companies",
       11: "category_public_transport",
       12: "category_offers",
-      13: "category_food"
+      13: "category_food",
+      29: "category_handel",
+      43: "category_gastro",
+      44: "category_job",
     };
     return categories[categoryId];
   }

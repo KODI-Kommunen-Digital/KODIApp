@@ -777,7 +777,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       10: "category_companies",
       11: "category_public_transport",
       13: "category_food",
-      17: "category_free"
+      17: "category_free",
+      29: "category_handel",
+      43: "category_gastro",
+      44: "category_job",
+      12: "category_offers",
     };
     return categories[id];
   }

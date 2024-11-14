@@ -20,7 +20,7 @@ class AppTheme {
   ///Default Theme
   static final ThemeModel defaultTheme = ThemeModel.fromJson({
     "name": "default",
-    "primary": '#fecc00',
+    "primary": '#ECFB04',
     "secondary": "#FFFFFF",
   });
 
@@ -28,7 +28,7 @@ class AppTheme {
   static final List themeSupport = [
     {
       "name": "default",
-      "primary": '#fecc00',
+      "primary": '#ECFB04',
       "secondary": "#FFFFFF",
     },
     {
