@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transaction_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_error_response.dart';
@@ -158,7 +159,12 @@ class TrolleyMakerRepository {
   Future<String?> getCachedCardName() async {
     try {
       return await prefs.getKeyValue(Preferences.trolleyMakerCardName, "");
-    } catch (e) {
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
+
       return null;
     }
   }
@@ -166,7 +172,11 @@ class TrolleyMakerRepository {
   Future<List<int>?> getCachedCards() async {
     try {
       return await prefs.getKeyValue(Preferences.trolleyMakerCardList, []);
-    } catch (e) {
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
       return null;
     }
   }
@@ -201,10 +211,18 @@ class TrolleyMakerRepository {
             jsonDecode(exception.response.toString()) as Map<String, dynamic>;
         final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
         return Left(errorResponse);
-      } catch (e) {
+      } catch (error, stackTrace) {
+        if (kDebugMode) {
+          print('Error: $error');
+          print('Stack trace: $stackTrace');
+        }
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
-    } catch (e) {
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
       return Left(TrolleyMakerErrorResponse.unknownError());
     }
   }

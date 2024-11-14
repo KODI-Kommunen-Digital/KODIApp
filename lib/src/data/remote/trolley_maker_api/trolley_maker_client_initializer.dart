@@ -32,7 +32,7 @@ class TrolleyMakerClientInitializer {
       await prefBox.deleteKey(Preferences.trolleyMakerApiToken);
       onTokenExpiry.call();
     }));
-    dio.interceptors.add(ApiLoggerInterceptor());
+    dio.interceptors.add(PrettyDioLogger());
     return TrolleyMakerClientApi(dio);
   }
 }
