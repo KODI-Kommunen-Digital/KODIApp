@@ -607,5 +607,10 @@
   "thursday": "Thursday",
   "friday": "Friday",
   "saturday": "Saturday",
-  "sunday": "Sunday"
+  "sunday": "Sunday",
+  "action_error_message": "Something went wrong. The action could not be completed.",
+  "start_navigation": "Start Navigation",
+  "opening_hours": "Opening Hours",
+  "telephone": "Phone",
+  "email_partner_details": "E-mail"
 }

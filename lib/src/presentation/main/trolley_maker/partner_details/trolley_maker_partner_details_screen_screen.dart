@@ -172,7 +172,9 @@ class _TrolleyMakerPartnerDetailsScreenState
               height: 15,
             ),
             Text(
-              "Standort",
+              Translate.of(context).translate(
+                  'location',
+                ),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -191,8 +193,9 @@ class _TrolleyMakerPartnerDetailsScreenState
             const SizedBox(
               height: 5,
             ),
-            AppButton(
-              "Navigation starten",
+            AppButton(Translate.of(context).translate(
+                  'start_navigation',
+                ),
               mainAxisSize: MainAxisSize.max,
               onPressed: () {
                 _launchMapNavigation(
@@ -213,7 +216,9 @@ class _TrolleyMakerPartnerDetailsScreenState
               height: 5,
             ),
             Text(
-              "öffnungszeiten",
+              Translate.of(context).translate(
+                  'opening_hours',
+                ),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -258,21 +263,27 @@ class _TrolleyMakerPartnerDetailsScreenState
               height: 10,
             ),
             _getCommunicationInfoWidget(
-                title: "Telefone",
+                title: Translate.of(context).translate(
+                  'telephone',
+                ),
                 info: companyInfo?.phone,
                 assetId: 'assets/images/ic_phone.svg',
                 callback: () {
                   _launchPhone(companyInfo?.phone);
                 }),
             _getCommunicationInfoWidget(
-                title: "E-Mail",
+                title: Translate.of(context).translate(
+                  'email_partner_details',
+                ),
                 info: companyInfo?.email,
                 assetId: 'assets/images/ic_mail.svg',
                 callback: () {
                   _launchEmail(companyInfo?.email);
                 }),
             _getCommunicationInfoWidget(
-                title: "Website",
+                title: Translate.of(context).translate(
+                  'website',
+                ),
                 info: companyInfo?.website,
                 assetId: 'assets/images/ic_browser.svg',
                 callback: () {
@@ -390,33 +401,33 @@ class _TrolleyMakerPartnerDetailsScreenState
 
   Future<void> _launchPhone(String? phoneNumber) async {
     if (phoneNumber == null) {
-      // ToastUtil.showErrorToast("Phone number not available");
+      _showActionNotSupportedError();
       return;
     }
     var androidUrl = "tel:$phoneNumber";
     try {
       await launchUrl(Uri.parse(androidUrl));
     } on Exception {
-      // ToastUtil.showErrorToast('Failed to launch phone app.');
+      _showActionNotSupportedError();
     }
   }
 
   Future<void> _launchWebsite(String? website) async {
     if (website == null) {
-      // ToastUtil.showErrorToast("Phone number not available");
+      _showActionNotSupportedError();
       return;
     }
 
     try {
       await launchUrl(Uri.parse(website));
     } on Exception {
-      // ToastUtil.showErrorToast('Failed to launch phone app.');
+      _showActionNotSupportedError();
     }
   }
 
   Future<void> _launchEmail(String? email) async {
     if (email == null) {
-      // ToastUtil.showErrorToast("Phone number not available");
+      _showActionNotSupportedError();
       return;
     }
 
@@ -427,7 +438,7 @@ class _TrolleyMakerPartnerDetailsScreenState
       );
       await launchUrl(emailUri);
     } on Exception {
-      // ToastUtil.showErrorToast('Failed to launch phone app.');
+      _showActionNotSupportedError();
     }
   }
 
@@ -449,6 +460,15 @@ class _TrolleyMakerPartnerDetailsScreenState
       } else {
         await launchUrl(appleMapsUri);
       }
-    } catch (e) {}
+    } catch (e) {
+      _showActionNotSupportedError();
+    }
+  }
+
+  void _showActionNotSupportedError() {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate(
+      'action_error_message',
+    ))));
   }
 }
