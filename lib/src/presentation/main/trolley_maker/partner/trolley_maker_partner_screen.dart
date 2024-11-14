@@ -6,6 +6,7 @@ import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/partner/cubit/trolley_maker_partners_cubit.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/partner/cubit/trolley_maker_partners_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class TrolleyMakerPartnersScreen extends StatefulWidget {
@@ -116,6 +117,7 @@ class _TrolleyMakerPartnersScreenState
             description: _getCategoriesText(partnersList?[index].categories),
             city: partnersList?[index].city,
             street: partnersList?[index].street,
+            gguid: partnersList?[index].gguid
           );
         },
       ),
@@ -133,6 +135,7 @@ class PartnerListItemWidget extends StatelessWidget {
   final String description;
   final String? city;
   final String? street;
+  final String? gguid;
 
   const PartnerListItemWidget({
     super.key,
@@ -141,12 +144,13 @@ class PartnerListItemWidget extends StatelessWidget {
     required this.description,
     required this.city,
     required this.street,
+     required this.gguid,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {navigateTodDetails(context, gguid, title);},
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -248,5 +252,12 @@ class PartnerListItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+  
+  void navigateTodDetails(BuildContext context, String? gguid, String title) {
+          Navigator.pushNamed(context, Routes.trolleyMakerPartnerDetails, arguments: {
+        'gguid': gguid,
+        'company_name': title,
+      });
   }
 }

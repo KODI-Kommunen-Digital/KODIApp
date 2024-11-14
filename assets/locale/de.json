@@ -608,6 +608,18 @@
   "transaction_overview": "Buchungsübersicht",
   "transaction_overview_info":"Aktuelle Buchungen erscheinen nach ca. 5 Minuten in der Übersicht",
   "title_card": "Karte",
-  "title_partner": "Partner"
+  "title_partner": "Partner",
+  "monday": "Montag",
+  "tuesday": "Dienstag",
+  "wednesday": "Mittwoch",
+  "thursday": "Donnerstag",
+  "friday": "Freitag",
+  "saturday": "Samstag",
+  "sunday": "Sonntag",
+  "action_error_message": "Etwas ist schief gelaufen. Die Aktion konnte nicht abgeschlossen werden.",
+  "start_navigation": "Navigation starten",
+  "opening_hours": "öffnungszeiten",
+  "telephone": "Telefone",
+  "email_partner_details": "E-Mail"
 }
 
