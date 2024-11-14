@@ -615,6 +615,11 @@
   "thursday": "Donnerstag",
   "friday": "Freitag",
   "saturday": "Samstag",
-  "sunday": "Sonntag"
+  "sunday": "Sonntag",
+  "action_error_message": "Etwas ist schief gelaufen. Die Aktion konnte nicht abgeschlossen werden.",
+  "start_navigation": "Navigation starten",
+  "opening_hours": "öffnungszeiten",
+  "telephone": "Telefone",
+  "email_partner_details": "E-Mail"
 }
 
