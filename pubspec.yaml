@@ -108,6 +108,8 @@ dependencies:
   barcode_widget: ^2.0.3
   # Svg icon loader
   flutter_svg: ^2.0.10+1
+  # Secure storage
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:

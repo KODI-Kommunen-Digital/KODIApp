@@ -16,11 +16,13 @@ import 'package:heidi/src/data/model/model_trolley_maker_country.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_sign_up_values.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/configs/secure_storage.dart';
 
 class TrolleyMakerRepository {
   final Preferences prefs;
   final TrolleyMakerClientApi api;
-  TrolleyMakerRepository(this.prefs, this.api);
+  final SecureStorage secureStorage;
+  TrolleyMakerRepository(this.prefs, this.api, this.secureStorage);
 
   Future<Either<TrolleyMakerErrorResponse, TrolleyMakerLoginResponse>> login(
       String email, String password) async {
@@ -153,7 +155,7 @@ class TrolleyMakerRepository {
   Future<void> _saveLoginResult(TrolleyMakerLoginResponse result) async {
     await prefs.setKeyValue(Preferences.trolleyMakerApiToken, result.xApiToken);
     await prefs.setKeyValue(Preferences.trolleyMakerCardName, result.cardName);
-    await prefs.setKeyValue(Preferences.trolleyMakerCardList, result.cardIDs);
+    await secureStorage.saveIntList(SecureStorage.keyCardList, result.cardIDs);
   }
 
   Future<String?> getCachedCardName() async {
@@ -171,7 +173,7 @@ class TrolleyMakerRepository {
 
   Future<List<int>?> getCachedCards() async {
     try {
-      return await prefs.getKeyValue(Preferences.trolleyMakerCardList, []);
+      return await secureStorage.getIntList(SecureStorage.keyCardList);
     } catch (error, stackTrace) {
       if (kDebugMode) {
         print('Error: $error');

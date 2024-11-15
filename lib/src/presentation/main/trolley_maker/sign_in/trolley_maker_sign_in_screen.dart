@@ -20,29 +20,28 @@ class TrolleyMakerSigninScreen extends StatefulWidget {
 }
 
 class _TrolleyMakerSigninScreenState extends State<TrolleyMakerSigninScreen> {
-
- late TrolleyMakerSigninCubit trolleyMakerCubit;
+  late TrolleyMakerSigninCubit trolleyMakerCubit;
 
   @override
   void initState() {
     super.initState();
-    trolleyMakerCubit = TrolleyMakerSigninCubit(context.read<TrolleyMakerRepository>());
+    trolleyMakerCubit =
+        TrolleyMakerSigninCubit(context.read<TrolleyMakerRepository>());
     WidgetsBinding.instance.addPostFrameCallback((_) {
       trolleyMakerCubit.checkAuthState();
     });
   }
 
-    @override
+  @override
   void dispose() {
-    trolleyMakerCubit.close(); 
+    trolleyMakerCubit.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          trolleyMakerCubit,
+      create: (_) => trolleyMakerCubit,
       child: SafeArea(
         child: Scaffold(
           appBar: AppBar(
@@ -131,110 +130,127 @@ class _SignInLoadedState extends State<SignInLoaded> {
       listener: (context, state) async {},
       child: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          alignment: Alignment.center,
-          child: SingleChildScrollView(
-            child: AutofillGroup(
-              child: Column(
-                children: <Widget>[
-                  AppTextInput(
-                    hintText: Translate.of(context).translate('cardIdOrEmail'),
-                    errorText: _errorID,
-                    controller: _textIDController,
-                    focusNode: _focusID,
-                    autofillHint: const [AutofillHints.username],
-                    textInputAction: TextInputAction.next,
-                    onChanged: (text) {
-                      setState(() {
-                        _errorID = UtilValidator.validate(
-                          _textIDController.text,
-                        );
-                      });
-                    },
-                    onSubmitted: (text) {
-                      Utils.fieldFocusChange(context, _focusID, _focusPass);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  AppTextInput(
-                    hintText: Translate.of(context).translate('password'),
-                    errorText: _errorPass,
-                    textInputAction: TextInputAction.done,
-                    autofillHint: const [AutofillHints.password],
-                    onChanged: (text) {
-                      setState(() {
-                        _errorPass = UtilValidator.validate(
-                          _textPassController.text,
-                        );
-                      });
-                    },
-                    onSubmitted: (text) {
-                      _login();
-                    },
-                    trailing: GestureDetector(
-                      dragStartBehavior: DragStartBehavior.down,
-                      onTap: () {
-                        setState(() {
-                          _showPassword = !_showPassword;
-                        });
-                      },
-                      child: Icon(_showPassword
-                          ? Icons.visibility
-                          : Icons.visibility_off),
-                    ),
-                    obscureText: !_showPassword,
-                    controller: _textPassController,
-                    focusNode: _focusPass,
-                  ),
-                  const SizedBox(height: 16),
-                  BlocBuilder<TrolleyMakerSigninCubit, TrolleyMakerSigninState>(
-                    builder: (context, state) {
-                      return AppButton(
-                        Translate.of(context).translate('sign_in'),
-                        mainAxisSize: MainAxisSize.max,
-                        onPressed: _login,
-                        loading:
-                            state == const TrolleyMakerSigninState.loading(),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 4),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            alignment: Alignment.center,
+            child: Column(
+              children: [
+                const Spacer(),
+                Text(
+                  Translate.of(context).translate('trolley_maker_sign_in_info'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(color: Colors.grey),
+                  textAlign: TextAlign.center,
+                ),
+                const Spacer(),
+                AutofillGroup(
+                  child: Column(
                     children: <Widget>[
-                      // AppButton(
-                      //   Translate.of(context).translate('forgot_password'),
-                      //   onPressed: _forgotPassword,
-                      //   type: ButtonType.text,
-                      // ),
-                      const SizedBox(width: 10,),
-                      AppButton(
-                        Translate.of(context).translate('sign_up'),
-                        onPressed: _signUp,
-                        type: ButtonType.text,
+                      AppTextInput(
+                        hintText:
+                            Translate.of(context).translate('cardIdOrEmail'),
+                        errorText: _errorID,
+                        controller: _textIDController,
+                        focusNode: _focusID,
+                        autofillHint: const [AutofillHints.username],
+                        textInputAction: TextInputAction.next,
+                        onChanged: (text) {
+                          setState(() {
+                            _errorID = UtilValidator.validate(
+                              _textIDController.text,
+                            );
+                          });
+                        },
+                        onSubmitted: (text) {
+                          Utils.fieldFocusChange(context, _focusID, _focusPass);
+                        },
                       ),
+                      const SizedBox(height: 8),
+                      AppTextInput(
+                        hintText: Translate.of(context).translate('password'),
+                        errorText: _errorPass,
+                        textInputAction: TextInputAction.done,
+                        autofillHint: const [AutofillHints.password],
+                        onChanged: (text) {
+                          setState(() {
+                            _errorPass = UtilValidator.validate(
+                              _textPassController.text,
+                            );
+                          });
+                        },
+                        onSubmitted: (text) {
+                          _login();
+                        },
+                        trailing: GestureDetector(
+                          dragStartBehavior: DragStartBehavior.down,
+                          onTap: () {
+                            setState(() {
+                              _showPassword = !_showPassword;
+                            });
+                          },
+                          child: Icon(_showPassword
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                        obscureText: !_showPassword,
+                        controller: _textPassController,
+                        focusNode: _focusPass,
+                      ),
+                      const SizedBox(height: 16),
+                      BlocBuilder<TrolleyMakerSigninCubit,
+                          TrolleyMakerSigninState>(
+                        builder: (context, state) {
+                          return AppButton(
+                            Translate.of(context).translate('sign_in'),
+                            mainAxisSize: MainAxisSize.max,
+                            onPressed: _login,
+                            loading: state ==
+                                const TrolleyMakerSigninState.loading(),
+                          );
+                        },
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          // AppButton(
+                          //   Translate.of(context).translate('forgot_password'),
+                          //   onPressed: _forgotPassword,
+                          //   type: ButtonType.text,
+                          // ),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          AppButton(
+                            Translate.of(context).translate('sign_up'),
+                            onPressed: _signUp,
+                            type: ButtonType.text,
+                          ),
+                        ],
+                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.end,
+                      //   children: <Widget>[
+                      //     TextButton(
+                      //       onPressed: () {
+                      //         _showInfoDialog();
+                      //       },
+                      //       child: Text(
+                      //         Translate.of(context).translate('info'),
+                      //         style: const TextStyle(
+                      //             color: Colors.blue, fontWeight: FontWeight.bold),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
                     ],
                   ),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.end,
-                  //   children: <Widget>[
-                  //     TextButton(
-                  //       onPressed: () {
-                  //         _showInfoDialog();
-                  //       },
-                  //       child: Text(
-                  //         Translate.of(context).translate('info'),
-                  //         style: const TextStyle(
-                  //             color: Colors.blue, fontWeight: FontWeight.bold),
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
+                const Spacer(),
+                const Spacer(),
+              ],
+            )),
       ),
     );
   }

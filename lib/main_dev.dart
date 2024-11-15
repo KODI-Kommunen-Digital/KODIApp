@@ -18,6 +18,7 @@ import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/configs/secure_storage.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
 import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
@@ -106,7 +107,8 @@ class _HeidiAppState extends State<HeidiApp> {
           create: (context) => TrolleyMakerRepository(
               widget.prefBox,
               TrolleyMakerClientInitializer.get(
-                  widget.prefBox, _getTrolleyMakerTokenExpiryCallback())),
+                  widget.prefBox, _getTrolleyMakerTokenExpiryCallback()),
+              SecureStorage.getInstance()),
         )
       ],
       child: MultiBlocProvider(
