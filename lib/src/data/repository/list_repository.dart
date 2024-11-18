@@ -65,7 +65,7 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(selectedCityId, pageNo);
+      final response = await Api.requestSubCatList(1, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -272,7 +272,8 @@ class ListRepository {
 
   Future<ResultApiModel> loadCategory() async {
     final response = await Api.requestSubmitCategory();
-    var jsonCategory = response.data;
+    var jsonCategory =
+        response.data.where((category) => category['id'] != 43).toList();
     final categoryId = jsonCategory.first['id'];
     prefs.setKeyValue(Preferences.categoryId, categoryId as int);
     return response;
