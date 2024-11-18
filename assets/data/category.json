@@ -6,40 +6,15 @@
             "name": "News",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
-            "color": "#ff8a65",
+            "color": "#657983",
             "categoryType" : "category"
         },
-        
         {
             "id": 3,
-            "name": "Events",
+            "name": "Veranstaltungen",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#a569bd",
-            "categoryType" : "category"
-        },
-        {
-            "id": 4,
-            "name": "Vereine",
-            "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#5dade2",
-            "categoryType" : "category"
-        },
-        {
-            "id": 6,
-            "name": "Biete/Suche",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-magnifying-glass",
-            "color": "#58d68d",
-            "categoryType" : "category"
-        },
-        {
-            "id": 10,
-            "name": "Unternehmen",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#fdc60a",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
@@ -47,15 +22,39 @@
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
-            "color": "#027148",
+            "color": "#95c11f",
             "categoryType" : "category"
         },
         {
-            "id": 25,
-            "name": "Umfrage",
+            "id": 4,
+            "name": "Vereine",
             "noOfSubcategories": 0,
-            "icon": "fas fa-square-poll-vertical",
-            "color": "#CC0000",
+            "icon": "far fa-handshake",
+            "color": "#fbe117",
+            "categoryType" : "category"
+        },
+        {
+            "id": 14,
+            "name": "Rathaus",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#657983",
+            "categoryType" : "category"
+        },
+        {
+            "id": 17,
+            "name": "Freizeit & Tourismus",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#d44d1c",
+            "categoryType" : "category"
+        },
+        {
+            "id": 6,
+            "name": "Biete/Suche",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-magnifying-glass",
+            "color": "#95c11f",
             "categoryType" : "category"
         },
         {
@@ -63,7 +62,7 @@
             "name": "Ortsinfo",
             "noOfSubcategories": 0,
             "icon": "fas fa-city",
-            "color": "#99FFCC",
+            "color": "#fbe117",
             "categoryType" : "category"
         }
     ]

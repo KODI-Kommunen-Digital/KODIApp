@@ -275,38 +275,10 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: <Widget>[
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
-                      cityTitlesList: cityTitles,
-                      hintText:
-                          Translate.of(context).translate('hselect_location'),
-                      selectedOption: (selectedCityId > 0)
-                          ? selectedCityTitle
-                          : Translate.of(context).translate('select_location'),
-                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                      banners: banner,
-                      setLocationCallback: (data) async {
-                        for (final list in location!) {
-                          if (list.title == data) {
-                            _onUpdateCategory();
-                            setState(() {
-                              selectedCityTitle = data;
-                              selectedCityId = list.id;
-                            });
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
-                          } else if (data ==
-                              Translate.of(context)
-                                  .translate('select_location')) {
-                            setState(() {
-                              selectedCityId = 0;
-                            });
-                            _onUpdateCategory();
-                            AppBloc.homeCubit.saveCityId(selectedCityId);
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
-                            break;
-                          }
-                        }
-                      }),
+                    hintText: Translate.of(context).translate('welcome'),
+                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                    banners: banner,
+                  ),
                   pinned: true,
                 ),
                 const SliverToBoxAdapter(

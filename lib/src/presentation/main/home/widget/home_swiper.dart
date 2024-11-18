@@ -38,7 +38,7 @@ class HomeSwipe extends StatelessWidget {
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: imageProvider,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 );

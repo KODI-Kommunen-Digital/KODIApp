@@ -69,19 +69,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
 
-  Future<String?> getCityLink() async {
-    final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
-    Map<int, String> cityWebsites = {
-      0: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger",
-      1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86974&behoerde=29997690498&gemeinde=325524110678",
-      2: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86925&behoerde=70664072559&gemeinde=006746347678",
-      3: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86944&behoerde=93996542745&gemeinde=208079671678",
-    };
-
-    return cityWebsites[cityId];
-  }
-
   Future<void> setServiceValue(String preference, String? type, int? id) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(preference, type ?? id);
@@ -102,12 +89,16 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   List<CitizenServiceModel> initializeServices() {
     return [
-      // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
-      // CitizenServiceModel(
-      //     imageUrl: Images.service3,
-      //     imageLink: "3",
-      //     type: "subCategoryService",
-      //     arguments: 4),
+      CitizenServiceModel(
+          imageUrl: Images.service2,
+          imageLink: "2",
+          arguments: 2,
+          categoryId: 43),
+      CitizenServiceModel(
+          imageUrl: Images.service3,
+          imageLink: "3",
+          categoryId: 16,
+          arguments: 3),
       CitizenServiceModel(
           imageUrl: Images.service4,
           imageLink: "4",
@@ -119,6 +110,26 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           arguments: 5,
           categoryId: 3),
       CitizenServiceModel(
+          imageUrl: Images.service14,
+          imageLink: "14",
+          categoryId: 14,
+          arguments: 0),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service13,
+      //     imageLink: "13",
+      //     categoryId: 15,
+      //     arguments: 0),
+      CitizenServiceModel(
+          imageUrl: Images.service15,
+          imageLink: "15",
+          categoryId: 15,
+          arguments: 0),
+      CitizenServiceModel(
+          imageUrl: Images.service8,
+          imageLink: "8",
+          arguments: 8,
+          categoryId: 13),
+      CitizenServiceModel(
           imageUrl: Images.service6,
           imageLink: "6",
           arguments: 6,
@@ -128,11 +139,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           imageLink: "7",
           arguments: 7,
           categoryId: 10),
-      CitizenServiceModel(
-          imageUrl: Images.service8,
-          imageLink: "8",
-          arguments: 8,
-          categoryId: 13),
       CitizenServiceModel(
           imageUrl: Images.service9,
           imageLink: "9",
@@ -144,20 +150,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         arguments: 10,
       ),
       CitizenServiceModel(
-          imageUrl: Images.service13,
-          imageLink: "13",
-          categoryId: 15,
-          arguments: 0),
-      // CitizenServiceModel(
-      //     imageUrl: Images.service14,
-      //     imageLink: "14",
-      //     categoryId: 14,
-      //     arguments: 0),
-      CitizenServiceModel(
-          imageUrl: Images.service15,
-          imageLink: "15",
-          categoryId: 15,
-          arguments: 0),
+          imageUrl: Images.service16,
+          imageLink: "16",
+          arguments: 10,
+          categoryId: 25),
     ];
   }
 

@@ -173,16 +173,16 @@ class HomeCubit extends Cubit<HomeState> {
     int? cityId,
   ) async {
     // Sort List
-    Map<int, int?> idToCountMap = {};
-    for (var obj in categoryCount) {
-      idToCountMap[obj.id] = obj.count;
-    }
-    categories.sort((a, b) {
-      if (a.id == 17) return 1; // Move category with id 14 to the last index
-      if (b.id == 17) return -1;
+    // Map<int, int?> idToCountMap = {};
+    // for (var obj in categoryCount) {
+    //   idToCountMap[obj.id] = obj.count;
+    // }
+    // categories.sort((a, b) {
+    //   if (a.id == 17) return 1; // Move category with id 14 to the last index
+    //   if (b.id == 17) return -1;
 
-      return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
-    });
+    //   return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
+    // });
 
     //Forum always at index 6, before the more button
     int forumIndex = categories.indexWhere((element) => element.id == 17);
@@ -193,10 +193,10 @@ class HomeCubit extends Cubit<HomeState> {
     }
     // Hide tag on empty categories
     for (var element in categories) {
-      bool hasContent = await categoryHasContent(element.id, cityId);
-      if (!hasContent) {
-        element.hide = true;
-      }
+      // bool hasContent = await categoryHasContent(element.id, cityId);
+      // if (!hasContent) {
+      //   element.hide = true;
+      // }
       if (element.id == 17 || element.id == 100) {
         element.hide = false;
       }

@@ -13,7 +13,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="Mitwitz App"
+        android:label="Mitwitz verbindet"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"

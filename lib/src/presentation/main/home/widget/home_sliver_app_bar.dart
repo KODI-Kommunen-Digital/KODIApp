@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-// import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
+import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_swiper.dart';
 
 class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
@@ -12,8 +12,8 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
 
   AppBarHomeSliver(
       {required this.expandedHeight,
-      required this.setLocationCallback,
-      required this.cityTitlesList,
+      this.setLocationCallback,
+      this.cityTitlesList,
       this.banners,
       this.hintText,
       this.selectedOption});
@@ -31,12 +31,9 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
         //   height: 32,
         //   color: Theme.of(context).colorScheme.background,
         // ),
-        // CitiesDropDown(
-        //   hintText: hintText,
-        //   cityTitlesList: cityTitlesList,
-        //   setLocationCallback: setLocationCallback,
-        //   selectedOption: selectedOption,
-        // ),
+        CitiesDropDown(
+          displayText: hintText,
+        ),
       ],
     );
   }

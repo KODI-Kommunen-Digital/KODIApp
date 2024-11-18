@@ -461,8 +461,10 @@
   "category_food": "Essen & Trinken",
   "category_rathaus": "Rathaus",
   "category_newsletter": "Mitteilungsblatt",
-  "category_official_notification": "Amtliche Mitteilung",
+  "category_official_notification": "Amtliche Bekanntmachungen",
   "category_polls": "Umfrage",
+  "category_freetime": "Tourismus",
+  "category_citizen_service": "Bürgerservice Verwaltung",
   "poll_options": "Umfrage Optionen",
   "add_option": "Option hinzufügen",
   "option_title": "Option Titel",
@@ -538,6 +540,7 @@
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
   "vote_submit_fail": "Fehler beim Abstimmen",
   "views": "Aufrufe",
-  "local_profile": "Ortssteckbrief"
+  "local_profile": "Ortssteckbrief",
+  "welcome":"Herzlich Willkommen"
 }
 

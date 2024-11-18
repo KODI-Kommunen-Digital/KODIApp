@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mitwitz App",
+            "name": "Mitwitz verbindet",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "Mitwitz App (profile mode)",
+            "name": "Mitwitz verbindet (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Mitwitz App (release mode)",
+            "name": "Mitwitz verbindet (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

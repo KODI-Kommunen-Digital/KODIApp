@@ -586,8 +586,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
-        await context.read<AddListingCubit>().setCategoryId(
-            selectedCategory?.toLowerCase());
+        await context
+            .read<AddListingCubit>()
+            .setCategoryId(selectedCategory?.toLowerCase());
         if (isImageChanged) {
           await context
               .read<AddListingCubit>()
@@ -816,6 +817,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       14: "category_rathaus",
       15: "category_newsletter",
       16: "category_official_notification",
+      17: "category_freetime",
       25: "category_polls",
     };
     return categories[id];

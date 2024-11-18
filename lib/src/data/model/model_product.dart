@@ -232,7 +232,7 @@ class ProductModel {
     } else if (json['categoryId'] == 15) {
       category = "Mitteilungsblatt";
     } else if (json['categoryId'] == 16) {
-      category = "Amtliche Mitteilung";
+      category = "Amtliche Bekanntmachungen";
     } else if (json['categoryId'] == 25) {
       category = "Umfrage";
     }
