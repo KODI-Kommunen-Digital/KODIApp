@@ -281,6 +281,11 @@ class Api {
 
   static Future<ResultApiModel> requestSubmitCategory() async {
     final result = await HTTPManager(forum: false).get(url: categories);
+    if (result['data'] is List) {
+      result['data'] = (result['data'] as List)
+          .where((category) => category['id'] != 45)
+          .toList();
+    }
     return ResultApiModel.fromJson(result);
   }
 

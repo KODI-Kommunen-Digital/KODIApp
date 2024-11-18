@@ -272,8 +272,7 @@ class ListRepository {
 
   Future<ResultApiModel> loadCategory() async {
     final response = await Api.requestSubmitCategory();
-    var jsonCategory =
-        response.data.where((category) => category['id'] != 45).toList();
+    final jsonCategory = response.data;
     final categoryId = jsonCategory.first['id'];
     prefs.setKeyValue(Preferences.categoryId, categoryId as int);
     return response;
