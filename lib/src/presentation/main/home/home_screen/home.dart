@@ -20,6 +20,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -256,7 +257,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               style: Theme.of(context)
                                   .textTheme
                                   .titleLarge!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                                  .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: screenAverage * 0.02),
                             ),
                           ],
                         );
@@ -280,7 +283,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 16,
                   ),
-                  _buildQRCodes()
+                  _buildQRCodes(),
+                  const SizedBox(
+                    height: 8,
+                  ),
                 ],
               ),
             ),
@@ -382,32 +388,80 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         AppTerminalContainer(
           width: screenAverage * 0.15,
-          height: screenAverage * 0.15,
+          height: screenAverage * 0.15 + screenAverage * 0.025,
           round: true,
           centerWidgets: true,
           widgets: [
-            Image.network(
-                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+            const SizedBox(
+              height: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "App",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: screenAverage * 0.015,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            QrImageView(data: 'https://www.smart-app-troisdorf.de')
           ],
         ),
         AppTerminalContainer(
           width: screenAverage * 0.15,
-          height: screenAverage * 0.15,
+          height: screenAverage * 0.15 + screenAverage * 0.025,
           round: true,
           centerWidgets: true,
           widgets: [
-            Image.network(
-                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+            const SizedBox(
+              height: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Mobilitätskarte",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: screenAverage * 0.015,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            QrImageView(data: 'https://troisdorf.dksr.city/map/')
           ],
         ),
         AppTerminalContainer(
           width: screenAverage * 0.15,
-          height: screenAverage * 0.15,
+          height: screenAverage * 0.15 + screenAverage * 0.025,
           round: true,
           centerWidgets: true,
           widgets: [
-            Image.network(
-                'https://play-lh.googleusercontent.com/lomBq_jOClZ5skh0ELcMx4HMHAMW802kp9Z02_A84JevajkqD87P48--is1rEVPfzGVf')
+            const SizedBox(
+              height: 2,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Stadt Troisdorf",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      fontSize: screenAverage * 0.015,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+            QrImageView(data: 'https://www.troisdorf.de')
           ],
         ),
       ],
