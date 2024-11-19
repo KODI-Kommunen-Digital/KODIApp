@@ -968,8 +968,8 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
                           Expanded(
                               child: InAppWebView(
                                   initialUrlRequest: URLRequest(
-                                      url: Uri.parse(
-                                          'https://troisdorf.dksr.city/map/')),
+                                      url: WebUri.uri(Uri.parse(
+                                          'https://troisdorf.dksr.city/map/'))),
                                   androidOnGeolocationPermissionsShowPrompt:
                                       (InAppWebViewController controller,
                                           String origin) async {
