@@ -22,8 +22,12 @@ class EditStoreScreen extends StatefulWidget {
 class _EditStoreScreenState extends State<EditStoreScreen> {
   @override
   void initState() {
-    context.read<EditStoreCubit>().storeId = widget.storeId;
-    context.read<EditStoreCubit>().cityId = widget.cityId;
+    context
+        .read<EditStoreCubit>()
+        .storeId = widget.storeId;
+    context
+        .read<EditStoreCubit>()
+        .cityId = widget.cityId;
     context.read<EditStoreCubit>().onLoad();
     super.initState();
   }
@@ -31,12 +35,13 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<EditStoreCubit, EditStoreState>(
-        builder: (context, state) => state.maybeWhen(
-            loading: () => const EditStoreLoading(),
-            loaded: (store) => EditStoreLoaded(store: store),
-            error: (e) => EditStoreError(error: e),
-            success: () => const EditStoreSuccess(),
-            orElse: () => ErrorWidget('Unknown Error')));
+        builder: (context, state) =>
+            state.maybeWhen(
+                loading: () => const EditStoreLoading(),
+                loaded: (store) => EditStoreLoaded(store: store),
+                error: (e) => EditStoreError(error: e),
+                success: () => const EditStoreSuccess(),
+                orElse: () => ErrorWidget('Unknown Error')));
   }
 }
 
@@ -60,6 +65,7 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
 
   String? nameError;
   String? descError;
+  String? addressError;
 
   @override
   void initState() {
@@ -100,15 +106,18 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
       descError = null;
     }
 
-    String? address;
-
-    if (_addressController.text != '') {
-      address = _addressController.text;
+    if (_addressController.text.trim() == '') {
+      setState(() {
+        addressError = Translate.of(context).translate('address_message');
+      });
+      return;
+    } else {
+      addressError = null;
     }
 
     context.read<EditStoreCubit>().updateStore(
         name: _nameController.text,
-        address: address,
+        address: _addressController.text,
         longitude: widget.store.longitude,
         latitude: widget.store.latitude,
         description: _descController.text);
@@ -135,7 +144,8 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                       Text.rich(
                         TextSpan(
                           text: Translate.of(context).translate('title'),
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -170,8 +180,9 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                       Text.rich(
                         TextSpan(
                           text:
-                              Translate.of(context).translate('input_content'),
-                          style: Theme.of(context)
+                          Translate.of(context).translate('input_content'),
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
@@ -206,12 +217,21 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                       Text.rich(
                         TextSpan(
                           text:
-                              Translate.of(context).translate('input_address'),
-                          style: Theme.of(context)
+                          Translate.of(context).translate('input_address'),
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .titleMedium!
                               .copyWith(fontWeight: FontWeight.bold),
-                        ),
+                          children: const <TextSpan>[
+                          TextSpan(
+                            text: ' *',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ]),
                       ),
                     ]),
                 const SizedBox(height: 8),
@@ -219,6 +239,7 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                   hintText: Translate.of(context).translate('input_address'),
                   controller: _addressController,
                   focusNode: _addressFocus,
+                  errorText: addressError,
                   textInputAction: TextInputAction.next,
                   keyboardType: TextInputType.text,
                 ),
@@ -228,8 +249,8 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
                   children: [
                     AppButton(Translate.of(context).translate('submit'),
                         onPressed: () {
-                      onSubmit();
-                    }),
+                          onSubmit();
+                        }),
                   ],
                 )
               ],
@@ -265,7 +286,9 @@ class EditStoreSuccess extends StatelessWidget {
                     height: 90,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Theme.of(context).primaryColor,
+                      color: Theme
+                          .of(context)
+                          .primaryColor,
                     ),
                     child: const Icon(
                       Icons.check,
@@ -278,7 +301,10 @@ class EditStoreSuccess extends StatelessWidget {
                   ),
                   Text(
                     Translate.of(context).translate('save_data_success'),
-                    style: Theme.of(context).textTheme.titleMedium,
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .titleMedium,
                   ),
                 ],
               ),
@@ -326,7 +352,10 @@ class EditStoreError extends StatelessWidget {
               ),
               Text(
                 Translate.of(context).translate(error),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .titleMedium,
                 textAlign: TextAlign.center,
               ),
             ],
