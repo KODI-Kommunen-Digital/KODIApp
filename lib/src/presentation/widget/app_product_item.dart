@@ -23,7 +23,8 @@ class AppProductItem extends StatelessWidget {
       this.cityName,
       this.categoryTitle,
       this.screenWidth,
-      this.screenHeigth});
+      this.screenHeight,
+      this.isEvent = false});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -33,13 +34,14 @@ class AppProductItem extends StatelessWidget {
   final String? cityName;
   final String? categoryTitle;
   final double? screenWidth;
-  final double? screenHeigth;
+  final double? screenHeight;
+  final bool isEvent;
 
   @override
   Widget build(BuildContext context) {
     double? screenAverage;
-    if (screenHeigth != null && screenWidth != null) {
-      screenAverage = (screenHeigth! + screenWidth!) / 2;
+    if (screenHeight != null && screenWidth != null) {
+      screenAverage = (screenHeight! + screenWidth!) / 2;
     }
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
@@ -536,7 +538,7 @@ class AppProductItem extends StatelessWidget {
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height:
-                        (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                        (screenHeight == null) ? 120 : screenHeight! * 0.085,
                     width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -572,7 +574,7 @@ class AppProductItem extends StatelessWidget {
                   return AppPlaceholder(
                     child: Container(
                       height:
-                          (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                          (screenHeight == null) ? 120 : screenHeight! * 0.085,
                       width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
@@ -587,7 +589,7 @@ class AppProductItem extends StatelessWidget {
                   return AppPlaceholder(
                     child: Container(
                       height:
-                          (screenHeigth == null) ? 120 : screenHeigth! * 0.085,
+                          (screenHeight == null) ? 120 : screenHeight! * 0.085,
                       width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -608,6 +610,9 @@ class AppProductItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if(isEvent)
+                      SizedBox(height: screenHeight! * 0.0125,),
+                    if(!isEvent)
                     Container(
                       decoration: BoxDecoration(
                           color: Theme.of(context).scaffoldBackgroundColor,
@@ -648,6 +653,7 @@ class AppProductItem extends StatelessWidget {
                                       .fontSize
                                   : screenAverage * 0.0125),
                     ),
+                    if (!isEvent)
                     Text(
                       item!.description,
                       maxLines: 2,

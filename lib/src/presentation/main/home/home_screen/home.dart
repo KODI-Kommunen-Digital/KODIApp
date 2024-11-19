@@ -605,7 +605,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: AppProductItem(
                                   type: ProductViewType.terminal,
                                   screenWidth: screenWidth,
-                                  screenHeigth: screenHeight,
+                                  screenHeight: screenHeight,
+                                  isEvent: !isNews,
                                   categoryTitle:
                                       Translate.of(context).translate('recent'),
                                   isRefreshLoader: isRefreshLoader,
