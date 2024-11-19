@@ -139,6 +139,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     await showModalBottomSheet(
       context: context,
+      constraints: BoxConstraints(
+        maxWidth: screenWidth/1.2
+      ),
       isScrollControlled: true,
       builder: (BuildContext context) {
         return SafeArea(
@@ -157,9 +160,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         link,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
+                          fontSize: screenAverage * 0.01,
                         ),
                       ),
                     ),
@@ -167,7 +171,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       icon: Icon(
                         Icons.close,
                         color: Colors.white,
-                        size: screenAverage * 0.03,
+                        size: screenAverage * 0.02,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -177,7 +181,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               SizedBox(
-                height: screenHeight - kToolbarHeight - 30,
+                height: screenHeight - kToolbarHeight - 50,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -985,7 +989,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ? modifiedDescription
                       : '${modifiedDescription.substring(0, 200)}...',
                   textStyle: TextStyle(
-                      fontSize: screenAverage * 0.015,
+                      fontSize: screenAverage * 0.018,
                       color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
                       height: 1.6), customStylesBuilder: (element) {
