@@ -19,12 +19,9 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:add_2_calendar/add_2_calendar.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.item});
@@ -40,6 +37,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
+  late double screenHeight;
+  late double screenWidth;
+  late double screenAverage;
+  bool expandDescription = false;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -163,9 +164,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(
+                      icon: Icon(
                         Icons.close,
                         color: Colors.white,
+                        size: screenAverage * 0.03,
                       ),
                       onPressed: () {
                         Navigator.of(context).pop();
@@ -175,8 +177,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 ),
               ),
               SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                height: screenHeight - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -187,226 +188,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       },
     );
-  }
-
-  Future<void> _requestPermissions() async {
-    PermissionStatus status = await Permission.calendar.status;
-
-    if (Platform.isIOS) {
-      // Check for iOS 17 or above
-      if (int.parse(
-              Platform.operatingSystemVersion.split(' ')[1].split('.')[0]) >=
-          17) {
-        // Request calendarWriteOnly and calendarFullAccess for iOS 17 and above
-        PermissionStatus writeStatus =
-            await Permission.calendarWriteOnly.request();
-        // PermissionStatus fullAccessStatus =
-        //     await Permission.calendarFullAccess.request();
-
-        // if (writeStatus.isGranted || fullAccessStatus.isGranted) {
-        //   _showCalendarChoiceDialog();
-        // } else if (writeStatus.isPermanentlyDenied ||
-        //     fullAccessStatus.isPermanentlyDenied) {
-        //   await openAppSettings();
-        // }
-        if (writeStatus.isGranted) {
-          _showCalendarChoiceDialog();
-        } else if (writeStatus.isPermanentlyDenied) {
-          await openAppSettings();
-        } else {
-          _showPermissionDeniedDialog();
-        }
-      } else {
-        // Below iOS 17 handling
-        if (status.isDenied || status.isRestricted || status.isLimited) {
-          // Request permission
-          status = await Permission.calendar.request();
-        }
-
-        if (status.isGranted) {
-          _showCalendarChoiceDialog();
-        } else if (status.isPermanentlyDenied) {
-          await openAppSettings();
-        } else {
-          _showPermissionDeniedDialog();
-        }
-      }
-    } else {
-      // Android or other platforms handling
-      if (status.isDenied || status.isRestricted || status.isLimited) {
-        // Request permission
-        status = await Permission.calendar.request();
-      }
-
-      if (status.isGranted) {
-        _showCalendarChoiceDialog();
-      } else if (status.isPermanentlyDenied) {
-        await openAppSettings();
-      } else {
-        _showPermissionDeniedDialog();
-      }
-    }
-  }
-
-  Future<void> _showCalendarChoiceDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate("choose_calendar")),
-          content: Text(Translate.of(context).translate('which_calendar')),
-          actions: <Widget>[
-            TextButton(
-              child: Text(Translate.of(context).translate('standard_calendar')),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _addEvent(widget.item);
-              },
-            ),
-            // if (Platform.isAndroid)
-            //   TextButton(
-            //     child: Text(Translate.of(context).translate('google_calendar')),
-            //     onPressed: () async {
-            //       Navigator.of(context).pop();
-            //       await launch(
-            //           'https://calendar.google.com/calendar/r/eventedit');
-            //     },
-            //   ),
-            // if (Platform.isIOS)
-            //   TextButton(
-            //     child: Text(Translate.of(context).translate('apple_calendar')),
-            //     onPressed: () async {
-            //       Navigator.of(context).pop();
-            //       await launch('calshow://');
-            //     },
-            //   ),
-            TextButton(
-              child: Text(Translate.of(context).translate('cancel')),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _showPermissionDeniedDialog() async {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate("no_permission")),
-          content: Text(Translate.of(context).translate("event_no_permission")),
-          actions: <Widget>[
-            TextButton(
-              child: Text(Translate.of(context).translate("no")),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(Translate.of(context).translate("yes")),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _requestPermissions();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _addEvent(ProductModel product) async {
-    DateTime eventStart;
-    DateTime eventEnd;
-
-    if (product.startDate.isNotEmpty) {
-      try {
-        String startDate = product.startDate.replaceAll(".", "-");
-        // Check if startDate contains time information
-        if (!startDate.contains(":")) {
-          // If no time is provided, append "00:00:00.000"
-          startDate += " 00:00:00.000";
-        } else {
-          // Append milliseconds if time is provided
-          startDate += ":00.000";
-        }
-        eventStart = DateFormat("dd-MM-yyyy HH:mm:ss.SSS").parse(startDate);
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(Translate.of(context)
-                  .translate("invalid_start_date_format"))),
-        );
-        return;
-      }
-    } else {
-      eventStart = DateTime.now();
-    }
-
-    if (product.endDate.isNotEmpty) {
-      try {
-        if (product.endDate.length > 5) {
-          String endDate = "${product.endDate.replaceAll(".", "-")}:00";
-          eventEnd = DateFormat("dd-MM-yyyy HH:mm:ss").parse(endDate);
-        } else {
-          int newHour = int.parse(product.endDate.split(":")[0]);
-          int newMinute = int.parse(product.endDate.split(":")[1]);
-
-          // Check if end time is 00:00 and change it to 24:00
-          if (newHour == 0 && newMinute == 0) {
-            newHour = 24;
-          }
-
-          eventEnd = DateTime(eventStart.year, eventStart.month, eventStart.day,
-              newHour, newMinute);
-        }
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text(
-                  Translate.of(context).translate("invalid_end_date_format"))),
-        );
-        return;
-      }
-    } else {
-      eventEnd = DateTime(
-          eventStart.year, eventStart.month, eventStart.day, 24, 0, 0, 0);
-    }
-
-    if (eventEnd.isBefore(eventStart)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(Translate.of(context).translate("end_before_start"))),
-      );
-      return;
-    }
-
-    Event event = Event(
-      title: product.title,
-      description: product.description,
-      location: product.address,
-      startDate: eventStart,
-      endDate: eventEnd,
-    );
-
-    Add2Calendar.addEvent2Cal(event).then((success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(success
-                ? Translate.of(context).translate("event_added_successful")
-                : Translate.of(context).translate("event_added_fail"))),
-      );
-    }).catchError((e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(
-                "${Translate.of(context).translate("error_occurred")}: $e")),
-      );
-    });
   }
 
   ///Build content UI
@@ -427,7 +208,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget website = Container();
     Widget startDate = Container();
     Widget endDate = Container();
-    Widget addCalendarButton = Container();
     Widget openHours = Container();
     Widget attachments = Container();
     Widget createdDate = Container();
@@ -708,8 +488,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
     double carouselHeight = 0;
     if (Platform.isAndroid) {
-      double screenHeight = MediaQuery.of(context).size.height;
-      double screenWidth = MediaQuery.of(context).size.width;
       double safeAreaVertical = MediaQuery.of(context).padding.top +
           MediaQuery.of(context).padding.bottom +
           kToolbarHeight;
@@ -757,7 +535,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           options: CarouselOptions(
                             aspectRatio:
                                 1 / MediaQuery.of(context).devicePixelRatio,
-                            height: carouselHeight,
+                            height: carouselHeight * 1.5,
                             viewportFraction: 1.0,
                             enlargeCenterPage: false,
                             enableInfiniteScroll:
@@ -894,8 +672,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     child: Row(
                       children: [
                         Container(
-                          width: 32,
-                          height: 32,
+                          width: screenAverage * 0.03,
+                          height: screenAverage * 0.03,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             color: Theme.of(context).dividerColor,
@@ -905,7 +683,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             color:
                                 Theme.of(context).textTheme.bodyMedium?.color ??
                                     Colors.white,
-                            size: 18,
+                            size: screenAverage * 0.02,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -915,7 +693,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             children: <Widget>[
                               Text(
                                 Translate.of(context).translate('address'),
-                                style: Theme.of(context).textTheme.bodySmall,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(fontSize: screenAverage * 0.015),
                               ),
                               Text(
                                 product.address,
@@ -924,7 +705,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
-                                    .copyWith(fontWeight: FontWeight.bold),
+                                    .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: screenAverage * 0.0125),
                               ),
                             ],
                           ),
@@ -951,8 +734,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: screenAverage * 0.03,
+                    height: screenAverage * 0.03,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context).dividerColor,
@@ -961,7 +744,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Icons.phone_outlined,
                       color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
-                      size: 18,
+                      size: screenAverage * 0.02,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -971,7 +754,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('phone'),
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: screenAverage * 0.015),
                         ),
                         Text(
                           product.phone,
@@ -980,7 +766,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenAverage * 0.0125),
                         ),
                       ],
                     ),
@@ -1024,7 +812,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('email'),
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: screenAverage * 0.015),
                         ),
                         Text(
                           product.email,
@@ -1033,7 +824,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenAverage * 0.0125),
                         ),
                       ],
                     ),
@@ -1057,8 +850,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Row(
                 children: <Widget>[
                   Container(
-                    width: 32,
-                    height: 32,
+                    width: screenAverage * 0.03,
+                    height: screenAverage * 0.03,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Theme.of(context).dividerColor,
@@ -1067,7 +860,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Icons.language_outlined,
                       color: Theme.of(context).textTheme.bodyMedium?.color ??
                           Colors.white,
-                      size: 18,
+                      size: screenAverage * 0.02,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -1077,7 +870,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       children: <Widget>[
                         Text(
                           Translate.of(context).translate('website'),
-                          style: Theme.of(context).textTheme.bodySmall,
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(fontSize: screenAverage * 0.015),
                         ),
                         Text(
                           product.website,
@@ -1086,7 +882,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
-                              .copyWith(fontWeight: FontWeight.bold),
+                              .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: screenAverage * 0.0125),
                         ),
                       ],
                     ),
@@ -1106,15 +904,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'start_date',
               ),
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(fontSize: screenAverage * 0.015),
             ),
             const SizedBox(width: 8),
             Text(
               product.startDate,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontWeight: FontWeight.bold, fontSize: screenAverage * 0.015),
             )
           ],
         );
@@ -1134,15 +933,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Translate.of(context).translate(
                 'end_date',
               ),
-              style: Theme.of(context).textTheme.bodySmall,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(fontSize: screenAverage * 0.015),
             ),
             const SizedBox(width: 8),
             Text(
               product.endDate,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontWeight: FontWeight.bold, fontSize: screenAverage * 0.015),
             )
           ],
         );
@@ -1155,10 +955,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           children: <Widget>[
             Text(
               product.createDate,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontWeight: FontWeight.bold, fontSize: screenAverage * 0.015),
             )
           ],
         );
@@ -1172,42 +970,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: $color");
 
-        description = HtmlWidget(modifiedDescription,
-            textStyle: TextStyle(
-                fontSize: 16.0,
-                color: Theme.of(context).textTheme.bodyMedium?.color ??
-                    Colors.white,
-                height: 1.6), customStylesBuilder: (element) {
-          if (element.localName == 'img') {
-            return {'max-width': '100%'};
-          } else if (element.localName == '') {
-            return {'color': hexColor};
-          }
-          var style = element.attributes['style'];
-          if (style != null) {
-            style =
-                style.replaceAll(RegExp(r'color:[^;];?'), 'color: $hexColor;');
-          } else {
-            style = 'color: $hexColor;';
-          }
+        description = GestureDetector(
+          onTap: () {
+            if(modifiedDescription.length > 200) {
+              setState(() {
+                expandDescription = !expandDescription;
+              });
+            }
+          },
+          child: Column(
+            children: [
+              HtmlWidget(
+                  (expandDescription || modifiedDescription.length <= 200)
+                      ? modifiedDescription
+                      : '${modifiedDescription.substring(0, 200)}...',
+                  textStyle: TextStyle(
+                      fontSize: screenAverage * 0.015,
+                      color: Theme.of(context).textTheme.bodyMedium?.color ??
+                          Colors.white,
+                      height: 1.6), customStylesBuilder: (element) {
+                if (element.localName == 'img') {
+                  return {'max-width': '100%'};
+                } else if (element.localName == '') {
+                  return {'color': hexColor};
+                }
+                var style = element.attributes['style'];
+                if (style != null) {
+                  style = style.replaceAll(
+                      RegExp(r'color:[^;];?'), 'color: $hexColor;');
+                } else {
+                  style = 'color: $hexColor;';
+                }
 
-          RegExp exp = RegExp(
-            r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
-            caseSensitive: false,
-          );
+                RegExp exp = RegExp(
+                  r'<a\s+[^>]*\bhref="([^"]+\.(?:jpg|png))"[^>]*>.*?<a>',
+                  caseSensitive: false,
+                );
 
-          modifiedDescription =
-              modifiedDescription.replaceAllMapped(exp, (match) {
-            String href = match.group(1) ?? "";
-            return '<img src="$href">';
-          });
-          return {'style': style};
-          // onTapUrl: (url) {
-          //   if (Uri.parse(url).hasAbsolutePath) {
-          //     _makeAction(url);
-          //   }
-          //   return false;
-        });
+                modifiedDescription =
+                    modifiedDescription.replaceAllMapped(exp, (match) {
+                  String href = match.group(1) ?? "";
+                  return '<img src="$href">';
+                });
+                return {'style': style};
+                // onTapUrl: (url) {
+                //   if (Uri.parse(url).hasAbsolutePath) {
+                //     _makeAction(url);
+                //   }
+                //   return false;
+              }),
+              if(modifiedDescription.length > 200)
+              Icon(
+                (expandDescription) ? Icons.expand_less : Icons.expand_more,
+                size: screenAverage * 0.02,
+              ),
+            ],
+          ),
+        );
       }
 
       info = Padding(
@@ -1223,17 +1042,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   child: Text(
                     product.title,
                     style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
+                        fontWeight: FontWeight.bold,
+                        fontSize: screenAverage * 0.03),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (product.category!.toLowerCase() == "events")
-                  IconButton(
-                      icon: const Icon(Icons.event),
-                      onPressed: _requestPermissions,
-                      color: Colors.blue),
                 const SizedBox(width: 8),
                 // price,
                 // booking,
@@ -1250,10 +1064,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       product.category != null
                           ? product.category as String
                           : '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          fontSize: screenAverage * 0.02),
                     ),
                     const SizedBox(height: 4),
                   ],
@@ -1264,6 +1077,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     icon: Icon(
                       product.favorite ? Icons.favorite : Icons.favorite_border,
                       color: Theme.of(context).primaryColor,
+                      size: screenAverage * 0.03,
                     ),
                     onPressed: () async {
                       setState(() {
@@ -1287,10 +1101,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               children: <Widget>[
                 startDate,
                 endDate,
-                addCalendarButton,
                 // priceRange,
               ],
             ),
+            const SizedBox(height: 8),
             description,
             address,
             phone,
@@ -1305,7 +1119,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).cardColor,
+                color: Theme.of(context).highlightColor,
                 boxShadow: [
                   BoxShadow(
                     color: Theme.of(context).dividerColor.withOpacity(
@@ -1322,6 +1136,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               child: AppUserInfo(
                 user: userDetail,
+                screenWidth: screenWidth,
+                screenHeight: screenHeight,
+                screenAverage: screenAverage,
                 onPressed: () async {
                   final loggedInUserId = await context
                       .read<ProductDetailCubit>()
@@ -1368,15 +1185,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       slivers: <Widget>[
         SliverAppBar(
           leading: IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_back,
               color: Colors.blue,
+              size: screenAverage * 0.03,
             ),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          expandedHeight: MediaQuery.of(context).size.height * 0.27,
+          expandedHeight: MediaQuery.of(context).size.height * 0.22,
           pinned: true,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(color: _iconColor),
@@ -1409,6 +1227,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    screenHeight = MediaQuery.of(context).size.height;
+    screenWidth = MediaQuery.of(context).size.width;
+    screenAverage = (screenHeight + screenWidth) / 2;
     return Scaffold(
       body: BlocProvider(
         create: (context) => _productDetailCubit,

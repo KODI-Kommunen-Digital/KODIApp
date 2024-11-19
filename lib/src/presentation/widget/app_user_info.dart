@@ -11,6 +11,9 @@ class AppUserInfo extends StatelessWidget {
   final VoidCallback? onPressed;
   final UserViewType type;
   final bool showDirectionIcon;
+  final double? screenHeight;
+  final double? screenWidth;
+  final double? screenAverage;
 
   const AppUserInfo({
     super.key,
@@ -18,11 +21,13 @@ class AppUserInfo extends StatelessWidget {
     this.onPressed,
     this.type = UserViewType.basic,
     required this.showDirectionIcon,
+    this.screenHeight,
+    this.screenWidth,
+    this.screenAverage,
   });
 
   @override
   Widget build(BuildContext context) {
-
     switch (type) {
       case UserViewType.information:
         if (user == null) {
@@ -85,8 +90,8 @@ class AppUserInfo extends StatelessWidget {
           );
         }
         Widget networkImage = SizedBox(
-          width: 60,
-          height: 60,
+          width: (screenAverage != null) ? screenAverage! * 0.05 : 60,
+          height: (screenAverage != null) ? screenAverage! * 0.05 : 60,
           child: ClipOval(
               child: Image.network(
             user!.image == 'Keine Angabe' || user!.image == ""
@@ -110,14 +115,21 @@ class AppUserInfo extends StatelessWidget {
                     Text(
                       user!.username,
                       maxLines: 1,
-                      style: Theme.of(context).textTheme.titleSmall,
+                      style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontSize: (screenAverage != null)
+                              ? screenAverage! * 0.015
+                              : 12),
                     ),
                     // description,
                     const SizedBox(height: 4),
+                    if(user!.email != '***@***.**')
                     Text(
                       user!.email,
                       maxLines: 2,
-                      style: Theme.of(context).textTheme.bodySmall,
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                          fontSize: (screenAverage != null)
+                              ? screenAverage! * 0.015
+                              : 12),
                     ),
                   ],
                 ),
