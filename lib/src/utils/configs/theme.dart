@@ -64,12 +64,14 @@ class AppTheme {
         colorScheme = ColorScheme.dark(
           primary: theme.primary,
           secondary: theme.secondary,
+          surface: const Color(0xFF1D1D1B),
         );
         break;
       default:
         colorScheme = ColorScheme.dark(
           primary: theme.primary,
           secondary: theme.secondary,
+          surface: const Color(0xFF1D1D1B),
         );
         break;
     }
@@ -87,14 +89,13 @@ class AppTheme {
       ),
       canvasColor: colorScheme.surface,
       scaffoldBackgroundColor: colorScheme.surface,
-      // bottomAppBarColor: colorScheme.surface,
       cardColor: colorScheme.surface,
       dividerColor: colorScheme.onSurface.withOpacity(0.12),
       dialogBackgroundColor: colorScheme.surface,
       indicatorColor: indicatorColor,
       applyElevationOverlayColor: isDark,
 
-      ///Custom
+      /// Custom
       fontFamily: font,
       dialogTheme: DialogTheme(
         backgroundColor: colorScheme.surface,
