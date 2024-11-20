@@ -623,5 +623,11 @@
   "container_seller_filter": "Which products do you want to view?",
   "created_by_me": "Created by me",
   "amount": "Amount",
-  "discount": "Discount"
+  "discount": "Discount",
+  "associate_container_card": "Associate your grocery store card",
+  "associate_container_card_message": "Connect your grocery store payment card now to see your orders.",
+  "associate_container_card_reminder": " You can always add new cards in the settings",
+  "later": "Later",
+  "connect": "Connect",
+  "never": "Never"
 }

@@ -625,5 +625,11 @@
   "container_seller_filter": "Welche Produkte möchtest du sehen?",
   "created_by_me": "Von mir erstellte",
   "amount": "Menge",
-  "discount": "Angebot"
+  "discount": "Angebot",
+  "associate_container_card": "Verknüpfe deine Dorfladen Card",
+  "associate_container_card_message": "Verknüpfe jetzt deine Dorfladen Card, um deine Bestellungen einsehen zu können.",
+  "associate_container_card_reminder": "Du kannst jederzeit weitere Karten in den Einstellungen hinzufügen",
+  "later": "Später",
+  "connect": "Verknüpfe",
+  "never": "Nie"
 }

@@ -20,7 +20,7 @@ mixin _$LoginState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(bool requestContainerCard) loaded,
     required TResult Function(String error) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -28,7 +28,7 @@ mixin _$LoginState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(bool requestContainerCard)? loaded,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ mixin _$LoginState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(bool requestContainerCard)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -126,7 +126,7 @@ class _$LoginStateInitialImpl implements LoginStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(bool requestContainerCard) loaded,
     required TResult Function(String error) error,
   }) {
     return initial();
@@ -137,7 +137,7 @@ class _$LoginStateInitialImpl implements LoginStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(bool requestContainerCard)? loaded,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -148,7 +148,7 @@ class _$LoginStateInitialImpl implements LoginStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(bool requestContainerCard)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -240,7 +240,7 @@ class _$LoginStateLoadingImpl implements LoginStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(bool requestContainerCard) loaded,
     required TResult Function(String error) error,
   }) {
     return loading();
@@ -251,7 +251,7 @@ class _$LoginStateLoadingImpl implements LoginStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(bool requestContainerCard)? loaded,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -262,7 +262,7 @@ class _$LoginStateLoadingImpl implements LoginStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(bool requestContainerCard)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -319,6 +319,8 @@ abstract class _$$LoginStateLoadedImplCopyWith<$Res> {
   factory _$$LoginStateLoadedImplCopyWith(_$LoginStateLoadedImpl value,
           $Res Function(_$LoginStateLoadedImpl) then) =
       __$$LoginStateLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({bool requestContainerCard});
 }
 
 /// @nodoc
@@ -328,36 +330,62 @@ class __$$LoginStateLoadedImplCopyWithImpl<$Res>
   __$$LoginStateLoadedImplCopyWithImpl(_$LoginStateLoadedImpl _value,
       $Res Function(_$LoginStateLoadedImpl) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? requestContainerCard = null,
+  }) {
+    return _then(_$LoginStateLoadedImpl(
+      null == requestContainerCard
+          ? _value.requestContainerCard
+          : requestContainerCard // ignore: cast_nullable_to_non_nullable
+              as bool,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$LoginStateLoadedImpl implements LoginStateLoaded {
-  const _$LoginStateLoadedImpl();
+  const _$LoginStateLoadedImpl(this.requestContainerCard);
+
+  @override
+  final bool requestContainerCard;
 
   @override
   String toString() {
-    return 'LoginState.loaded()';
+    return 'LoginState.loaded(requestContainerCard: $requestContainerCard)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$LoginStateLoadedImpl);
+        (other.runtimeType == runtimeType &&
+            other is _$LoginStateLoadedImpl &&
+            (identical(other.requestContainerCard, requestContainerCard) ||
+                other.requestContainerCard == requestContainerCard));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode => Object.hash(runtimeType, requestContainerCard);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$LoginStateLoadedImplCopyWith<_$LoginStateLoadedImpl> get copyWith =>
+      __$$LoginStateLoadedImplCopyWithImpl<_$LoginStateLoadedImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(bool requestContainerCard) loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded();
+    return loaded(requestContainerCard);
   }
 
   @override
@@ -365,10 +393,10 @@ class _$LoginStateLoadedImpl implements LoginStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(bool requestContainerCard)? loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call();
+    return loaded?.call(requestContainerCard);
   }
 
   @override
@@ -376,12 +404,12 @@ class _$LoginStateLoadedImpl implements LoginStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(bool requestContainerCard)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded();
+      return loaded(requestContainerCard);
     }
     return orElse();
   }
@@ -425,7 +453,13 @@ class _$LoginStateLoadedImpl implements LoginStateLoaded {
 }
 
 abstract class LoginStateLoaded implements LoginState {
-  const factory LoginStateLoaded() = _$LoginStateLoadedImpl;
+  const factory LoginStateLoaded(final bool requestContainerCard) =
+      _$LoginStateLoadedImpl;
+
+  bool get requestContainerCard;
+  @JsonKey(ignore: true)
+  _$$LoginStateLoadedImplCopyWith<_$LoginStateLoadedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -495,7 +529,7 @@ class _$LoginStateErrorImpl implements LoginStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function() loaded,
+    required TResult Function(bool requestContainerCard) loaded,
     required TResult Function(String error) error,
   }) {
     return error(this.error);
@@ -506,7 +540,7 @@ class _$LoginStateErrorImpl implements LoginStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function()? loaded,
+    TResult? Function(bool requestContainerCard)? loaded,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -517,7 +551,7 @@ class _$LoginStateErrorImpl implements LoginStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function()? loaded,
+    TResult Function(bool requestContainerCard)? loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {

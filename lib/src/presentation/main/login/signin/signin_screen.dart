@@ -31,8 +31,11 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
-            if (state == const LoginState.loaded()) {
+            if (state == const LoginState.loaded(false)) {
               Navigator.pop(context);
+            } else if(state == const LoginState.loaded(true)) {
+              Navigator.pop(context);
+              LoginCubit.showRedirectContainerCard(context);
             }
             state.maybeWhen(
               error: (msg) {
@@ -55,7 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
               return const SignInLoaded();
             },
             loading: () => const SignInLoading(),
-            loaded: () => Container(),
+            loaded: (redirectContainerCard) => Container(),
             error: (msg) => const SignInLoaded(),
             orElse: () {
               return Container();

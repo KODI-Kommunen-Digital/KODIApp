@@ -40,6 +40,7 @@ class Preferences {
       "pushNotificationsPermission";
   static const String receiveNotification = "receiveNotification";
   static const bool hasOpenedForumsBefore = false;
+  static const String redirectContainerCard = "redirectContainerCard";
 
   Preferences._(this._box);
 
