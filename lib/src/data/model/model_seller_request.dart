@@ -26,6 +26,7 @@ class SellerRequestModel {
       required this.username});
 
   factory SellerRequestModel.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic>? jsonUser = json['user'];
     return SellerRequestModel(
       id: json['id'],
       createdAt: json['createdAt'],
@@ -37,7 +38,7 @@ class SellerRequestModel {
       description: json['description'] ?? '',
       status: json['status'],
       paymentOwed: json['paymentOwed'],
-      username: json['username']
+      username: jsonUser?['username']
     );
   }
 }
