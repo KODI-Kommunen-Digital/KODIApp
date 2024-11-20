@@ -40,16 +40,16 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
           loading: () => const SellerProductsLoading(),
-          loadedProducts: (products, categories, subCategories,
-                  stores, selectedStore) =>
-              SellerProductsLoaded(
-                products: products ?? [],
-                categories: categories ?? [],
-                subCategories: subCategories ?? [],
-                stores: stores,
-                selectedStore: selectedStore,
-                user: widget.user,
-              ),
+          loadedProducts:
+              (products, categories, subCategories, stores, selectedStore) =>
+                  SellerProductsLoaded(
+                    products: products ?? [],
+                    categories: categories ?? [],
+                    subCategories: subCategories ?? [],
+                    stores: stores,
+                    selectedStore: selectedStore,
+                    user: widget.user,
+                  ),
           orElse: () => ErrorWidget("Failed to load listings.")),
     );
   }
@@ -115,7 +115,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         final newProducts =
             await context.read<SellerCubit>().newProducts(++pageNo);
         products.addAll(newProducts);
-        if(newProducts.isEmpty) {
+        if (newProducts.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         setState(() {
@@ -157,8 +157,12 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         child: Column(
           children: [
             DropdownButton<int>(
-              isExpanded: false,
-              hint: Text(Translate.of(context).translate('choose_store')),
+              isExpanded: true,
+              hint: Text(
+                Translate.of(context).translate('choose_store'),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
               value: selectedStore,
               onChanged: (chosen) async {
                 if (chosen != null) {
