@@ -14,6 +14,7 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
@@ -68,6 +69,60 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
+    _checkFirstTime().then((isFirstTime) {
+      if (isFirstTime) {
+        _showIntroPopup(context);
+      }
+    });
+  }
+
+  Future<bool> _checkFirstTime() async {
+    final prefs = await Preferences.openBox();
+    final hasOpenedForumsBefore =
+        prefs.getBool('hasOpenedAppBefore', defaultValue: false);
+
+    if (!hasOpenedForumsBefore) {
+      await prefs.setBool('hasOpenedAppBefore', true);
+      return true;
+    }
+    return false;
+  }
+
+  void _showIntroPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: Text(Translate.of(context).translate('welcomeTitle')),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(Translate.of(context).translate('intro_login')),
+                const SizedBox(height: 16),
+              ],
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Skip'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, Routes.signIn);
+                },
+                child: Text(Translate.of(context).translate('sign_up')),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> getIgnoreAppVersion() async {
@@ -150,21 +205,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        actions: [
-          IconButton(
-              onPressed: () {
-                _searchListings();
-              },
-              icon: Icon(
-                Icons.search,
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-              ))
-        ],
-      ),
       extendBodyBehindAppBar: true,
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -210,16 +250,6 @@ class _HomeScreenState extends State<HomeScreen> {
             }
           }
 
-          if (state is HomeStatecategoryLoading) {
-            categoryLoading = true;
-            location = state.location;
-            if (location!.isNotEmpty) {
-              for (final ids in location!) {
-                cityTitles.add(ids.title.toString());
-              }
-            }
-          }
-
           return UpgradeAlert(
             upgrader: ignoreAppStoreVersion == latestAppStoreVersion
                 ? null
@@ -261,63 +291,97 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: <Widget>[
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
-                      cityTitlesList: cityTitles,
-                      hintText:
-                          Translate.of(context).translate('hselect_location'),
-                      selectedOption: (selectedCityId > 0)
-                          ? selectedCityTitle
-                          : Translate.of(context).translate('select_location'),
-                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                      banners: banner,
-                      setLocationCallback: (data) async {
-                        for (final list in location!) {
-                          if (list.title == data) {
-                            _onUpdateCategory();
-                            setState(() {
-                              selectedCityTitle = data;
-                              selectedCityId = list.id;
-                            });
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
-                          } else if (data ==
-                              Translate.of(context)
-                                  .translate('select_location')) {
-                            setState(() {
-                              selectedCityId = 0;
-                              selectedCityTitle = Translate.of(context)
-                                  .translate('select_location');
-                            });
-                            await AppBloc.homeCubit.saveCityId(selectedCityId);
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
+                    expandedHeight: MediaQuery.of(context).size.height * 0.25,
+                    onSearch: _searchListings,
+                  ),
+                  pinned: false,
+                ),
+                SliverToBoxAdapter(
+                  child: Transform.translate(
+                    offset: const Offset(0, -45),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.surface,
+                            borderRadius: BorderRadius.circular(8),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                offset: const Offset(0, 4),
+                                blurRadius: 8,
+                              ),
+                            ],
+                          ),
+                          child: CitiesDropDown(
+                            hintText: Translate.of(context)
+                                .translate('hselect_location'),
+                            cityTitlesList: cityTitles,
+                            setLocationCallback: (data) async {
+                              for (final list in location!) {
+                                if (list.title == data) {
+                                  _onUpdateCategory();
+                                  setState(() {
+                                    selectedCityTitle = data;
+                                    selectedCityId = list.id;
+                                  });
+                                  await AppBloc.discoveryCubit
+                                      .onLocationFilter(selectedCityId, false);
+                                } else if (data ==
+                                    Translate.of(context)
+                                        .translate('select_location')) {
+                                  setState(() {
+                                    selectedCityId = 0;
+                                    selectedCityTitle = Translate.of(context)
+                                        .translate('select_location');
+                                  });
+                                  await AppBloc.homeCubit
+                                      .saveCityId(selectedCityId);
+                                  await AppBloc.discoveryCubit
+                                      .onLocationFilter(selectedCityId, false);
 
-                            _onUpdateCategory();
-                            break;
-                          }
-                        }
-                      }),
-                  pinned: true,
+                                  _onUpdateCategory();
+                                  break;
+                                }
+                              }
+                            },
+                            selectedOption: (selectedCityId > 0)
+                                ? selectedCityTitle
+                                : Translate.of(context)
+                                    .translate('select_location'),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
                 CupertinoSliverRefreshControl(
                   onRefresh: _onRefresh,
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate([
-                    SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
-                        ],
+                    Transform.translate(
+                      offset: const Offset(0, -20),
+                      child: SafeArea(
+                        top: false,
+                        bottom: false,
+                        child: Column(
+                          children: <Widget>[
+                            categoryLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : _buildCategory(AppBloc.homeCubit
+                                    .getCategoriesWithoutHidden(
+                                        category ?? [])),
+                            _buildLocation(location),
+                            _buildRecent(recent, selectedCityId, location),
+                            if (isLoading)
+                              const CircularProgressIndicator.adaptive(),
+                            const SizedBox(height: 50),
+                          ],
+                        ),
                       ),
                     )
                   ]),
@@ -477,7 +541,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           _onCategory(item, listBuild);
                           return false;
                         },
-                        // _onCategory,
                       );
                     },
                   ).toList(),
@@ -490,26 +553,34 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    if (item.id != -1) {
-      if (item.id == 14) {
-        final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-        if (cityId != 0) {
-          if (!mounted) return;
-          Navigator.pushNamed(context, Routes.listGroups,
-              arguments: {'id': item.id, 'title': 'Forum'});
-        } else {
-          if (!mounted) return;
-          _showCitySelectionPopup(context);
-        }
-      } else {
-        final prefs = await Preferences.openBox();
-        prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.type, "category");
+    if (item.id == 14) {
+      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+      if (cityId != 0) {
         if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': selectedCityId, 'title': '', 'type': 'category'});
+        Navigator.pushNamed(context, Routes.listGroups,
+            arguments: {'id': item.id, 'title': 'Forum'});
+      } else {
+        if (!mounted) return;
+        _showCitySelectionPopup(context);
       }
-    } else if (item.id != -1 && !item.hasChild) {
+      return;
+    }
+
+    if (item.id == 500) {
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.discoveryDetail,
+          arguments: {'id': selectedCityId});
+      return;
+    }
+
+    if (item.hasChild) {
+      final prefs = await Preferences.openBox();
+      prefs.setKeyValue(Preferences.categoryId, item.id);
+      prefs.setKeyValue(Preferences.type, "category");
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.listProduct,
+          arguments: {'id': selectedCityId, 'title': '', 'type': 'category'});
+    } else {
       _onPopUpCatError();
     }
   }

@@ -101,7 +101,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -141,9 +140,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
                               arguments: {
                                 "multifilter": multiFilter
                               }).then((filter) => {
-                            if (filter != null)
-                              {_updateSelectedFilter(filter as MultiFilter)}
-                          });
+                                if (filter != null)
+                                  {_updateSelectedFilter(filter as MultiFilter)}
+                              });
                         },
                       ),
                       IconButton(
@@ -153,8 +152,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
                           icon: Icon(
                             Icons.search,
                             color:
-                            Theme.of(context).textTheme.bodyLarge?.color ??
-                                Colors.white,
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white,
                           ))
                     ],
                   );

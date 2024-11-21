@@ -84,4 +84,9 @@ class Preferences {
 
   List<String> getForumChatTopics() =>
       _getValue<List<String>>(forumChatTopics, <String>[]);
+
+  bool getBool(String key, {bool defaultValue = false}) =>
+      _getValue<bool>(key, defaultValue);
+
+  Future<void> setBool(String key, bool value) => _setValue<bool>(key, value);
 }

@@ -16,9 +16,8 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl = !forum
-        ? 'http://116.203.166.183:3001/'
-        : 'http://116.203.166.183:3001/';
+    _baseUrl =
+        !forum ? 'http://www.63inside.de/api/' : 'http://www.63inside.de/api/';
 
     _dio = Dio(
       BaseOptions(

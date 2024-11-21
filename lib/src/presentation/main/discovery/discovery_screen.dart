@@ -149,7 +149,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     return Scaffold(
       body: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2, // Adjust the number of columns as desired
+            crossAxisCount: 2,
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
             mainAxisExtent: 300.0),
