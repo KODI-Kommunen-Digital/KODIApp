@@ -37,12 +37,18 @@ class IntroPageState extends State<IntroPage> {
   }
 
   Future<void> _loadLocations() async {
-    final fetchedLocations = await repository.loadWasteCalendarStreets(1);
-    setState(() {
-      if (fetchedLocations != null) {
-        locations = fetchedLocations;
-      }
-    });
+    try {
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      setState(() {
+        if (fetchedLocations != null) {
+          locations = fetchedLocations;
+        }
+      });
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              "Standorte konnten nicht geladen werden. Bitte versuchen Sie es später noch einmal.")));
+    }
   }
 
   void _selectLocation(String locationId, String locationName) async {

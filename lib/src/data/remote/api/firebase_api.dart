@@ -43,10 +43,22 @@ class FirebaseApi {
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "authorized");
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      try {
+        await _firebaseMessaging
+            .subscribeToTopic("warnings")
+            .timeout(const Duration(seconds: 10));
+      } catch (e) {
+        logInfo("Warning subscription timedout");
+      }
     } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "denied");
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      try {
+        await _firebaseMessaging
+            .unsubscribeFromTopic("warnings")
+            .timeout(const Duration(seconds: 10));
+      } catch (e) {
+        logInfo("Warning unsubscription timedout");
+      }
     }
 
     int uId = await getLoggedUserId();
