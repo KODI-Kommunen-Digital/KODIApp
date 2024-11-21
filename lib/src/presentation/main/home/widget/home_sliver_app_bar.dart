@@ -1,41 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
-import 'package:heidi/src/presentation/main/home/widget/home_swiper.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 
 class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final String? banners;
-  final ValueSetter<String>? setLocationCallback;
-  final List<String>? cityTitlesList;
-  String? hintText;
-  String? selectedOption;
+  final Function onSearch;
 
-  AppBarHomeSliver(
-      {required this.expandedHeight,
-        required this.setLocationCallback,
-        required this.cityTitlesList,
-        this.banners,
-        this.hintText,
-        this.selectedOption});
+  AppBarHomeSliver({
+    required this.expandedHeight,
+    required this.onSearch,
+  });
 
   @override
-  Widget build(context, shrinkOffset, overlapsContent) {
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Stack(
-      alignment: Alignment.bottomCenter,
       children: [
-        HomeSwipe(
-          images: banners,
-          height: expandedHeight,
+        SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: CachedNetworkImage(
+            imageUrl: "${Application.picturesURL}admin/Homepage.png",
+            fit: BoxFit.cover,
+            placeholder: (context, url) => AppPlaceholder(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            errorWidget: (context, url, error) => AppPlaceholder(
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: const Icon(Icons.error),
+              ),
+            ),
+          ),
         ),
-        Container(
-          height: 32,
-          color: Theme.of(context).colorScheme.surface,
-        ),
-        CitiesDropDown(
-          hintText: hintText,
-          cityTitlesList: cityTitlesList,
-          setLocationCallback: setLocationCallback,
-          selectedOption: selectedOption,
+        Positioned(
+          top: 10,
+          right: 16,
+          child: SafeArea(
+            child: IconButton(
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () => onSearch(),
+            ),
+          ),
         ),
       ],
     );
@@ -45,8 +62,9 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   double get maxExtent => expandedHeight;
 
   @override
-  double get minExtent => 120;
+  double get minExtent => kToolbarHeight;
 
   @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) =>
+      true;
 }

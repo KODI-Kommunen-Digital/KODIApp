@@ -26,10 +26,10 @@
             "categoryType" : "category"
         },
         {
-            "id": 29,
-            "name": "Handel",
+            "id": 500,
+            "name": "Einkaufen",
             "noOfSubcategories": 0,                
-            "icon": "fas fa-business-time",
+            "icon": "fas fa-shopping",
             "color": "#ECFB04",
             "categoryType" : "category"
         },
@@ -46,14 +46,6 @@
             "name": "Jobbörse",
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 12,
-            "name": "Angebote",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-gift",
             "color": "#ECFB04",
             "categoryType" : "category"
         }
