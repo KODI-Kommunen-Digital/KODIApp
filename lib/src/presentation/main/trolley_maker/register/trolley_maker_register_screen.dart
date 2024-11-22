@@ -316,7 +316,7 @@ class _TrolleyMakerRegisterScreenState
                 ),
                 obscureText: !_showConfirmPassword,
               ),
-              _titleDropDown(),
+              // _titleDropDown(),
               _genderDropDown(),
               _signUpInput(
                   'title_first_name',

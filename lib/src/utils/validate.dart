@@ -101,8 +101,7 @@ class UtilValidator {
         break;
 
       case ValidateType.card:
-        final RegExp idRegExp = RegExp(r'^\d{9}$');
-        if (!idRegExp.hasMatch(data)) {
+        if (!validateCardID(data)) {
           return invalidCardId;
         }
         break;
@@ -158,6 +157,22 @@ class UtilValidator {
   static bool _validZipCode(String value) {
     final RegExp regex = RegExp(r'^\d{4,5}$');
     return regex.hasMatch(value);
+  }
+
+  static bool validateCardID(String? value) {
+    if (value == null || value.isEmpty) {
+      return false;
+    }
+    if (!RegExp(r'^\d+$').hasMatch(value)) {
+      return false;
+    }
+    if (value.length != 15) {
+      return false;
+    }
+    if (!value.startsWith("1761")) {
+      return false;
+    }
+    return true; // Valid
   }
 
   ///Singleton factory
