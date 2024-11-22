@@ -69,60 +69,19 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
-    _checkFirstTime().then((isFirstTime) {
-      if (isFirstTime) {
-        _showIntroPopup(context);
-      }
-    });
+    checkFirstTime();
   }
 
-  Future<bool> _checkFirstTime() async {
+  Future<void> checkFirstTime() async {
     final prefs = await Preferences.openBox();
-    final hasOpenedForumsBefore =
+    final hasOpenedAppBefore =
         prefs.getBool('hasOpenedAppBefore', defaultValue: false);
 
-    if (!hasOpenedForumsBefore) {
+    if (!hasOpenedAppBefore) {
       await prefs.setBool('hasOpenedAppBefore', true);
-      return true;
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.welcomeScreen);
     }
-    return false;
-  }
-
-  void _showIntroPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return PopScope(
-          canPop: false,
-          child: AlertDialog(
-            title: Text(Translate.of(context).translate('welcomeTitle')),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(Translate.of(context).translate('intro_login')),
-                const SizedBox(height: 16),
-              ],
-            ),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text('Skip'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.pushNamed(context, Routes.signIn);
-                },
-                child: Text(Translate.of(context).translate('sign_up')),
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 
   Future<void> getIgnoreAppVersion() async {

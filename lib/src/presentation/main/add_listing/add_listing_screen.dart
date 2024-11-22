@@ -239,6 +239,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           .read<AddListingCubit>()
           .loadSubCategory(selectedCategory);
       listSubCategory = subCategoryResponse!.data;
+      selectedSubCategory = subCategoryResponse.data.last['name'];
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
@@ -246,7 +247,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
             selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
+            break;
           }
         }
       } else {
@@ -695,7 +696,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
     //   allowEmpty: true,
     // );
 
-    _errorWebsite = (_textWebsiteController.text == 'https://')
+    _errorWebsite = (_textWebsiteController.text == 'https://' ||
+            _textWebsiteController.text.isEmpty)
         ? null
         : UtilValidator.validate(
             _textWebsiteController.text,
@@ -707,9 +709,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textStatusController.text,
       allowEmpty: true,
     );
-
-    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
-        allowEmpty: true, type: ValidateType.website);
 
     _errorTitle =
         UtilValidator.validate(_textTitleController.text, allowEmpty: false);
@@ -992,71 +991,67 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 )
               ],
             ),
-            if ((selectedCategory?.toLowerCase() == "news" ||
-                    selectedCategory == null) ||
-                selectedSubCategory != null)
-              const SizedBox(height: 8),
-            if ((selectedCategory?.toLowerCase() == "news" ||
-                    selectedCategory == null) ||
-                selectedSubCategory != null)
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('subCategory'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
+            if (selectedCategory?.toLowerCase() == "news")
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 8),
+                  Text.rich(
                     TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      text: Translate.of(context).translate('subCategory'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: listSubCategory.isEmpty
+                            ? const LinearProgressIndicator()
+                            : DropdownButton(
+                                isExpanded: true,
+                                menuMaxHeight: 200,
+                                hint: Text(Translate.of(context)
+                                    .translate('input_subcategory')),
+                                value: selectedSubCategory,
+                                items: listSubCategory.map((subcategory) {
+                                  return DropdownMenuItem(
+                                      value: subcategory['name'],
+                                      child: Text(Translate.of(context).translate(
+                                          _getSubCategoryTranslation(
+                                              subcategory['id']))));
+                                }).toList(),
+                                onChanged: (value) {
+                                  context
+                                      .read<AddListingCubit>()
+                                      .getSubCategoryId(value);
+                                  setState(() {
+                                    selectedSubCategory = value as String?;
+                                    context
+                                        .read<AddListingCubit>()
+                                        .setSubCategoryId(
+                                            selectedSubCategory?.toLowerCase());
+                                  });
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                if (selectedCategory?.toLowerCase() == "news" ||
-                    selectedSubCategory != null)
-                  Expanded(
-                    child: listSubCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_subcategory')),
-                            value: selectedSubCategory,
-                            items: listSubCategory.map((subcategory) {
-                              return DropdownMenuItem(
-                                  value: subcategory['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      _getSubCategoryTranslation(
-                                          subcategory['id']))));
-                            }).toList(),
-                            onChanged: (value) {
-                              context
-                                  .read<AddListingCubit>()
-                                  .getSubCategoryId(value);
-                              setState(() {
-                                selectedSubCategory = value as String?;
-                                context
-                                    .read<AddListingCubit>()
-                                    .setSubCategoryId(
-                                        selectedSubCategory?.toLowerCase());
-                              });
-                            },
-                          ),
-                  ),
-              ],
-            ),
-            if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory == null)
-              const SizedBox(height: 8),
             const SizedBox(height: 8),
             Text.rich(
               TextSpan(
@@ -1555,7 +1550,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   Future<void> selectSubCategory(String? selectedCategory) async {
     context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
-    // clearStartEndDate();
     final subCategoryResponse = await context
         .read<AddListingCubit>()
         .loadSubCategory(selectedCategory!.toLowerCase());
@@ -1563,14 +1557,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     context
         .read<AddListingCubit>()
         .setCategoryId(selectedCategory.toLowerCase());
-    if (subCategoryResponse?.data.isNotEmpty) {
-      context
-          .read<AddListingCubit>()
-          .setSubCategoryId(subCategoryResponse?.data.last['name']);
-    }
+
     setState(() {
       listSubCategory = subCategoryResponse!.data;
       if (subCategoryResponse.data.isNotEmpty) {
+        selectedSubCategory = subCategoryResponse.data.last['name'];
         context
             .read<AddListingCubit>()
             .setSubCategoryId(subCategoryResponse.data.last['name']);
