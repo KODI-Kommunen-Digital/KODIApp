@@ -23,16 +23,19 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<void> onLoad(int id) async {
     emit(const DiscoveryState.loading());
-    final cityRequestResponse = await Api.requestCities();
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
+    try {
+      final cityRequestResponse = await Api.requestCities();
+      location = List.from(cityRequestResponse.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+    // ignore: empty_catches
+    } catch (e) {}
     if (id == 1) {
       services = await ServiceManager.initializeServices();
     } else if (id == 6) {
       services = await ServiceManager.initializeServices6();
     } else if (id == 16) {
-       services = await ServiceManager.initializeServices16();
+      services = await ServiceManager.initializeServices16();
     }
 
     List<CitizenServiceModel> servicesCopy = List.from(services);
