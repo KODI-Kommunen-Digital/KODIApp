@@ -73,7 +73,7 @@ class _TrolleyMakerRegisterScreenState
   List<String>? genderList;
   List<String>? titleList;
 
-  String? _selectedTitle;
+  // String? _selectedTitle;
   String? _selectedGender;
   TrolleyMakerCountry? _selectedCountry;
   DateTime? _selectedDate;
@@ -477,21 +477,21 @@ class _TrolleyMakerRegisterScreenState
     );
   }
 
-  Widget _titleDropDown() {
-    return _getDropDown(
-        title: Translate.of(context).translate('title_title'),
-        menuItems: titleList?.map<DropdownMenuEntry<String>>((String value) {
-              return DropdownMenuEntry<String>(
-                value: value,
-                label: value,
-              );
-            }).toList() ??
-            [],
-        onSelected: (value) {
-          _selectedTitle = value as String;
-        },
-        initialSelection: _selectedTitle);
-  }
+  // Widget _titleDropDown() {
+  //   return _getDropDown(
+  //       title: Translate.of(context).translate('title_title'),
+  //       menuItems: titleList?.map<DropdownMenuEntry<String>>((String value) {
+  //             return DropdownMenuEntry<String>(
+  //               value: value,
+  //               label: value,
+  //             );
+  //           }).toList() ??
+  //           [],
+  //       onSelected: (value) {
+  //         _selectedTitle = value as String;
+  //       },
+  //       initialSelection: _selectedTitle);
+  // }
 
   Widget _genderDropDown() {
     return _getDropDown(
