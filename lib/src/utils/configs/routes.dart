@@ -54,6 +54,7 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/welcome/welcome_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -126,6 +127,7 @@ class Routes {
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
   static const String discoveryDetail = "/discovery_detail";
+  static const String welcomeScreen = "/welcomeScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -527,6 +529,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) => const DiscoveryScreenDetail(),
           settings: settings,
+        );
+
+      case welcomeScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const WelcomeScreen();
+          },
         );
 
       default:

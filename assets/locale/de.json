@@ -528,6 +528,8 @@
   "welcomeForum": "Hier können Sie mit dem roten Plus-Symbol neue Gruppen erstellen. Sie können private und öffentliche Gruppen erstellen. Mitglieder können jederzeit öffentlichen Gruppen beitreten und eine Anfrage für private Gruppen stellen. Viel Spaß!",
   "views": "Aufrufe",
   "group_name": "Gruppenname",
-  "new_message": "Neue Nachricht"
+  "new_message": "Neue Nachricht",
+  "intro_login": "",
+  "welcomeTitle": ""
 }
 
