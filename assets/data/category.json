@@ -27,14 +27,14 @@
         },
         {
             "id": 500,
-            "name": "Einkaufen",
+            "name": "Shopping",
             "noOfSubcategories": 0,                
             "icon": "fas fa-shopping",
             "color": "#ECFB04",
             "categoryType" : "category"
         },
         {
-            "id": 43,
+            "id": 13,
             "name": "Gastro",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
