@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -59,6 +60,23 @@ class HomeCubit extends Cubit<HomeState> {
         return ProductModel.fromJson(item);
       }).toList();
     }
+
+    // Fetch ads
+    List<AdDataModel> ads = await ListRepository.fetchAds();
+
+    // Combine recent listings with ads
+    List<dynamic> combinedRecent = [];
+    for (int i = 0; i < recent.length; i++) {
+      combinedRecent.add(recent[i]); // Add the product to the combined list
+
+      // Append the ad after every 3rd product
+      if ((i + 1) % 3 == 0 && ads.isNotEmpty) {
+        combinedRecent.add(ads[0]); // Add the ad model
+        ads.removeAt(0); // Remove the ad after inserting
+      }
+    }
+    recent = combinedRecent; // Update recent with combined list
+
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(selectedCity?.id);
     categoryCount =

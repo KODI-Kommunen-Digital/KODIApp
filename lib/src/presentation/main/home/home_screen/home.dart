@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
@@ -20,6 +21,7 @@ import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -53,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? banner;
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
-  List<ProductModel>? recent = [];
+  List<dynamic>? recent = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -765,21 +767,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
-      List<CategoryModel>? cities) {
-    Widget content = ListView.builder(
-      padding: const EdgeInsets.all(0),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
-        );
-      },
-      itemCount: 8,
-    );
+  Widget _buildRecent(
+      List<dynamic>? recent, int selectedCity, List<CategoryModel>? cities) {
+    Widget content;
 
     if (recent != null && recent.isNotEmpty) {
       content = ListView.builder(
@@ -788,34 +778,39 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final item = recent[index];
-          return selectedCityId != 0
-              ? Visibility(
-                  visible: recent[index].cityId == selectedCity,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: AppProductItem(
-                        onPressed: () {
-                          _onProductDetail(item);
-                        },
-                        item: item,
-                        type: ProductViewType.small,
-                        isRefreshLoader: isRefreshLoader,
-                        cityName: AppBloc.homeCubit
-                            .getCityName(cities, item.cityId ?? 0)),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: AppProductItem(
-                      onPressed: () {
-                        _onProductDetail(item);
-                      },
-                      isRefreshLoader: isRefreshLoader,
-                      item: item,
-                      type: ProductViewType.small,
-                      cityName: AppBloc.homeCubit
-                          .getCityName(cities, item.cityId ?? 0)),
-                );
+
+          // Check if the item is an AdDataModel
+          if (item is AdDataModel) {
+            return GestureDetector(
+              onTap: () {
+                // Redirect to the link associated with the ad
+                _makeAction(item.link);
+              },
+              child: Container(
+                width: double.infinity, // Stretch across the screen
+                margin: const EdgeInsets.only(bottom: 16),
+                child: Image.network(
+                  "${Application.picturesURL}${item.image}", // Use the base URL
+                  fit: BoxFit.cover, // Ensure the image covers the container
+                ),
+              ),
+            );
+          } else {
+            // Handle ProductModel as before
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: AppProductItem(
+                onPressed: () {
+                  _onProductDetail(item);
+                },
+                item: item,
+                type: ProductViewType.small,
+                cityName:
+                    AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
+                isRefreshLoader: isRefreshLoader,
+              ),
+            );
+          }
         },
         itemCount: recent.length,
       );
@@ -853,10 +848,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        if (recent != null && recent.isEmpty)
-          const SizedBox(
-            height: 64,
-          ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: content,

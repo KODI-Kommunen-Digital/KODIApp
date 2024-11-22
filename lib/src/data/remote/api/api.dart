@@ -709,6 +709,14 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestAds({int? cityId}) async {
+    const String filepath = "/ads/list";
+    final result = await HTTPManager(forum: true).get(
+      url: filepath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

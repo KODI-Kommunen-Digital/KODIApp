@@ -25,7 +25,7 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -41,7 +41,7 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -57,7 +57,7 @@ mixin _$HomeState {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -163,7 +163,7 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -182,7 +182,7 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -201,7 +201,7 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -307,7 +307,7 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -326,7 +326,7 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -345,7 +345,7 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -490,7 +490,7 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -509,7 +509,7 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -528,7 +528,7 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -605,7 +605,7 @@ abstract class _$$HomeStateLoadedImplCopyWith<$Res> {
       {String banner,
       List<CategoryModel> category,
       List<CategoryModel> location,
-      List<ProductModel> recent,
+      List<dynamic> recent,
       bool isRefreshLoader,
       CategoryModel? selectedCity});
 }
@@ -646,7 +646,7 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
       null == recent
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
+              as List<dynamic>,
       null == isRefreshLoader
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
@@ -666,7 +666,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
       this.banner,
       final List<CategoryModel> category,
       final List<CategoryModel> location,
-      final List<ProductModel> recent,
+      final List<dynamic> recent,
       this.isRefreshLoader,
       this.selectedCity)
       : _category = category,
@@ -691,9 +691,9 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
     return EqualUnmodifiableListView(_location);
   }
 
-  final List<ProductModel> _recent;
+  final List<dynamic> _recent;
   @override
-  List<ProductModel> get recent {
+  List<dynamic> get recent {
     if (_recent is EqualUnmodifiableListView) return _recent;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_recent);
@@ -753,7 +753,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -773,7 +773,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -793,7 +793,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -853,14 +853,14 @@ abstract class HomeStateLoaded implements HomeState {
       final String banner,
       final List<CategoryModel> category,
       final List<CategoryModel> location,
-      final List<ProductModel> recent,
+      final List<dynamic> recent,
       final bool isRefreshLoader,
       final CategoryModel? selectedCity) = _$HomeStateLoadedImpl;
 
   String get banner;
   List<CategoryModel> get category;
   List<CategoryModel> get location;
-  List<ProductModel> get recent;
+  List<dynamic> get recent;
   bool get isRefreshLoader;
   CategoryModel? get selectedCity;
 
@@ -947,7 +947,7 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)
         loaded,
@@ -966,7 +966,7 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
@@ -985,7 +985,7 @@ class _$HomeStateErrorImpl implements HomeStateError {
             String banner,
             List<CategoryModel> category,
             List<CategoryModel> location,
-            List<ProductModel> recent,
+            List<dynamic> recent,
             bool isRefreshLoader,
             CategoryModel? selectedCity)?
         loaded,
