@@ -213,13 +213,11 @@ class ProductModel {
     } else if (json['categoryId'] == 12) {
       category = "Angebote";
     } else if (json['categoryId'] == 13) {
-      category = "Essen & Trinken";
+      category = "Gastro";
     } else if (json['categoryId'] == 17) {
       category = "Freizeit";
     } else if (json['categoryId'] == 29) {
       category = "Handel";
-    } else if (json['categoryId'] == 43) {
-      category = "Gastro";
     } else if (json['categoryId'] == 44) {
       category = "Jobbörse";
     }

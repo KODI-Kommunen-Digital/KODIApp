@@ -21,7 +21,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           width: double.infinity,
           height: double.infinity,
           child: CachedNetworkImage(
-            imageUrl: "${Application.picturesURL}admin/Homepage2.png",
+            imageUrl: "${Application.picturesURL}admin/Homepage1.png",
             fit: BoxFit.cover,
             placeholder: (context, url) => AppPlaceholder(
               child: Container(
