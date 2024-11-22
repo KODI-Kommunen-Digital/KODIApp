@@ -24,19 +24,24 @@ class DiscoveryScreenDetail extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   int? selectedLocationId;
+  
+  late DiscoveryCubit discoveryCubit;
 
   @override
   void initState() {
     super.initState();
-    loadLocationList();
+    discoveryCubit = DiscoveryCubit();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+       loadLocationList();
+    });
   }
 
   Future<void> loadLocationList() async {
-    await context.read<DiscoveryCubit>().onLoad(widget.arguments['id']);
+    await discoveryCubit.onLoad(widget.arguments['id']);
   }
 
   Future<void> loadSelectedLocation() async {
-    final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+    final cityId = await discoveryCubit.getCitySelected();
     setState(() {
       selectedLocationId = cityId;
     });
@@ -44,10 +49,8 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (bool didPop, dynamic result) {
-        context.read<DiscoveryCubit>().onLoad(1);
-      },
+    return BlocProvider(
+      create: (_) => discoveryCubit, // Override with a new local instance
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
