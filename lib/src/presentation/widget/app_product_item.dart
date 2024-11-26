@@ -549,25 +549,25 @@ class AppProductItem extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Icon(
-                                item!.favorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                    // child: Column(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: <Widget>[
+                    //     Row(
+                    //       mainAxisAlignment: MainAxisAlignment.end,
+                    //       children: <Widget>[
+                    //         Padding(
+                    //           padding: const EdgeInsets.all(4),
+                    //           child: Icon(
+                    //             item!.favorite
+                    //                 ? Icons.favorite
+                    //                 : Icons.favorite_border,
+                    //             color: Colors.white,
+                    //           ),
+                    //         )
+                    //       ],
+                    //     )
+                    //   ],
+                    // ),
                   );
                 },
                 placeholder: (context, url) {
@@ -610,35 +610,37 @@ class AppProductItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if(isEvent)
-                      SizedBox(height: screenHeight! * 0.0125,),
-                    if(!isEvent)
-                    Container(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).scaffoldBackgroundColor,
-                          borderRadius: BorderRadius.circular(4)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Text(
-                          categoryTitle ?? item?.category ?? '',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: (screenAverage == null)
-                                      ? Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .fontSize
-                                      : screenAverage * 0.0125),
+                    if (isEvent)
+                      SizedBox(
+                        height: screenHeight! * 0.0125,
+                      ),
+                    if (!isEvent)
+                      Container(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            borderRadius: BorderRadius.circular(4)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            categoryTitle ?? item?.category ?? '',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: (screenAverage == null)
+                                        ? Theme.of(context)
+                                            .textTheme
+                                            .bodySmall!
+                                            .fontSize
+                                        : screenAverage * 0.0125),
+                          ),
                         ),
                       ),
-                    ),
                     const SizedBox(height: 4),
                     Text(
                       item!.title,
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context)
                           .textTheme
@@ -654,16 +656,19 @@ class AppProductItem extends StatelessWidget {
                                   : screenAverage * 0.0125),
                     ),
                     if (!isEvent)
-                    Text(
-                      item!.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                          color: Colors.black,
-                          fontSize: (screenAverage == null)
-                              ? Theme.of(context).textTheme.bodySmall!.fontSize
-                              : screenAverage * 0.0115),
-                    ),
+                      Text(
+                        item!.description,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            color: Colors.black,
+                            fontSize: (screenAverage == null)
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .fontSize
+                                : screenAverage * 0.0115),
+                      ),
                   ],
                 ),
               )

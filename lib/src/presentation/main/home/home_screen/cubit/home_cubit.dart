@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -25,8 +26,23 @@ class HomeCubit extends Cubit<HomeState> {
   late List<CitizenServiceModel> services;
   bool calledExternally = false;
   bool doesScroll = false;
+  Timer? _timer;
 
-  HomeCubit() : super(const HomeState.loading());
+  HomeCubit() : super(const HomeState.loading()) {
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(minutes: 30), (timer) {
+      onLoad(true);
+    });
+  }
+
+  @override
+  Future<void> close() {
+    _timer?.cancel();
+    return super.close();
+  }
 
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!await hasInternet()) {
@@ -136,7 +152,8 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(banner, category, location, news, events, false, services));
+    emit(HomeStateLoaded(
+        banner, category, location, news, events, false, services));
   }
 
   bool getCalledExternally() {
@@ -237,16 +254,17 @@ class HomeCubit extends Cubit<HomeState> {
       emit(const HomeState.error("no_internet"));
     }
     dynamic listingsRequestResponse;
-    if(isNews) {
+    if (isNews) {
       listingsRequestResponse = await Api.requestCatList(1, 1, pageNo);
     } else {
       listingsRequestResponse = await Api.requestCatList(3, 1, pageNo);
     }
-    final newListings = List.from(listingsRequestResponse.data ?? []).map((item) {
+    final newListings =
+        List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
-    if(isNews) {
+    if (isNews) {
       news.addAll(newListings);
     } else {
       events.addAll(newListings);
