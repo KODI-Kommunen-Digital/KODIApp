@@ -139,9 +139,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
     await showModalBottomSheet(
       context: context,
-      constraints: BoxConstraints(
-        maxWidth: screenWidth/1.2
-      ),
+      constraints: BoxConstraints(maxWidth: screenWidth / 1.2),
       isScrollControlled: true,
       builder: (BuildContext context) {
         return SafeArea(
@@ -974,9 +972,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         modifiedDescription = modifiedDescription.replaceAll(
             RegExp(r'color: [^;]+;'), "color: $color");
 
+        if (product.sourceId == 3) {
+          modifiedDescription =
+              modifiedDescription.replaceAll(product.website, '');
+        }
         description = GestureDetector(
           onTap: () {
-            if(modifiedDescription.length > 200) {
+            if (modifiedDescription.length > 200) {
               setState(() {
                 expandDescription = !expandDescription;
               });
@@ -1023,11 +1025,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 //   }
                 //   return false;
               }),
-              if(modifiedDescription.length > 200)
-              Icon(
-                (expandDescription) ? Icons.expand_less : Icons.expand_more,
-                size: screenAverage * 0.02,
-              ),
+              if (modifiedDescription.length > 200)
+                Icon(
+                  (expandDescription) ? Icons.expand_less : Icons.expand_more,
+                  size: screenAverage * 0.02,
+                ),
             ],
           ),
         );
