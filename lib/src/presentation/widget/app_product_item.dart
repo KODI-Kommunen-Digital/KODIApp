@@ -655,20 +655,6 @@ class AppProductItem extends StatelessWidget {
                                       .fontSize
                                   : screenAverage * 0.0125),
                     ),
-                    if (!isEvent)
-                      Text(
-                        item!.description,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                            color: Colors.black,
-                            fontSize: (screenAverage == null)
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .fontSize
-                                : screenAverage * 0.0115),
-                      ),
                   ],
                 ),
               )
