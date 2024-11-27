@@ -11,7 +11,6 @@ import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_terminal_container.dart';
 
@@ -58,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late double screenHeight;
   late double screenWidth;
   late double screenAverage;
-  String mapLink = 'https://troisdorf.dksr.city/map/';
+  String mapLink = 'https://troisdorf.dksr.city/poimap/';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -588,6 +587,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(
             height: 4,
           ),
+          /*
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -617,7 +617,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }),
               ),
             ],
-          )
+          )*/
         ],
       ),
     );
