@@ -14,7 +14,6 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
-import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
@@ -1320,39 +1319,39 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   ),
                 ],
               ),
-              child: AppUserInfo(
-                user: userDetail,
-                onPressed: () async {
-                  final loggedInUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getLoggedInUserId();
-                  if (!mounted) return;
-                  final productUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getUserDetails(widget.item.userId, widget.item.cityId);
-                  if (product.sourceId != 2 && product.sourceId != 3) {
-                    if (productUserId?.id == loggedInUserId) {
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.profile,
-                              arguments: {'user': userDetail, 'editable': true})
-                          .then((value) {
-                        setState(() {});
-                      });
-                    } else {
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.profile, arguments: {
-                        'user': userDetail,
-                        'editable': false
-                      }).then((value) {
-                        setState(() {});
-                      });
-                    }
-                  }
-                },
-                type: UserViewType.information,
-                showDirectionIcon:
-                    product.sourceId != 2 && product.sourceId != 3,
-              ),
+              // child: AppUserInfo(
+              //   user: userDetail,
+              //   onPressed: () async {
+              //     final loggedInUserId = await context
+              //         .read<ProductDetailCubit>()
+              //         .getLoggedInUserId();
+              //     if (!mounted) return;
+              //     final productUserId = await context
+              //         .read<ProductDetailCubit>()
+              //         .getUserDetails(widget.item.userId, widget.item.cityId);
+              //     if (product.sourceId != 2 && product.sourceId != 3) {
+              //       if (productUserId?.id == loggedInUserId) {
+              //         if (!mounted) return;
+              //         Navigator.pushNamed(context, Routes.profile,
+              //                 arguments: {'user': userDetail, 'editable': true})
+              //             .then((value) {
+              //           setState(() {});
+              //         });
+              //       } else {
+              //         if (!mounted) return;
+              //         Navigator.pushNamed(context, Routes.profile, arguments: {
+              //           'user': userDetail,
+              //           'editable': false
+              //         }).then((value) {
+              //           setState(() {});
+              //         });
+              //       }
+              //     }
+              //   },
+              //   type: UserViewType.information,
+              //   showDirectionIcon:
+              //       product.sourceId != 2 && product.sourceId != 3,
+              // ),
             ),
             const SizedBox(height: 16),
           ],
