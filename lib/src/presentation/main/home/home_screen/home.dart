@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -569,20 +570,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildMap() {
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(mapLink));
     return Expanded(
       child: Column(
         children: [
           Expanded(
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: WebViewWidget(
-                controller: webViewController,
-                gestureRecognizers: gestureRecognizers,
-              ),
-            ),
+                borderRadius: BorderRadius.circular(20),
+                child: InAppWebView(
+                  initialUrlRequest: URLRequest(url: WebUri(mapLink)),
+                  onGeolocationPermissionsShowPrompt: (controller, origin) async {
+                    return GeolocationPermissionShowPromptResponse(
+                        origin: origin, allow: true, retain: true);
+                  },
+                  onPermissionRequest: (controller, request) async {
+                    return PermissionResponse(
+                        resources: request.resources,
+                        action: PermissionResponseAction.GRANT);
+                  },
+                  onWebViewCreated: (controller) {
+                    controller = controller;
+                  },
+                )),
           ),
           const SizedBox(
             height: 4,
