@@ -104,63 +104,67 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
       controller: _pageController,
       itemCount: cardList?.length,
       itemBuilder: (context, index) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Image.asset(width: 200,
-                          "assets/images/card-name-landshut.png",
-                          fit: BoxFit.cover,
+        return SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    StyledCardName(cardName: cardName),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Visibility(
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            visible: index != 0,
+                            child: _getLeftArrow()),
+                        Center(
+                          child: SizedBox(
+                            height: 250,
+                            child: Image.asset(
+                              'assets/images/tro-card.png',
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
                         ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Visibility(
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: index != 0,
-                          child: _getLeftArrow()),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: Image.asset(
-                          "assets/images/landshut-card.png",
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      Visibility(
-                          maintainSize: true,
-                          maintainAnimation: true,
-                          maintainState: true,
-                          visible: index != ((cardList?.length ?? 1) - 1),
-                          child: _getRightArrow()),
-                    ],
-                  )
-                ],
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _getBarCode(cardList?[index]),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              )
-            ],
+                        Visibility(
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            visible: index != ((cardList?.length ?? 1) - 1),
+                            child: _getRightArrow()),
+                      ],
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _getBarCode(cardList?[index]),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 10,
+                )
+              ],
+            ),
           ),
         );
       },
@@ -169,7 +173,10 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
 
   _getBarCode(int? cardNumber) {
     var screenWidth = MediaQuery.of(context).size.width;
-    var width = screenWidth - 150;
+    var screenHeight = MediaQuery.of(context).size.height;
+    var displayWidth =
+        (screenWidth < screenHeight) ? screenWidth : screenHeight;
+    var width = displayWidth - 150;
     var height = width * (4 / 10);
     var color = Theme.of(context).brightness == Brightness.dark
         ? Colors.white
@@ -220,6 +227,45 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
         colorFilter: ColorFilter.mode(
           color,
           BlendMode.srcIn,
+        ),
+      ),
+    );
+  }
+}
+
+class StyledCardName extends StatelessWidget {
+  final String? cardName;
+
+  const StyledCardName({super.key, required this.cardName});
+
+  @override
+  Widget build(BuildContext context) {
+    const suffix = "CARD";
+    bool endsWithCard = cardName?.endsWith(suffix) ?? false;
+    String? baseText = endsWithCard
+        ? cardName?.substring(0, (cardName?.length ?? 0) - suffix.length)
+        : cardName;
+
+    return Center(
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: baseText,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.w800, fontSize: 25),
+            ),
+            if (endsWithCard)
+              TextSpan(
+                text: suffix,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.w100, fontSize: 25),
+              ),
+          ],
         ),
       ),
     );
