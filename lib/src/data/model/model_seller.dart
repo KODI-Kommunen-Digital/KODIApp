@@ -28,6 +28,7 @@ class SellerModel {
       required this.username});
 
   factory SellerModel.fromJson(Map<String, dynamic> json) {
+    final Map<String, dynamic>? jsonUser = json['user'];
     return SellerModel(
         id: json['id'],
         userId: json['userId'],
@@ -38,7 +39,7 @@ class SellerModel {
         createdAt: json['createdAt'],
         deletedAt: json['deletedAt'],
         updatedAt: json['updatedAt'],
-        username: json['username']);
+        username: jsonUser?['username']);
   }
 
   factory SellerModel.updateUser(SellerModel seller, UserModel user) {
