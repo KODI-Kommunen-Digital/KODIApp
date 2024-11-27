@@ -19,7 +19,7 @@ abstract class TrolleyMakerClientApi {
   Future<TrolleyMakerLoginResponse> login(
       @Body() TrolleyMakerLoginRequest request);
 
-  @POST('/api/v1/customers/login')
+  @POST('/api/v1/customers')
   Future<TrolleyMakerRegisterResponse> register(
       @Body() TrolleyMakerRegisterRequest request);
 

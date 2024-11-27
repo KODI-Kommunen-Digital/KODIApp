@@ -78,6 +78,9 @@ class _$ForgotPasswordStateCopyWithImpl<$Res, $Val extends ForgotPasswordState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ForgotPasswordState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -97,6 +100,9 @@ class __$$ForgotPasswordStateLoadingImplCopyWithImpl<$Res>
       _$ForgotPasswordStateLoadingImpl _value,
       $Res Function(_$ForgotPasswordStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ForgotPasswordState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -209,6 +215,9 @@ class __$$ForgotPasswordStateLoadedImplCopyWithImpl<$Res>
       _$ForgotPasswordStateLoadedImpl _value,
       $Res Function(_$ForgotPasswordStateLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ForgotPasswordState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -321,6 +330,9 @@ class __$$ForgotPasswordStateErrorImplCopyWithImpl<$Res>
       _$ForgotPasswordStateErrorImpl _value,
       $Res Function(_$ForgotPasswordStateErrorImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ForgotPasswordState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

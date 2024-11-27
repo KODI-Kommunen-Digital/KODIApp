@@ -255,7 +255,7 @@ class StyledCardName extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
-                  .copyWith(fontWeight: FontWeight.w800, fontSize: 25),
+                  .copyWith(fontWeight: FontWeight.w100, fontSize: 30),
             ),
             if (endsWithCard)
               TextSpan(
@@ -263,7 +263,7 @@ class StyledCardName extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(fontWeight: FontWeight.w100, fontSize: 25),
+                    .copyWith(fontWeight: FontWeight.w700, fontSize: 30),
               ),
           ],
         ),
