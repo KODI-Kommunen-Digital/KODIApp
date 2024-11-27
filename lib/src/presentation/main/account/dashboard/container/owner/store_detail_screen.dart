@@ -34,32 +34,34 @@ class StoreDetailScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(store.description,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium!),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text("${Translate.of(context).translate('address')}:",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold)),
-                  Text(store.address ?? '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(fontWeight: FontWeight.bold)),
-                ],
-              ),
-              const SizedBox(height: 16),
+              if (store.description != null) const SizedBox(height: 16),
+              if (store.description != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(store.description!,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.bodyMedium!),
+                  ],
+                ),
+              if (store.address != null) const SizedBox(height: 4),
+              if (store.address != null)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("${Translate.of(context).translate('address')}:",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold)),
+                    Text(store.address ?? '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              if (store.address != null) const SizedBox(height: 16),
               GridView.count(
                 physics: const ScrollPhysics(),
                 shrinkWrap: true,

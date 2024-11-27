@@ -16,10 +16,10 @@ class ContainerProductModel {
   final int inventory;
   final int minCount;
   final int maxCount;
-  final int sellerId;
+  final int? sellerId;
   final int shopId;
   final int categoryId;
-  final int subCategoryId;
+  final int? subCategoryId;
   final String? meta;
   final bool isActive;
   final bool isArchived;

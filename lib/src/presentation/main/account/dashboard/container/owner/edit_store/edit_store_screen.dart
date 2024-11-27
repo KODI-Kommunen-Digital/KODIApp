@@ -70,7 +70,7 @@ class _EditStoreLoadedState extends State<EditStoreLoaded> {
   @override
   void initState() {
     _nameController.text = widget.store.name;
-    _descController.text = widget.store.description;
+    _descController.text = widget.store.description ?? '';
     _addressController.text = widget.store.address ?? '';
     super.initState();
   }

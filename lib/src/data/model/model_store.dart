@@ -4,7 +4,7 @@ import 'package:loggy/loggy.dart';
 class StoreModel {
   final int id;
   final String name;
-  final String description;
+  final String? description;
   final int cityId;
   final String? createdAt;
   final String? address;

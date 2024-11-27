@@ -202,8 +202,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _textTaxController.text = widget.product!.tax.toString();
       //_textInventoryController.text = widget.product!.inventory.toString();
       _textMinCountController.text = widget.product!.minCount.toString();
-      _textBarcodeController.text =
-          widget.product!.barcode ?? ''; //TODO remove null check
+      _textBarcodeController.text = widget.product!.barcode ?? '';
     }
   }
 
@@ -222,7 +221,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             inventory: int.parse(_textInventoryController.text),
             minCount: int.parse(_textMinCountController.text),
             categoryId: selectedCategory!.id,
-            subCategoryId: selectedSubCategory!.id,
+            subCategoryId: selectedSubCategory?.id,
             barcode: _textBarcodeController.text,
             image: context.read<CreateProductCubit>().selectedImage,
             isImageChanged: context.read<CreateProductCubit>().isImageChanged);
@@ -293,12 +292,12 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _errorCategory = null;
     }
 
-    if (selectedSubCategory == null &&
+    /*if (selectedSubCategory == null &&
         (widget.subCategories ?? []).isNotEmpty) {
       _errorSubCategory = "subCategory_require";
     } else {
       _errorSubCategory = null;
-    }
+    }*/
 
     _errorPrice = UtilValidator.validate(_textPriceController.text,
         type: ValidateType.price, allowEmpty: false);
@@ -469,7 +468,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                         return ListTile(
                           title: Text(store.name),
                           subtitle: Text(
-                            store.description,
+                            store.description ?? '',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium
@@ -491,7 +490,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                         final result = widget.stores.where((element) {
                           return formattedSearchString(element.name)
                                   .contains(formattedSearchString(search)) ||
-                              formattedSearchString(element.description)
+                              formattedSearchString(element.description ?? '')
                                   .contains(formattedSearchString(search));
                         }).toList();
                         return result;

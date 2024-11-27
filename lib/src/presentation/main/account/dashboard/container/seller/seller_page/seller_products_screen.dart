@@ -283,13 +283,15 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                                     fontWeight: FontWeight.bold,
                                                   ),
                                             ),
-                                            const SizedBox(height: 4),
-                                            Text(
-                                                getSubCategoryTranslation(
-                                                    item.subCategoryId),
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .labelSmall!),
+                                            if (item.subCategoryId != null)
+                                              const SizedBox(height: 4),
+                                            if (item.subCategoryId != null)
+                                              Text(
+                                                  getSubCategoryTranslation(
+                                                      item.subCategoryId!),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .labelSmall!),
                                             const SizedBox(height: 4),
                                             Text(
                                               "${Translate.of(context).translate('quantity')}: ${item.inventory.toString()}",

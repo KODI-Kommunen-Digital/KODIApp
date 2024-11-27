@@ -545,7 +545,7 @@ class ContainerRepository {
       required int inventory,
       required int minCount,
       required int categoryId,
-      required int subCategoryId,
+      required int? subCategoryId,
       required String barcode,
       File? image,
       bool isImageChanged = false}) async {
@@ -557,9 +557,12 @@ class ContainerRepository {
       "inventory": inventory,
       "minCount": minCount,
       "categoryId": categoryId,
-      "subCategoryId": subCategoryId,
       "barcode": barcode
     };
+
+    if(subCategoryId != null) {
+      params["subCategoryId"] = subCategoryId;
+    }
 
     final response = await Api.addProduct(cityId, storeId, params);
 

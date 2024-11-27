@@ -319,10 +319,12 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
+                                      if(item.subCategoryId != null)
                                       const SizedBox(height: 4),
+                                      if(item.subCategoryId != null)
                                       Text(
                                           getSubCategoryTranslation(
-                                              item.subCategoryId),
+                                              item.subCategoryId!),
                                           style: Theme.of(context)
                                               .textTheme
                                               .labelSmall!),

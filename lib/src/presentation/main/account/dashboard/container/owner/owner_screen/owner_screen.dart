@@ -188,7 +188,7 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
-                                        store.description,
+                                        store.description ?? '',
                                         maxLines: 2,
                                         style: Theme.of(context)
                                             .textTheme

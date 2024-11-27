@@ -206,7 +206,7 @@ class _SellerRequestLoadedState extends State<SellerRequestLoaded> {
                           return ListTile(
                             title: Text(store.name),
                             subtitle: Text(
-                              store.description,
+                              store.description ?? '',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium
@@ -223,7 +223,7 @@ class _SellerRequestLoadedState extends State<SellerRequestLoaded> {
                           final result = widget.stores.where((element) {
                             return formattedSearchString(element.name)
                                     .contains(formattedSearchString(search)) ||
-                                formattedSearchString(element.description)
+                                formattedSearchString(element.description ?? '')
                                     .contains(formattedSearchString(search));
                           }).toList();
                           return result;

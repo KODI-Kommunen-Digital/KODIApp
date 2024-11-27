@@ -82,11 +82,14 @@ class CreateProductCubit extends Cubit<CreateProductState> {
     final selectedCity = AppBloc.homeCubit.getCityName(cities, product.cityId);
     final category = await ContainerRepository.loadStoreCategory(
         product.cityId, product.shopId, product.categoryId);
-    final subcategory = await ContainerRepository.loadStoreSubCategory(
-        product.cityId, product.shopId, product.subCategoryId);
+    CategoryModel? subcategory;
+    if(product.subCategoryId != null) {
+      subcategory = await ContainerRepository.loadStoreSubCategory(
+          product.cityId, product.shopId, product.subCategoryId!);
+    }
     final shop =
         await ContainerRepository.loadStore(product.cityId, product.shopId);
-    if (category == null || subcategory == null || shop == null) {
+    if (category == null || shop == null) {
       emit(const CreateProductState.error());
       return null;
     }

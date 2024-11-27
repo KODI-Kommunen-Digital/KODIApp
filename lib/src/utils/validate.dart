@@ -87,7 +87,7 @@ class UtilValidator {
         break;
 
       case ValidateType.tax:
-        final taxRegex = RegExp(r'^[1-9][0-9]?$|^0(?:\.[0-9]+)?$');
+        final taxRegex = RegExp(r'^(0(\.\d+)?|([1-9]?\d(\.\d+)?|100(\.0+)?))$');
         if (!taxRegex.hasMatch(data)) {
           return errorTax;
         }
