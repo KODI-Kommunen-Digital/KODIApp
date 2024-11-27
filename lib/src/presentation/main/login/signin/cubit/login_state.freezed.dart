@@ -84,6 +84,9 @@ class _$LoginStateCopyWithImpl<$Res, $Val extends LoginState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -100,6 +103,9 @@ class __$$LoginStateInitialImplCopyWithImpl<$Res>
   __$$LoginStateInitialImplCopyWithImpl(_$LoginStateInitialImpl _value,
       $Res Function(_$LoginStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -214,6 +220,9 @@ class __$$LoginStateLoadingImplCopyWithImpl<$Res>
   __$$LoginStateLoadingImplCopyWithImpl(_$LoginStateLoadingImpl _value,
       $Res Function(_$LoginStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -328,6 +337,9 @@ class __$$LoginStateLoadedImplCopyWithImpl<$Res>
   __$$LoginStateLoadedImplCopyWithImpl(_$LoginStateLoadedImpl _value,
       $Res Function(_$LoginStateLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -445,6 +457,8 @@ class __$$LoginStateErrorImplCopyWithImpl<$Res>
       _$LoginStateErrorImpl _value, $Res Function(_$LoginStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -483,7 +497,9 @@ class _$LoginStateErrorImpl implements LoginStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginStateErrorImplCopyWith<_$LoginStateErrorImpl> get copyWith =>
@@ -569,7 +585,10 @@ abstract class LoginStateError implements LoginState {
   const factory LoginStateError(final String error) = _$LoginStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LoginState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginStateErrorImplCopyWith<_$LoginStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
