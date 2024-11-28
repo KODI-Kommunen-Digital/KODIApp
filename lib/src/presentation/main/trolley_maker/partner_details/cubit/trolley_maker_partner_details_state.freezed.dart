@@ -88,9 +88,6 @@ class _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -107,9 +104,6 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -225,9 +219,6 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -348,8 +339,6 @@ class __$$PartnerDetailsSuccessImplCopyWithImpl<$Res>
       $Res Function(_$PartnerDetailsSuccessImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -389,9 +378,7 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   @override
   int get hashCode => Object.hash(runtimeType, companyInfo);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$PartnerDetailsSuccessImplCopyWith<_$PartnerDetailsSuccessImpl>
@@ -481,10 +468,7 @@ abstract class PartnerDetailsSuccess
       _$PartnerDetailsSuccessImpl;
 
   TrolleyMakerPartnerDetailsInfo get companyInfo;
-
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$PartnerDetailsSuccessImplCopyWith<_$PartnerDetailsSuccessImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -506,8 +490,6 @@ class __$$LoadFailureImplCopyWithImpl<$Res>
       _$LoadFailureImpl _value, $Res Function(_$LoadFailureImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -546,9 +528,7 @@ class _$LoadFailureImpl implements LoadFailure {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
@@ -634,10 +614,7 @@ abstract class LoadFailure implements TrolleyMakerPartnerDetailsState {
   const factory LoadFailure(final String message) = _$LoadFailureImpl;
 
   String get message;
-
-  /// Create a copy of TrolleyMakerPartnerDetailsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -94,9 +94,6 @@ class _$ProductDetailStateCopyWithImpl<$Res, $Val extends ProductDetailState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -113,9 +110,6 @@ class __$$ProductDetailInitialImplCopyWithImpl<$Res>
   __$$ProductDetailInitialImplCopyWithImpl(_$ProductDetailInitialImpl _value,
       $Res Function(_$ProductDetailInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -241,9 +235,6 @@ class __$$ProductDetailLoadingImplCopyWithImpl<$Res>
   __$$ProductDetailLoadingImplCopyWithImpl(_$ProductDetailLoadingImpl _value,
       $Res Function(_$ProductDetailLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -377,8 +368,6 @@ class __$$ProductDetailLoadedImplCopyWithImpl<$Res>
       $Res Function(_$ProductDetailLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -473,9 +462,7 @@ class _$ProductDetailLoadedImpl implements ProductDetailLoaded {
       isLoggedIn,
       isDarkMode);
 
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProductDetailLoadedImplCopyWith<_$ProductDetailLoadedImpl> get copyWith =>
@@ -581,10 +568,7 @@ abstract class ProductDetailLoaded implements ProductDetailState {
   UserModel? get userDetail;
   bool get isLoggedIn;
   bool get isDarkMode;
-
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProductDetailLoadedImplCopyWith<_$ProductDetailLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -606,8 +590,6 @@ class __$$ProductDetailErrorImplCopyWithImpl<$Res>
       $Res Function(_$ProductDetailErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -646,9 +628,7 @@ class _$ProductDetailErrorImpl implements ProductDetailError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProductDetailErrorImplCopyWith<_$ProductDetailErrorImpl> get copyWith =>
@@ -745,10 +725,7 @@ abstract class ProductDetailError implements ProductDetailState {
       _$ProductDetailErrorImpl;
 
   String get error;
-
-  /// Create a copy of ProductDetailState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProductDetailErrorImplCopyWith<_$ProductDetailErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -86,9 +86,6 @@ class _$TrolleyMakerMyCreditStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -105,9 +102,6 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -223,9 +217,6 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -344,8 +335,6 @@ class __$$MyCreditSuccessImplCopyWithImpl<$Res>
       _$MyCreditSuccessImpl _value, $Res Function(_$MyCreditSuccessImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -385,9 +374,7 @@ class _$MyCreditSuccessImpl implements MyCreditSuccess {
   @override
   int get hashCode => Object.hash(runtimeType, cardDetails);
 
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$MyCreditSuccessImplCopyWith<_$MyCreditSuccessImpl> get copyWith =>
@@ -476,10 +463,7 @@ abstract class MyCreditSuccess implements TrolleyMakerMyCreditState {
       _$MyCreditSuccessImpl;
 
   CardBalanceAndTransactionResponse get cardDetails;
-
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$MyCreditSuccessImplCopyWith<_$MyCreditSuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -501,8 +485,6 @@ class __$$ApiErrorImplCopyWithImpl<$Res>
       _$ApiErrorImpl _value, $Res Function(_$ApiErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -541,9 +523,7 @@ class _$ApiErrorImpl implements ApiError {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ApiErrorImplCopyWith<_$ApiErrorImpl> get copyWith =>
@@ -629,10 +609,7 @@ abstract class ApiError implements TrolleyMakerMyCreditState {
   const factory ApiError(final String message) = _$ApiErrorImpl;
 
   String get message;
-
-  /// Create a copy of TrolleyMakerMyCreditState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ApiErrorImplCopyWith<_$ApiErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

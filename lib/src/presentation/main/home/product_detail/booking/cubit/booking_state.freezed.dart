@@ -82,9 +82,6 @@ class _$BookingStateCopyWithImpl<$Res, $Val extends BookingState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -101,9 +98,6 @@ class __$$BookingStateLoadingImplCopyWithImpl<$Res>
   __$$BookingStateLoadingImplCopyWithImpl(_$BookingStateLoadingImpl _value,
       $Res Function(_$BookingStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -220,8 +214,6 @@ class __$$BookingStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$BookingStateLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -286,9 +278,7 @@ class _$BookingStateLoadedImpl implements BookingStateLoaded {
       const DeepCollectionEquality().hash(_availableSlots),
       const DeepCollectionEquality().hash(_services));
 
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
@@ -375,10 +365,7 @@ abstract class BookingStateLoaded implements BookingState {
 
   Map<String, int> get availableSlots;
   List<String> get services;
-
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BookingStateLoadedImplCopyWith<_$BookingStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -400,8 +387,6 @@ class __$$BookingStateErrorImplCopyWithImpl<$Res>
       $Res Function(_$BookingStateErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -440,9 +425,7 @@ class _$BookingStateErrorImpl implements BookingStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
@@ -526,10 +509,7 @@ abstract class BookingStateError implements BookingState {
   const factory BookingStateError(final String error) = _$BookingStateErrorImpl;
 
   String get error;
-
-  /// Create a copy of BookingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$BookingStateErrorImplCopyWith<_$BookingStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

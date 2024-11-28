@@ -91,9 +91,6 @@ class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -110,9 +107,6 @@ class __$$ListStateInitialImplCopyWithImpl<$Res>
   __$$ListStateInitialImplCopyWithImpl(_$ListStateInitialImpl _value,
       $Res Function(_$ListStateInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -235,9 +229,6 @@ class __$$ListStateLoadingImplCopyWithImpl<$Res>
   __$$ListStateLoadingImplCopyWithImpl(_$ListStateLoadingImpl _value,
       $Res Function(_$ListStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -363,8 +354,6 @@ class __$$ListStateLoadedImplCopyWithImpl<$Res>
       _$ListStateLoadedImpl _value, $Res Function(_$ListStateLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -428,9 +417,7 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
       const DeepCollectionEquality().hash(_list),
       const DeepCollectionEquality().hash(_cityList));
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
@@ -527,10 +514,7 @@ abstract class ListStateLoaded implements ListState {
 
   List<ProductModel> get list;
   List<dynamic> get cityList;
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -552,8 +536,6 @@ class __$$ListStateUpdatedImplCopyWithImpl<$Res>
       $Res Function(_$ListStateUpdatedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -617,9 +599,7 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
       const DeepCollectionEquality().hash(_list),
       const DeepCollectionEquality().hash(_cityList));
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
@@ -716,10 +696,7 @@ abstract class ListStateUpdated implements ListState {
 
   List<ProductModel> get list;
   List<dynamic> get cityList;
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -741,8 +718,6 @@ class __$$ListStateErrorImplCopyWithImpl<$Res>
       _$ListStateErrorImpl _value, $Res Function(_$ListStateErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -781,9 +756,7 @@ class _$ListStateErrorImpl implements ListStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
@@ -877,10 +850,7 @@ abstract class ListStateError implements ListState {
   const factory ListStateError(final String error) = _$ListStateErrorImpl;
 
   String get error;
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

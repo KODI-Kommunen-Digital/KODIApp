@@ -77,9 +77,6 @@ class _$FaqStateCopyWithImpl<$Res, $Val extends FaqState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of FaqState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -96,9 +93,6 @@ class __$$FaqStateLoadingImplCopyWithImpl<$Res>
   __$$FaqStateLoadingImplCopyWithImpl(
       _$FaqStateLoadingImpl _value, $Res Function(_$FaqStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of FaqState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -207,9 +201,6 @@ class __$$FaqStateLoadedImplCopyWithImpl<$Res>
   __$$FaqStateLoadedImplCopyWithImpl(
       _$FaqStateLoadedImpl _value, $Res Function(_$FaqStateLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of FaqState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -318,9 +309,6 @@ class __$$FaqStateErrorImplCopyWithImpl<$Res>
   __$$FaqStateErrorImplCopyWithImpl(
       _$FaqStateErrorImpl _value, $Res Function(_$FaqStateErrorImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of FaqState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

@@ -78,9 +78,6 @@ class _$ApplicationStateCopyWithImpl<$Res, $Val extends ApplicationState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of ApplicationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -97,9 +94,6 @@ class __$$ApplicationLoadingImplCopyWithImpl<$Res>
   __$$ApplicationLoadingImplCopyWithImpl(_$ApplicationLoadingImpl _value,
       $Res Function(_$ApplicationLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ApplicationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -208,9 +202,6 @@ class __$$ApplicationLoadedImplCopyWithImpl<$Res>
   __$$ApplicationLoadedImplCopyWithImpl(_$ApplicationLoadedImpl _value,
       $Res Function(_$ApplicationLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ApplicationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -319,9 +310,6 @@ class __$$ApplicationErrorImplCopyWithImpl<$Res>
   __$$ApplicationErrorImplCopyWithImpl(_$ApplicationErrorImpl _value,
       $Res Function(_$ApplicationErrorImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ApplicationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

@@ -90,9 +90,6 @@ class _$ListGroupsStateCopyWithImpl<$Res, $Val extends ListGroupsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -111,9 +108,6 @@ class __$$ListGroupsStateInitialImplCopyWithImpl<$Res>
       _$ListGroupsStateInitialImpl _value,
       $Res Function(_$ListGroupsStateInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -237,9 +231,6 @@ class __$$ListGroupsStateLoadingImplCopyWithImpl<$Res>
       _$ListGroupsStateLoadingImpl _value,
       $Res Function(_$ListGroupsStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -365,8 +356,6 @@ class __$$ListGroupsStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$ListGroupsStateLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -422,9 +411,7 @@ class _$ListGroupsStateLoadedImpl implements ListGroupsStateLoaded {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_list), userId);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListGroupsStateLoadedImplCopyWith<_$ListGroupsStateLoadedImpl>
@@ -519,10 +506,7 @@ abstract class ListGroupsStateLoaded implements ListGroupsState {
 
   List<ForumGroupModel> get list;
   int get userId;
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListGroupsStateLoadedImplCopyWith<_$ListGroupsStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -546,8 +530,6 @@ class __$$ListGroupsStateUpdatedImplCopyWithImpl<$Res>
       $Res Function(_$ListGroupsStateUpdatedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -603,9 +585,7 @@ class _$ListGroupsStateUpdatedImpl implements ListGroupsStateUpdated {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_list), userId);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListGroupsStateUpdatedImplCopyWith<_$ListGroupsStateUpdatedImpl>
@@ -700,10 +680,7 @@ abstract class ListGroupsStateUpdated implements ListGroupsState {
 
   List<ForumGroupModel> get list;
   int get userId;
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListGroupsStateUpdatedImplCopyWith<_$ListGroupsStateUpdatedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -725,8 +702,6 @@ class __$$ListGroupsStateErrorImplCopyWithImpl<$Res>
       $Res Function(_$ListGroupsStateErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -765,9 +740,7 @@ class _$ListGroupsStateErrorImpl implements ListGroupsStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ListGroupsStateErrorImplCopyWith<_$ListGroupsStateErrorImpl>
@@ -861,10 +834,7 @@ abstract class ListGroupsStateError implements ListGroupsState {
       _$ListGroupsStateErrorImpl;
 
   String get error;
-
-  /// Create a copy of ListGroupsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ListGroupsStateErrorImplCopyWith<_$ListGroupsStateErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
