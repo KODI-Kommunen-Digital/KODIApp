@@ -104,6 +104,12 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
       controller: _pageController,
       itemCount: cardList?.length,
       itemBuilder: (context, index) {
+        var screenWidth = MediaQuery.of(context).size.width;
+        var screenHeight = MediaQuery.of(context).size.height;
+        var displayWidth =
+            (screenWidth < screenHeight) ? screenWidth : screenHeight;
+        var cardWidth = displayWidth - 80;
+
         return SingleChildScrollView(
           child: Center(
             child: Column(
@@ -132,9 +138,10 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
                         Center(
                           child: SizedBox(
                             height: 250,
+                            width: cardWidth,
                             child: Image.asset(
                               'assets/images/tro-card.png',
-                              fit: BoxFit.fitHeight,
+                              fit: BoxFit.contain,
                             ),
                           ),
                         ),
