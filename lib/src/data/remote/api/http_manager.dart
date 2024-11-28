@@ -17,8 +17,8 @@ class HTTPManager {
 
   HTTPManager({String apiType = ""}) {
     //_baseUrl = 'http://192.168.178.126:3011';
-    //_baseUrl = 'https://test.smartregion-auf.de';
-    _baseUrl = 'https://app.smartregion-auf.de';
+    _baseUrl = 'https://test.smartregion-auf.de';
+    //_baseUrl = 'https://app.smartregion-auf.de';
     switch(apiType) {
       case "":
         //_baseUrl = '$_baseUrl/';

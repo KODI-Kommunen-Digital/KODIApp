@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_store.dart';
@@ -40,16 +39,13 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
     return BlocBuilder<SellerCubit, SellerState>(
       builder: (context, state) => state.maybeWhen(
           loading: () => const SellerProductsLoading(),
-          loadedProducts:
-              (products, categories, subCategories, stores, selectedStore) =>
-                  SellerProductsLoaded(
-                    products: products ?? [],
-                    categories: categories ?? [],
-                    subCategories: subCategories ?? [],
-                    stores: stores,
-                    selectedStore: selectedStore,
-                    user: widget.user,
-                  ),
+          loadedProducts: (products, stores, selectedStore) =>
+              SellerProductsLoaded(
+                products: products ?? [],
+                stores: stores,
+                selectedStore: selectedStore,
+                user: widget.user,
+              ),
           orElse: () => ErrorWidget("Failed to load listings.")),
     );
   }
@@ -58,8 +54,6 @@ class _SellerOrderScreenState extends State<SellerProductsScreen> {
 class SellerProductsLoaded extends StatefulWidget {
   final List<ContainerProductModel> products;
   final UserModel user;
-  final List<CategoryModel> categories;
-  final List<CategoryModel> subCategories;
   final List<StoreModel> stores;
   final StoreModel? selectedStore;
 
@@ -67,8 +61,6 @@ class SellerProductsLoaded extends StatefulWidget {
       {super.key,
       required this.products,
       required this.user,
-      required this.categories,
-      required this.subCategories,
       required this.stores,
       required this.selectedStore});
 
@@ -274,8 +266,8 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              getCategoryTranslation(
-                                                  item.categoryId),
+                                              item.categoryName ??
+                                                  '${Translate.of(context).translate('category')}: ${Translate.of(context).translate('undefined')}',
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodySmall!
@@ -286,9 +278,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
                                             if (item.subCategoryId != null)
                                               const SizedBox(height: 4),
                                             if (item.subCategoryId != null)
-                                              Text(
-                                                  getSubCategoryTranslation(
-                                                      item.subCategoryId!),
+                                              Text(item.subCategoryName ?? '',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .labelSmall!),
@@ -443,26 +433,6 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
     await Navigator.pushNamed(context, Routes.productRequestScreen,
         arguments: {"isOwner": false});
     context.read<SellerCubit>().onLoad(false, true);
-  }
-
-  String getCategoryTranslation(int id) {
-    try {
-      CategoryModel? category =
-          widget.categories.firstWhere((element) => element.id == id);
-      return category.title;
-    } catch (e) {
-      return '';
-    }
-  }
-
-  String getSubCategoryTranslation(int id) {
-    try {
-      CategoryModel? category =
-          widget.subCategories.firstWhere((element) => element.id == id);
-      return category.title;
-    } catch (e) {
-      return '';
-    }
   }
 }
 

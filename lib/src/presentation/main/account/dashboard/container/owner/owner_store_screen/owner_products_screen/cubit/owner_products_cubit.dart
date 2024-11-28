@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
@@ -18,22 +17,9 @@ class OwnerProductsCubit extends Cubit<OwnerProductsState> {
     final products = await ContainerRepository.getStoreProducts(
         cityId: store.cityId, storeId: store.id, pageNo: 1);
 
-    final categories =
-        await ContainerRepository.loadStoreCategories(store.cityId, store.id);
-
-    List<CategoryModel> subCategories = [];
-    if (categories != null) {
-      for (var category in categories) {
-        final subCategory = await ContainerRepository.loadStoreSubCategories(
-            store.cityId, store.id, category.id);
-        if (subCategory != null) {
-          subCategories.addAll(subCategory);
-        }
-      }
-    }
 
     emit(OwnerProductsState.loaded(
-        products ?? [], categories ?? [], subCategories));
+        products ?? []));
   }
 
   Future<List<ContainerProductModel>> newProducts(int pageNo) async {
