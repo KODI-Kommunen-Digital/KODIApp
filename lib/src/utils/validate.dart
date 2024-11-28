@@ -1,11 +1,15 @@
 enum ValidateType {
   normal,
   email,
+  cemail,
   number,
   phone,
   tag,
   cpassword,
   website,
+  card,
+  trolleyMakerPassword,
+  zipCode
 }
 
 class UtilValidator {
@@ -20,6 +24,9 @@ class UtilValidator {
   static const String errorWebsite = "value_not_website";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
+  static const String invalidCardId = "invalid_card_id";
+  static const String emailNotMatch = "email_not_mach";
+  static const String invalidZipCode = "invalid_zip_code";
 
   static String? validate(String data,
       {ValidateType? type = ValidateType.normal,
@@ -27,7 +34,8 @@ class UtilValidator {
       int? max,
       bool allowEmpty = false,
       String? match,
-      String? password}) {
+      String? password,
+      String? email}) {
     ///Empty
     if (!allowEmpty && data.isEmpty) {
       return errorEmpty;
@@ -91,9 +99,80 @@ class UtilValidator {
           return errorWebsite;
         }
         break;
+
+      case ValidateType.card:
+        if (!validateCardID(data)) {
+          return invalidCardId;
+        }
+        break;
+      case ValidateType.cemail:
+        if (data != email) {
+          return emailNotMatch;
+        }
+        break;
+      case ValidateType.trolleyMakerPassword:
+        if (!_validateTrolleyMakerPassword(data)) {
+          return errorPassword;
+        }
+        break;
+      case ValidateType.zipCode:
+        if (!_validZipCode(data)) {
+          return invalidZipCode;
+        }
+        break;
       default:
     }
     return null;
+  }
+
+  static bool _validateTrolleyMakerPassword(String password) {
+    // Check if the password has at least 8 characters
+    if (password.length < 8) {
+      return false;
+    }
+
+    // Check if the password contains at least 1 capital letter
+    if (!RegExp(r'[A-Z]').hasMatch(password)) {
+      return false;
+    }
+
+    // Check if the password contains at least 1 digit
+    if (!RegExp(r'\d').hasMatch(password)) {
+      return false;
+    }
+
+    // Check if the password contains at least 1 special character from the specified set
+    if (!RegExp(r'[!$%()*,-.?@^_~]').hasMatch(password)) {
+      return false;
+    }
+    // Check if the password contains spaces
+    if (password.contains(' ')) {
+      return false;
+    }
+
+    // All checks passed
+    return true;
+  }
+
+  static bool _validZipCode(String value) {
+    final RegExp regex = RegExp(r'^\d{4,5}$');
+    return regex.hasMatch(value);
+  }
+
+  static bool validateCardID(String? value) {
+    if (value == null || value.isEmpty) {
+      return false;
+    }
+    if (!RegExp(r'^\d+$').hasMatch(value)) {
+      return false;
+    }
+    if (value.length != 15) {
+      return false;
+    }
+    if (!value.startsWith("1761")) {
+      return false;
+    }
+    return true; // Valid
   }
 
   ///Singleton factory

@@ -223,8 +223,8 @@ class _SignInLoadedState extends State<SignInLoaded> {
                                       const SizedBox(height: 16),
                                       RichText(
                                         text: TextSpan(
-                                          style:
-                                              DefaultTextStyle.of(context).style,
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
                                           children: const <TextSpan>[
                                             TextSpan(
                                               text: 'Schritt 1:',

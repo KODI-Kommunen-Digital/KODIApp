@@ -22,7 +22,6 @@ class AppUserInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     switch (type) {
       case UserViewType.information:
         if (user == null) {

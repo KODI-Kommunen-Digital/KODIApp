@@ -78,8 +78,7 @@ class AppointmentModel {
         if (openHours[day] != null) {
           List<dynamic> schedules = openHours[day];
           for (var schedule in schedules) {
-            TimeOfDay startTime =
-                timeOfDayFromString(schedule['startTime']!);
+            TimeOfDay startTime = timeOfDayFromString(schedule['startTime']!);
             TimeOfDay endTime = timeOfDayFromString(schedule['endTime']!);
             ScheduleModel parsedSchedule =
                 ScheduleModel(startTime: startTime, endTime: endTime);

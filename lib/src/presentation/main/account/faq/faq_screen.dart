@@ -55,7 +55,7 @@ class _FaqScreenState extends State<FaqScreen> {
                 child: const PDF().fromUrl(
                   link,
                   placeholder: (progress) =>
-                  const Center(child: CircularProgressIndicator()),
+                      const Center(child: CircularProgressIndicator()),
                   errorWidget: (error) => Center(child: Text(error.toString())),
                 ))),
       );

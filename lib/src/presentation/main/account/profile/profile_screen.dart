@@ -350,21 +350,21 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                 ),
                                                           ),
                                                           if (userListingsList[
-                                                          index]
-                                                              .viewCount !=
+                                                                      index]
+                                                                  .viewCount !=
                                                               null)
-                                                          Text(
-                                                            '${Translate.of(context).translate('views')}: ${userListingsList[index].viewCount}',
-                                                            style: Theme.of(
-                                                                    context)
-                                                                .textTheme
-                                                                .bodySmall!
-                                                                .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w100,
-                                                                ),
-                                                          ),
+                                                            Text(
+                                                              '${Translate.of(context).translate('views')}: ${userListingsList[index].viewCount}',
+                                                              style: Theme.of(
+                                                                      context)
+                                                                  .textTheme
+                                                                  .bodySmall!
+                                                                  .copyWith(
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w100,
+                                                                  ),
+                                                            ),
                                                         ],
                                                       ),
                                                       const SizedBox(height: 8),

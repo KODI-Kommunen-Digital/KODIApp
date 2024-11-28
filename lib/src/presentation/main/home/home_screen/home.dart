@@ -235,7 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.4';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.5';
                         });
                       }
                     },
@@ -967,35 +967,28 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
                         children: [
                           Expanded(
                               child: InAppWebView(
-                                  initialUrlRequest: URLRequest(
-                                      url: Uri.parse(
-                                          'https://troisdorf.dksr.city/map/')),
-                                  androidOnGeolocationPermissionsShowPrompt:
-                                      (InAppWebViewController controller,
-                                          String origin) async {
-                                    return GeolocationPermissionShowPromptResponse(
-                                        origin: origin,
-                                        allow: true,
-                                        retain: true);
-                                  },
-                                  initialOptions: InAppWebViewGroupOptions(
-                                    android: AndroidInAppWebViewOptions(
-                                      useWideViewPort: true,
-                                      geolocationEnabled: true,
-                                    ),
-                                    ios: IOSInAppWebViewOptions(
-                                      allowsInlineMediaPlayback: true,
-                                    ),
-                                  ),
-                                  androidOnPermissionRequest:
-                                      (InAppWebViewController controller,
-                                          String origin,
-                                          List<String> resources) async {
-                                    return PermissionRequestResponse(
-                                        resources: resources,
-                                        action: PermissionRequestResponseAction
-                                            .GRANT);
-                                  })),
+                            initialUrlRequest: URLRequest(
+                                url: WebUri.uri(Uri.parse(
+                                    'https://troisdorf.dksr.city/map/'))),
+                            onGeolocationPermissionsShowPrompt:
+                                (InAppWebViewController controller,
+                                    String origin) async {
+                              return GeolocationPermissionShowPromptResponse(
+                                  origin: origin, allow: true, retain: true);
+                            },
+                            initialSettings: InAppWebViewSettings(
+                                useWideViewPort: true,
+                                geolocationEnabled: true,
+                                allowsInlineMediaPlayback: true),
+                            onPermissionRequest:
+                                (InAppWebViewController controller,
+                                    PermissionRequest request) async {
+                              return PermissionResponse(
+                                resources: request.resources,
+                                action: PermissionResponseAction.GRANT,
+                              );
+                            },
+                          )),
                         ],
                       ),
               ),

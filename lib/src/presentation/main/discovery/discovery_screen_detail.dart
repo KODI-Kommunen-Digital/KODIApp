@@ -24,23 +24,24 @@ class DiscoveryScreenDetail extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   int? selectedLocationId;
+  
+  late DiscoveryCubit discoveryCubit;
 
   @override
   void initState() {
     super.initState();
-    int id = widget.arguments['id'];
-    if (id == 6) {
-      context.read<DiscoveryCubit>().onLoad(6);
-    }
-    loadLocationList();
+    discoveryCubit = DiscoveryCubit();
+     WidgetsBinding.instance.addPostFrameCallback((_) {
+       loadLocationList();
+    });
   }
 
   Future<void> loadLocationList() async {
-    await context.read<DiscoveryCubit>().onLoad(widget.arguments['id']);
+    await discoveryCubit.onLoad(widget.arguments['id']);
   }
 
   Future<void> loadSelectedLocation() async {
-    final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+    final cityId = await discoveryCubit.getCitySelected();
     setState(() {
       selectedLocationId = cityId;
     });
@@ -48,10 +49,8 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      onPopInvokedWithResult: (bool didPop, dynamic result) {
-        context.read<DiscoveryCubit>().onLoad(1);
-      },
+    return BlocProvider(
+      create: (_) => discoveryCubit, // Override with a new local instance
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -164,8 +163,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.arguments == 61) {
-      Routes.trackMatomoEvent(
-          true, null, 5, null);
+      Routes.trackMatomoEvent(true, null, 5, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
@@ -228,8 +226,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await webViewController.runJavaScript(
           "document.querySelector('.flex').style.display = 'none';");
     } else if (service.arguments == 62) {
-      Routes.trackMatomoEvent(
-          false, null, 62, null);
+      Routes.trackMatomoEvent(false, null, 62, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse(
@@ -292,6 +289,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
       await webViewController.runJavaScript(
           "document.querySelector('.flex').style.display = 'none';");
+    } else if (service.arguments == 161) {
+      Navigator.pushNamed(context, Routes.trolleyMakerMyCredit);
+    } else if (service.arguments == 162) {
+      Navigator.pushNamed(context, Routes.trolleyMakerCards);
+    } else if (service.arguments == 163) {
+      Navigator.pushNamed(context, Routes.trolleyMakerPartner);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
