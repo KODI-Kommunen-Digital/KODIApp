@@ -610,34 +610,34 @@ class AppProductItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (isEvent)
-                      SizedBox(
-                        height: screenHeight! * 0.0125,
-                      ),
-                    if (!isEvent)
-                      Container(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).scaffoldBackgroundColor,
-                            borderRadius: BorderRadius.circular(4)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(2.0),
-                          child: Text(
-                            categoryTitle ?? item?.category ?? '',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: (screenAverage == null)
-                                        ? Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .fontSize
-                                        : screenAverage * 0.0125),
-                          ),
-                        ),
-                      ),
-                    const SizedBox(height: 4),
+                    // if (isEvent)
+                    //   SizedBox(
+                    //     height: screenHeight! * 0.0125,
+                    //   ),
+                    // if (!isEvent)
+                    //   Container(
+                    //     decoration: BoxDecoration(
+                    //         color: Theme.of(context).scaffoldBackgroundColor,
+                    //         borderRadius: BorderRadius.circular(4)),
+                    //     child: Padding(
+                    //       padding: const EdgeInsets.all(2.0),
+                    //       child: Text(
+                    //         categoryTitle ?? item?.category ?? '',
+                    //         style: Theme.of(context)
+                    //             .textTheme
+                    //             .bodySmall!
+                    //             .copyWith(
+                    //                 fontWeight: FontWeight.bold,
+                    //                 fontSize: (screenAverage == null)
+                    //                     ? Theme.of(context)
+                    //                         .textTheme
+                    //                         .bodySmall!
+                    //                         .fontSize
+                    //                     : screenAverage * 0.0125),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // const SizedBox(height: 4),
                     Text(
                       item!.title,
                       maxLines: 3,
