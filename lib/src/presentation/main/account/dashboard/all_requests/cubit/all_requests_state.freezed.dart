@@ -79,9 +79,6 @@ class _$AllRequestsStateCopyWithImpl<$Res, $Val extends AllRequestsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -100,9 +97,6 @@ class __$$AllRequestsStateInitialImplCopyWithImpl<$Res>
       _$AllRequestsStateInitialImpl _value,
       $Res Function(_$AllRequestsStateInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -215,9 +209,6 @@ class __$$AllRequestsStateLoadingImplCopyWithImpl<$Res>
       _$AllRequestsStateLoadingImpl _value,
       $Res Function(_$AllRequestsStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -333,8 +324,6 @@ class __$$AllRequestsStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$AllRequestsStateLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -391,9 +380,7 @@ class _$AllRequestsStateLoadedImpl implements AllRequestsStateLoaded {
   int get hashCode => Object.hash(runtimeType,
       const DeepCollectionEquality().hash(_recent), isRefreshLoader);
 
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AllRequestsStateLoadedImplCopyWith<_$AllRequestsStateLoadedImpl>
@@ -477,10 +464,7 @@ abstract class AllRequestsStateLoaded implements AllRequestsState {
 
   List<ProductModel> get recent;
   bool get isRefreshLoader;
-
-  /// Create a copy of AllRequestsState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AllRequestsStateLoadedImplCopyWith<_$AllRequestsStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

@@ -78,9 +78,6 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of SignUpState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -97,9 +94,6 @@ class __$$SignUpStateLoadingImplCopyWithImpl<$Res>
   __$$SignUpStateLoadingImplCopyWithImpl(_$SignUpStateLoadingImpl _value,
       $Res Function(_$SignUpStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of SignUpState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -208,9 +202,6 @@ class __$$SignUpStateLoadedImplCopyWithImpl<$Res>
   __$$SignUpStateLoadedImplCopyWithImpl(_$SignUpStateLoadedImpl _value,
       $Res Function(_$SignUpStateLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of SignUpState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -319,9 +310,6 @@ class __$$SignUpStateErrorImplCopyWithImpl<$Res>
   __$$SignUpStateErrorImplCopyWithImpl(_$SignUpStateErrorImpl _value,
       $Res Function(_$SignUpStateErrorImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of SignUpState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

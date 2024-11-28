@@ -110,9 +110,6 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -129,9 +126,6 @@ class __$$HomeStateInitialImplCopyWithImpl<$Res>
   __$$HomeStateInitialImplCopyWithImpl(_$HomeStateInitialImpl _value,
       $Res Function(_$HomeStateInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -273,9 +267,6 @@ class __$$HomeStateLoadingImplCopyWithImpl<$Res>
   __$$HomeStateLoadingImplCopyWithImpl(_$HomeStateLoadingImpl _value,
       $Res Function(_$HomeStateLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -422,8 +413,6 @@ class __$$HomeStatecategoryLoadingImplCopyWithImpl<$Res>
       $Res Function(_$HomeStatecategoryLoadingImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -471,9 +460,7 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_location));
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStatecategoryLoadingImplCopyWith<_$HomeStatecategoryLoadingImpl>
@@ -587,10 +574,7 @@ abstract class HomeStatecategoryLoading implements HomeState {
       _$HomeStatecategoryLoadingImpl;
 
   List<CategoryModel>? get location;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HomeStatecategoryLoadingImplCopyWith<_$HomeStatecategoryLoadingImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -618,8 +602,6 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
       _$HomeStateLoadedImpl _value, $Res Function(_$HomeStateLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -739,9 +721,7 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
       isRefreshLoader,
       const DeepCollectionEquality().hash(_services));
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStateLoadedImplCopyWith<_$HomeStateLoadedImpl> get copyWith =>
@@ -868,10 +848,7 @@ abstract class HomeStateLoaded implements HomeState {
   List<ProductModel> get recent;
   bool get isRefreshLoader;
   List<CitizenServiceModel> get services;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HomeStateLoadedImplCopyWith<_$HomeStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -893,8 +870,6 @@ class __$$HomeStateErrorImplCopyWithImpl<$Res>
       _$HomeStateErrorImpl _value, $Res Function(_$HomeStateErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -933,9 +908,7 @@ class _$HomeStateErrorImpl implements HomeStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStateErrorImplCopyWith<_$HomeStateErrorImpl> get copyWith =>
@@ -1048,10 +1021,7 @@ abstract class HomeStateError implements HomeState {
   const factory HomeStateError(final String error) = _$HomeStateErrorImpl;
 
   String get error;
-
-  /// Create a copy of HomeState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$HomeStateErrorImplCopyWith<_$HomeStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

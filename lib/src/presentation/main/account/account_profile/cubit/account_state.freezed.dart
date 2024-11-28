@@ -78,9 +78,6 @@ class _$AccountStateCopyWithImpl<$Res, $Val extends AccountState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -97,9 +94,6 @@ class __$$AccountLoadingImplCopyWithImpl<$Res>
   __$$AccountLoadingImplCopyWithImpl(
       _$AccountLoadingImpl _value, $Res Function(_$AccountLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -208,9 +202,6 @@ class __$$AccountLoadedImplCopyWithImpl<$Res>
   __$$AccountLoadedImplCopyWithImpl(
       _$AccountLoadedImpl _value, $Res Function(_$AccountLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -322,8 +313,6 @@ class __$$AccountErrorImplCopyWithImpl<$Res>
       _$AccountErrorImpl _value, $Res Function(_$AccountErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -363,9 +352,7 @@ class _$AccountErrorImpl implements AccountError {
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
@@ -444,10 +431,7 @@ abstract class AccountError implements AccountState {
   const factory AccountError(final String errorMessage) = _$AccountErrorImpl;
 
   String get errorMessage;
-
-  /// Create a copy of AccountState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

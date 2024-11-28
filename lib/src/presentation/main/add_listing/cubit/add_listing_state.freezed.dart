@@ -78,9 +78,6 @@ class _$AddListingStateCopyWithImpl<$Res, $Val extends AddListingState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -97,9 +94,6 @@ class __$$AddListingLoadingImplCopyWithImpl<$Res>
   __$$AddListingLoadingImplCopyWithImpl(_$AddListingLoadingImpl _value,
       $Res Function(_$AddListingLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -208,9 +202,6 @@ class __$$AddListingLoadedImplCopyWithImpl<$Res>
   __$$AddListingLoadedImplCopyWithImpl(_$AddListingLoadedImpl _value,
       $Res Function(_$AddListingLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -322,8 +313,6 @@ class __$$AddListingErrorImplCopyWithImpl<$Res>
       _$AddListingErrorImpl _value, $Res Function(_$AddListingErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -362,9 +351,7 @@ class _$AddListingErrorImpl implements AddListingError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AddListingErrorImplCopyWith<_$AddListingErrorImpl> get copyWith =>
@@ -444,10 +431,7 @@ abstract class AddListingError implements AddListingState {
   const factory AddListingError(final String error) = _$AddListingErrorImpl;
 
   String get error;
-
-  /// Create a copy of AddListingState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AddListingErrorImplCopyWith<_$AddListingErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

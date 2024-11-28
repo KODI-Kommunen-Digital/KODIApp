@@ -102,9 +102,6 @@ class _$AuthenticationStateCopyWithImpl<$Res, $Val extends AuthenticationState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -122,9 +119,6 @@ class __$$AuthenticationInitialImplCopyWithImpl<$Res>
   __$$AuthenticationInitialImplCopyWithImpl(_$AuthenticationInitialImpl _value,
       $Res Function(_$AuthenticationInitialImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -259,9 +253,6 @@ class __$$AuthenticationLoadingImplCopyWithImpl<$Res>
   __$$AuthenticationLoadingImplCopyWithImpl(_$AuthenticationLoadingImpl _value,
       $Res Function(_$AuthenticationLoadingImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -395,9 +386,6 @@ class __$$AuthenticationLoadedImplCopyWithImpl<$Res>
   __$$AuthenticationLoadedImplCopyWithImpl(_$AuthenticationLoadedImpl _value,
       $Res Function(_$AuthenticationLoadedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -531,9 +519,6 @@ class __$$AuthenticationFailedImplCopyWithImpl<$Res>
   __$$AuthenticationFailedImplCopyWithImpl(_$AuthenticationFailedImpl _value,
       $Res Function(_$AuthenticationFailedImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -670,9 +655,6 @@ class __$$AuthenticationLoggedInImplCopyWithImpl<$Res>
       _$AuthenticationLoggedInImpl _value,
       $Res Function(_$AuthenticationLoggedInImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -809,9 +791,6 @@ class __$$AuthenticationLoggedOutImplCopyWithImpl<$Res>
       _$AuthenticationLoggedOutImpl _value,
       $Res Function(_$AuthenticationLoggedOutImpl) _then)
       : super(_value, _then);
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -948,8 +927,6 @@ class __$$AuthenticationErrorImplCopyWithImpl<$Res>
       $Res Function(_$AuthenticationErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -989,9 +966,7 @@ class _$AuthenticationErrorImpl implements AuthenticationError {
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$AuthenticationErrorImplCopyWith<_$AuthenticationErrorImpl> get copyWith =>
@@ -1096,10 +1071,7 @@ abstract class AuthenticationError implements AuthenticationState {
       _$AuthenticationErrorImpl;
 
   String get errorMessage;
-
-  /// Create a copy of AuthenticationState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$AuthenticationErrorImplCopyWith<_$AuthenticationErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
