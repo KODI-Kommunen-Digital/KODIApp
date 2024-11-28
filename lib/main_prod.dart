@@ -5,8 +5,10 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
@@ -15,6 +17,7 @@ import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/configs/secure_storage.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
 import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
@@ -91,6 +94,13 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
         RepositoryProvider(
           create: (context) => ForumRepository(widget.prefBox),
+        ),
+        RepositoryProvider(
+          create: (context) => TrolleyMakerRepository(
+              widget.prefBox,
+              TrolleyMakerClientInitializer.get(
+                  widget.prefBox, _getTrolleyMakerTokenExpiryCallback()),
+              SecureStorage.getInstance()),
         )
       ],
       child: MultiBlocProvider(
@@ -129,7 +139,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -144,5 +155,14 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+
+  VoidCallback _getTrolleyMakerTokenExpiryCallback() {
+    return () {
+      globalNavKey.currentState?.popUntil((route) {
+        return route.settings.name == Routes.main;
+      });
+      globalNavKey.currentState?.pushNamed(Routes.trolleyMakerSignIn);
+    };
   }
 }

@@ -45,6 +45,8 @@ class Preferences {
   static const String listingDesc = "listingDesc";
   static const String selectedLocationId = 'selectedLocationId';
   static const String selectedLocationName = 'selectedLocationName';
+  static const String trolleyMakerApiToken = 'trolleyMakerApiToken';
+  static const String trolleyMakerCardName = 'trolleyMakerCardName';
 
   Preferences._(this._box);
 

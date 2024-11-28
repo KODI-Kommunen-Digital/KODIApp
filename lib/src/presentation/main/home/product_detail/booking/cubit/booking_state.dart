@@ -6,7 +6,9 @@ part 'booking_state.freezed.dart';
 class BookingState with _$BookingState {
   const factory BookingState.loading() = BookingStateLoading;
 
-  const factory BookingState.loaded(Map<String, int> availableSlots, List<String> services) = BookingStateLoaded;
+  const factory BookingState.loaded(
+          Map<String, int> availableSlots, List<String> services) =
+      BookingStateLoaded;
 
   const factory BookingState.error(String error) = BookingStateError;
 }

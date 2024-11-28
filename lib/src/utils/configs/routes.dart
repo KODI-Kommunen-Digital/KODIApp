@@ -54,6 +54,12 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/cards/trolley_maker_cards_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/my_credit/trolley_maker_my_credit_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/partner/trolley_maker_partner_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/partner_details/trolley_maker_partner_details_screen_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker_register_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
 
@@ -135,15 +141,22 @@ class Routes {
   static const String appointmentRequests = "/appointmentRequests";
   static const String wasteCalendar = "/wasteCalendar";
   static const String rsag = "/rsag";
+  static const String trolleyMakerSignIn = "/trolleyMaker";
+  static const String trolleyMakerCards = "/trolleyMakerCards";
+  static const String trolleyMakerMyCredit = "/trolleyMakerMyCredit";
+  static const String trolleyMakerPartner = "/trolleyMakerPartner";
+  static const String trolleyMakerSignUp = '/trolleyMakerSignUp';
+  static const String trolleyMakerPartnerDetails =
+      "/trolleyMakerPartnerDetails";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case main:
         return MaterialPageRoute(
-          builder: (context) {
-            return MainScreen();
-          },
-        );
+            builder: (context) {
+              return MainScreen();
+            },
+            settings: settings);
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
@@ -192,10 +205,10 @@ class Routes {
 
       case forgotPassword:
         return MaterialPageRoute(
-          builder: (context) {
-            return const ForgotPasswordScreen();
-          },
-        );
+            builder: (context) {
+              return const ForgotPasswordScreen();
+            },
+            settings: settings);
 
       case editProfile:
         return MaterialPageRoute(
@@ -549,6 +562,50 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return DiscoveryScreenDetail(arguments: arguments);
+          },
+        );
+
+      case trolleyMakerSignIn:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerSigninScreen();
+          },
+        );
+
+      case trolleyMakerCards:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerCardsScreen();
+          },
+        );
+      case trolleyMakerMyCredit:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerMyCreditScreen();
+          },
+        );
+
+      case trolleyMakerPartner:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerPartnersScreen();
+          },
+        );
+      case trolleyMakerSignUp:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerRegisterScreen();
+          },
+        );
+
+      case trolleyMakerPartnerDetails:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        var gguid = arguments["gguid"];
+        var companyName = arguments["company_name"];
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyMakerPartnerDetailsScreen(gguid, companyName);
           },
         );
 

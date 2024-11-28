@@ -19,19 +19,19 @@ class ListRepository {
 
   ListRepository(this.prefs);
 
-  static Future<List?> loadList({
-    required categoryId,
-    required type,
-    required pageNo,
-    cityId,
-    eventFilter
-  }) async {
+  static Future<List?> loadList(
+      {required categoryId,
+      required type,
+      required pageNo,
+      cityId,
+      eventFilter}) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
     if (type == "category") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo, eventFilter: eventFilter);
+      final response = await Api.requestCatList(params, cityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -53,7 +53,8 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo, eventFilter: eventFilter);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

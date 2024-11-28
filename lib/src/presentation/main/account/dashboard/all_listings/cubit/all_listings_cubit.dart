@@ -75,8 +75,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     posts = listDataList;
 
     int currentListingFilter = await getCurrentStatus();
-    emit(AllListingsState.loaded(
-        posts, currentListingFilter));
+    emit(AllListingsState.loaded(posts, currentListingFilter));
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
