@@ -587,24 +587,42 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Expanded(
-            child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: InAppWebView(
-                  initialUrlRequest: URLRequest(url: WebUri(mapLink)),
-                  onGeolocationPermissionsShowPrompt:
-                      (controller, origin) async {
-                    return GeolocationPermissionShowPromptResponse(
-                        origin: origin, allow: true, retain: true);
-                  },
-                  onPermissionRequest: (controller, request) async {
-                    return PermissionResponse(
-                        resources: request.resources,
-                        action: PermissionResponseAction.GRANT);
-                  },
-                  onWebViewCreated: (controller) {
-                    controller = controller;
-                  },
-                )),
+            child: Stack(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: InAppWebView(
+                      initialUrlRequest: URLRequest(url: WebUri(mapLink)),
+                      onGeolocationPermissionsShowPrompt:
+                          (controller, origin) async {
+                        return GeolocationPermissionShowPromptResponse(
+                            origin: origin, allow: true, retain: true);
+                      },
+                      onPermissionRequest: (controller, request) async {
+                        return PermissionResponse(
+                            resources: request.resources,
+                            action: PermissionResponseAction.GRANT);
+                      },
+                      onWebViewCreated: (controller) {
+                        controller = controller;
+                      },
+                    )),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                        onPressed: () {
+                          _requestLocationPermission();
+                        },
+                        icon: Icon(
+                          Icons.gps_fixed,
+                          size: screenAverage * 0.015,
+                          color: Colors.black,
+                        )),
+                  ],
+                ),
+              ],
+            ),
           ),
           const SizedBox(
             height: 4,
