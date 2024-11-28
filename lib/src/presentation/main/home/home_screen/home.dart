@@ -20,6 +20,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -73,6 +74,18 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
+    _requestLocationPermission();
+  }
+
+  void _requestLocationPermission() async {
+    PermissionStatus status = await Permission.location.request();
+    if (status == PermissionStatus.denied ||
+        status == PermissionStatus.permanentlyDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('geo_permission_needed'),
+            textAlign: TextAlign.center),
+      ));
+    }
   }
 
   Future<void> getIgnoreAppVersion() async {
@@ -578,7 +591,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 borderRadius: BorderRadius.circular(20),
                 child: InAppWebView(
                   initialUrlRequest: URLRequest(url: WebUri(mapLink)),
-                  onGeolocationPermissionsShowPrompt: (controller, origin) async {
+                  onGeolocationPermissionsShowPrompt:
+                      (controller, origin) async {
                     return GeolocationPermissionShowPromptResponse(
                         origin: origin, allow: true, retain: true);
                   },
