@@ -143,7 +143,7 @@ class _TrolleyMakerRegisterScreenState
           listener: (context, state) {
             state.maybeWhen(
               success: () {
-                  _showSuccessDialog();
+                _showSuccessDialog();
               },
               error: (msg) {
                 ScaffoldMessenger.of(context)
@@ -780,7 +780,10 @@ class _TrolleyMakerRegisterScreenState
             text: TextSpan(
               text: Translate.of(context)
                   .translate('term_conditions_consent_part1'),
-              style: const TextStyle(fontSize: 14),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 14),
               children: [
                 _linkTextSpan(
                     Translate.of(context)
@@ -824,7 +827,10 @@ class _TrolleyMakerRegisterScreenState
             text: TextSpan(
               text: Translate.of(context)
                   .translate('term_marketing_consent_part1'),
-              style: const TextStyle(fontSize: 14),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 14),
               children: [
                 _linkTextSpan(
                     Translate.of(context)
@@ -834,7 +840,10 @@ class _TrolleyMakerRegisterScreenState
                 TextSpan(
                   text: Translate.of(context)
                       .translate('term_marketing_consent_part3'),
-                  style: const TextStyle(fontSize: 14),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontSize: 14),
                 ),
               ],
             ),
@@ -861,7 +870,10 @@ class _TrolleyMakerRegisterScreenState
           child: RichText(
             text: TextSpan(
               text: Translate.of(context).translate('term_news_letter_consent'),
-              style: const TextStyle(fontSize: 14),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 14),
               children: const [],
             ),
           ),
@@ -890,7 +902,10 @@ class _TrolleyMakerRegisterScreenState
             text: TextSpan(
               text:
                   Translate.of(context).translate('term_generic_consent_part1'),
-              style: const TextStyle(fontSize: 14),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontSize: 14),
               children: [
                 _linkTextSpan(
                     Translate.of(context)
@@ -900,7 +915,10 @@ class _TrolleyMakerRegisterScreenState
                 TextSpan(
                   text: Translate.of(context)
                       .translate('term_generic_consent_part3'),
-                  style: const TextStyle(fontSize: 14),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontSize: 14),
                 ),
                 _linkTextSpan(
                     Translate.of(context)
