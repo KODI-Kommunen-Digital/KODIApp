@@ -29,7 +29,7 @@
             "id": 500,
             "name": "Shopping",
             "noOfSubcategories": 0,                
-            "icon": "fas fa-shopping",
+            "icon": "fas fa-cart-shopping",
             "color": "#ECFB04",
             "categoryType" : "category"
         },
