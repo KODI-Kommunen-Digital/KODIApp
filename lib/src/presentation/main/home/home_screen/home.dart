@@ -778,20 +778,18 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const NeverScrollableScrollPhysics(),
         itemBuilder: (context, index) {
           final item = recent[index];
-
-          // Check if the item is an AdDataModel
           if (item is AdDataModel) {
             return GestureDetector(
-              onTap: () {
-                // Redirect to the link associated with the ad
-                _makeAction(item.link);
-              },
+              // onTap: () {
+              //   // Redirect to the link associated with the ad
+              //   _makeAction(item.link);
+              // },
               child: Container(
-                width: double.infinity, // Stretch across the screen
+                width: double.infinity,
                 margin: const EdgeInsets.only(bottom: 16),
                 child: Image.network(
-                  "${Application.picturesURL}${item.image}", // Use the base URL
-                  fit: BoxFit.cover, // Ensure the image covers the container
+                  "${Application.picturesURL}${item.image}",
+                  fit: BoxFit.cover,
                 ),
               ),
             );
