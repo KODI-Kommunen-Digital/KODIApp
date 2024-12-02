@@ -780,10 +780,9 @@ class _HomeScreenState extends State<HomeScreen> {
           final item = recent[index];
           if (item is AdDataModel) {
             return GestureDetector(
-              // onTap: () {
-              //   // Redirect to the link associated with the ad
-              //   _makeAction(item.link);
-              // },
+              onTap: () {
+                _makeAction(item.link);
+              },
               child: Container(
                 width: double.infinity,
                 margin: const EdgeInsets.only(bottom: 16),

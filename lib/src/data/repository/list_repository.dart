@@ -745,7 +745,6 @@ class ListRepository {
 
   static Future<List<AdDataModel>> fetchAds({int? cityId}) async {
     final response = await Api.requestAds(cityId: cityId);
-    // Convert the response data into a list of AdDataModel
     return List<AdDataModel>.from(
         response.data.map((item) => AdDataModel.fromJson({
               'id': item['id'],
