@@ -90,6 +90,9 @@ class _$PostDetailStateCopyWithImpl<$Res, $Val extends PostDetailState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -106,6 +109,9 @@ class __$$PostDetailInitialImplCopyWithImpl<$Res>
   __$$PostDetailInitialImplCopyWithImpl(_$PostDetailInitialImpl _value,
       $Res Function(_$PostDetailInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -226,6 +232,9 @@ class __$$PostDetailLoadingImplCopyWithImpl<$Res>
   __$$PostDetailLoadingImplCopyWithImpl(_$PostDetailLoadingImpl _value,
       $Res Function(_$PostDetailLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -350,6 +359,8 @@ class __$$PostDetailLoadedImplCopyWithImpl<$Res>
       $Res Function(_$PostDetailLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -416,7 +427,9 @@ class _$PostDetailLoadedImpl implements PostDetailLoaded {
   int get hashCode =>
       Object.hash(runtimeType, userDetail, userImage, userId, isAdmin);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PostDetailLoadedImplCopyWith<_$PostDetailLoadedImpl> get copyWith =>
@@ -515,7 +528,10 @@ abstract class PostDetailLoaded implements PostDetailState {
   String get userImage;
   int get userId;
   bool get isAdmin;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PostDetailLoadedImplCopyWith<_$PostDetailLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -537,6 +553,8 @@ class __$$PostDetailErrorImplCopyWithImpl<$Res>
       _$PostDetailErrorImpl _value, $Res Function(_$PostDetailErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -575,7 +593,9 @@ class _$PostDetailErrorImpl implements PostDetailError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$PostDetailErrorImplCopyWith<_$PostDetailErrorImpl> get copyWith =>
@@ -667,7 +687,10 @@ abstract class PostDetailError implements PostDetailState {
   const factory PostDetailError(final String error) = _$PostDetailErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of PostDetailState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$PostDetailErrorImplCopyWith<_$PostDetailErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -8,4 +8,5 @@ class TrolleyMakerCardsState with _$TrolleyMakerCardsState {
   const factory TrolleyMakerCardsState.loading() = Loading;
   const factory TrolleyMakerCardsState.success(String cardName, List<int> cardIDs) = CardDataSuccess;
   const factory TrolleyMakerCardsState.error(String message) = LoadFailure;
+  const factory TrolleyMakerCardsState.addedNewCard(int cardNumber) = NewCardAdded;
 }

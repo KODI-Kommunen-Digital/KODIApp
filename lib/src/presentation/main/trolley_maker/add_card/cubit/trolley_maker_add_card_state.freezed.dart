@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'trolley_maker_partner_details_state.dart';
+part of 'trolley_maker_add_card_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -15,13 +15,12 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$TrolleyMakerPartnerDetailsState {
+mixin _$TrolleyMakerAddCardState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)
-        success,
+    required TResult Function(String cardNumber) success,
     required TResult Function(String message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -29,7 +28,7 @@ mixin _$TrolleyMakerPartnerDetailsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult? Function(String cardNumber)? success,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -37,7 +36,7 @@ mixin _$TrolleyMakerPartnerDetailsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult Function(String cardNumber)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) =>
@@ -46,50 +45,48 @@ mixin _$TrolleyMakerPartnerDetailsState {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
-    required TResult Function(PartnerDetailsSuccess value) success,
-    required TResult Function(LoadFailure value) error,
+    required TResult Function(AddCardSuccess value) success,
+    required TResult Function(Error value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
-    TResult? Function(PartnerDetailsSuccess value)? success,
-    TResult? Function(LoadFailure value)? error,
+    TResult? Function(AddCardSuccess value)? success,
+    TResult? Function(Error value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Loading value)? loading,
-    TResult Function(PartnerDetailsSuccess value)? success,
-    TResult Function(LoadFailure value)? error,
+    TResult Function(AddCardSuccess value)? success,
+    TResult Function(Error value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $TrolleyMakerPartnerDetailsStateCopyWith<$Res> {
-  factory $TrolleyMakerPartnerDetailsStateCopyWith(
-          TrolleyMakerPartnerDetailsState value,
-          $Res Function(TrolleyMakerPartnerDetailsState) then) =
-      _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res,
-          TrolleyMakerPartnerDetailsState>;
+abstract class $TrolleyMakerAddCardStateCopyWith<$Res> {
+  factory $TrolleyMakerAddCardStateCopyWith(TrolleyMakerAddCardState value,
+          $Res Function(TrolleyMakerAddCardState) then) =
+      _$TrolleyMakerAddCardStateCopyWithImpl<$Res, TrolleyMakerAddCardState>;
 }
 
 /// @nodoc
-class _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res,
-        $Val extends TrolleyMakerPartnerDetailsState>
-    implements $TrolleyMakerPartnerDetailsStateCopyWith<$Res> {
-  _$TrolleyMakerPartnerDetailsStateCopyWithImpl(this._value, this._then);
+class _$TrolleyMakerAddCardStateCopyWithImpl<$Res,
+        $Val extends TrolleyMakerAddCardState>
+    implements $TrolleyMakerAddCardStateCopyWith<$Res> {
+  _$TrolleyMakerAddCardStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -102,13 +99,13 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$TrolleyMakerAddCardStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -119,7 +116,7 @@ class _$InitialImpl implements Initial {
 
   @override
   String toString() {
-    return 'TrolleyMakerPartnerDetailsState.initial()';
+    return 'TrolleyMakerAddCardState.initial()';
   }
 
   @override
@@ -136,8 +133,7 @@ class _$InitialImpl implements Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)
-        success,
+    required TResult Function(String cardNumber) success,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -148,7 +144,7 @@ class _$InitialImpl implements Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult? Function(String cardNumber)? success,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -159,7 +155,7 @@ class _$InitialImpl implements Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult Function(String cardNumber)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -174,8 +170,8 @@ class _$InitialImpl implements Initial {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
-    required TResult Function(PartnerDetailsSuccess value) success,
-    required TResult Function(LoadFailure value) error,
+    required TResult Function(AddCardSuccess value) success,
+    required TResult Function(Error value) error,
   }) {
     return initial(this);
   }
@@ -185,8 +181,8 @@ class _$InitialImpl implements Initial {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
-    TResult? Function(PartnerDetailsSuccess value)? success,
-    TResult? Function(LoadFailure value)? error,
+    TResult? Function(AddCardSuccess value)? success,
+    TResult? Function(Error value)? error,
   }) {
     return initial?.call(this);
   }
@@ -196,8 +192,8 @@ class _$InitialImpl implements Initial {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Loading value)? loading,
-    TResult Function(PartnerDetailsSuccess value)? success,
-    TResult Function(LoadFailure value)? error,
+    TResult Function(AddCardSuccess value)? success,
+    TResult Function(Error value)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -207,7 +203,7 @@ class _$InitialImpl implements Initial {
   }
 }
 
-abstract class Initial implements TrolleyMakerPartnerDetailsState {
+abstract class Initial implements TrolleyMakerAddCardState {
   const factory Initial() = _$InitialImpl;
 }
 
@@ -220,13 +216,13 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$TrolleyMakerAddCardStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -237,7 +233,7 @@ class _$LoadingImpl implements Loading {
 
   @override
   String toString() {
-    return 'TrolleyMakerPartnerDetailsState.loading()';
+    return 'TrolleyMakerAddCardState.loading()';
   }
 
   @override
@@ -254,8 +250,7 @@ class _$LoadingImpl implements Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)
-        success,
+    required TResult Function(String cardNumber) success,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -266,7 +261,7 @@ class _$LoadingImpl implements Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult? Function(String cardNumber)? success,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -277,7 +272,7 @@ class _$LoadingImpl implements Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult Function(String cardNumber)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -292,8 +287,8 @@ class _$LoadingImpl implements Loading {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
-    required TResult Function(PartnerDetailsSuccess value) success,
-    required TResult Function(LoadFailure value) error,
+    required TResult Function(AddCardSuccess value) success,
+    required TResult Function(Error value) error,
   }) {
     return loading(this);
   }
@@ -303,8 +298,8 @@ class _$LoadingImpl implements Loading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
-    TResult? Function(PartnerDetailsSuccess value)? success,
-    TResult? Function(LoadFailure value)? error,
+    TResult? Function(AddCardSuccess value)? success,
+    TResult? Function(Error value)? error,
   }) {
     return loading?.call(this);
   }
@@ -314,8 +309,8 @@ class _$LoadingImpl implements Loading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Loading value)? loading,
-    TResult Function(PartnerDetailsSuccess value)? success,
-    TResult Function(LoadFailure value)? error,
+    TResult Function(AddCardSuccess value)? success,
+    TResult Function(Error value)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -325,89 +320,86 @@ class _$LoadingImpl implements Loading {
   }
 }
 
-abstract class Loading implements TrolleyMakerPartnerDetailsState {
+abstract class Loading implements TrolleyMakerAddCardState {
   const factory Loading() = _$LoadingImpl;
 }
 
 /// @nodoc
-abstract class _$$PartnerDetailsSuccessImplCopyWith<$Res> {
-  factory _$$PartnerDetailsSuccessImplCopyWith(
-          _$PartnerDetailsSuccessImpl value,
-          $Res Function(_$PartnerDetailsSuccessImpl) then) =
-      __$$PartnerDetailsSuccessImplCopyWithImpl<$Res>;
+abstract class _$$AddCardSuccessImplCopyWith<$Res> {
+  factory _$$AddCardSuccessImplCopyWith(_$AddCardSuccessImpl value,
+          $Res Function(_$AddCardSuccessImpl) then) =
+      __$$AddCardSuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({TrolleyMakerPartnerDetailsInfo companyInfo});
+  $Res call({String cardNumber});
 }
 
 /// @nodoc
-class __$$PartnerDetailsSuccessImplCopyWithImpl<$Res>
-    extends _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res,
-        _$PartnerDetailsSuccessImpl>
-    implements _$$PartnerDetailsSuccessImplCopyWith<$Res> {
-  __$$PartnerDetailsSuccessImplCopyWithImpl(_$PartnerDetailsSuccessImpl _value,
-      $Res Function(_$PartnerDetailsSuccessImpl) _then)
+class __$$AddCardSuccessImplCopyWithImpl<$Res>
+    extends _$TrolleyMakerAddCardStateCopyWithImpl<$Res, _$AddCardSuccessImpl>
+    implements _$$AddCardSuccessImplCopyWith<$Res> {
+  __$$AddCardSuccessImplCopyWithImpl(
+      _$AddCardSuccessImpl _value, $Res Function(_$AddCardSuccessImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? companyInfo = null,
+    Object? cardNumber = null,
   }) {
-    return _then(_$PartnerDetailsSuccessImpl(
-      null == companyInfo
-          ? _value.companyInfo
-          : companyInfo // ignore: cast_nullable_to_non_nullable
-              as TrolleyMakerPartnerDetailsInfo,
+    return _then(_$AddCardSuccessImpl(
+      null == cardNumber
+          ? _value.cardNumber
+          : cardNumber // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
 
 /// @nodoc
 
-class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
-  const _$PartnerDetailsSuccessImpl(this.companyInfo);
+class _$AddCardSuccessImpl implements AddCardSuccess {
+  const _$AddCardSuccessImpl(this.cardNumber);
 
   @override
-  final TrolleyMakerPartnerDetailsInfo companyInfo;
+  final String cardNumber;
 
   @override
   String toString() {
-    return 'TrolleyMakerPartnerDetailsState.success(companyInfo: $companyInfo)';
+    return 'TrolleyMakerAddCardState.success(cardNumber: $cardNumber)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$PartnerDetailsSuccessImpl &&
-            (identical(other.companyInfo, companyInfo) ||
-                other.companyInfo == companyInfo));
+            other is _$AddCardSuccessImpl &&
+            (identical(other.cardNumber, cardNumber) ||
+                other.cardNumber == cardNumber));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, companyInfo);
+  int get hashCode => Object.hash(runtimeType, cardNumber);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$PartnerDetailsSuccessImplCopyWith<_$PartnerDetailsSuccessImpl>
-      get copyWith => __$$PartnerDetailsSuccessImplCopyWithImpl<
-          _$PartnerDetailsSuccessImpl>(this, _$identity);
+  _$$AddCardSuccessImplCopyWith<_$AddCardSuccessImpl> get copyWith =>
+      __$$AddCardSuccessImplCopyWithImpl<_$AddCardSuccessImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)
-        success,
+    required TResult Function(String cardNumber) success,
     required TResult Function(String message) error,
   }) {
-    return success(companyInfo);
+    return success(cardNumber);
   }
 
   @override
@@ -415,10 +407,10 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult? Function(String cardNumber)? success,
     TResult? Function(String message)? error,
   }) {
-    return success?.call(companyInfo);
+    return success?.call(cardNumber);
   }
 
   @override
@@ -426,12 +418,12 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult Function(String cardNumber)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
-      return success(companyInfo);
+      return success(cardNumber);
     }
     return orElse();
   }
@@ -441,8 +433,8 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
-    required TResult Function(PartnerDetailsSuccess value) success,
-    required TResult Function(LoadFailure value) error,
+    required TResult Function(AddCardSuccess value) success,
+    required TResult Function(Error value) error,
   }) {
     return success(this);
   }
@@ -452,8 +444,8 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
-    TResult? Function(PartnerDetailsSuccess value)? success,
-    TResult? Function(LoadFailure value)? error,
+    TResult? Function(AddCardSuccess value)? success,
+    TResult? Function(Error value)? error,
   }) {
     return success?.call(this);
   }
@@ -463,8 +455,8 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Loading value)? loading,
-    TResult Function(PartnerDetailsSuccess value)? success,
-    TResult Function(LoadFailure value)? error,
+    TResult Function(AddCardSuccess value)? success,
+    TResult Function(Error value)? error,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -474,46 +466,43 @@ class _$PartnerDetailsSuccessImpl implements PartnerDetailsSuccess {
   }
 }
 
-abstract class PartnerDetailsSuccess
-    implements TrolleyMakerPartnerDetailsState {
-  const factory PartnerDetailsSuccess(
-          final TrolleyMakerPartnerDetailsInfo companyInfo) =
-      _$PartnerDetailsSuccessImpl;
+abstract class AddCardSuccess implements TrolleyMakerAddCardState {
+  const factory AddCardSuccess(final String cardNumber) = _$AddCardSuccessImpl;
 
-  TrolleyMakerPartnerDetailsInfo get companyInfo;
+  String get cardNumber;
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$PartnerDetailsSuccessImplCopyWith<_$PartnerDetailsSuccessImpl>
-      get copyWith => throw _privateConstructorUsedError;
+  _$$AddCardSuccessImplCopyWith<_$AddCardSuccessImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$LoadFailureImplCopyWith<$Res> {
-  factory _$$LoadFailureImplCopyWith(
-          _$LoadFailureImpl value, $Res Function(_$LoadFailureImpl) then) =
-      __$$LoadFailureImplCopyWithImpl<$Res>;
+abstract class _$$ErrorImplCopyWith<$Res> {
+  factory _$$ErrorImplCopyWith(
+          _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
+      __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String message});
 }
 
 /// @nodoc
-class __$$LoadFailureImplCopyWithImpl<$Res>
-    extends _$TrolleyMakerPartnerDetailsStateCopyWithImpl<$Res,
-        _$LoadFailureImpl> implements _$$LoadFailureImplCopyWith<$Res> {
-  __$$LoadFailureImplCopyWithImpl(
-      _$LoadFailureImpl _value, $Res Function(_$LoadFailureImpl) _then)
+class __$$ErrorImplCopyWithImpl<$Res>
+    extends _$TrolleyMakerAddCardStateCopyWithImpl<$Res, _$ErrorImpl>
+    implements _$$ErrorImplCopyWith<$Res> {
+  __$$ErrorImplCopyWithImpl(
+      _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? message = null,
   }) {
-    return _then(_$LoadFailureImpl(
+    return _then(_$ErrorImpl(
       null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
@@ -524,43 +513,42 @@ class __$$LoadFailureImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$LoadFailureImpl implements LoadFailure {
-  const _$LoadFailureImpl(this.message);
+class _$ErrorImpl implements Error {
+  const _$ErrorImpl(this.message);
 
   @override
   final String message;
 
   @override
   String toString() {
-    return 'TrolleyMakerPartnerDetailsState.error(message: $message)';
+    return 'TrolleyMakerAddCardState.error(message: $message)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$LoadFailureImpl &&
+            other is _$ErrorImpl &&
             (identical(other.message, message) || other.message == message));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
-  _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
-      __$$LoadFailureImplCopyWithImpl<_$LoadFailureImpl>(this, _$identity);
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
+      __$$ErrorImplCopyWithImpl<_$ErrorImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)
-        success,
+    required TResult Function(String cardNumber) success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -571,7 +559,7 @@ class _$LoadFailureImpl implements LoadFailure {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult? Function(String cardNumber)? success,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -582,7 +570,7 @@ class _$LoadFailureImpl implements LoadFailure {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(TrolleyMakerPartnerDetailsInfo companyInfo)? success,
+    TResult Function(String cardNumber)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -597,8 +585,8 @@ class _$LoadFailureImpl implements LoadFailure {
   TResult map<TResult extends Object?>({
     required TResult Function(Initial value) initial,
     required TResult Function(Loading value) loading,
-    required TResult Function(PartnerDetailsSuccess value) success,
-    required TResult Function(LoadFailure value) error,
+    required TResult Function(AddCardSuccess value) success,
+    required TResult Function(Error value) error,
   }) {
     return error(this);
   }
@@ -608,8 +596,8 @@ class _$LoadFailureImpl implements LoadFailure {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(Initial value)? initial,
     TResult? Function(Loading value)? loading,
-    TResult? Function(PartnerDetailsSuccess value)? success,
-    TResult? Function(LoadFailure value)? error,
+    TResult? Function(AddCardSuccess value)? success,
+    TResult? Function(Error value)? error,
   }) {
     return error?.call(this);
   }
@@ -619,8 +607,8 @@ class _$LoadFailureImpl implements LoadFailure {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(Initial value)? initial,
     TResult Function(Loading value)? loading,
-    TResult Function(PartnerDetailsSuccess value)? success,
-    TResult Function(LoadFailure value)? error,
+    TResult Function(AddCardSuccess value)? success,
+    TResult Function(Error value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -630,14 +618,14 @@ class _$LoadFailureImpl implements LoadFailure {
   }
 }
 
-abstract class LoadFailure implements TrolleyMakerPartnerDetailsState {
-  const factory LoadFailure(final String message) = _$LoadFailureImpl;
+abstract class Error implements TrolleyMakerAddCardState {
+  const factory Error(final String message) = _$ErrorImpl;
 
   String get message;
 
-  /// Create a copy of TrolleyMakerPartnerDetailsState
+  /// Create a copy of TrolleyMakerAddCardState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
+  _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

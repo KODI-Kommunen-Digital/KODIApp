@@ -22,6 +22,7 @@ mixin _$TrolleyMakerCardsState {
     required TResult Function() loading,
     required TResult Function(String cardName, List<int> cardIDs) success,
     required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -30,6 +31,7 @@ mixin _$TrolleyMakerCardsState {
     TResult? Function()? loading,
     TResult? Function(String cardName, List<int> cardIDs)? success,
     TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -38,6 +40,7 @@ mixin _$TrolleyMakerCardsState {
     TResult Function()? loading,
     TResult Function(String cardName, List<int> cardIDs)? success,
     TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -47,6 +50,7 @@ mixin _$TrolleyMakerCardsState {
     required TResult Function(Loading value) loading,
     required TResult Function(CardDataSuccess value) success,
     required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -55,6 +59,7 @@ mixin _$TrolleyMakerCardsState {
     TResult? Function(Loading value)? loading,
     TResult? Function(CardDataSuccess value)? success,
     TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -63,6 +68,7 @@ mixin _$TrolleyMakerCardsState {
     TResult Function(Loading value)? loading,
     TResult Function(CardDataSuccess value)? success,
     TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -85,6 +91,9 @@ class _$TrolleyMakerCardsStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -101,6 +110,9 @@ class __$$InitialImplCopyWithImpl<$Res>
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -129,6 +141,7 @@ class _$InitialImpl implements Initial {
     required TResult Function() loading,
     required TResult Function(String cardName, List<int> cardIDs) success,
     required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
   }) {
     return initial();
   }
@@ -140,6 +153,7 @@ class _$InitialImpl implements Initial {
     TResult? Function()? loading,
     TResult? Function(String cardName, List<int> cardIDs)? success,
     TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
   }) {
     return initial?.call();
   }
@@ -151,6 +165,7 @@ class _$InitialImpl implements Initial {
     TResult Function()? loading,
     TResult Function(String cardName, List<int> cardIDs)? success,
     TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -166,6 +181,7 @@ class _$InitialImpl implements Initial {
     required TResult Function(Loading value) loading,
     required TResult Function(CardDataSuccess value) success,
     required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
   }) {
     return initial(this);
   }
@@ -177,6 +193,7 @@ class _$InitialImpl implements Initial {
     TResult? Function(Loading value)? loading,
     TResult? Function(CardDataSuccess value)? success,
     TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
   }) {
     return initial?.call(this);
   }
@@ -188,6 +205,7 @@ class _$InitialImpl implements Initial {
     TResult Function(Loading value)? loading,
     TResult Function(CardDataSuccess value)? success,
     TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -215,6 +233,9 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -243,6 +264,7 @@ class _$LoadingImpl implements Loading {
     required TResult Function() loading,
     required TResult Function(String cardName, List<int> cardIDs) success,
     required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
   }) {
     return loading();
   }
@@ -254,6 +276,7 @@ class _$LoadingImpl implements Loading {
     TResult? Function()? loading,
     TResult? Function(String cardName, List<int> cardIDs)? success,
     TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
   }) {
     return loading?.call();
   }
@@ -265,6 +288,7 @@ class _$LoadingImpl implements Loading {
     TResult Function()? loading,
     TResult Function(String cardName, List<int> cardIDs)? success,
     TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -280,6 +304,7 @@ class _$LoadingImpl implements Loading {
     required TResult Function(Loading value) loading,
     required TResult Function(CardDataSuccess value) success,
     required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
   }) {
     return loading(this);
   }
@@ -291,6 +316,7 @@ class _$LoadingImpl implements Loading {
     TResult? Function(Loading value)? loading,
     TResult? Function(CardDataSuccess value)? success,
     TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
   }) {
     return loading?.call(this);
   }
@@ -302,6 +328,7 @@ class _$LoadingImpl implements Loading {
     TResult Function(Loading value)? loading,
     TResult Function(CardDataSuccess value)? success,
     TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -332,6 +359,8 @@ class __$$CardDataSuccessImplCopyWithImpl<$Res>
       _$CardDataSuccessImpl _value, $Res Function(_$CardDataSuccessImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -386,7 +415,9 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
   int get hashCode => Object.hash(
       runtimeType, cardName, const DeepCollectionEquality().hash(_cardIDs));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$CardDataSuccessImplCopyWith<_$CardDataSuccessImpl> get copyWith =>
@@ -400,6 +431,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     required TResult Function() loading,
     required TResult Function(String cardName, List<int> cardIDs) success,
     required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
   }) {
     return success(cardName, cardIDs);
   }
@@ -411,6 +443,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     TResult? Function()? loading,
     TResult? Function(String cardName, List<int> cardIDs)? success,
     TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
   }) {
     return success?.call(cardName, cardIDs);
   }
@@ -422,6 +455,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     TResult Function()? loading,
     TResult Function(String cardName, List<int> cardIDs)? success,
     TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -437,6 +471,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     required TResult Function(Loading value) loading,
     required TResult Function(CardDataSuccess value) success,
     required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
   }) {
     return success(this);
   }
@@ -448,6 +483,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     TResult? Function(Loading value)? loading,
     TResult? Function(CardDataSuccess value)? success,
     TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
   }) {
     return success?.call(this);
   }
@@ -459,6 +495,7 @@ class _$CardDataSuccessImpl implements CardDataSuccess {
     TResult Function(Loading value)? loading,
     TResult Function(CardDataSuccess value)? success,
     TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
     required TResult orElse(),
   }) {
     if (success != null) {
@@ -474,7 +511,10 @@ abstract class CardDataSuccess implements TrolleyMakerCardsState {
 
   String get cardName;
   List<int> get cardIDs;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CardDataSuccessImplCopyWith<_$CardDataSuccessImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -496,6 +536,8 @@ class __$$LoadFailureImplCopyWithImpl<$Res>
       _$LoadFailureImpl _value, $Res Function(_$LoadFailureImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -534,7 +576,9 @@ class _$LoadFailureImpl implements LoadFailure {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
@@ -547,6 +591,7 @@ class _$LoadFailureImpl implements LoadFailure {
     required TResult Function() loading,
     required TResult Function(String cardName, List<int> cardIDs) success,
     required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
   }) {
     return error(message);
   }
@@ -558,6 +603,7 @@ class _$LoadFailureImpl implements LoadFailure {
     TResult? Function()? loading,
     TResult? Function(String cardName, List<int> cardIDs)? success,
     TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
   }) {
     return error?.call(message);
   }
@@ -569,6 +615,7 @@ class _$LoadFailureImpl implements LoadFailure {
     TResult Function()? loading,
     TResult Function(String cardName, List<int> cardIDs)? success,
     TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -584,6 +631,7 @@ class _$LoadFailureImpl implements LoadFailure {
     required TResult Function(Loading value) loading,
     required TResult Function(CardDataSuccess value) success,
     required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
   }) {
     return error(this);
   }
@@ -595,6 +643,7 @@ class _$LoadFailureImpl implements LoadFailure {
     TResult? Function(Loading value)? loading,
     TResult? Function(CardDataSuccess value)? success,
     TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
   }) {
     return error?.call(this);
   }
@@ -606,6 +655,7 @@ class _$LoadFailureImpl implements LoadFailure {
     TResult Function(Loading value)? loading,
     TResult Function(CardDataSuccess value)? success,
     TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -619,7 +669,169 @@ abstract class LoadFailure implements TrolleyMakerCardsState {
   const factory LoadFailure(final String message) = _$LoadFailureImpl;
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoadFailureImplCopyWith<_$LoadFailureImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$NewCardAddedImplCopyWith<$Res> {
+  factory _$$NewCardAddedImplCopyWith(
+          _$NewCardAddedImpl value, $Res Function(_$NewCardAddedImpl) then) =
+      __$$NewCardAddedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({int cardNumber});
+}
+
+/// @nodoc
+class __$$NewCardAddedImplCopyWithImpl<$Res>
+    extends _$TrolleyMakerCardsStateCopyWithImpl<$Res, _$NewCardAddedImpl>
+    implements _$$NewCardAddedImplCopyWith<$Res> {
+  __$$NewCardAddedImplCopyWithImpl(
+      _$NewCardAddedImpl _value, $Res Function(_$NewCardAddedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? cardNumber = null,
+  }) {
+    return _then(_$NewCardAddedImpl(
+      null == cardNumber
+          ? _value.cardNumber
+          : cardNumber // ignore: cast_nullable_to_non_nullable
+              as int,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$NewCardAddedImpl implements NewCardAdded {
+  const _$NewCardAddedImpl(this.cardNumber);
+
+  @override
+  final int cardNumber;
+
+  @override
+  String toString() {
+    return 'TrolleyMakerCardsState.addedNewCard(cardNumber: $cardNumber)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$NewCardAddedImpl &&
+            (identical(other.cardNumber, cardNumber) ||
+                other.cardNumber == cardNumber));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, cardNumber);
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$NewCardAddedImplCopyWith<_$NewCardAddedImpl> get copyWith =>
+      __$$NewCardAddedImplCopyWithImpl<_$NewCardAddedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(String cardName, List<int> cardIDs) success,
+    required TResult Function(String message) error,
+    required TResult Function(int cardNumber) addedNewCard,
+  }) {
+    return addedNewCard(cardNumber);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(String cardName, List<int> cardIDs)? success,
+    TResult? Function(String message)? error,
+    TResult? Function(int cardNumber)? addedNewCard,
+  }) {
+    return addedNewCard?.call(cardNumber);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(String cardName, List<int> cardIDs)? success,
+    TResult Function(String message)? error,
+    TResult Function(int cardNumber)? addedNewCard,
+    required TResult orElse(),
+  }) {
+    if (addedNewCard != null) {
+      return addedNewCard(cardNumber);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(Initial value) initial,
+    required TResult Function(Loading value) loading,
+    required TResult Function(CardDataSuccess value) success,
+    required TResult Function(LoadFailure value) error,
+    required TResult Function(NewCardAdded value) addedNewCard,
+  }) {
+    return addedNewCard(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(Initial value)? initial,
+    TResult? Function(Loading value)? loading,
+    TResult? Function(CardDataSuccess value)? success,
+    TResult? Function(LoadFailure value)? error,
+    TResult? Function(NewCardAdded value)? addedNewCard,
+  }) {
+    return addedNewCard?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(Initial value)? initial,
+    TResult Function(Loading value)? loading,
+    TResult Function(CardDataSuccess value)? success,
+    TResult Function(LoadFailure value)? error,
+    TResult Function(NewCardAdded value)? addedNewCard,
+    required TResult orElse(),
+  }) {
+    if (addedNewCard != null) {
+      return addedNewCard(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class NewCardAdded implements TrolleyMakerCardsState {
+  const factory NewCardAdded(final int cardNumber) = _$NewCardAddedImpl;
+
+  int get cardNumber;
+
+  /// Create a copy of TrolleyMakerCardsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$NewCardAddedImplCopyWith<_$NewCardAddedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
