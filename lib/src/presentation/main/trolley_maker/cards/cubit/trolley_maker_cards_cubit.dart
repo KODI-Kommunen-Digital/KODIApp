@@ -23,4 +23,12 @@ class TrolleyMakerCardsCubit extends Cubit<TrolleyMakerCardsState> {
           "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut."));
     }
   }
+
+  Future<void> addedNewCard(String cardNumber) async {
+    try {
+      final intCardNumber = int.parse(cardNumber);
+      emit(NewCardAdded(intCardNumber));
+    // ignore: empty_catches
+    } catch (e) {}
+  }
 }

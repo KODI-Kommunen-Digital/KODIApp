@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/presentation/cubit/authentication/authentication_cubit.dart';
 import 'package:heidi/src/presentation/cubit/user/user_cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart
 import 'package:heidi/src/presentation/main/login/forgot_password/cubit/forgot_password_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/cards/cubit/trolley_maker_cards_cubit.dart';
 import 'package:heidi/src/presentation/main/wishlist/cubit/cubit.dart';
 
 import 'bloc.dart';
@@ -114,6 +116,10 @@ class AppBloc {
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,
     // ),
+    BlocProvider<TrolleyMakerCardsCubit>(
+      create: (context) =>
+          TrolleyMakerCardsCubit(context.read<TrolleyMakerRepository>()),
+    ),
   ];
 
   static void dispose() {

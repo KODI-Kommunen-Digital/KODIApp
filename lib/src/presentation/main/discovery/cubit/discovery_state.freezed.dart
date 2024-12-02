@@ -90,6 +90,9 @@ class _$DiscoveryStateCopyWithImpl<$Res, $Val extends DiscoveryState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -107,6 +110,9 @@ class __$$DiscoveryStateInitialImplCopyWithImpl<$Res>
   __$$DiscoveryStateInitialImplCopyWithImpl(_$DiscoveryStateInitialImpl _value,
       $Res Function(_$DiscoveryStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -229,6 +235,9 @@ class __$$DiscoveryStateLoadingImplCopyWithImpl<$Res>
   __$$DiscoveryStateLoadingImplCopyWithImpl(_$DiscoveryStateLoadingImpl _value,
       $Res Function(_$DiscoveryStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -353,6 +362,8 @@ class __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$DiscoveryStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -398,7 +409,9 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoveryStateLoadedImplCopyWith<_$DiscoveryStateLoadedImpl>
@@ -492,7 +505,10 @@ abstract class DiscoveryStateLoaded implements DiscoveryState {
       _$DiscoveryStateLoadedImpl;
 
   List<CitizenServiceModel> get list;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiscoveryStateLoadedImplCopyWith<_$DiscoveryStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -515,6 +531,8 @@ class __$$DiscoveryStateUpdatedImplCopyWithImpl<$Res>
       $Res Function(_$DiscoveryStateUpdatedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -560,7 +578,9 @@ class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoveryStateUpdatedImplCopyWith<_$DiscoveryStateUpdatedImpl>
@@ -653,7 +673,10 @@ abstract class DiscoveryStateUpdated implements DiscoveryState {
       _$DiscoveryStateUpdatedImpl;
 
   List<CategoryModel> get list;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiscoveryStateUpdatedImplCopyWith<_$DiscoveryStateUpdatedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -675,6 +698,8 @@ class __$$DiscoveryStateErrorImplCopyWithImpl<$Res>
       $Res Function(_$DiscoveryStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -713,7 +738,9 @@ class _$DiscoveryStateErrorImpl implements DiscoveryStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$DiscoveryStateErrorImplCopyWith<_$DiscoveryStateErrorImpl> get copyWith =>
@@ -806,7 +833,10 @@ abstract class DiscoveryStateError implements DiscoveryState {
       _$DiscoveryStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of DiscoveryState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$DiscoveryStateErrorImplCopyWith<_$DiscoveryStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

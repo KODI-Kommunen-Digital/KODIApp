@@ -78,6 +78,9 @@ class _$AddPostStateCopyWithImpl<$Res, $Val extends AddPostState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -94,6 +97,9 @@ class __$$AddPostLoadingImplCopyWithImpl<$Res>
   __$$AddPostLoadingImplCopyWithImpl(
       _$AddPostLoadingImpl _value, $Res Function(_$AddPostLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -202,6 +208,9 @@ class __$$AddPostLoadedImplCopyWithImpl<$Res>
   __$$AddPostLoadedImplCopyWithImpl(
       _$AddPostLoadedImpl _value, $Res Function(_$AddPostLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -313,6 +322,8 @@ class __$$AddPostErrorImplCopyWithImpl<$Res>
       _$AddPostErrorImpl _value, $Res Function(_$AddPostErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -351,7 +362,9 @@ class _$AddPostErrorImpl implements AddPostError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddPostErrorImplCopyWith<_$AddPostErrorImpl> get copyWith =>
@@ -430,7 +443,10 @@ abstract class AddPostError implements AddPostState {
   const factory AddPostError(final String error) = _$AddPostErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddPostState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddPostErrorImplCopyWith<_$AddPostErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

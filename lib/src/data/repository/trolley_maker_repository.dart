@@ -4,6 +4,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:heidi/src/data/model/model_trolley_maker_add_card_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transaction_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_error_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_request.dart';
@@ -206,6 +207,47 @@ class TrolleyMakerRepository {
       getPartnerDetails(String gguid) async {
     try {
       final result = await api.getPartnerDetails(gguid);
+      return Right(result);
+    } on DioException catch (exception) {
+      try {
+        final responseMap =
+            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+        return Left(errorResponse);
+      } catch (error, stackTrace) {
+        if (kDebugMode) {
+          print('Error: $error');
+          print('Stack trace: $stackTrace');
+        }
+        return Left(TrolleyMakerErrorResponse.unknownError());
+      }
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
+      return Left(TrolleyMakerErrorResponse.unknownError());
+    }
+  }
+
+  Future<Either<TrolleyMakerErrorResponse, dynamic>> addCard(
+      String cardNumber, String productionNumber, int cardIDToLock) async {
+    try {
+      final request = TrolleyMakerAddCardRequest(
+          newCardToAdd: cardNumber,
+          newCardProductionNumber: productionNumber,
+          cardIDToLock: cardIDToLock);
+      final result = await api.addCard(request);
+      final cardIds = await getCachedCards();
+      if (cardIds != null) {
+        try {
+          final intCardNumber = int.parse(cardNumber);
+          cardIds.add(intCardNumber);
+          await secureStorage.saveIntList(
+              SecureStorage.keyCardList, cardIds);
+        // ignore: empty_catches
+        } catch (e) {}
+      }
       return Right(result);
     } on DioException catch (exception) {
       try {
