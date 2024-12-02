@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'dart:io';
 
 class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
@@ -19,7 +20,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
       children: [
         SizedBox(
           width: double.infinity,
-          height: double.infinity,
+          height: expandedHeight - shrinkOffset,
           child: CachedNetworkImage(
             imageUrl: "${Application.picturesURL}admin/Homepage1.png",
             fit: BoxFit.cover,
@@ -54,6 +55,16 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
             ),
           ),
         ),
+        if (Platform.isAndroid)
+          Positioned(
+            top: expandedHeight - shrinkOffset + 20,
+            left: 0,
+            right: 0,
+            child: Container(
+              height: 20,
+              color: Colors.transparent,
+            ),
+          ),
       ],
     );
   }

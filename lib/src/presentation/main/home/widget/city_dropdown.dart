@@ -31,7 +31,9 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
 
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(left: 10, right: 5, bottom: 8),
+        padding: Platform.isIOS
+            ? const EdgeInsets.only(left: 10, right: 5, bottom: 8)
+            : const EdgeInsets.only(left: 10, right: 5, bottom: 8, top: 26),
         child: Card(
           margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(

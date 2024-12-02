@@ -23,74 +23,88 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic selectedCity;
   bool calledExternally = false;
   bool doesScroll = false;
+  bool _isLoading = false; // Flag to track loading state
 
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    if (!await hasInternet()) {
-      emit(const HomeState.error("no_internet"));
-    }
-    final cityRequestResponse = await Api.requestCities();
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    if (!calledExternally && !isRefreshLoader) {
-      await AppBloc.discoveryCubit.onLoad();
+    if (_isLoading) {
+      return; // Prevent duplicate calls
     }
 
-    if (!isRefreshLoader) {
-      emit(HomeState.categoryLoading(location));
-    }
-
-    final categoryRequestResponse = await Api.requestHomeCategory();
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-    selectedCity = await checkSavedCity(location);
-    if (selectedCity != null) {
-      final listingsRequestResponse =
-          await Api.requestLocList(selectedCity.id, 1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    } else {
-      final listingsRequestResponse = await Api.requestRecentListings(1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    }
-
-    // Fetch ads
-    List<AdDataModel> ads = await ListRepository.fetchAds();
-
-    // Combine recent listings with ads
-    List<dynamic> combinedRecent = [];
-    for (int i = 0; i < recent.length; i++) {
-      combinedRecent.add(recent[i]); // Add the product to the combined list
-
-      // Append the ad after every 3rd product
-      if ((i + 1) % 3 == 0 && ads.isNotEmpty) {
-        combinedRecent.add(ads[0]); // Add the ad model
-        ads.removeAt(0); // Remove the ad after inserting
+    _isLoading = true; // Set the flag to true
+    try {
+      if (!await hasInternet()) {
+        emit(const HomeState.error("no_internet"));
+        return;
       }
+
+      final cityRequestResponse = await Api.requestCities();
+      location = List.from(cityRequestResponse.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+
+      if (!calledExternally && !isRefreshLoader) {
+        await AppBloc.discoveryCubit.onLoad();
+      }
+
+      if (!isRefreshLoader) {
+        emit(HomeState.categoryLoading(location));
+      }
+
+      final categoryRequestResponse = await Api.requestHomeCategory();
+      category = List.from(categoryRequestResponse.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+      selectedCity = await checkSavedCity(location);
+      if (selectedCity != null) {
+        final listingsRequestResponse =
+            await Api.requestLocList(selectedCity.id, 1);
+        recent = List.from(listingsRequestResponse.data ?? []).map((item) {
+          return ProductModel.fromJson(item);
+        }).toList();
+      } else {
+        final listingsRequestResponse = await Api.requestRecentListings(1);
+        recent = List.from(listingsRequestResponse.data ?? []).map((item) {
+          return ProductModel.fromJson(item);
+        }).toList();
+      }
+
+      // Fetch ads
+      List<AdDataModel> ads = await ListRepository.fetchAds();
+
+      // Combine recent listings with ads
+      List<dynamic> combinedRecent = [];
+      for (int i = 0; i < recent.length; i++) {
+        combinedRecent.add(recent[i]); // Add the product to the combined list
+
+        // Append the ad after every 3rd product
+        if ((i + 1) % 3 == 0 && ads.isNotEmpty) {
+          combinedRecent.add(ads[0]); // Add the ad model
+          ads.removeAt(0); // Remove the ad after inserting
+        }
+      }
+      recent = combinedRecent; // Update recent with combined list
+
+      final categoryCountRequestResponse =
+          await Api.requestCategoryCount(selectedCity?.id);
+      categoryCount =
+          List.from(categoryCountRequestResponse.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+
+      const banner = Images.slider;
+
+      List<CategoryModel> formattedCategories =
+          await formatCategoriesList(category, categoryCount, selectedCity?.id);
+
+      emit(HomeStateLoaded(banner, formattedCategories, location, recent,
+          isRefreshLoader, selectedCity));
+    } catch (e) {
+      emit(HomeState.error("Error loading data: ${e.toString()}"));
+    } finally {
+      _isLoading = false;
     }
-    recent = combinedRecent; // Update recent with combined list
-
-    final categoryCountRequestResponse =
-        await Api.requestCategoryCount(selectedCity?.id);
-    categoryCount =
-        List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    const banner = Images.slider;
-
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, selectedCity?.id);
-
-    emit(HomeStateLoaded(banner, formattedCategories, location, recent,
-        isRefreshLoader, selectedCity));
   }
 
   Future<void> saveIgnoreAppVersion(String version) async {

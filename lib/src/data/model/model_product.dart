@@ -183,7 +183,7 @@ class ProductModel {
             DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
       }
     } else if (json['categoryId'] == 3) {
-      category = "Veranstaltungen";
+      category = "Events";
       final parsedDateTime = DateTime.parse(json['startDate']);
       startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
       if ((json['endDate']) != null) {
