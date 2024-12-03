@@ -5,7 +5,6 @@ import 'package:heidi/src/utils/configs/routes.dart';
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
 
-  ///TODO: Add translations and pop out the welcome screen when taken to login or signup
   @override
   Widget build(BuildContext context) {
     return Scaffold(

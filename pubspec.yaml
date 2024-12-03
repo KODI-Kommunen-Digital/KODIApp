@@ -79,7 +79,7 @@ dependencies:
   open_filex: ^4.5.0
   image_picker: ^1.1.2
   flutter_slidable: ^3.0.0
-  file_picker: ^8.1.2
+  file_picker: ^8.1.4
   flutter_pdfview: ^1.0.1
   flutter_cached_pdfview: ^0.4.2
   flutter_cache_manager: ^3.3.1

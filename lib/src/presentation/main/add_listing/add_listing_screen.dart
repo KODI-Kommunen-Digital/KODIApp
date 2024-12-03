@@ -570,102 +570,109 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       String description = _textContentController.text.replaceAll('\n', '<br>');
-      if (widget.item != null) {
-        if (isImageChanged) {
-          await context
-              .read<AddListingCubit>()
-              .deleteImage(widget.item?.cityId, widget.item?.id);
-          await context
-              .read<AddListingCubit>()
-              .deletePdf(widget.item?.cityId, widget.item?.id);
-        }
-        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
-        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+      try {
+        if (widget.item != null) {
+          if (isImageChanged) {
+            await context
+                .read<AddListingCubit>()
+                .deleteImage(widget.item?.cityId, widget.item?.id);
+            await context
+                .read<AddListingCubit>()
+                .deletePdf(widget.item?.cityId, widget.item?.id);
+          }
+          String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+          TimeOfDay? submitExpiryTime =
+              _isExpiryDateEnabled ? _expiryTime : null;
 
-        setState(() {
-          isLoading = true;
-        });
-        final website = (_textWebsiteController.text == 'https://')
-            ? null
-            : _textWebsiteController.text;
-        final result = await context.read<AddListingCubit>().onEdit(
-              cityId: widget.item?.cityId,
-              categoryId: widget.item!.categoryId,
-              listingId: widget.item?.id,
-              title: _textTitleController.text,
-              place: _textPlaceController.text,
-              description: description,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: website,
-              price: _textPriceController.text,
-              expiryDate: submitExpiryDate,
-              expiryTime: submitExpiryTime,
-              startDate: _startDate,
-              endDate: _endDate,
-              createdAt: _createdAt,
-              startTime: _startTime,
-              endTime: _endTime,
-              timeless: _isExpiryDateEnabled ? 0 : 1,
-              isImageChanged: isImageChanged,
-              statusId: statusId,
-              imagesList: selectedImages,
-            );
-        if (result) {
-          await AppBloc.homeCubit.onLoad(false);
           setState(() {
-            isLoading = false;
+            isLoading = true;
           });
-          _onSuccess();
-          if (!mounted) return;
-          context.read<AddListingCubit>().clearAssets();
-        }
-      } else {
-        String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
-        TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
-
-        setState(() {
-          isLoading = true;
-        });
-        final website = (_textWebsiteController.text == 'https://')
-            ? null
-            : _textWebsiteController.text;
-        final result = await context.read<AddListingCubit>().onSubmit(
-              cityId: cityId ?? 1,
-              title: _textTitleController.text,
-              city: selectedCity,
-              place: _textPlaceController.text,
-              description: description,
-              address: _textAddressController.text,
-              email: _textEmailController.text,
-              phone: _textPhoneController.text,
-              website: website,
-              expiryDate: submitExpiryDate,
-              startDate: _startDate,
-              endDate: _endDate,
-              expiryTime: submitExpiryTime,
-              timeless: _isExpiryDateEnabled ? 0 : 1,
-              startTime: _startTime,
-              endTime: _endTime,
-              imagesList: selectedImages,
-              isImageChanged: isImageChanged,
-            );
-        if (result) {
-          await AppBloc.homeCubit.onLoad(false);
-          setState(() {
-            isLoading = false;
-          });
-          _onSuccess();
-          if (!mounted) return;
-          context.read<AddListingCubit>().clearImagePath();
-          if (!mounted) return;
-          context.read<AddListingCubit>().clearAssets();
+          final website = (_textWebsiteController.text == 'https://')
+              ? null
+              : _textWebsiteController.text;
+          final result = await context.read<AddListingCubit>().onEdit(
+                cityId: widget.item?.cityId,
+                categoryId: widget.item!.categoryId,
+                listingId: widget.item?.id,
+                title: _textTitleController.text,
+                place: _textPlaceController.text,
+                description: description,
+                address: _textAddressController.text,
+                email: _textEmailController.text,
+                phone: _textPhoneController.text,
+                website: website,
+                price: _textPriceController.text,
+                expiryDate: submitExpiryDate,
+                expiryTime: submitExpiryTime,
+                startDate: _startDate,
+                endDate: _endDate,
+                createdAt: _createdAt,
+                startTime: _startTime,
+                endTime: _endTime,
+                timeless: _isExpiryDateEnabled ? 0 : 1,
+                isImageChanged: isImageChanged,
+                statusId: statusId,
+                imagesList: selectedImages,
+              );
+          if (result) {
+            await AppBloc.homeCubit.onLoad(false);
+            setState(() {
+              isLoading = false;
+            });
+            _onSuccess();
+            if (!mounted) return;
+            context.read<AddListingCubit>().clearAssets();
+          }
+          await _uploadPdf();
         } else {
+          String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
+          TimeOfDay? submitExpiryTime =
+              _isExpiryDateEnabled ? _expiryTime : null;
+
           setState(() {
-            isLoading = false;
+            isLoading = true;
           });
+          final website = (_textWebsiteController.text == 'https://')
+              ? null
+              : _textWebsiteController.text;
+          final result = await context.read<AddListingCubit>().onSubmit(
+                cityId: cityId ?? 1,
+                title: _textTitleController.text,
+                city: selectedCity,
+                place: _textPlaceController.text,
+                description: description,
+                address: _textAddressController.text,
+                email: _textEmailController.text,
+                phone: _textPhoneController.text,
+                website: website,
+                expiryDate: submitExpiryDate,
+                startDate: _startDate,
+                endDate: _endDate,
+                expiryTime: submitExpiryTime,
+                timeless: _isExpiryDateEnabled ? 0 : 1,
+                startTime: _startTime,
+                endTime: _endTime,
+                imagesList: selectedImages,
+                isImageChanged: isImageChanged,
+              );
+          if (result) {
+            await AppBloc.homeCubit.onLoad(false);
+            setState(() {
+              isLoading = false;
+            });
+            _onSuccess();
+            if (!mounted) return;
+            context.read<AddListingCubit>().clearImagePath();
+            if (!mounted) return;
+            context.read<AddListingCubit>().clearAssets();
+          }
+          await _uploadPdf();
         }
+      } catch (e) {
+        logError('Error during PDF upload: $e');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to upload PDF: $e')),
+        );
       }
     }
   }
@@ -824,14 +831,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
                     ? selectedImages!.isNotEmpty
                         ? selectedImages![0].path
                         : null
-                    // downloadedImages[0].path
                     : _featurePdf,
                 profile: false,
                 forumGroup: false,
                 onDelete: () {
                   if (selectedImages!.isNotEmpty) {
                     setState(() {
-                      // downloadedImages.removeAt(0);
                       selectedImages?.removeAt(0);
                       isImageChanged = true;
                     });
@@ -1568,5 +1573,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .setSubCategoryId(subCategoryResponse.data.last['name']);
       }
     });
+  }
+
+  Future<void> _uploadPdf() async {
+    if (_featurePdf != null) {
+      // Implement your PDF upload logic here
+      // For example, using http package to upload the PDF
+      try {
+        // Your upload logic here
+      } catch (e) {
+        logError('PDF upload failed: $e'); // Log the error
+        throw Exception('PDF upload failed: $e'); // Rethrow the error
+      }
+    }
   }
 }
