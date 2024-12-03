@@ -377,7 +377,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for(final selectedImages in result.files){
+                      for (final selectedImages in result.files) {
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);
@@ -445,10 +445,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
           child: RawGestureDetector(
               gestures: {
                 AllowMultipleGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<
-                    AllowMultipleGestureRecognizer>(
-                      () => AllowMultipleGestureRecognizer(),
-                      (AllowMultipleGestureRecognizer instance) {
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(),
+                  (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )
@@ -457,7 +457,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 borderRadius: BorderRadius.circular(200),
                 child: CachedNetworkImage(
                   imageUrl:
-                  "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
+                      "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
                   fit: BoxFit.fill,
                 ),
               )));
