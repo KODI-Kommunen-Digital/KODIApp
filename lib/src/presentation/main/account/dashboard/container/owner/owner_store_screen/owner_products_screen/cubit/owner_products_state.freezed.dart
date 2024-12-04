@@ -19,27 +19,21 @@ mixin _$OwnerProductsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)
-        loaded,
+    required TResult Function(List<ContainerProductModel> products) loaded,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult? Function(List<ContainerProductModel> products)? loaded,
     TResult? Function()? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult Function(List<ContainerProductModel> products)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) =>
@@ -129,9 +123,7 @@ class _$OwnerProductsStateLoadingImpl implements OwnerProductsStateLoading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)
-        loaded,
+    required TResult Function(List<ContainerProductModel> products) loaded,
     required TResult Function() error,
   }) {
     return loading();
@@ -141,9 +133,7 @@ class _$OwnerProductsStateLoadingImpl implements OwnerProductsStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult? Function(List<ContainerProductModel> products)? loaded,
     TResult? Function()? error,
   }) {
     return loading?.call();
@@ -153,9 +143,7 @@ class _$OwnerProductsStateLoadingImpl implements OwnerProductsStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult Function(List<ContainerProductModel> products)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -211,10 +199,7 @@ abstract class _$$OwnerProductsStateLoadedImplCopyWith<$Res> {
           $Res Function(_$OwnerProductsStateLoadedImpl) then) =
       __$$OwnerProductsStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call(
-      {List<ContainerProductModel> products,
-      List<CategoryModel> categories,
-      List<CategoryModel> subCategories});
+  $Res call({List<ContainerProductModel> products});
 }
 
 /// @nodoc
@@ -231,22 +216,12 @@ class __$$OwnerProductsStateLoadedImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? products = null,
-    Object? categories = null,
-    Object? subCategories = null,
   }) {
     return _then(_$OwnerProductsStateLoadedImpl(
       null == products
           ? _value._products
           : products // ignore: cast_nullable_to_non_nullable
               as List<ContainerProductModel>,
-      null == categories
-          ? _value._categories
-          : categories // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>,
-      null == subCategories
-          ? _value._subCategories
-          : subCategories // ignore: cast_nullable_to_non_nullable
-              as List<CategoryModel>,
     ));
   }
 }
@@ -255,12 +230,8 @@ class __$$OwnerProductsStateLoadedImplCopyWithImpl<$Res>
 
 class _$OwnerProductsStateLoadedImpl implements OwnerProductsStateLoaded {
   const _$OwnerProductsStateLoadedImpl(
-      final List<ContainerProductModel> products,
-      final List<CategoryModel> categories,
-      final List<CategoryModel> subCategories)
-      : _products = products,
-        _categories = categories,
-        _subCategories = subCategories;
+      final List<ContainerProductModel> products)
+      : _products = products;
 
   final List<ContainerProductModel> _products;
   @override
@@ -270,25 +241,9 @@ class _$OwnerProductsStateLoadedImpl implements OwnerProductsStateLoaded {
     return EqualUnmodifiableListView(_products);
   }
 
-  final List<CategoryModel> _categories;
-  @override
-  List<CategoryModel> get categories {
-    if (_categories is EqualUnmodifiableListView) return _categories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_categories);
-  }
-
-  final List<CategoryModel> _subCategories;
-  @override
-  List<CategoryModel> get subCategories {
-    if (_subCategories is EqualUnmodifiableListView) return _subCategories;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_subCategories);
-  }
-
   @override
   String toString() {
-    return 'OwnerProductsState.loaded(products: $products, categories: $categories, subCategories: $subCategories)';
+    return 'OwnerProductsState.loaded(products: $products)';
   }
 
   @override
@@ -296,19 +251,12 @@ class _$OwnerProductsStateLoadedImpl implements OwnerProductsStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$OwnerProductsStateLoadedImpl &&
-            const DeepCollectionEquality().equals(other._products, _products) &&
-            const DeepCollectionEquality()
-                .equals(other._categories, _categories) &&
-            const DeepCollectionEquality()
-                .equals(other._subCategories, _subCategories));
+            const DeepCollectionEquality().equals(other._products, _products));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_products),
-      const DeepCollectionEquality().hash(_categories),
-      const DeepCollectionEquality().hash(_subCategories));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_products));
 
   @JsonKey(ignore: true)
   @override
@@ -321,38 +269,32 @@ class _$OwnerProductsStateLoadedImpl implements OwnerProductsStateLoaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)
-        loaded,
+    required TResult Function(List<ContainerProductModel> products) loaded,
     required TResult Function() error,
   }) {
-    return loaded(products, categories, subCategories);
+    return loaded(products);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult? Function(List<ContainerProductModel> products)? loaded,
     TResult? Function()? error,
   }) {
-    return loaded?.call(products, categories, subCategories);
+    return loaded?.call(products);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult Function(List<ContainerProductModel> products)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(products, categories, subCategories);
+      return loaded(products);
     }
     return orElse();
   }
@@ -394,13 +336,10 @@ class _$OwnerProductsStateLoadedImpl implements OwnerProductsStateLoaded {
 
 abstract class OwnerProductsStateLoaded implements OwnerProductsState {
   const factory OwnerProductsStateLoaded(
-      final List<ContainerProductModel> products,
-      final List<CategoryModel> categories,
-      final List<CategoryModel> subCategories) = _$OwnerProductsStateLoadedImpl;
+          final List<ContainerProductModel> products) =
+      _$OwnerProductsStateLoadedImpl;
 
   List<ContainerProductModel> get products;
-  List<CategoryModel> get categories;
-  List<CategoryModel> get subCategories;
   @JsonKey(ignore: true)
   _$$OwnerProductsStateLoadedImplCopyWith<_$OwnerProductsStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -449,9 +388,7 @@ class _$OwnerProductsStateErrorImpl implements OwnerProductsStateError {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
-    required TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)
-        loaded,
+    required TResult Function(List<ContainerProductModel> products) loaded,
     required TResult Function() error,
   }) {
     return error();
@@ -461,9 +398,7 @@ class _$OwnerProductsStateErrorImpl implements OwnerProductsStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult? Function(List<ContainerProductModel> products)? loaded,
     TResult? Function()? error,
   }) {
     return error?.call();
@@ -473,9 +408,7 @@ class _$OwnerProductsStateErrorImpl implements OwnerProductsStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(List<ContainerProductModel> products,
-            List<CategoryModel> categories, List<CategoryModel> subCategories)?
-        loaded,
+    TResult Function(List<ContainerProductModel> products)? loaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {

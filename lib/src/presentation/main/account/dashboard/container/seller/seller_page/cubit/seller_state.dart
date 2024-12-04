@@ -1,6 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:heidi/src/data/model/model_cart_item.dart';
-import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 
@@ -15,8 +14,6 @@ class SellerState with _$SellerState {
 
   const factory SellerState.loadedProducts(
       List<ContainerProductModel>? products,
-      List<CategoryModel>? categories,
-      List<CategoryModel>? subCategories,
       List<StoreModel> stores,
       StoreModel? selectedStore) = SellerStateLoadedProducts;
 

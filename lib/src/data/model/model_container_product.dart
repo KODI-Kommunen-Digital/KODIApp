@@ -20,6 +20,8 @@ class ContainerProductModel {
   final int shopId;
   final int categoryId;
   final int? subCategoryId;
+  final String? categoryName;
+  final String? subCategoryName;
   final String? meta;
   final bool isActive;
   final bool isArchived;
@@ -44,6 +46,8 @@ class ContainerProductModel {
       required this.shopId,
       required this.categoryId,
       required this.subCategoryId,
+      required this.subCategoryName,
+      required this.categoryName,
       required this.meta,
       required this.isActive,
       required this.isArchived,
@@ -51,7 +55,10 @@ class ContainerProductModel {
       required this.productImages,
       required this.barcode});
 
-  factory ContainerProductModel.fromJson(Map<String, dynamic> json, int cityId) {
+  factory ContainerProductModel.fromJson(
+      Map<String, dynamic> json, int cityId) {
+    Map<String, dynamic>? categoryJson = json['category'];
+    Map<String, dynamic>? subCategoryJson = json['subCategory'];
     return ContainerProductModel(
         id: json['id'],
         cityId: cityId,
@@ -69,6 +76,8 @@ class ContainerProductModel {
         shopId: json['shopId'],
         categoryId: json['categoryId'],
         subCategoryId: json['subCategoryId'],
+        categoryName: categoryJson?['name'],
+        subCategoryName: subCategoryJson?['name'],
         meta: json['meta'],
         isActive: (json['isActive'] ?? 0) == 1,
         isArchived: (json['isArchived'] ?? 0) == 1,
