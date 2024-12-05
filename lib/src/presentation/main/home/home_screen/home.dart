@@ -323,7 +323,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     expandedHeight: MediaQuery.of(context).size.height * 0.3,
                     banners: banner,
                   ),
-                  pinned: true,
+                  pinned: false,
                 ),
                 const SliverToBoxAdapter(
                   child: SizedBox(
