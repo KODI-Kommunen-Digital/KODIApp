@@ -27,7 +27,7 @@ import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -56,6 +56,13 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductModel>? recent = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
+  String mitwizAppleLink = "";
+  String mitwizAndroidLink = "";
+  String schneckenloheAppleLink = "";
+  String schneckenloheAndroidLink = "";
+  String pressigAppleLink = "";
+  String pressigAndroidLink = "";
+
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -69,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
+    _checkStoreLinks();
   }
 
   Future<void> getIgnoreAppVersion() async {
@@ -164,6 +172,42 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
     //AppBloc.homeCubit.onLoad(true);
+  }
+
+  void _checkStoreLinks() async {
+    try {
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 10),
+        minimumFetchInterval: const Duration(seconds: 10),
+      ));
+      await remoteConfig.fetchAndActivate();
+      mitwizAppleLink = remoteConfig.getString('mitwizAppleLink');
+      mitwizAndroidLink = remoteConfig.getString('mitwizAndroidLink');
+      schneckenloheAppleLink = remoteConfig.getString('schneckenloheAppleLink');
+      schneckenloheAndroidLink =
+          remoteConfig.getString('schneckenloheAndroidLink');
+      pressigAppleLink = remoteConfig.getString('pressigAppleLink');
+      pressigAndroidLink = remoteConfig.getString('pressigAndroidLink');
+      setState(() {
+        mitwizAppleLink = mitwizAppleLink;
+        mitwizAndroidLink = mitwizAndroidLink;
+        schneckenloheAppleLink = schneckenloheAppleLink;
+        schneckenloheAndroidLink = schneckenloheAndroidLink;
+        pressigAppleLink = pressigAppleLink;
+        pressigAndroidLink = pressigAndroidLink;
+      });
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      setState(() {
+        mitwizAppleLink = "";
+        mitwizAndroidLink = "";
+        schneckenloheAppleLink = "";
+        schneckenloheAndroidLink = "";
+        pressigAppleLink = "";
+        pressigAndroidLink = "";
+      });
+    }
   }
 
   @override
@@ -544,35 +588,26 @@ class _HomeScreenState extends State<HomeScreen> {
           arguments: {'id': item.id, 'title': item.title, 'type': 'location'});
     } else if (item.id == 2) {
       if (Platform.isIOS) {
-        await launchUrl(
-            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+        await launchUrl(Uri.parse(pressigAppleLink),
             mode: LaunchMode.externalApplication);
       } else if (Platform.isAndroid) {
-        await launchUrl(
-            Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+        await launchUrl(Uri.parse(pressigAndroidLink),
             mode: LaunchMode.externalApplication);
       }
     } else if (item.id == 3) {
       if (Platform.isIOS) {
-        await launchUrl(
-            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+        await launchUrl(Uri.parse(schneckenloheAppleLink),
             mode: LaunchMode.externalApplication);
       } else if (Platform.isAndroid) {
-        await launchUrl(
-            Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+        await launchUrl(Uri.parse(schneckenloheAndroidLink),
             mode: LaunchMode.externalApplication);
       }
     } else if (item.id == 4) {
       if (Platform.isIOS) {
-        await launchUrl(
-            Uri.parse("https://apps.apple.com/de/app/smart-app/id6503079555"),
+        await launchUrl(Uri.parse(mitwizAppleLink),
             mode: LaunchMode.externalApplication);
       } else if (Platform.isAndroid) {
-        await launchUrl(
-            Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.troisdorf.app"),
+        await launchUrl(Uri.parse(mitwizAndroidLink),
             mode: LaunchMode.externalApplication);
       }
     } else if (item.id != -1 && !item.hasChild) {
