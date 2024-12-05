@@ -46,7 +46,7 @@
             "name": "Freizeit & Tourismus",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#d44d1c",
+            "color": "#95c11f",
             "categoryType" : "category"
         },
         {
@@ -54,7 +54,7 @@
             "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
-            "color": "#95c11f",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
