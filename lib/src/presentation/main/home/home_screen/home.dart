@@ -351,7 +351,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         }
                       }),
-                  pinned: true,
+                  pinned: false,
                 ),
                 const SliverToBoxAdapter(
                   child: SizedBox(
