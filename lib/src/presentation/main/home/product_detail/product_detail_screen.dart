@@ -197,6 +197,71 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
+  void _makeTechAction(String link) async {
+    if (!link.startsWith("https://") && !link.startsWith("http://")) {
+      link = "https://$link";
+    }
+
+    final webViewController = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(link));
+
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                color: Colors.black,
+                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                child: Row(
+                  children: [
+                    // Expanded(
+                    //   child: Text(
+                    //     link,
+                    //     overflow: TextOverflow.ellipsis,
+                    //     maxLines: 1,
+                    //     style: TextStyle(
+                    //       color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    //           Colors.white,
+                    //       fontWeight: FontWeight.bold,
+                    //     ),
+                    //   ),
+                    // ),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(
+                        Icons.close,
+                        color: Theme.of(context).textTheme.bodyLarge?.color ??
+                            Colors.white,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height:
+                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                child: WebViewWidget(
+                  controller: webViewController,
+                  gestureRecognizers: gestureRecognizers,
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   ///Build content UI
   Widget _buildContent(ProductModel? product, List<FavoriteModel>? favoriteList,
       UserModel? userDetail, bool isLoggedIn, bool isDarkMode) {
@@ -219,6 +284,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget attachments = Container();
     Widget createdDate = Container();
     Widget description = Container();
+    Widget booking = Container();
     Widget info = AppPlaceholder(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -1007,6 +1073,31 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           },
         );
       }
+      booking = InkWell(
+        onTap: () {
+          _makeTechAction(product.website);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Container(
+            height: 45,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            ),
+            child: Text(
+              widget.item.button ?? "",
+              style: Theme.of(context)
+                  .textTheme
+                  .labelLarge!
+                  .copyWith(color: Colors.white),
+            ),
+          ),
+        ),
+      );
+
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
@@ -1185,6 +1276,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 16),
                   child: Row(),
                 ),
+                if (product?.button != null) booking,
                 info,
                 // latest,
                 const SizedBox(height: 16),
