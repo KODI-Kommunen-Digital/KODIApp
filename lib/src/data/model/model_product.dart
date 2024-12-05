@@ -71,6 +71,7 @@ class ProductModel {
   final int? viewCount;
   List<ImageListModel>? imageLists;
   int? timeless;
+  final String? button;
 
   ProductModel(
       {required this.id,
@@ -133,7 +134,8 @@ class ProductModel {
       this.imageLists,
       this.showExternal,
       this.timeless,
-      this.viewCount});
+      this.viewCount,
+      this.button});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -160,6 +162,7 @@ class ProductModel {
     String priceMax = '';
     String priceDisplay = '';
     int? timeless;
+    String? button;
     String imageUrl =
         'admin/News/Defaultimage${json['id'].toString().substring(json['id'].toString().length - 1)}.png';
 
@@ -171,6 +174,12 @@ class ProductModel {
       timeless = 0;
     } else {
       timeless = 1;
+    }
+
+    if (json['title'] == "Liefer King - Online Bestellung") {
+      button = "Jetzt bestellen";
+    } else {
+      button = null;
     }
 
     if (json['categoryId'] == 1) {
@@ -331,6 +340,7 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
+      button: button,
     );
   }
 
