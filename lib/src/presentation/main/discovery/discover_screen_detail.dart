@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:heidi/src/utils/configs/image.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
@@ -11,6 +11,7 @@ class DiscoveryScreenDetail extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final selectedCityId = args['id'] as int;
+    final List<CitizenServiceModel> services = args['services'];
 
     return Scaffold(
       appBar: AppBar(
@@ -25,23 +26,26 @@ class DiscoveryScreenDetail extends StatelessWidget {
           mainAxisSpacing: 10.0,
           mainAxisExtent: 300.0,
         ),
-        itemCount: 2,
+        itemCount: services.length,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () async {
-              Navigator.pushNamed(context, Routes.listProduct, arguments: {
-                'id': selectedCityId,
-                'title': '',
-                'type': 'category'
-              });
-              final prefs = await Preferences.openBox();
-              prefs.setKeyValue(Preferences.categoryId, index == 0 ? 29 : 12);
-              prefs.setKeyValue(Preferences.type, "category");
+              if (services[index].categoryId != null) {
+                Navigator.pushNamed(context, Routes.listProduct, arguments: {
+                  'id': selectedCityId,
+                  'title': '',
+                  'type': 'category'
+                });
+                final prefs = await Preferences.openBox();
+                prefs.setKeyValue(
+                    Preferences.categoryId, services[index].categoryId);
+                prefs.setKeyValue(Preferences.type, "category");
+              }
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
-                index == 0 ? Images.service29 : Images.service12,
+                services[index].imageLink,
                 fit: BoxFit.cover,
               ),
             ),
