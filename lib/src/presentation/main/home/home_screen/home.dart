@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -22,6 +23,7 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -529,8 +531,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id == 500) {
       if (!mounted) return;
-      Navigator.pushNamed(context, Routes.discoveryDetail,
-          arguments: {'id': selectedCityId});
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': selectedCityId,
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "29", imageLink: Images.service29, categoryId: 29),
+          CitizenServiceModel(
+              imageUrl: "12", imageLink: Images.service12, categoryId: 12)
+        ]
+      });
       return;
     }
 

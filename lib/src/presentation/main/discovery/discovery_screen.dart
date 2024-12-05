@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -191,6 +192,27 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
+    } else if (service.imageLink == "500" || service.imageLink == "31") {
+      int? currentLocation =
+          await context.read<DiscoveryCubit>().getCitySelected();
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': currentLocation ?? 0,
+        'services': (service.imageLink == "500")
+            ? [
+                CitizenServiceModel(
+                    imageUrl: "29",
+                    imageLink: Images.service29,
+                    categoryId: 29),
+                CitizenServiceModel(
+                    imageUrl: "12", imageLink: Images.service12, categoryId: 12)
+              ]
+            : [
+                CitizenServiceModel(
+                    imageUrl: "311", imageLink: Images.service311),
+                CitizenServiceModel(
+                    imageUrl: "312", imageLink: Images.service312)
+              ]
+      });
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
