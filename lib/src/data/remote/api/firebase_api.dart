@@ -175,10 +175,6 @@ class FirebaseApi {
         fetchTimeout: const Duration(seconds: 10),
         minimumFetchInterval: const Duration(seconds: 10),
       ));
-      await remoteConfig.setDefaults({
-        'minWordsAds': 50,
-        'positionAds': 100,
-      });
       await remoteConfig.fetchAndActivate();
       final pressigAppleLink = remoteConfig.getString('pressigAppleLink');
       final pressigAndroidLink = remoteConfig.getString('pressigAndroidLink');
