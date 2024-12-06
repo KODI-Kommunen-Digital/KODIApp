@@ -1,12 +1,20 @@
 {
     "status": "success",
-    "data": [ 
+    "data": [  
+        {
+            "id": 100,
+            "name": "Willkommen",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#657983",
+            "categoryType" : "category"
+        },
         {
             "id": 1,
             "name": "News",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
-            "color": "#657983",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
@@ -14,7 +22,7 @@
             "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#d44d1c",
+            "color": "#95c11f",
             "categoryType" : "category"
         },
         {
@@ -22,14 +30,6 @@
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
-            "color": "#95c11f",
-            "categoryType" : "category"
-        },
-        {
-            "id": 25,
-            "name": "Umfrage",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-square-poll-vertical",
             "color": "#fbe117",
             "categoryType" : "category"
         },
@@ -42,10 +42,18 @@
             "categoryType" : "category"
         },
         {
-            "id": 10,
-            "name": "Unternehmen",
+            "id": 14,
+            "name": "Rathaus",
             "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
+            "icon": "far fa-handshake",
+            "color": "#95c11f",
+            "categoryType" : "category"
+        },
+        {
+            "id": 17,
+            "name": "Freizeit & Tourismus",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
             "color": "#d44d1c",
             "categoryType" : "category"
         },
@@ -54,7 +62,7 @@
             "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
-            "color": "#95c11f",
+            "color": "#fbe117",
             "categoryType" : "category"
         },
         {
@@ -62,7 +70,7 @@
             "name": "Ortsinfo",
             "noOfSubcategories": 0,
             "icon": "fas fa-city",
-            "color": "#fbe117",
+            "color": "#657983",
             "categoryType" : "category"
         }
     ]
