@@ -1,12 +1,20 @@
 {
     "status": "success",
-    "data": [ 
+    "data": [  
+        {
+            "id": 100,
+            "name": "Willkommen",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#657983",
+            "categoryType" : "category"
+        },
         {
             "id": 1,
             "name": "News",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
-            "color": "#657983",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
@@ -14,7 +22,7 @@
             "name": "Veranstaltungen",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#d44d1c",
+            "color": "#95c11f",
             "categoryType" : "category"
         },
         {
@@ -22,7 +30,7 @@
             "name": "Essen & Trinken",
             "noOfSubcategories": 0,
             "icon": "fas fa-utensils",
-            "color": "#95c11f",
+            "color": "#fbe117",
             "categoryType" : "category"
         },
         {
@@ -30,7 +38,7 @@
             "name": "Vereine",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#fbe117",
+            "color": "#657983",
             "categoryType" : "category"
         },
         {
@@ -38,7 +46,7 @@
             "name": "Rathaus",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#657983",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
@@ -54,14 +62,6 @@
             "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
-            "color": "#d44d1c",
-            "categoryType" : "category"
-        },
-        {
-            "id": 100,
-            "name": "Ortsinfo",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-city",
             "color": "#fbe117",
             "categoryType" : "category"
         }
