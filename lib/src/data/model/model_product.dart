@@ -196,20 +196,38 @@ class ProductModel {
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
       final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
+      if (parsedDateTime.hour == 0 &&
+          parsedDateTime.minute == 0 &&
+          parsedDateTime.second == 0) {
+        startDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      } else {
+        startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
+      }
       if ((json['endDate']) != null) {
         final parsedEDateTime = DateTime.parse(json['endDate']);
         if (parsedDateTime.year == parsedEDateTime.year &&
             parsedDateTime.month == parsedEDateTime.month &&
             parsedDateTime.day == parsedEDateTime.day) {
-          endDate = DateFormat('HH:mm').format(parsedEDateTime);
+          if (parsedEDateTime.hour == 0 &&
+              parsedEDateTime.minute == 0 &&
+              parsedEDateTime.second == 0) {
+            endDate = "";
+          } else {
+            endDate = DateFormat('HH:mm').format(parsedEDateTime);
+          }
         } else {
-          endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+          if (parsedEDateTime.hour == 0 &&
+              parsedEDateTime.minute == 0 &&
+              parsedEDateTime.second == 0) {
+            endDate = DateFormat('dd.MM.yyyy').format(parsedEDateTime);
+          } else {
+            endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+          }
         }
       } else {
         endDate = "";
       }
-    } else if (json['categoryId'] == 4) {
+    }else if (json['categoryId'] == 4) {
       category = "Vereine";
     } else if (json['categoryId'] == 5) {
       category = "Regionale Produkte";
