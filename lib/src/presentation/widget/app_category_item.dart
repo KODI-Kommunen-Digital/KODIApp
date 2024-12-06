@@ -266,7 +266,7 @@ class AppCategory extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.fill,
+                        fit: BoxFit.cover,
                         colorFilter: ColorFilter.mode(
                             Colors.black.withOpacity(0.3), BlendMode.darken),
                       ),
