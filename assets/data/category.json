@@ -62,7 +62,7 @@
             "name": "Ortsinfo",
             "noOfSubcategories": 0,
             "icon": "fas fa-city",
-            "color": "#99FFCC",
+            "color": "#0e5485",
             "categoryType" : "category"
         }
     ]
