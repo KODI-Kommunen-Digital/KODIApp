@@ -5,13 +5,13 @@
             "id": 100,
             "name": "Willkommen",
             "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
+            "icon": "fas fa-user",
             "color": "#657983",
             "categoryType" : "category"
         },
         {
             "id": 1,
-            "name": "News",
+            "name": "Nachrichten",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
             "color": "#d44d1c",
@@ -19,20 +19,21 @@
         },
         {
             "id": 3,
-            "name": "Events",
+            "name": "Ereignisse",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
             "color": "#95c11f",
             "categoryType" : "category"
         },
         {
-            "id": 13,
-            "name": "Essen & Trinken",
+            "id": 10,
+            "name": "Unternehmen",
             "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
+            "icon": "far fa-building",
             "color": "#fbe117",
             "categoryType" : "category"
         },
+
         {
             "id": 4,
             "name": "Vereine",
@@ -42,19 +43,19 @@
             "categoryType" : "category"
         },
         {
-            "id": 14,
-            "name": "Rathaus",
+            "id": -1,
+            "name": "Bürgerhaus",
             "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#95c11f",
+            "icon": "fas fa-users",
+            "color": "#d44d1c",
             "categoryType" : "category"
         },
         {
-            "id": 17,
-            "name": "Freizeit & Tourismus",
+            "id": 13,
+            "name": "Essen & Trinken",
             "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#d44d1c",
+            "icon": "fas fa-utensils",
+            "color":"#95c11f",
             "categoryType" : "category"
         },
         {
@@ -70,7 +71,7 @@
             "name": "Ortsinfo",
             "noOfSubcategories": 0,
             "icon": "fas fa-city",
-            "color": "#657983",
+            "color": "#0e5485",
             "categoryType" : "category"
         }
     ]
