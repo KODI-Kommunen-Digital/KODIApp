@@ -537,6 +537,7 @@
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
   "vote_submit_fail": "Fehler beim Abstimmen",
   "views": "Aufrufe",
-  "local_profile": "Ortssteckbrief"
+  "local_profile": "Ortssteckbrief",
+  "welcome":"Herzlich Willkommen"
 }
 
