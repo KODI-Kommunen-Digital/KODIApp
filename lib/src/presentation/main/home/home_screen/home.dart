@@ -319,7 +319,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
                     hintText: Translate.of(context).translate('welcome'),
-                    expandedHeight: MediaQuery.of(context).size.height * 0.2,
+                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
                     banners: banner,
                   ),
                   pinned: false,
