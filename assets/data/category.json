@@ -1,60 +1,63 @@
 {
     "status": "success",
-    "data": [  
+    "data": [
         {
             "id": 100,
             "name": "Willkommen",
             "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
-            "color": "#657983",
+            "icon": "fas fa-user",
+            "color": "#ff8a65",
             "categoryType" : "category"
         },
         {
             "id": 1,
-            "name": "News",
+            "name": "Nachrichten",
             "noOfSubcategories": 8,
             "icon": "fas fa-newspaper",
-            "color": "#d44d1c",
+            "color": "#a569bd",
             "categoryType" : "category"
         },
         {
             "id": 3,
-            "name": "Events",
+            "name": "Veranstaltungen",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#95c11f",
+            "color": "#027148",
             "categoryType" : "category"
         },
+
         {
-            "id": 13,
-            "name": "Essen & Trinken",
+            "id": 10,
+            "name": "Unternehmen",
             "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
-            "color": "#fbe117",
+            "icon": "far fa-building",
+            "color": "#CC0000",
             "categoryType" : "category"
         },
+
         {
             "id": 4,
             "name": "Vereine",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#657983",
+            "color": "#5dade2",
             "categoryType" : "category"
         },
         {
             "id": 14,
-            "name": "Rathaus",
+            "name": "Bürgerhaus",
             "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#95c11f",
+            "icon": "fas fa-landmark",
+            "color":  "#fdc60a",
             "categoryType" : "category"
         },
+
         {
-            "id": 17,
-            "name": "Freizeit & Tourismus",
+            "id": 13,
+            "name": "Essen & Trinken",
             "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#d44d1c",
+            "icon": "fas fa-utensils",
+            "color": "#58d68d",
             "categoryType" : "category"
         },
         {
@@ -62,15 +65,7 @@
             "name": "Biete/Suche",
             "noOfSubcategories": 0,
             "icon": "fas fa-magnifying-glass",
-            "color": "#fbe117",
-            "categoryType" : "category"
-        },
-        {
-            "id": 100,
-            "name": "Ortsinfo",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-city",
-            "color": "#657983",
+            "color": "#0e5485",
             "categoryType" : "category"
         }
     ]

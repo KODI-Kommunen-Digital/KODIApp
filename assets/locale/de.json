@@ -459,10 +459,11 @@
   "category_public_transport": "Mitfahrbank",
   "category_offers": "Angebote",
   "category_food": "Essen & Trinken",
-  "category_rathaus": "Rathaus",
+  "category_rathaus": "Bürgerhaus",
   "category_newsletter": "Mitteilungsblatt",
-  "category_official_notification": "Amtliche Mitteilung",
+  "category_official_notification": "Amtliche Bekanntmachungen",
   "category_polls": "Umfrage",
+  "category_citizen_service": "Bürgerservice Verwaltung",
   "poll_options": "Umfrage Optionen",
   "add_option": "Option hinzufügen",
   "question": "Frage",
@@ -537,6 +538,7 @@
   "vote_submit_successful": "Stimme erfolgreich abgegeben",
   "vote_submit_fail": "Fehler beim Abstimmen",
   "views": "Aufrufe",
-  "local_profile": "Ortssteckbrief"
+  "local_profile": "Ortssteckbrief",
+  "welcome":"Herzlich Willkommen"
 }
 
