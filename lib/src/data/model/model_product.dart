@@ -228,7 +228,7 @@ class ProductModel {
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
     } else if (json['categoryId'] == 14) {
-      category = "Rathaus";
+      category = "Bürgerhaus";
     } else if (json['categoryId'] == 15) {
       category = "Mitteilungsblatt";
     } else if (json['categoryId'] == 16) {
