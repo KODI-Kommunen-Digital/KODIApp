@@ -255,69 +255,77 @@ class AppCategory extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: CachedNetworkImage(
-                imageUrl: "$profilePicUrl${item!.image}",
-                cacheManager: memoryCacheManager,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(0.3), BlendMode.darken),
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4, bottom: 8),
-                          child: Text(
-                            item!.title,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 12),
+              child: Stack(alignment: Alignment.center, children: [
+                Container(
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: CachedNetworkImage(
+                    imageUrl: "$profilePicUrl${item!.image}",
+                    cacheManager: memoryCacheManager,
+                    imageBuilder: (context, imageProvider) {
+                      return Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(8),
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                },
-                placeholder: (context, url) {
-                  return AppPlaceholder(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                          image: DecorationImage(
+                            image: imageProvider,
+                            fit: BoxFit.contain,
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                },
-                errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
+                      );
+                    },
+                    placeholder: (context, url) {
+                      return AppPlaceholder(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
                         ),
-                      ),
-                      child: const Icon(Icons.error),
-                    ),
-                  );
-                },
-              ),
+                      );
+                    },
+                    errorWidget: (context, url, error) {
+                      return AppPlaceholder(
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(8),
+                            ),
+                          ),
+                          child: const Icon(Icons.error),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  width: double.infinity,
+                  color: Colors.black.withOpacity(0.3),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4, bottom: 8),
+                        child: Text(
+                          item!.title,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ]),
             ),
           ),
         );
