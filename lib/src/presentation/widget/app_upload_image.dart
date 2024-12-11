@@ -212,11 +212,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
           if (!profile) {
             await ListRepository.uploadImage(_file!, profile);
+             _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
           }
           if (forumGroup) {
             await ForumRepository.uploadImage(_file!, forumGroup);
           } else if (profile) {
             final response = await ListRepository.uploadImage(_file!, profile);
+            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
             if (response!.data['status'] == 'success') {
               setState(() {
                 isImageUploaded = true;
@@ -255,8 +257,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
         }
         if (forumGroup) {
           await ForumRepository.uploadImage(_file!, forumGroup);
+          _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
         } else if (profile) {
           final response = await ListRepository.uploadImage(_file!, profile);
+          _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
           if (response!.data['status'] == 'success') {
             setState(() {
               isImageUploaded = true;
@@ -324,6 +328,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
+                      _buildContext?.read<AddListingCubit>().savePdfFile(_file);
                     }
                     if (!mounted) return;
                     _buildContext?.read<AddListingCubit>().clearAssets();
@@ -351,10 +356,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       if (!profile) {
                         if (_file != null) {
                           await ListRepository.uploadImage(_file!, profile);
+                          _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
                         }
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
+                            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;
@@ -387,10 +394,12 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
+                        _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
                         // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
+                            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;

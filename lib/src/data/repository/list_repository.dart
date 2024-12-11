@@ -324,30 +324,30 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    String? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    TimeOfDay? expiryTime,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    List<File>? imagesList,
-    bool isImageChanged,
-    int? timeless,
-  ) async {
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      String? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      TimeOfDay? expiryTime,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      List<File>? imagesList,
+      bool isImageChanged,
+      int? timeless,
+      File? selectedPdfFile) async {
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
@@ -439,8 +439,13 @@ class ListRepository {
       var formData = FormData();
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
-        if (pickedFile.files[0].key == 'pdf') {
-          await Api.requestListingUploadMedia(id, cityId, pickedFile);
+        if (pickedFile.files[0].key == 'pdf' && selectedPdfFile != null) {
+          final pdfFormData = FormData.fromMap({
+            'pdf': await MultipartFile.fromFile(selectedPdfFile!.path,
+                filename: selectedPdfFile!.path,
+                contentType: MediaType('application', 'pdf')),
+          });
+          await Api.requestListingUploadMedia(id, cityId, pdfFormData);
         } else {
           if (imagesList!.isNotEmpty) {
             for (final image in imagesList) {
