@@ -52,8 +52,9 @@ class HTTPManager {
       }, onResponse: (response, handler) {
         handler.next(response);
       }, onError: (error, handler) async {
+        _logApiErrorInSentry(error);
         logError('Errors', error.response?.data);
-        if (error.response?.data['message'] ==
+        if (error.response?.data['message'].toString() ==
             'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();
           var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
@@ -310,5 +311,26 @@ class HTTPManager {
       "message": message,
       "data": data,
     };
+  }
+
+  void _logApiErrorInSentry(DioException error) async {
+    // Extracting the URL and response
+    final url = error.requestOptions.uri.toString();
+    final statusCode = error.response?.statusCode;
+    final errorResponse = error.response?.data;
+
+    // Log to Sentry
+    await Sentry.captureException(
+      error,
+      stackTrace: error.stackTrace,
+      withScope: (scope) {
+        scope.setContexts('HTTP Request', {
+          'url': url,
+          'method': error.requestOptions.method,
+          'status_code': statusCode,
+          'response': errorResponse?.toString(),
+        });
+      },
+    );
   }
 }
