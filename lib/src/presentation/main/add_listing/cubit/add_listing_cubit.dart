@@ -15,6 +15,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class AddListingCubit extends Cubit<AddListingState> {
   final ListRepository _repo;
   List<XFile> selectedAssets = [];
+  File? _selectedPdfFile;
 
   AddListingCubit(this._repo) : super(const AddListingState.loaded());
 
@@ -82,7 +83,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           endTime,
           imagesList,
           isImageChanged,
-          timeless);
+          timeless,
+          _selectedPdfFile);
       if (response.success) {
         return true;
       } else {
@@ -325,5 +327,13 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<void> clearImagePath() async {
     _repo.clearImagePath();
+  }
+
+  Future<void> savePdfFile(File? pdf) async{
+    _selectedPdfFile = pdf;
+  }
+
+    Future<void> clearSavedPdfFile() async{
+    _selectedPdfFile = null;
   }
 }
