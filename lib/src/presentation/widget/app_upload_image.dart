@@ -60,6 +60,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
   List<File> selectedFiles = [];
   List<XFile> selectedAssets = [];
   String? image;
+  BuildContext? _buildContext;
 
   @override
   void initState() {
@@ -74,11 +75,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   @override
   void dispose() {
+    _buildContext = null;
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    _buildContext = context;
     DecorationImage? decorationImage;
     BorderType borderType = BorderType.RRect;
     Widget circle = Container();
@@ -323,7 +326,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       await ListRepository.uploadPdf(_file!);
                     }
                     if (!mounted) return;
-                    context.read<AddListingCubit>().clearAssets();
+                    _buildContext?.read<AddListingCubit>().clearAssets();
                   }
                 },
                 child: const ListTile(
