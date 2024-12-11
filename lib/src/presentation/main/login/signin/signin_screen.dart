@@ -12,6 +12,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
 class SignInScreen extends StatefulWidget {
+  static const loginSuccessResult = "login_success";
   const SignInScreen({super.key});
 
   @override
@@ -32,7 +33,7 @@ class _SignInScreenState extends State<SignInScreen> {
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
             if (state == const LoginState.loaded()) {
-              Navigator.pop(context);
+              Navigator.pop(context, SignInScreen.loginSuccessResult);
             }
             state.maybeWhen(
               error: (msg) {
@@ -223,8 +224,8 @@ class _SignInLoadedState extends State<SignInLoaded> {
                                       const SizedBox(height: 16),
                                       RichText(
                                         text: TextSpan(
-                                          style:
-                                              DefaultTextStyle.of(context).style,
+                                          style: DefaultTextStyle.of(context)
+                                              .style,
                                           children: const <TextSpan>[
                                             TextSpan(
                                               text: 'Schritt 1:',
