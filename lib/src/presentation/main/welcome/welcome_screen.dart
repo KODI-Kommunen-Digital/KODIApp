@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
+  @override
+  _WelcomeScreenState createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +75,7 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, Routes.signIn);
+                      naviagateToLoginPage();
                     },
                     child: const Text(
                       'Anmelden',
@@ -112,5 +118,14 @@ class WelcomeScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void naviagateToLoginPage() async {
+    final result = await Navigator.pushNamed(context, Routes.signIn);
+
+    if (!mounted) return;
+    if (result != null && result == SignInScreen.loginSuccessResult) {
+      Navigator.pop(context);
+    }
   }
 }
