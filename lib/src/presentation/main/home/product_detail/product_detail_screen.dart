@@ -207,7 +207,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget phone = Container();
     Widget fax = Container();
     Widget email = Container();
-    Widget website = Container();
+    //Widget website = Container();
     Widget startDate = Container();
     Widget endDate = Container();
     Widget openHours = Container();
@@ -840,7 +840,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.website.isNotEmpty) {
+      /*if (product.website.isNotEmpty) {
         website = Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -896,7 +896,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           ],
         );
-      }
+      }*/
 
       if (product.startDate.isNotEmpty || product.endDate != "") {
         startDate = Row(
@@ -1116,7 +1116,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             phone,
             fax,
             email,
-            website,
+            //website,
             openHours,
             attachments,
             const SizedBox(height: 16),
