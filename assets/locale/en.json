@@ -546,5 +546,8 @@
   "views": "Views",
   "geo_permission_needed": "GPS permission needed",
   "today": "Today",
-  "mobility": "Mobility"
+  "mobility": "Mobility",
+  "update_available": "Update available",
+  "update_available_message": "An update is available. Do you want to install it?",
+  "later": "Later"
 }

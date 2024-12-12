@@ -25,7 +25,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -43,7 +42,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
-  await Upgrader.clearSavedSettings();
+  //await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

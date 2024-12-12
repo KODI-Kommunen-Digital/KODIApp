@@ -19,6 +19,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -54,12 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductModel>? news = [];
   List<ProductModel>? events = [];
   List<CitizenServiceModel>? services = [];
-  String latestAppStoreVersion = '';
-  String ignoreAppStoreVersion = '';
+  AppUpdateInfo? _updateInfo;
   late double screenHeight;
   late double screenWidth;
   late double screenAverage;
-  String mapLink = 'https://troisdorf.dksr.city/poimap/';
+  final String mapLink = 'https://troisdorf.dksr.city/poimap/';
+  final String statisticsLink =
+      'https://troisdorf.dksr.city/public-dashboards/4ce486ba9c294808bb58ba19a88e19fa?orgId=1';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     checkUserExist();
-    getIgnoreAppVersion();
+    checkForUpdate();
     _requestLocationPermission();
   }
 
@@ -88,11 +90,63 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> getIgnoreAppVersion() async {
-    String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
-    setState(() {
-      ignoreAppStoreVersion = ignoreVersion;
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      setState(() {
+        _updateInfo = info;
+      });
+      liveUpdate();
+    }).catchError((e) {
+      logError(e.toString());
     });
+  }
+
+  Future<void> liveUpdate() async {
+    if (_updateInfo?.updateAvailability == UpdateAvailability.updateAvailable) {
+      final performUpdate = await showUpdateMessage();
+      if (performUpdate) {
+        InAppUpdate.performImmediateUpdate().catchError((e) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(Translate.of(context).translate('error_message'))));
+          return AppUpdateResult.inAppUpdateFailed;
+        });
+      }
+    }
+  }
+
+  Future<bool> showUpdateMessage() async {
+    bool update = false;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('update_available')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('update_available_message')),
+              const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                update = true;
+                Navigator.of(context).pop();
+              },
+              child: const Text('Update'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(Translate.of(context).translate('later')),
+            ),
+          ],
+        );
+      },
+    );
+    return update;
   }
 
   void connectivityInternet() {
@@ -482,6 +536,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildStatistics() {
+    /*WebViewController controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..loadRequest(Uri.parse(statisticsLink));
+    return Container(
+      height: 200,
+      child: WebViewWidget(controller: controller),
+    );*/
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

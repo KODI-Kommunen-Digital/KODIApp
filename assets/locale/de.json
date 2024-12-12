@@ -554,6 +554,9 @@
   "views": "Aufrufe",
   "geo_permission_needed": "GPS Berechtigung erforderlich",
   "today": "Heute",
-  "mobility": "Mobilität"
+  "mobility": "Mobilität",
+  "update_available": "Update verfügbar",
+  "update_available_message": "Es ist ein Update verfügbar. Möchtest du die App aktualisieren?",
+  "later": "Später"
 }
 
