@@ -553,6 +553,7 @@
   "rsag": "RSAG App",
   "views": "Aufrufe",
   "geo_permission_needed": "GPS Berechtigung erforderlich",
+  "geo_permission_needed_settings": "GPS Berechtigung erforderlich! In den Einstellungen erlauben.",
   "today": "Heute",
   "mobility": "Mobilität",
   "update_available": "Update verfügbar",

@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -48,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoadingNews = false;
   bool isLoadingEvents = false;
   bool categoryLoading = false;
+  bool locationLoading = false;
   bool isRefreshLoader = false;
   String? banner;
   List<CategoryModel>? category = [];
@@ -56,6 +58,20 @@ class _HomeScreenState extends State<HomeScreen> {
   List<ProductModel>? events = [];
   List<CitizenServiceModel>? services = [];
   AppUpdateInfo? _updateInfo;
+  PermissionStatus? locationPermission;
+  WebViewController webViewController = WebViewController()
+    ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setNavigationDelegate(
+      NavigationDelegate(
+        onProgress: (int progress) {
+          // Update loading bar.
+        },
+        onPageStarted: (String url) {},
+        onPageFinished: (String url) {},
+        onHttpError: (HttpResponseError error) {},
+      ),
+    )
+    ..loadRequest(Uri.parse('https://troisdorf.dksr.city/poimap/'));
   late double screenHeight;
   late double screenWidth;
   late double screenAverage;
@@ -79,7 +95,46 @@ class _HomeScreenState extends State<HomeScreen> {
     _requestLocationPermission();
   }
 
-  void _requestLocationPermission() async {
+  Future<void> _requestLocationPermission() async {
+    locationPermission = await Permission.location.request();
+    if (isLocationAllowed()) {
+      await _getLocation();
+    } else if (locationPermission != PermissionStatus.permanentlyDenied) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content:
+              Text(Translate.of(context).translate("geo_permission_needed"))));
+      _requestLocationPermission();
+    } else {
+      bool opened = await openAppSettings();
+      if (opened) {
+        locationPermission = await Permission.location.status;
+      }
+    }
+  }
+
+  Future<void> _getLocation() async {
+    setState(() {
+      locationLoading = true;
+    });
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    setState(() {
+      locationLoading = false;
+    });
+  }
+
+  bool isLocationAllowed() {
+    if (locationPermission != null) {
+      if (locationPermission!.isGranted ||
+          locationPermission!.isProvisional ||
+          locationPermission!.isLimited) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /*Future<bool> _requestLocationPermission() async {
     PermissionStatus status = await Permission.location.request();
     if (status == PermissionStatus.denied ||
         status == PermissionStatus.permanentlyDenied) {
@@ -87,8 +142,10 @@ class _HomeScreenState extends State<HomeScreen> {
         content: Text(Translate.of(context).translate('geo_permission_needed'),
             textAlign: TextAlign.center),
       ));
+      return false;
     }
-  }
+    return true;
+  }*/
 
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
@@ -653,36 +710,55 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: InAppWebView(
-                      initialUrlRequest: URLRequest(url: WebUri(mapLink)),
-                      onGeolocationPermissionsShowPrompt:
-                          (controller, origin) async {
-                        return GeolocationPermissionShowPromptResponse(
-                            origin: origin, allow: true, retain: true);
-                      },
-                      onPermissionRequest: (controller, request) async {
-                        return PermissionResponse(
-                            resources: request.resources,
-                            action: PermissionResponseAction.GRANT);
-                      },
-                      onWebViewCreated: (controller) {
-                        controller = controller;
-                      },
-                    )),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          _requestLocationPermission();
-                        },
-                        icon: Icon(
-                          Icons.gps_fixed,
-                          size: screenAverage * 0.015,
-                          color: Colors.black,
-                        )),
-                  ],
-                ),
+                    child: (isLocationAllowed())
+                        ? InAppWebView(
+                            initialUrlRequest: URLRequest(url: WebUri(mapLink)),
+                            initialSettings: InAppWebViewSettings(
+                              javaScriptEnabled: true,
+                              geolocationEnabled: true,
+                              domStorageEnabled: true,
+                              allowFileAccess: true,
+                              useWideViewPort: true,
+                              mediaPlaybackRequiresUserGesture: false,
+                            ),
+                            onGeolocationPermissionsShowPrompt:
+                                (controller, origin) async {
+                              return GeolocationPermissionShowPromptResponse(
+                                  origin: origin, allow: true, retain: true);
+                            },
+                            onPermissionRequest: (controller, request) async {
+                              return PermissionResponse(
+                                  resources: request.resources,
+                                  action: PermissionResponseAction.GRANT);
+                            },
+                            onWebViewCreated: (controller) {
+                              controller = controller;
+                            },
+                          )
+                        : (locationPermission == null ||
+                                locationPermission!.isPermanentlyDenied)
+                            ? Container(
+                                color: Theme.of(context).shadowColor,
+                                child: TextButton(
+                                    onPressed: () async {
+                                      await openAppSettings();
+                                      _requestLocationPermission();
+                                    },
+                                    child: Text(
+                                      Translate.of(context).translate(
+                                          'geo_permission_needed_settings'),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .copyWith(
+                                              fontSize: screenAverage * 0.03),
+                                    )),
+                              )
+                            : (locationLoading)
+                                ? const Center(
+                                    child: CircularProgressIndicator(),
+                                  )
+                                : Container()),
               ],
             ),
           ),

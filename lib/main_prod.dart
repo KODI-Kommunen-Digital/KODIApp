@@ -1,10 +1,7 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
-import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
@@ -43,11 +40,11 @@ Future<void> main() async {
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
   //await Upgrader.clearSavedSettings();
-  await Firebase.initializeApp(
+  /*await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();*/
 
   await SentryFlutter.init((options) {
     options.dsn =
@@ -128,7 +125,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
