@@ -42,7 +42,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           ),
         ),
         Positioned(
-          top: 10,
+          bottom: 10,
           right: 16,
           child: SafeArea(
             child: IconButton(
