@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late double screenAverage;
   final String mapLink = 'https://troisdorf.dksr.city/poimap/';
   final String statisticsLink =
-      'https://troisdorf.dksr.city/public-dashboards/4ce486ba9c294808bb58ba19a88e19fa?orgId=1';
+      'https://troisdorf.dksr.city/public-dashboards/6a10f80976174b5789426a231357ff1f?orgId=1';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -601,108 +601,29 @@ class _HomeScreenState extends State<HomeScreen> {
       child: WebViewWidget(controller: controller),
     );*/
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        AppTerminalContainer(
-          backgroundColor: const Color(0xFF97c3c5),
-          height: screenHeight * 0.1,
-          width: screenWidth * 0.4,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.directions_walk, size: screenAverage * 0.05),
-                const SizedBox(
-                  width: 16,
+    return Expanded(
+      flex: 1,
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: InAppWebView(
+                initialUrlRequest: URLRequest(url: WebUri(statisticsLink)),
+                initialSettings: InAppWebViewSettings(
+                  javaScriptEnabled: true,
+                  domStorageEnabled: true,
+                  allowFileAccess: true,
+                  useWideViewPort: true,
+                  mediaPlaybackRequiresUserGesture: false,
                 ),
-                Text(
-                  "111",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: screenAverage * 0.03),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.2,
-                    child: Text(
-                      "Wieviele Menschen sind heute zu Fuß unterwegs?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: screenAverage * 0.015),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-        AppTerminalContainer(
-          backgroundColor: const Color(0xFF9abb8f),
-          height: screenHeight * 0.1,
-          width: screenWidth * 0.4,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.directions_bike,
-                  size: screenAverage * 0.05,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  "58",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: screenAverage * 0.03),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.2,
-                    child: Text(
-                      "Wieviele Menschen sind heute mit dem Rad unterwegs?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: screenAverage * 0.015),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ],
-    );
+                onWebViewCreated: (controller) {
+                  controller = controller;
+                },
+              )),
+        );
   }
 
   Widget _buildMap() {
     return Expanded(
+      flex: 2,
       child: Column(
         children: [
           Expanded(
