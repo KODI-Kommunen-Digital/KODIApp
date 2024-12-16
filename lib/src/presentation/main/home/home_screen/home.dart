@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late double screenAverage;
   final String mapLink = 'https://troisdorf.dksr.city/poimap/';
   final String statisticsLink =
-      'https://troisdorf.dksr.city/public-dashboards/6a10f80976174b5789426a231357ff1f?orgId=1';
+      'https://troisdorf.dksr.city/public-dashboards/4ce486ba9c294808bb58ba19a88e19fa?orgId=1';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
