@@ -34,12 +34,13 @@ class DiscoveryScreenDetail extends StatelessWidget {
                 Navigator.pushNamed(context, Routes.listProduct, arguments: {
                   'id': selectedCityId,
                   'title': '',
-                  'type': 'category'
+                  'type': services[index].type,
+                  'subCategoryId': services[index].subCategoryId
                 });
                 final prefs = await Preferences.openBox();
                 prefs.setKeyValue(
                     Preferences.categoryId, services[index].categoryId);
-                prefs.setKeyValue(Preferences.type, "category");
+                prefs.setKeyValue(Preferences.type, services[index].type);
               }
             },
             child: ClipRRect(
