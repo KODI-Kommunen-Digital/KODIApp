@@ -524,11 +524,18 @@ class Api {
     }
   }
 
-  static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
-    var list =
-        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
-    final result = await HTTPManager(forum: false).get(url: list);
-    return ResultApiModel.fromJson(result);
+  static Future<ResultApiModel> requestSubCatList(params, cityId, pageNo, subCategoryId) async {
+      if (cityId != 0 && cityId != null) {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
+        final result = await HTTPManager(forum: false).get(url: list);
+        return ResultApiModel.fromJson(result);
+      } else {
+        var list =
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
+        final result = await HTTPManager(forum: false).get(url: list);
+        return ResultApiModel.fromJson(result);
+      }
   }
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
@@ -725,4 +732,11 @@ class Api {
   }
 
   Api._internal();
+  
+  static _getSubCategoryParam(subCategoryId) {
+    if(subCategoryId != null) {
+      return "&subcategoryId=$subCategoryId";
+    }
+    return "";
+  }
 }

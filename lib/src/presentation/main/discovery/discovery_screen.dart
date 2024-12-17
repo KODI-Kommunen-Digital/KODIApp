@@ -192,7 +192,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
-    } else if (service.imageLink == "500" || service.imageLink == "31") {
+    } else if (service.imageLink == "500" || service.imageLink == "501") {
       int? currentLocation =
           await context.read<DiscoveryCubit>().getCitySelected();
       Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
@@ -208,9 +208,29 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               ]
             : [
                 CitizenServiceModel(
-                    imageUrl: "311", imageLink: Images.service311),
+                    imageUrl: "32",
+                    imageLink: Images.service32,
+                    categoryId: 45,
+                    subCategoryId: 12,
+                    type: "subCategoryService"),
                 CitizenServiceModel(
-                    imageUrl: "312", imageLink: Images.service312)
+                    imageUrl: "33",
+                    imageLink: Images.service33,
+                    categoryId: 45,
+                    subCategoryId: 13,
+                    type: "subCategoryService"),
+                CitizenServiceModel(
+                    imageUrl: "34",
+                    imageLink: Images.service34,
+                    categoryId: 45,
+                    subCategoryId: 14,
+                    type: "subCategoryService"),
+                CitizenServiceModel(
+                    imageUrl: "35",
+                    imageLink: Images.service35,
+                    categoryId: 45,
+                    subCategoryId: 15,
+                    type: "subCategoryService")
               ]
       });
     } else {

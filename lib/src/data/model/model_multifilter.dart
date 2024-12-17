@@ -8,6 +8,7 @@ class MultiFilter {
   final GroupFilter? currentForumGroupFilter; //Forum group filter
   final int? currentListingStatus; //Listing status in All Listings
   final int? currentCategory; //Listing category in ListProduct city
+  final int? currentSubCategory; //Listing sub category in ListProduct city
 
   final List<CategoryModel>? cities; //All cities
   final List<CategoryModel>? categories;
@@ -18,6 +19,7 @@ class MultiFilter {
   final bool hasProductEventFilter;
   final bool hasLocationFilter;
   final bool hasCategoryFilter;
+  final bool hasSubCategoryFilter;
 
   final bool multipleCityFilter;
 
@@ -29,10 +31,12 @@ class MultiFilter {
         this.currentListingStatus,
         this.currentProductEventFilter,
         this.currentCategory,
+        this.currentSubCategory,
         this.hasListingStatusFilter = false,
         this.hasForumGroupFilter = false,
         this.hasProductEventFilter = false,
         this.hasLocationFilter = false,
         this.hasCategoryFilter = false,
-        this.multipleCityFilter = false});
+        this.multipleCityFilter = false,
+        this.hasSubCategoryFilter = false});
 }

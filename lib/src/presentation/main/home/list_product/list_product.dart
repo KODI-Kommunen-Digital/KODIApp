@@ -31,6 +31,7 @@ class ListProductScreen extends StatefulWidget {
 class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
+  int? _subCategoryId;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -42,16 +43,18 @@ class _ListProductScreenState extends State<ListProductScreen> {
   void initState() {
     super.initState();
     isCity = widget.arguments['title'] != '';
+    _subCategoryId = widget.arguments['subCategoryId'];
     loadListingsList();
   }
 
   Future<void> loadListingsList() async {
     if (isCity) {
-      await context.read<ListCubit>().setCategoryFilter(0, null);
+      await context.read<ListCubit>().setCategoryFilter(0, null, _subCategoryId);
     }
-    await context
-        .read<ListCubit>()
-        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
+    print("fetchibng data 1");
+    await context.read<ListCubit>().onLoad(
+        selectedFilter?.currentLocation ?? widget.arguments['id'],
+        _subCategoryId);
   }
 
   MultiFilter whatCanFilter(bool isEvent) {
@@ -86,7 +89,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (filter?.hasProductEventFilter ?? false) {
       loadedList = await context
           .read<ListCubit>()
-          .updateLoadedList(filter!.currentLocation);
+          .updateLoadedList(filter!.currentLocation, _subCategoryId);
       context.read<ListCubit>().onDateProductFilter(
           filter.currentProductEventFilter,
           loadedList,
@@ -97,7 +100,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     }
     if (filter?.hasCategoryFilter ?? false) {
       context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
-          selectedFilter?.currentLocation ?? widget.arguments['id']);
+          selectedFilter?.currentLocation ?? widget.arguments['id'], _subCategoryId);
     }
   }
 
@@ -110,7 +113,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           title: widget.arguments['title'] != ''
               ? Text(widget.arguments['title'])
               : FutureBuilder<String?>(
-                  future: context.read<ListCubit>().getCategory(),
+                  future: context.read<ListCubit>().getCategory(_subCategoryId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const CircularProgressIndicator.adaptive();
@@ -173,18 +176,19 @@ class _ListProductScreenState extends State<ListProductScreen> {
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
             loaded: (list, listCity) => ListLoaded(
-              list: list,
-              listCity: listCity,
-              selectedId:
-                  selectedFilter?.currentLocation ?? widget.arguments['id'],
-            ),
+                list: list,
+                listCity: listCity,
+                selectedId:
+                    selectedFilter?.currentLocation ?? widget.arguments['id'],
+                subCategoryId: _subCategoryId),
             updated: (list, listCity) {
               return ListLoaded(
                   list: list,
                   listCity: listCity,
                   selectedId:
                       selectedFilter?.currentLocation ?? widget.arguments['id'],
-                  updated: true);
+                  updated: true,
+                  subCategoryId: _subCategoryId);
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
             initial: () {
@@ -199,11 +203,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult.trim(), true);
+      context.read<ListCubit>().searchListing(searchResult.trim(), true, _subCategoryId);
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(
-          selectedFilter?.currentLocation ?? widget.arguments['id']);
+          selectedFilter?.currentLocation ?? widget.arguments['id'], _subCategoryId);
     }
   }
 
@@ -274,13 +278,15 @@ class ListLoaded extends StatefulWidget {
   final dynamic selectedId;
   final List listCity;
   final bool updated;
+  final int? subCategoryId;
 
   const ListLoaded(
       {super.key,
       required this.list,
       required this.selectedId,
       required this.listCity,
-      this.updated = false});
+      this.updated = false,
+      this.subCategoryId});
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -324,11 +330,11 @@ class _ListLoadedState extends State<ListLoaded> {
         if (context.read<ListCubit>().isSearching) {
           context
               .read<ListCubit>()
-              .searchListing(context.read<ListCubit>().searchTerm, false);
+              .searchListing(context.read<ListCubit>().searchTerm, false, widget.subCategoryId);
         } else {
           list = await context
               .read<ListCubit>()
-              .newListings(++pageNo, widget.selectedId);
+              .newListings(++pageNo, widget.selectedId, widget.subCategoryId);
         }
         setState(() {
           isLoadingMore = false;
@@ -352,7 +358,8 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
+    print("fetchibng data 2");
+    await context.read<ListCubit>().onLoad(widget.selectedId, widget.subCategoryId);
     setState(() {
       isLoading = false;
     });

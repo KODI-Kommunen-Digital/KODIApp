@@ -25,6 +25,7 @@ class ListRepository {
     required type,
     required pageNo,
     cityId,
+    int? subCategoryId,
   }) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
@@ -64,11 +65,16 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(selectedCityId, pageNo);
+      int params = categoryId;
+      final response = await Api.requestSubCatList(
+          params, selectedCityId, pageNo, subCategoryId);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
+        if (selectedCityId != 0) {
+          list.removeWhere((element) => element.cityId != selectedCityId);
+        }
         return [list, response.pagination];
       }
     }
@@ -91,6 +97,11 @@ class ListRepository {
     if (multiFilter.hasCategoryFilter &&
         (multiFilter.currentCategory ?? 0) != 0) {
       linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
+    }
+    if (multiFilter.hasSubCategoryFilter &&
+        (multiFilter.currentSubCategory ?? 0) != 0) {
+      linkFilter =
+          "$linkFilter&subcategoryId=${multiFilter.currentSubCategory}";
     }
     final response =
         await Api.requestSearchListing(content, linkFilter, pageNo);
@@ -370,7 +381,7 @@ class ListRepository {
       }
     }
 
-    if (categoryId == 1) {
+    if (categoryId == 1 || categoryId == 45) {
       subCategoryId = subCategoryId;
     } else {
       subCategoryId = null;
@@ -555,7 +566,7 @@ class ListRepository {
       }
     }
 
-    if (categoryId == 1) {
+    if (categoryId == 1 || categoryId == 45) {
       subCategoryId = subCategoryId;
     } else {
       subCategoryId = null;
@@ -734,8 +745,8 @@ class ListRepository {
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
   }
 
-  void setSubCategoryId(value) async {
-    final response = await Api.requestSubmitSubCategory(categoryId: 1);
+  void setSubCategoryId(value, categoryID) async {
+    final response = await Api.requestSubmitSubCategory(categoryId: categoryID);
     var jsonSubCategory = response.data;
     final item = jsonSubCategory.firstWhere(
         (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());

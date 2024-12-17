@@ -259,7 +259,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _processing = true;
     });
 
-    if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+    if (selectedCategory?.toLowerCase() == "news" ||
+        selectedCategory == null ||
+        selectedCategory?.toLowerCase() == "dienstleister") {
       await selectSubCategory(selectedCategory?.toLowerCase());
     }
 
@@ -283,6 +285,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedCategory = jsonCategory.firstWhere(
           (element) => element["id"] == widget.item!.categoryId)["name"];
       if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory?.toLowerCase() == "dienstleister" ||
           selectedCategory == null) {
         selectedSubCategory = listSubCategory.firstWhere(
             (element) => element["id"] == widget.item!.subcategoryId)["name"];
@@ -292,6 +295,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           .firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
       if (selectedCategory?.toLowerCase() == "news" ||
+          selectedCategory?.toLowerCase() == "dienstleister" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
@@ -368,6 +372,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
         if (selectedCategory?.toLowerCase() == "news" ||
+            selectedCategory?.toLowerCase() == "dienstleister" ||
             selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
@@ -665,6 +670,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
             context.read<AddListingCubit>().clearImagePath();
             if (!mounted) return;
             context.read<AddListingCubit>().clearAssets();
+          } else {
+            await AppBloc.homeCubit.onLoad(false);
+            setState(() {
+              isLoading = false;
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                  content: Text(
+                      "Etwas ist schiefgelaufen. Bitte versuchen Sie es später noch einmal.")),
+            );
           }
           await _uploadPdf();
         }
@@ -787,24 +802,30 @@ class _AddListingScreenState extends State<AddListingScreen> {
       17: "category_free",
       29: "category_handel",
       44: "category_job",
+      43: "category_gastro",
       12: "category_offers",
+      45: "category_dienstleister"
     };
     return categories[id];
   }
 
-  String? _getSubCategoryTranslation(int id) {
-    Map<int, String> subCategories = {
-      1: "subcategory_newsflash",
-      3: "subcategory_politics",
-      4: "subcategory_economy",
-      5: "subcategory_sports",
-      7: "subcategory_local",
-      8: "subcategory_club_news",
-      9: "subcategory_road",
-      10: "subcategory_official_notification",
-      11: "subcategory_timeless_news"
-    };
-    return subCategories[id];
+  String? _getSubCategoryTranslation(dynamic subcategory) {
+    final id = subcategory['id'];
+    if (selectedCategory == 1) {
+      Map<int, String> subCategories = {
+        1: "subcategory_newsflash",
+        3: "subcategory_politics",
+        4: "subcategory_economy",
+        5: "subcategory_sports",
+        7: "subcategory_local",
+        8: "subcategory_club_news",
+        9: "subcategory_road",
+        10: "subcategory_official_notification",
+        11: "subcategory_timeless_news"
+      };
+      return subCategories[id] ?? subcategory['name'];
+    }
+    return subcategory['name'];
   }
 
   Widget _buildContent() {
@@ -987,6 +1008,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               },
                             );
                             if (selectedCategory?.toLowerCase() == "news" ||
+                                selectedCategory?.toLowerCase() ==
+                                    "dienstleister" ||
                                 selectedCategory == null) {
                               selectSubCategory(
                                   selectedCategory?.toLowerCase());
@@ -997,7 +1020,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 )
               ],
             ),
-            if (selectedCategory?.toLowerCase() == "news")
+            if (selectedCategory?.toLowerCase() == "news" ||
+                selectedCategory?.toLowerCase() == "dienstleister")
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1037,7 +1061,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                       value: subcategory['name'],
                                       child: Text(Translate.of(context)
                                           .translate(_getSubCategoryTranslation(
-                                              subcategory['id']))));
+                                              subcategory))));
                                 }).toList(),
                                 onChanged: (value) {
                                   context
@@ -1048,7 +1072,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                     context
                                         .read<AddListingCubit>()
                                         .setSubCategoryId(
-                                            selectedSubCategory?.toLowerCase());
+                                            selectedSubCategory?.toLowerCase(),
+                                            _getSelectedCategroyId(
+                                                selectedCategory));
                                   });
                                 },
                               ),
@@ -1568,9 +1594,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listSubCategory = subCategoryResponse!.data;
       if (subCategoryResponse.data.isNotEmpty) {
         selectedSubCategory = subCategoryResponse.data.last['name'];
-        context
-            .read<AddListingCubit>()
-            .setSubCategoryId(subCategoryResponse.data.last['name']);
+        context.read<AddListingCubit>().setSubCategoryId(
+            subCategoryResponse.data.last['name'],
+            _getSelectedCategroyId(selectedCategory));
       }
     });
   }
@@ -1586,5 +1612,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
         throw Exception('PDF upload failed: $e'); // Rethrow the error
       }
     }
+  }
+
+  _getSelectedCategroyId(String? selectedCategory) {
+    final firstMatchingCategroy = listCategory.firstWhere((item) =>
+        item['name'].toString().toLowerCase() ==
+        selectedCategory?.toLowerCase());
+
+    // falls back to original logic if fails
+    if (firstMatchingCategroy == null) {
+      return 1;
+    }
+
+    return firstMatchingCategroy['id'];
   }
 }

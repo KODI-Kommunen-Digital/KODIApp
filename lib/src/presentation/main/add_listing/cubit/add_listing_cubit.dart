@@ -250,9 +250,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void setSubCategoryId(value) async {
+  void setSubCategoryId(value, categoryId) async {
     try {
-      _repo.setSubCategoryId(value);
+      _repo.setSubCategoryId(value, categoryId);
     } catch (e, stackTrace) {
       logError('set subCategoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);

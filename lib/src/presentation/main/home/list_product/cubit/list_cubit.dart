@@ -30,7 +30,8 @@ class ListCubit extends Cubit<ListState> {
   bool isSearching = false;
   String? searchTerm;
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad(cityId, int? subCategoryId) async {
+    print("fetchibng data onLoad");
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -38,6 +39,7 @@ class ListCubit extends Cubit<ListState> {
     listCity = await getCityList() ?? [];
     dynamic result;
     if (cityId is List) {
+      print("fetchibng data multiple city");
       result = [];
       for (var city in cityId) {
         final list = await ListRepository.loadList(
@@ -45,15 +47,18 @@ class ListCubit extends Cubit<ListState> {
           type: type,
           pageNo: pageNo,
           cityId: city,
+          subCategoryId: subCategoryId,
         );
         result.addAll(list);
       }
     } else {
+      print("fetchibng data single city");
       result = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
         pageNo: pageNo,
         cityId: cityId,
+        subCategoryId: subCategoryId,
       );
     }
     if (result != null) {
@@ -64,7 +69,8 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  Future<void> setCategoryFilter(int filter, int? cityId) async {
+  Future<void> setCategoryFilter(
+      int filter, int? cityId, int? subCategoryId) async {
     final prefs = await Preferences.openBox();
 
     if (filter == 0) {
@@ -73,11 +79,13 @@ class ListCubit extends Cubit<ListState> {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
     if (cityId != null) {
-      onLoad(cityId);
+      print("fetchibng data 3");
+      onLoad(cityId, subCategoryId);
     }
   }
 
-  Future<List<ProductModel>> newListings(int pageNo, city) async {
+  Future<List<ProductModel>> newListings(
+      int pageNo, city, int? subCategoryId) async {
     final prefs = await Preferences.openBox();
     // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -88,20 +96,24 @@ class ListCubit extends Cubit<ListState> {
     if (city is List) {
       result = [];
       for (var cityId in city) {
+        print("fetchibng data mul city new listing");
         final list = await ListRepository.loadList(
           categoryId: (categoryId == 0) ? "" : categoryId,
           type: type,
           pageNo: pageNo,
           cityId: cityId,
+          subCategoryId: subCategoryId,
         );
         result.addAll(list);
       }
     } else {
+      print("fetchibng single city new listing");
       result = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
         pageNo: pageNo,
         cityId: city,
+        subCategoryId: subCategoryId,
       );
     }
 
@@ -114,17 +126,19 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  Future<List<ProductModel>> updateLoadedList(city) async {
+  Future<List<ProductModel>> updateLoadedList(city, int? subCategoryId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
     List<ProductModel> result = [];
     for (var cityId in city) {
+      print("fetchibng data updated loaded list 1");
       final list = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
         pageNo: pageNo,
         cityId: cityId,
+        subCategoryId: subCategoryId,
       );
       result.addAll(list?[0] as List<ProductModel>? ?? []);
     }
@@ -132,7 +146,8 @@ class ListCubit extends Cubit<ListState> {
     return listLoaded;
   }
 
-  Future<void> searchListing(content, bool newSearch) async {
+  Future<void> searchListing(
+      content, bool newSearch, int? subCategoryId) async {
     if (newSearch) {
       emit(const ListState.loading());
       pageNo = 1;
@@ -148,7 +163,9 @@ class ListCubit extends Cubit<ListState> {
         hasCategoryFilter: true,
         hasLocationFilter: true,
         currentLocation: cityId,
-        currentCategory: categoryId);
+        currentCategory: categoryId,
+        hasSubCategoryFilter: true,
+        currentSubCategory: subCategoryId);
 
     final result = await ListRepository.searchListing(
         content: content, multiFilter: multiFilter, pageNo: pageNo++);
@@ -192,11 +209,12 @@ class ListCubit extends Cubit<ListState> {
     emit(ListStateUpdated(listDataList, listCity));
   }
 
-  Future<void> cancelSearch(int cityId) async {
+  Future<void> cancelSearch(int cityId, int? subCategoryId) async {
     isSearching = true;
     searchTerm = "";
     pageNo = 0;
-    onLoad(cityId);
+    print("fetchibng data 4");
+    onLoad(cityId, subCategoryId);
   }
 
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
@@ -308,8 +326,20 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  Future<String?> getCategory() async {
+  Future<String?> getCategory(int? subCategoryId) async {
     final categoryId = await repo.getCategoryId();
+    if (categoryId == 45 && subCategoryId != null) {
+      switch (subCategoryId) {
+        case 12:
+          return "category_handwerk";
+        case 13:
+          return "category_gesundheit";
+        case 14:
+          return "category_immobilien";
+        case 15:
+          return "category_finanzen";
+      }
+    }
     Map<int, String> categories = {
       1: "category_news",
       2: "category_traffic",
@@ -326,6 +356,7 @@ class ListCubit extends Cubit<ListState> {
       13: "category_food",
       29: "category_handel",
       44: "category_job",
+      43: "category_gastro",
     };
     return categories[categoryId];
   }
