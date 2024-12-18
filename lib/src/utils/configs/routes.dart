@@ -241,9 +241,12 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
+            
             return AddListingScreen(
               item: arguments['item'] as ProductModel?,
               isNewList: arguments['isNewList'] as bool,
+              preselectCategory: arguments['category'] as int?,
+              preselectSubCategory: arguments['subCategory'] as int?,
             );
           },
           fullscreenDialog: true,
