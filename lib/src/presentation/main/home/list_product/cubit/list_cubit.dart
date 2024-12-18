@@ -84,6 +84,17 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  Future<int?> getCategoryId() async {
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, null);
+    return categoryId;
+  }
+
+  Future<void> setCategoryId(int categoryId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
   Future<List<ProductModel>> newListings(
       int pageNo, city, int? subCategoryId) async {
     final prefs = await Preferences.openBox();

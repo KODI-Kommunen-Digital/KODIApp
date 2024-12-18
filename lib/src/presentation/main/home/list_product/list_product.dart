@@ -32,6 +32,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   final TextEditingController _searchController = TextEditingController();
   late bool isCity;
   int? _subCategoryId;
+  int? _categoryId;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -48,8 +49,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future<void> loadListingsList() async {
+    _categoryId = await context.read<ListCubit>().getCategoryId();
     if (isCity) {
-      await context.read<ListCubit>().setCategoryFilter(0, null, _subCategoryId);
+      await context
+          .read<ListCubit>()
+          .setCategoryFilter(0, null, _subCategoryId);
     }
     print("fetchibng data 1");
     await context.read<ListCubit>().onLoad(
@@ -99,8 +103,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
       loadListingsList();
     }
     if (filter?.hasCategoryFilter ?? false) {
-      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
-          selectedFilter?.currentLocation ?? widget.arguments['id'], _subCategoryId);
+      context.read<ListCubit>().setCategoryFilter(
+          filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? widget.arguments['id'],
+          _subCategoryId);
     }
   }
 
@@ -196,6 +202,17 @@ class _ListProductScreenState extends State<ListProductScreen> {
             },
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
+          shape: const CircleBorder(),
+          onPressed: () {
+            _navigateToAddListingScreen(context);
+          },
+          child: const Icon(
+            Icons.add,
+            color: Color(0xFF1D1D1B),
+          ),
+        ),
       ),
     );
   }
@@ -203,11 +220,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult.trim(), true, _subCategoryId);
+      context
+          .read<ListCubit>()
+          .searchListing(searchResult.trim(), true, _subCategoryId);
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(
-          selectedFilter?.currentLocation ?? widget.arguments['id'], _subCategoryId);
+          selectedFilter?.currentLocation ?? widget.arguments['id'],
+          _subCategoryId);
     }
   }
 
@@ -259,6 +279,25 @@ class _ListProductScreenState extends State<ListProductScreen> {
       },
     );
     return searchRequest;
+  }
+
+  Future<void> _navigateToAddListingScreen(BuildContext context) async {
+    if (AppBloc.userCubit.state == null) {
+      final result = await Navigator.pushNamed(
+        context,
+        Routes.signIn,
+        arguments: Routes.submit,
+      );
+      if (result == null) return;
+    }
+    if (!mounted) return;
+    final result = await Navigator.pushNamed(context, Routes.submit,
+        arguments: {
+          'isNewList': true,
+          'subCategory': _subCategoryId,
+          'category': _categoryId
+        });
+    await context.read<ListCubit>().setCategoryId(_categoryId ?? 0);
   }
 }
 
@@ -328,9 +367,10 @@ class _ListLoadedState extends State<ListLoaded> {
           // previousScrollPosition = _scrollController.position.pixels;
         });
         if (context.read<ListCubit>().isSearching) {
-          context
-              .read<ListCubit>()
-              .searchListing(context.read<ListCubit>().searchTerm, false, widget.subCategoryId);
+          context.read<ListCubit>().searchListing(
+              context.read<ListCubit>().searchTerm,
+              false,
+              widget.subCategoryId);
         } else {
           list = await context
               .read<ListCubit>()
@@ -359,7 +399,9 @@ class _ListLoadedState extends State<ListLoaded> {
       isLoading = true;
     });
     print("fetchibng data 2");
-    await context.read<ListCubit>().onLoad(widget.selectedId, widget.subCategoryId);
+    await context
+        .read<ListCubit>()
+        .onLoad(widget.selectedId, widget.subCategoryId);
     setState(() {
       isLoading = false;
     });

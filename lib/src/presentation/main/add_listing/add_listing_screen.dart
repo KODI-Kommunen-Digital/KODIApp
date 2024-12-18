@@ -25,12 +25,15 @@ import 'cubit/add_listing_cubit.dart';
 class AddListingScreen extends StatefulWidget {
   final ProductModel? item;
   final bool isNewList;
+  final int? preselectCategory;
+  final int? preselectSubCategory;
 
-  const AddListingScreen({
-    super.key,
-    this.item,
-    required this.isNewList,
-  });
+  const AddListingScreen(
+      {super.key,
+      this.item,
+      required this.isNewList,
+      required this.preselectCategory,
+      required this.preselectSubCategory});
 
   @override
   State<AddListingScreen> createState() => _AddListingScreenState();
@@ -105,9 +108,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
   late int? currentCity;
   late List<dynamic> jsonCategory;
 
+  int? _preselectCategory;
+  int? _preselectSubCategory;
+
   @override
   void initState() {
     super.initState();
+    _preselectCategory = widget.preselectCategory;
+    _preselectSubCategory = widget.preselectSubCategory;
     _onProcess();
     if (widget.item != null) {
       if (widget.item?.expiryDate != null && widget.item?.expiryDate != "") {
@@ -229,17 +237,44 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final loadCitiesResponse =
         await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
+    String? selectedCategoryLocal;
     final loadCategoryResponse =
         await context.read<AddListingCubit>().loadCategory();
     if (!loadCategoryResponse?.data.isEmpty) {
       jsonCategory = loadCategoryResponse!.data;
-      final selectedCategory = jsonCategory.first['name'];
+      selectedCategoryLocal = jsonCategory.first['name'];
+      if (_preselectCategory != null) {
+        String? selectedCategoryName = jsonCategory.firstWhere(
+          (category) => category['id'] == _preselectCategory,
+          orElse: () => null,
+        )?['name'];
+        if (selectedCategoryName != null) {
+          selectedCategoryLocal = selectedCategoryName;
+        }
+      }
       if (!mounted) return;
       final subCategoryResponse = await context
           .read<AddListingCubit>()
-          .loadSubCategory(selectedCategory);
-      listSubCategory = subCategoryResponse!.data;
-      selectedSubCategory = subCategoryResponse.data.last['name'];
+          .loadSubCategory(selectedCategoryLocal);
+      listSubCategory = subCategoryResponse?.data ?? [];
+
+      final subCategoryList = subCategoryResponse?.data;
+      if (subCategoryList != null &&
+          subCategoryList is List &&
+          subCategoryList.isNotEmpty) {
+        selectedSubCategory = subCategoryList.last['name'];
+        if (_preselectSubCategory != null) {
+          String? selectedSubCategoryName = subCategoryList.firstWhere(
+            (category) => category['id'] == _preselectSubCategory,
+            orElse: () => null,
+          )?['name'];
+          if (selectedSubCategoryName != null) {
+            selectedSubCategory = selectedSubCategoryName;
+          }
+        }
+      } else {
+        selectedSubCategory = null;
+      }
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
@@ -253,16 +288,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         selectedCity = loadCitiesResponse!.data.first['name'];
       }
-      selectedSubCategory = loadCategoryResponse?.data.first['name'];
       listCity = loadCitiesResponse.data;
-      selectedCategory = selectedSubCategory;
+      selectedCategory = selectedCategoryLocal;
       _processing = true;
     });
 
     if (selectedCategory?.toLowerCase() == "news" ||
         selectedCategory == null ||
         selectedCategory?.toLowerCase() == "dienstleister") {
-      await selectSubCategory(selectedCategory?.toLowerCase());
+      await selectSubCategoryOnLaunch(selectedCategory?.toLowerCase());
     }
 
     Map<String, dynamic> params = {};
@@ -377,8 +411,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context)
-                  .translate(_getCategoryTranslation(
-                      loadCategoryResponse!.data.first['id']))
+                  .translate(selectedCategory ??
+                      _getCategoryTranslation(
+                          loadCategoryResponse!.data.first['id']))
                   .toLowerCase());
           setState(() {
             listSubCategory = subCategoryResponse!.data;
@@ -1579,6 +1614,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
     );
   }
 
+  Future<void> selectSubCategoryOnLaunch(String? selectedCategory) async {
+    context.read<AddListingCubit>().clearSubCategory();
+    final subCategoryResponse = await context
+        .read<AddListingCubit>()
+        .loadSubCategory(selectedCategory!.toLowerCase());
+    if (!mounted) return;
+    setState(() {
+      listSubCategory = subCategoryResponse?.data;
+      if (subCategoryResponse?.data?.isNotEmpty == true) {
+        selectedSubCategory ??= subCategoryResponse!.data.last['name'];
+        context.read<AddListingCubit>().setSubCategoryId(
+            subCategoryResponse?.data.last['name'],
+            _getSelectedCategroyId(selectedCategory));
+      }
+    });
+  }
+
   Future<void> selectSubCategory(String? selectedCategory) async {
     context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
@@ -1586,14 +1638,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
         .read<AddListingCubit>()
         .loadSubCategory(selectedCategory!.toLowerCase());
     if (!mounted) return;
-    context
-        .read<AddListingCubit>()
-        .setCategoryId(selectedCategory.toLowerCase());
 
     setState(() {
-      listSubCategory = subCategoryResponse!.data;
-      if (subCategoryResponse.data.isNotEmpty) {
-        selectedSubCategory = subCategoryResponse.data.last['name'];
+      listSubCategory = subCategoryResponse?.data;
+      if (subCategoryResponse?.data?.isNotEmpty == true) {
+        selectedSubCategory = subCategoryResponse!.data.last['name'];
         context.read<AddListingCubit>().setSubCategoryId(
             subCategoryResponse.data.last['name'],
             _getSelectedCategroyId(selectedCategory));
