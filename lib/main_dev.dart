@@ -47,7 +47,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+try{
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+}catch(e){
+  
+}
 
   await SentryFlutter.init((options) {
     options.dsn =
