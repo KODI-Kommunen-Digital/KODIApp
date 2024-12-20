@@ -16,11 +16,9 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl =
-        !forum ? 'http://5.75.161.217:6001/' : 'http://5.75.161.217:6002/';
-    // _baseUrl = !forum
-    //     ? 'https://appcms.stockheim-online.de/api/'
-    //     : 'https://appcms.stockheim-online.de/forumapi/';
+    _baseUrl = !forum
+        ? 'https://appcms.stockheim-online.de/api/'
+        : 'https://appcms.stockheim-online.de/forumapi/';
 
     _dio = Dio(
       BaseOptions(
