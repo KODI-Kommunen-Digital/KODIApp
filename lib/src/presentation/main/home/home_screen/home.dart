@@ -947,9 +947,9 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
                           Expanded(
                               child: InAppWebView(
                                   initialUrlRequest: URLRequest(
-                                      url: Uri.parse(
+                                      url: WebUri(
                                           'https://troisdorf.dksr.city/map/')),
-                                  androidOnGeolocationPermissionsShowPrompt:
+                                  onGeolocationPermissionsShowPrompt:
                                       (InAppWebViewController controller,
                                           String origin) async {
                                     return GeolocationPermissionShowPromptResponse(
@@ -957,23 +957,17 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
                                         allow: true,
                                         retain: true);
                                   },
-                                  initialOptions: InAppWebViewGroupOptions(
-                                    android: AndroidInAppWebViewOptions(
+                                  initialSettings: InAppWebViewSettings(
                                       useWideViewPort: true,
                                       geolocationEnabled: true,
-                                    ),
-                                    ios: IOSInAppWebViewOptions(
-                                      allowsInlineMediaPlayback: true,
-                                    ),
-                                  ),
-                                  androidOnPermissionRequest:
+                                      allowsInlineMediaPlayback: true),
+                                  onPermissionRequest:
                                       (InAppWebViewController controller,
-                                          String origin,
-                                          List<String> resources) async {
-                                    return PermissionRequestResponse(
-                                        resources: resources,
-                                        action: PermissionRequestResponseAction
-                                            .GRANT);
+                                          PermissionRequest request) async {
+                                    return PermissionResponse(
+                                      resources: request.resources,
+                                      action: PermissionResponseAction.GRANT,
+                                    );
                                   })),
                         ],
                       ),

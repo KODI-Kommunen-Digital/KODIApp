@@ -47,7 +47,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction(dotenv.env['IMPRINT_URL']!);
+                _makeAction(dotenv.env['IMPRINT_URL'] ?? "");
               },
               trailing: Row(
                 children: <Widget>[
@@ -64,7 +64,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction(dotenv.env['PRIVACY_POLICY_URL']!);
+                _makeAction(dotenv.env['PRIVACY_POLICY_URL'] ?? "");
               },
               trailing: Row(
                 children: <Widget>[
@@ -81,7 +81,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction(dotenv.env['TERMS_OF_USE_URL']!);
+                _makeAction(dotenv.env['TERMS_OF_USE_URL'] ?? "");
               },
               trailing: Row(
                 children: <Widget>[

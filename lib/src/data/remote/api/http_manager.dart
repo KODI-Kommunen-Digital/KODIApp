@@ -24,13 +24,13 @@ class HTTPManager {
         _baseUrl = dotenv.env['DEFAULT_API_URL']!;
         break;
       case APIType.forum:
-        _baseUrl = dotenv.env['FORUM_API_URL']!;
+        _baseUrl = dotenv.env['FORUM_API_URL'] ?? "";
         break;
       case APIType.appointment:
-        _baseUrl = dotenv.env['APPOINTMENT_API_URL']!;
+        _baseUrl = dotenv.env['APPOINTMENT_API_URL'] ?? "";
         break;
       case APIType.waste:
-        _baseUrl = dotenv.env['WASTE_API_URL']!;
+        _baseUrl = dotenv.env['WASTE_API_URL'] ?? "";
         break;
     }
 
