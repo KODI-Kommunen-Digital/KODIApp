@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:6005/ImprintPage');
+                _makeAction('https://appcms.stockheim-online.de/ImprintPage');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:6005/PrivacyPolicy');
+                _makeAction('https://appcms.stockheim-online.de/PrivacyPolicy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +79,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('http://5.75.161.217:6005/TermsOfUse');
+                _makeAction('https://appcms.stockheim-online.de/TermsOfUse');
               },
               trailing: Row(
                 children: <Widget>[
