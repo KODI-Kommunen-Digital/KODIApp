@@ -9,11 +9,11 @@ class TrolleyMakerAddCardCubit extends Cubit<TrolleyMakerAddCardState> {
       : super(const Initial());
 
   Future<void> addCard(
-      String cardNumber, String productionNumber, int cardIDToLock) async {
+      String cardNumber, String productionNumber) async {
     emit(const Loading());
     try {
       var result = await trolleyMakerRepository.addCard(
-          cardNumber, productionNumber, cardIDToLock);
+          cardNumber, productionNumber);
       result.fold((error) => {emit(Error(error.errorMessage))},
           (responseModel) {
         emit(AddCardSuccess(cardNumber));

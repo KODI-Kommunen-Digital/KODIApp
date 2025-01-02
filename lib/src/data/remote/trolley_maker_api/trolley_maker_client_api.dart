@@ -37,6 +37,6 @@ abstract class TrolleyMakerClientApi {
   Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(
       @Path("gguid") String gguid);
 
-  @POST('/add-card')
+  @POST('/api/v2/add-card')
   Future<dynamic> addCard(@Body() TrolleyMakerAddCardRequest request);
 }
