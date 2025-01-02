@@ -1,6 +1,6 @@
 class TrolleyMakerErrorResponse {
   final String errorMessage;
-  final String errorStatusCode;
+  final dynamic errorStatusCode;
   final int httpStatusCode;
 
   TrolleyMakerErrorResponse({

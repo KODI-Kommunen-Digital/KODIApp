@@ -158,7 +158,7 @@ class _TrolleyMakerAddCardSheetState extends State<TrolleyMakerAddCardSheet> {
             setState(() {
               _errorProductNumber = UtilValidator.validate(
                   _productNumberTextController.text,
-                  type: ValidateType.number);
+                  type: ValidateType.normal);
             });
           },
           onSubmitted: (text) {
@@ -201,13 +201,13 @@ class _TrolleyMakerAddCardSheetState extends State<TrolleyMakerAddCardSheet> {
           type: ValidateType.card);
       _errorProductNumber = UtilValidator.validate(
           _productNumberTextController.text,
-          type: ValidateType.number);
+          type: ValidateType.normal);
     });
     if (_errorCardNumber == null &&
         _errorProductNumber == null &&
         widget.cardToLock != null) {
       trolleyMakerCubit.addCard(_cardNumberTextController.text,
-          _productNumberTextController.text, widget.cardToLock!);
+          _productNumberTextController.text);
     }
   }
 }
