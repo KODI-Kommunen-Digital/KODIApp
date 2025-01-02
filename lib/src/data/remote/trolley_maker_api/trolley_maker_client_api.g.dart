@@ -241,7 +241,7 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
     )
         .compose(
           _dio.options,
-          '/add-card',
+          '/api/v2/add-card',
           queryParameters: queryParameters,
           data: _data,
         )

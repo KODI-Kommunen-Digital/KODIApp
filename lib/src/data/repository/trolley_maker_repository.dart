@@ -231,12 +231,11 @@ class TrolleyMakerRepository {
   }
 
   Future<Either<TrolleyMakerErrorResponse, dynamic>> addCard(
-      String cardNumber, String productionNumber, int cardIDToLock) async {
+      String cardNumber, String productionNumber) async {
     try {
       final request = TrolleyMakerAddCardRequest(
           newCardToAdd: cardNumber,
-          newCardProductionNumber: productionNumber,
-          cardIDToLock: cardIDToLock);
+          newCardProductionNumber: productionNumber,);
       final result = await api.addCard(request);
       final cardIds = await getCachedCards();
       if (cardIds != null) {

@@ -207,7 +207,7 @@ class _TrolleyMakerAddCardSheetState extends State<TrolleyMakerAddCardSheet> {
         _errorProductNumber == null &&
         widget.cardToLock != null) {
       trolleyMakerCubit.addCard(_cardNumberTextController.text,
-          _productNumberTextController.text, widget.cardToLock!);
+          _productNumberTextController.text);
     }
   }
 }

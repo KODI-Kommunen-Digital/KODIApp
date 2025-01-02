@@ -11,7 +11,6 @@ TrolleyMakerAddCardRequest _$TrolleyMakerAddCardRequestFromJson(
     TrolleyMakerAddCardRequest(
       newCardToAdd: json['newCardToAdd'] as String,
       newCardProductionNumber: json['newCardProductionNumber'] as String,
-      cardIDToLock: (json['cardIDToLock'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TrolleyMakerAddCardRequestToJson(
@@ -19,5 +18,4 @@ Map<String, dynamic> _$TrolleyMakerAddCardRequestToJson(
     <String, dynamic>{
       'newCardToAdd': instance.newCardToAdd,
       'newCardProductionNumber': instance.newCardProductionNumber,
-      'cardIDToLock': instance.cardIDToLock,
     };
