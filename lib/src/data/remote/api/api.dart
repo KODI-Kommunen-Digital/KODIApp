@@ -201,7 +201,7 @@ class Api {
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
     final result = await HTTPManager(forum: false)
-        .get(url: 'cities/$cityId/listings/$listingId');
+        .get(url: '/cities/$cityId/listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 
@@ -274,7 +274,7 @@ class Api {
 
   static Future<ResultApiModel> requestSubmitSubCategory(
       {required categoryId}) async {
-    final filePath = 'categories/$categoryId/subcategories';
+    final filePath = '/categories/$categoryId/subcategories';
     final result = await HTTPManager(forum: false).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }

@@ -372,6 +372,19 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 .circular(10),
                                                       ),
                                                       child: ElevatedButton(
+                                                        style: ElevatedButton
+                                                            .styleFrom(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .primaryColor,
+                                                          shape:
+                                                              RoundedRectangleBorder(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        8),
+                                                          ),
+                                                        ),
                                                         onPressed: () async {
                                                           _openListingStatusActionPopUp(
                                                               item);
@@ -460,10 +473,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     String? searchRequest = await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return WillPopScope(
-          onWillPop: () async {
-            Navigator.pop(context, searchTerm);
-            return false;
+        return PopScope(
+          onPopInvokedWithResult: (bool didPop, dynamic result) {
+            if (!didPop) {
+              Navigator.pop(context, searchTerm);
+            }
           },
           child: SimpleDialog(
               title: Center(
@@ -511,9 +525,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
     switch (chosen) {
       case 1:
-        Navigator.pushNamed(context, Routes.submit,
-                arguments: {'item': item, 'isApplicant': false, 'isAdmin': true})
-            .then((value) async {
+        Navigator.pushNamed(context, Routes.submit, arguments: {
+          'item': item,
+          'isApplicant': false,
+          'isAdmin': true
+        }).then((value) async {
           await _onRefresh();
         });
         break;

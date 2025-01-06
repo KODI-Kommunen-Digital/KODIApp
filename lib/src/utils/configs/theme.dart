@@ -5,7 +5,7 @@ enum DarkOption { dynamic, alwaysOn, alwaysOff }
 
 class AppTheme {
   ///Default font
-  static const String defaultFont = "Poppins";
+  static const String defaultFont = "Calibri";
 
   ///List Font support
   static final List<String> fontSupport = [
@@ -14,13 +14,14 @@ class AppTheme {
     "Raleway",
     "Roboto",
     "Merriweather",
-    "Poppins"
+    "Poppins",
+    "Calibri"
   ];
 
   ///Default Theme
   static final ThemeModel defaultTheme = ThemeModel.fromJson({
     "name": "default",
-    "primary": '#2c99ff',
+    "primary": '#8EB72C',
     "secondary": "#FFFFFF",
   });
 
@@ -28,7 +29,7 @@ class AppTheme {
   static final List themeSupport = [
     {
       "name": "default",
-      "primary": '#2c99ff',
+      "primary": '#8EB72C',
       "secondary": "#FFFFFF",
     },
     {
@@ -81,16 +82,16 @@ class AppTheme {
       brightness: colorScheme.brightness,
       primaryColor: colorScheme.primary,
       appBarTheme: AppBarTheme(
-        backgroundColor: colorScheme.surface,
+        backgroundColor: Colors.white.withAlpha(30),
         foregroundColor: isDark ? Colors.white : Colors.black,
         shadowColor: isDark ? null : colorScheme.onSurface.withOpacity(0.2),
       ),
-      canvasColor: colorScheme.background,
-      scaffoldBackgroundColor: colorScheme.background,
+      canvasColor: colorScheme.surface,
+      scaffoldBackgroundColor: colorScheme.surface,
       // bottomAppBarColor: colorScheme.surface,
       cardColor: colorScheme.surface,
       dividerColor: colorScheme.onSurface.withOpacity(0.12),
-      dialogBackgroundColor: colorScheme.background,
+      dialogBackgroundColor: colorScheme.surface,
       indicatorColor: indicatorColor,
       applyElevationOverlayColor: isDark,
 
@@ -119,7 +120,7 @@ class AppTheme {
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme
-          .copyWith(background: colorScheme.background)
+          .copyWith(surface: colorScheme.surface)
           .copyWith(error: colorScheme.error)
           .copyWith(surface: colorScheme.surface),
     );

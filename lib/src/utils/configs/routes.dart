@@ -28,6 +28,7 @@ import 'package:heidi/src/presentation/main/account/profile_settings/profile_set
 import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
+import 'package:heidi/src/presentation/main/discovery/discovery_screen_detail.dart';
 import 'package:heidi/src/presentation/main/home/contact/contact_screen.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
@@ -53,6 +54,8 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
+import 'package:heidi/src/presentation/main/wishlist/cubit/wish_list_cubit.dart';
+import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -125,6 +128,7 @@ class Routes {
   static const String filterScreen = "/filterScreen";
   static const String portal = "/portal";
   static const String contact = "/contact";
+  static const String discoveryDetail = "/discoveryDetail";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -352,6 +356,16 @@ class Routes {
           },
         );
 
+      case wishList:
+        return MaterialPageRoute(
+          builder: (context) {
+            return BlocProvider(
+              create: (context) => WishListCubit(),
+              child: const WishListScreen(),
+            );
+          },
+        );
+
       case contactUsSuccess:
         return MaterialPageRoute(
           builder: (context) {
@@ -520,6 +534,16 @@ class Routes {
             return ContactScreen();
           },
         );
+
+      case discoveryDetail:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+            return DiscoveryScreenDetail(arguments: arguments);
+          },
+        );
+
       default:
         const SignInScreen();
 

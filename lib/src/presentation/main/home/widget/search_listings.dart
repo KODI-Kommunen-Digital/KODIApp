@@ -8,10 +8,10 @@ class SearchListings extends StatefulWidget {
   final String? hintText;
 
   const SearchListings({
-    Key? key,
+    super.key,
     required this.onSearchCallback,
     this.hintText,
-  }) : super(key: key);
+  });
 
   @override
   _SearchListingsState createState() => _SearchListingsState();

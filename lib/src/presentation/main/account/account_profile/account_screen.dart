@@ -16,7 +16,7 @@ import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class AccountScreen extends StatefulWidget {
-  const AccountScreen({Key? key}) : super(key: key);
+  const AccountScreen({super.key});
 
   @override
   State<AccountScreen> createState() => _AccountScreenState();
@@ -49,7 +49,7 @@ class _AccountScreenState extends State<AccountScreen> {
 }
 
 class AccountLoading extends StatelessWidget {
-  const AccountLoading({Key? key}) : super(key: key);
+  const AccountLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class AccountLoading extends StatelessWidget {
 }
 
 class AccountLoaded extends StatefulWidget {
-  const AccountLoaded({Key? key}) : super(key: key);
+  const AccountLoaded({super.key});
 
   @override
   State<AccountLoaded> createState() => _AccountLoadedState();
@@ -156,6 +156,20 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.profile,
                               arguments: {'user': user, 'editable': true});
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
+                    if (user != null)
+                      AppListTitle(
+                        title: Translate.of(context).translate('my_contacts'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.wishList);
                         },
                         trailing: RotatedBox(
                           quarterTurns: AppLanguage.isRTL() ? 2 : 0,

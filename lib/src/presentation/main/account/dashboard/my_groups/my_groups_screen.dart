@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +15,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'cubit/my_groups_state.dart';
 
 class MyGroupsScreen extends StatefulWidget {
-  const MyGroupsScreen({Key? key}) : super(key: key);
+  const MyGroupsScreen({super.key});
 
   @override
   State<MyGroupsScreen> createState() => _MyGroupsScreenState();
@@ -70,7 +72,7 @@ class _MyGroupsScreenState extends State<MyGroupsScreen> {
 }
 
 class ListLoading extends StatelessWidget {
-  const ListLoading({Key? key}) : super(key: key);
+  const ListLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -85,10 +87,10 @@ class ListLoaded extends StatefulWidget {
   final int userId;
 
   const ListLoaded({
-    Key? key,
+    super.key,
     required this.list,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();

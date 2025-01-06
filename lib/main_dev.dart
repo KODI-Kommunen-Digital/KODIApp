@@ -47,7 +47,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+try{
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+}catch(e){
+  
+}
 
   await SentryFlutter.init((options) {
     options.dsn =
@@ -127,7 +131,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaleFactor: theme.textScaleFactor,
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,

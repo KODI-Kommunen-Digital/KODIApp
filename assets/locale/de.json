@@ -1,8 +1,13 @@
 {
   "home": "Start",
   "wish_list": "Favoriten",  
-  "portal": "Careet",  
-  "portal_head": "Bewerberportal",
+  "portal": "Karriere",
+  "portal_head": "Karriere im Fichtelgebirge",
+  "portal_subhead": "Perspektivwechsel",
+  "portal_text": "Bist du ein Unternehmer oder eine Unternehmerin der Region und suchst nach Arbeitskräften?\nOder Bist du ein Macher / eine Macherin und interessierst dich für eine neue berufliche Perspektive im Fichtelgebirge?",
+  "i_am": "Ich bin...",
+  "portal_company": "... auf der Suche nach neuen Mitarbeitern & Kollegen",
+  "portal_employee": "... offen für neue berufliche Perspektiven",
   "message": "Mitteilungen",
   "notification": "Benachrichtigung",
   "account": "Nutzername",
@@ -70,6 +75,7 @@
   "apply": "Anwenden",
   "contact_us": "Kontaktiere uns",
   "contact": "Kontakt",
+  "which_contact_option": "Welche Kontaktmöglichkeit möchtest du benutzen?",
   "send": "Senden",
   "name": "Name",
   "input_name": "Gib deinen Namen ein",
@@ -161,6 +167,7 @@
   "request_Confirmation": "Bestätigung anfordern",
   "no": "Nein",
   "my_listings": "Meine Beiträge",
+  "my_contacts": "Meine Kontakte",
   "profile_listings": "Profilbeiträge",
   "Are_you_sure_you_want_to_delete_this_item?": "Bist Du sicher, dass Du diesen Beitrag löschen möchtest?",
   "phone": "Telefon",
@@ -466,6 +473,7 @@
   "category_newsletter": "Mitteilungsblatt",
   "category_official_notification": "Amtliche Mitteilung",
   "category_applicant": "Antragsteller",
+  "category_project": "Projekte",
   "login" : "Anmeldung",
   "please_select_city": "Bitte wähle einen Ort, um das Forum zu betreten.",
   "login_required" : "Anmeldung erforderlich",
@@ -538,6 +546,8 @@
   "company": "Unternehmen",
   "applicant": "Antragsteller",
   "open_whatsapp": "Worüber wollen Sie diese Nummer öffnen?",
-  "call": "Anruf"
+  "call": "Anruf",
+  "funding_guide": "Fördermittelwegweiser",
+  "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein"
 }
 

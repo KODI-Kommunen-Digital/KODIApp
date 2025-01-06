@@ -2,14 +2,16 @@
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_contact.dart';
 import 'package:heidi/src/presentation/main/home/contact/cubit/contact_cubit.dart';
 import 'package:heidi/src/presentation/main/home/contact/cubit/contact_state.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ContactScreen extends StatefulWidget {
   const ContactScreen({super.key});
@@ -67,11 +69,7 @@ class ContactLoaded extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 16, left: 16),
             child: InkWell(
               onTap: () async {
-                await Clipboard.setData(
-                    ClipboardData(text: list[index].email ?? ""));
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content:
-                        Text(Translate.of(context).translate('email_copied'))));
+                await showContactDialog(context, list[index]);
               },
               child: Row(
                 children: <Widget>[
@@ -197,6 +195,140 @@ class ContactLoaded extends StatelessWidget {
         },
         itemCount: list.length,
       ),
+    );
+  }
+
+  Future<void> showContactDialog(
+      BuildContext context, ContactPerson person) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            Translate.of(context).translate('which_contact_option'),
+            style: Theme.of(context).textTheme.bodyLarge!,
+          ),
+          children: [
+            SimpleDialogOption(
+              child: Text(
+                Translate.of(context).translate('email'),
+                style: Theme.of(context).textTheme.bodyLarge!,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                _mailAction(context, person.email!);
+              },
+            ),
+            SimpleDialogOption(
+              child: Text(
+                Translate.of(context).translate('phone'),
+                style: Theme.of(context).textTheme.bodyLarge!,
+              ),
+              onPressed: () {
+                Navigator.pop(context);
+                _phoneAction(context, person.phone!);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  ///Phone action
+  void _phoneAction(BuildContext context, String phone) async {
+    bool? openWithWhatsApp = await _openWhatsapp(context);
+    if (openWithWhatsApp != null) {
+      String cleanedPhone = phone.replaceAll(' ', '');
+      try {
+        if (openWithWhatsApp) {
+          await launchUrl(Uri.parse('https://wa.me/$cleanedPhone?text='));
+        } else {
+          await launchUrl(Uri.parse('tel:$cleanedPhone'));
+        }
+      } catch (e, stackTrace) {
+        _showMessage(
+            context, Translate.of(context).translate('cannot_make_action'));
+        await Sentry.captureException(e, stackTrace: stackTrace);
+      }
+    }
+  }
+
+  Future<bool?> _openWhatsapp(BuildContext context) async {
+    bool? choice = await showDialog<bool?>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: Text(
+            Translate.of(context).translate('open_whatsapp'),
+            style: Theme.of(context).textTheme.bodyLarge!,
+          ),
+          children: <Widget>[
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: const Text("WhatsApp"),
+            ),
+            SimpleDialogOption(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text(
+                Translate.of(context).translate('call'),
+                style: Theme.of(context).textTheme.bodyLarge!,
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    return choice;
+  }
+
+  ///Mail action
+  void _mailAction(BuildContext context, String email) async {
+    try {
+      launchUrl(Uri.parse('mailto:$email'));
+      // launch('mailto:$email');
+    } catch (e, stackTrace) {
+      _showMessage(
+          context, Translate.of(context).translate('cannot_make_action'));
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    }
+  }
+
+  void _showMessage(BuildContext context, String message) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('explore_product'),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  message,
+                  style: Theme.of(context).textTheme.bodyLarge,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            AppButton(
+              Translate.of(context).translate('close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+          ],
+        );
+      },
     );
   }
 }

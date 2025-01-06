@@ -15,7 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
-  const DiscoveryScreen({Key? key}) : super(key: key);
+  const DiscoveryScreen({super.key});
 
   @override
   State<DiscoveryScreen> createState() => _DiscoveryScreenState();
@@ -47,7 +47,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Translate.of(context).translate('cust_services')),
+        title: Text(Translate.of(context).translate('services')),
         actions: [
           BlocConsumer<DiscoveryCubit, DiscoveryState>(
             listener: (context, state) {},
@@ -100,7 +100,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 }
 
 class DiscoveryLoading extends StatelessWidget {
-  const DiscoveryLoading({Key? key}) : super(key: key);
+  const DiscoveryLoading({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -114,9 +114,9 @@ class DiscoveryLoaded extends StatefulWidget {
   final List<CitizenServiceModel> services;
 
   const DiscoveryLoaded({
-    Key? key,
+    super.key,
     required this.services,
-  }) : super(key: key);
+  });
 
   @override
   State<DiscoveryLoaded> createState() => _DiscoveryLoadedState();
@@ -191,6 +191,27 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
+    } else if (service.imageLink == "15") {
+      await Navigator.pushNamed(context, Routes.discoveryDetail,
+          arguments: {"id": 15});
+    } else if (service.imageLink == "16") {
+      //Fördermittelwegweiser
+      showNotAvailPopup(context);
+    } else if (service.imageLink == "18") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-unternehmen/standort/'),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "19") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-innovation/wasserstoff-modellregion/'),
+          mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "20") {
+      await launchUrl(
+          Uri.parse(
+              'https://freiraum-fichtelgebirge.de/freiraum-fuer-unternehmen/start-ups/'),
+          mode: LaunchMode.inAppWebView);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -214,6 +235,32 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             children: [
               Text(Translate.of(context).translate('please_select_city')),
               const SizedBox(height: 16),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void showNotAvailPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('funding_guide')),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(Translate.of(context).translate('funding_guide_message')),
+              const SizedBox(height: 12),
             ],
           ),
           actions: <Widget>[
