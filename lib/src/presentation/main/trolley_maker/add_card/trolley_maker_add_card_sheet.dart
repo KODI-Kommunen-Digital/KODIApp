@@ -153,7 +153,7 @@ class _TrolleyMakerAddCardSheetState extends State<TrolleyMakerAddCardSheet> {
           focusNode: _focusProductNumber,
           autofillHint: const [AutofillHints.username],
           textInputAction: TextInputAction.done,
-          keyboardType: TextInputType.number,
+          keyboardType: TextInputType.text,
           onChanged: (text) {
             setState(() {
               _errorProductNumber = UtilValidator.validate(
