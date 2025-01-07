@@ -97,6 +97,9 @@ class _$TrolleyMakerRegisterStateCopyWithImpl<$Res,
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -114,6 +117,9 @@ class __$$RegistrationInitialImplCopyWithImpl<$Res>
   __$$RegistrationInitialImplCopyWithImpl(_$RegistrationInitialImpl _value,
       $Res Function(_$RegistrationInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -241,6 +247,9 @@ class __$$LoadingImplCopyWithImpl<$Res>
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -368,6 +377,9 @@ class __$$RegistrationSuccessImplCopyWithImpl<$Res>
   __$$RegistrationSuccessImplCopyWithImpl(_$RegistrationSuccessImpl _value,
       $Res Function(_$RegistrationSuccessImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -498,6 +510,8 @@ class __$$ApiErrorImplCopyWithImpl<$Res>
       _$ApiErrorImpl _value, $Res Function(_$ApiErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -536,7 +550,9 @@ class _$ApiErrorImpl implements ApiError {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ApiErrorImplCopyWith<_$ApiErrorImpl> get copyWith =>
@@ -633,7 +649,10 @@ abstract class ApiError implements TrolleyMakerRegisterState {
   const factory ApiError(final String message) = _$ApiErrorImpl;
 
   String get message;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ApiErrorImplCopyWith<_$ApiErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -658,6 +677,8 @@ class __$$SingUpValuesImplCopyWithImpl<$Res>
       _$SingUpValuesImpl _value, $Res Function(_$SingUpValuesImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -740,7 +761,9 @@ class _$SingUpValuesImpl implements SingUpValues {
       const DeepCollectionEquality().hash(_genderList),
       const DeepCollectionEquality().hash(_titleList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$SingUpValuesImplCopyWith<_$SingUpValuesImpl> get copyWith =>
@@ -842,7 +865,10 @@ abstract class SingUpValues implements TrolleyMakerRegisterState {
   List<TrolleyMakerCountry> get countryList;
   List<String> get genderList;
   List<String> get titleList;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of TrolleyMakerRegisterState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SingUpValuesImplCopyWith<_$SingUpValuesImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

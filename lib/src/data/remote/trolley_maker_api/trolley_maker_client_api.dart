@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:heidi/src/data/model/model_trolley_maker_add_card_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_card_balance_transaction_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_login_response.dart';
@@ -33,5 +34,9 @@ abstract class TrolleyMakerClientApi {
   Future<List<TrolleyMakerPartners>> getPartnersList();
 
   @GET('/api/v1/partners/{gguid}')
-  Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(@Path("gguid") String gguid);
+  Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(
+      @Path("gguid") String gguid);
+
+  @POST('/api/v2/add-card')
+  Future<dynamic> addCard(@Body() TrolleyMakerAddCardRequest request);
 }
