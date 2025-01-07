@@ -1,6 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'cubit/cubit.dart';
 
@@ -24,15 +26,15 @@ class DiscoveryScreenDetail extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   int? selectedLocationId;
-  
+
   late DiscoveryCubit discoveryCubit;
 
   @override
   void initState() {
     super.initState();
     discoveryCubit = DiscoveryCubit();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-       loadLocationList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadLocationList();
     });
   }
 
@@ -166,6 +168,29 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Routes.trackMatomoEvent(true, null, 5, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..setNavigationDelegate(
+          NavigationDelegate(
+            onProgress: (int progress) {
+              // Update loading bar.
+            },
+            onPageStarted: (String url) {},
+            onPageFinished: (String url) {},
+            onHttpError: (HttpResponseError error) {},
+            onWebResourceError: (WebResourceError error) {},
+            onNavigationRequest: (NavigationRequest request) {
+              print(request.url);
+              if (request.url.startsWith("itms-appss") && Platform.isIOS) {
+                _lauchUrlExternally(request.url);
+                return NavigationDecision.prevent;
+              } else if (request.url.startsWith("intent") &&
+                  Platform.isAndroid) {
+                _lauchUrlExternally(request.url);
+                return NavigationDecision.prevent;
+              }
+              return NavigationDecision.navigate;
+            },
+          ),
+        )
         ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
 
       await showModalBottomSheet(
@@ -307,6 +332,20 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         'title': '',
         'type': 'categoryService'
       });
+    }
+  }
+
+  Future<void> _lauchUrlExternally(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      await launchUrl(
+        uri,
+        mode:
+            LaunchMode.externalApplication, // Ensures the URL opens externally
+      );
+      // ignore: empty_catches
+    } catch (e) {
+      print(e.toString());
     }
   }
 }
