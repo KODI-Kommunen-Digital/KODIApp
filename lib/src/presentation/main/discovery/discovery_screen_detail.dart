@@ -184,8 +184,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                 return NavigationDecision.prevent;
               } else if (request.url.startsWith("intent") &&
                   Platform.isAndroid) {
-                _lauchUrlExternally(request.url);
-                return NavigationDecision.prevent;
+                final packageName = _getPackageNameFromIntent(request.url);
+                if (packageName != null) {
+                  final playStoreUrl =
+                      "https://play.google.com/store/apps/details?id=$packageName";
+                  _lauchUrlExternally(playStoreUrl);
+                  return NavigationDecision.prevent;
+                }
               }
               return NavigationDecision.navigate;
             },
@@ -346,6 +351,20 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       // ignore: empty_catches
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  String? _getPackageNameFromIntent(String intentUrl) {
+    try {
+      // Parse the intent URL
+      Uri uri = Uri.parse(intentUrl);
+
+      // Look for the "package" parameter in the URL
+      String? packageName = uri.queryParameters['apn'];
+      return packageName;
+    } catch (e) {
+      // Handle error if parsing fails
+      return null;
     }
   }
 }
