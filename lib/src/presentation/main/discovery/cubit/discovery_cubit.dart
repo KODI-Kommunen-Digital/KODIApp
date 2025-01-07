@@ -28,7 +28,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       location = List.from(cityRequestResponse.data ?? []).map((item) {
         return CategoryModel.fromJson(item);
       }).toList();
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
     if (id == 1) {
       services = await ServiceManager.initializeServices();
@@ -188,7 +188,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "7": "https://web.troisdorf.de/chatbot/",
       "8":
           "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show",
-      "9": "https://geoportal.troisdorf.de/app.php/application/mobile",
+      "9": "https://troisdorf.dksr.city/poimap/",
       "11":
           "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/",
       "12": "https://www.aggua.de/",
