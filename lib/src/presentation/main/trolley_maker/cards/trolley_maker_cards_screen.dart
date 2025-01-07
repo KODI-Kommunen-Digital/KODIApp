@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/add_card/trolley_maker_add_card_sheet.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/cards/cubit/trolley_maker_cards_cubit.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/cards/cubit/trolley_maker_cards_state.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -26,8 +27,7 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
   @override
   void initState() {
     super.initState();
-    trolleyMakerCubit =
-        TrolleyMakerCardsCubit(context.read<TrolleyMakerRepository>());
+    trolleyMakerCubit = BlocProvider.of<TrolleyMakerCardsCubit>(context);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       trolleyMakerCubit.getCardDetails();
     });
@@ -41,51 +41,66 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => trolleyMakerCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            Translate.of(context).translate('title_card'),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          Translate.of(context).translate('title_card'),
         ),
-        body: SafeArea(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            alignment: Alignment.center,
-            child: BlocConsumer<TrolleyMakerCardsCubit, TrolleyMakerCardsState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                  error: (msg) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(msg)));
-                  },
-                  success: (cardName, cardList) {
-                    setState(() {
-                      this.cardName = cardName;
-                      this.cardList = cardList;
-                    });
-                  },
-                  orElse: () {},
-                );
-              },
-              builder: (context, state) => state.when(
-                initial: () {
-                  return Container();
-                },
-                loading: () {
-                  return const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  );
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add_card),
+            onPressed: () {
+              _showAddCardDialog(context);
+            },
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          child: BlocConsumer<TrolleyMakerCardsCubit, TrolleyMakerCardsState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                error: (msg) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(SnackBar(content: Text(msg)));
                 },
                 success: (cardName, cardList) {
-                  return _getCardDetailsWidget();
+                  setState(() {
+                    this.cardName = cardName;
+                    this.cardList = cardList;
+                  });
                 },
-                error: (message) {
-                  return _getErrorScreenWidget(message);
+                addedNewCard: (cardNumber) {
+                  setState(() {
+                    final List<int> tempCardList = List.from(cardList!)
+                      ..add(cardNumber);
+                    cardList = tempCardList;
+                  });
                 },
-              ),
+                orElse: () {},
+              );
+            },
+            builder: (context, state) => state.when(
+              initial: () {
+                return Container();
+              },
+              loading: () {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              },
+              success: (cardName, cardList) {
+                return _getCardDetailsWidget();
+              },
+              addedNewCard: (cardNumber) {
+                return _getCardDetailsWidget();
+              },
+              error: (message) {
+                return _getErrorScreenWidget(message);
+              },
             ),
           ),
         ),
@@ -237,6 +252,16 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
         ),
       ),
     );
+  }
+
+  void _showAddCardDialog(BuildContext context) {
+    showModalBottomSheet(
+        isDismissible: true,
+        isScrollControlled: true,
+        context: context,
+        builder: (BuildContext context) {
+          return TrolleyMakerAddCardSheet(cardList?.first);
+        });
   }
 }
 

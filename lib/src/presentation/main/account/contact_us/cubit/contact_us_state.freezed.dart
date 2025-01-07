@@ -78,6 +78,9 @@ class _$ContactUsStateCopyWithImpl<$Res, $Val extends ContactUsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ContactUsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -95,6 +98,9 @@ class __$$ContactUsStateLoadingImplCopyWithImpl<$Res>
   __$$ContactUsStateLoadingImplCopyWithImpl(_$ContactUsStateLoadingImpl _value,
       $Res Function(_$ContactUsStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ContactUsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -204,6 +210,9 @@ class __$$ContactUsStateLoadedImplCopyWithImpl<$Res>
   __$$ContactUsStateLoadedImplCopyWithImpl(_$ContactUsStateLoadedImpl _value,
       $Res Function(_$ContactUsStateLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ContactUsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -313,6 +322,9 @@ class __$$ContactUsStateErrorImplCopyWithImpl<$Res>
   __$$ContactUsStateErrorImplCopyWithImpl(_$ContactUsStateErrorImpl _value,
       $Res Function(_$ContactUsStateErrorImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ContactUsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

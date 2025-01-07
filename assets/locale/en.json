@@ -613,5 +613,8 @@
   "opening_hours": "Opening Hours",
   "telephone": "Phone",
   "email_partner_details": "E-mail",
-  "trolley_maker_sign_in_info": "Please log in with your TrolleyMaker credentials"
+  "trolley_maker_sign_in_info": "Please log in with your TrolleyMaker credentials",
+  "add_card": "Add Card",
+  "production_number": "Production Number",
+  "add_new_card": "Add New Card"
 }
