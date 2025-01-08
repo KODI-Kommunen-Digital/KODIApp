@@ -9,6 +9,7 @@ import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/mobilitat_helper.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'cubit/cubit.dart';
@@ -24,15 +25,15 @@ class DiscoveryScreenDetail extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
   int? selectedLocationId;
-  
+
   late DiscoveryCubit discoveryCubit;
 
   @override
   void initState() {
     super.initState();
     discoveryCubit = DiscoveryCubit();
-     WidgetsBinding.instance.addPostFrameCallback((_) {
-       loadLocationList();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      loadLocationList();
     });
   }
 
@@ -164,67 +165,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.arguments == 61) {
       Routes.trackMatomoEvent(true, null, 5, null);
-      final webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
-
-      await showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'smartAPP',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                          width:
-                              48), // Placeholder to balance the space taken by the IconButton
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(
-                    controller: webViewController,
-                    gestureRecognizers: gestureRecognizers,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-
-      await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");
+      MobilitatHelper.showMobilitat(context);
     } else if (service.arguments == 62) {
       Routes.trackMatomoEvent(false, null, 62, null);
       final webViewController = WebViewController()
