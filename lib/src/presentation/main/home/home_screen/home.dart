@@ -23,6 +23,7 @@ import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:heidi/src/utils/mobilitat_helper.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:upgrader/upgrader.dart';
@@ -860,7 +861,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
-        service.imageLink == "6" ||
         service.imageLink == "7" ||
         service.imageLink == "9" ||
         service.imageLink == "11") {
@@ -980,6 +980,9 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
                                 useWideViewPort: true,
                                 geolocationEnabled: true,
                                 allowsInlineMediaPlayback: true),
+                            shouldOverrideUrlLoading: (controller,
+                                    navigationAction) =>
+                                MobilitatHelper.getUrlLoading(navigationAction),
                             onPermissionRequest:
                                 (InAppWebViewController controller,
                                     PermissionRequest request) async {
