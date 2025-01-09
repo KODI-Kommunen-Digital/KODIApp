@@ -115,7 +115,7 @@ class _TrolleyMakerPartnerDetailsScreenState
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: CachedNetworkImage(
-                imageUrl: companyInfo?.featuredImageUrl ?? "",
+                imageUrl: companyInfo?.logoUrl ?? "",
                 placeholder: (context, url) {
                   return AppPlaceholder(
                     child: Container(
@@ -134,7 +134,7 @@ class _TrolleyMakerPartnerDetailsScreenState
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.fill,
                       ),
                     ),
                   );
@@ -173,8 +173,8 @@ class _TrolleyMakerPartnerDetailsScreenState
             ),
             Text(
               Translate.of(context).translate(
-                  'location',
-                ),
+                'location',
+              ),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -190,12 +190,13 @@ class _TrolleyMakerPartnerDetailsScreenState
                   .titleMedium!
                   .copyWith(fontWeight: FontWeight.normal),
             ),
-            const SizedBox(
-              height: 5,
-            ),
-            AppButton(Translate.of(context).translate(
-                  'start_navigation',
-                ),
+            // const SizedBox(
+            //   height: 5,
+            // ),
+            AppButton(
+              Translate.of(context).translate(
+                'start_navigation',
+              ),
               mainAxisSize: MainAxisSize.max,
               onPressed: () {
                 _launchMapNavigation(
@@ -217,8 +218,8 @@ class _TrolleyMakerPartnerDetailsScreenState
             ),
             Text(
               Translate.of(context).translate(
-                  'opening_hours',
-                ),
+                'opening_hours',
+              ),
               style: Theme.of(context)
                   .textTheme
                   .titleMedium!
@@ -299,8 +300,12 @@ class _TrolleyMakerPartnerDetailsScreenState
   }
 
   String _getAddress() {
-    return "${companyInfo?.street} \n${companyInfo?.zip} ${companyInfo?.city}\nLat: ${companyInfo?.latitude} Long: ${companyInfo?.longitude} ";
+    return "${companyInfo?.street} \n${companyInfo?.zip} ${companyInfo?.city}\n";
   }
+
+  // String _getAddress() {
+  //   return "${companyInfo?.street} \n${companyInfo?.zip} ${companyInfo?.city}\nLat: ${companyInfo?.latitude} Long: ${companyInfo?.longitude} ";
+  // }
 
   Widget _getTimingRow(String day, List<TimeSlot>? slot) {
     return Column(

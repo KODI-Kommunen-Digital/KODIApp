@@ -1,4 +1,3 @@
-
 class TrolleyMakerPartnerDetailsInfo {
   final bool closedMonday;
   final bool closedTuesday;
@@ -23,7 +22,6 @@ class TrolleyMakerPartnerDetailsInfo {
   final double longitude;
   final bool anyBonusActive;
   final String logoUrl;
-  final String featuredImageUrl;
 
   TrolleyMakerPartnerDetailsInfo({
     required this.closedMonday,
@@ -49,8 +47,23 @@ class TrolleyMakerPartnerDetailsInfo {
     required this.longitude,
     required this.anyBonusActive,
     required this.logoUrl,
-    required this.featuredImageUrl,
   });
+
+  static String standardizePhoneNumber(String phone) {
+    if (phone.isEmpty) return '';
+
+    phone = phone.replaceAll(RegExp(r'\D'), '');
+
+    if (phone.startsWith('49')) {
+      return '49${phone.substring(2)}';
+    }
+
+    if (phone.startsWith('0')) {
+      return '49${phone.substring(1)}';
+    }
+
+    return '49$phone';
+  }
 
   factory TrolleyMakerPartnerDetailsInfo.fromJson(Map<String, dynamic> json) {
     return TrolleyMakerPartnerDetailsInfo(
@@ -62,22 +75,23 @@ class TrolleyMakerPartnerDetailsInfo {
       closedSaturday: json['closedSaturday'] ?? false,
       closedSunday: json['closedSunday'] ?? false,
       openingHours: OpeningHours.fromJson(json['openingHours']),
-      companyOpenHoursAdditionalInfo: json['companyOpenHoursAdditionalInfo'] ?? '',
-      companyOpenHoursOnlyByArrangement: json['companyOpenHoursOnlyByArrangement'] ?? false,
+      companyOpenHoursAdditionalInfo:
+          json['companyOpenHoursAdditionalInfo'] ?? '',
+      companyOpenHoursOnlyByArrangement:
+          json['companyOpenHoursOnlyByArrangement'] ?? false,
       companyName: json['companyName'] ?? '',
       category: json['category'] ?? '',
       city: json['city'] ?? '',
       street: json['street'] ?? '',
       zip: json['zip'] ?? '',
       country: json['country'] ?? '',
-      phone: json['phone'] ?? '',
+      phone: standardizePhoneNumber(json['phone'] ?? ''),
       email: json['email'] ?? '',
       website: json['website'] ?? '',
       latitude: json['latitude']?.toDouble() ?? 0.0,
       longitude: json['longitude']?.toDouble() ?? 0.0,
       anyBonusActive: json['anyBonusActive'] ?? false,
       logoUrl: json['logoUrl'] ?? '',
-      featuredImageUrl: json['featuredImageUrl'] ?? '',
     );
   }
 
@@ -106,7 +120,6 @@ class TrolleyMakerPartnerDetailsInfo {
       'longitude': longitude,
       'anyBonusActive': anyBonusActive,
       'logoUrl': logoUrl,
-      'featuredImageUrl': featuredImageUrl,
     };
   }
 }
@@ -132,13 +145,27 @@ class OpeningHours {
 
   factory OpeningHours.fromJson(Map<String, dynamic> json) {
     return OpeningHours(
-      mon: (json['mon'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      tue: (json['tue'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      wed: (json['wed'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      thu: (json['thu'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      fri: (json['fri'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      sat: (json['sat'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
-      sun: (json['sun'] as List<dynamic>).map((e) => TimeSlot.fromJson(e)).toList(),
+      mon: (json['mon'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      tue: (json['tue'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      wed: (json['wed'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      thu: (json['thu'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      fri: (json['fri'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      sat: (json['sat'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
+      sun: (json['sun'] as List<dynamic>)
+          .map((e) => TimeSlot.fromJson(e))
+          .toList(),
     );
   }
 

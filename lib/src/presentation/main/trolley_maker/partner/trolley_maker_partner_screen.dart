@@ -112,13 +112,12 @@ class _TrolleyMakerPartnersScreenState
         itemCount: partnersList?.length,
         itemBuilder: (context, index) {
           return PartnerListItemWidget(
-            imageUrl: partnersList?[index].logoUrl,
-            title: partnersList?[index].companyName ?? "",
-            description: _getCategoriesText(partnersList?[index].categories),
-            city: partnersList?[index].city,
-            street: partnersList?[index].street,
-            gguid: partnersList?[index].gguid
-          );
+              imageUrl: partnersList?[index].logoUrl,
+              title: partnersList?[index].companyName ?? "",
+              description: _getCategoriesText(partnersList?[index].categories),
+              city: partnersList?[index].city,
+              street: partnersList?[index].street,
+              gguid: partnersList?[index].gguid);
         },
       ),
     );
@@ -144,13 +143,15 @@ class PartnerListItemWidget extends StatelessWidget {
     required this.description,
     required this.city,
     required this.street,
-     required this.gguid,
+    required this.gguid,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {navigateTodDetails(context, gguid, title);},
+      onTap: () {
+        navigateTodDetails(context, gguid, title);
+      },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -178,7 +179,7 @@ class PartnerListItemWidget extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.fitHeight,
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
                   );
@@ -202,7 +203,6 @@ class PartnerListItemWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 16),
-
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -253,11 +253,11 @@ class PartnerListItemWidget extends StatelessWidget {
       ),
     );
   }
-  
+
   void navigateTodDetails(BuildContext context, String? gguid, String title) {
-          Navigator.pushNamed(context, Routes.trolleyMakerPartnerDetails, arguments: {
-        'gguid': gguid,
-        'company_name': title,
-      });
+    Navigator.pushNamed(context, Routes.trolleyMakerPartnerDetails, arguments: {
+      'gguid': gguid,
+      'company_name': title,
+    });
   }
 }
