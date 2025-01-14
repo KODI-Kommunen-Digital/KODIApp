@@ -31,7 +31,6 @@ class ListCubit extends Cubit<ListState> {
   String? searchTerm;
 
   Future<void> onLoad(cityId, int? subCategoryId) async {
-    print("fetchibng data onLoad");
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -39,7 +38,6 @@ class ListCubit extends Cubit<ListState> {
     listCity = await getCityList() ?? [];
     dynamic result;
     if (cityId is List) {
-      print("fetchibng data multiple city");
       result = [];
       for (var city in cityId) {
         final list = await ListRepository.loadList(
@@ -52,7 +50,6 @@ class ListCubit extends Cubit<ListState> {
         result.addAll(list);
       }
     } else {
-      print("fetchibng data single city");
       result = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
@@ -79,7 +76,6 @@ class ListCubit extends Cubit<ListState> {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
     if (cityId != null) {
-      print("fetchibng data 3");
       onLoad(cityId, subCategoryId);
     }
   }
@@ -107,7 +103,6 @@ class ListCubit extends Cubit<ListState> {
     if (city is List) {
       result = [];
       for (var cityId in city) {
-        print("fetchibng data mul city new listing");
         final list = await ListRepository.loadList(
           categoryId: (categoryId == 0) ? "" : categoryId,
           type: type,
@@ -118,7 +113,6 @@ class ListCubit extends Cubit<ListState> {
         result.addAll(list);
       }
     } else {
-      print("fetchibng single city new listing");
       result = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
@@ -143,7 +137,6 @@ class ListCubit extends Cubit<ListState> {
     final type = prefs.getKeyValue(Preferences.type, '');
     List<ProductModel> result = [];
     for (var cityId in city) {
-      print("fetchibng data updated loaded list 1");
       final list = await ListRepository.loadList(
         categoryId: (categoryId == 0) ? "" : categoryId,
         type: type,
@@ -224,7 +217,6 @@ class ListCubit extends Cubit<ListState> {
     isSearching = true;
     searchTerm = "";
     pageNo = 0;
-    print("fetchibng data 4");
     onLoad(cityId, subCategoryId);
   }
 

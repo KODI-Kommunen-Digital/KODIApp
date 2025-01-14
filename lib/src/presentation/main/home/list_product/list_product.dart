@@ -55,7 +55,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
           .read<ListCubit>()
           .setCategoryFilter(0, null, _subCategoryId);
     }
-    print("fetchibng data 1");
     await context.read<ListCubit>().onLoad(
         selectedFilter?.currentLocation ?? widget.arguments['id'],
         _subCategoryId);
@@ -398,7 +397,6 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    print("fetchibng data 2");
     await context
         .read<ListCubit>()
         .onLoad(widget.selectedId, widget.subCategoryId);
