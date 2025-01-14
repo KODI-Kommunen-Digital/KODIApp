@@ -202,9 +202,15 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                 CitizenServiceModel(
                     imageUrl: "29",
                     imageLink: Images.service29,
-                    categoryId: 29),
+                    categoryId: 46,
+                    subCategoryId: 20,
+                    type: "subCategoryService"),
                 CitizenServiceModel(
-                    imageUrl: "12", imageLink: Images.service12, categoryId: 12)
+                    imageUrl: "12",
+                    imageLink: Images.service12,
+                    categoryId: 46,
+                    subCategoryId: 19,
+                    type: "subCategoryService")
               ]
             : [
                 CitizenServiceModel(
