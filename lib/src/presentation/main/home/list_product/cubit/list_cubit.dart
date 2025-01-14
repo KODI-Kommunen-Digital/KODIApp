@@ -350,6 +350,13 @@ class ListCubit extends Cubit<ListState> {
         case 15:
           return "category_finanzen";
       }
+    } else if (categoryId == 46 && subCategoryId != null) {
+      switch (subCategoryId) {
+        case 20:
+          return "category_handel";
+        case 19:
+          return "category_offers";
+      }
     }
     Map<int, String> categories = {
       1: "category_news",
