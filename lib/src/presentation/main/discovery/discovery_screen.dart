@@ -192,52 +192,83 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
-    } else if (service.imageLink == "500" || service.imageLink == "501") {
+    } else if (service.imageLink == "500") {
       int? currentLocation =
           await context.read<DiscoveryCubit>().getCitySelected();
       Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
         'id': currentLocation ?? 0,
-        'services': (service.imageLink == "500")
-            ? [
-                CitizenServiceModel(
-                    imageUrl: "29",
-                    imageLink: Images.service29,
-                    categoryId: 46,
-                    subCategoryId: 20,
-                    type: "subCategoryService"),
-                CitizenServiceModel(
-                    imageUrl: "12",
-                    imageLink: Images.service12,
-                    categoryId: 46,
-                    subCategoryId: 19,
-                    type: "subCategoryService")
-              ]
-            : [
-                CitizenServiceModel(
-                    imageUrl: "32",
-                    imageLink: Images.service32,
-                    categoryId: 45,
-                    subCategoryId: 12,
-                    type: "subCategoryService"),
-                CitizenServiceModel(
-                    imageUrl: "33",
-                    imageLink: Images.service33,
-                    categoryId: 45,
-                    subCategoryId: 13,
-                    type: "subCategoryService"),
-                CitizenServiceModel(
-                    imageUrl: "34",
-                    imageLink: Images.service34,
-                    categoryId: 45,
-                    subCategoryId: 14,
-                    type: "subCategoryService"),
-                CitizenServiceModel(
-                    imageUrl: "35",
-                    imageLink: Images.service35,
-                    categoryId: 45,
-                    subCategoryId: 15,
-                    type: "subCategoryService")
-              ]
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "29",
+              imageLink: Images.service29,
+              categoryId: 46,
+              subCategoryId: 20,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "12",
+              imageLink: Images.service12,
+              categoryId: 46,
+              subCategoryId: 19,
+              type: "subCategoryService")
+        ]
+      });
+    } else if (service.imageLink == "501") {
+      int? currentLocation =
+          await context.read<DiscoveryCubit>().getCitySelected();
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': currentLocation ?? 0,
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "32",
+              imageLink: Images.service32,
+              categoryId: 45,
+              subCategoryId: 12,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "33",
+              imageLink: Images.service33,
+              categoryId: 45,
+              subCategoryId: 13,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "34",
+              imageLink: Images.service34,
+              categoryId: 45,
+              subCategoryId: 14,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "35",
+              imageLink: Images.service35,
+              categoryId: 45,
+              subCategoryId: 15,
+              type: "subCategoryService")
+        ]
+      });
+    } else if (service.imageLink == "8") {
+      int? currentLocation =
+          await context.read<DiscoveryCubit>().getCitySelected();
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': currentLocation ?? 0,
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "8.1",
+              imageLink: Images.service8_1,
+              categoryId: 43,
+              subCategoryId: 16,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.2",
+              imageLink: Images.service8_2,
+              categoryId: 43,
+              subCategoryId: 17,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.3",
+              imageLink: Images.service8_3,
+              categoryId: 43,
+              subCategoryId: 18,
+              type: "subCategoryService"),
+        ]
       });
     } else {
       AppBloc.discoveryCubit
