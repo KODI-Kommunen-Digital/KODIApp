@@ -23,7 +23,10 @@ class Images {
   static const String service5 = "assets/images/services-5.png";
   static const String service6 = "assets/images/services-6.png";
   static const String service7 = "assets/images/services-7.png";
-  static const String service8 = "assets/images/services-8.png";
+  static const String service8 = "assets/images/services-8.png";  
+  static const String service8_1 = "assets/images/services-8.1.png";  
+  static const String service8_2 = "assets/images/services-8.2.png";
+    static const String service8_3 = "assets/images/services-8.3.png";
   static const String service9 = "assets/images/services-9.png";
   static const String service10 = "assets/images/services-10.png";
   static const String service11 = "assets/images/services-11.png";

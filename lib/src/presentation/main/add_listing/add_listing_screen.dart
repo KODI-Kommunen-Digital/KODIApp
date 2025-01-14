@@ -295,7 +295,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
     if (selectedCategory?.toLowerCase() == "news" ||
         selectedCategory == null ||
-        selectedCategory?.toLowerCase() == "dienstleister") {
+        selectedCategory?.toLowerCase() == "dienstleister" ||
+        selectedCategory?.toLowerCase() == "shopping" ||
+        selectedCategory?.toLowerCase() == "gastro") {
       await selectSubCategoryOnLaunch(selectedCategory?.toLowerCase());
     }
 
@@ -320,6 +322,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
           (element) => element["id"] == widget.item!.categoryId)["name"];
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory?.toLowerCase() == "dienstleister" ||
+          selectedCategory?.toLowerCase() == "shopping" ||
+          selectedCategory?.toLowerCase() == "gastro" ||
           selectedCategory == null) {
         selectedSubCategory = listSubCategory.firstWhere(
             (element) => element["id"] == widget.item!.subcategoryId)["name"];
@@ -330,6 +334,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedCity = city['name'];
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory?.toLowerCase() == "dienstleister" ||
+          selectedCategory?.toLowerCase() == "shopping" ||
+          selectedCategory?.toLowerCase() == "gastro" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
             .read<AddListingCubit>()
@@ -407,6 +413,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
         if (!mounted) return;
         if (selectedCategory?.toLowerCase() == "news" ||
             selectedCategory?.toLowerCase() == "dienstleister" ||
+            selectedCategory?.toLowerCase() == "shopping" ||
+            selectedCategory?.toLowerCase() == "gastro" ||
             selectedCategory == null) {
           final subCategoryResponse = await context
               .read<AddListingCubit>()
@@ -839,7 +847,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       44: "category_job",
       43: "category_gastro",
       12: "category_offers",
-      45: "category_dienstleister"
+      45: "category_dienstleister",
+      46: "category_shopping",
     };
     return categories[id];
   }
@@ -1045,6 +1054,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             if (selectedCategory?.toLowerCase() == "news" ||
                                 selectedCategory?.toLowerCase() ==
                                     "dienstleister" ||
+                                selectedCategory?.toLowerCase() == "shopping" ||
+                                selectedCategory?.toLowerCase() == "gastro" ||
                                 selectedCategory == null) {
                               selectSubCategory(
                                   selectedCategory?.toLowerCase());
@@ -1056,7 +1067,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               ],
             ),
             if (selectedCategory?.toLowerCase() == "news" ||
-                selectedCategory?.toLowerCase() == "dienstleister")
+                selectedCategory?.toLowerCase() == "dienstleister" ||
+                selectedCategory?.toLowerCase() == "shopping" ||
+                selectedCategory?.toLowerCase() == "gastro")
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -357,6 +357,15 @@ class ListCubit extends Cubit<ListState> {
         case 19:
           return "category_offers";
       }
+    } else if (categoryId == 43 && subCategoryId != null) {
+      switch (subCategoryId) {
+        case 16:
+          return "category_tagesangebote";
+        case 17:
+          return "categroy_speisekarten";
+        case 18:
+          return "categroy_lokale";
+      }
     }
     Map<int, String> categories = {
       1: "category_news",
