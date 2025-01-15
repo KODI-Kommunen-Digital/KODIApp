@@ -452,8 +452,8 @@ class ListRepository {
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
         if (pickedFile.files[0].key == 'pdf' && selectedPdfFile != null) {
           final pdfFormData = FormData.fromMap({
-            'pdf': await MultipartFile.fromFile(selectedPdfFile!.path,
-                filename: selectedPdfFile!.path,
+            'pdf': await MultipartFile.fromFile(selectedPdfFile.path,
+                filename: selectedPdfFile.path,
                 contentType: MediaType('application', 'pdf')),
           });
           await Api.requestListingUploadMedia(id, cityId, pdfFormData);
