@@ -23,16 +23,17 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic selectedCity;
   bool calledExternally = false;
   bool doesScroll = false;
-  bool _isLoading = false; // Flag to track loading state
+  bool _isLoading = false;
+  int _adIndex = 0;
 
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
     if (_isLoading) {
-      return; // Prevent duplicate calls
+      return;
     }
 
-    _isLoading = true; // Set the flag to true
+    _isLoading = true;
     try {
       if (!await hasInternet()) {
         emit(const HomeState.error("no_internet"));
@@ -56,7 +57,9 @@ class HomeCubit extends Cubit<HomeState> {
       category = List.from(categoryRequestResponse.data ?? []).map((item) {
         return CategoryModel.fromJson(item);
       }).toList();
+
       selectedCity = await checkSavedCity(location);
+
       if (selectedCity != null) {
         final listingsRequestResponse =
             await Api.requestLocList(selectedCity.id, 1);
@@ -73,18 +76,21 @@ class HomeCubit extends Cubit<HomeState> {
       // Fetch ads
       List<AdDataModel> ads = await ListRepository.fetchAds();
 
-      // Combine recent listings with ads
+      int currentAdIndex = _adIndex;
+
       List<dynamic> combinedRecent = [];
       for (int i = 0; i < recent.length; i++) {
-        combinedRecent.add(recent[i]); // Add the product to the combined list
+        combinedRecent.add(recent[i]);
 
-        // Append the ad after every 3rd product
         if ((i + 1) % 3 == 0 && ads.isNotEmpty) {
-          combinedRecent.add(ads[0]); // Add the ad model
-          ads.removeAt(0); // Remove the ad after inserting
+          combinedRecent.add(ads[currentAdIndex]);
+          currentAdIndex = (currentAdIndex + 1) % ads.length;
         }
       }
-      recent = combinedRecent; // Update recent with combined list
+
+      _adIndex = currentAdIndex;
+
+      recent = combinedRecent;
 
       final categoryCountRequestResponse =
           await Api.requestCategoryCount(selectedCity?.id);
@@ -243,13 +249,33 @@ class HomeCubit extends Cubit<HomeState> {
   Future<dynamic> newListings(int pageNo) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
+      return;
     }
 
     final listingsRequestResponse = await Api.requestRecentListings(pageNo);
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
-    recent.addAll(newRecent);
+
+    // Fetch ads
+    List<AdDataModel> ads = await ListRepository.fetchAds();
+
+    int currentAdIndex = _adIndex;
+
+    List<dynamic> combinedList = [];
+    for (int i = 0; i < newRecent.length; i++) {
+      combinedList.add(newRecent[i]);
+
+      if ((i + 1) % 3 == 0 && ads.isNotEmpty) {
+        combinedList.add(ads[currentAdIndex]);
+        currentAdIndex = (currentAdIndex + 1) % ads.length;
+      }
+    }
+
+    AppBloc.homeCubit._adIndex = currentAdIndex;
+
+    recent.addAll(combinedList);
+
     return recent;
   }
 

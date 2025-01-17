@@ -20,9 +20,9 @@ mixin _$ListState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) =>
@@ -31,8 +31,8 @@ mixin _$ListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -40,8 +40,8 @@ mixin _$ListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) =>
@@ -139,9 +139,9 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) {
@@ -153,8 +153,8 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) {
     return initial?.call();
@@ -165,8 +165,8 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -264,9 +264,9 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) {
@@ -278,8 +278,8 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) {
     return loading?.call();
@@ -290,8 +290,8 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -352,7 +352,7 @@ abstract class _$$ListStateLoadedImplCopyWith<$Res> {
           $Res Function(_$ListStateLoadedImpl) then) =
       __$$ListStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> list, List<dynamic> cityList});
+  $Res call({List<dynamic> list, List<dynamic> cityList});
 }
 
 /// @nodoc
@@ -375,7 +375,7 @@ class __$$ListStateLoadedImplCopyWithImpl<$Res>
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
+              as List<dynamic>,
       null == cityList
           ? _value._cityList
           : cityList // ignore: cast_nullable_to_non_nullable
@@ -388,13 +388,13 @@ class __$$ListStateLoadedImplCopyWithImpl<$Res>
 
 class _$ListStateLoadedImpl implements ListStateLoaded {
   const _$ListStateLoadedImpl(
-      final List<ProductModel> list, final List<dynamic> cityList)
+      final List<dynamic> list, final List<dynamic> cityList)
       : _list = list,
         _cityList = cityList;
 
-  final List<ProductModel> _list;
+  final List<dynamic> _list;
   @override
-  List<ProductModel> get list {
+  List<dynamic> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -442,9 +442,9 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) {
@@ -456,8 +456,8 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) {
     return loaded?.call(list, cityList);
@@ -468,8 +468,8 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -522,10 +522,10 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
 
 abstract class ListStateLoaded implements ListState {
   const factory ListStateLoaded(
-          final List<ProductModel> list, final List<dynamic> cityList) =
+          final List<dynamic> list, final List<dynamic> cityList) =
       _$ListStateLoadedImpl;
 
-  List<ProductModel> get list;
+  List<dynamic> get list;
   List<dynamic> get cityList;
 
   /// Create a copy of ListState
@@ -541,7 +541,7 @@ abstract class _$$ListStateUpdatedImplCopyWith<$Res> {
           $Res Function(_$ListStateUpdatedImpl) then) =
       __$$ListStateUpdatedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> list, List<dynamic> cityList});
+  $Res call({List<dynamic> list, List<dynamic> cityList});
 }
 
 /// @nodoc
@@ -564,7 +564,7 @@ class __$$ListStateUpdatedImplCopyWithImpl<$Res>
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
+              as List<dynamic>,
       null == cityList
           ? _value._cityList
           : cityList // ignore: cast_nullable_to_non_nullable
@@ -577,13 +577,13 @@ class __$$ListStateUpdatedImplCopyWithImpl<$Res>
 
 class _$ListStateUpdatedImpl implements ListStateUpdated {
   const _$ListStateUpdatedImpl(
-      final List<ProductModel> list, final List<dynamic> cityList)
+      final List<dynamic> list, final List<dynamic> cityList)
       : _list = list,
         _cityList = cityList;
 
-  final List<ProductModel> _list;
+  final List<dynamic> _list;
   @override
-  List<ProductModel> get list {
+  List<dynamic> get list {
     if (_list is EqualUnmodifiableListView) return _list;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_list);
@@ -631,9 +631,9 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) {
@@ -645,8 +645,8 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) {
     return updated?.call(list, cityList);
@@ -657,8 +657,8 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
@@ -711,10 +711,10 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
 
 abstract class ListStateUpdated implements ListState {
   const factory ListStateUpdated(
-          final List<ProductModel> list, final List<dynamic> cityList) =
+          final List<dynamic> list, final List<dynamic> cityList) =
       _$ListStateUpdatedImpl;
 
-  List<ProductModel> get list;
+  List<dynamic> get list;
   List<dynamic> get cityList;
 
   /// Create a copy of ListState
@@ -795,9 +795,9 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         loaded,
-    required TResult Function(List<ProductModel> list, List<dynamic> cityList)
+    required TResult Function(List<dynamic> list, List<dynamic> cityList)
         updated,
     required TResult Function(String error) error,
   }) {
@@ -809,8 +809,8 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult? Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult? Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult? Function(String error)? error,
   }) {
     return error?.call(this.error);
@@ -821,8 +821,8 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? loaded,
-    TResult Function(List<ProductModel> list, List<dynamic> cityList)? updated,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? loaded,
+    TResult Function(List<dynamic> list, List<dynamic> cityList)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {

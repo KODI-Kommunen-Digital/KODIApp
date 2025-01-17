@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
@@ -30,7 +31,8 @@ class DiscoveryScreenDetail extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () async {
-              if (services[index].categoryId != null) {
+              if (services[index].categoryId != null &&
+                  services[index].categoryId != 0) {
                 Navigator.pushNamed(context, Routes.listProduct, arguments: {
                   'id': selectedCityId,
                   'title': '',
@@ -41,6 +43,29 @@ class DiscoveryScreenDetail extends StatelessWidget {
                 prefs.setKeyValue(
                     Preferences.categoryId, services[index].categoryId);
                 prefs.setKeyValue(Preferences.type, services[index].type);
+              } else if (services[index].imageUrl == "8.4" &&
+                  services[index].categoryId == 0) {
+                final item = ProductModel(
+                  id: 62,
+                  cityId: 2,
+                  title: '',
+                  image: '',
+                  expiryDate: '',
+                  startDate: '',
+                  endDate: '',
+                  createDate: '',
+                  favorite: false,
+                  address: '',
+                  phone: '',
+                  email: '',
+                  website: '',
+                  externalId: '',
+                  description: '',
+                  button: "Jetzt bestellen",
+                  userId: 2,
+                );
+                Navigator.pushNamed(context, Routes.productDetail,
+                    arguments: item);
               }
             },
             child: ClipRRect(
