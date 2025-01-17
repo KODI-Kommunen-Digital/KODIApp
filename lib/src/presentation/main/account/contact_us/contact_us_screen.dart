@@ -26,7 +26,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   @override
   void initState() {
     super.initState();
-    _textEmailController.text = 'info@heidi-app.de';
+    _textEmailController.text =
+        'markus@rodgauerleben.de, tball@labtec-life-solutions.de';
     _textInfoController.text = '';
   }
 
@@ -91,7 +92,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: const Text(
-                      'info@heidi-app.de',
+                      'markus@rodgauerleben.de, tball@labtec-life-solutions.de',
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ),

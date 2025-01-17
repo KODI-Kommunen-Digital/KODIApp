@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
@@ -312,7 +313,7 @@ class ListLoading extends StatelessWidget {
 }
 
 class ListLoaded extends StatefulWidget {
-  final List<ProductModel> list;
+  final List<dynamic> list;
   final dynamic selectedId;
   final List listCity;
   final bool updated;
@@ -331,7 +332,7 @@ class ListLoaded extends StatefulWidget {
 }
 
 class _ListLoadedState extends State<ListLoaded> {
-  List<ProductModel> list = [];
+  List<dynamic> list = [];
   List listCity = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
   bool isLoading = false;
@@ -536,10 +537,26 @@ class _ListLoadedState extends State<ListLoaded> {
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
                     final item = list[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 16, top: 5),
-                      child: _buildItem(item: item, type: _listMode),
-                    );
+                    if (item is AdDataModel) {
+                      return GestureDetector(
+                        onTap: () {
+                          _makeAction(item.link);
+                        },
+                        child: Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: Image.network(
+                            "${Application.picturesURL}${item.image}",
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      );
+                    } else {
+                      return Padding(
+                        padding: const EdgeInsets.only(bottom: 16, top: 5),
+                        child: _buildItem(item: item, type: _listMode),
+                      );
+                    }
                   },
                   childCount: list.length,
                 ),

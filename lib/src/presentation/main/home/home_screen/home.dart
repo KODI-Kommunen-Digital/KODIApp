@@ -542,6 +542,39 @@ class _HomeScreenState extends State<HomeScreen> {
       });
       return;
     }
+    if (item.id == 502) {
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': selectedCityId,
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "8.1",
+              imageLink: Images.service8_1,
+              categoryId: 43,
+              subCategoryId: 16,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.2",
+              imageLink: Images.service8_2,
+              categoryId: 43,
+              subCategoryId: 17,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.3",
+              imageLink: Images.service8_3,
+              categoryId: 43,
+              subCategoryId: 18,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.4",
+              imageLink: Images.service8_4,
+              categoryId: 0,
+              subCategoryId: 0,
+              type: "subCategoryService"),
+        ]
+      });
+      return;
+    }
 
     if (item.hasChild) {
       final prefs = await Preferences.openBox();

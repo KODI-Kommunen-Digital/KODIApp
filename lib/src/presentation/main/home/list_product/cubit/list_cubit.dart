@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -22,13 +23,14 @@ class ListCubit extends Cubit<ListState> {
   }
 
   int pageNo = 1;
-  List<ProductModel> list = [];
+  List<dynamic> list = [];
   PaginationModel? pagination;
-  List<ProductModel> listLoaded = [];
-  List<ProductModel> filteredList = [];
+  List<dynamic> listLoaded = [];
+  List<dynamic> filteredList = [];
   List listCity = [];
   bool isSearching = false;
   String? searchTerm;
+  int _adIndex = 0;
 
   Future<void> onLoad(cityId, int? subCategoryId) async {
     pageNo = 1;
@@ -37,6 +39,7 @@ class ListCubit extends Cubit<ListState> {
     final type = await prefs.getKeyValue(Preferences.type, '');
     listCity = await getCityList() ?? [];
     dynamic result;
+
     if (cityId is List) {
       result = [];
       for (var city in cityId) {
@@ -58,9 +61,30 @@ class ListCubit extends Cubit<ListState> {
         subCategoryId: subCategoryId,
       );
     }
+
     if (result != null) {
       list = result[0];
       pagination = result[1];
+
+      // Fetch ads
+      List<AdDataModel> ads = await ListRepository.fetchAds();
+      if (ads.isNotEmpty) {
+        List<dynamic> combinedList = [];
+        int currentAdIndex = _adIndex;
+
+        for (int i = 0; i < list.length; i++) {
+          combinedList.add(list[i]);
+
+          if ((i + 1) % 10 == 0) {
+            combinedList.add(ads[currentAdIndex]);
+            currentAdIndex = (currentAdIndex + 1) % ads.length;
+          }
+        }
+
+        _adIndex = currentAdIndex;
+        list = combinedList;
+      }
+
       listLoaded = list;
       emit(ListStateLoaded(list, listCity));
     }
@@ -91,10 +115,9 @@ class ListCubit extends Cubit<ListState> {
     prefs.setKeyValue(Preferences.categoryId, categoryId);
   }
 
-  Future<List<ProductModel>> newListings(
+  Future<List<dynamic>> newListings(
       int pageNo, city, int? subCategoryId) async {
     final prefs = await Preferences.openBox();
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
 
@@ -122,16 +145,34 @@ class ListCubit extends Cubit<ListState> {
       );
     }
 
-    final listUpdated = result?[0] ?? [];
-    if (listUpdated.isNotEmpty) {
-      list.addAll(listUpdated);
+    List<dynamic> combinedList = [];
+    if (result != null && result.isNotEmpty) {
+      List<ProductModel> productList = result[0];
+      List<AdDataModel> ads = await ListRepository.fetchAds();
+      if (ads.isNotEmpty) {
+        int currentAdIndex = _adIndex;
+
+        for (int i = 0; i < productList.length; i++) {
+          combinedList.add(productList[i]);
+
+          if ((i + 1) % 10 == 0) {
+            combinedList.add(ads[currentAdIndex]);
+            currentAdIndex = (currentAdIndex + 1) % ads.length;
+          }
+        }
+
+        _adIndex = currentAdIndex;
+      }
+
+      list.addAll(combinedList);
     }
-    return list;
+
+    return combinedList;
   }
 
-  List<ProductModel> getLoadedList() => listLoaded;
+  List<dynamic> getLoadedList() => listLoaded;
 
-  Future<List<ProductModel>> updateLoadedList(city, int? subCategoryId) async {
+  Future<List<dynamic>> updateLoadedList(city, int? subCategoryId) async {
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
