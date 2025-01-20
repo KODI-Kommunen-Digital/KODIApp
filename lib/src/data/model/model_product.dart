@@ -221,7 +221,7 @@ class ProductModel {
       category = "Fahrgemeinschaften/Öffentliche Verkehrsmittel";
     } else if (json['categoryId'] == 12) {
       category = "Angebote";
-    } else if (json['categoryId'] == 13) {
+    } else if (json['categoryId'] == 43) {
       category = "Gastro";
     } else if (json['categoryId'] == 17) {
       category = "Freizeit";
@@ -229,6 +229,10 @@ class ProductModel {
       category = "Handel";
     } else if (json['categoryId'] == 44) {
       category = "Jobbörse";
+    } else if (json['categoryId'] == 45) {
+      category = "Dienstleister";
+    } else if (json['categoryId'] == 46) {
+      category = "Shopping";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {

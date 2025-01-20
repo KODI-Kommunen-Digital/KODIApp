@@ -566,12 +566,18 @@ class _HomeScreenState extends State<HomeScreen> {
               subCategoryId: 18,
               type: "subCategoryService"),
           CitizenServiceModel(
+              imageUrl: "8.5",
+              imageLink: Images.service8_5,
+              categoryId: 43,
+              subCategoryId: 21,
+              type: "subCategoryService"),
+          CitizenServiceModel(
               imageUrl: "8.4",
               imageLink: Images.service8_4,
               categoryId: 0,
               subCategoryId: 0,
               type: "subCategoryService"),
-        ]
+        ],
       });
       return;
     }
