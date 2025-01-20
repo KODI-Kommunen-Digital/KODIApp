@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -761,11 +762,16 @@ class ListRepository {
 
   static Future<List<AdDataModel>> fetchAds({int? cityId}) async {
     final response = await Api.requestAds(cityId: cityId);
-    return List<AdDataModel>.from(
+
+    List<AdDataModel> ads = List<AdDataModel>.from(
         response.data.map((item) => AdDataModel.fromJson({
               'id': item['id'],
               'image': item['image'],
               'link': item['link'],
             })));
+
+    ads.shuffle(Random());
+
+    return ads;
   }
 }
