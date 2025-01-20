@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDTXtPKqLIlSzjkjbifX79hM47wWA7Psqo',
-    appId: '1:96328404128:android:33e97eaa48632ea4df4dc5',
-    messagingSenderId: '96328404128',
-    projectId: 'rodgau-199f9',
-    storageBucket: 'rodgau-199f9.firebasestorage.app',
+    apiKey: 'AIzaSyCe_EQJjSCK1x3_KIg2Np8a9h-9zszTSzI',
+    appId: '1:72980319332:android:6100446a8da94778fda371',
+    messagingSenderId: '72980319332',
+    projectId: 'inside-rodgau',
+    storageBucket: 'inside-rodgau.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDoIuWQp-f3zAozjOqXJoQy9zj3uUSn2EY',
-    appId: '1:96328404128:ios:a8710e4deea01b2cdf4dc5',
-    messagingSenderId: '96328404128',
-    projectId: 'rodgau-199f9',
-    storageBucket: 'rodgau-199f9.firebasestorage.app',
-    iosBundleId: 'com.rodgau.app',
+    apiKey: 'AIzaSyCinGmwemX4Vzx1uH6JQi_B-KcoeLtukNk',
+    appId: '1:72980319332:ios:3c84e02412c7769dfda371',
+    messagingSenderId: '72980319332',
+    projectId: 'inside-rodgau',
+    storageBucket: 'inside-rodgau.firebasestorage.app',
+    iosBundleId: 'com.sixtythree.app',
   );
 
 }

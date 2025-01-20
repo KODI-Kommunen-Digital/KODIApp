@@ -1,4 +1,4 @@
-package com.rodgau.app
+package com.sixtythree.app
 
 import io.flutter.embedding.android.FlutterActivity
 
