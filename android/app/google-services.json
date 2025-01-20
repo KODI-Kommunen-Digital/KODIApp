@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "96328404128",
-    "project_id": "rodgau-199f9",
-    "storage_bucket": "rodgau-199f9.firebasestorage.app"
+    "project_number": "72980319332",
+    "project_id": "inside-rodgau",
+    "storage_bucket": "inside-rodgau.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:96328404128:android:33e97eaa48632ea4df4dc5",
+        "mobilesdk_app_id": "1:72980319332:android:6100446a8da94778fda371",
         "android_client_info": {
-          "package_name": "com.rodgau.app"
+          "package_name": "com.sixtythree.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDTXtPKqLIlSzjkjbifX79hM47wWA7Psqo"
+          "current_key": "AIzaSyCe_EQJjSCK1x3_KIg2Np8a9h-9zszTSzI"
         }
       ],
       "services": {

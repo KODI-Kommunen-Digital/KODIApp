@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDoIuWQp-f3zAozjOqXJoQy9zj3uUSn2EY</string>
+	<string>AIzaSyCinGmwemX4Vzx1uH6JQi_B-KcoeLtukNk</string>
 	<key>GCM_SENDER_ID</key>
-	<string>96328404128</string>
+	<string>72980319332</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.sixtythreeinside.testapp</string>
+	<string>com.sixtythree.app</string>
 	<key>PROJECT_ID</key>
-	<string>rodgau-199f9</string>
+	<string>inside-rodgau</string>
 	<key>STORAGE_BUCKET</key>
-	<string>rodgau-199f9.firebasestorage.app</string>
+	<string>inside-rodgau.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:96328404128:ios:a8710e4deea01b2cdf4dc5</string>
+	<string>1:72980319332:ios:3c84e02412c7769dfda371</string>
 </dict>
 </plist>
