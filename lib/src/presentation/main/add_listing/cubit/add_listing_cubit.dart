@@ -58,6 +58,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     int? timeless,
     List<File>? imagesList,
     isImageChanged,
+    required List<String> allCities,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -84,7 +85,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           imagesList,
           isImageChanged,
           timeless,
-          _selectedPdfFile);
+          _selectedPdfFile,
+          allCities);
       if (response.success) {
         return true;
       } else {
@@ -132,6 +134,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     int? timeless,
     required bool isImageChanged,
     List<File>? imagesList,
+    required List<String> allCities,
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -162,7 +165,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           startTime,
           endTime,
           imagesList,
-          timeless);
+          timeless,
+          allCities);
       if (response.success) {
         return true;
       } else {
@@ -329,11 +333,11 @@ class AddListingCubit extends Cubit<AddListingState> {
     _repo.clearImagePath();
   }
 
-  Future<void> savePdfFile(File? pdf) async{
+  Future<void> savePdfFile(File? pdf) async {
     _selectedPdfFile = pdf;
   }
 
-    Future<void> clearSavedPdfFile() async{
+  Future<void> clearSavedPdfFile() async {
     _selectedPdfFile = null;
   }
 }

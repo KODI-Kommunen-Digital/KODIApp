@@ -72,6 +72,7 @@ class ProductModel {
   List<ImageListModel>? imageLists;
   int? timeless;
   final String? button;
+  List<int>? allCities;
 
   ProductModel(
       {required this.id,
@@ -135,7 +136,8 @@ class ProductModel {
       this.showExternal,
       this.timeless,
       this.viewCount,
-      this.button});
+      this.button,
+      this.allCities});
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -246,7 +248,7 @@ class ProductModel {
       return ProductModel.fromJson(item, setting: setting);
     }).toList();
 
-    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+    final imagesList = List.from(json['otherLogos'] ?? []).map((item) {
       return ImageListModel.fromJson(item);
     }).toList();
 
@@ -303,7 +305,7 @@ class ProductModel {
       status: status,
       favorite: json['wishlist'] ?? false,
       address: json['address'] ?? '',
-      zipCode: json['zip_code'] ?? '',
+      zipCode: _getZipcode(json),
       phone: json['phone'] ?? '',
       fax: json['fax'] ?? '',
       email: json['email'] ?? '',
@@ -326,6 +328,7 @@ class ProductModel {
       country: country,
       state: state,
       city: city,
+      allCities: List<int>.from(json['allCities']),
       features: features,
       author: author,
       galleries: galleries,
@@ -368,6 +371,7 @@ class ProductModel {
       sourceId: 0,
       showExternal: 0,
       cityId: 0,
+      allCities: [0],
       villageId: 0,
       rateText: '',
       status: '',
@@ -397,7 +401,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
-      imageLists: json['otherlogos'],
+      imageLists: json['otherLogos'],
     );
   }
 
@@ -411,6 +415,16 @@ class ProductModel {
         "thumb": {},
       },
     };
+  }
+
+  static String _getZipcode(Map<String, dynamic> json) {
+    if (json.keys.contains("zipcode")) {
+      final zipCode = json['zipcode'];
+      if (zipCode != null) {
+        return zipCode.toString();
+      }
+    }
+    return "";
   }
 }
 
