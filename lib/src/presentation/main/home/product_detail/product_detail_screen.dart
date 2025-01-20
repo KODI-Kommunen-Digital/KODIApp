@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
   AdDataModel? _adData;
+  int minWordsForAds = 0;
+  int positionForAds = 0;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -50,13 +53,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
-    // _loadAdData();
+    _loadAdData();
+    _checkShowAdWords();
   }
 
-  // void _loadAdData() async {
-  //   _adData = await ProductDetailCubit.loadAdData(widget.item.cityId);
-  //   setState(() {});
-  // }
+  void _loadAdData() async {
+    _adData = await ProductDetailCubit.loadAdData();
+    setState(() {});
+  }
+
+  void _checkShowAdWords() async {
+    try {
+      final remoteConfig = FirebaseRemoteConfig.instance;
+      await remoteConfig.setConfigSettings(RemoteConfigSettings(
+        fetchTimeout: const Duration(seconds: 10),
+        minimumFetchInterval: const Duration(seconds: 10),
+      ));
+      await remoteConfig.fetchAndActivate();
+      await remoteConfig.setDefaults({
+        'minWordsAds': 50,
+        'positionAds': 100,
+      });
+      int minWordsAds = remoteConfig.getInt('mininumWordsForAd');
+      int positionAds = remoteConfig.getInt('positionOfAds');
+      setState(() {
+        minWordsForAds = minWordsAds;
+        positionForAds = positionAds;
+      });
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      setState(() {
+        minWordsForAds = 0;
+        positionForAds = 0;
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -998,9 +1029,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
         List<String> words = modifiedDescription.split(' ');
 
-        int insertPosition = words.length >= 100 ? 100 : words.length;
+        int? insertPosition =
+            words.length >= (positionForAds) ? positionForAds : words.length;
 
-        if (_adData != null && words.length > 50) {
+        if (_adData != null && words.length > minWordsForAds) {
           String adBanner = '''
     <div style="position: relative; display: inline-block; width: 100%;">
       <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
