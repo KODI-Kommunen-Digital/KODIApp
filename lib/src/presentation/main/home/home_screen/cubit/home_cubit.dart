@@ -41,9 +41,23 @@ class HomeCubit extends Cubit<HomeState> {
       }
 
       final cityRequestResponse = await Api.requestCities();
-      location = List.from(cityRequestResponse.data ?? []).map((item) {
-        return CategoryModel.fromJson(item);
-      }).toList();
+
+      if (cityRequestResponse.data != null &&
+          cityRequestResponse.data is List) {
+        List<dynamic> cities = List.from(cityRequestResponse.data);
+
+        cities.sort((a, b) {
+          String nameA = (a['name'] ?? '').toString().toLowerCase();
+          String nameB = (b['name'] ?? '').toString().toLowerCase();
+          return nameA.compareTo(nameB);
+        });
+
+        location = cities.map((item) {
+          return CategoryModel.fromJson(item);
+        }).toList();
+      } else {
+        emit(const HomeState.error("no_valid_data"));
+      }
 
       if (!calledExternally && !isRefreshLoader) {
         await AppBloc.discoveryCubit.onLoad();
