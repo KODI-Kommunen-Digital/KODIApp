@@ -99,6 +99,8 @@ dependencies:
   flutter_secure_storage: ^9.2.2
   fast_rsa: ^3.6.3
   calendar_date_picker2: ^1.1.5
+  # Mutiple drop down selector
+  multi_dropdown: ^3.0.1
 
 dev_dependencies:
   flutter_test:
