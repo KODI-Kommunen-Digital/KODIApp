@@ -336,30 +336,32 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-      String title,
-      String description,
-      String place,
-      CategoryModel? country,
-      CategoryModel? state,
-      String? city,
-      int? statusId,
-      int? sourceId,
-      String address,
-      String? zipcode,
-      String? phone,
-      String? email,
-      String? website,
-      String? status,
-      String? expiryDate,
-      String? startDate,
-      String? endDate,
-      TimeOfDay? expiryTime,
-      TimeOfDay? startTime,
-      TimeOfDay? endTime,
-      List<File>? imagesList,
-      bool isImageChanged,
-      int? timeless,
-      File? selectedPdfFile) async {
+    String title,
+    String description,
+    String place,
+    CategoryModel? country,
+    CategoryModel? state,
+    String? city,
+    int? statusId,
+    int? sourceId,
+    String address,
+    String? zipcode,
+    String? phone,
+    String? email,
+    String? website,
+    String? status,
+    String? expiryDate,
+    String? startDate,
+    String? endDate,
+    TimeOfDay? expiryTime,
+    TimeOfDay? startTime,
+    TimeOfDay? endTime,
+    List<File>? imagesList,
+    bool isImageChanged,
+    int? timeless,
+    File? selectedPdfFile,
+    List<String> allCities,
+  ) async {
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
@@ -427,27 +429,29 @@ class ListRepository {
       "email": email,
       "phone": phone,
       "website": website,
-      "price": 100, //dummy data
-      "discountPrice": 100, //dummy data
+      // "price": 100, //dummy data
+      // "discountPrice": 100, //dummy data
       "logo": null,
-      "statusId": 1, //dummy data
-      "sourceId": 1, //dummy data
-      "longitude": 245.65, //dummy data
-      "latitude": 22.456, //dummy data
+      // "statusId": 1, //dummy data
+      // "sourceId": 1, //dummy data
+      // "longitude": 245.65, //dummy data
+      // "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "cityId": cityId,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
-      "timeless": timeless
+      "timeless": timeless,
+      "zipcode": zipcode,
+      "cityIds": allCities
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
     if (response.success) {
       final prefs = await Preferences.openBox();
       FormData? pickedFile = prefs.getPickedFile();
-      final id = response.id;
+      final id = _getListingId(response);
       var formData = FormData();
 
       if (pickedFile != null && pickedFile.files.isNotEmpty) {
@@ -515,6 +519,7 @@ class ListRepository {
     TimeOfDay? endTime,
     List<File>? imagesList,
     int? timeless,
+    List<String> allCities,
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
@@ -579,34 +584,34 @@ class ListRepository {
       "title": title,
       "place": place,
       "description": description,
-      "externalId": null,
+      // "externalId": null,
       "categoryId": categoryId,
       "subcategoryId": subCategoryId,
       "address": address,
       "email": email,
       "phone": phone,
       "website": website,
-      "price": 100, //dummy data
-      "discountPrice": 100, //dummy data
+      // "price": 100, //dummy data
+      // "discountPrice": 100, //dummy data
       "hasAttachment": isImageChanged ? true : false,
-      "statusId": statusId ?? 1, //change 1 to 3 when done
-      "sourceId": 1, //dummy data
-      "longitude": 245.65, //dummy data
-      "latitude": 22.456, //dummy data
+      // "statusId": statusId ?? 1, //change 1 to 3 when done
+      // "sourceId": 1, //dummy data
+      // "longitude": 245.65, //dummy data
+      // "latitude": 22.456, //dummy data
       "villageId": villageId ?? 0,
       "expiryDate": combinedExpiryDateTime,
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
-      "createdAt": createdAt,
-      "pdf": null,
-      "updatedAt": currentDate.toString(),
-      "zipcode": null,
-      "appointmentId": null,
+      // "createdAt": createdAt,
+      // "pdf": null,
+      // "updatedAt": currentDate.toString(),
+      "zipcode": zipcode,
+      // "appointmentId": null,
       "logo": media,
-      "otherlogos": [
-        {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
-      ],
-      "cityId": cityId,
+      // "otherlogos": [
+      //   {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
+      // ],
+      "cityIds": allCities,
       "timeless": timeless
     };
 
@@ -773,5 +778,14 @@ class ListRepository {
     ads.shuffle(Random());
 
     return ads;
+  }
+
+  _getListingId(ResultApiModel response) {
+    var id = 0;
+    try {
+      id = response.data[0]['listingId'];
+    // ignore: empty_catches
+    } catch (e) {}
+    return id;
   }
 }

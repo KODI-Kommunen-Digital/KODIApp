@@ -17,12 +17,10 @@ class Api {
   static const String categories = "/categories";
   static const String categoriesCount = "/categories/listingsCount";
   static const String list = "/listings";
-  static const String uploadImage = "/users/4/imageUpload";
   static const String cities = "/cities";
   static const String listings = "/listings?statusId=1";
   static const String contact = "/contactUs";
   static const String faq = "/moreInfo";
-  static const String forum = "/forumapi/cities/1/forums";
   static const String hasForum = "/cities?hasForum=true";
   static const bool showExternalListings = true;
 
@@ -214,7 +212,7 @@ class Api {
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
     final result = await HTTPManager(forum: false)
-        .get(url: 'cities/$cityId/listings/$listingId');
+        .get(url: 'listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 
@@ -368,7 +366,7 @@ class Api {
 
   ///Get ProductDetail
   static Future<ResultApiModel> requestProduct(cityId, id) async {
-    final filePath = '/cities/$cityId/listings/$id';
+    final filePath = '/listings/$id';
     final result = await HTTPManager(forum: false).get(url: filePath);
     return ResultApiModel.fromJson(result);
   }
@@ -384,7 +382,7 @@ class Api {
   ///Save Product
   static Future<ResultApiModel> requestSaveProduct(
       cityId, params, isImageChanged) async {
-    final filePath = '/cities/$cityId/listings';
+    const filePath = '/listings';
     final result = await HTTPManager(forum: false).post(
       url: filePath,
       data: params,
@@ -437,7 +435,7 @@ class Api {
 
   static Future<ResultApiModel> requestEditProduct(
       cityId, listingId, params, bool isImageChanged) async {
-    final filePath = '/cities/$cityId/listings/$listingId';
+    final filePath = '/listings/$listingId';
     final result = await HTTPManager(forum: false).patch(
       url: filePath,
       data: params,
@@ -450,7 +448,7 @@ class Api {
     listingId,
     params,
   ) async {
-    final filePath = '/cities/$cityId/listings/$listingId';
+    final filePath = '/listings/$listingId';
     final result = await HTTPManager(forum: false).patch(
       url: filePath,
       data: params,
@@ -472,7 +470,7 @@ class Api {
 
   static Future<ResultApiModel> deletePdf(cityId, listingId) async {
     final result = await HTTPManager(forum: false).delete(
-      url: '/cities/$cityId/listings/$listingId/pdfDelete',
+      url: '/listings/$listingId/pdfDelete',
       loading: true,
     );
     return ResultApiModel.fromJson(result);
@@ -480,14 +478,14 @@ class Api {
 
   static Future<ResultApiModel> deleteImage(cityId, listingId) async {
     final result = await HTTPManager(forum: false).delete(
-      url: '/cities/$cityId/listings/$listingId/imageDelete',
+      url: '/listings/$listingId/imageDelete',
       loading: true,
     );
     return ResultApiModel.fromJson(result);
   }
 
   static Future<ResultApiModel> deleteUserList(cityId, int listingId) async {
-    final String removeList = "/cities/$cityId/listings/$listingId";
+    final String removeList = "/listings/$listingId";
     final result = await HTTPManager(forum: false).delete(
       url: removeList,
     );
@@ -574,9 +572,9 @@ class Api {
     if (pickedFile?.files.length != 0) {
       var firstFileEntry = pickedFile?.files[0];
       if (firstFileEntry?.key == 'pdf') {
-        filePath = '/cities/$cityId/listings/$listingId/pdfUpload';
+        filePath = '/listings/$listingId/pdfUpload';
       } else if (firstFileEntry?.key == 'image') {
-        filePath = '/cities/$cityId/listings/$listingId/imageUpload';
+        filePath = '/listings/$listingId/imageUpload';
       }
       await HTTPManager(forum: false).post(
         url: filePath,
