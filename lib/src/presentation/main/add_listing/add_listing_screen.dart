@@ -864,7 +864,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _getSubCategoryTranslation(dynamic subcategory) {
     final id = subcategory['id'];
-    if (selectedCategory == 1) {
+    if (categoryId == 1 || selectedCategory?.toLowerCase() == "news") {
       Map<int, String> subCategories = {
         1: "subcategory_newsflash",
         3: "subcategory_politics",
@@ -1067,6 +1067,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 },
                               );
                               if (selectedCategory?.toLowerCase() == "news" ||
+                                  selectedCategory?.toLowerCase() ==
+                                      "dienstleister" ||
+                                  selectedCategory?.toLowerCase() ==
+                                      "shopping" ||
+                                  selectedCategory?.toLowerCase() == "gastro" ||
                                   selectedCategory == null) {
                                 selectSubCategory(
                                     selectedCategory?.toLowerCase());
