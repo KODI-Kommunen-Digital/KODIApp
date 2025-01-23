@@ -29,6 +29,13 @@ class AppProductItem extends StatelessWidget {
   final bool isRefreshLoader;
   final String? cityName;
 
+  String getDefaultImagePath(String? category) {
+    if (category == null || category.isEmpty) {
+      return "${Application.picturesURL}admin/Events/Defaultimage1.png";
+    }
+    return "${Application.picturesURL}admin/$category/Defaultimage1.png";
+  }
+
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
@@ -98,18 +105,15 @@ class AppProductItem extends StatelessWidget {
                           );
                         },
                         errorWidget: (context, url, error) {
-                          return AppPlaceholder(
-                            child: Container(
-                              width: 120,
-                              height: 140,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                ),
+                          return Container(
+                            width: 120,
+                            height: 140,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    getDefaultImagePath(item?.category)),
+                                fit: BoxFit.fitHeight,
                               ),
-                              child: const Icon(Icons.error),
                             ),
                           );
                         },
@@ -256,63 +260,39 @@ class AppProductItem extends StatelessWidget {
                             ? "${Application.picturesURL}${item!.image}"
                             : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                 cacheManager: memoryCacheManager,
-                imageBuilder: (context, imageProvider) {
-                  return Container(
-                    height: 120,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Padding(
-                              padding: const EdgeInsets.all(4),
-                              child: Icon(
-                                item!.favorite
-                                    ? Icons.favorite
-                                    : Icons.favorite_border,
-                                color: Colors.white,
-                              ),
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  );
-                },
                 placeholder: (context, url) {
                   return AppPlaceholder(
                     child: Container(
-                      height: 120,
+                      width: 120,
+                      height: 140,
                       decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
                         color: Colors.white,
+                      ),
+                    ),
+                  );
+                },
+                imageBuilder: (context, imageProvider) {
+                  return Container(
+                    width: 120,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
                   );
                 },
                 errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+                  return Container(
+                    width: 120,
+                    height: 140,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image:
+                            NetworkImage(getDefaultImagePath(item?.category)),
+                        fit: BoxFit.fitHeight,
                       ),
-                      child: const Icon(Icons.error),
                     ),
                   );
                 },
@@ -430,18 +410,15 @@ class AppProductItem extends StatelessWidget {
                               );
                             },
                             errorWidget: (context, url, error) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  width: 120,
-                                  height: 140,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8),
-                                    ),
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        getDefaultImagePath(item?.category)),
+                                    fit: BoxFit.fitHeight,
                                   ),
-                                  child: const Icon(Icons.error),
                                 ),
                               );
                             },
