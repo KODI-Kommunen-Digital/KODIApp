@@ -211,8 +211,8 @@ class Api {
 
   static Future<ResultApiModel> requestFavoritesDetailsList(
       cityId, listingId) async {
-    final result = await HTTPManager(forum: false)
-        .get(url: 'listings/$listingId');
+    final result =
+        await HTTPManager(forum: false).get(url: 'listings/$listingId');
     return ResultApiModel.fromJson(result);
   }
 
@@ -522,18 +522,19 @@ class Api {
     }
   }
 
-  static Future<ResultApiModel> requestSubCatList(params, cityId, pageNo, subCategoryId) async {
-      if (cityId != 0 && cityId != null) {
-        var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
-        final result = await HTTPManager(forum: false).get(url: list);
-        return ResultApiModel.fromJson(result);
-      } else {
-        var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
-        final result = await HTTPManager(forum: false).get(url: list);
-        return ResultApiModel.fromJson(result);
-      }
+  static Future<ResultApiModel> requestSubCatList(
+      params, cityId, pageNo, subCategoryId) async {
+    if (cityId != 0 && cityId != null) {
+      var list =
+          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
+      final result = await HTTPManager(forum: false).get(url: list);
+      return ResultApiModel.fromJson(result);
+    } else {
+      var list =
+          '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings${_getSubCategoryParam(subCategoryId)}';
+      final result = await HTTPManager(forum: false).get(url: list);
+      return ResultApiModel.fromJson(result);
+    }
   }
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
@@ -716,7 +717,7 @@ class Api {
 
   static Future<ResultApiModel> requestAds({int? cityId}) async {
     const String filepath = "/ads/list";
-    final result = await HTTPManager(forum: true).get(
+    final result = await HTTPManager(forum: false).get(
       url: filepath,
     );
     return ResultApiModel.fromJson(result);
@@ -730,9 +731,9 @@ class Api {
   }
 
   Api._internal();
-  
+
   static _getSubCategoryParam(subCategoryId) {
-    if(subCategoryId != null) {
+    if (subCategoryId != null) {
       return "&subcategoryId=$subCategoryId";
     }
     return "";
