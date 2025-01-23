@@ -282,6 +282,23 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               type: "subCategoryService"),
         ]
       });
+    } else if (service.imageLink == "31") {
+      int? currentLocation =
+          await context.read<DiscoveryCubit>().getCitySelected();
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': currentLocation ?? 0,
+        'services': [
+          CitizenServiceModel(
+              imageUrl: "31.1",
+              imageLink: Images.service31,
+              categoryId: 44,
+              type: "categoryService"),
+          CitizenServiceModel(
+            imageUrl: "31.2",
+            imageLink: Images.service31_2,
+          ),
+        ]
+      });
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

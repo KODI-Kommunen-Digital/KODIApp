@@ -489,24 +489,22 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         Translate.of(context).translate('all_Categories'),
                         style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
+                      ),
                     ],
                   ),
                 ),
                 Wrap(
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
-                  children: listBuild.map(
-                    (item) {
-                      return HomeCategoryItem(
-                        item: item,
-                        onPressed: (item) {
-                          _onCategory(item, listBuild);
-                          return false;
-                        },
-                      );
-                    },
-                  ).toList(),
+                  children: listBuild.map((item) {
+                    return HomeCategoryItem(
+                      item: item,
+                      onPressed: (item) {
+                        _onCategory(item, listBuild);
+                        return false;
+                      },
+                    );
+                  }).toList(),
                 ),
               ],
             ),
@@ -520,8 +518,10 @@ class _HomeScreenState extends State<HomeScreen> {
       final cityId = await context.read<DiscoveryCubit>().getCitySelected();
       if (cityId != 0) {
         if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': item.id, 'title': 'Forum'});
+        Navigator.pushNamed(context, Routes.listGroups, arguments: {
+          'id': item.id,
+          'title': 'Forum',
+        });
       } else {
         if (!mounted) return;
         _showCitySelectionPopup(context);
@@ -535,48 +535,80 @@ class _HomeScreenState extends State<HomeScreen> {
         'id': selectedCityId,
         'services': [
           CitizenServiceModel(
-              imageUrl: "29", imageLink: Images.service29, categoryId: 29),
+            imageUrl: "29",
+            imageLink: Images.service29,
+            categoryId: 29,
+          ),
           CitizenServiceModel(
-              imageUrl: "12", imageLink: Images.service12, categoryId: 12)
-        ]
+            imageUrl: "12",
+            imageLink: Images.service12,
+            categoryId: 12,
+          ),
+        ],
       });
       return;
     }
+
     if (item.id == 502) {
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
         'id': selectedCityId,
         'services': [
           CitizenServiceModel(
-              imageUrl: "8.1",
-              imageLink: Images.service8_1,
-              categoryId: 43,
-              subCategoryId: 16,
-              type: "subCategoryService"),
+            imageUrl: "8.1",
+            imageLink: Images.service8_1,
+            categoryId: 43,
+            subCategoryId: 16,
+            type: "subCategoryService",
+          ),
           CitizenServiceModel(
-              imageUrl: "8.2",
-              imageLink: Images.service8_2,
-              categoryId: 43,
-              subCategoryId: 17,
-              type: "subCategoryService"),
+            imageUrl: "8.2",
+            imageLink: Images.service8_2,
+            categoryId: 43,
+            subCategoryId: 17,
+            type: "subCategoryService",
+          ),
           CitizenServiceModel(
-              imageUrl: "8.3",
-              imageLink: Images.service8_3,
-              categoryId: 43,
-              subCategoryId: 18,
-              type: "subCategoryService"),
+            imageUrl: "8.3",
+            imageLink: Images.service8_3,
+            categoryId: 43,
+            subCategoryId: 18,
+            type: "subCategoryService",
+          ),
           CitizenServiceModel(
-              imageUrl: "8.5",
-              imageLink: Images.service8_5,
-              categoryId: 43,
-              subCategoryId: 21,
-              type: "subCategoryService"),
+            imageUrl: "8.5",
+            imageLink: Images.service8_5,
+            categoryId: 43,
+            subCategoryId: 21,
+            type: "subCategoryService",
+          ),
           CitizenServiceModel(
-              imageUrl: "8.4",
-              imageLink: Images.service8_4,
-              categoryId: 0,
-              subCategoryId: 0,
-              type: "subCategoryService"),
+            imageUrl: "8.4",
+            imageLink: Images.service8_4,
+            categoryId: 0,
+            subCategoryId: 0,
+            type: "subCategoryService",
+          ),
+        ],
+      });
+      return;
+    }
+
+    if (item.id == 44) {
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': selectedCityId,
+        'services': [
+          CitizenServiceModel(
+            imageUrl: "31.1",
+            imageLink: Images.service31,
+            categoryId: 44,
+            type: "categoryService",
+          ),
+          CitizenServiceModel(
+            imageUrl: "31.2",
+            imageLink: Images.service31_2,
+          ),
         ],
       });
       return;
@@ -587,8 +619,11 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.categoryId, item.id);
       prefs.setKeyValue(Preferences.type, "category");
       if (!mounted) return;
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': selectedCityId, 'title': '', 'type': 'category'});
+      Navigator.pushNamed(context, Routes.listProduct, arguments: {
+        'id': selectedCityId,
+        'title': '',
+        'type': 'category',
+      });
     } else {
       _onPopUpCatError();
     }

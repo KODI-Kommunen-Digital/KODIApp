@@ -18,7 +18,7 @@ class HTTPManager {
   HTTPManager({bool forum = false}) {
     _baseUrl = !forum
         ? 'http://www.63inside.de/api/v2/'
-        : 'http://www.63inside.de/api/';
+        : 'http://www.63inside.de/api/v2';
 
     _dio = Dio(
       BaseOptions(

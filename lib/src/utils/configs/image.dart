@@ -38,6 +38,7 @@ class Images {
   static const String service500 = "assets/images/services-500.png";
   static const String service501 = "assets/images/services-501.png";
   static const String service31 = "assets/images/services-31.png";
+  static const String service31_2 = "assets/images/services-31_2.png";
   static const String service32 = "assets/images/services-32.png";
   static const String service33 = "assets/images/services-33.png";
   static const String service34 = "assets/images/services-34.png";
