@@ -46,8 +46,8 @@ class DiscoveryScreenDetail extends StatelessWidget {
               } else if (services[index].imageUrl == "8.4" &&
                   services[index].categoryId == 0) {
                 final item = ProductModel(
-                  id: 62,
-                  cityId: 2,
+                  id: 511,
+                  allCities: [2],
                   title: '',
                   image: '',
                   expiryDate: '',
@@ -62,7 +62,7 @@ class DiscoveryScreenDetail extends StatelessWidget {
                   externalId: '',
                   description: '',
                   button: "Jetzt bestellen",
-                  userId: 2,
+                  userId: 4,
                 );
                 Navigator.pushNamed(context, Routes.productDetail,
                     arguments: item);

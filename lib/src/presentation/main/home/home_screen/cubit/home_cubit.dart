@@ -106,20 +106,20 @@ class HomeCubit extends Cubit<HomeState> {
 
       recent = combinedRecent;
 
-      final categoryCountRequestResponse =
-          await Api.requestCategoryCount(selectedCity?.id);
-      categoryCount =
-          List.from(categoryCountRequestResponse.data ?? []).map((item) {
-        return CategoryModel.fromJson(item);
-      }).toList();
+      // final categoryCountRequestResponse =
+      //     await Api.requestCategoryCount(selectedCity?.id);
+      // categoryCount =
+      //     List.from(categoryCountRequestResponse.data ?? []).map((item) {
+      //   return CategoryModel.fromJson(item);
+      // }).toList();
 
       const banner = Images.slider;
 
-      List<CategoryModel> formattedCategories =
-          await formatCategoriesList(category, categoryCount, selectedCity?.id);
+      // List<CategoryModel> formattedCategories =
+      //     await formatCategoriesList(category, categoryCount, selectedCity?.id);
 
-      emit(HomeStateLoaded(banner, formattedCategories, location, recent,
-          isRefreshLoader, selectedCity));
+      emit(HomeStateLoaded(
+          banner, category, location, recent, isRefreshLoader, selectedCity));
     } catch (e) {
       emit(HomeState.error("Error loading data: ${e.toString()}"));
     } finally {
@@ -207,16 +207,6 @@ class HomeCubit extends Cubit<HomeState> {
       var forum = categories.removeAt(forumIndex);
       categories.insert(6, forum);
     }
-    // Hide tag on empty categories
-    // for (var element in categories) {
-    //   bool hasContent = await categoryHasContent(element.id, cityId);
-    //   if (!hasContent) {
-    //     element.hide = true;
-    //   }
-    //   if (element.id == 14) {
-    //     element.hide = false;
-    //   }
-    // }
 
     return categories;
   }

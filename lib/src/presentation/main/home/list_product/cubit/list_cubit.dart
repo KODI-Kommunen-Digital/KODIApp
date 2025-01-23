@@ -75,7 +75,7 @@ class ListCubit extends Cubit<ListState> {
         for (int i = 0; i < list.length; i++) {
           combinedList.add(list[i]);
 
-          if ((i + 1) % 10 == 0) {
+          if ((i + 1) % 6 == 0) {
             combinedList.add(ads[currentAdIndex]);
             currentAdIndex = (currentAdIndex + 1) % ads.length;
           }
@@ -155,7 +155,7 @@ class ListCubit extends Cubit<ListState> {
         for (int i = 0; i < productList.length; i++) {
           combinedList.add(productList[i]);
 
-          if ((i + 1) % 10 == 0) {
+          if ((i + 1) % 6 == 0) {
             combinedList.add(ads[currentAdIndex]);
             currentAdIndex = (currentAdIndex + 1) % ads.length;
           }
