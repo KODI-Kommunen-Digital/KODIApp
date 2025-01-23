@@ -160,7 +160,7 @@ class ListCubit extends Cubit<ListState> {
           combinedList.add(productList[i]);
 
           // Insert an ad after every 6 items, but ensure no two ads are consecutive
-          if ((i + 1) % 6 == 0 && i + 1 < productList.length) {
+          if ((i + 1) % 10 == 0 && i + 1 < productList.length) {
             combinedList.add(ads[currentAdIndex]);
             currentAdIndex = (currentAdIndex + 1) % ads.length;
           }
