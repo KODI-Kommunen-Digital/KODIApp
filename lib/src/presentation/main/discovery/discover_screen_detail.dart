@@ -56,6 +56,8 @@ class DiscoveryScreenDetail extends StatelessWidget {
                 final item = ProductModel(
                   id: 511,
                   allCities: [2],
+                  cityId: 2,
+                  categoryId: 1,
                   title: '',
                   image: '',
                   expiryDate: '',

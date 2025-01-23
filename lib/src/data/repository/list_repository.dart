@@ -443,7 +443,7 @@ class ListRepository {
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
       "timeless": timeless,
-      "zipcode": zipcode,
+      "zipcode": 0,
       "cityIds": allCities
     };
     final response =
@@ -605,7 +605,7 @@ class ListRepository {
       // "createdAt": createdAt,
       // "pdf": null,
       // "updatedAt": currentDate.toString(),
-      "zipcode": zipcode,
+      "zipcode": 0,
       // "appointmentId": null,
       "logo": media,
       // "otherlogos": [
@@ -784,7 +784,7 @@ class ListRepository {
     var id = 0;
     try {
       id = response.data[0]['listingId'];
-    // ignore: empty_catches
+      // ignore: empty_catches
     } catch (e) {}
     return id;
   }
