@@ -1010,6 +1010,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
+
+        modifiedDescription = modifiedDescription.replaceAll('\n', '<br>');
+
+        modifiedDescription = modifiedDescription
+            .replaceAllMapped(
+                RegExp(r'\*\*(.*?)\*\*'), (match) => '<b>${match[1]}</b>')
+            .replaceAllMapped(
+                RegExp(r'_(.*?)_'), (match) => '<i>${match[1]}</i>');
+
         String color = (isDarkMode) ? 'white' : 'black';
         String hexColor = (isDarkMode) ? '#ffffff' : '#000000';
 
@@ -1071,8 +1080,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             return {'style': style};
           },
           onTapUrl: (url) {
-            if (Platform.isAndroid) {
-              final uri = Uri.parse(url);
+            final uri = Uri.parse(url);
+            if (Platform.isAndroid || Platform.isIOS) {
               final newUri = Uri(
                 scheme: uri.scheme,
                 host: uri.host,
@@ -1083,28 +1092,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 _makeAction(newUri.toString());
               }
               return false;
-            } else if (Platform.isIOS) {
-              final uri = Uri.parse(url);
-              if (uri.queryParameters['isAd'] == 'true') {
-                return false;
-              } else {
-                final newUri = Uri(
-                  scheme: uri.scheme,
-                  host: uri.host,
-                  path: uri.path,
-                  queryParameters: Map.from(uri.queryParameters)
-                    ..remove('isAd'),
-                );
-                if (newUri.hasAbsolutePath) {
-                  _makeAction(newUri.toString());
-                }
-                return false;
-              }
             }
             return false;
           },
         );
       }
+
       booking = InkWell(
         onTap: () {
           _makeTechAction(product.website);

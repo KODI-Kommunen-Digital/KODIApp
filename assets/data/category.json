@@ -18,6 +18,14 @@
             "categoryType" : "category"
         },
         {
+            "id": 502,
+            "name": "Gastro",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-utensils",
+            "color": "#ECFB04",
+            "categoryType" : "category"
+        },
+        {
             "id": 4,
             "name": "Vereine",
             "noOfSubcategories": 0,
@@ -30,14 +38,6 @@
             "name": "Shopping",
             "noOfSubcategories": 0,                
             "icon": "fas fa-cart-shopping",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 502,
-            "name": "Gastro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
             "color": "#ECFB04",
             "categoryType" : "category"
         },
