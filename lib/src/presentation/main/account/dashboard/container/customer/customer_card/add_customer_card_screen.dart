@@ -57,13 +57,18 @@ class _AddCustomerCardScreenState extends State<AddCustomerCardScreen> {
     if (user != null) {
       final result =
           await ContainerRepository.associateCard(user.id, cardId, pin);
-      if (result) {
+      if (result != null && result.success) {
         _showMessage('add_card_success');
         Navigator.of(context).pop();
         return;
+      } else if (result != null){
+        //Error Handling here
+      } else {
+        _showMessage('error_message');
       }
+    } else {
+      _showMessage('login_required');
     }
-    _showMessage('error_message');
   }
 
   void _showMessage(String message) {

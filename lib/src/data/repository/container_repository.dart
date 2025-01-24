@@ -889,15 +889,15 @@ class ContainerRepository {
     }
   }
 
-  static Future<bool> associateCard(userId, cardId, pin) async {
+  static Future<ResultApiModel?> associateCard(userId, cardId, pin) async {
     Map<String, dynamic> params = {"pinCode": pin};
     final response = await Api.associateCard(userId, cardId, params);
 
     if (response.success) {
-      return true;
+      return response;
     } else {
       logError('Error associating card: ${response.data} ${response.message}');
-      return false;
+      return null;
     }
   }
 
