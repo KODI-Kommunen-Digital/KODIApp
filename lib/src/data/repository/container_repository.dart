@@ -193,14 +193,18 @@ class ContainerRepository {
     required int storeId,
     required String title,
     String? description,
-    required int productId,
+    int? productId,
   }) async {
     Map<String, dynamic> params = {
       'title': title,
       'description': description,
-      'productId': productId,
       'shopId': storeId
     };
+
+    if(productId != null) {
+      params['productId'] = productId;
+    }
+
 
     final response = await Api.addShelf(cityId, storeId, params);
 

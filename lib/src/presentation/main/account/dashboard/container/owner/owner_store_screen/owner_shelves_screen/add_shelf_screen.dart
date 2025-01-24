@@ -29,7 +29,7 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
 
   String? _errorTitle;
   String? _errorDescription;
-  String? _errorProduct;
+  //String? _errorProduct;
 
   @override
   void dispose() {
@@ -169,23 +169,23 @@ class _AddShelfScreenState extends State<AddShelfScreen> {
       _errorDescription = null;
     }
 
-    if (selectedProduct == null) {
+    /*if (selectedProduct == null) {
       _errorProduct = 'product_empty';
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(Translate.of(context).translate(_errorProduct!))));
     } else {
       _errorProduct = null;
-    }
+    }*/
 
     if (_errorTitle == null &&
-        _errorProduct == null &&
+        //_errorProduct == null &&
         _errorDescription == null) {
       final bool success = await ContainerRepository.saveShelf(
           cityId: widget.store.cityId,
           storeId: widget.store.id,
           title: _titleController.text,
           description: _descriptionController.text,
-          productId: selectedProduct!.id);
+          productId: selectedProduct?.id);
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content:
