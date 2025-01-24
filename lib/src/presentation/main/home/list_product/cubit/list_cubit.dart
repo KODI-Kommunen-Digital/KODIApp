@@ -75,8 +75,8 @@ class ListCubit extends Cubit<ListState> {
         for (int i = 0; i < list.length; i++) {
           combinedList.add(list[i]);
 
-          // Insert an ad after every 6 items, but ensure no two ads are consecutive
-          if ((i + 1) % 6 == 0 && i + 1 < list.length) {
+          // Insert an ad after every 9 items, but ensure no two ads are consecutive
+          if ((i + 1) % 9 == 0 && i + 1 < list.length) {
             // Ensure the next item is not an ad
             if (i + 1 < list.length && list[i + 1] is! AdDataModel) {
               combinedList.add(ads[currentAdIndex]);
@@ -159,8 +159,8 @@ class ListCubit extends Cubit<ListState> {
         for (int i = 0; i < productList.length; i++) {
           combinedList.add(productList[i]);
 
-          // Insert an ad after every 6 items, but ensure no two ads are consecutive
-          if ((i + 1) % 10 == 0 && i + 1 < productList.length) {
+          // Insert an ad after every 9 items, but ensure no two ads are consecutive
+          if ((i + 1) % 9 == 0 && i + 1 < productList.length) {
             combinedList.add(ads[currentAdIndex]);
             currentAdIndex = (currentAdIndex + 1) % ads.length;
           }
