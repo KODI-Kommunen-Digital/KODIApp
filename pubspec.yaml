@@ -37,9 +37,6 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
 
-  ###Matomo
-  matomo_tracker: ^5.0.0+1
-
   ### Networking
   dio: ^5.4.3+1
   retrofit: ^4.1.0
@@ -77,10 +74,6 @@ dependencies:
   flutter_widget_from_html: ^0.15.2
   webview_flutter: ^4.10.0
   flutter_inappwebview: ^6.1.5
-
-  ### Firebase
-  firebase_core: ^3.1.0
-  firebase_messaging: ^15.0.1
 
   ### File Reading
   open_filex: ^4.4.0
@@ -139,7 +132,7 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
-    - assets/env/.envTroisdorf
+    - assets/env/.envWiesenburg
     - assets/data/categories_config.json
     - assets/data/subcategories_config.json
     - assets/data/services_config.json

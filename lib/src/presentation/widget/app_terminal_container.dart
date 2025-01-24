@@ -41,7 +41,7 @@ class AppTerminalContainer extends StatelessWidget {
           if (title != null)
             Padding(
               padding:
-                  const EdgeInsets.symmetric(vertical: 4.0, horizontal: 32),
+                  const EdgeInsets.symmetric(vertical: 12.0, horizontal: 32),
               child: Container(
                 decoration: BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,

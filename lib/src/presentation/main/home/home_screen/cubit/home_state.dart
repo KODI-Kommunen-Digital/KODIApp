@@ -18,10 +18,12 @@ class HomeState with _$HomeState {
     String banner,
     List<CategoryModel> category,
     List<CategoryModel> location,
-    List<ProductModel> news,
+    List<ProductModel> current,
     List<ProductModel> events,
     bool isRefreshLoader,
       List<CitizenServiceModel> services,
+      List<ProductModel> officialNotification,
+      List<ProductModel> clubs,
   ) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;

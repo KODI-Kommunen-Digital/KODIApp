@@ -18,8 +18,10 @@ import 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   dynamic category;
   dynamic location;
-  dynamic news;
+  dynamic current;
   dynamic events;
+  dynamic officialNotification;
+  dynamic clubs;
   dynamic sliders;
   dynamic categoryCount;
   final List<CitizenServiceModel> hiddenServices = [];
@@ -66,8 +68,8 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
     CategoryModel? savedCity = await checkSavedCity(location);
-    final newsListingsRequestResponse = await Api.requestCatList(1, 1, 1);
-    news = List.from(newsListingsRequestResponse.data ?? []).map((item) {
+    final currentListingsRequestResponse = await Api.requestRecentListings(1);
+    current = List.from(currentListingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
@@ -75,6 +77,57 @@ class HomeCubit extends Cubit<HomeState> {
     events = List.from(eventsListingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
+
+    /*
+    final officialNotificationListingsRequestResponse =
+        await Api.requestCatList(16, 1, 1);
+    officialNotification =
+        List.from(officialNotificationListingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();*/
+
+    /*final clubsListingsRequestResponse = await Api.requestCatList(4, 1, 1);
+    clubs = List.from(clubsListingsRequestResponse.data ?? []).map((item) {
+      return ProductModel.fromJson(item);
+    }).toList();*/
+
+    //Dummy Data
+    clubs = [
+      ProductModel(
+          id: 1,
+          title: "title",
+          image: "image",
+          expiryDate: "expiryDate",
+          startDate: "startDate",
+          endDate: "endDate",
+          createDate: "createDate",
+          favorite: false,
+          address: "address",
+          phone: "phone",
+          email: "email",
+          website: "website",
+          externalId: "externalId",
+          description: "description",
+          userId: 1)
+    ];
+    officialNotification = [
+      ProductModel(
+          id: 1,
+          title: "title",
+          image: "image",
+          expiryDate: "expiryDate",
+          startDate: "startDate",
+          endDate: "endDate",
+          createDate: "createDate",
+          favorite: false,
+          address: "address",
+          phone: "phone",
+          email: "email",
+          website: "website",
+          externalId: "externalId",
+          description: "description",
+          userId: 1)
+    ];
 
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);
@@ -103,8 +156,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     List<CategoryModel> formattedCategories =
         await formatCategoriesList(category, categoryCount, savedCity?.id);
-    emit(HomeStateLoaded(banner, formattedCategories, location, news, events,
-        isRefreshLoader, services));
+    emit(HomeStateLoaded(banner, formattedCategories, location, current, events,
+        isRefreshLoader, services, officialNotification, clubs));
   }
 
   Future<void> saveIgnoreAppVersion(String version) async {
@@ -152,8 +205,8 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(
-        banner, category, location, news, events, false, services));
+    emit(HomeStateLoaded(banner, category, location, current, events, false,
+        services, officialNotification, clubs));
   }
 
   bool getCalledExternally() {
@@ -249,26 +302,38 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
-  Future<dynamic> newListings(int pageNo, bool isNews) async {
+  Future<dynamic> newListings(int pageNo, int category) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }
     dynamic listingsRequestResponse;
-    if (isNews) {
-      listingsRequestResponse = await Api.requestCatList(1, 1, pageNo);
+
+    if (category != 0) {
+      listingsRequestResponse = await Api.requestCatList(category, 1, pageNo);
     } else {
-      listingsRequestResponse = await Api.requestCatList(3, 1, pageNo);
+      listingsRequestResponse = await Api.requestRecentListings(pageNo);
     }
+
     final newListings =
         List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
 
-    if (isNews) {
-      news.addAll(newListings);
-    } else {
-      events.addAll(newListings);
+    switch (category) {
+      case 0:
+        current.addAll(newListings);
+        break;
+      case 3:
+        events.addAll(newListings);
+        break;
+      case 4:
+        clubs.addAll(newListings);
+        break;
+      case 16:
+        officialNotification.addAll(newListings);
+        break;
     }
+
     return newListings;
   }
 

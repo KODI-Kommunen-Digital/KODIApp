@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,7 @@ class AppProductItem extends StatelessWidget {
       this.cityName,
       this.categoryTitle,
       this.screenWidth,
-      this.screenHeight,
-      this.isEvent = false});
+      this.screenHeight});
 
   final ProductModel? item;
   final ProductViewType type;
@@ -35,7 +35,6 @@ class AppProductItem extends StatelessWidget {
   final String? categoryTitle;
   final double? screenWidth;
   final double? screenHeight;
-  final bool isEvent;
 
   @override
   Widget build(BuildContext context) {
@@ -537,12 +536,11 @@ class AppProductItem extends StatelessWidget {
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
-                    height:
-                        (screenHeight == null) ? 120 : screenHeight! * 0.085,
+                    height: (screenHeight == null) ? 120 : screenHeight! * 0.18,
                     width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
+                        Radius.circular(16),
                       ),
                       image: DecorationImage(
                         image: imageProvider,
@@ -574,7 +572,7 @@ class AppProductItem extends StatelessWidget {
                   return AppPlaceholder(
                     child: Container(
                       height:
-                          (screenHeight == null) ? 120 : screenHeight! * 0.085,
+                          (screenHeight == null) ? 120 : screenHeight! * 0.18,
                       width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.all(
@@ -589,7 +587,7 @@ class AppProductItem extends StatelessWidget {
                   return AppPlaceholder(
                     child: Container(
                       height:
-                          (screenHeight == null) ? 120 : screenHeight! * 0.085,
+                          (screenHeight == null) ? 120 : screenHeight! * 0.18,
                       width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
                       decoration: const BoxDecoration(
                         color: Colors.white,
@@ -610,34 +608,6 @@ class AppProductItem extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // if (isEvent)
-                    //   SizedBox(
-                    //     height: screenHeight! * 0.0125,
-                    //   ),
-                    // if (!isEvent)
-                    //   Container(
-                    //     decoration: BoxDecoration(
-                    //         color: Theme.of(context).scaffoldBackgroundColor,
-                    //         borderRadius: BorderRadius.circular(4)),
-                    //     child: Padding(
-                    //       padding: const EdgeInsets.all(2.0),
-                    //       child: Text(
-                    //         categoryTitle ?? item?.category ?? '',
-                    //         style: Theme.of(context)
-                    //             .textTheme
-                    //             .bodySmall!
-                    //             .copyWith(
-                    //                 fontWeight: FontWeight.bold,
-                    //                 fontSize: (screenAverage == null)
-                    //                     ? Theme.of(context)
-                    //                         .textTheme
-                    //                         .bodySmall!
-                    //                         .fontSize
-                    //                     : screenAverage * 0.0125),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // const SizedBox(height: 4),
                     Text(
                       item!.title,
                       maxLines: 3,
@@ -655,6 +625,26 @@ class AppProductItem extends StatelessWidget {
                                       .fontSize
                                   : screenAverage * 0.0125),
                     ),
+                    Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: (item?.description != null)
+                            ? Text(
+                                "${item!.description.substring(0, min(item!.description.length, 150))}${(item!.description.length > 150) ? "..." : ""}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: (screenAverage == null)
+                                            ? Theme.of(context)
+                                                .textTheme
+                                                .bodySmall!
+                                                .fontSize
+                                            : screenAverage * 0.01),
+                              )
+                            : Container()),
+                    const SizedBox(height: 4),
                   ],
                 ),
               )

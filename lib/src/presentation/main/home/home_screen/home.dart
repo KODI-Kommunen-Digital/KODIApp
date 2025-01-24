@@ -6,8 +6,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -22,14 +20,14 @@ import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
+
+enum InfoWidget { events, current, officialNotification, clubs }
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -44,40 +42,29 @@ class _HomeScreenState extends State<HomeScreen> {
   int newsPageNo = 1;
   int eventsPageNo = 1;
   late bool checkSavedCity;
-  final _newsScrollController = ScrollController();
+  final _currentScrollController = ScrollController();
   final _eventsScrollController = ScrollController();
-  bool isLoadingNews = false;
+  final _officialNotificationScrollController = ScrollController();
+  final _clubsScrollController = ScrollController();
+  bool isLoadingCurrent = false;
   bool isLoadingEvents = false;
+  bool isLoadingClubs = false;
+  bool isLoadingOfficialNotification = false;
   bool categoryLoading = false;
   bool locationLoading = false;
   bool isRefreshLoader = false;
   String? banner;
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
-  List<ProductModel>? news = [];
+  List<ProductModel>? current = [];
   List<ProductModel>? events = [];
+  List<ProductModel>? officialNotification = [];
+  List<ProductModel>? clubs = [];
   List<CitizenServiceModel>? services = [];
   AppUpdateInfo? _updateInfo;
-  PermissionStatus? locationPermission;
-  WebViewController webViewController = WebViewController()
-    ..setJavaScriptMode(JavaScriptMode.unrestricted)
-    ..setNavigationDelegate(
-      NavigationDelegate(
-        onProgress: (int progress) {
-          // Update loading bar.
-        },
-        onPageStarted: (String url) {},
-        onPageFinished: (String url) {},
-        onHttpError: (HttpResponseError error) {},
-      ),
-    )
-    ..loadRequest(Uri.parse('https://troisdorf.dksr.city/poimap/'));
   late double screenHeight;
   late double screenWidth;
   late double screenAverage;
-  final String mapLink = 'https://troisdorf.dksr.city/poimap/';
-  final String statisticsLink =
-      'https://troisdorf.dksr.city/public-dashboards/4ce486ba9c294808bb58ba19a88e19fa?orgId=1';
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -85,53 +72,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _newsScrollController.addListener(_newsScrollListener);
+    _currentScrollController.addListener(_currentScrollListener);
     _eventsScrollController.addListener(_eventsScrollListener);
+    _officialNotificationScrollController
+        .addListener(_officialNotificationScrollListener);
+    _clubsScrollController.addListener(_clubsScrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     checkUserExist();
     checkForUpdate();
-    _requestLocationPermission();
-  }
-
-  Future<void> _requestLocationPermission() async {
-    locationPermission = await Permission.location.request();
-    if (isLocationAllowed()) {
-      await _getLocation();
-    } else if (locationPermission != PermissionStatus.permanentlyDenied) {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content:
-              Text(Translate.of(context).translate("geo_permission_needed"))));
-      _requestLocationPermission();
-    } else {
-      bool opened = await openAppSettings();
-      if (opened) {
-        locationPermission = await Permission.location.status;
-      }
-    }
-  }
-
-  Future<void> _getLocation() async {
-    setState(() {
-      locationLoading = true;
-    });
-    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    setState(() {
-      locationLoading = false;
-    });
-  }
-
-  bool isLocationAllowed() {
-    if (locationPermission != null) {
-      if (locationPermission!.isGranted ||
-          locationPermission!.isProvisional ||
-          locationPermission!.isLimited) {
-        return true;
-      }
-    }
-    return false;
   }
 
   /*Future<bool> _requestLocationPermission() async {
@@ -215,10 +165,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-    _newsScrollController.removeListener(_newsScrollListener);
+    _officialNotificationScrollController
+        .removeListener(_officialNotificationScrollListener);
+    _clubsScrollController.removeListener(_clubsScrollListener);
+    _currentScrollController.removeListener(_currentScrollListener);
     _eventsScrollController.removeListener(_eventsScrollListener);
-    _newsScrollController.dispose();
+
+    _officialNotificationScrollController.dispose();
+    _clubsScrollController.dispose();
     _eventsScrollController.dispose();
+    _currentScrollController.dispose();
   }
 
   Future<void> checkUserExist() async {
@@ -228,21 +184,21 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _newsScrollListener() async {
-    if (_newsScrollController.position.atEdge) {
-      if (_newsScrollController.position.pixels != 0) {
+  Future<void> _currentScrollListener() async {
+    if (_currentScrollController.position.atEdge) {
+      if (_currentScrollController.position.pixels != 0) {
         setState(() {
-          isLoadingNews = true;
+          isLoadingCurrent = true;
         });
-        news =
-            await AppBloc.homeCubit.newListings(++newsPageNo, true).then((_) {
+        current =
+            await AppBloc.homeCubit.newListings(++newsPageNo, 0).then((_) {
           setState(() {
-            isLoadingNews = false;
+            isLoadingCurrent = false;
           });
         }).catchError(
           (error, stackTrace) async {
             setState(() {
-              isLoadingNews = false;
+              isLoadingCurrent = false;
             });
             logError('Error loading new news: $error');
             await Sentry.captureException(error, stackTrace: stackTrace);
@@ -258,9 +214,8 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           isLoadingEvents = true;
         });
-        events = await AppBloc.homeCubit
-            .newListings(++eventsPageNo, false)
-            .then((_) {
+        events =
+            await AppBloc.homeCubit.newListings(++eventsPageNo, 3).then((_) {
           setState(() {
             isLoadingEvents = false;
           });
@@ -277,8 +232,56 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  Future<void> _clubsScrollListener() async {
+    if (_clubsScrollController.position.atEdge) {
+      if (_clubsScrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingClubs = true;
+        });
+        clubs =
+            await AppBloc.homeCubit.newListings(++eventsPageNo, 4).then((_) {
+          setState(() {
+            isLoadingClubs = false;
+          });
+        }).catchError(
+          (error, stackTrace) async {
+            setState(() {
+              isLoadingClubs = false;
+            });
+            logError('Error loading new clubs: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+          },
+        );
+      }
+    }
+  }
+
+  Future<void> _officialNotificationScrollListener() async {
+    if (_officialNotificationScrollController.position.atEdge) {
+      if (_officialNotificationScrollController.position.pixels != 0) {
+        setState(() {
+          isLoadingOfficialNotification = true;
+        });
+        officialNotification =
+            await AppBloc.homeCubit.newListings(++eventsPageNo, 16).then((_) {
+          setState(() {
+            isLoadingOfficialNotification = false;
+          });
+        }).catchError(
+          (error, stackTrace) async {
+            setState(() {
+              isLoadingOfficialNotification = false;
+            });
+            logError('Error loading new official notifications: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+          },
+        );
+      }
+    }
+  }
+
   void scrollUp() {
-    _newsScrollController.animateTo(0,
+    _currentScrollController.animateTo(0,
         duration: const Duration(milliseconds: 500), //duration of scroll
         curve: Curves.fastOutSlowIn //scroll type
         );
@@ -325,8 +328,10 @@ class _HomeScreenState extends State<HomeScreen> {
             banner = state.banner;
             category = state.category;
             location = state.location;
-            news = state.news;
+            current = state.current;
             events = state.events;
+            officialNotification = state.officialNotification;
+            clubs = state.clubs;
             services = state.services;
             isRefreshLoader = true;
             categoryLoading = false;
@@ -391,25 +396,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(
                     height: 8,
                   ),
-                  _buildItems(news, categoryLoading, true),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildItems(events, categoryLoading, false),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildMap(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildStatistics(),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  _buildQRCodes(),
-                  const SizedBox(
-                    height: 8,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: _buildItems(events, InfoWidget.events)),
+                      const SizedBox(
+                        width: 32,
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _buildItems(current, InfoWidget.current),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            _buildItems(officialNotification,
+                                InfoWidget.officialNotification),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            _buildItems(clubs, InfoWidget.clubs),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ],
               ),
@@ -506,368 +520,121 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Widget _buildQRCodes() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        AppTerminalContainer(
-          width: screenAverage * 0.15,
-          height: screenAverage * 0.15 + screenAverage * 0.025,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            const SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "App",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: screenAverage * 0.015,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            QrImageView(data: 'https://www.smart-app-troisdorf.de')
-          ],
-        ),
-        AppTerminalContainer(
-          width: screenAverage * 0.15,
-          height: screenAverage * 0.15 + screenAverage * 0.025,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            const SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Mobilitätskarte",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: screenAverage * 0.015,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            QrImageView(data: 'https://troisdorf.dksr.city/map/')
-          ],
-        ),
-        AppTerminalContainer(
-          width: screenAverage * 0.15,
-          height: screenAverage * 0.15 + screenAverage * 0.025,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            const SizedBox(
-              height: 2,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Stadt Troisdorf",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                      fontSize: screenAverage * 0.015,
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold),
-                ),
-              ],
-            ),
-            QrImageView(data: 'https://www.troisdorf.de')
-          ],
-        ),
-      ],
-    );
-  }
+  Widget _buildItems(List<ProductModel>? items, InfoWidget infoWidget) {
+    late String title;
+    bool isVertical = false;
+    late ScrollController controller;
+    late bool isLoading;
 
-  Widget _buildStatistics() {
-    /*WebViewController controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(statisticsLink));
-    return Container(
-      height: 200,
-      child: WebViewWidget(controller: controller),
-    );*/
+    switch (infoWidget) {
+      case InfoWidget.current:
+        title = 'current';
+        controller = _currentScrollController;
+        isLoading = isLoadingCurrent;
+        break;
+      case InfoWidget.clubs:
+        title = 'category_clubs';
+        controller = _clubsScrollController;
+        isLoading = isLoadingClubs;
+        break;
+      case InfoWidget.officialNotification:
+        title = 'category_official_notification';
+        controller = _officialNotificationScrollController;
+        isLoading = isLoadingOfficialNotification;
+        break;
+      case InfoWidget.events:
+        title = "events_today";
+        controller = _eventsScrollController;
+        isLoading = isLoadingEvents;
+        isVertical = true;
+        break;
+    }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        AppTerminalContainer(
-          backgroundColor: const Color(0xFF97c3c5),
-          height: screenHeight * 0.1,
-          width: screenWidth * 0.4,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.directions_walk, size: screenAverage * 0.05),
-                const SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  "111",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: screenAverage * 0.03),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.2,
-                    child: Text(
-                      "Wieviele Menschen sind heute zu Fuß unterwegs?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: screenAverage * 0.015),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-        AppTerminalContainer(
-          backgroundColor: const Color(0xFF9abb8f),
-          height: screenHeight * 0.1,
-          width: screenWidth * 0.4,
-          round: true,
-          centerWidgets: true,
-          widgets: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.directions_bike,
-                  size: screenAverage * 0.05,
-                ),
-                const SizedBox(
-                  width: 16,
-                ),
-                Text(
-                  "58",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: screenAverage * 0.03),
-                )
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: screenWidth * 0.2,
-                    child: Text(
-                      "Wieviele Menschen sind heute mit dem Rad unterwegs?",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(fontSize: screenAverage * 0.015),
-                      maxLines: 3,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  )
-                ],
-              ),
-            )
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMap() {
-    return Expanded(
-      child: Column(
-        children: [
-          Expanded(
-            child: Stack(
-              children: [
-                ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: (isLocationAllowed())
-                        ? InAppWebView(
-                            initialUrlRequest: URLRequest(url: WebUri(mapLink)),
-                            initialSettings: InAppWebViewSettings(
-                              javaScriptEnabled: true,
-                              geolocationEnabled: true,
-                              domStorageEnabled: true,
-                              allowFileAccess: true,
-                              useWideViewPort: true,
-                              mediaPlaybackRequiresUserGesture: false,
-                            ),
-                            onGeolocationPermissionsShowPrompt:
-                                (controller, origin) async {
-                              return GeolocationPermissionShowPromptResponse(
-                                  origin: origin, allow: true, retain: true);
-                            },
-                            onPermissionRequest: (controller, request) async {
-                              return PermissionResponse(
-                                  resources: request.resources,
-                                  action: PermissionResponseAction.GRANT);
-                            },
-                            onWebViewCreated: (controller) {
-                              controller = controller;
-                            },
-                          )
-                        : (locationPermission == null ||
-                                locationPermission!.isPermanentlyDenied)
-                            ? Container(
-                                color: Theme.of(context).shadowColor,
-                                child: TextButton(
-                                    onPressed: () async {
-                                      await openAppSettings();
-                                      _requestLocationPermission();
-                                    },
-                                    child: Text(
-                                      Translate.of(context).translate(
-                                          'geo_permission_needed_settings'),
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              fontSize: screenAverage * 0.03),
-                                    )),
-                              )
-                            : (locationLoading)
-                                ? const Center(
-                                    child: CircularProgressIndicator(),
-                                  )
-                                : Container()),
-              ],
-            ),
-          ),
-          const SizedBox(
-            height: 4,
-          ),
-          /*
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Expanded(
-                child: AppButton(Translate.of(context).translate('mobility'),
-                    color: (mapLink == 'https://troisdorf.dksr.city/map/')
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).scaffoldBackgroundColor,
-                    outlineColor: Colors.white, onPressed: () {
-                  setState(() {
-                    mapLink = 'https://troisdorf.dksr.city/map/';
-                  });
-                }),
-              ),
-              const SizedBox(
-                width: 16,
-              ),
-              Expanded(
-                child: AppButton('POI',
-                    color: (mapLink == 'https://troisdorf.dksr.city/poimap/')
-                        ? Theme.of(context).primaryColor
-                        : Theme.of(context).scaffoldBackgroundColor,
-                    outlineColor: Colors.white, onPressed: () {
-                  setState(() {
-                    mapLink = 'https://troisdorf.dksr.city/poimap/';
-                  });
-                }),
-              ),
-            ],
-          )*/
-        ],
-      ),
-    );
-  }
-
-  Widget _buildItems(
-      List<ProductModel>? items, bool isLoadingInit, bool isNews) {
     return AppTerminalContainer(
-      height: screenHeight * 0.12,
+      height: (isVertical) ? screenHeight * 0.85 : screenHeight * 0.27,
       round: true,
       screenAverage: screenAverage,
-      title: Translate.of(context)
-          .translate((isNews) ? 'recent_listings' : 'category_events'),
+      centerWidgets: true,
+      title: Translate.of(context).translate(title),
       widgets: [
+        if (!isVertical)
+          SizedBox(
+            height: screenHeight * 0.015,
+          ),
         ((items ?? []).isNotEmpty)
             ? Expanded(
                 child: Row(
                   children: [
-                    const SizedBox(
-                      width: 2,
-                    ),
-                    Icon(Icons.arrow_back_ios,
-                        color: Theme.of(context).scaffoldBackgroundColor),
+                    (isVertical)
+                        ? const SizedBox(
+                            width: 12,
+                          )
+                        : const SizedBox(
+                            width: 2,
+                          ),
+                    if (!isVertical)
+                      Icon(Icons.arrow_back_ios,
+                          color: Theme.of(context).scaffoldBackgroundColor),
                     Expanded(
-                      child: ListView.builder(
-                          physics: const ClampingScrollPhysics(),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          controller: (isNews)
-                              ? _newsScrollController
-                              : _eventsScrollController,
-                          itemCount: items!.length + 1,
-                          itemBuilder: (BuildContext context, int index) {
-                            if (index < items.length) {
-                              ProductModel product = items[index];
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 4),
-                                child: AppProductItem(
-                                  type: ProductViewType.terminal,
-                                  screenWidth: screenWidth,
-                                  screenHeight: screenHeight,
-                                  isEvent: !isNews,
-                                  categoryTitle:
-                                      Translate.of(context).translate('recent'),
-                                  isRefreshLoader: isRefreshLoader,
-                                  item: product,
-                                  onPressed: () {
-                                    _onProductDetail(product);
-                                  },
-                                ),
-                              );
-                            } else {
-                              return ((isNews)
-                                      ? isLoadingNews
-                                      : isLoadingEvents)
-                                  ? const Center(
-                                      child: CircularProgressIndicator(),
-                                    )
-                                  : Container();
-                            }
-                          }),
+                      child: RawScrollbar(
+                        controller: controller,
+                        scrollbarOrientation: ScrollbarOrientation.right,
+                        thumbColor: Theme.of(context).scaffoldBackgroundColor,
+                        radius: const Radius.circular(16),
+                        thickness: 15.0,
+                        thumbVisibility: true,
+                        child: ListView.builder(
+                            physics: const ClampingScrollPhysics(),
+                            shrinkWrap: true,
+                            scrollDirection:
+                                (isVertical) ? Axis.vertical : Axis.horizontal,
+                            controller: controller,
+                            itemCount: items!.length + 1,
+                            itemBuilder: (BuildContext context, int index) {
+                              if (index < items.length) {
+                                ProductModel product = items[index];
+                                return Center(
+                                  child: Padding(
+                                    padding: (isVertical)
+                                        ? const EdgeInsets.symmetric(vertical: 12)
+                                        : const EdgeInsets.symmetric(
+                                            horizontal: 4),
+                                    child: AppProductItem(
+                                      type: ProductViewType.terminal,
+                                      screenWidth: screenWidth,
+                                      screenHeight: screenHeight,
+                                      categoryTitle: Translate.of(context)
+                                          .translate('recent'),
+                                      isRefreshLoader: isRefreshLoader,
+                                      item: product,
+                                      onPressed: () {
+                                        _onProductDetail(product);
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                return (isLoading)
+                                    ? const Center(
+                                        child: CircularProgressIndicator(),
+                                      )
+                                    : Container();
+                              }
+                            }),
+                      ),
                     ),
-                    Icon(Icons.arrow_forward_ios,
-                        color: Theme.of(context).scaffoldBackgroundColor),
-                    const SizedBox(
-                      width: 2,
-                    ),
+                    if (!isVertical)
+                      Icon(Icons.arrow_forward_ios,
+                          color: Theme.of(context).scaffoldBackgroundColor),
+                    (isVertical)
+                        ?  const SizedBox(width: 12,)
+                        : const SizedBox(
+                            width: 2,
+                          ),
                   ],
                 ),
               )
-            : (isLoadingInit)
+            : (categoryLoading)
                 ? const Center(
                     child: CircularProgressIndicator(),
                   )

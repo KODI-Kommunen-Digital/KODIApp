@@ -550,5 +550,7 @@
   "mobility": "Mobility",
   "update_available": "Update available",
   "update_available_message": "An update is available. Do you want to install it?",
-  "later": "Later"
+  "later": "Later",
+  "current": "Currently",
+  "events_today": "Events today"
 }

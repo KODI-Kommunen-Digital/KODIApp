@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -20,7 +21,6 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -48,17 +48,14 @@ Future<void> main() async {
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();*/
 
-  await MatomoTracker.instance.initialize(
-    siteId: "1",
-    url: 'https://troisdorf.matomo.cloud/matomo.php',
-  );
-
   await SentryFlutter.init((options) {
     options.dsn =
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envTroisdorf");
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.landscapeLeft, DeviceOrientation.landscapeRight]);
+  await dotenv.load(fileName: "assets/env/.envWiesenburg");
   await CategoryManager.loadCategories();
 }
 
@@ -155,7 +152,7 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
-  /*Future<String?> _getStoredLocation() async {
+/*Future<String?> _getStoredLocation() async {
     final prefs = await Preferences.openBox();
     return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }*/

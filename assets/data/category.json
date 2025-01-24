@@ -18,35 +18,19 @@
             "categoryType" : "category"
         },
         {
-            "id": 5,
-            "name": "Mobilität",
+            "id": 4,
+            "name": "Vereine",
             "noOfSubcategories": 0,
             "icon": "fas fa-location-dot",
             "color": "#497E76",
             "categoryType" : "category"
         },
         {
-            "id": 6,
-            "name": "Online-Dienste",
+            "id": 16,
+            "name": "Amtliche Bekanntmachungen",
             "noOfSubcategories": 0,
             "icon": "fas fa-globe",
             "color": "#84C3BE",
-            "categoryType" : "category"
-        },
-        {
-            "id": 7,
-            "name": "Stadtwerke",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-bolt",
-            "color": "#4C9141",
-            "categoryType" : "category"
-        },
-        {
-            "id": 8,
-            "name": "Sehenswertes",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-eye",
-            "color": "#826C34",
             "categoryType" : "category"
         }
     ]

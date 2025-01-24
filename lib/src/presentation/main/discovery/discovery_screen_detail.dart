@@ -164,8 +164,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.arguments == 61) {
-      Routes.trackMatomoEvent(
-          true, null, 5, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
@@ -228,8 +226,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await webViewController.runJavaScript(
           "document.querySelector('.flex').style.display = 'none';");
     } else if (service.arguments == 62) {
-      Routes.trackMatomoEvent(
-          false, null, 62, null);
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse(

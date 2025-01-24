@@ -558,6 +558,8 @@
   "mobility": "Mobilität",
   "update_available": "Update verfügbar",
   "update_available_message": "Es ist ein Update verfügbar. Möchtest du die App aktualisieren?",
-  "later": "Später"
+  "later": "Später",
+  "current": "Aktuelles",
+  "events_today": "Veranstaltungen heute"
 }
 

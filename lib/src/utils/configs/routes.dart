@@ -54,8 +54,6 @@ import 'package:heidi/src/presentation/main/login/signin/signin_screen.dart';
 import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
-import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 
 class RouteArguments<T> {
   final T? item;
@@ -133,7 +131,6 @@ class Routes {
   static const String myAppointments = "/myAppointments";
   static const String appointmentDetails = "/appointmentDetails";
   static const String appointmentRequests = "/appointmentRequests";
-  static const String wasteCalendar = "/wasteCalendar";
   static const String rsag = "/rsag";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -149,8 +146,6 @@ class Routes {
             settings.arguments as Map<String, dynamic>;
         if (arguments['type'] == "category" ||
             arguments['type'] == "categoryService") {
-          trackMatomoEvent(
-              true, null, arguments['categoryId'] ?? arguments['id'], null);
         }
         return MaterialPageRoute(
           builder: (context) {
@@ -167,10 +162,6 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             ProductModel product = settings.arguments as ProductModel;
-            if (product.city?.id != null || product.cityId != null) {
-              trackMatomoEvent(false, product.title, product.id,
-                  product.cityId ?? product.city?.id);
-            }
             return ProductDetailScreen(item: product);
           },
         );
@@ -536,12 +527,6 @@ class Routes {
           },
         );
 
-      case Routes.wasteCalendar:
-        return MaterialPageRoute(
-          builder: (context) {
-            return WasteCalendar();
-          },
-        );
 
       case discoveryDetail:
         return MaterialPageRoute(
@@ -566,60 +551,6 @@ class Routes {
           fullscreenDialog: true,
         );
     }
-  }
-
-  static void trackMatomoEvent(
-      bool isCategory, String? name, int id, int? cityId) {
-    late String eventName;
-    late String type;
-    if (isCategory) {
-      name = _getCategoryName(id);
-      eventName = "category_${name}_${id.toString()}";
-      type = 'category';
-    } else if (isCategory && name != null) {
-      eventName = "${name}_${id.toString()}_${cityId.toString()}";
-      type = 'listing';
-    } else {
-      name = _getServiceName(id);
-      eventName = "service_${name}_${id.toString()}";
-      type = 'service';
-    }
-    MatomoTracker.instance.trackEvent(
-      eventInfo: EventInfo(
-        category: type,
-        name: eventName,
-        action: 'click',
-        value: 1,
-      ),
-    );
-  }
-
-  static String _getCategoryName(int id) {
-    Map<int, String> categories = {
-      1: "News",
-      3: "Events",
-      5: "Mobilität",
-      6: "Online-Dienste",
-      7: "Stadtwerke",
-      8: "Sehenswertes",
-    };
-    return categories[id] ?? '';
-  }
-
-  static String _getServiceName(int id) {
-    Map<int, String> categories = {
-      3: "Terminbuchung_Bürgerbüro",
-      5: "Bürger:innenbeteiligung",
-      62: "Parken",
-      7: "Chatbot",
-      8: "Mängelmelder",
-      10: "Abfallkalender",
-      11: "Neubürger:innen",
-      12: "Aggua",
-      14: "Jeti-Line-Glasfaser",
-      15: "Virtuelles_Beratungsbüro"
-    };
-    return categories[id] ?? '';
   }
 
   ///Singleton factory
