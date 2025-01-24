@@ -158,8 +158,8 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: CachedNetworkImage(
-                                            imageUrl: (category.image != '')
-                                                ? category.image
+                                            imageUrl: (category.image != '' && !category.image.contains('encryptedtbn0.gstatic.com'))
+                                                ? category.image.trim()
                                                 : '${Application.picturesURL}admin/eatOrDrink.jpeg',
                                             cacheManager: memoryCacheManager,
                                             placeholder: (context, url) {
