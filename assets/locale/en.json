@@ -629,5 +629,8 @@
   "associate_container_card_reminder": " You can always add new cards in the settings",
   "later": "Later",
   "connect": "Connect",
-  "never": "Never"
+  "never": "Never",
+  "debit": "Debit",
+  "credit_cash": "Credit Cash",
+  "credit_card": "Credit Card"
 }

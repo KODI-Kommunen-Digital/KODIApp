@@ -5,7 +5,7 @@ import 'package:loggy/loggy.dart';
 class OrderModel {
   final int id;
   final int shopId;
-  final int amount;
+  final double amount;
   final int? cartId;
   final int? userId;
   final int? paymentId;
@@ -40,7 +40,7 @@ class OrderModel {
     return OrderModel(
         id: json['id'],
         shopId: json['shopId'],
-        amount: json['amount'],
+        amount: json['amount'].toDouble(),
         cartId: json['cartId'],
         userId: json['userId'],
         paymentId: json['paymentId'],

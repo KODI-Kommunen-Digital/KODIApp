@@ -7,7 +7,7 @@ class ContainerTransactionModel {
   final String? updatedAt;
   final String? deletedAt;
   final int cardId;
-  final int amount;
+  final double amount;
   final int type;
 
   ContainerTransactionModel(
@@ -26,7 +26,7 @@ class ContainerTransactionModel {
       updatedAt: json['updatedAt'] as String?,
       deletedAt: json['deletedAt'] as String?,
       cardId: json['cardId'] as int,
-      amount: json['amount'] as int,
+      amount: json['amount'].toDouble(),
       type: json['type'] as int,
     );
   }

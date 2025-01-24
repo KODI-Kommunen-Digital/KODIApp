@@ -97,6 +97,19 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
     super.dispose();
   }
 
+  String getType(int type) {
+    switch (type) {
+      case 1:
+        return Translate.of(context).translate('debit');
+      case 2:
+        return Translate.of(context).translate('credit_cash');
+      case 3:
+        return Translate.of(context).translate('credit_card');
+      default:
+        return Translate.of(context).translate('undefined');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -182,13 +195,15 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        '${Translate.of(context).translate('amount')}: ${transaction.amount}',
+                                        '${getType(transaction.type)}: ${(transaction.type == 1) ? '-' : '+'}${transaction.amount}€',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodySmall!
                                             .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                                fontWeight: FontWeight.bold,
+                                                color: (transaction.type == 1)
+                                                    ? Colors.red
+                                                    : Colors.green),
                                       ),
                                       if (transaction.createdAt != null)
                                         const SizedBox(height: 4),
@@ -212,7 +227,7 @@ class _CustomerCardLoadedState extends State<CustomerCardLoaded> {
                       } else {
                         return (isLoadingMore)
                             ? const Center(
-                                  child: CircularProgressIndicator.adaptive(),
+                                child: CircularProgressIndicator.adaptive(),
                               )
                             : Container();
                       }
