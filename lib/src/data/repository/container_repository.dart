@@ -897,7 +897,7 @@ class ContainerRepository {
       return response;
     } else {
       logError('Error associating card: ${response.data} ${response.message}');
-      return null;
+      return response;
     }
   }
 

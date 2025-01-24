@@ -627,10 +627,15 @@
   "associate_container_card": "Associate your grocery store card",
   "associate_container_card_message": "Connect your grocery store payment card now to see your orders.",
   "associate_container_card_reminder": " You can always add new cards in the settings",
+  "container_card_already_associated": "You are already associated with an active card",
+  "container_card_not_found": "This card does not exist",
+  "container_card_other_associated": "This card is already associated with another account",
   "later": "Later",
   "connect": "Connect",
   "never": "Never",
   "debit": "Debit",
   "credit_cash": "Credit Cash",
-  "credit_card": "Credit Card"
+  "credit_card": "Credit Card",
+  "pin_error_length": "PIN must be six digits long",
+  "pin_wrong": "Card PIN is incorrect"
 }

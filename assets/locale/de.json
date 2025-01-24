@@ -629,10 +629,15 @@
   "associate_container_card": "Verknüpfe deine Dorfladen Card",
   "associate_container_card_message": "Verknüpfe jetzt deine Dorfladen Card, um deine Bestellungen einsehen zu können.",
   "associate_container_card_reminder": "Du kannst jederzeit weitere Karten in den Einstellungen hinzufügen",
+  "container_card_already_associated": "Du bist bereits mit einer aktiven Karte verknüpft",
+  "container_card_not_found": "Diese Karte gibt es nicht",
+  "container_card_other_associated": "Diese Karte ist mit einem anderen Account verknüpft",
   "later": "Später",
   "connect": "Verknüpfe",
   "never": "Nie",
   "debit": "Abbuchung",
   "credit_cash": "Aufladung Bar",
-  "credit_card": "Aufladung Karte"
+  "credit_card": "Aufladung Karte",
+  "pin_error_length": "PIN muss sechstellig sein",
+  "pin_wrong": "Die eingegebene PIN ist inkorrekt"
 }

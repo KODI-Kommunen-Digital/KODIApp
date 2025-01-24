@@ -53,6 +53,11 @@ class _AddCustomerCardScreenState extends State<AddCustomerCardScreen> {
       _errorNumberPin = null;
     });
 
+    if (_textPinController.text.length != 6) {
+      _showMessage('pin_error_length');
+      return;
+    }
+
     final UserModel? user = await UserRepository.loadUser();
     if (user != null) {
       final result =
@@ -61,8 +66,16 @@ class _AddCustomerCardScreenState extends State<AddCustomerCardScreen> {
         _showMessage('add_card_success');
         Navigator.of(context).pop();
         return;
-      } else if (result != null){
-        //Error Handling here
+      } else if (result != null) {
+        if(result.message.contains("You are already associated")) {
+          _showMessage('container_card_already_associated');
+        } else if(result.message.contains("Card not found")) {
+          _showMessage('container_card_not_found');
+        } else if(result.message.contains("Card is already associated")) {
+          _showMessage('container_card_other_associated');
+        } else if(result.message.contains("PIN code is incorrect")) {
+          _showMessage('pin_wrong');
+        }
       } else {
         _showMessage('error_message');
       }
