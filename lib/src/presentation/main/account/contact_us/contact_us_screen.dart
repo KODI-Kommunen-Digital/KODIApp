@@ -20,7 +20,6 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   final _textInfoController = TextEditingController();
   final _focusInfo = FocusNode();
 
-  String? _errorEmail;
   String? _errorInfo;
 
   @override
@@ -39,23 +38,13 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   void _sendFeedback() async {
     final user = AppBloc.contactUsCubit.getUserDetails();
     Utils.hiddenKeyboard(context);
-    setState(() {
-      _errorEmail = UtilValidator.validate(
-        _textEmailController.text,
-        type: ValidateType.email,
-      );
-      _errorInfo = UtilValidator.validate(_textInfoController.text);
-    });
-    if (_errorEmail == null && _errorInfo == null) {
-      final result = await AppBloc.contactUsCubit
-          .onSendFeedback(email: _textInfoController.text, token: user.token);
-
-      if (result) {
-        _onSuccess();
-        if (!mounted) return;
-      } else {
-        logError('Update User Result Error', result);
-      }
+    final result = await AppBloc.contactUsCubit
+        .onSendFeedback(email: _textInfoController.text, token: user.token);
+    if (result) {
+      _onSuccess();
+      if (!mounted) return;
+    } else {
+      logError('Update User Result Error', result);
     }
   }
 
