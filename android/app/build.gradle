@@ -57,7 +57,7 @@ android {
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion 29
         targetSdkVersion 30
-        versionCode 3
+        versionCode 1
         versionName flutterVersionName
         //Change for Daniel
         multiDexEnabled true

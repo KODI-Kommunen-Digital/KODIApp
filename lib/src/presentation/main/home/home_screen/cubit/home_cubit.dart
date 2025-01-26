@@ -68,7 +68,7 @@ class HomeCubit extends Cubit<HomeState> {
       return CategoryModel.fromJson(item);
     }).toList();
     CategoryModel? savedCity = await checkSavedCity(location);
-    final currentListingsRequestResponse = await Api.requestRecentListings(1);
+    final currentListingsRequestResponse = await Api.requestCatList(1, 1, 1);
     current = List.from(currentListingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
@@ -78,56 +78,18 @@ class HomeCubit extends Cubit<HomeState> {
       return ProductModel.fromJson(item);
     }).toList();
 
-    /*
     final officialNotificationListingsRequestResponse =
         await Api.requestCatList(16, 1, 1);
     officialNotification =
-        List.from(officialNotificationListingsRequestResponse.data ?? []).map((item) {
+        List.from(officialNotificationListingsRequestResponse.data ?? [])
+            .map((item) {
       return ProductModel.fromJson(item);
-    }).toList();*/
+    }).toList();
 
-    /*final clubsListingsRequestResponse = await Api.requestCatList(4, 1, 1);
+    final clubsListingsRequestResponse = await Api.requestCatList(4, 1, 1);
     clubs = List.from(clubsListingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
-    }).toList();*/
-
-    //Dummy Data
-    clubs = [
-      ProductModel(
-          id: 1,
-          title: "title",
-          image: "image",
-          expiryDate: "expiryDate",
-          startDate: "startDate",
-          endDate: "endDate",
-          createDate: "createDate",
-          favorite: false,
-          address: "address",
-          phone: "phone",
-          email: "email",
-          website: "website",
-          externalId: "externalId",
-          description: "description",
-          userId: 1)
-    ];
-    officialNotification = [
-      ProductModel(
-          id: 1,
-          title: "title",
-          image: "image",
-          expiryDate: "expiryDate",
-          startDate: "startDate",
-          endDate: "endDate",
-          createDate: "createDate",
-          favorite: false,
-          address: "address",
-          phone: "phone",
-          email: "email",
-          website: "website",
-          externalId: "externalId",
-          description: "description",
-          userId: 1)
-    ];
+    }).toList();
 
     final categoryCountRequestResponse =
         await Api.requestCategoryCount(savedCity?.id);

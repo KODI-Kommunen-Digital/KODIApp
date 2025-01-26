@@ -537,14 +537,14 @@ class AppProductItem extends StatelessWidget {
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: (screenHeight == null) ? 120 : screenHeight! * 0.18,
-                    width: (screenWidth == null) ? 120 : screenWidth! * 0.15,
+                    width: (screenWidth == null) ? 100 : screenWidth! * 0.15,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
                         Radius.circular(16),
                       ),
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.fill,
                       ),
                     ),
                     // child: Column(
@@ -604,7 +604,7 @@ class AppProductItem extends StatelessWidget {
                 width: 8,
               ),
               SizedBox(
-                width: (screenWidth == null) ? 200 : screenWidth! * 0.2,
+                width: (screenWidth == null) ? 100 : screenWidth! * 0.2,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [

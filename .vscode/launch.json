@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "smarT:app",
+            "name": "Weissenburg",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "smarT:app (profile mode)",
+            "name": "Weissenburg (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "smarT:app (release mode)",
+            "name": "Weissenburg (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

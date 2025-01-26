@@ -596,9 +596,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 return Center(
                                   child: Padding(
                                     padding: (isVertical)
-                                        ? const EdgeInsets.symmetric(vertical: 12)
+                                        ? const EdgeInsets.symmetric(
+                                            vertical: 12)
                                         : const EdgeInsets.symmetric(
-                                            horizontal: 4),
+                                            horizontal: 1),
                                     child: AppProductItem(
                                       type: ProductViewType.terminal,
                                       screenWidth: screenWidth,
@@ -627,7 +628,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       Icon(Icons.arrow_forward_ios,
                           color: Theme.of(context).scaffoldBackgroundColor),
                     (isVertical)
-                        ?  const SizedBox(width: 12,)
+                        ? const SizedBox(
+                            width: 12,
+                          )
                         : const SizedBox(
                             width: 2,
                           ),

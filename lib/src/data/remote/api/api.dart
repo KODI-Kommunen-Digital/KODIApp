@@ -377,7 +377,7 @@ class Api {
 
   ///Get ProductDetail
   static Future<ResultApiModel> requestProduct(cityId, id) async {
-    final filePath = '/cities/$cityId/listings/$id';
+    final filePath = '/listings/$id';
     final result =
         await HTTPManager(apiType: APIType.defaultAPI).get(url: filePath);
     return ResultApiModel.fromJson(result);

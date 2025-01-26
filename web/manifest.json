@@ -1,11 +1,11 @@
 {
-    "name": "smarT:app",
-    "short_name": "smarT:app",
+    "name": "Weissenburg",
+    "short_name": "Weissenburg",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "smarT:app",
+    "description": "Weissenburg",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
