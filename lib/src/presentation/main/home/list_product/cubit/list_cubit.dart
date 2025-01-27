@@ -71,16 +71,17 @@ class ListCubit extends Cubit<ListState> {
       if (ads.isNotEmpty) {
         List<dynamic> combinedList = [];
         int currentAdIndex = _adIndex;
+        int itemCounter = 0;
 
         for (int i = 0; i < list.length; i++) {
           combinedList.add(list[i]);
+          itemCounter++;
 
-          // Insert an ad after every 9 items, but ensure no two ads are consecutive
-          if ((i + 1) % 9 == 0 && i + 1 < list.length) {
-            // Ensure the next item is not an ad
-            if (i + 1 < list.length && list[i + 1] is! AdDataModel) {
+          if (itemCounter == 9 && i + 1 < list.length) {
+            if (list[i + 1] is! AdDataModel) {
               combinedList.add(ads[currentAdIndex]);
               currentAdIndex = (currentAdIndex + 1) % ads.length;
+              itemCounter = 0;
             }
           }
         }
@@ -152,24 +153,35 @@ class ListCubit extends Cubit<ListState> {
     List<dynamic> combinedList = [];
     if (result != null && result.isNotEmpty) {
       List<ProductModel> productList = result[0];
+      pagination = result[1];
+
+      // Fetch ads
       List<AdDataModel> ads = await ListRepository.fetchAds();
       if (ads.isNotEmpty) {
         int currentAdIndex = _adIndex;
+        int itemCounter = 0;
 
         for (int i = 0; i < productList.length; i++) {
           combinedList.add(productList[i]);
+          itemCounter++;
 
-          // Insert an ad after every 9 items, but ensure no two ads are consecutive
-          if ((i + 1) % 9 == 0 && i + 1 < productList.length) {
-            combinedList.add(ads[currentAdIndex]);
-            currentAdIndex = (currentAdIndex + 1) % ads.length;
+          if (itemCounter == 9 && i + 1 < productList.length) {
+            if (productList[i + 1] is! AdDataModel) {
+              combinedList.add(ads[currentAdIndex]);
+              currentAdIndex = (currentAdIndex + 1) % ads.length;
+              itemCounter = 0;
+            }
           }
         }
 
         _adIndex = currentAdIndex;
+      } else {
+        combinedList.addAll(productList);
       }
 
       list.addAll(combinedList);
+
+      emit(ListStateLoaded(list, listCity));
     }
 
     return combinedList;
