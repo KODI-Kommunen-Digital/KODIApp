@@ -263,7 +263,7 @@ class ProductModel {
       return ProductModel.fromJson(item, setting: setting);
     }).toList();
 
-    final imagesList = List.from(json['otherlogos'] ?? []).map((item) {
+    final imagesList = List.from(json['otherLogos'] ?? []).map((item) {
       return ImageListModel.fromJson(item);
     }).toList();
 
@@ -413,7 +413,7 @@ class ProductModel {
       bookingUse: false,
       bookingStyle: '',
       priceDisplay: '',
-      imageLists: json['otherlogos'],
+      imageLists: json['otherLogos'],
     );
   }
 
