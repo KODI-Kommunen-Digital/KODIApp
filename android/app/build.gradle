@@ -55,8 +55,8 @@ android {
         applicationId "com.wiesenburg.terminal"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 34
-        targetSdkVersion 34
+        minSdkVersion 24
+        targetSdkVersion 30
         versionCode 5
         versionName flutterVersionName
         //Change for Daniel

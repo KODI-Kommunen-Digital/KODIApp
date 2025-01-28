@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
@@ -11,6 +12,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:html/parser.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
@@ -626,24 +628,33 @@ class AppProductItem extends StatelessWidget {
                                   : screenAverage * 0.0125),
                     ),
                     Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: (item?.description != null)
-                            ? Text(
-                                "${item!.description.substring(0, min(item!.description.length, 150))}${(item!.description.length > 150) ? "..." : ""}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w100,
-                                        fontSize: (screenAverage == null)
-                                            ? Theme.of(context)
-                                                .textTheme
-                                                .bodySmall!
-                                                .fontSize
-                                            : screenAverage * 0.01),
-                              )
-                            : Container()),
+                      padding: const EdgeInsets.all(2.0),
+                      child: (item?.description != null)
+                          ? Html(
+                              data: () {
+                                var document =
+                                    parse(item!.description); 
+                                String text =
+                                    document.body!.text; 
+                                return text.length > 300
+                                    ? "${text.substring(0, min(text.length, 300))}..."
+                                    : text;
+                              }(),
+                              style: {
+                                "body": Style(
+                                  fontSize: FontSize((screenAverage == null)
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .bodySmall!
+                                          .fontSize!
+                                      : screenAverage * 0.01),
+                                  fontWeight: FontWeight.w100,
+                                  color: Colors.black,
+                                ),
+                              },
+                            )
+                          : Container(),
+                    ),
                     const SizedBox(height: 4),
                   ],
                 ),
