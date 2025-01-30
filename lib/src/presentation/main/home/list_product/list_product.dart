@@ -59,10 +59,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
       await context
           .read<ListCubit>()
           .setCategoryFilter(0, null, _subCategoryId);
+      await context
+          .read<ListCubit>()
+          .onLoad(widget.arguments['id'], _subCategoryId);
+    } else {
+      await context.read<ListCubit>().onLoad(
+          selectedFilter?.currentLocation ?? _selectedCityId, _subCategoryId);
     }
-    await context.read<ListCubit>().onLoad(
-        selectedFilter?.currentLocation ?? _selectedCityId,
-        _subCategoryId);
   }
 
   MultiFilter whatCanFilter(bool isEvent) {
@@ -78,15 +81,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasProductEventFilter: true,
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? [_selectedCityId],
+          currentLocation: selectedFilter?.currentLocation ?? [_selectedCityId],
           cities: AppBloc.discoveryCubit.location,
           multipleCityFilter: true);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
-          currentLocation:
-              selectedFilter?.currentLocation ?? _selectedCityId,
+          currentLocation: selectedFilter?.currentLocation ?? _selectedCityId,
           cities: AppBloc.discoveryCubit.location);
     }
   }
@@ -107,10 +108,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
       loadListingsList();
     }
     if (filter?.hasCategoryFilter ?? false) {
-      context.read<ListCubit>().setCategoryFilter(
-          filter?.currentCategory ?? 0,
-          selectedFilter?.currentLocation ?? _selectedCityId,
-          _subCategoryId);
+      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
+          selectedFilter?.currentLocation ?? _selectedCityId, _subCategoryId);
     }
   }
 
@@ -188,8 +187,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list, listCity) => ListLoaded(
                 list: list,
                 listCity: listCity,
-                selectedId:
-                    selectedFilter?.currentLocation ?? _selectedCityId,
+                selectedId: selectedFilter?.currentLocation ?? _selectedCityId,
                 subCategoryId: _subCategoryId),
             updated: (list, listCity) {
               return ListLoaded(
@@ -230,8 +228,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(
-          selectedFilter?.currentLocation ?? _selectedCityId,
-          _subCategoryId);
+          selectedFilter?.currentLocation ?? _selectedCityId, _subCategoryId);
     }
   }
 
@@ -346,6 +343,7 @@ class _ListLoadedState extends State<ListLoaded> {
   final ProductViewType _listMode = Application.setting.listMode;
   double previousScrollPosition = 0;
   int pageNo = 1;
+  int? selectedCityId;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -403,9 +401,11 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
+    final prefs = await Preferences.openBox();
+    selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
     await context
         .read<ListCubit>()
-        .onLoad(widget.selectedId, widget.subCategoryId);
+        .onLoad(widget.selectedId ?? selectedCityId, widget.subCategoryId);
     setState(() {
       isLoading = false;
     });

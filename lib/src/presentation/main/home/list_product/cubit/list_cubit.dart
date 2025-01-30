@@ -66,28 +66,32 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
 
-      // Fetch ads
-      List<AdDataModel> ads = await ListRepository.fetchAds();
-      if (ads.isNotEmpty) {
-        List<dynamic> combinedList = [];
-        int currentAdIndex = _adIndex;
-        int itemCounter = 0;
+      bool shouldAddAds = !(categoryId == 43 && subCategoryId == 17);
 
-        for (int i = 0; i < list.length; i++) {
-          combinedList.add(list[i]);
-          itemCounter++;
+      if (shouldAddAds) {
+        // Fetch ads
+        List<AdDataModel> ads = await ListRepository.fetchAds();
+        if (ads.isNotEmpty) {
+          List<dynamic> combinedList = [];
+          int currentAdIndex = _adIndex;
+          int itemCounter = 0;
 
-          if (itemCounter == 9 && i + 1 < list.length) {
-            if (list[i + 1] is! AdDataModel) {
-              combinedList.add(ads[currentAdIndex]);
-              currentAdIndex = (currentAdIndex + 1) % ads.length;
-              itemCounter = 0;
+          for (int i = 0; i < list.length; i++) {
+            combinedList.add(list[i]);
+            itemCounter++;
+
+            if (itemCounter == 9 && i + 1 < list.length) {
+              if (list[i + 1] is! AdDataModel) {
+                combinedList.add(ads[currentAdIndex]);
+                currentAdIndex = (currentAdIndex + 1) % ads.length;
+                itemCounter = 0;
+              }
             }
           }
-        }
 
-        _adIndex = currentAdIndex;
-        list = combinedList;
+          _adIndex = currentAdIndex;
+          list = combinedList;
+        }
       }
 
       listLoaded = list;
@@ -155,32 +159,37 @@ class ListCubit extends Cubit<ListState> {
       List<ProductModel> productList = result[0];
       pagination = result[1];
 
-      // Fetch ads
-      List<AdDataModel> ads = await ListRepository.fetchAds();
-      if (ads.isNotEmpty) {
-        int currentAdIndex = _adIndex;
-        int itemCounter = 0;
+      bool shouldAddAds = !(categoryId == 43 && subCategoryId == 17);
 
-        for (int i = 0; i < productList.length; i++) {
-          combinedList.add(productList[i]);
-          itemCounter++;
+      if (shouldAddAds) {
+        // Fetch ads
+        List<AdDataModel> ads = await ListRepository.fetchAds();
+        if (ads.isNotEmpty) {
+          int currentAdIndex = _adIndex;
+          int itemCounter = 0;
 
-          if (itemCounter == 9 && i + 1 < productList.length) {
-            if (productList[i + 1] is! AdDataModel) {
-              combinedList.add(ads[currentAdIndex]);
-              currentAdIndex = (currentAdIndex + 1) % ads.length;
-              itemCounter = 0;
+          for (int i = 0; i < productList.length; i++) {
+            combinedList.add(productList[i]);
+            itemCounter++;
+
+            if (itemCounter == 9 && i + 1 < productList.length) {
+              if (productList[i + 1] is! AdDataModel) {
+                combinedList.add(ads[currentAdIndex]);
+                currentAdIndex = (currentAdIndex + 1) % ads.length;
+                itemCounter = 0;
+              }
             }
           }
-        }
 
-        _adIndex = currentAdIndex;
+          _adIndex = currentAdIndex;
+        } else {
+          combinedList.addAll(productList);
+        }
       } else {
         combinedList.addAll(productList);
       }
 
       list.addAll(combinedList);
-
       emit(ListStateLoaded(list, listCity));
     }
 
