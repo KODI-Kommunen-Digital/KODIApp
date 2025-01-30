@@ -623,8 +623,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (selectedSubCategory != null) {
         selectedSubCategoryId = _getSelectedSubCategroyId(selectedSubCategory);
       }
-      print(
-          "categoryId is $selectedCategoryId and subcategoryId is $selectedSubCategoryId");
       try {
         if (widget.item != null) {
           if (isImageChanged) {
