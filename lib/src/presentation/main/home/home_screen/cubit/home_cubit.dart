@@ -96,7 +96,7 @@ class HomeCubit extends Cubit<HomeState> {
       for (int i = 0; i < recent.length; i++) {
         combinedRecent.add(recent[i]);
 
-        if ((i + 1) % 5 == 0 && ads.isNotEmpty) {
+        if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
           combinedRecent.add(ads[currentAdIndex]);
           currentAdIndex = (currentAdIndex + 1) % ads.length;
         }
@@ -270,7 +270,7 @@ class HomeCubit extends Cubit<HomeState> {
     for (int i = 0; i < newRecent.length; i++) {
       combinedList.add(newRecent[i]);
 
-      if ((i + 1) % 5 == 0 && ads.isNotEmpty) {
+      if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
         combinedList.add(ads[currentAdIndex]);
         currentAdIndex = (currentAdIndex + 1) % ads.length;
       }

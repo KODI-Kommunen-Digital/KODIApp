@@ -563,12 +563,6 @@ class ListRepository {
       }
     }
 
-    if (categoryId == 1 || categoryId == 45) {
-      subCategoryId = subCategoryId;
-    } else {
-      subCategoryId = null;
-    }
-
     Map<String, dynamic> params = {
       "id": listingId,
       "userId": userId,
