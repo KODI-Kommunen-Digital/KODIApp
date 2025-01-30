@@ -115,9 +115,15 @@ class _SettingsScreenState extends State<SettingsScreen>
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       await prefs.setKeyValue(
           Preferences.pushNotificationsPermission, 'authorized');
-      setState(() {
-        _receiveNotification = true;
-      });
+      if (_receiveNotification) {
+        setState(() {
+          _receiveNotification = true;
+        });
+      } else {
+        setState(() {
+          _receiveNotification = false;
+        });
+      }
     } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
       await prefs.setKeyValue(
           Preferences.pushNotificationsPermission, 'denied');
