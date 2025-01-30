@@ -72,7 +72,8 @@ class AllListingsCubit extends Cubit<AllListingsState> {
               userId: product.userId,
               sourceId: product.sourceId,
               imageLists: product.imageLists,
-              expiryDate: product.expiryDate),
+              expiryDate: product.expiryDate,
+              allCities: product.allCities),
         );
       }
     }
@@ -114,30 +115,30 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       if (product != null) {
         listDataList.add(
           ProductModel(
-            id: product.id,
-            cityId: product.cityId,
-            title: product.title,
-            image: product.image,
-            pdf: product.pdf,
-            category: product.category,
-            categoryId: product.categoryId,
-            subcategoryId: product.subcategoryId,
-            startDate: product.startDate,
-            endDate: product.endDate,
-            createDate: product.createDate,
-            favorite: product.favorite,
-            address: product.address,
-            phone: product.phone,
-            email: product.email,
-            website: product.website,
-            description: product.description,
-            statusId: product.statusId,
-            userId: product.userId,
-            sourceId: product.sourceId,
-            imageLists: product.imageLists,
-            externalId: product.externalId,
-            expiryDate: product.expiryDate,
-          ),
+              id: product.id,
+              cityId: product.cityId,
+              title: product.title,
+              image: product.image,
+              pdf: product.pdf,
+              category: product.category,
+              categoryId: product.categoryId,
+              subcategoryId: product.subcategoryId,
+              startDate: product.startDate,
+              endDate: product.endDate,
+              createDate: product.createDate,
+              favorite: product.favorite,
+              address: product.address,
+              phone: product.phone,
+              email: product.email,
+              website: product.website,
+              description: product.description,
+              statusId: product.statusId,
+              userId: product.userId,
+              sourceId: product.sourceId,
+              imageLists: product.imageLists,
+              externalId: product.externalId,
+              expiryDate: product.expiryDate,
+              allCities: product.allCities),
         );
       }
     }
@@ -196,7 +197,8 @@ class AllListingsCubit extends Cubit<AllListingsState> {
               userId: product.userId,
               sourceId: product.sourceId,
               imageLists: product.imageLists,
-              expiryDate: product.expiryDate),
+              expiryDate: product.expiryDate,
+              allCities: product.allCities),
         );
       }
     }
