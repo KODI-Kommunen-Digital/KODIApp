@@ -29,7 +29,7 @@ class ListRepository {
     int? subCategoryId,
   }) async {
     final prefs = await Preferences.openBox();
-    int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int selectedCityId = cityId ?? prefs.getKeyValue(Preferences.cityId, 0);
 
     if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
