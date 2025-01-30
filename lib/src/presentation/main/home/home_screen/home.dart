@@ -551,7 +551,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    if (item.id == 502) {
+    if (item.id == 43) {
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
         'id': selectedCityId,
