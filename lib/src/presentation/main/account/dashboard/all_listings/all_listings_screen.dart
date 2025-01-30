@@ -490,6 +490,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
+          canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
             Navigator.pop(context, searchTerm);
           },
