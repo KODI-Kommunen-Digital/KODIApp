@@ -72,9 +72,8 @@ class FirebaseApi {
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _subscribeToAllForumChats();
+      await _firebaseMessaging.subscribeToTopic("warnings");
     } else {
-      await _unsubscribeFromAllForumChats();
       await _firebaseMessaging.unsubscribeFromTopic("warnings");
     }
 
@@ -109,33 +108,10 @@ class FirebaseApi {
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _subscribeToAllForumChats();
+      await _firebaseMessaging.subscribeToTopic("warnings");
     } else {
-      await _unsubscribeFromAllForumChats();
+      await _firebaseMessaging.unsubscribeFromTopic("warnings");
     }
-  }
-
-  Future<void> _unsubscribeFromAllForumChats() async {
-    final List<String> forumChatTopics = await _getForumChatTopics();
-    for (String topic in forumChatTopics) {
-      await _firebaseMessaging.unsubscribeFromTopic(topic);
-      logInfo("Unsubscribed from forum chat topic: $topic");
-    }
-  }
-
-  Future<void> _subscribeToAllForumChats() async {
-    final List<String> forumChatTopics = await _getForumChatTopics();
-    for (String topic in forumChatTopics) {
-      await _firebaseMessaging.subscribeToTopic(topic);
-      logInfo("Subscribed to forum chat topic: $topic");
-    }
-  }
-
-  Future<List<String>> _getForumChatTopics() async {
-    final prefs = await Preferences.openBox();
-    final List<String>? forumChatTopics =
-        prefs.getKeyValue(Preferences.forumChatTopics, <String>[]);
-    return forumChatTopics ?? <String>[];
   }
 
   Future<void> uploadToken(int userId, String token) async {
