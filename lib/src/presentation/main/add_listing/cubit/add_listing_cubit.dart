@@ -32,34 +32,35 @@ class AddListingCubit extends Cubit<AddListingState> {
   String? selectedCategory;
   String? selectedSubCategory;
 
-  Future<bool> onSubmit({
-    required String title,
-    required String description,
-    required int cityId,
-    CategoryModel? country,
-    CategoryModel? state,
-    String? city,
-    int? statusId,
-    int? sourceId,
-    required String address,
-    required String place,
-    String? zipcode,
-    required String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    String? price,
-    TimeOfDay? expiryTime,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    int? timeless,
-    List<File>? imagesList,
-    isImageChanged,
-    required List<String> allCities,
-  }) async {
+  Future<bool> onSubmit(
+      {required String title,
+      required String description,
+      required int cityId,
+      CategoryModel? country,
+      CategoryModel? state,
+      String? city,
+      int? statusId,
+      int? sourceId,
+      required String address,
+      required String place,
+      String? zipcode,
+      required String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      String? price,
+      TimeOfDay? expiryTime,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      int? timeless,
+      List<File>? imagesList,
+      isImageChanged,
+      required List<String> allCities,
+      int? categoryId,
+      int? subCategoryId}) async {
     try {
       final response = await _repo.saveProduct(
           title,
@@ -86,7 +87,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           isImageChanged,
           timeless,
           _selectedPdfFile,
-          allCities);
+          allCities,
+          categoryId,
+          subCategoryId);
       if (response.success) {
         return true;
       } else {
@@ -105,37 +108,37 @@ class AddListingCubit extends Cubit<AddListingState> {
     return prefs.getKeyValue(Preferences.cityId, 0);
   }
 
-  Future<bool> onEdit({
-    int? cityId,
-    int? categoryId,
-    int? listingId,
-    required String title,
-    required String description,
-    CategoryModel? country,
-    CategoryModel? state,
-    CategoryModel? city,
-    int? statusId,
-    int? sourceId,
-    required String address,
-    required String place,
-    String? zipcode,
-    required String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    String? createdAt,
-    String? price,
-    TimeOfDay? expiryTime,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    int? timeless,
-    required bool isImageChanged,
-    List<File>? imagesList,
-    required List<String> allCities,
-  }) async {
+  Future<bool> onEdit(
+      {int? cityId,
+      int? categoryId,
+      int? listingId,
+      required String title,
+      required String description,
+      CategoryModel? country,
+      CategoryModel? state,
+      CategoryModel? city,
+      int? statusId,
+      int? sourceId,
+      required String address,
+      required String place,
+      String? zipcode,
+      required String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      String? createdAt,
+      String? price,
+      TimeOfDay? expiryTime,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      int? timeless,
+      required bool isImageChanged,
+      List<File>? imagesList,
+      required List<String> allCities,
+      int? subCategoryId}) async {
     try {
       final response = await _repo.editProduct(
           listingId,
@@ -166,7 +169,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           endTime,
           imagesList,
           timeless,
-          allCities);
+          allCities,
+          subCategoryId);
       if (response.success) {
         return true;
       } else {

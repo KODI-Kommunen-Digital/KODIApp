@@ -336,34 +336,33 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    String? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    TimeOfDay? expiryTime,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    List<File>? imagesList,
-    bool isImageChanged,
-    int? timeless,
-    File? selectedPdfFile,
-    List<String> allCities,
-  ) async {
-    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      String? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      TimeOfDay? expiryTime,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      List<File>? imagesList,
+      bool isImageChanged,
+      int? timeless,
+      File? selectedPdfFile,
+      List<String> allCities,
+      int? categoryId,
+      int? subCategoryId) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final cityId = await getCityId(city);
@@ -382,12 +381,6 @@ class ListRepository {
             "${expiryTime.hour}:${expiryTime.minute.toString().padLeft(2, '0')}";
         combinedExpiryDateTime = "${expiryDate.trim()}T$formattedTime";
       }
-    }
-
-    if (categoryId == 1 || categoryId == 45) {
-      subCategoryId = subCategoryId;
-    } else {
-      subCategoryId = null;
     }
 
     if (startDate != null) {
@@ -491,38 +484,36 @@ class ListRepository {
   }
 
   Future<ResultApiModel> editProduct(
-    int? listingId,
-    int? categoryId,
-    cityId,
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    CategoryModel? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    String? createdAt,
-    String? price,
-    bool isImageChanged,
-    TimeOfDay? expiryTime,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    List<File>? imagesList,
-    int? timeless,
-    List<String> allCities,
-  ) async {
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+      int? listingId,
+      int? categoryId,
+      cityId,
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      CategoryModel? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      String? createdAt,
+      String? price,
+      bool isImageChanged,
+      TimeOfDay? expiryTime,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      List<File>? imagesList,
+      int? timeless,
+      List<String> allCities,
+      int? subCategoryId) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);

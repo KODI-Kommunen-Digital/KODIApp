@@ -84,7 +84,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   int? statusId;
   int? villageId;
   int? categoryId;
-  int? subCategoryId;
   List listCity = [];
   List listVillage = [];
   List listCategory = [];
@@ -121,9 +120,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _onProcess();
     if (widget.item != null) {
       _isExpiryDateEnabled = (widget.item?.expiryDate.isNotEmpty == true);
-      context
-          .read<AddListingCubit>()
-          .setCategoryId(selectedCategory?.toLowerCase());
     } else if (widget.item == null) {
       _setDefaultExpiryDate();
       _isExpiryDateEnabled = true;
@@ -319,6 +315,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
           selectedCategory?.toLowerCase() == "shopping" ||
           selectedCategory?.toLowerCase() == "gastro" ||
           selectedCategory == null) {
+        final subCategoryResponse = await context
+            .read<AddListingCubit>()
+            .loadSubCategory(selectedCategory);
+        listSubCategory = subCategoryResponse?.data ?? [];
         selectedSubCategory = listSubCategory.firstWhere(
             (element) => element["id"] == widget.item!.subcategoryId)["name"];
       }
@@ -617,6 +617,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
             orElse: () => null);
         allCities.add(city['id'].toString());
       }
+      int? selectedCategoryId =
+          _getSelectedCategroyIdFromName(selectedCategory);
+      int? selectedSubCategoryId;
+      if (selectedSubCategory != null) {
+        selectedSubCategoryId = _getSelectedSubCategroyId(selectedSubCategory);
+      }
+      print(
+          "categoryId is $selectedCategoryId and subcategoryId is $selectedSubCategoryId");
       try {
         if (widget.item != null) {
           if (isImageChanged) {
@@ -639,7 +647,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               : _textWebsiteController.text;
           final result = await context.read<AddListingCubit>().onEdit(
               cityId: widget.item?.cityId,
-              categoryId: widget.item!.categoryId,
+              categoryId: selectedCategoryId,
               listingId: widget.item?.id,
               title: _textTitleController.text,
               place: _textPlaceController.text,
@@ -661,7 +669,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               statusId: statusId,
               imagesList: selectedImages,
               allCities: allCities,
-              zipcode: _textZipCodeController.text);
+              zipcode: _textZipCodeController.text,
+              subCategoryId: selectedSubCategoryId);
           if (result) {
             await AppBloc.homeCubit.onLoad(false);
             setState(() {
@@ -703,7 +712,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
-              zipcode: _textZipCodeController.text);
+              zipcode: _textZipCodeController.text,
+              categoryId: selectedCategoryId,
+              subCategoryId: selectedSubCategoryId);
           if (result) {
             await AppBloc.homeCubit.onLoad(false);
             setState(() {
@@ -1062,8 +1073,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               setState(
                                 () {
                                   selectedCategory = value as String?;
-                                  context.read<AddListingCubit>().setCategoryId(
-                                      selectedCategory?.toLowerCase());
                                 },
                               );
                               if (selectedCategory?.toLowerCase() == "news" ||
@@ -1076,6 +1085,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                 selectSubCategory(
                                     selectedCategory?.toLowerCase());
                                 _setDefaultExpiryDate();
+                              } else {
+                                selectedSubCategory = null;
+                                listSubCategory = [];
                               }
                             },
                           ),
@@ -1140,18 +1152,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                                     subcategory))));
                                   }).toList(),
                                   onChanged: (value) {
-                                    context
-                                        .read<AddListingCubit>()
-                                        .getSubCategoryId(value);
                                     setState(() {
                                       selectedSubCategory = value as String?;
-                                      context
-                                          .read<AddListingCubit>()
-                                          .setSubCategoryId(
-                                              selectedSubCategory
-                                                  ?.toLowerCase(),
-                                              _getSelectedCategroyId(
-                                                  selectedCategory));
                                     });
                                   },
                                 ),
@@ -1630,7 +1632,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   Future<void> selectSubCategoryOnLaunch(String? selectedCategory) async {
-    context.read<AddListingCubit>().clearSubCategory();
     final subCategoryResponse = await context
         .read<AddListingCubit>()
         .loadSubCategory(selectedCategory!.toLowerCase());
@@ -1639,15 +1640,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listSubCategory = subCategoryResponse?.data;
       if (subCategoryResponse?.data?.isNotEmpty == true) {
         selectedSubCategory ??= subCategoryResponse!.data.last['name'];
-        context.read<AddListingCubit>().setSubCategoryId(
-            subCategoryResponse?.data.last['name'],
-            _getSelectedCategroyId(selectedCategory));
       }
     });
   }
 
   Future<void> selectSubCategory(String? selectedCategory) async {
-    context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
     final subCategoryResponse = await context
         .read<AddListingCubit>()
@@ -1658,9 +1655,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       listSubCategory = subCategoryResponse?.data;
       if (subCategoryResponse?.data?.isNotEmpty == true) {
         selectedSubCategory = subCategoryResponse!.data.last['name'];
-        context.read<AddListingCubit>().setSubCategoryId(
-            subCategoryResponse.data.last['name'],
-            _getSelectedCategroyId(selectedCategory));
       }
     });
   }
@@ -1678,8 +1672,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
     // }
   }
 
-  _getSelectedCategroyId(String? selectedCategory) {
+  int _getSelectedCategroyIdFromName(String? selectedCategory) {
     final firstMatchingCategroy = listCategory.firstWhere((item) =>
+        item['name'].toString().toLowerCase() ==
+        selectedCategory?.toLowerCase());
+
+    // falls back to original logic if fails
+    if (firstMatchingCategroy == null) {
+      return 1;
+    }
+
+    return firstMatchingCategroy['id'];
+  }
+
+  int _getSelectedSubCategroyId(String? selectedCategory) {
+    final firstMatchingCategroy = listSubCategory.firstWhere((item) =>
         item['name'].toString().toLowerCase() ==
         selectedCategory?.toLowerCase());
 
