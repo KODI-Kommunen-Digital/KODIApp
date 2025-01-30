@@ -145,18 +145,21 @@ class _ListProductScreenState extends State<ListProductScreen> {
                   bool isEvent = snapshot.data ?? false;
                   return Row(
                     children: [
-                      AppFilterButton(
-                        voidCallback: () {
-                          MultiFilter multiFilter = whatCanFilter(isEvent);
-                          Navigator.pushNamed(context, Routes.filterScreen,
-                              arguments: {
-                                "multifilter": multiFilter
-                              }).then((filter) => {
-                                if (filter != null)
-                                  {_updateSelectedFilter(filter as MultiFilter)}
-                              });
-                        },
-                      ),
+                      if (!isCity)
+                        AppFilterButton(
+                          voidCallback: () {
+                            MultiFilter multiFilter = whatCanFilter(isEvent);
+                            Navigator.pushNamed(context, Routes.filterScreen,
+                                    arguments: {"multifilter": multiFilter})
+                                .then((filter) => {
+                                      if (filter != null)
+                                        {
+                                          _updateSelectedFilter(
+                                              filter as MultiFilter)
+                                        }
+                                    });
+                          },
+                        ),
                       IconButton(
                           onPressed: () {
                             _searchListings();
