@@ -14,6 +14,7 @@ import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -40,6 +41,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   MultiFilter? selectedFilter;
   int pageNo = 1;
+  int? _selectedCityId;
 
   @override
   void initState() {
@@ -50,6 +52,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
   }
 
   Future<void> loadListingsList() async {
+    final prefs = await Preferences.openBox();
+    _selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
     _categoryId = await context.read<ListCubit>().getCategoryId();
     if (isCity) {
       await context
@@ -57,7 +61,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           .setCategoryFilter(0, null, _subCategoryId);
     }
     await context.read<ListCubit>().onLoad(
-        selectedFilter?.currentLocation ?? widget.arguments['id'],
+        selectedFilter?.currentLocation ?? _selectedCityId,
         _subCategoryId);
   }
 
@@ -75,14 +79,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
           currentProductEventFilter: selectedFilter?.currentProductEventFilter,
           hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? [widget.arguments['id']],
+              selectedFilter?.currentLocation ?? [_selectedCityId],
           cities: AppBloc.discoveryCubit.location,
           multipleCityFilter: true);
     } else {
       return MultiFilter(
           hasLocationFilter: true,
           currentLocation:
-              selectedFilter?.currentLocation ?? widget.arguments['id'],
+              selectedFilter?.currentLocation ?? _selectedCityId,
           cities: AppBloc.discoveryCubit.location);
     }
   }
@@ -105,7 +109,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (filter?.hasCategoryFilter ?? false) {
       context.read<ListCubit>().setCategoryFilter(
           filter?.currentCategory ?? 0,
-          selectedFilter?.currentLocation ?? widget.arguments['id'],
+          selectedFilter?.currentLocation ?? _selectedCityId,
           _subCategoryId);
     }
   }
@@ -185,14 +189,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 list: list,
                 listCity: listCity,
                 selectedId:
-                    selectedFilter?.currentLocation ?? widget.arguments['id'],
+                    selectedFilter?.currentLocation ?? _selectedCityId,
                 subCategoryId: _subCategoryId),
             updated: (list, listCity) {
               return ListLoaded(
                   list: list,
                   listCity: listCity,
                   selectedId:
-                      selectedFilter?.currentLocation ?? widget.arguments['id'],
+                      selectedFilter?.currentLocation ?? _selectedCityId,
                   updated: true,
                   subCategoryId: _subCategoryId);
             },
@@ -226,7 +230,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(
-          selectedFilter?.currentLocation ?? widget.arguments['id'],
+          selectedFilter?.currentLocation ?? _selectedCityId,
           _subCategoryId);
     }
   }
