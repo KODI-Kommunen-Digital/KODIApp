@@ -546,7 +546,8 @@ class _HomeScreenState extends State<HomeScreen> {
               categoryId: 46,
               subCategoryId: 19,
               type: "subCategoryService")
-        ]
+        ],
+        'title': 'Shopping'
       });
       return;
     }
@@ -592,6 +593,7 @@ class _HomeScreenState extends State<HomeScreen> {
             type: "subCategoryService",
           ),
         ],
+        'title': 'Gastro',
       });
       return;
     }
@@ -612,6 +614,7 @@ class _HomeScreenState extends State<HomeScreen> {
             imageLink: Images.service31_2,
           ),
         ],
+        'title': 'Jobs',
       });
       return;
     }

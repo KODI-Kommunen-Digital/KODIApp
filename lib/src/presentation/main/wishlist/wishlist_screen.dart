@@ -27,6 +27,7 @@ class _WishListScreenState extends State<WishListScreen> {
   @override
   void initState() {
     super.initState();
+    AppBloc.wishListCubit.onLoad();
   }
 
   @override
@@ -94,21 +95,16 @@ class _WishListLoadedState extends State<WishListLoaded> {
       ),
       body: RefreshIndicator(
         onRefresh: _onRefresh,
-        child: Stack(children: [
-          Center(
-            child: Visibility(
-              visible: isLoading,
-              child: const CircularProgressIndicator.adaptive(),
-            ),
-          ),
-          BlocListener<WishListCubit, WishListState>(
-            listener: (context, state) {
-              if (AppBloc.wishListCubit.getDoesScroll()) {
-                AppBloc.wishListCubit.setDoesScroll(false);
-                scrollUp();
-              }
-            },
-            child: ListView.builder(
+        child: Stack(
+          children: [
+            BlocListener<WishListCubit, WishListState>(
+              listener: (context, state) {
+                if (AppBloc.wishListCubit.getDoesScroll()) {
+                  AppBloc.wishListCubit.setDoesScroll(false);
+                  scrollUp();
+                }
+              },
+              child: ListView.builder(
                 controller: _scrollController,
                 padding: const EdgeInsets.only(top: 8),
                 itemCount: widget.favoritesList.length,
@@ -248,15 +244,27 @@ class _WishListLoadedState extends State<WishListLoaded> {
                       ),
                     ),
                   );
-                }),
-          ),
-        ]),
+                },
+              ),
+            ),
+            if (isLoading)
+              const Center(
+                child: CircularProgressIndicator.adaptive(),
+              ),
+          ],
+        ),
       ),
     );
   }
 
   Future<void> _onRefresh() async {
+    setState(() {
+      isLoading = true;
+    });
     await context.read<WishListCubit>().onLoad();
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void openWishlistDetails(

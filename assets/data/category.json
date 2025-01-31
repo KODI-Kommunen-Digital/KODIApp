@@ -43,7 +43,7 @@
         },
         {
             "id": 44,
-            "name": "Jobbörse",
+            "name": "Jobs",
             "noOfSubcategories": 0,
             "icon": "fas fa-briefcase",
             "color": "#ECFB04",

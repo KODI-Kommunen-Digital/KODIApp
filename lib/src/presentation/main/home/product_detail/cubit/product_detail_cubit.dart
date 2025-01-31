@@ -18,8 +18,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   List<FavoriteModel> favoritesList = [];
   bool isFavorite = false;
   UserModel? userDetail;
-  static int _adIndex = 0; 
-  static final Random _random = Random(); 
+  static int _adIndex = 0;
+  static final Random _random = Random();
 
   void onLoad(ProductModel item) async {
     final int userId = await UserRepository.getLoggedUserId();
