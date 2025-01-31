@@ -14,12 +14,14 @@ class DiscoveryScreenDetail extends StatelessWidget {
     final args =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     final selectedCityId = args['id'] as int?;
+    final title = args['title'] as String;
+
     final List<CitizenServiceModel> services = args['services'];
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Services'),
+        title: Text(title),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(16),

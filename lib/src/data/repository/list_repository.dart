@@ -425,7 +425,7 @@ class ListRepository {
       // "price": 100, //dummy data
       // "discountPrice": 100, //dummy data
       "logo": null,
-      // "statusId": 1, //dummy data
+      "statusId": 1,
       // "sourceId": 1, //dummy data
       // "longitude": 245.65, //dummy data
       // "latitude": 22.456, //dummy data
@@ -579,7 +579,7 @@ class ListRepository {
       // "price": 100, //dummy data
       // "discountPrice": 100, //dummy data
       "hasAttachment": isImageChanged ? true : false,
-      // "statusId": statusId ?? 1, //change 1 to 3 when done
+      "statusId": statusId ?? 1,
       // "sourceId": 1, //dummy data
       // "longitude": 245.65, //dummy data
       // "latitude": 22.456, //dummy data

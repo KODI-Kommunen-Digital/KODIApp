@@ -210,7 +210,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               categoryId: 46,
               subCategoryId: 19,
               type: "subCategoryService")
-        ]
+        ],
+        'title': 'Shopping',
       });
     } else if (service.imageLink == "501") {
       int? currentLocation =
@@ -242,7 +243,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               categoryId: 45,
               subCategoryId: 15,
               type: "subCategoryService")
-        ]
+        ],
+        'title': 'Dienstleister',
       });
     } else if (service.imageLink == "8") {
       int? currentLocation =
@@ -280,7 +282,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               categoryId: 0,
               subCategoryId: 0,
               type: "subCategoryService"),
-        ]
+        ],
+        'title': 'Gastro',
       });
     } else if (service.imageLink == "31") {
       int? currentLocation =
@@ -297,7 +300,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             imageUrl: "31.2",
             imageLink: Images.service31_2,
           ),
-        ]
+        ],
+        'title': 'Jobs',
       });
     } else {
       AppBloc.discoveryCubit

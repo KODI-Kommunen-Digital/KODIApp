@@ -36,7 +36,7 @@ class ResultApiModel {
     return ResultApiModel(
       success: json['status'] == 'error' ? false : true,
       data: json['data'] ?? '',
-      id: json['id'] ?? 0,
+      id: json['id'] is int ? json['id'] : 0,
       pagination: pagination,
       attr: json['attr'] ?? '',
       payment: json['payment'] ?? '',

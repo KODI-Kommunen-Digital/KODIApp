@@ -5,19 +5,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "63inside App",
+            "name": "63inside",
             "request": "launch",
             "type": "dart",
             "program": "lib/main_dev.dart"
         },
         {
-            "name": "63inside App (profile mode)",
+            "name": "63inside (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "63inside App (release mode)",
+            "name": "63inside (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
