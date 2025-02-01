@@ -55,9 +55,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Einem personalisierten Erlebnis\nZugriff auf alle Vorteile der App\nLieblingsbeiträge, Events, Restaurants\nund vieles mehr als Favoriten zu speichern',
+                    'Melde Dich direkt an, um deine\npersönlichen Favoriten fest.\nSo fokussierst Du dich auf\nLieblingsrestaurants und vieles mehr.\nund hast optimale Zugriff auf deine Interessen.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    style: TextStyle(color: Colors.white, fontSize: 18),
                   ),
                   const SizedBox(height: 32),
                 ],
