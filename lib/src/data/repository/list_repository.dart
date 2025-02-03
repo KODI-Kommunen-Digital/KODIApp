@@ -436,7 +436,7 @@ class ListRepository {
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
       "timeless": timeless,
-      "zipcode": zipcode,
+      "zipcode": (zipcode == null || zipcode == "") ? 0 : zipcode,
       "cityIds": allCities
     };
     final response =
@@ -590,7 +590,7 @@ class ListRepository {
       // "createdAt": createdAt,
       // "pdf": null,
       // "updatedAt": currentDate.toString(),
-      "zipcode": zipcode,
+      "zipcode": (zipcode == null || zipcode == "") ? 0 : zipcode,
       // "appointmentId": null,
       "logo": media,
       // "otherlogos": [
