@@ -51,7 +51,7 @@ Future<void> main() async {
 
   await SentryFlutter.init((options) {
     options.dsn =
-        'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
+        'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/1231232';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
   await dotenv.load(fileName: "assets/env/.envWiesenburg");
