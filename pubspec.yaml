@@ -79,8 +79,8 @@ dependencies:
   flutter_inappwebview: ^6.1.5
 
   ### Firebase
-  firebase_core: ^3.1.0
-  firebase_messaging: ^15.0.1
+  firebase_core: ^3.10.1
+  firebase_messaging: ^15.2.1
 
   ### File Reading
   open_filex: ^4.4.0
@@ -98,12 +98,10 @@ dependencies:
   calendar_date_picker2: ^1.1.5
   package_info_plus: ^4.2.0
   flutter_dotenv: ^5.1.0
-  firebase_remote_config: ^5.0.1
   add_2_calendar: ^2.2.5
   table_calendar: ^3.0.9
   flutter_typeahead: ^5.2.0
   shared_preferences: ^2.2.3
-
   # bar code generator
   barcode_widget: ^2.0.3
   # Svg icon loader
