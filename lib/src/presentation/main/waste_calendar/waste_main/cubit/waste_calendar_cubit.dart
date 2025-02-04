@@ -57,7 +57,7 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
     switch (type) {
       case 'Biotonne Regelabfuhr':
       case 'Biotonne 2-wö.':
-        return Colors.green;
+        return Colors.brown;
       case 'Papiertonne 4-wö.':
         return Colors.blue;
       case 'Wertstofftonne oder -sack 4-wö.':

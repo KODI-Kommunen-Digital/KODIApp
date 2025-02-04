@@ -208,9 +208,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                           ),
                         ),
                       ),
-                      const SizedBox(
-                          width:
-                              48), // Placeholder to balance the space taken by the IconButton
+                      const SizedBox(width: 48),
                     ],
                   ),
                 ),
