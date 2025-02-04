@@ -43,4 +43,8 @@ class TrolleyMakerErrorResponse {
   bool isInvalidToken() {
     return errorStatusCode == "invalid_token";
   }
+
+    bool isExpiredToken() {
+    return errorStatusCode == "expired_token";
+  }
 }

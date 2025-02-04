@@ -136,21 +136,32 @@ class TrolleyMakerRepository {
 
   Future<Either<TrolleyMakerErrorResponse, CardBalanceAndTransactionResponse>>
       getCardBalanceAndTransactions() async {
-    try {
-      final result = await api.getCardBalanceAndTransactions();
-      return Right(result);
-    } on DioException catch (exception) {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
       try {
-        final responseMap =
-            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
-        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
-        return Left(errorResponse);
+        final result = await api.getCardBalanceAndTransactions();
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+                  errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (e) {
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
       } catch (e) {
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
-    } catch (e) {
-      return Left(TrolleyMakerErrorResponse.unknownError());
     }
+    return Left(TrolleyMakerErrorResponse.unknownError());
   }
 
   Future<void> _saveLoginResult(TrolleyMakerLoginResponse result) async {
@@ -186,34 +197,61 @@ class TrolleyMakerRepository {
 
   Future<Either<TrolleyMakerErrorResponse, List<TrolleyMakerPartners>>>
       getPartnersList() async {
-    try {
-      final result = await api.getPartnersList();
-      return Right(result);
-    } on DioException catch (exception) {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
       try {
-        final responseMap =
-            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
-        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
-        return Left(errorResponse);
+        final result = await api.getPartnersList();
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+                  errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (e) {
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
       } catch (e) {
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
-    } catch (e) {
-      return Left(TrolleyMakerErrorResponse.unknownError());
     }
+    return Left(TrolleyMakerErrorResponse.unknownError());
   }
 
   Future<Either<TrolleyMakerErrorResponse, TrolleyMakerPartnerDetailsInfo>>
       getPartnerDetails(String gguid) async {
-    try {
-      final result = await api.getPartnerDetails(gguid);
-      return Right(result);
-    } on DioException catch (exception) {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
       try {
-        final responseMap =
-            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
-        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
-        return Left(errorResponse);
+        final result = await api.getPartnerDetails(gguid);
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+                  errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (error, stackTrace) {
+          if (kDebugMode) {
+            print('Error: $error');
+            print('Stack trace: $stackTrace');
+          }
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
       } catch (error, stackTrace) {
         if (kDebugMode) {
           print('Error: $error');
@@ -221,39 +259,50 @@ class TrolleyMakerRepository {
         }
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
-    } catch (error, stackTrace) {
-      if (kDebugMode) {
-        print('Error: $error');
-        print('Stack trace: $stackTrace');
-      }
-      return Left(TrolleyMakerErrorResponse.unknownError());
     }
+    return Left(TrolleyMakerErrorResponse.unknownError());
   }
 
   Future<Either<TrolleyMakerErrorResponse, dynamic>> addCard(
       String cardNumber, String productionNumber) async {
-    try {
-      final request = TrolleyMakerAddCardRequest(
-          newCardToAdd: cardNumber,
-          newCardProductionNumber: productionNumber,);
-      final result = await api.addCard(request);
-      final cardIds = await getCachedCards();
-      if (cardIds != null) {
-        try {
-          final intCardNumber = int.parse(cardNumber);
-          cardIds.add(intCardNumber);
-          await secureStorage.saveIntList(
-              SecureStorage.keyCardList, cardIds);
-        // ignore: empty_catches
-        } catch (e) {}
-      }
-      return Right(result);
-    } on DioException catch (exception) {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
       try {
-        final responseMap =
-            jsonDecode(exception.response.toString()) as Map<String, dynamic>;
-        final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
-        return Left(errorResponse);
+        final request = TrolleyMakerAddCardRequest(
+          newCardToAdd: cardNumber,
+          newCardProductionNumber: productionNumber,
+        );
+        final result = await api.addCard(request);
+        final cardIds = await getCachedCards();
+        if (cardIds != null) {
+          try {
+            final intCardNumber = int.parse(cardNumber);
+            cardIds.add(intCardNumber);
+            await secureStorage.saveIntList(SecureStorage.keyCardList, cardIds);
+            // ignore: empty_catches
+          } catch (e) {}
+        }
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+                  errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (error, stackTrace) {
+          if (kDebugMode) {
+            print('Error: $error');
+            print('Stack trace: $stackTrace');
+          }
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
       } catch (error, stackTrace) {
         if (kDebugMode) {
           print('Error: $error');
@@ -261,12 +310,12 @@ class TrolleyMakerRepository {
         }
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
-    } catch (error, stackTrace) {
-      if (kDebugMode) {
-        print('Error: $error');
-        print('Stack trace: $stackTrace');
-      }
-      return Left(TrolleyMakerErrorResponse.unknownError());
     }
+    return Left(TrolleyMakerErrorResponse.unknownError());
+  }
+
+  bool _hasRefreshToken(DioException exception) {
+    final newToken = exception.response?.headers.value('X-NEW-Token');
+    return newToken != null;
   }
 }
