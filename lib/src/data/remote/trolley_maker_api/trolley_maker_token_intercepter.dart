@@ -23,12 +23,23 @@ class TokenInterceptor extends Interceptor {
   }
 
   @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    final newToken = response.headers.value('X-NEW-Token');
+    if (newToken != null) {
+      prefBox.setKeyValue(Preferences.trolleyMakerApiToken, newToken);
+    }
+    super.onResponse(response, handler);
+  }
+
+  @override
   void onError(DioException err, ErrorInterceptorHandler handler) {
     try {
       final responseMap =
           jsonDecode(err.response.toString()) as Map<String, dynamic>;
       final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
-      if (errorResponse.isInvalidToken()) {
+      final newToken = err.response?.headers.value('X-NEW-Token');
+      if ((errorResponse.isInvalidToken() || errorResponse.isExpiredToken()) &&
+          newToken == null) {
         onTokenExpiry.call();
       }
       // ignore: empty_catches
