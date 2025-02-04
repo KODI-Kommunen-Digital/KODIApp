@@ -46,7 +46,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _textContentController = TextEditingController();
   final _textTagsController = TextEditingController();
   final _textAddressController = TextEditingController();
-  final _textZipCodeController = TextEditingController();
   final _textPhoneController = TextEditingController();
   final _textFaxController = TextEditingController();
   final _textEmailController = TextEditingController();
@@ -60,7 +59,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _focusTitle = FocusNode();
   final _focusContent = FocusNode();
   final _focusAddress = FocusNode();
-  final _focusZipCode = FocusNode();
   final _focusPhone = FocusNode();
   final _focusFax = FocusNode();
   final _focusEmail = FocusNode();
@@ -70,7 +68,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool _processing = false;
   String? _errorTitle;
   String? _errorContent;
-  String? _errorZipCode;
   String? _errorPhone;
 
   // String? _errorEmail;
@@ -155,7 +152,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _textContentController.dispose();
     _textTagsController.dispose();
     _textAddressController.dispose();
-    _textZipCodeController.dispose();
     _textPhoneController.dispose();
     _textFaxController.dispose();
     _textEmailController.dispose();
@@ -167,7 +163,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _focusTitle.dispose();
     _focusContent.dispose();
     _focusAddress.dispose();
-    _focusZipCode.dispose();
     _focusPhone.dispose();
     _focusFax.dispose();
     _focusEmail.dispose();
@@ -303,7 +298,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textTitleController.text = widget.item!.title;
       _textContentController.text = clearedText(widget.item!.description);
       _textAddressController.text = widget.item!.address;
-      _textZipCodeController.text = widget.item?.zipCode ?? '';
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
@@ -667,7 +661,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               statusId: statusId,
               imagesList: selectedImages,
               allCities: allCities,
-              zipcode: _textZipCodeController.text,
               subCategoryId: selectedSubCategoryId);
           if (result) {
             await AppBloc.homeCubit.onLoad(false);
@@ -710,7 +703,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
-              zipcode: _textZipCodeController.text,
               categoryId: selectedCategoryId,
               subCategoryId: selectedSubCategoryId);
           if (result) {
@@ -754,11 +746,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   bool _validData() {
-    _errorZipCode = UtilValidator.validate(
-      _textZipCodeController.text,
-      type: ValidateType.number,
-      allowEmpty: true,
-    );
+    // _errorZipCode = UtilValidator.validate(
+    //   _textZipCodeController.text,
+    //   type: ValidateType.number,
+    //   allowEmpty: true,
+    // );
 
     _errorPhone = UtilValidator.validate(
       _textPhoneController.text,
@@ -1310,41 +1302,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 Utils.fieldFocusChange(
                   context,
                   _focusAddress,
-                  _focusZipCode,
-                );
-              },
-              leading: Icon(
-                Icons.home_outlined,
-                color: Theme.of(context).hintColor,
-              ),
-            ),
-            const SizedBox(height: 8),
-            AppTextInput(
-              hintText: Translate.of(context).translate('input_zipcode'),
-              errorText: _errorZipCode,
-              controller: _textZipCodeController,
-              focusNode: _focusZipCode,
-              maxLength: 5,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.number,
-              onChanged: (text) {
-                setState(() {
-                  _errorZipCode = UtilValidator.validate(
-                    _textZipCodeController.text,
-                    type: ValidateType.number,
-                    allowEmpty: true,
-                  );
-                });
-              },
-              onSubmitted: (text) {
-                Utils.fieldFocusChange(
-                  context,
-                  _focusZipCode,
                   _focusPhone,
                 );
               },
               leading: Icon(
-                Icons.wallet_travel_outlined,
+                Icons.home_outlined,
                 color: Theme.of(context).hintColor,
               ),
             ),
