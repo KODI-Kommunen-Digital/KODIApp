@@ -1,5 +1,7 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
@@ -9,6 +11,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -256,11 +259,80 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "13" ||
         service.imageLink == "14" ||
         service.imageLink == "15") {
-      await launchUrl(
-          Uri.parse(
-              await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
-                  ""),
-          mode: LaunchMode.inAppWebView);
+      final url =
+          await AppBloc.discoveryCubit.getServiceLink(service.imageLink);
+
+      if (url != null && url.isNotEmpty) {
+        final webViewController = WebViewController();
+        webViewController.loadRequest(Uri.parse(url));
+
+        final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+          Factory<VerticalDragGestureRecognizer>(
+            () => VerticalDragGestureRecognizer(),
+          ),
+        };
+
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              url,
+                              maxLines: 1,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 48),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height -
+                        kToolbarHeight -
+                        30,
+                    child: WebViewWidget(
+                      controller: webViewController,
+                      gestureRecognizers: gestureRecognizers,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        await webViewController.runJavaScript(
+          "document.querySelector('.flex').style.display = 'none';",
+        );
+      }
+
       if (service.imageLink == "4" ||
           service.imageLink == "9" ||
           service.imageLink == "13") {
@@ -277,9 +349,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         'id': 6,
       });
     }
-    // else if (service.imageLink == "8") {
-    //   _onSubmit();
-    // }
+// else if (service.imageLink == "8") {
+//   _onSubmit();
+// }
     else if (service.imageLink == "10") {
       Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       Navigator.pushNamed(context, Routes.wasteCalendar);
