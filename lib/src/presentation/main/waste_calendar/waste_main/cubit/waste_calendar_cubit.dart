@@ -26,7 +26,8 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
 
         for (var item in data) {
           final collection = WasteCollection.fromJson(item);
-          if (collection.type.contains("für Wohnanlagen")) {
+          if ((collection.type.contains("wöchentlich")) ||
+              collection.type.contains("14")) {
             continue;
           }
           wasteCollections.add(collection);
@@ -55,30 +56,21 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
 
   Color getColorForType(String type) {
     switch (type) {
-      case 'Biotonne Regelabfuhr':
-      case 'Biotonne 2-wö.':
-        return Colors.green;
-      case 'Papiertonne 4-wö.':
-        return Colors.blue;
-      case 'Wertstofftonne oder -sack 4-wö.':
-        return Colors.orange;
-      case 'Weihnachtsbaumabfuhr':
-        return Colors.red;
-      case 'Restmülltonne 2-wö.':
-      case 'Restmülltonne 4-wö.':
-        // case 'Restmüll-Container (wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (2-wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (4-wö.) für Wohnanlagen':
+      case 'Restmüll 14-tägig':
+      case 'Restmüll 4-wöchentlich':
+      case 'Restmüllcontainer wöchentlich':
+      case 'Restmüllcontainer 14-tägig':
         return Colors.grey;
-      // case 'Papier-Container (2-wö.) für Wohnanlagen':
-      // case 'Papier-Container (4-wö.) für Wohnanlagen':
-      //   return Colors.lightBlue;
-      // case 'Bio-Container Regelabfuhr für Wohnanlagen':
-      // case 'Bio-Container (2-wö.) für Wohnanlagen':
-      //   return Colors.lightGreen;
-      case 'Wertstoff-Container (2-wö.)':
-      case 'Wertstoff-Container (4-wö.)':
+
+      case 'Biotonne':
+        return Colors.green;
+
+      case 'Blaue Tonne':
+        return Colors.blue;
+
+      case 'Gelbe Tonne':
         return Colors.yellow;
+
       default:
         return Colors.white;
     }
