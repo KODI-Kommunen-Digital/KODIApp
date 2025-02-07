@@ -56,7 +56,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     ),
                     SizedBox(height: screenHeight * 0.02),
                     Text(
-                      'Melde Dich direkt an, um deine\npersönlichen Favoriten fest.\nSo fokussierst Du dich auf\nLieblingsrestaurants und vieles mehr.\nund hast optimale Zugriff auf deine Interessen.',
+                      'Melde Dich direkt an und lege Deine\npersönlichen Favoriten fest.\nSo fokussierst Du dich auf\nLieblingsrestaurants und vieles mehr\nund hast optimalen Zugriff auf Deine Interessen.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: Colors.white,
