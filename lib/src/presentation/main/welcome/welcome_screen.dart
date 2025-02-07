@@ -13,107 +13,119 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
       ),
       backgroundColor: Colors.black,
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Spacer(),
-              Column(
-                children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Willkommen bei',
-                        style: TextStyle(
-                          color: Colors.yellow,
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.06),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Spacer(),
+                Column(
+                  children: [
+                    const Text(
+                      'Willkommen bei',
+                      style: TextStyle(
+                        color: Colors.yellow,
+                        fontSize: 32,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    Image.asset(
+                      Images.logo,
+                      width: screenWidth * 0.2,
+                      height: screenWidth * 0.2,
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    Text(
+                      'Erleben Sie die App in ihrer \nbesten Form!',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.yellow,
+                        fontSize: screenWidth * 0.045,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    Text(
+                      'Melde Dich direkt an, um deine\npersönlichen Favoriten fest.\nSo fokussierst Du dich auf\nLieblingsrestaurants und vieles mehr.\nund hast optimale Zugriff auf deine Interessen.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: screenWidth * 0.04,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.04),
+                  ],
+                ),
+                const Spacer(),
+                Column(
+                  children: [
+                    SizedBox(
+                      width: screenWidth * 0.8,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.018,
+                          ),
+                        ),
+                        onPressed: () {
+                          naviagateToLoginPage();
+                        },
+                        child: Text(
+                          'Anmelden',
+                          style: TextStyle(fontSize: screenWidth * 0.045),
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Image.asset(
-                    Images.logo,
-                    width: 80,
-                    height: 80,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Erleben Sie die App in ihrer \nbesten Form!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.yellow, fontSize: 18),
-                  ),
-                  const SizedBox(height: 16),
-                  const Text(
-                    'Melde Dich direkt an, um deine\npersönlichen Favoriten fest.\nSo fokussierst Du dich auf\nLieblingsrestaurants und vieles mehr.\nund hast optimale Zugriff auf deine Interessen.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                  const SizedBox(height: 32),
-                ],
-              ),
-              const Spacer(flex: 2),
-              Column(
-                children: [
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 80,
-                        vertical: 16,
+                    ),
+                    SizedBox(height: screenHeight * 0.015),
+                    SizedBox(
+                      width: screenWidth * 0.8,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          foregroundColor: Colors.black,
+                          padding: EdgeInsets.symmetric(
+                            vertical: screenHeight * 0.018,
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.signUp);
+                        },
+                        child: Text(
+                          'Registrieren',
+                          style: TextStyle(fontSize: screenWidth * 0.045),
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      naviagateToLoginPage();
-                    },
-                    child: const Text(
-                      'Anmelden',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).primaryColor,
-                      foregroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 80,
-                        vertical: 16,
+                    SizedBox(height: screenHeight * 0.015),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.home);
+                      },
+                      child: Text(
+                        'Ohne Anmeldung fortfahren',
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: screenWidth * 0.04,
+                        ),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.signUp);
-                    },
-                    child: const Text(
-                      'Registrieren',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, Routes.home);
-                    },
-                    child: const Text(
-                      'Ohne Anmeldung fortfahren',
-                      style: TextStyle(color: Colors.grey, fontSize: 16),
-                    ),
-                  ),
-                  const SizedBox(height: 32),
-                ],
-              ),
-            ],
+                    SizedBox(height: screenHeight * 0.04),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
