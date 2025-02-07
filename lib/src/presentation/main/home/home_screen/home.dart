@@ -471,6 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       if (url.isNotEmpty) {
         final webViewController = WebViewController();
+        webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
         webViewController.loadRequest(Uri.parse(url));
 
         final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
