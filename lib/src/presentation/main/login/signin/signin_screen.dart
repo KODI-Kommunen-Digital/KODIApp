@@ -277,7 +277,7 @@ class _SignInLoadedState extends State<SignInLoaded> {
                                             ),
                                             TextSpan(
                                               text:
-                                                  ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!!',
+                                                  ' Ihr Account ist verifiziert und Sie können sich mit Ihren Login-Daten einloggen\n\nWir wünschen Ihnen viel Spaß beim Benutzen der App!\n\nDanke!',
                                               style: TextStyle(
                                                 fontSize: 16,
                                               ),
