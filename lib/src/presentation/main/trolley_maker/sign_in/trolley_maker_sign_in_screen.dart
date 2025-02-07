@@ -10,6 +10,7 @@ import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
 class TrolleyMakerSigninScreen extends StatefulWidget {
   const TrolleyMakerSigninScreen({super.key});
@@ -255,8 +256,9 @@ class _SignInLoadedState extends State<SignInLoaded> {
     );
   }
 
-  // void _forgotPassword() {
-  //   // Navigator.pushNamed(context, Routes.forgotPassword);
+  // Future<void> _forgotPassword() async {
+  //   await launchUrl(Uri.parse("https://mycity.cards/reset-password"),
+  //       mode: LaunchMode.inAppWebView);
   // }
 
   void _signUp() {
