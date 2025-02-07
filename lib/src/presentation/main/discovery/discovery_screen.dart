@@ -264,6 +264,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
       if (url != null && url.isNotEmpty) {
         final webViewController = WebViewController();
+        webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
         webViewController.loadRequest(Uri.parse(url));
 
         final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
