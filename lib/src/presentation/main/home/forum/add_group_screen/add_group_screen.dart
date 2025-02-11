@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
+import 'package:heidi/src/presentation/main/home/forum/add_group_screen/forum_group_upload_image.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
-import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
@@ -41,7 +41,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
 
   String? _featureImage;
   String? selectedPrivacy;
-  bool isImageChanged = false;
+  String? _selectedImagePath;
 
   late int? currentCity;
 
@@ -155,7 +155,8 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             title: _textTitleController.text,
             city: selectedCity,
             description: _textContentController.text,
-            type: selectedPrivacy);
+            type: selectedPrivacy,
+            selectedImagePath: _selectedImagePath);
         if (result) {
           if (!mounted) return;
           Navigator.pop(context);
@@ -166,7 +167,7 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
             _textContentController.text,
             selectedCity,
             selectedPrivacy,
-            isImageChanged,
+            _selectedImagePath,
             widget.item!.id,
             widget.item!.createdAt);
         if (result) {
@@ -225,14 +226,11 @@ class _AddGroupScreenState extends State<AddGroupScreen> {
           children: [
             SizedBox(
               height: 180,
-              child: AppUploadImage(
-                title: Translate.of(context).translate('upload_feature_image'),
+              child: ForumGroupImageUpload(
                 image: _featureImage,
-                profile: true,
-                forumGroup: true,
                 onChange: (result) {
                   setState(() {
-                    isImageChanged = true;
+                    _selectedImagePath = result;
                   });
                 },
               ),
