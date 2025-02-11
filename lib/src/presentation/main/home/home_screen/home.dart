@@ -140,9 +140,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onUpdateCategory() async {
-    await AppBloc.homeCubit.onLoad(false);
-  }
+  // Future<void> _onUpdateCategory() async {
+  //   await AppBloc.homeCubit.onLoad(false);
+  // }
 
   void scrollUp() {
     _scrollController.animateTo(0,
@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.4';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.5';
                         });
                       }
                     },
