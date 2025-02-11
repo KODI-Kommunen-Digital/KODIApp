@@ -253,6 +253,8 @@ class ProductModel {
       category = "Amtliche Bekanntmachungen";
     } else if (json['categoryId'] == 25) {
       category = "Umfrage";
+    } else if (json['categoryId'] == 45) {
+      category = "Bürgerservice Verwaltung";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
