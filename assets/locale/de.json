@@ -20,7 +20,7 @@
   "group_delete_confirmation" : "Gruppe löschen Bestätigung",
   "post_delete_confirmation" : "Beitrag löschen Bestätigung",  
   "post_delete_confirmation_body" : "Sind Sie sicher, dass Sie diesen Beitrag löschen möchten?",
-  "see_member": "Mitlieder ansehen",
+  "see_member": "Mitglieder ansehen",
   "leave_group": "Gruppe verlassen",
   "group_leave_confirmation" : "Bestätigung des Gruppenaustritts",
   "ignore_member_request_confirmation" : "Bestätigung der Mitgliederanfrage ignorieren",
