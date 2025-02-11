@@ -577,6 +577,7 @@ class ForumRepository {
     String description,
     String? city,
     String? type,
+    String? selectedImagePath,
   ) async {
     final cityId = await getCityId();
     int cityIdPref = prefs.getKeyValue(Preferences.cityId, 0);
@@ -599,7 +600,7 @@ class ForumRepository {
       "villageId": 0,
       "visibility": "",
     };
-    FormData? pickedFile = prefs.getPickedFile();
+    FormData? pickedFile = await _getPickedImageFormData(selectedImagePath);
     final response = await Api.requestSaveForum(cityId, params);
     if (response.success) {
       final forumId = response.id;
@@ -649,7 +650,7 @@ class ForumRepository {
     String description,
     String? city,
     String? type,
-    isImageChanged,
+    String? selectedImagePath,
     forumId,
     String createdDate,
   ) async {
@@ -675,9 +676,9 @@ class ForumRepository {
     final response = await Api.requestEditForum(cityId, forumId, params);
 
     if (response.success) {
-      if (isImageChanged) {
+      if (selectedImagePath != null) {
         final prefs = await Preferences.openBox();
-        FormData? pickedFile = prefs.getPickedFile();
+        FormData? pickedFile = await _getPickedImageFormData(selectedImagePath);
         if (pickedFile != null) {
           await Api.requestForumImageUpload(cityId, forumId, pickedFile);
         }
@@ -823,5 +824,19 @@ class ForumRepository {
         await prefs.setForumChatTopics(forumChatTopics);
       }
     }
+  }
+
+  Future<FormData?> _getPickedImageFormData(String? selectedImagePath) async {
+    if (selectedImagePath == null) {
+      return null;
+    }
+    List<String> parts = selectedImagePath.split('.');
+    String imageExtension = parts.last;
+    final formData = FormData.fromMap({
+      'image': await MultipartFile.fromFile(selectedImagePath,
+          filename: selectedImagePath,
+          contentType: MediaType('image', imageExtension)),
+    });
+    return formData;
   }
 }
