@@ -19,9 +19,9 @@ class AddGroupCubit extends Cubit<AddGroupState> {
       required String description,
       required int cityId,
       String? city,
-      String? type}) async {
+      String? type, String? selectedImagePath}) async {
     try {
-      final response = await _repo.saveForum(title, description, city, type);
+      final response = await _repo.saveForum(title, description, city, type, selectedImagePath);
       if (response.success) {
         return true;
       } else {
@@ -40,7 +40,7 @@ class AddGroupCubit extends Cubit<AddGroupState> {
     String description,
     String? city,
     String? type,
-    bool isImageChanged,
+    String? selectedImagePath,
     forumId,
     createdDate,
   ) async {
@@ -50,7 +50,7 @@ class AddGroupCubit extends Cubit<AddGroupState> {
         description,
         city,
         type,
-        isImageChanged,
+        selectedImagePath,
         forumId,
         createdDate,
       );
