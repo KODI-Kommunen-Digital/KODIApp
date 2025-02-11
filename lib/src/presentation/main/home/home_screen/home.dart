@@ -298,7 +298,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.2';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.3';
                         });
                       }
                     },
@@ -534,11 +534,13 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         final prefs = await Preferences.openBox();
         prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.categoryId, item.id);
         prefs.setKeyValue(Preferences.type, "category");
         if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': selectedCityId, 'title': '', 'type': 'category'});
+        Navigator.pushNamed(context, Routes.listProduct, arguments: {
+          'id': selectedCityId,
+          'title': item.title,
+          'type': 'category'
+        });
       }
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
