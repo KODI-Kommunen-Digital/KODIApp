@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:1084962010221:android:05af2ef8e9505e5830bb64',
     messagingSenderId: '1084962010221',
     projectId: 'troisdorf-204e4',
-    storageBucket: 'troisdorf-204e4.appspot.com',
+    storageBucket: 'troisdorf-204e4.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,8 @@ class DefaultFirebaseOptions {
     appId: '1:1084962010221:ios:bb2728dee9a95b0030bb64',
     messagingSenderId: '1084962010221',
     projectId: 'troisdorf-204e4',
-    storageBucket: 'troisdorf-204e4.appspot.com',
+    storageBucket: 'troisdorf-204e4.firebasestorage.app',
     iosBundleId: 'com.troisdorf.app',
   );
+
 }
