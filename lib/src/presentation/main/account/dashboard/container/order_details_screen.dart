@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
@@ -71,9 +72,11 @@ class OrderDetailsScreen extends StatelessWidget {
                                     Row(
                                       children: <Widget>[
                                         ClipRRect(
-                                          borderRadius: BorderRadius.circular(12),
+                                          borderRadius:
+                                              BorderRadius.circular(12),
                                           child: CachedNetworkImage(
-                                            imageUrl: ((product!.productImages ??
+                                            imageUrl: ((product!
+                                                            .productImages ??
                                                         [])
                                                     .isNotEmpty)
                                                 ? '${Application.picturesURL}${product.productImages!.last}'
@@ -84,7 +87,8 @@ class OrderDetailsScreen extends StatelessWidget {
                                                 child: Container(
                                                   height: 140,
                                                   width: 120,
-                                                  decoration: const BoxDecoration(
+                                                  decoration:
+                                                      const BoxDecoration(
                                                     color: Colors.white,
                                                   ),
                                                 ),
@@ -108,16 +112,19 @@ class OrderDetailsScreen extends StatelessWidget {
                                                 child: Container(
                                                   width: 120,
                                                   height: 140,
-                                                  decoration: const BoxDecoration(
+                                                  decoration:
+                                                      const BoxDecoration(
                                                     color: Colors.white,
                                                     borderRadius:
                                                         BorderRadius.only(
-                                                      topLeft: Radius.circular(8),
+                                                      topLeft:
+                                                          Radius.circular(8),
                                                       bottomLeft:
                                                           Radius.circular(8),
                                                     ),
                                                   ),
-                                                  child: const Icon(Icons.error),
+                                                  child:
+                                                      const Icon(Icons.error),
                                                 ),
                                               );
                                             },
@@ -143,15 +150,7 @@ class OrderDetailsScreen extends StatelessWidget {
                                                             FontWeight.bold),
                                               ),
                                               const SizedBox(height: 8),
-                                              Text(
-                                                product.description,
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .bodySmall!
-                                                    .copyWith(
-                                                      fontWeight: FontWeight.normal,
-                                                    ),
-                                              ),
+                                              Html(data: product.description),
                                               const SizedBox(height: 4),
                                               Text(
                                                 "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",
@@ -159,7 +158,8 @@ class OrderDetailsScreen extends StatelessWidget {
                                                     .textTheme
                                                     .bodySmall!
                                                     .copyWith(
-                                                      fontWeight: FontWeight.bold,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                               ),
                                               Row(
