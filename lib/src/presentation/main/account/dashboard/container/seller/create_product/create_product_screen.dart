@@ -216,7 +216,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             storeId: selectedStore!.id,
             title: _textTitleController.text,
             description: _textDescriptionController.text,
-            price: double.parse(_textPriceController.text),
+            price: double.parse(_textPriceController.text.replaceAll(',', '.')),
             tax: double.parse(_textTaxController.text),
             inventory: int.parse(_textInventoryController.text),
             minCount: int.parse(_textMinCountController.text),
@@ -232,7 +232,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             productId: widget.product!.id,
             title: _textTitleController.text,
             description: _textDescriptionController.text,
-            price: double.parse(_textPriceController.text),
+            price: double.parse(_textPriceController.text.replaceAll(',', '.')),
             tax: double.parse(_textTaxController.text),
             inventory: (_textInventoryController.text != '')
                 ? int.parse(_textInventoryController.text)
@@ -744,7 +744,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                       },
                     ),
                     textInputAction: TextInputAction.next,
-                    keyboardType: TextInputType.number,
+                    //keyboardType: TextInputType.number,
                     onSubmitted: (text) {
                       Utils.fieldFocusChange(
                           context, _focusBarcode, _focusPrice);
