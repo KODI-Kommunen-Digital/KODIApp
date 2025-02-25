@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
@@ -373,7 +374,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                 child: AppUploadImage(
                   title:
                       Translate.of(context).translate('upload_feature_image'),
-                  image: context.read<CreateProductCubit>().selectedImage?.path,
+                  image: context.read<CreateProductCubit>().selectedImage?.path ?? '${Application.picturesURL}${widget.product?.productImages?.last}',
                   profile: false,
                   forumGroup: false,
                   allowPdf: false,

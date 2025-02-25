@@ -33,18 +33,17 @@ class AppUploadImage extends StatefulWidget {
   final int imageLimit;
   final bool allowPdf;
 
-  const AppUploadImage({
-    super.key,
-    this.title,
-    this.image,
-    required this.onChange,
-    this.type = UploadImageType.square,
-    required this.profile,
-    required this.forumGroup,
-    this.onDelete,
-    this.imageLimit = 8,
-    this.allowPdf = true
-  });
+  const AppUploadImage(
+      {super.key,
+      this.title,
+      this.image,
+      required this.onChange,
+      this.type = UploadImageType.square,
+      required this.profile,
+      required this.forumGroup,
+      this.onDelete,
+      this.imageLimit = 8,
+      this.allowPdf = true});
 
   @override
   State<AppUploadImage> createState() => _AppUploadImageState();
@@ -67,7 +66,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
   void initState() {
     image = widget.image;
     if (image != null) {
-      if (!image!.contains('Defaultimage')) {
+      if (!image!.contains('Defaultimage') &&
+          !image!.contains(Application.defaultPicturesURL)) {
         _file = File(image!);
       }
     }
@@ -87,13 +87,22 @@ class _AppUploadImageState extends State<AppUploadImage> {
     if (widget.image != null) {
       if (!widget.image!.contains('pdf')) {
         image = widget.image;
-        _file = File(image!);
+        if (!widget.image!.contains(Application.defaultPicturesURL)) {
+          _file = File(image!);
+        }
       }
     }
     if (_file != null && !_file!.path.contains(".pdf")) {
       decorationImage = DecorationImage(
         image: FileImage(
           _file!,
+        ),
+        fit: BoxFit.cover,
+      );
+    } else if (_file == null && image != null && !image!.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: NetworkImage(
+          image!,
         ),
         fit: BoxFit.cover,
       );
@@ -150,7 +159,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     if (selectedAssets.length > 1) {
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
-                    images.removeWhere((element) => element.path == _file?.path);
+                    images
+                        .removeWhere((element) => element.path == _file?.path);
                     _file = null;
                     if (images.isNotEmpty) {
                       _file ??= File(images[0].path);
@@ -299,39 +309,39 @@ class _AppUploadImageState extends State<AppUploadImage> {
           return SimpleDialog(
             title: Text(Translate.of(context).translate('Choose_File_Type')),
             children: [
-              if(widget.allowPdf)
-              SimpleDialogOption(
-                onPressed: () async {
-                  Navigator.pop(context);
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['pdf'],
-                  );
-                  if (result != null) {
-                    widget.onChange([]);
-                    setState(() {
-                      _file = null;
-                      images.clear();
+              if (widget.allowPdf)
+                SimpleDialogOption(
+                  onPressed: () async {
+                    Navigator.pop(context);
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['pdf'],
+                    );
+                    if (result != null) {
+                      widget.onChange([]);
+                      setState(() {
+                        _file = null;
+                        images.clear();
+                        widget.onChange(images);
+                        _file = File(result.files.single.path!);
+                        isImageUploaded = false;
+                        selectedAssets.clear();
+                      });
                       widget.onChange(images);
-                      _file = File(result.files.single.path!);
-                      isImageUploaded = false;
-                      selectedAssets.clear();
-                    });
-                    widget.onChange(images);
-                    final profile = widget.profile;
-                    if (!profile) {
-                      await ListRepository.uploadPdf(_file!);
+                      final profile = widget.profile;
+                      if (!profile) {
+                        await ListRepository.uploadPdf(_file!);
+                      }
+                      if (!mounted) return;
+                      context.read<AddListingCubit>().clearAssets();
                     }
-                    if (!mounted) return;
-                    context.read<AddListingCubit>().clearAssets();
-                  }
-                },
-                child: const ListTile(
-                  leading: Icon(Icons.picture_as_pdf),
-                  title: Text('PDF'),
+                  },
+                  child: const ListTile(
+                    leading: Icon(Icons.picture_as_pdf),
+                    title: Text('PDF'),
+                  ),
                 ),
-              ),
               SimpleDialogOption(
                 onPressed: () async {
                   Navigator.pop(context);
@@ -378,7 +388,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for(final selectedImages in result.files){
+                      for (final selectedImages in result.files) {
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);
@@ -565,9 +575,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      if(widget.imageLimit == 1) {
+      if (widget.imageLimit == 1) {
         XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-        if(image != null) resultList = [image];
+        if (image != null) resultList = [image];
       } else {
         resultList = await _picker.pickMultiImage(
           limit: widget.imageLimit,
