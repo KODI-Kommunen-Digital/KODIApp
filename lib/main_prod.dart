@@ -55,7 +55,7 @@ Future<void> main() async {
     options.dsn =
         'https://196f54a62defd6f94e81653c8b98b17d@o4506393481510912.ingest.us.sentry.io/4508885909045248';
     options.tracesSampleRate = 0.01;
-  }, appRunner: () => runApp(HeidiApp(prefBox)));
+  }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
   await dotenv.load(fileName: "assets/env/.envRatingen");
   await CategoryManager.loadCategories();
 }
