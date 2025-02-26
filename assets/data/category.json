@@ -1,0 +1,78 @@
+{
+    "status": "success",
+    "data": [
+        {
+            "id": 1,
+            "name": "News",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#ff8a65",
+            "categoryType" : "category"
+        },
+        
+        {
+            "id": 3,
+            "name": "Events",
+            "noOfSubcategories": 0,
+            "icon": "far fa-calendar-check",
+            "color": "#a569bd",
+            "categoryType" : "category"
+        },
+        {
+            "id": 4,
+            "name": "Vereine",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#5dade2",
+            "categoryType" : "category"
+        },
+        {
+            "id": 6,
+            "name": "Biete/Suche",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-magnifying-glass",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 10,
+            "name": "Unternehmen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-briefcase",
+            "color": "#fdc60a",
+            "categoryType" : "category"
+        },
+        {
+            "id": 13,
+            "name": "Essen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-utensils",
+            "color": "#027148",
+            "categoryType" : "category"
+        },
+        {
+            "id": 14,
+            "name": "Rathaus",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-building",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 15,
+            "name": "Mitteilungsblatt",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        },
+        {
+            "id": 16,
+            "name": "Amtliche Mitteilungen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#58d68d",
+            "categoryType" : "category"
+        }
+    ]
+}
