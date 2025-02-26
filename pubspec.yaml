@@ -100,6 +100,7 @@ dependencies:
   shared_preferences: ^2.2.3
 
 dev_dependencies:
+  sentry_dart_plugin: ^2.4.1
   flutter_test:
     sdk: flutter
 
@@ -217,3 +218,9 @@ flutter:
         - asset: assets/fonts/Merriweather-Regular.ttf
   uses-material-design: true
 
+
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: ratingen
+  org: heidi-heimat-digital
