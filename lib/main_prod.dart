@@ -53,7 +53,7 @@ Future<void> main() async {
 
   await SentryFlutter.init((options) {
     options.dsn =
-        'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
+        'https://196f54a62defd6f94e81653c8b98b17d@o4506393481510912.ingest.us.sentry.io/4508885909045248';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
   await dotenv.load(fileName: "assets/env/.envRatingen");
