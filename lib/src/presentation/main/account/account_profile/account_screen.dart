@@ -28,16 +28,18 @@ class _AccountScreenState extends State<AccountScreen> {
     return BlocConsumer<AccountCubit, AccountState>(
       listener: (context, state) {
         state.maybeWhen(
-          error: (msg) => ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(msg))),
+          error: (msg) =>
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
           orElse: () {},
         );
       },
-      builder: (context, state) => state.maybeWhen(
-        loading: () => const AccountLoading(),
-        loaded: () => const AccountLoaded(),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
-      ),
+      builder: (context, state) =>
+          state.maybeWhen(
+            loading: () => const AccountLoading(),
+            loaded: () => const AccountLoaded(),
+            orElse: () => ErrorWidget('Failed to load Accounts.'),
+          ),
     );
   }
 
@@ -106,10 +108,15 @@ class _AccountLoadedState extends State<AccountLoaded> {
                     margin: const EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
-                      color: Theme.of(context).cardColor,
+                      color: Theme
+                          .of(context)
+                          .cardColor,
                       boxShadow: [
                         BoxShadow(
-                          color: Theme.of(context).dividerColor.withOpacity(
+                          color: Theme
+                              .of(context)
+                              .dividerColor
+                              .withOpacity(
                             .05,
                           ),
                           spreadRadius: 4,

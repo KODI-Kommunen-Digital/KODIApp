@@ -30,7 +30,7 @@ class UserCubit extends Cubit<UserModel?> {
       onSaveUser(sync);
       return sync;
     }
-    return null;
+    return local;
   }
   Future<void> onSaveUser(UserModel user) async {
     await UserRepository.saveUser(user: user);
