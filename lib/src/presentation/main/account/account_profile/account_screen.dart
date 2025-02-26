@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/user/cubit.dart';
@@ -14,6 +15,7 @@ import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -212,9 +214,10 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ),
                     ),
                     AppListTitle(
-                      title: Translate.of(context).translate('trader_area'),
+                      title:
+                          Translate.of(context).translate('contact_us_account'),
                       onPressed: () {
-
+                        _makeAction(dotenv.env['CONTACT_US_ACCOUNT'] ?? "");
                       },
                       trailing: Row(
                         children: <Widget>[
@@ -255,6 +258,13 @@ class _AccountLoadedState extends State<AccountLoaded> {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  Future<void> _makeAction(String link) async {
+    await launchUrl(
+      Uri.parse(link),
+      mode: LaunchMode.inAppWebView,
+    );
   }
 
   void _onLogout() async {

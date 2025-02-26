@@ -19,19 +19,19 @@ class ListRepository {
 
   ListRepository(this.prefs);
 
-  static Future<List?> loadList({
-    required categoryId,
-    required type,
-    required pageNo,
-    cityId,
-    eventFilter
-  }) async {
+  static Future<List?> loadList(
+      {required categoryId,
+      required type,
+      required pageNo,
+      cityId,
+      eventFilter}) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
     if (type == "category") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo, eventFilter: eventFilter);
+      final response = await Api.requestCatList(params, cityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -53,7 +53,8 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo, eventFilter: eventFilter);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -293,33 +294,32 @@ class ListRepository {
   }
 
   Future<ResultApiModel> saveProduct(
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    String? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    TimeOfDay? expiryTime,
-    int? timeless,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    List<File>? imagesList,
-    bool isImageChanged,
-    List<PollOptionModel>? pollOptions,
-  ) async {
-    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      String? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      TimeOfDay? expiryTime,
+      int? timeless,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      List<File>? imagesList,
+      bool isImageChanged,
+      List<PollOptionModel>? pollOptions,
+      int? categoryId,
+      int? subCategoryId) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     const cityId = 1;
@@ -366,12 +366,6 @@ class ListRepository {
       }
     } else {
       combinedEndDateTime = "";
-    }
-
-    if (categoryId == 1) {
-      subCategoryId = subCategoryId;
-    } else {
-      subCategoryId = null;
     }
 
     Map<String, dynamic> params = {
@@ -443,38 +437,36 @@ class ListRepository {
   }
 
   Future<ResultApiModel> editProduct(
-    int? listingId,
-    int? categoryId,
-    cityId,
-    String title,
-    String description,
-    String place,
-    CategoryModel? country,
-    CategoryModel? state,
-    CategoryModel? city,
-    int? statusId,
-    int? sourceId,
-    String address,
-    String? zipcode,
-    String? phone,
-    String? email,
-    String? website,
-    String? status,
-    String? expiryDate,
-    String? startDate,
-    String? endDate,
-    String? createdAt,
-    String? price,
-    bool isImageChanged,
-    TimeOfDay? expiryTime,
-    int? timeless,
-    TimeOfDay? startTime,
-    TimeOfDay? endTime,
-    List<File>? imagesList,
-    List<PollOptionModel>? pollOptions, // Add poll options parameter
-  ) async {
-    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
-    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
+      int? listingId,
+      int? categoryId,
+      cityId,
+      String title,
+      String description,
+      String place,
+      CategoryModel? country,
+      CategoryModel? state,
+      CategoryModel? city,
+      int? statusId,
+      int? sourceId,
+      String address,
+      String? zipcode,
+      String? phone,
+      String? email,
+      String? website,
+      String? status,
+      String? expiryDate,
+      String? startDate,
+      String? endDate,
+      String? createdAt,
+      String? price,
+      bool isImageChanged,
+      TimeOfDay? expiryTime,
+      int? timeless,
+      TimeOfDay? startTime,
+      TimeOfDay? endTime,
+      List<File>? imagesList,
+      List<PollOptionModel>? pollOptions,
+      int? subCategoryId) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
