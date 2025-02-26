@@ -111,11 +111,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                           filterCallBack: (filter) {
                             _updateSelectedFilter(filter);
                           }),
-                      IconButton(
-                          onPressed: () {
-                            _searchListings();
-                          },
-                          icon: const Icon(Icons.search))
                     ],
                   );
                 }
@@ -157,7 +152,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     );
   }
 
-  Future _searchListings() async {
+  /*Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
       context.read<ListCubit>().searchListing(searchResult.trim(), true);
@@ -165,7 +160,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(widget.arguments['id']);
     }
-  }
+  }*/
 
   Future<String?> openSearchDialog() async {
     String? searchRequest = await showDialog(
