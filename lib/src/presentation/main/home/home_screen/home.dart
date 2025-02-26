@@ -562,8 +562,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _onCategoryItem(CategoryModel item, List<CategoryModel> category) {
-    if (item.id == 4 ||
-        item.id == 5 ||
+    if (item.id == 5 ||
         item.id == 6 ||
         item.id == 8 ||
         item.id == 9 ||

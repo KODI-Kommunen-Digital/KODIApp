@@ -18,6 +18,14 @@
             "categoryType" : "category"
         },
         {
+            "id": 4,
+            "name": "Vereine",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#5dade2",
+            "categoryType" : "category"
+        },
+        {
             "id": 5,
             "name": "Parken",
             "noOfSubcategories": 0,
