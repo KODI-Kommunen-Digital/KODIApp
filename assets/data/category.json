@@ -42,14 +42,6 @@
             "categoryType" : "category"
         },
         {
-            "id": 26,
-            "name": "Uber Uns",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-gas-pump",
-            "color": "#00bf63",
-            "categoryType" : "category"
-        },
-        {
             "id": 43,
             "name": "Coupons",
             "noOfSubcategories": 0,

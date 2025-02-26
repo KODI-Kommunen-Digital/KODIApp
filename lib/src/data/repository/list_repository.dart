@@ -322,6 +322,7 @@ class ListRepository {
       int? subCategoryId) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     const cityId = 1;
     String? combinedStartDateTime;
     String? combinedEndDateTime;
