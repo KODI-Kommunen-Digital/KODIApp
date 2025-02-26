@@ -64,6 +64,14 @@
             "icon": "fas fa-square-poll-vertical",
             "color": "#027148",
             "categoryType" : "category"
+        },
+        {
+            "id": 47,
+            "name": "Über uns",
+            "noOfSubcategories": 5,
+            "icon": "fas fa-address-card",
+            "color": "#58d68d",
+            "categoryType" : "category"
         }
     ]
 }
