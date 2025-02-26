@@ -90,7 +90,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           endTime,
           imagesList,
           isImageChanged,
-          pollOptions);
+          pollOptions,
+          categoryId,
+          subCategoryId);
 
       if (response.success) {
         return true;
@@ -171,7 +173,8 @@ class AddListingCubit extends Cubit<AddListingState> {
           startTime,
           endTime,
           imagesList,
-          pollOptions);
+          pollOptions,
+          subCategoryId);
       if (response.success) {
         return true;
       } else {

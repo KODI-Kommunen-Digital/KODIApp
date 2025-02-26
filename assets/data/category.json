@@ -35,7 +35,7 @@
         },
         {
             "id": 26,
-            "name": "Tanken",
+            "name": "Uber Uns",
             "noOfSubcategories": 0,
             "icon": "fas fa-gas-pump",
             "color": "#00bf63",
@@ -48,23 +48,7 @@
             "icon": "fas fa-ticket",
             "color": "#a570f1",
             "categoryType" : "category"
-        },
-        {
-            "id": 8,
-            "name": "RatingenCard",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-id-card",
-            "color": "#ffde59",
-            "categoryType" : "category"
-        },
-        {
-            "id": 9,
-            "name": "EK-Gutschein",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-gift",
-            "color": "#ff914d",
-            "categoryType" : "category"
-        },
+        }, 
         {
             "id": 25,
             "name": "Umfrage",
