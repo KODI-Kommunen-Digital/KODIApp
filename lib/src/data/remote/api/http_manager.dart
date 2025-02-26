@@ -18,7 +18,7 @@ class HTTPManager {
   HTTPManager() {
     _dio = Dio(
       BaseOptions(
-         baseUrl: 'http://138.199.200.114:3001/v2/',
+         baseUrl: 'https://maximale-aufmerksamkeit.de/api/v2/',
         //baseUrl: 'https://test.smartregion-auf.de/api/',
         // baseUrl: 'https://waldi.app/api',
         // baseUrl: 'https://heimat-digital.eu/api/v2',

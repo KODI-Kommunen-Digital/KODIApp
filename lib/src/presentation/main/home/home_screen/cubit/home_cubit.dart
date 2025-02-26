@@ -229,11 +229,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<List<ProductModel>> searchListing(content, int pageNo) async {
-    int currentCityFilter = await getCurrentCityFilter();
     List<ProductModel>? listDataList = [];
-    MultiFilter multiFilter = MultiFilter(
-        hasLocationFilter: true,
-        currentLocation: currentCityFilter);
+    MultiFilter multiFilter = MultiFilter();
 
     final result = await ListRepository.searchListing(
         content: content, multiFilter: multiFilter, pageNo: pageNo);

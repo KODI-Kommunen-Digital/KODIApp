@@ -9,6 +9,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final List<String>? cityTitlesList;
   String? hintText;
   String? selectedOption;
+  bool enabled;
 
   AppBarHomeSliver(
       {required this.expandedHeight,
@@ -16,7 +17,8 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
       required this.cityTitlesList,
       this.banners,
       this.hintText,
-      this.selectedOption});
+      this.selectedOption,
+      this.enabled = true});
 
   @override
   Widget build(context, shrinkOffset, overlapsContent) {
@@ -31,6 +33,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           height: 32,
           color: Theme.of(context).colorScheme.surface,
         ),
+        if(enabled)
         CitiesDropDown(
           hintText: hintText,
           cityTitlesList: cityTitlesList,

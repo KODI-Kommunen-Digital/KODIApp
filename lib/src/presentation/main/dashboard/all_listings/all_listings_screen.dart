@@ -134,13 +134,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
               AppFilterButton(
                   multiFilter: MultiFilter(
                       hasListingStatusFilter: true,
-                      hasLocationFilter: true,
-                      currentListingStatus: currentListingFilter,
-                      cities: AppBloc.homeCubit.location,
-                      currentLocation: currentCityFilter),
+                      currentListingStatus: currentListingFilter,),
                   filterCallBack: (filter) async {
-                    await AppBloc.allListingsCubit
-                        .setCurrentCityFilter(filter.currentLocation ?? 0);
                     await AppBloc.allListingsCubit
                         .setCurrentStatus(filter.currentListingStatus ?? 0);
                     await context.read<AllListingsCubit>().onLoad(false);

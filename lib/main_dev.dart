@@ -1,9 +1,6 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
-import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -39,20 +36,20 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
-  /*await SentryFlutter.init(
+  await SentryFlutter.init(
     (options) {
       options.dsn =
-          'https://c0698d6ee375f51fd7fe487b160a624c@o4507264812908544.ingest.de.sentry.io/4507968045318224';
+          'https://c0698d6ee375f51fd7fe487b160a624c@o4507261212908544.ingest.de.sentry.io/4507968045318224';
       options.tracesSampleRate = 0.01;
     },
     appRunner: () => runApp(HeidiApp(prefBox)),
-  );*/
+  );
 
-  await Firebase.initializeApp(
+  /*await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();*/
 
   Bloc.observer = HeidiBlocObserver();
 }

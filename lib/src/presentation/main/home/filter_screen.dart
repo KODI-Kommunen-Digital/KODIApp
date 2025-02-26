@@ -23,7 +23,7 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    currentCity = widget.multiFilter.currentLocation;
+    currentCity = 1;
     currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
@@ -49,9 +49,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     currentProductEventFilter: currentProductEventFilter,
                     currentListingStatus: currentListingStatus,
                     currentCategory: currentCategory,
-                    currentLocation: currentCity,
                     startAfterDate: startAfterDate,
-                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasProductEventFilter:
                         widget.multiFilter.hasProductEventFilter,
                     hasListingStatusFilter:
@@ -60,8 +58,6 @@ class _FilterScreenState extends State<FilterScreen> {
           },
           child: Column(
             children: [
-              if (widget.multiFilter.hasLocationFilter == true)
-                ..._buildLocationFilter(),
               if (widget.multiFilter.hasProductEventFilter == true)
                 ..._buildProductEventFilter(),
               if (widget.multiFilter.hasListingStatusFilter == true)
@@ -73,47 +69,6 @@ class _FilterScreenState extends State<FilterScreen> {
         ),
       ),
     ));
-  }
-
-  List<Widget> _buildLocationFilter() {
-    return [
-      const SizedBox(
-        height: 8,
-      ),
-      Center(
-          child: Text(
-        Translate.of(context).translate('choose_city'),
-        style: Theme.of(context)
-            .textTheme
-            .titleMedium!
-            .copyWith(fontWeight: FontWeight.bold),
-      )),
-      Container(
-        padding: const EdgeInsets.all(8.0),
-        child: Wrap(spacing: 8.0, children: [
-          ChoiceChip(
-            label: Text(Translate.of(context).translate('select_location')),
-            selected: 0 == currentCity,
-            onSelected: (selected) {
-              setState(() {
-                currentCity = 0;
-              });
-            },
-          ),
-          ...widget.multiFilter.cities!.map((city) {
-            return ChoiceChip(
-              label: Text(city.title),
-              selected: city.id == currentCity,
-              onSelected: (selected) {
-                setState(() {
-                  currentCity = city.id;
-                });
-              },
-            );
-          }),
-        ]),
-      )
-    ];
   }
 
   List<Widget> _buildListingStatusFilter() {

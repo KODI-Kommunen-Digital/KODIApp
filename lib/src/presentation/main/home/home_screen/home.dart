@@ -13,7 +13,6 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
-import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -34,8 +33,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedCityTitle = '';
-  int selectedCityId = 0;
+  String selectedCityTitle = 'Wiesenburg';
+  int selectedCityId = 1;
   int pageNo = 1;
   bool isSearching = false;
   String searchTerm = "";
@@ -273,6 +272,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
                       cityTitlesList: cityTitles,
+                      enabled: false,
                       hintText:
                           Translate.of(context).translate('hselect_location'),
                       selectedOption: (selectedCityId > 0)
@@ -320,7 +320,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? const CircularProgressIndicator.adaptive()
                               : _buildCategory(AppBloc.homeCubit
                                   .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
@@ -634,91 +633,6 @@ class _HomeScreenState extends State<HomeScreen> {
     return Container(
       padding: const EdgeInsets.all(8),
       child: content,
-    );
-  }
-
-  Widget _buildLocation(List<CategoryModel>? location) {
-    Widget content = ListView.builder(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
-          child: AppCategory(
-            type: CategoryView.cardLarge,
-          ),
-        );
-      },
-      itemCount: List.generate(8, (index) => index).length,
-    );
-    if (location != null) {
-      content = ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        itemBuilder: (context, index) {
-          final item = location[index];
-          return selectedCityId != 0
-              ? Visibility(
-                  visible: item.title != selectedCityTitle,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppCategory(
-                      item: item,
-                      type: CategoryView.cardLarge,
-                      onPressed: () {
-                        _onLocation(item);
-                      },
-                    ),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: AppCategory(
-                    item: item,
-                    type: CategoryView.cardLarge,
-                    onPressed: () {
-                      _onLocation(item);
-                    },
-                  ),
-                );
-        },
-        itemCount: location.length,
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                Translate.of(context).translate(
-                  'popular_location',
-                ),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                Translate.of(context).translate(
-                  'let_find_interesting',
-                ),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          height: 180,
-          padding: const EdgeInsets.only(top: 4),
-          child: content,
-        ),
-      ],
     );
   }
 

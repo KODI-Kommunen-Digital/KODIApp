@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
-import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
@@ -48,34 +47,16 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
-    await context.read<ListCubit>().onLoad(
-        _selectedFilter?.currentLocation ?? widget.arguments['id'],
-        _selectedFilter,
-        isUpdate: isUpdate);
+    await context
+        .read<ListCubit>()
+        .onLoad(widget.arguments['id'], _selectedFilter, isUpdate: isUpdate);
   }
 
-  MultiFilter whatCanFilter(bool isEvent, int cityId) {
-    if (isCity) {
-      return MultiFilter(
-          hasCategoryFilter: true,
-          categories: AppBloc.homeCubit.category,
-          currentCategory: _selectedFilter?.currentCategory ?? 0);
-    }
-
-    if (isEvent) {
-      return MultiFilter(
-          hasProductEventFilter: true,
-          currentProductEventFilter: _selectedFilter?.currentProductEventFilter,
-          hasLocationFilter: true,
-          currentLocation: _selectedFilter?.currentLocation ?? cityId,
-          cities: AppBloc.discoveryCubit.location,
-          startAfterDate: _selectedFilter?.startAfterDate);
-    } else {
-      return MultiFilter(
-          hasLocationFilter: true,
-          currentLocation: _selectedFilter?.currentLocation ?? cityId,
-          cities: AppBloc.discoveryCubit.location);
-    }
+  MultiFilter whatCanFilter() {
+    return MultiFilter(
+        hasProductEventFilter: true,
+        currentProductEventFilter: _selectedFilter?.currentProductEventFilter,
+        startAfterDate: _selectedFilter?.startAfterDate);
   }
 
   void _updateSelectedFilter(MultiFilter? filter) async {
@@ -85,13 +66,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
         loadListingsList(true);
       }
     }
-    if (filter?.hasLocationFilter ?? false) {
-      await context.read<ListCubit>().setCity(filter!.currentLocation ?? 0);
-      loadListingsList(true);
-    }
     if (filter?.hasCategoryFilter ?? false) {
-      context.read<ListCubit>().setCategoryFilter(filter?.currentCategory ?? 0,
-          _selectedFilter?.currentLocation ?? widget.arguments['id']);
+      context.read<ListCubit>().setCategoryFilter(
+          filter?.currentCategory ?? 0, widget.arguments['id']);
     }
     setState(() {});
   }
@@ -125,12 +102,12 @@ class _ListProductScreenState extends State<ListProductScreen> {
                 } else if (snapshot.hasError) {
                   return Container();
                 } else {
-                  bool isEvent = snapshot.data!.first == 3;
-                  int cityId = snapshot.data!.last;
+                  //bool isEvent = snapshot.data!.first == 3;
+                  //int cityId = snapshot.data!.last;
                   return Row(
                     children: [
                       AppFilterButton(
-                          multiFilter: whatCanFilter(isEvent, cityId),
+                          multiFilter: whatCanFilter(),
                           filterCallBack: (filter) {
                             _updateSelectedFilter(filter);
                           }),
@@ -160,15 +137,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
               list: list,
               listCity: listCity,
               filter: _selectedFilter,
-              selectedId:
-                  _selectedFilter?.currentLocation ?? widget.arguments['id'],
+              selectedId: widget.arguments['id'],
             ),
             updated: (list, listCity) {
               return ListLoaded(
                   list: list,
                   listCity: listCity,
-                  selectedId:
-                      _selectedFilter?.currentLocation ?? widget.arguments['id'],
+                  selectedId: widget.arguments['id'],
                   filter: _selectedFilter,
                   updated: true);
             },
@@ -188,8 +163,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       context.read<ListCubit>().searchListing(searchResult.trim(), true);
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
-      context.read<ListCubit>().cancelSearch(
-          _selectedFilter?.currentLocation ?? widget.arguments['id']);
+      context.read<ListCubit>().cancelSearch(widget.arguments['id']);
     }
   }
 

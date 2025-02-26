@@ -106,12 +106,9 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
 
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasCategoryFilter: true,
-        hasLocationFilter: true,
-        currentLocation: cityId,
         currentCategory: categoryId);
 
     final result = await ListRepository.searchListing(

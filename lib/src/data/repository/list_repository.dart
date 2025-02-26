@@ -108,10 +108,6 @@ class ListRepository {
         (multiFilter.currentListingStatus ?? 0) != 0) {
       linkFilter = "$linkFilter&statusId=${multiFilter.currentListingStatus}";
     }
-    if (multiFilter.hasLocationFilter &&
-        (multiFilter.currentLocation ?? 0) != 0) {
-      linkFilter = "$linkFilter&cityId=${multiFilter.currentLocation}";
-    }
     if (multiFilter.hasCategoryFilter &&
         (multiFilter.currentCategory ?? 0) != 0) {
       linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
