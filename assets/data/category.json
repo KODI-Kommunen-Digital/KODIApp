@@ -69,7 +69,7 @@
             "id": 47,
             "name": "Über uns",
             "noOfSubcategories": 5,
-            "icon": "fas fa-address-card",
+            "icon": "fas fa-users",
             "color": "#58d68d",
             "categoryType" : "category"
         }
