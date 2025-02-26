@@ -644,6 +644,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         setState(() {
           isLoading = true;
         });
+        await context.read<AddListingCubit>().setCategoryId(selectedCategory);
         final result = await context.read<AddListingCubit>().onSubmit(
               cityId: 1,
               title: _textTitleController.text,
@@ -781,6 +782,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         _errorSDate = null;
       }
+    } else {
+      _errorSDate = null;
     }
 
     List<String?> errors = [
