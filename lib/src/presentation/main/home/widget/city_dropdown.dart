@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class CitiesDropDown extends StatefulWidget {
@@ -58,6 +59,11 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
             }).toList(),
             decoration: InputDecoration(
               contentPadding: contentPadding,
+              suffixIcon: IconButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, Routes.qrCodeScreen);
+                  },
+                  icon: const Icon(Icons.qr_code)),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),

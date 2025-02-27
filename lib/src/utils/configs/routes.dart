@@ -29,6 +29,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/shelf_detail_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/qr_code/qr_code_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
@@ -174,6 +175,7 @@ class Routes {
   static const String editStoreScreen = "/editStoreScreen";
   static const String containerProductDetailScreen =
       "/containerProductDetailScreen";
+  static const String qrCodeScreen = "/qrCodeScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -764,10 +766,9 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return ProductRequestDetailScreen(
-              request: arguments['request'],
-              shelves: arguments['shelves'],
-              isOwner: arguments['isOwner']
-            );
+                request: arguments['request'],
+                shelves: arguments['shelves'],
+                isOwner: arguments['isOwner']);
           },
         );
 
@@ -791,6 +792,13 @@ class Routes {
             return ContainerProductDetailScreen(
               product: arguments['product'],
             );
+          },
+        );
+
+      case qrCodeScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return QrCodeScreen();
           },
         );
 

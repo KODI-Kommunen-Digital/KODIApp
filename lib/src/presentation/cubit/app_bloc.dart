@@ -15,6 +15,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/owner/ow
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/cubit/owner_products_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/cubit/owner_shelves_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/qr_code/cubit/qr_code_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/cubit/create_product_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/cubit/seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/cubit/seller_request_cubit.dart';
@@ -71,6 +72,7 @@ class AppBloc {
   static final ownerSellerCubit = OwnerSellerCubit();
   static final editStoreCubit = EditStoreCubit();
   static final ownerCategoryCubit = OwnerCategoryCubit();
+  static final qrCodeCubit = QrCodeCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -177,6 +179,9 @@ class AppBloc {
     ),
     BlocProvider<OwnerCategoryCubit>(
       create: (context) => ownerCategoryCubit,
+    ),
+    BlocProvider<QrCodeCubit>(
+      create: (context) => qrCodeCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,
