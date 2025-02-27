@@ -639,5 +639,6 @@
   "credit_cash": "Aufladung Bar",
   "credit_card": "Aufladung Karte",
   "pin_error_length": "PIN muss sechstellig sein",
-  "pin_wrong": "Die eingegebene PIN ist inkorrekt"
+  "pin_wrong": "Die eingegebene PIN ist inkorrekt",
+  "login_required_qr_code": "Du musst eingeloggt sein, um deinen QR Code einzusehen."
 }

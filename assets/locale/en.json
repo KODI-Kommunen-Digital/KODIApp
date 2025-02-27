@@ -637,5 +637,6 @@
   "credit_cash": "Credit Cash",
   "credit_card": "Credit Card",
   "pin_error_length": "PIN must be six digits long",
-  "pin_wrong": "Card PIN is incorrect"
+  "pin_wrong": "Card PIN is incorrect",
+  "login_required_qr_code": "You need to be logged in to see your QR code."
 }

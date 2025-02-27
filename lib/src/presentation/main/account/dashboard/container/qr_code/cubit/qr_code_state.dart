@@ -6,9 +6,8 @@ part 'qr_code_state.freezed.dart';
 class QrCodeState with _$QrCodeState {
   const factory QrCodeState.loading() = QrCodeStateLoading;
 
-  const factory QrCodeState.loaded(
-          String? qrCodeData, String? validUntil, int? accountId) =
-      QrCodeStateLoadedProducts;
+  const factory QrCodeState.loaded(String qrCodeData, String validUntil,
+      int accountId) = QrCodeStateLoadedProducts;
 
-  const factory QrCodeState.error() = QrCodeStateError;
+  const factory QrCodeState.error(String msg) = QrCodeStateError;
 }
