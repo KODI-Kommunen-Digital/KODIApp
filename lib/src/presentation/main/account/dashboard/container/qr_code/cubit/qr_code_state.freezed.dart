@@ -20,7 +20,7 @@ mixin _$QrCodeState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            String qrCodeData, String validUntil, int accountId)
+            String qrCodeData, String validUntil, int accountId, String name)
         loaded,
     required TResult Function(String msg) error,
   }) =>
@@ -28,7 +28,8 @@ mixin _$QrCodeState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String qrCodeData, String validUntil, int accountId)?
+    TResult? Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult? Function(String msg)? error,
   }) =>
@@ -36,7 +37,8 @@ mixin _$QrCodeState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String qrCodeData, String validUntil, int accountId)?
+    TResult Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
@@ -124,7 +126,7 @@ class _$QrCodeStateLoadingImpl implements QrCodeStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            String qrCodeData, String validUntil, int accountId)
+            String qrCodeData, String validUntil, int accountId, String name)
         loaded,
     required TResult Function(String msg) error,
   }) {
@@ -135,7 +137,8 @@ class _$QrCodeStateLoadingImpl implements QrCodeStateLoading {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String qrCodeData, String validUntil, int accountId)?
+    TResult? Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
@@ -146,7 +149,8 @@ class _$QrCodeStateLoadingImpl implements QrCodeStateLoading {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String qrCodeData, String validUntil, int accountId)?
+    TResult Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
@@ -203,7 +207,7 @@ abstract class _$$QrCodeStateLoadedProductsImplCopyWith<$Res> {
           $Res Function(_$QrCodeStateLoadedProductsImpl) then) =
       __$$QrCodeStateLoadedProductsImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String qrCodeData, String validUntil, int accountId});
+  $Res call({String qrCodeData, String validUntil, int accountId, String name});
 }
 
 /// @nodoc
@@ -221,6 +225,7 @@ class __$$QrCodeStateLoadedProductsImplCopyWithImpl<$Res>
     Object? qrCodeData = null,
     Object? validUntil = null,
     Object? accountId = null,
+    Object? name = null,
   }) {
     return _then(_$QrCodeStateLoadedProductsImpl(
       null == qrCodeData
@@ -235,6 +240,10 @@ class __$$QrCodeStateLoadedProductsImplCopyWithImpl<$Res>
           ? _value.accountId
           : accountId // ignore: cast_nullable_to_non_nullable
               as int,
+      null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -243,7 +252,7 @@ class __$$QrCodeStateLoadedProductsImplCopyWithImpl<$Res>
 
 class _$QrCodeStateLoadedProductsImpl implements QrCodeStateLoadedProducts {
   const _$QrCodeStateLoadedProductsImpl(
-      this.qrCodeData, this.validUntil, this.accountId);
+      this.qrCodeData, this.validUntil, this.accountId, this.name);
 
   @override
   final String qrCodeData;
@@ -251,10 +260,12 @@ class _$QrCodeStateLoadedProductsImpl implements QrCodeStateLoadedProducts {
   final String validUntil;
   @override
   final int accountId;
+  @override
+  final String name;
 
   @override
   String toString() {
-    return 'QrCodeState.loaded(qrCodeData: $qrCodeData, validUntil: $validUntil, accountId: $accountId)';
+    return 'QrCodeState.loaded(qrCodeData: $qrCodeData, validUntil: $validUntil, accountId: $accountId, name: $name)';
   }
 
   @override
@@ -267,12 +278,13 @@ class _$QrCodeStateLoadedProductsImpl implements QrCodeStateLoadedProducts {
             (identical(other.validUntil, validUntil) ||
                 other.validUntil == validUntil) &&
             (identical(other.accountId, accountId) ||
-                other.accountId == accountId));
+                other.accountId == accountId) &&
+            (identical(other.name, name) || other.name == name));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, qrCodeData, validUntil, accountId);
+      Object.hash(runtimeType, qrCodeData, validUntil, accountId, name);
 
   @JsonKey(ignore: true)
   @override
@@ -286,35 +298,37 @@ class _$QrCodeStateLoadedProductsImpl implements QrCodeStateLoadedProducts {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            String qrCodeData, String validUntil, int accountId)
+            String qrCodeData, String validUntil, int accountId, String name)
         loaded,
     required TResult Function(String msg) error,
   }) {
-    return loaded(qrCodeData, validUntil, accountId);
+    return loaded(qrCodeData, validUntil, accountId, name);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String qrCodeData, String validUntil, int accountId)?
+    TResult? Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
-    return loaded?.call(qrCodeData, validUntil, accountId);
+    return loaded?.call(qrCodeData, validUntil, accountId, name);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String qrCodeData, String validUntil, int accountId)?
+    TResult Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(qrCodeData, validUntil, accountId);
+      return loaded(qrCodeData, validUntil, accountId, name);
     }
     return orElse();
   }
@@ -358,11 +372,13 @@ abstract class QrCodeStateLoadedProducts implements QrCodeState {
   const factory QrCodeStateLoadedProducts(
       final String qrCodeData,
       final String validUntil,
-      final int accountId) = _$QrCodeStateLoadedProductsImpl;
+      final int accountId,
+      final String name) = _$QrCodeStateLoadedProductsImpl;
 
   String get qrCodeData;
   String get validUntil;
   int get accountId;
+  String get name;
   @JsonKey(ignore: true)
   _$$QrCodeStateLoadedProductsImplCopyWith<_$QrCodeStateLoadedProductsImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -435,7 +451,7 @@ class _$QrCodeStateErrorImpl implements QrCodeStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function(
-            String qrCodeData, String validUntil, int accountId)
+            String qrCodeData, String validUntil, int accountId, String name)
         loaded,
     required TResult Function(String msg) error,
   }) {
@@ -446,7 +462,8 @@ class _$QrCodeStateErrorImpl implements QrCodeStateError {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
-    TResult? Function(String qrCodeData, String validUntil, int accountId)?
+    TResult? Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult? Function(String msg)? error,
   }) {
@@ -457,7 +474,8 @@ class _$QrCodeStateErrorImpl implements QrCodeStateError {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
-    TResult Function(String qrCodeData, String validUntil, int accountId)?
+    TResult Function(
+            String qrCodeData, String validUntil, int accountId, String name)?
         loaded,
     TResult Function(String msg)? error,
     required TResult orElse(),

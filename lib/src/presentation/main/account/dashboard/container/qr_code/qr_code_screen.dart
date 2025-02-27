@@ -26,11 +26,11 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     return BlocBuilder<QrCodeCubit, QrCodeState>(
         builder: (context, state) => state.maybeWhen(
             loading: () => const QrCodeLoading(),
-            loaded: (data, validUntil, accountId) => QrCodeLoaded(
-                  data: data,
-                  validUntil: validUntil,
-                  accountId: accountId,
-                ),
+            loaded: (data, validUntil, accountId, name) => QrCodeLoaded(
+                data: data,
+                validUntil: validUntil,
+                accountId: accountId,
+                name: name),
             error: (msg) {
               if (msg == 'login') {
                 return const QrCodeLogin();
@@ -45,12 +45,14 @@ class QrCodeLoaded extends StatefulWidget {
   final String data;
   final String validUntil;
   final int accountId;
+  final String name;
 
   const QrCodeLoaded(
       {super.key,
       required this.data,
       required this.validUntil,
-      required this.accountId});
+      required this.accountId,
+      required this.name});
 
   @override
   State<QrCodeLoaded> createState() => _QrCodeLoadedState();
@@ -92,12 +94,22 @@ class _QrCodeLoadedState extends State<QrCodeLoaded> {
                 height: 8,
               ),
               Text(
-                '${Translate.of(context).translate('valid_until')}: ${widget.validUntil}',
+                widget.name,
                 textAlign: TextAlign.center,
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium!
                     .copyWith(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                height: 2,
+              ),
+              Text(
+                '${Translate.of(context).translate('valid_until')}: ${widget.validUntil}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
               )
             ],
           ),

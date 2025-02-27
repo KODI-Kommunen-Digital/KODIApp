@@ -14,11 +14,11 @@ class QrCodeCubit extends Cubit<QrCodeState> {
     if (user != null) {
       final QRCode? qr = await ContainerRepository.getUserQrCode(user.id);
       if (qr != null) {
-        emit(QrCodeState.loaded(qr.data, qr.validUntil, qr.accountId));
+        emit(QrCodeState.loaded(qr.data, qr.validUntil, qr.accountId, '${user.firstname} ${user.lastname}'));
       } else {
         //Change back, using dummy data
         //emit(const QrCodeState.error("error"));
-        emit(const QrCodeState.loaded("123456789", "23.10.1999", 0));
+        emit(const QrCodeState.loaded("123456789", "23.10.1999", 0, "Peter Müller"));
       }
     } else {
       emit(const QrCodeState.error("login"));
