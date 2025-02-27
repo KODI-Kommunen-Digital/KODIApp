@@ -665,7 +665,8 @@ class Api {
   }
 
   static Future<ResultApiModel> getSellerSoldOrders(pageNo, period) async {
-    var list = '/seller/orderSold?pageNumber=$pageNo&pageSize=10&period=$period';
+    var list =
+        '/seller/orderSold?pageNumber=$pageNo&pageSize=10&period=$period';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -1048,6 +1049,13 @@ class Api {
         '/cities/$cityId/store/$storeId/product/$productId/imageDelete';
     final result = await HTTPManager(apiType: 'container')
         .delete(url: filePath, data: params, loading: true);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> getUserQrCode(userId) async {
+    var filePath = '/users/$userId/generateQR';
+    final result = await HTTPManager(apiType: 'container')
+        .get(url: filePath, loading: true);
     return ResultApiModel.fromJson(result);
   }
 

@@ -9,6 +9,7 @@ import 'package:heidi/src/data/model/model_container_product.dart';
 import 'package:heidi/src/data/model/model_container_transaction.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
+import 'package:heidi/src/data/model/model_qr_code.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
 import 'package:heidi/src/data/model/model_shelf.dart';
@@ -201,10 +202,9 @@ class ContainerRepository {
       'shopId': storeId
     };
 
-    if(productId != null) {
+    if (productId != null) {
       params['productId'] = productId;
     }
-
 
     final response = await Api.addShelf(cityId, storeId, params);
 
@@ -564,7 +564,7 @@ class ContainerRepository {
       "barcode": barcode
     };
 
-    if(subCategoryId != null) {
+    if (subCategoryId != null) {
       params["subCategoryId"] = subCategoryId;
     }
 
@@ -1136,5 +1136,19 @@ class ContainerRepository {
         break;
     }
     return datePeriod;
+  }
+
+  static Future<QRCode?> getUserQrCode(int userId) async {
+    final response = await Api.getUserQrCode(userId);
+
+    if (!response.success ||
+        response.data == null ||
+        (response.data['message'] != null &&
+            response.data['message'].contains("does not exist"))) {
+      logError('Error getting QR Code: ${response.data} ${response.message}');
+      return null;
+    } else {
+      return QRCode.fromJson(response.data);
+    }
   }
 }

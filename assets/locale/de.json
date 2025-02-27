@@ -640,5 +640,6 @@
   "credit_card": "Aufladung Karte",
   "pin_error_length": "PIN muss sechstellig sein",
   "pin_wrong": "Die eingegebene PIN ist inkorrekt",
-  "login_required_qr_code": "Du musst eingeloggt sein, um deinen QR Code einzusehen."
+  "login_required_qr_code": "Du musst eingeloggt sein, um deinen QR Code einzusehen.",
+  "valid_until": "Gültig bis"
 }

@@ -21,53 +21,6 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     context.read<QrCodeCubit>().onLoad();
   }
 
-  void login() async {
-    await Navigator.pushNamed(context, Routes.signIn);
-    context.read<QrCodeCubit>().onLoad();
-  }
-
-  void showLoginDialog() async {
-    await showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            Translate.of(context).translate('login_required'),
-          ),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(
-                  Translate.of(context).translate('login_required_qr_code'),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            AppButton(
-              Translate.of(context).translate('back'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-              type: ButtonType.text,
-            ),
-            AppButton(
-              Translate.of(context).translate('login'),
-              onPressed: () {
-                Navigator.of(context).pop();
-                login();
-              },
-              type: ButtonType.text,
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<QrCodeCubit, QrCodeState>(
@@ -80,7 +33,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 ),
             error: (msg) {
               if (msg == 'login') {
-                showLoginDialog();
+                return const QrCodeLogin();
               }
               return const QrCodeLoading();
             },
@@ -116,19 +69,99 @@ class _QrCodeLoadedState extends State<QrCodeLoaded> {
         centerTitle: true,
         title: const Text("QR Code"),
       ),
-      body: Center(
-        child: Container(
-          width: qrSize,
-          height: qrSize,
-          color: Colors.white,
-          child: QrImageView(
-            data: widget.data,
-            version: QrVersions.auto,
-            size: qrSize,
+      body: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                width: qrSize,
+                height: qrSize,
+                child: QrImageView(
+                  data: widget.data,
+                  version: QrVersions.auto,
+                  size: qrSize,
+                ),
+              ),
+              const SizedBox(
+                height: 8,
+              ),
+              Text(
+                '${Translate.of(context).translate('valid_until')}: ${widget.validUntil}',
+                textAlign: TextAlign.center,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              )
+            ],
           ),
-        ),
+        ],
       ),
     );
+  }
+}
+
+class QrCodeLogin extends StatelessWidget {
+  const QrCodeLogin({super.key});
+
+  void login(BuildContext context) async {
+    await Navigator.pushNamed(context, Routes.signIn);
+    context.read<QrCodeCubit>().onLoad();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text("QR Code"),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              Translate.of(context).translate('login_required'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleLarge!
+                  .copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              Translate.of(context).translate('login_required_qr_code'),
+              style: Theme.of(context).textTheme.bodyMedium,
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(
+              height: 16,
+            ),
+            AppButton(
+              Translate.of(context).translate('login'),
+              onPressed: () {
+                login(context);
+              },
+              type: ButtonType.normal,
+            ),
+            const SizedBox(
+              height: 2,
+            ),
+            AppButton(
+              Translate.of(context).translate('back'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.normal,
+            ),
+          ],
+        ));
   }
 }
 
