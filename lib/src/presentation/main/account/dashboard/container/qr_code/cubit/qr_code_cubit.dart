@@ -18,7 +18,7 @@ class QrCodeCubit extends Cubit<QrCodeState> {
       } else {
         //Change back, using dummy data
         //emit(const QrCodeState.error("error"));
-        emit(QrCodeState.loaded("123456789", "23.10.1999", 0));
+        emit(const QrCodeState.loaded("123456789", "23.10.1999", 0));
       }
     } else {
       emit(const QrCodeState.error("login"));
