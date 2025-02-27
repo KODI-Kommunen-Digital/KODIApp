@@ -233,6 +233,8 @@ class ProductModel {
       category = "EK-Gutschein";
     } else if (json['categoryId'] == 25) {
       category = "Umfrage";
+    } else if (json['categoryId'] == 47) {
+      category = "Über uns";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
@@ -268,13 +270,13 @@ class ProductModel {
 
     late String logo;
 
-    if(json['logo'] is List<dynamic> && json['logo'].isNotEmpty) {
+    if (json['logo'] is List<dynamic> && json['logo'].isNotEmpty) {
       logo = json['logo'][0]?.toString() ?? 'admin/News.jpeg';
     } else {
       logo = json['logo']?.toString() ?? 'admin/News.jpeg';
     }
 
-    if(logo.contains('admin/undefined')) {
+    if (logo.contains('admin/undefined')) {
       logo = 'admin/News.jpeg';
     }
 
