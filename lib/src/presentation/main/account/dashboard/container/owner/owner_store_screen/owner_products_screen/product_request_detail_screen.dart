@@ -280,22 +280,13 @@ class _ProductRequestDetailScreenState
                               value: shelf.id,
                               label: shelf.title ?? shelf.id.toString());
                         }).toList(),
-                        onOptionRemoved: (index, ValueItem option) {
-                          setState(() {
-                            shelves.add(selectedShelves.firstWhere(
-                                (shelf) => option.value == shelf.id));
-                            selectedShelves.removeWhere(
-                                (shelf) => shelf.id == option.value);
-                          });
-                        },
                         onOptionSelected:
                             (List<ValueItem> selectedOptions) async {
+                          selectedShelves = [];
                           for (var option in selectedOptions) {
                             setState(() {
                               selectedShelves.add(shelves.firstWhere(
                                   (shelf) => option.value == shelf.id));
-                              shelves.removeWhere(
-                                  (shelf) => shelf.id == option.value);
                             });
                           }
                         }),
