@@ -155,12 +155,15 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
           'request': item,
           'shelves': shelves,
           'isOwner': widget.isOwner
-        }).then((approvedOrDeleted) {
+        }).then((approvedOrDeleted) async {
       if (approvedOrDeleted != null) {
         if (approvedOrDeleted == true) {
           setState(() {
-            requests.remove(item);
+            requests = [];
           });
+          pageNo = 1;
+          requests = await getInitialRequests();
+          setState(() {});
         }
       }
     });
