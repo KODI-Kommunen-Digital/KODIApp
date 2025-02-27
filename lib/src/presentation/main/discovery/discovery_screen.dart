@@ -252,7 +252,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
-        service.imageLink == "7" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
         service.imageLink == "12" ||
@@ -342,7 +341,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         Routes.trackMatomoEvent(
             false, null, int.parse(service.imageLink), null);
       }
-    } else if (service.imageLink == "11") {
+    } else if (service.imageLink == "11" || service.imageLink == "7" ) {
       Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       await launchContestPage(context, service.imageLink);
     } else if (service.imageLink == "6") {
