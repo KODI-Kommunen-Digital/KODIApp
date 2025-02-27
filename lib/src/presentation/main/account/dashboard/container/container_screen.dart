@@ -68,6 +68,13 @@ class ContainerScreen extends StatelessWidget {
                           Navigator.pushNamed(context, Routes.ownerScreen);
                         },
                       ),
+                    GridItemButton(
+                      icon: Icons.qr_code,
+                      title: "QR Code",
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.qrCodeScreen);
+                      },
+                    ),
                   ],
                 ),
               );
