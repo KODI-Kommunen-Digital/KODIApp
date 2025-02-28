@@ -43,8 +43,8 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
 
 class QrCodeLoaded extends StatefulWidget {
   final String data;
-  final String validUntil;
-  final int accountId;
+  final String? validUntil;
+  final int? accountId;
   final String name;
 
   const QrCodeLoaded(
@@ -104,6 +104,7 @@ class _QrCodeLoadedState extends State<QrCodeLoaded> {
               const SizedBox(
                 height: 2,
               ),
+              if(widget.validUntil != null)
               Text(
                 '${Translate.of(context).translate('valid_until')}: ${widget.validUntil}',
                 textAlign: TextAlign.center,
