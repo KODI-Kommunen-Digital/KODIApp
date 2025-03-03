@@ -577,6 +577,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
+      String description = _textContentController.text.replaceAll('\n', '<br>');
       if (widget.item != null) {
         if (isImageChanged) {
           await context
@@ -598,7 +599,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               listingId: widget.item?.id,
               title: _textTitleController.text,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: description,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -650,7 +651,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               title: _textTitleController.text,
               city: cityName,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: description,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -1047,6 +1048,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 controller: _textContentController,
                 focusNode: _focusContent,
                 textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.multiline,
                 onChanged: (text) {
                   _errorContent = UtilValidator.validate(
                     _textContentController.text,
