@@ -48,9 +48,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   MultiFilter whatCanFilter(bool isEvent) {
     if (isEvent) {
+      print(selectedFilter?.currentProductEventFilter);
       return MultiFilter(
         hasProductEventFilter: true,
-        currentProductEventFilter: selectedFilter?.currentProductEventFilter,
+        currentProductEventFilter: selectedFilter?.currentProductEventFilter ?? context.read<ListCubit>().eventFilter,
       );
     } else {
       return MultiFilter();
