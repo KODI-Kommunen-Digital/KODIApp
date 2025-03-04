@@ -1052,8 +1052,9 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getUserQrCode(userId) async {
-    var filePath = '/users/$userId/generateQR';
+  static Future<ResultApiModel> getUserQrCode(userId, generateNew) async {
+    print(generateNew);
+    var filePath = '/users/$userId/generateQR?generateNew=$generateNew';
     final result = await HTTPManager(apiType: 'container')
         .get(url: filePath, loading: false);
     return ResultApiModel.fromJson(result);

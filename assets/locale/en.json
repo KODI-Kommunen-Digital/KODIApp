@@ -639,5 +639,7 @@
   "pin_error_length": "PIN must be six digits long",
   "pin_wrong": "Card PIN is incorrect",
   "login_required_qr_code": "You need to be logged in to see your QR code.",
-  "valid_until": "Valid until"
+  "valid_until": "Valid until",
+  "generate_new_qr": "Generate new QR-Code",
+  "are_you_sure_new_qr": "Are you sure you want to create a new QR-Code? This will override your current QR-Code!"
 }

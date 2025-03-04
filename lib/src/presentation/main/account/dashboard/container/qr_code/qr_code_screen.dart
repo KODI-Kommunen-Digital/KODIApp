@@ -18,7 +18,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<QrCodeCubit>().onLoad();
+    context.read<QrCodeCubit>().onLoad(false);
   }
 
   @override
@@ -60,6 +60,48 @@ class QrCodeLoaded extends StatefulWidget {
 
 class _QrCodeLoadedState extends State<QrCodeLoaded> {
   late double qrSize;
+
+  void showNewQRDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('generate_new_qr'),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  Translate.of(context)
+                      .translate('are_you_sure_new_qr'),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            AppButton(
+              Translate.of(context).translate('yes'),
+              onPressed: () {
+                context.read<QrCodeCubit>().onLoad(true);
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+            AppButton(
+              Translate.of(context).translate('no'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +153,11 @@ class _QrCodeLoadedState extends State<QrCodeLoaded> {
                 style: Theme.of(context)
                     .textTheme
                     .bodyMedium
-              )
+              ),
+              const SizedBox(height: 16,),
+              AppButton(Translate.of(context).translate('generate_new_qr'), onPressed: () {
+                showNewQRDialog();
+              })
             ],
           ),
         ],
@@ -126,7 +172,7 @@ class QrCodeLogin extends StatelessWidget {
   void login(BuildContext context) async {
     await Navigator.pushNamed(context, Routes.signIn);
     // ignore: use_build_context_synchronously
-    context.read<QrCodeCubit>().onLoad();
+    context.read<QrCodeCubit>().onLoad(false);
   }
 
   @override

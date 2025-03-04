@@ -8,11 +8,11 @@ import 'package:heidi/src/presentation/main/account/dashboard/container/qr_code/
 class QrCodeCubit extends Cubit<QrCodeState> {
   QrCodeCubit() : super(const QrCodeState.loading());
 
-  Future<void> onLoad() async {
+  Future<void> onLoad(bool generateNew) async {
     emit(const QrCodeState.loading());
     UserModel? user = await AppBloc.userCubit.onLoadUser();
     if (user != null) {
-      final QRCode? qr = await ContainerRepository.getUserQrCode(user.id);
+      final QRCode? qr = await ContainerRepository.getUserQrCode(user.id, generateNew);
       if (qr != null) {
         emit(QrCodeState.loaded(qr.data, qr.validUntil, qr.accountId, '${user.firstname} ${user.lastname}'));
       } else {

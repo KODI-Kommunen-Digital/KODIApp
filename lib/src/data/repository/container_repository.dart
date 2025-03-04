@@ -1138,8 +1138,8 @@ class ContainerRepository {
     return datePeriod;
   }
 
-  static Future<QRCode?> getUserQrCode(int userId) async {
-    final response = await Api.getUserQrCode(userId);
+  static Future<QRCode?> getUserQrCode(int userId, bool generateNew) async {
+    final response = await Api.getUserQrCode(userId, generateNew);
 
     if (!response.success ||
         response.data == null ||
