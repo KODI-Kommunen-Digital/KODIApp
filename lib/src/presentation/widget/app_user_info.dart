@@ -11,18 +11,18 @@ class AppUserInfo extends StatelessWidget {
   final VoidCallback? onPressed;
   final UserViewType type;
   final bool showDirectionIcon;
+  final bool showEmail;
 
-  const AppUserInfo({
-    super.key,
-    this.user,
-    this.onPressed,
-    this.type = UserViewType.basic,
-    required this.showDirectionIcon,
-  });
+  const AppUserInfo(
+      {super.key,
+      this.user,
+      this.onPressed,
+      this.type = UserViewType.basic,
+      required this.showDirectionIcon,
+      this.showEmail = true});
 
   @override
   Widget build(BuildContext context) {
-
     switch (type) {
       case UserViewType.information:
         if (user == null) {
@@ -113,12 +113,13 @@ class AppUserInfo extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleSmall,
                     ),
                     // description,
-                    const SizedBox(height: 4),
-                    Text(
-                      user!.email,
-                      maxLines: 2,
-                      style: Theme.of(context).textTheme.bodySmall,
-                    ),
+                    if (showEmail) const SizedBox(height: 4),
+                    if (showEmail)
+                      Text(
+                        user!.email,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
                   ],
                 ),
               ),
@@ -188,10 +189,11 @@ class AppUserInfo extends StatelessWidget {
                         .titleMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
-                  Text(
-                    user!.email,
-                    style: Theme.of(context).textTheme.bodySmall,
-                  )
+                  if (showEmail)
+                    Text(
+                      user!.email,
+                      style: Theme.of(context).textTheme.bodySmall,
+                    )
                 ],
               )
             ],
