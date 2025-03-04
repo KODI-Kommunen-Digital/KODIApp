@@ -276,6 +276,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       if (!mounted) return;
       _featurePdf = widget.item?.pdf;
       statusId = widget.item?.statusId;
+      pollOptions = widget.item?.pollOptions ?? [];
       _textTitleController.text = widget.item!.title;
       _textContentController.text = clearedText(widget.item!.description);
       _textAddressController.text = widget.item!.address;
