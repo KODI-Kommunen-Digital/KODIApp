@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:image_picker/image_picker.dart';
@@ -343,5 +344,19 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<void> clearSavedPdfFile() async {
     _selectedPdfFile = null;
+  }
+
+  String? getCategoryTranslation(int id) {
+    Map<int, String> categories = ListCubit.getCategories();
+    return categories[id];
+  }
+
+  String? getSubCategoryTranslation(dynamic subcategory) {
+    final id = subcategory['id'];
+    if (categoryId == 1 || selectedCategory?.toLowerCase() == "news") {
+      Map<int, String> subCategories = ListCubit.getSubCategories();
+      return subCategories[id] ?? subcategory['name'];
+    }
+    return subcategory['name'];
   }
 }

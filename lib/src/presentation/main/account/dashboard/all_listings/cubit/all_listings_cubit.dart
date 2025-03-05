@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
@@ -23,8 +24,6 @@ class AllListingsCubit extends Cubit<AllListingsState> {
 
   Future<void> onLoad(bool isRefreshLoader) async {
     if (!isRefreshLoader) emit(const AllListingsState.loading());
-
-    List<ProductModel> listDataList = [];
     int status = await getCurrentStatus();
     final ResultApiModel listingsRequestResponse;
     int currentCityFilter = await getCurrentCityFilter();
@@ -45,18 +44,56 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       return ProductModel.fromJson(item);
     }).toList();
 
+    List<ProductModel> listDataList = await loadFullProducts(productData) ?? [];
+
+    posts = listDataList;
+
+    int currentListingFilter = await getCurrentStatus();
+    emit(AllListingsState.loaded(
+        posts, currentListingFilter, currentCityFilter));
+  }
+
+  Future<List<ProductModel>?> loadFullProducts(
+      List<ProductModel> productData) async {
+    List<ProductModel> listDataList = [];
+    List<CategoryModel?> location = [];
+    final cityRequestResponse = await Api.requestCities();
+    if (cityRequestResponse.data != null && cityRequestResponse.data is List) {
+      location = List.from(cityRequestResponse.data ?? []).map((item) {
+        return CategoryModel.fromJson(item);
+      }).toList();
+    }
+
     for (final listing in productData) {
       final product = await loadProduct(listing.cityId, listing.id);
       if (product != null) {
+        String? subcategoryName;
+        CategoryModel? city;
+
+        if (listing.categoryId != null &&
+            listing.subcategoryId != null &&
+            listing.subcategoryId != 0) {
+          subcategoryName = await getSubcategoryName(
+              listing.categoryId!, listing.subcategoryId!);
+        }
+
+        if (listing.cityId != null) {
+          city = location.firstWhere((item) => item?.id == listing.cityId);
+        } else {
+          city = location
+              .firstWhere((item) => item?.id == listing.allCities?.first);
+        }
         listDataList.add(
           ProductModel(
               id: listing.id,
               cityId: listing.cityId,
+              city: city,
               title: product.title,
               image: product.image,
               pdf: product.pdf,
               category: product.category,
               categoryId: product.categoryId,
+              subcategory: subcategoryName,
               subcategoryId: product.subcategoryId,
               startDate: product.startDate,
               endDate: product.endDate,
@@ -77,12 +114,20 @@ class AllListingsCubit extends Cubit<AllListingsState> {
         );
       }
     }
+    return listDataList;
+  }
 
-    posts = listDataList;
-
-    int currentListingFilter = await getCurrentStatus();
-    emit(AllListingsState.loaded(
-        posts, currentListingFilter, currentCityFilter));
+  static Future<String?> getSubcategoryName(
+      int categoryId, int subcategoryId) async {
+    final subcategories =
+        await Api.requestSubmitSubCategory(categoryId: categoryId);
+    if (subcategories.data != null) {
+      var jsonCategory = subcategories.data;
+      final item =
+          jsonCategory.firstWhere((item) => item['id'] == subcategoryId);
+      return item['name'];
+    }
+    return null;
   }
 
   Future<ProductModel?> loadProduct(cityId, id) async {
@@ -111,37 +156,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       posts.addAll(listUpdated);
     }
 
-    for (final product in posts) {
-      if (product != null) {
-        listDataList.add(
-          ProductModel(
-              id: product.id,
-              cityId: product.cityId,
-              title: product.title,
-              image: product.image,
-              pdf: product.pdf,
-              category: product.category,
-              categoryId: product.categoryId,
-              subcategoryId: product.subcategoryId,
-              startDate: product.startDate,
-              endDate: product.endDate,
-              createDate: product.createDate,
-              favorite: product.favorite,
-              address: product.address,
-              phone: product.phone,
-              email: product.email,
-              website: product.website,
-              description: product.description,
-              statusId: product.statusId,
-              userId: product.userId,
-              sourceId: product.sourceId,
-              imageLists: product.imageLists,
-              externalId: product.externalId,
-              expiryDate: product.expiryDate,
-              allCities: product.allCities),
-        );
-      }
-    }
+    listDataList = await loadFullProducts(posts.cast<ProductModel>());
 
     return listDataList;
   }
@@ -170,38 +185,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       return ProductModel.fromJson(item);
     }).toList();
 
-    for (final listing in newProductData) {
-      final product = await loadProduct(listing.cityId, listing.id);
-      if (product != null) {
-        listDataList.add(
-          ProductModel(
-              id: listing.id,
-              cityId: listing.cityId,
-              title: product.title,
-              image: product.image,
-              pdf: product.pdf,
-              category: product.category,
-              categoryId: product.categoryId,
-              subcategoryId: product.subcategoryId,
-              startDate: product.startDate,
-              endDate: product.endDate,
-              createDate: product.createDate,
-              favorite: product.favorite,
-              address: product.address,
-              phone: product.phone,
-              email: product.email,
-              website: product.website,
-              externalId: product.externalId,
-              description: product.description,
-              statusId: product.statusId,
-              userId: product.userId,
-              sourceId: product.sourceId,
-              imageLists: product.imageLists,
-              expiryDate: product.expiryDate,
-              allCities: product.allCities),
-        );
-      }
-    }
+    listDataList = await loadFullProducts(newProductData) ?? [];
     posts.addAll(listDataList);
     return posts;
   }

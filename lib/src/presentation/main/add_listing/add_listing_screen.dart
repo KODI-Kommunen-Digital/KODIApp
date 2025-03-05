@@ -407,7 +407,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               .read<AddListingCubit>()
               .loadSubCategory(Translate.of(context)
                   .translate(selectedCategory ??
-                      _getCategoryTranslation(
+                      context.read<AddListingCubit>().getCategoryTranslation(
                           loadCategoryResponse!.data.first['id']))
                   .toLowerCase());
           setState(() {
@@ -841,47 +841,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return true;
   }
 
-  String? _getCategoryTranslation(int id) {
-    Map<int, String> categories = {
-      1: "category_news",
-      3: "category_events",
-      4: "category_clubs",
-      5: "category_products",
-      6: "category_offer_search",
-      9: "category_lost_found",
-      10: "category_companies",
-      11: "category_public_transport",
-      13: "category_food",
-      17: "category_free",
-      29: "category_handel",
-      44: "category_job",
-      43: "category_gastro",
-      12: "category_offers",
-      45: "category_dienstleister",
-      46: "category_shopping",
-    };
-    return categories[id];
-  }
-
-  String? _getSubCategoryTranslation(dynamic subcategory) {
-    final id = subcategory['id'];
-    if (categoryId == 1 || selectedCategory?.toLowerCase() == "news") {
-      Map<int, String> subCategories = {
-        1: "subcategory_newsflash",
-        3: "subcategory_politics",
-        4: "subcategory_economy",
-        5: "subcategory_sports",
-        7: "subcategory_local",
-        8: "subcategory_club_news",
-        9: "subcategory_road",
-        10: "subcategory_official_notification",
-        11: "subcategory_timeless_news"
-      };
-      return subCategories[id] ?? subcategory['name'];
-    }
-    return subcategory['name'];
-  }
-
   Widget _buildContent() {
     if (_processing) {
       return const Center(
@@ -1056,8 +1015,10 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               return DropdownMenuItem(
                                   value: category['name'],
                                   child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
+                                      context
+                                          .read<AddListingCubit>()
+                                          .getCategoryTranslation(
+                                              category['id']))));
                             }).toList(),
                             onChanged: (value) async {
                               setState(
@@ -1137,8 +1098,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                                     return DropdownMenuItem(
                                         value: subcategory['name'],
                                         child: Text(Translate.of(context)
-                                            .translate(
-                                                _getSubCategoryTranslation(
+                                            .translate(context
+                                                .read<AddListingCubit>()
+                                                .getSubCategoryTranslation(
                                                     subcategory))));
                                   }).toList(),
                                   onChanged: (value) {

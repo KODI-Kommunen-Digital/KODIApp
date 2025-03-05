@@ -16,6 +16,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -104,6 +105,11 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   String selectedListingStatusValue = "inactive";
   late int currentListingFilter;
   late int currentCityFilter;
+
+  String? getSubCategory(int id) {
+    Map<int, String> subcategories = ListCubit.getSubCategories();
+    return subcategories[id];
+  }
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -339,19 +345,24 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 ),
                                                 const SizedBox(height: 4),
                                                 Text(
-                                                  item.categoryId == 3
-                                                      ? (item.endDate != ""
-                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                          : item.startDate)
-                                                      : item.createDate,
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .bodySmall!
-                                                      .copyWith(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
+                                                    '${item.city?.title}: ${item.category}${(item.subcategory != null) ? ' - ${Translate.of(context).translate(item.subcategory)}' : ''}',
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!),
+                                                const SizedBox(height: 4),
+                                                Text(
+                                                    item.categoryId == 3
+                                                        ? (item.endDate != ""
+                                                            ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
+                                                            : item.startDate)
+                                                        : item.createDate,
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .bodySmall!
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold)),
                                                 if (item.sourceId == 3)
                                                   Text(
                                                     "${Translate.of(context).translate('quelle')} ${item.externalId}",
