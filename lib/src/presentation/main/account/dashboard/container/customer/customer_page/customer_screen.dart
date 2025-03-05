@@ -63,9 +63,9 @@ class _CustomerLoadedState extends State<CustomerLoaded> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushNamed(context, Routes.customerCardScreen);
+                Navigator.pushNamed(context, Routes.addCustomerCardScreen);
               },
-              icon: const Icon(Icons.credit_card))
+              icon: const Icon(Icons.add_card_outlined))
         ],
       ),
       body: OrderListScreen(
