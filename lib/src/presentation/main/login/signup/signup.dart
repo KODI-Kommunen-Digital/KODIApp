@@ -29,6 +29,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _focusCPass = FocusNode();
   final _focusEmail = FocusNode();
 
+  String firstname = '';
+  String lastname = '';
+  String email = '';
+  String username = '';
+  String password = '';
+  String cpassword = '';
+
   bool _showPassword = false;
   bool _showCPassword = false;
   String? _errorID;
@@ -62,21 +69,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
   void _signUp() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _textIDController.text = _textIDController.text.replaceAll(" ", "");
-      _textFNController.text = _textFNController.text.replaceAll(" ", "");
-      _textLNController.text = _textLNController.text.replaceAll(" ", "");
-      _textPassController.text = _textPassController.text.replaceAll(" ", "");
-      _textCPassController.text = _textCPassController.text.replaceAll(" ", "");
+      username = username.replaceAll(" ", "");
+      firstname = firstname.replaceAll(" ", "");
+      lastname = lastname.replaceAll(" ", "");
+      password = password.replaceAll(" ", "");
+      cpassword = cpassword.replaceAll(" ", "");
 
-      _errorID = AppBloc.signupCubit.validateUsername(_textIDController.text);
-      _errorFN = UtilValidator.validate(_textFNController.text);
-      _errorLN = UtilValidator.validate(_textLNController.text);
+      _errorID = AppBloc.signupCubit.validateUsername(username);
+      _errorFN = UtilValidator.validate(firstname);
+      _errorLN = UtilValidator.validate(lastname);
       _errorPass =
-          AppBloc.signupCubit.validatePassword(_textPassController.text);
-      _errorCPass = UtilValidator.validate(_textCPassController.text,
-          password: _textPassController.text, type: ValidateType.cpassword);
+          AppBloc.signupCubit.validatePassword(password);
+      _errorCPass = UtilValidator.validate(cpassword,
+          password: password, type: ValidateType.cpassword);
       _errorEmail = UtilValidator.validate(
-        _textEmailController.text,
+        email,
         type: ValidateType.email,
       );
       if (_errorPass != null) {
@@ -91,19 +98,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _errorEmail == null &&
         _errorCPass == null) {
       final result = await AppBloc.signupCubit.onRegister(
-        username: _textIDController.text.toLowerCase(),
-        firstname: _textFNController.text,
-        lastname: _textLNController.text,
-        password: _textPassController.text,
-        confirmPassword: _textCPassController.text,
-        email: _textEmailController.text,
+        username: username.toLowerCase(),
+        firstname: firstname,
+        lastname: lastname,
+        password: password,
+        confirmPassword: cpassword,
+        email: email,
         role: "3",
       );
       if (result.success) {
         if (!mounted) return;
         AppBloc.loginCubit.onLogin(
-          username: _textIDController.text,
-          password: _textPassController.text,
+          username: username,
+          password: password,
         );
         Navigator.pop(context);
       } else {
@@ -161,7 +168,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   focusNode: _focusID,
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
-                    setState(() {});
+                    username = _textIDController.text.replaceAll('•', ' ');
+                    final int oldCursorPosition =
+                        _textIDController.selection.baseOffset;
+                    setState(() {
+                      _textIDController.value = TextEditingValue(
+                          text: _textIDController.text.replaceAll(' ', '•'),
+                          selection: TextSelection.collapsed(
+                            offset:
+                                oldCursorPosition, // Maintain cursor position
+                          ));
+                      _errorID = UtilValidator.validate(
+                        username,
+                      );
+                    });
                   },
                   onSubmitted: (text) {
                     Utils.fieldFocusChange(context, _focusID, _focusFN);
@@ -191,8 +211,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   focusNode: _focusFN,
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
+                    firstname = _textFNController.text.replaceAll('•', ' ');
+                    final int oldCursorPosition =
+                        _textFNController.selection.baseOffset;
                     setState(() {
-                      _errorFN = UtilValidator.validate(_textFNController.text);
+                      _textFNController.value = TextEditingValue(
+                          text: _textFNController.text.replaceAll(' ', '•'),
+                          selection: TextSelection.collapsed(
+                            offset:
+                                oldCursorPosition, // Maintain cursor position
+                          ));
+                      _errorFN = UtilValidator.validate(
+                        firstname,
+                      );
                     });
                   },
                   onSubmitted: (text) {
@@ -215,8 +246,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   focusNode: _focusLN,
                   textInputAction: TextInputAction.next,
                   onChanged: (text) {
+                    lastname = _textLNController.text.replaceAll('•', ' ');
+                    final int oldCursorPosition =
+                        _textLNController.selection.baseOffset;
                     setState(() {
-                      _errorLN = UtilValidator.validate(_textLNController.text);
+                      _textLNController.value = TextEditingValue(
+                          text: _textLNController.text.replaceAll(' ', '•'),
+                          selection: TextSelection.collapsed(
+                            offset:
+                                oldCursorPosition, // Maintain cursor position
+                          ));
+                      _errorLN = UtilValidator.validate(
+                        lastname,
+                      );
                     });
                   },
                   onSubmitted: (text) {
@@ -239,9 +281,20 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   errorText: _errorPass,
                   onChanged: (text) {
                     setState(() {
-                      _errorPass = UtilValidator.validate(
-                        _textPassController.text,
-                      );
+                      password = _textPassController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textPassController.selection.baseOffset;
+                      setState(() {
+                        _textPassController.value = TextEditingValue(
+                            text: _textPassController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
+                        _errorPass = UtilValidator.validate(
+                          password,
+                        );
+                      });
                     });
                   },
                   onSubmitted: (text) {
@@ -290,9 +343,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   errorText: _errorCPass,
                   onChanged: (text) {
                     setState(() {
-                      _errorCPass = UtilValidator.validate(
-                        _textCPassController.text,
-                      );
+                      cpassword =
+                          _textCPassController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textCPassController.selection.baseOffset;
+                      setState(() {
+                        _textCPassController.value = TextEditingValue(
+                            text:
+                                _textCPassController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
+                        _errorCPass = UtilValidator.validate(
+                          cpassword,
+                        );
+                      });
                     });
                   },
                   onSubmitted: (text) {
@@ -335,10 +401,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   },
                   onChanged: (text) {
                     setState(() {
-                      _errorEmail = UtilValidator.validate(
-                        _textEmailController.text,
-                        type: ValidateType.email,
-                      );
+                      email = _textEmailController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textEmailController.selection.baseOffset;
+                      setState(() {
+                        _textEmailController.value = TextEditingValue(
+                            text:
+                                _textEmailController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
+                        _errorEmail = UtilValidator.validate(
+                          email,
+                          type: ValidateType.email,
+                        );
+                      });
                     });
                   },
                   controller: _textEmailController,

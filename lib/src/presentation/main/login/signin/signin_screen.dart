@@ -13,6 +13,7 @@ import 'package:heidi/src/utils/validate.dart';
 
 class SignInScreen extends StatefulWidget {
   static const loginSuccessResult = "login_success";
+
   const SignInScreen({super.key});
 
   @override
@@ -91,6 +92,10 @@ class _SignInLoadedState extends State<SignInLoaded> {
   final _textPassController = TextEditingController();
   final _focusID = FocusNode();
   final _focusPass = FocusNode();
+
+  String username = '';
+  String password = '';
+
   bool _showPassword = false;
   String? _errorID;
   String? _errorPass;
@@ -125,9 +130,20 @@ class _SignInLoadedState extends State<SignInLoaded> {
                     textInputAction: TextInputAction.next,
                     onChanged: (text) {
                       setState(() {
-                        _errorID = UtilValidator.validate(
-                          _textIDController.text,
-                        );
+                        username = _textIDController.text.replaceAll('•', ' ');
+                        final int oldCursorPosition =
+                            _textIDController.selection.baseOffset;
+                        setState(() {
+                          _textIDController.value = TextEditingValue(
+                              text: _textIDController.text.replaceAll(' ', '•'),
+                              selection: TextSelection.collapsed(
+                                offset:
+                                    oldCursorPosition, // Maintain cursor position
+                              ));
+                          _errorID = UtilValidator.validate(
+                            username,
+                          );
+                        });
                       });
                     },
                     onSubmitted: (text) {
@@ -141,9 +157,18 @@ class _SignInLoadedState extends State<SignInLoaded> {
                     textInputAction: TextInputAction.done,
                     autofillHint: const [AutofillHints.password],
                     onChanged: (text) {
+                      password = _textPassController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textPassController.selection.baseOffset;
                       setState(() {
+                        _textPassController.value = TextEditingValue(
+                            text: _textPassController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
                         _errorPass = UtilValidator.validate(
-                          _textPassController.text,
+                          password,
                         );
                       });
                     },
@@ -327,13 +352,13 @@ class _SignInLoadedState extends State<SignInLoaded> {
   void _login() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorID = UtilValidator.validate(_textIDController.text);
-      _errorPass = UtilValidator.validate(_textPassController.text);
+      _errorID = UtilValidator.validate(username);
+      _errorPass = UtilValidator.validate(password);
     });
     if (_errorID == null && _errorPass == null) {
       AppBloc.loginCubit.onLogin(
-        username: _textIDController.text.trim(),
-        password: _textPassController.text.trim(),
+        username: username.trim(),
+        password: password.trim(),
       );
     }
   }
