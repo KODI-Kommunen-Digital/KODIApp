@@ -20,6 +20,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _focusPass = FocusNode();
   final _focusNewPass = FocusNode();
 
+  String newPass = '';
+  String cpass = '';
+
   bool _showPassword = false;
   bool _showCPassword = false;
   bool _isPasswordFocused = false;
@@ -44,25 +47,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     Utils.hiddenKeyboard(context);
     setState(() {
       _errorPass =
-          AppBloc.signupCubit.validatePassword(_textPassController.text);
-      _errorNewPass = UtilValidator.validate(_textNewPassController.text,
-          password: _textPassController.text, type: ValidateType.cpassword);
+          AppBloc.signupCubit.validatePassword(newPass);
+      _errorNewPass = UtilValidator.validate(cpass,
+          password: newPass, type: ValidateType.cpassword);
     });
     if (_errorPass != null) {
       _errorPass = Translate.of(context).translate(_errorPass);
     }
     if (_errorPass == null && _errorNewPass == null) {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
-        _textPassController.text,
-        _textNewPassController.text,
+        newPass,
+        cpass,
       );
       if (!mounted) return;
       if (result) {
         Navigator.pop(context);
-      }
-      else{
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('New password should not be same as the old password')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content:
+                Text('New password should not be same as the old password')));
       }
     }
   }
@@ -102,9 +105,18 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   keyboardType: TextInputType.emailAddress,
                   errorText: _errorPass,
                   onChanged: (text) {
+                    newPass = _textPassController.text.replaceAll('•', ' ');
+                    final int oldCursorPosition =
+                        _textPassController.selection.baseOffset;
                     setState(() {
+                      _textPassController.value = TextEditingValue(
+                          text: _textPassController.text.replaceAll(' ', '•'),
+                          selection: TextSelection.collapsed(
+                            offset:
+                                oldCursorPosition, // Maintain cursor position
+                          ));
                       _errorPass = UtilValidator.validate(
-                        _textPassController.text,
+                        newPass,
                       );
                     });
                   },
@@ -155,9 +167,19 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   errorText: _errorNewPass,
                   focusNode: _focusNewPass,
                   onChanged: (text) {
+                    cpass = _textNewPassController.text.replaceAll('•', ' ');
+                    final int oldCursorPosition =
+                        _textNewPassController.selection.baseOffset;
                     setState(() {
+                      _textNewPassController.value = TextEditingValue(
+                          text:
+                              _textNewPassController.text.replaceAll(' ', '•'),
+                          selection: TextSelection.collapsed(
+                            offset:
+                                oldCursorPosition, // Maintain cursor position
+                          ));
                       _errorNewPass = UtilValidator.validate(
-                        _textNewPassController.text,
+                        cpass,
                       );
                     });
                   },

@@ -31,6 +31,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final _focusInfo = FocusNode();
   final picker = ImagePicker();
 
+  String username = '';
+  String firstname = '';
+  String lastname = '';
+  String email = '';
+
   String? _image;
   String? _errorUName;
   String? _errorFName;
@@ -43,10 +48,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void initState() {
     super.initState();
     final user = AppBloc.editProfileCubit.getUserDetails();
-    _textUNameController.text = user.username;
-    _textFNameController.text = user.firstname;
-    _textLNameController.text = user.lastname;
-    _textEmailController.text = user.email;
+    _textUNameController.text = user.username.replaceAll(' ', '•');
+    _textFNameController.text = user.firstname.replaceAll(' ', '•');
+    _textLNameController.text = user.lastname.replaceAll(' ', '•');
+    _textEmailController.text = user.email.replaceAll(' ', '•');
+    firstname = user.firstname;
+    lastname = user.lastname;
+    email = user.email;
+    username = user.username;
     _textWebsiteController.text = user.url;
     _textInfoController.text = user.description;
     _image = user.image;
@@ -60,11 +69,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _updateProfile() async {
     Utils.hiddenKeyboard(context);
     setState(() {
-      _errorUName = UtilValidator.validate(_textUNameController.text);
-      _errorFName = UtilValidator.validate(_textFNameController.text);
-      _errorLName = UtilValidator.validate(_textLNameController.text);
+      _errorUName = UtilValidator.validate(username);
+      _errorFName = UtilValidator.validate(firstname);
+      _errorLName = UtilValidator.validate(lastname);
       _errorEmail = UtilValidator.validate(
-        _textEmailController.text,
+        email,
         type: ValidateType.email,
       );
       _errorWebsite = UtilValidator.validate(_textWebsiteController.text);
@@ -81,10 +90,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         _errorWebsite == null &&
         _errorInfo == null) {
       final result = await AppBloc.editProfileCubit.onUpdateUser(
-        username: _textUNameController.text,
-        firstname: _textFNameController.text,
-        lastname: _textLNameController.text,
-        email: _textEmailController.text,
+        username: username,
+        firstname: firstname,
+        lastname: lastname,
+        email: email,
         url: _textWebsiteController.text,
         description: _textInfoController.text,
       );
@@ -153,6 +162,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     hasDelete: false,
                     readOnly: true,
                     controller: _textUNameController,
+                    onChanged: (text) {
+                      username = _textUNameController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textUNameController.selection.baseOffset;
+                      setState(() {
+                        _textUNameController.value = TextEditingValue(
+                            text:
+                                _textUNameController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
+                      });
+                    },
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -176,9 +199,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                     },
                     onChanged: (text) {
+                      firstname =
+                          _textFNameController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textFNameController.selection.baseOffset;
                       setState(() {
+                        _textFNameController.value = TextEditingValue(
+                            text:
+                                _textFNameController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
                         _errorFName = UtilValidator.validate(
-                          _textFNameController.text,
+                          firstname,
                         );
                       });
                     },
@@ -206,9 +240,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                     },
                     onChanged: (text) {
+                      lastname = _textLNameController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textLNameController.selection.baseOffset;
                       setState(() {
+                        _textLNameController.value = TextEditingValue(
+                            text:
+                                _textLNameController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
                         _errorLName = UtilValidator.validate(
-                          _textLNameController.text,
+                          lastname,
                         );
                       });
                     },
@@ -236,9 +280,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       );
                     },
                     onChanged: (text) {
+                      email = _textEmailController.text.replaceAll('•', ' ');
+                      final int oldCursorPosition =
+                          _textEmailController.selection.baseOffset;
                       setState(() {
+                        _textEmailController.value = TextEditingValue(
+                            text:
+                                _textEmailController.text.replaceAll(' ', '•'),
+                            selection: TextSelection.collapsed(
+                              offset:
+                                  oldCursorPosition, // Maintain cursor position
+                            ));
                         _errorEmail = UtilValidator.validate(
-                          _textEmailController.text,
+                          email,
                           type: ValidateType.email,
                         );
                       });
