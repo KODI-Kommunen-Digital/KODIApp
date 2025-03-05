@@ -109,19 +109,6 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 }
                 return NavigationActionPolicy.ALLOW;
               },
-              // 🔹 Handle general web loading errors (e.g., no internet)
-              onReceivedError: (controller, request, error) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("Error: ${error.description}")),
-                );
-              },
-
-              // 🔹 Handle HTTP errors (e.g., 404, 500)
-              onReceivedHttpError: (controller, request, response) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text("HTTP Error: ${response.statusCode}")),
-                );
-              },
             ),
           ),
 
