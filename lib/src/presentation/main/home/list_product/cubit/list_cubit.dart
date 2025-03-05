@@ -448,4 +448,39 @@ class ListCubit extends Cubit<ListState> {
     };
     return categories[categoryId];
   }
+
+  static Map<int, String> getSubCategories() {
+    return {
+      1: "subcategory_newsflash",
+      3: "subcategory_politics",
+      4: "subcategory_economy",
+      5: "subcategory_sports",
+      7: "subcategory_local",
+      8: "subcategory_club_news",
+      9: "subcategory_road",
+      10: "subcategory_official_notification",
+      11: "subcategory_timeless_news"
+    };
+  }
+
+  static Map<int, String> getCategories() {
+    return {
+      1: "category_news",
+      3: "category_events",
+      4: "category_clubs",
+      5: "category_products",
+      6: "category_offer_search",
+      9: "category_lost_found",
+      10: "category_companies",
+      11: "category_public_transport",
+      13: "category_food",
+      17: "category_free",
+      29: "category_handel",
+      44: "category_job",
+      43: "category_gastro",
+      12: "category_offers",
+      45: "category_dienstleister",
+      46: "category_shopping",
+    };
+  }
 }

@@ -52,6 +52,7 @@ class ProductModel {
   final String? price;
   final String? priceMin;
   final String? priceMax;
+  final String? subcategory;
   final CategoryModel? country;
   final CategoryModel? city;
   final CategoryModel? state;
@@ -90,6 +91,7 @@ class ProductModel {
       this.lastname,
       this.profileImage,
       this.dateEstablish,
+      this.subcategory,
       this.rate,
       this.numRate,
       this.rateText,
