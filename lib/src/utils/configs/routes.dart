@@ -658,7 +658,7 @@ class Routes {
       5: "Mobilität",
       6: "Online-Dienste",
       7: "Stadtwerke",
-      8: "Sehenswertes",
+      8: "Freizeitkarte",
     };
     return categories[id] ?? '';
   }

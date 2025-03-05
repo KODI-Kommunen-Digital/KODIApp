@@ -1,0 +1,156 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class CustomWebViewScreen extends StatefulWidget {
+  final String url;
+  final String? title;
+
+  const CustomWebViewScreen({super.key, required this.url, this.title});
+
+  @override
+  State<CustomWebViewScreen> createState() => _CustomWebViewScreenState();
+
+  static void showAsBottomSheet(
+      {required BuildContext context, required String url, String? title}) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return Wrap(
+          children: [
+            Container(
+              height: MediaQuery.of(context).size.height,
+              padding: const EdgeInsets.only(top: kToolbarHeight),
+              decoration: BoxDecoration(
+                color: Theme.of(context).scaffoldBackgroundColor,
+              ),
+              child: CustomWebViewScreen(url: url, title: title,),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
+  InAppWebViewController? webViewController;
+  bool isLoading = true;
+
+  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
+    Factory<VerticalDragGestureRecognizer>(
+      () => VerticalDragGestureRecognizer(),
+    ),
+  };
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final backgroundColor = theme.scaffoldBackgroundColor;
+    final loaderColor = theme.colorScheme.primary;
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: backgroundColor,
+        title: Text(
+          (widget.title ?? widget.url.toString()),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      body: Stack(
+        children: [
+          SizedBox(
+            child: InAppWebView(
+              initialUrlRequest:
+                  URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
+              gestureRecognizers: gestureRecognizers,
+              onWebViewCreated: (controller) {
+                webViewController = controller;
+              },
+              onLoadStart: (controller, url) {
+                setState(() {
+                  isLoading = true;
+                });
+              },
+              onLoadStop: (controller, url) async {
+                setState(() {
+                  isLoading = false;
+                });
+
+                // // Hide elements with the "flex" class - Commenting it since Daniel don't remember why it was added
+                // await controller.evaluateJavascript(
+                //   source:
+                //       "document.querySelector('.flex').style.display = 'none';",
+                // );
+              },
+              initialSettings: InAppWebViewSettings(
+                javaScriptEnabled: true,
+              ),
+              onReceivedServerTrustAuthRequest: (controller, challenge) async {
+                return ServerTrustAuthResponse(
+                    action: ServerTrustAuthResponseAction.PROCEED);
+              },
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                final url = navigationAction.request.url.toString();
+
+                if (url.startsWith("https://go.ridedott.com/vehicles/")) {
+                  _launchUrlExternally(url);
+                  return NavigationActionPolicy
+                      .CANCEL; // Prevent navigation inside WebView
+                }
+                return NavigationActionPolicy.ALLOW;
+              },
+              // 🔹 Handle general web loading errors (e.g., no internet)
+              onReceivedError: (controller, request, error) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Error: ${error.description}")),
+                );
+              },
+
+              // 🔹 Handle HTTP errors (e.g., 404, 500)
+              onReceivedHttpError: (controller, request, response) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("HTTP Error: ${response.statusCode}")),
+                );
+              },
+            ),
+          ),
+
+          // Loading indicator overlay
+          if (isLoading)
+            Positioned.fill(
+              child: Container(
+                color: backgroundColor
+                    .withAlpha((0.8 * 255).toInt()), // Matches theme
+                child: Center(
+                  child: CircularProgressIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(loaderColor),
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  void _launchUrlExternally(String url) async {
+    try {
+      final uri = Uri.parse(url);
+      await launchUrl(
+        uri,
+        mode: LaunchMode.externalApplication,
+      );
+      // ignore: empty_catches
+    } catch (e) {}
+  }
+}
