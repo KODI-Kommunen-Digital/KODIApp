@@ -188,7 +188,7 @@ class UserRepository {
     return false;
   }
 
-  static Future<bool> changePassword({
+  static Future<String?> changePassword({
     required String currentPassword,
     required String password,
   }) async {
@@ -201,9 +201,9 @@ class UserRepository {
     final response = await Api.requestChangeProfile(params, userId);
     logError('Change Password Response', response.message);
     if (response.success) {
-      return true;
+      return null;
     }
-    return false;
+    return response.message;
   }
 
   static Future<List<FavoriteModel>> loadFavorites(userId) async {

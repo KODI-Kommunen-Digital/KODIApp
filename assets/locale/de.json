@@ -47,6 +47,7 @@
   "category_not_found": "Kategorie nicht gefunden",
   "password": "Passwort",
   "New password should not be same as the old password": "Das neue Passwort sollte nicht wie das alte sein.",
+  "Password is required": "Password wird benötigt.",
   "Password cannot contain spaces": "Das Passwort darf keine Leerzeichen enthalten.",
   "cur_password": "Aktuelles Passwort",
   "fname": "Vornamen",
@@ -624,6 +625,7 @@
   "trolley_maker_sign_in_info": "Bitte melden Sie sich mit Ihren TroCARD-Daten an",
   "add_card": "Karte hinzufügen",
   "production_number": "Produktionsnummer",
-  "add_new_card": "Neue Karte hinzufügen"
+  "add_new_card": "Neue Karte hinzufügen",
+  "current_password_incorrect": "Das aktuelle Passwort ist falsch"
 }
 
