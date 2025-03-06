@@ -242,10 +242,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       String? serviceLink =
           await AppBloc.discoveryCubit.getServiceLink(imageLink);
       if (serviceLink != null && serviceLink.isNotEmpty) {
-        await launchUrl(
-          Uri.parse(serviceLink),
-          mode: LaunchMode.inAppWebView,
-        );
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context, url: serviceLink);
         // }
       }
     }
