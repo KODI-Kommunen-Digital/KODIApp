@@ -27,7 +27,10 @@ class CustomWebViewScreen extends StatefulWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
-              child: CustomWebViewScreen(url: url, title: title,),
+              child: CustomWebViewScreen(
+                url: url,
+                title: title,
+              ),
             ),
           ],
         );
@@ -54,6 +57,14 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(
+            Icons.close,
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         centerTitle: true,
         backgroundColor: backgroundColor,
         title: Text(
