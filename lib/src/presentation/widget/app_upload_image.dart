@@ -64,7 +64,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
   void initState() {
     image = widget.image;
     if (image != null) {
-      if (!image!.contains('Defaultimage')) {
+      if (!image!.contains('Defaultimage') &&
+          !image!.contains(Application.picturesURL)) {
         _file = File(image!);
       }
     }
@@ -84,13 +85,22 @@ class _AppUploadImageState extends State<AppUploadImage> {
     if (widget.image != null) {
       if (!widget.image!.contains('pdf')) {
         image = widget.image;
-        _file = File(image!);
+        if (!widget.image!.contains(Application.picturesURL)) {
+          _file = File(image!);
+        }
       }
     }
     if (_file != null && !_file!.path.contains(".pdf")) {
       decorationImage = DecorationImage(
         image: FileImage(
           _file!,
+        ),
+        fit: BoxFit.cover,
+      );
+    } else if (_file == null && image != null && !image!.contains(".pdf")) {
+      decorationImage = DecorationImage(
+        image: NetworkImage(
+          image!,
         ),
         fit: BoxFit.cover,
       );
