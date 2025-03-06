@@ -5,7 +5,7 @@ import 'package:heidi/src/presentation/main/account/change_password/cubit/change
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   ChangePasswordCubit() : super(const ChangePasswordState.loading());
 
-  Future<bool> onChangePassword(
+  Future<String?> onChangePassword(
       String currentPassword, String newPassword) async {
     return await UserRepository.changePassword(
         currentPassword: currentPassword, password: newPassword);

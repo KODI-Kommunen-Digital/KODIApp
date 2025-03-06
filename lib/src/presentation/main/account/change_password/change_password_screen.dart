@@ -17,14 +17,18 @@ class ChangePasswordScreen extends StatefulWidget {
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   final _textPassController = TextEditingController();
   final _textNewPassController = TextEditingController();
+  final _textOldPassController = TextEditingController();
   final _focusPass = FocusNode();
   final _focusNewPass = FocusNode();
+  final _focusOldPass = FocusNode();
 
+  bool _showOldPassword = false;
   bool _showPassword = false;
   bool _showCPassword = false;
   bool _isPasswordFocused = false;
   String? _errorPass;
   String? _errorNewPass;
+  String? _errorOldPass;
 
   @override
   void initState() {
@@ -35,8 +39,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   void dispose() {
     _textPassController.dispose();
     _textNewPassController.dispose();
+    _textOldPassController.dispose();
     _focusPass.dispose();
     _focusNewPass.dispose();
+    _focusOldPass.dispose();
     super.dispose();
   }
 
@@ -47,22 +53,36 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
           AppBloc.signupCubit.validatePassword(_textPassController.text);
       _errorNewPass = UtilValidator.validate(_textNewPassController.text,
           password: _textPassController.text, type: ValidateType.cpassword);
+      _errorOldPass =
+          AppBloc.signupCubit.validatePassword(_textOldPassController.text);
     });
     if (_errorPass != null) {
       _errorPass = Translate.of(context).translate(_errorPass);
     }
-    if (_errorPass == null && _errorNewPass == null) {
+    if (_errorOldPass != null) {
+      _errorOldPass = Translate.of(context).translate(_errorOldPass);
+    }
+    if (_errorPass == null && _errorNewPass == null && _errorOldPass == null) {
       final result = await AppBloc.changePasswordCubit.onChangePassword(
-        _textPassController.text,
+        _textOldPassController.text,
         _textNewPassController.text,
       );
       if (!mounted) return;
-      if (result) {
+      if (result == null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(Translate.of(context)
+                .translate('change_password_success'))));
         Navigator.pop(context);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content:
-                Text('New password should not be same as the old password')));
+        if (result == 'Incorrect current password given') {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(Translate.of(context)
+                  .translate('current_password_incorrect'))));
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(Translate.of(context).translate(
+                  'New password should not be same as the old password'))));
+        }
       }
     }
   }
@@ -87,6 +107,50 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(
+                  Translate.of(context).translate('cur_password'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 8),
+                AppTextInput(
+                  hintText: Translate.of(context).translate(
+                    'cur_password',
+                  ),
+                  keyboardType: TextInputType.emailAddress,
+                  errorText: _errorOldPass,
+                  onChanged: (text) {
+                    setState(() {
+                      _errorOldPass = UtilValidator.validate(
+                        _textOldPassController.text,
+                      );
+                    });
+                  },
+                  onSubmitted: (text) {
+                    Utils.fieldFocusChange(
+                      context,
+                      _focusOldPass,
+                      _focusPass,
+                    );
+                  },
+                  trailing: GestureDetector(
+                    dragStartBehavior: DragStartBehavior.down,
+                    onTap: () {
+                      setState(() {
+                        _showOldPassword = !_showOldPassword;
+                      });
+                    },
+                    child: Icon(_showOldPassword
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+                  ),
+                  obscureText: !_showOldPassword,
+                  controller: _textOldPassController,
+                  focusNode: _focusOldPass,
+                ),
+                const SizedBox(height: 16),
                 Text(
                   Translate.of(context).translate('newPass'),
                   style: Theme.of(context)
