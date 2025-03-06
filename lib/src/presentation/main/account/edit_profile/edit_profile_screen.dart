@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/common.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
@@ -124,7 +125,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           type: UploadImageType.circle,
                           profile: true,
                           forumGroup: false,
-                          image: _image,
+                          image: "${Application.picturesURL}$_image",
                           onChange: (result) {
                             setState(() {
                               if (result.isNotEmpty) {
