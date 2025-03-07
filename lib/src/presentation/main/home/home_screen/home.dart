@@ -858,6 +858,16 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
           } else {
             bool hasPermission = snapshot.data ?? false;
             return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
               body: SafeArea(
                 child: (!hasPermission)
                     ? Center(
