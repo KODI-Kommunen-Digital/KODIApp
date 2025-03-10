@@ -284,30 +284,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .translate('hselect_location'),
                             cityTitlesList: cityTitles,
                             setLocationCallback: (data) async {
-                              for (final list in location!) {
-                                if (list.title == data) {
-                                  _onUpdateCategory();
-                                  setState(() {
-                                    selectedCityTitle = data;
-                                    selectedCityId = list.id;
-                                  });
-                                  await AppBloc.discoveryCubit
-                                      .onLocationFilter(selectedCityId, false);
-                                } else if (data ==
-                                    Translate.of(context)
-                                        .translate('select_location')) {
-                                  setState(() {
-                                    selectedCityId = 0;
-                                    selectedCityTitle = Translate.of(context)
-                                        .translate('select_location');
-                                  });
-                                  await AppBloc.homeCubit
-                                      .saveCityId(selectedCityId);
-                                  await AppBloc.discoveryCubit
-                                      .onLocationFilter(selectedCityId, false);
+                              if (data ==
+                                  Translate.of(context)
+                                      .translate('select_location')) {
+                                setState(() {
+                                  selectedCityId = 0;
+                                  selectedCityTitle = Translate.of(context)
+                                      .translate('select_location');
+                                });
+                                await AppBloc.homeCubit
+                                    .saveCityId(selectedCityId);
+                                await AppBloc.discoveryCubit
+                                    .onLocationFilter(selectedCityId, false);
 
-                                  _onUpdateCategory();
-                                  break;
+                                _onUpdateCategory();
+                              } else {
+                                for (final list in location!) {
+                                  if (list.title == data) {
+                                    _onUpdateCategory();
+                                    setState(() {
+                                      selectedCityTitle = data;
+                                      selectedCityId = list.id;
+                                    });
+                                    await AppBloc.discoveryCubit
+                                        .onLocationFilter(
+                                            selectedCityId, false);
+                                  }
                                 }
                               }
                             },

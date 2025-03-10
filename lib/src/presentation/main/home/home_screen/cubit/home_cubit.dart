@@ -212,6 +212,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   Future<void> saveCityId(int cityId) async {
+    //Dont send to Matomo, because it is already sent in Discovery which is always being called
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
