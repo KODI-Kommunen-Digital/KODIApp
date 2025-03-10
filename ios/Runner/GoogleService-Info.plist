@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyD-fcsydeZJnA9ZvOyMKgGYbrWPO9QT1dk</string>
+	<string>AIzaSyAx4RI1suWzEoG76FS-mCDAsgo3e89Y3A8</string>
 	<key>GCM_SENDER_ID</key>
-	<string>1084962010221</string>
+	<string>348792158622</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.ratingen.test</string>
+	<string>de.rmgratingen.ratingenapp</string>
 	<key>PROJECT_ID</key>
-	<string>troisdorf-204e4</string>
+	<string>ratingen-21e20</string>
 	<key>STORAGE_BUCKET</key>
-	<string>troisdorf-204e4.appspot.com</string>
+	<string>ratingen-21e20.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:1084962010221:ios:bb2728dee9a95b0030bb64</string>
+	<string>1:348792158622:ios:d1a8060833793a6cd6be8f</string>
 </dict>
 </plist>

@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCDTb2XvOcFKwN5YwBpQ9061GLbWI174Wg',
-    appId: '1:1084962010221:android:05af2ef8e9505e5830bb64',
-    messagingSenderId: '1084962010221',
-    projectId: 'troisdorf-204e4',
-    storageBucket: 'troisdorf-204e4.appspot.com',
+    apiKey: 'AIzaSyBgSuwUmPzwLyh-pCRzDdeRspo73AlVwx4',
+    appId: '1:348792158622:android:ca8dfab68eef8dc3d6be8f',
+    messagingSenderId: '348792158622',
+    projectId: 'ratingen-21e20',
+    storageBucket: 'ratingen-21e20.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyD-fcsydeZJnA9ZvOyMKgGYbrWPO9QT1dk',
-    appId: '1:1084962010221:ios:bb2728dee9a95b0030bb64',
-    messagingSenderId: '1084962010221',
-    projectId: 'troisdorf-204e4',
-    storageBucket: 'troisdorf-204e4.appspot.com',
-    iosBundleId: 'com.ratingen.test',
+    apiKey: 'AIzaSyAx4RI1suWzEoG76FS-mCDAsgo3e89Y3A8',
+    appId: '1:348792158622:ios:d1a8060833793a6cd6be8f',
+    messagingSenderId: '348792158622',
+    projectId: 'ratingen-21e20',
+    storageBucket: 'ratingen-21e20.firebasestorage.app',
+    iosBundleId: 'de.rmgratingen.ratingenapp',
   );
 }

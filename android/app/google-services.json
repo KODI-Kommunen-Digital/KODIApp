@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "1084962010221",
-    "project_id": "troisdorf-204e4",
-    "storage_bucket": "troisdorf-204e4.appspot.com"
+    "project_number": "348792158622",
+    "project_id": "ratingen-21e20",
+    "storage_bucket": "ratingen-21e20.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1084962010221:android:05af2ef8e9505e5830bb64",
+        "mobilesdk_app_id": "1:348792158622:android:ca8dfab68eef8dc3d6be8f",
         "android_client_info": {
-          "package_name": "com.ratingen.test"
+          "package_name": "de.rmgratingen.ratingenapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCDTb2XvOcFKwN5YwBpQ9061GLbWI174Wg"
+          "current_key": "AIzaSyBgSuwUmPzwLyh-pCRzDdeRspo73AlVwx4"
         }
       ],
       "services": {
