@@ -15,6 +15,9 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:http_parser/http_parser.dart';
+import 'package:matomo_tracker/matomo_tracker.dart';
+
+enum MatomoType { city, ad }
 
 class ListRepository {
   final Preferences prefs;
@@ -772,5 +775,34 @@ class ListRepository {
       // ignore: empty_catches
     } catch (e) {}
     return id;
+  }
+
+  static void saveEventToMatomo(
+      {required MatomoType type, required String name}) {
+    late String category;
+    const action = "click";
+    switch (type) {
+      case MatomoType.city:
+        category = "city";
+        break;
+      case MatomoType.ad:
+        category = "ad";
+        if(name.length > 50) {
+          name = '${name.substring(0, 47)}...';
+        }
+        break;
+      default:
+        return;
+    }
+
+    String eventName = "${category}_$name";
+
+    MatomoTracker.instance.trackEvent(
+        eventInfo: EventInfo(
+      category: category,
+      name: eventName,
+      action: action,
+      value: 1,
+    ));
   }
 }

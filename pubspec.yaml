@@ -36,6 +36,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.12
   hive: ^2.2.3
   hive_flutter: ^1.1.0
+  matomo_tracker: ^5.1.0
 
   ### Firebase
   firebase_core: ^3.4.1

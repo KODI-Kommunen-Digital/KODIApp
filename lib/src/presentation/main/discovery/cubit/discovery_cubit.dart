@@ -1,10 +1,15 @@
 import 'package:bloc/bloc.dart';
+
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 import 'discovery_state.dart';
 
@@ -65,6 +70,22 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<void> saveCityId(int cityId) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
+    saveToMatomo(cityId);
+  }
+
+  Future<void> saveToMatomo(int cityId) async {
+    String? cityName;
+    if (cityId != 0) {
+      cityName =
+          location.firstWhereOrNull((element) => element.id == cityId)?.title;
+      if (cityName == null) {
+        logError('[MATOMO] Could not find name for cityId: $cityId');
+        return;
+      }
+    } else {
+      cityName = 'Alle-Orte';
+    }
+    ListRepository.saveEventToMatomo(type: MatomoType.city, name: cityName);
   }
 
   Future<String?> getCityLink() async {
