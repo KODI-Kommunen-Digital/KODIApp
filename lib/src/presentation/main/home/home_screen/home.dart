@@ -657,6 +657,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
+    context.read<HomeCubit>().sendToMatomo();
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(link));

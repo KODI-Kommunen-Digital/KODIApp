@@ -778,24 +778,24 @@ class ListRepository {
   }
 
   static void saveEventToMatomo(
-      {required MatomoType type, required String name}) {
+      {required MatomoType type, String? name}) {
     late String category;
+    late String eventName;
     const action = "click";
     switch (type) {
       case MatomoType.city:
         category = "city";
+        eventName = "${category}_$name";
         break;
       case MatomoType.ad:
         category = "ad";
-        if(name.length > 50) {
-          name = '${name.substring(0, 47)}...';
-        }
+        eventName = "ad_click";
         break;
       default:
         return;
     }
 
-    String eventName = "${category}_$name";
+
 
     MatomoTracker.instance.trackEvent(
         eventInfo: EventInfo(
