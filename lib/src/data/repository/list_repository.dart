@@ -209,7 +209,7 @@ class ListRepository {
 
   Future<List<ProductModel>> loadUserListings(id, pageNo) async {
     List<ProductModel> userList = [];
-    final listResponse = await Api.requestMyListings(1);
+    final listResponse = await Api.requestMyListings(pageNo);
     if (listResponse.success) {
       final responseData = listResponse.data;
       if (responseData != []) {
@@ -550,7 +550,7 @@ class ListRepository {
       "expiryDate": combinedExpiryDateTime,
       "timeless": timeless,
       "updatedAt": currentDate.toString(),
-      "zipcode": null,
+      "zipcode": (zipcode?.isEmpty == true) ? null : zipcode,
       "appointmentId": null,
       "logo": media,
       "otherlogos": [

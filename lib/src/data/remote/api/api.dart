@@ -71,7 +71,7 @@ class Api {
 
   static Future<ResultApiModel> requestMyListings(pageNo) async {
     final result = await HTTPManager(apiType: APIType.defaultAPI)
-        .get(url: 'users/myListings');
+        .get(url: 'users/myListings?pageNo=$pageNo&pageSize=10');
     return ResultApiModel.fromJson(result);
   }
 
