@@ -211,8 +211,8 @@ class HomeCubit extends Cubit<HomeState> {
     return categories;
   }
 
-  void sendToMatomo() {
-    ListRepository.saveEventToMatomo(type: MatomoType.ad);
+  void sendToMatomo(int id, String website) {
+    ListRepository.saveEventToMatomo(type: MatomoType.ad, name: website, adId: id);
   }
 
   Future<void> saveCityId(int cityId) async {

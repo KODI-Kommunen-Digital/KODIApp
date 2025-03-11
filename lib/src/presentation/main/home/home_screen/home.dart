@@ -653,11 +653,11 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _makeAction(String link) async {
+  void _makeAction(String link, int id) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    context.read<HomeCubit>().sendToMatomo();
+    context.read<HomeCubit>().sendToMatomo(id, link);
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(link));
@@ -717,7 +717,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onProductDetail(ProductModel item) {
     if (item.sourceId == 2 || item.showExternal == 1) {
-      _makeAction(item.website);
+      _makeAction(item.website, item.id);
     } else if (item.showExternal == 0) {
       Navigator.pushNamed(context, Routes.productDetail, arguments: item);
     } else {
@@ -872,7 +872,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (item is AdDataModel) {
             return GestureDetector(
               onTap: () {
-                _makeAction(item.link);
+                _makeAction(item.link, item.id);
               },
               child: Container(
                 width: double.infinity,
