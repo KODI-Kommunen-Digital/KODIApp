@@ -3,6 +3,7 @@ import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/main/discovery/defect_report/cubit/defect_report_state.dart';
+import 'package:http_parser/http_parser.dart';
 
 class DefectReportCubit extends Cubit<DefectReportState> {
   DefectReportCubit() : super(const DefectReportState());
@@ -11,17 +12,22 @@ class DefectReportCubit extends Cubit<DefectReportState> {
     required String title,
     required String description,
     required File image,
+    required String address,
   }) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
+      List<String> parts = image.path.split('.');
+      String imageExtension = parts.last;
       var formData = FormData.fromMap({
         'title': title,
         'description': description,
-        'language': 'de', // You might want to make this configurable
+        //'language': 'de', // You might want to make this configurable
         'image': await MultipartFile.fromFile(
           image.path,
-          filename: 'defect_image.jpg',
+          filename: image.path,
+          contentType: MediaType('image', imageExtension),
         ),
+        'address': address
       });
 
       final result = await Api.requestReportDefect(formData);

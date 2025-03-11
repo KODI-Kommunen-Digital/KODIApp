@@ -19,12 +19,14 @@ class DefectReportScreen extends StatefulWidget {
 class _DefectReportScreenState extends State<DefectReportScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _addressController = TextEditingController();
   File? _selectedImage;
 
   @override
   void dispose() {
     _titleController.dispose();
     _descriptionController.dispose();
+    _addressController.dispose();
     super.dispose();
   }
 
@@ -132,6 +134,32 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       controller: _descriptionController,
                       maxLines: 5,
                     ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context)
+                                .translate('input_address'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    AppTextInput(
+                      hintText:
+                          Translate.of(context).translate('input_address'),
+                      controller: _addressController,
+                      maxLines: 3,
+                    ),
                     const SizedBox(height: 24),
                     Text(
                       Translate.of(context).translate('email'),
@@ -166,6 +194,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   void _onSubmit(BuildContext context) {
     final title = _titleController.text.trim();
     final description = _descriptionController.text.trim();
+    final address = _addressController.text.trim();
 
     if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -180,12 +209,16 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
           content: Text('Bitte laden Sie ein Bild hoch.'),
         ),
       );
+    } else if (address.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('address_message')),
+      ));
     } else {
       context.read<DefectReportCubit>().submitReport(
-            title: title,
-            description: description,
-            image: _selectedImage!,
-          );
+          title: title,
+          description: description,
+          image: _selectedImage!,
+          address: address);
     }
   }
 }
