@@ -11,6 +11,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
     required String title,
     required String description,
     required File image,
+    required String address,
   }) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
@@ -22,6 +23,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
           image.path,
           filename: 'defect_image.jpg',
         ),
+        'address': address
       });
 
       final result = await Api.requestReportDefect(formData);
