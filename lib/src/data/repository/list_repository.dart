@@ -778,7 +778,7 @@ class ListRepository {
   }
 
   static void saveEventToMatomo(
-      {required MatomoType type, String? name}) {
+      {required MatomoType type, required String name, int? adId}) {
     late String category;
     late String eventName;
     const action = "click";
@@ -789,7 +789,11 @@ class ListRepository {
         break;
       case MatomoType.ad:
         category = "ad";
-        eventName = "ad_click";
+        /*
+        if (name.length > 50) {
+          name = '${name.substring(0, 47)}...';
+        }*/
+        eventName = "ad_$adId:$name";
         break;
       default:
         return;
