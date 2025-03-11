@@ -1,14 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_state.dart';
-import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
-import 'package:heidi/src/utils/translate.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginState.initial());
@@ -25,19 +20,8 @@ class LoginCubit extends Cubit<LoginState> {
       final userDetailResponse =
           await UserRepository.requestUserDetails(response.data['userId']);
       if (userDetailResponse != null) {
-        bool redirectContainerCard = false;
         await AppBloc.authenticateCubit.onSave(userDetailResponse);
-
-        final List? containerCards =
-            await ContainerRepository.getCustomerCards(userDetailResponse.id);
-
-        if ((containerCards ?? []).isEmpty) {
-          final prefs = await Preferences.openBox();
-          redirectContainerCard =
-              prefs.getKeyValue(Preferences.redirectContainerCard, true);
-        }
-
-        emit(LoginState.loaded(redirectContainerCard));
+        emit(const LoginState.loaded());
       } else {
         emit(const LoginState.initial());
         logError('Login Result Failed', userDetailResponse);
@@ -69,7 +53,7 @@ class LoginCubit extends Cubit<LoginState> {
     AppBloc.userCubit.onDeleteUser();
   }
 
-  static void showRedirectContainerCard(BuildContext context) async {
+  /*static void showRedirectContainerCard(BuildContext context) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -124,10 +108,5 @@ class LoginCubit extends Cubit<LoginState> {
         );
       },
     );
-  }
-
-  static Future<void> saveRemindContainerCard() async {
-    final prefs = await Preferences.openBox();
-    prefs.setKeyValue(Preferences.redirectContainerCard, false);
-  }
+  }*/
 }

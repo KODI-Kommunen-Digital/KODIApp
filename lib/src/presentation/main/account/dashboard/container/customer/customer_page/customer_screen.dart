@@ -4,7 +4,6 @@ import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/cubit/customer_state.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_list_screen.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class CustomerScreen extends StatefulWidget {
@@ -60,20 +59,13 @@ class _CustomerLoadedState extends State<CustomerLoaded> {
       appBar: AppBar(
         title: Text(Translate.of(context).translate('customer')),
         centerTitle: true,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Navigator.pushNamed(context, Routes.addCustomerCardScreen);
-              },
-              icon: const Icon(Icons.add_card_outlined))
-        ],
       ),
       body: OrderListScreen(
           orders: orders,
           loadMore: (page) async {
             final newOrders =
                 await context.read<CustomerCubit>().newOrders(page);
-            if(newOrders.isEmpty) {
+            if (newOrders.isEmpty) {
               finishedLoading = true;
             }
             setState(() {

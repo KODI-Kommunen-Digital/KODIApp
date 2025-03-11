@@ -911,7 +911,7 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> getCustomerTransactions(
+  /*static Future<ResultApiModel> getCustomerTransactions(
       userId, cardId, pageNo) async {
     var list =
         '/users/$userId/card/$cardId/transactions?pageNumber=$pageNo&pageSize=10';
@@ -923,7 +923,7 @@ class Api {
     var list = '/users/$userId/card/$cardId/transactions';
     final result = await HTTPManager(apiType: 'container').get(url: list);
     return ResultApiModel.fromJson(result);
-  }
+  }*/
 
   static Future<ResultApiModel> associateCardWithUser(userId, cardId) async {
     var list = '/users/$userId/card/$cardId/associate';

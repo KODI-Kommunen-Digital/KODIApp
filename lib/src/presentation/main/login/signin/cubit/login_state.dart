@@ -8,7 +8,7 @@ class LoginState with _$LoginState {
 
   const factory LoginState.loading() = LoginStateLoading;
 
-  const factory LoginState.loaded(bool requestContainerCard) = LoginStateLoaded;
+  const factory LoginState.loaded() = LoginStateLoaded;
 
   const factory LoginState.error(String error) = LoginStateError;
 }

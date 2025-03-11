@@ -1,7 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
@@ -107,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: _textPassController.text,
         );
         Navigator.pop(context);
-        LoginCubit.showRedirectContainerCard(context);
+        //LoginCubit.showRedirectContainerCard(context);
       } else {
         if (result.message.contains('is already registered')) {
           if (!mounted) return;

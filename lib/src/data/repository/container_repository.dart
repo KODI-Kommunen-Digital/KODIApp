@@ -4,9 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_category.dart';
-import 'package:heidi/src/data/model/model_container_card.dart';
 import 'package:heidi/src/data/model/model_container_product.dart';
-import 'package:heidi/src/data/model/model_container_transaction.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_product_request.dart';
 import 'package:heidi/src/data/model/model_qr_code.dart';
@@ -862,7 +860,7 @@ class ContainerRepository {
     }
   }
 
-  static Future<List<ContainerCardModel>?> getCustomerCards(userId) async {
+  /*static Future<List<ContainerCardModel>?> getCustomerCards(userId) async {
     final response = await Api.getCustomerCards(userId);
 
     if (response.success) {
@@ -875,9 +873,9 @@ class ContainerRepository {
           'Error loading customer orders: ${response.data} ${response.message}');
       return null;
     }
-  }
+  }*/
 
-  static Future<List<ContainerTransactionModel>?> getCustomerTransactions(
+  /*static Future<List<ContainerTransactionModel>?> getCustomerTransactions(
       userId, cardId, pageNo) async {
     final response = await Api.getCustomerTransactions(userId, cardId, pageNo);
 
@@ -903,7 +901,7 @@ class ContainerRepository {
       logError('Error associating card: ${response.data} ${response.message}');
       return response;
     }
-  }
+  }*/
 
   static Future<bool> requestBecomeSeller(
       int storeId, String title, String description) async {

@@ -13,8 +13,6 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/add_customer_card_screen.dart';
-import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_card/customer_card_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/customer_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/edit_store/edit_store_screen.dart';
@@ -159,7 +157,6 @@ class Routes {
   static const String ownerScreen = "/ownerScreen";
   static const String orderDetailsScreen = "/orderDetailsScreen";
   static const String customerCardScreen = "/customerCardScreen";
-  static const String addCustomerCardScreen = "/addCustomerCardScreen";
   static const String sellerRequestsViewScreen = "/sellerRequestsView";
   static const String sellerRequestDetailsScreen = "/sellerRequestDetails";
   static const String storeDetailScreen = "/storeDetailScreen";
@@ -643,20 +640,6 @@ class Routes {
             return OrderDetailsScreen(
                 order: arguments['order'],
                 sellerOrder: arguments['sellerOrder']);
-          },
-        );
-
-      case customerCardScreen:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const CustomerCardScreen();
-          },
-        );
-
-      case addCustomerCardScreen:
-        return MaterialPageRoute(
-          builder: (context) {
-            return const AddCustomerCardScreen();
           },
         );
 
