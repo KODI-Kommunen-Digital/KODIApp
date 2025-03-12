@@ -49,3 +49,6 @@ android/app/build/
 # Ignore environment files
 assets/env/*
 sentry.properties
+
+# FVM Version Cache
+.fvm/
