@@ -19,7 +19,7 @@ class ProductRequestModel {
   final String? createdAt;
   final String? updatedAt;
   final String? deletedAt;
-  final String? barcode; //TODO make not nullable once backend ready
+  final String? barcode;
 
   ProductRequestModel(
       {required this.id,

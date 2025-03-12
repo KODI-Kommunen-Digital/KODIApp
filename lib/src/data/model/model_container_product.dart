@@ -27,7 +27,7 @@ class ContainerProductModel {
   final bool isArchived;
   final int? deletedBy;
   final List<String>? productImages;
-  final String? barcode; //TODO make not nullable once backend integrated
+  final String? barcode;
 
   ContainerProductModel(
       {required this.id,

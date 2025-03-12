@@ -1,15 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_store.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/cubit/owner_state.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
-import 'package:heidi/src/presentation/widget/app_placeholder.dart';
-import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -60,7 +56,7 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
         });
         final newStores = await context.read<OwnerCubit>().newStores(++pageNo);
         stores.addAll(newStores);
-        if(newStores.isEmpty) {
+        if (newStores.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         setState(() {
@@ -86,7 +82,6 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -102,13 +97,16 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
         ],
       ),
       body: (stores.isNotEmpty)
-          ? ListView.builder(
+          ? ListView.separated(
               controller: _scrollController,
+              separatorBuilder: (context, index) {
+                return const Divider();
+              },
               itemBuilder: (context, index) {
                 if (index < stores.length) {
                   StoreModel store = stores[index];
                   return Padding(
-                    padding: const EdgeInsets.only(top: 8.0),
+                    padding: const EdgeInsets.only(top: 0),
                     child: InkWell(
                       onTap: () {
                         Navigator.pushNamed(context, Routes.storeDetailScreen,
@@ -120,54 +118,6 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                           children: [
                             Row(
                               children: <Widget>[
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: CachedNetworkImage(
-                                    imageUrl:
-                                        '${Application.picturesURL}admin/News.jpeg',
-                                    //TODO change once added in backend
-                                    cacheManager: memoryCacheManager,
-                                    placeholder: (context, url) {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          height: 140,
-                                          width: 120,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    imageBuilder: (context, imageProvider) {
-                                      return Container(
-                                        width: 120,
-                                        height: 140,
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.fitHeight,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    errorWidget: (context, url, error) {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          width: 120,
-                                          height: 140,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              bottomLeft: Radius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.error),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
