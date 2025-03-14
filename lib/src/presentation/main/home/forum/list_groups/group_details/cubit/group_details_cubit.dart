@@ -393,7 +393,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
     );
 
     if (response.data != null && (response.data as List).isNotEmpty) {
-      final newMessages =
+      List<ChatMessageModel?> newMessages =
           await Future.wait((response.data as List).map((messageData) async {
         final message = ChatMessageModel.fromJson(messageData);
         final user = userMap[message.senderId];
@@ -406,7 +406,7 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
           } catch (e) {
             logError('Decryption failed for message ${messageData['message']}',
                 e.toString());
-            return message.copyWith(message: 'Decryption failed');
+            return null;
           }
         }
 
@@ -417,7 +417,9 @@ class GroupDetailsCubit extends Cubit<GroupDetailsState> {
         );
       }));
 
-      final updatedMessages = [...currentMessages, ...newMessages];
+      newMessages.removeWhere((element) => element == null);
+
+      final updatedMessages = [...currentMessages, ...newMessages as List<ChatMessageModel>];
 
       emit(currentState.copyWith(messages: updatedMessages));
       _currentOffset++;
