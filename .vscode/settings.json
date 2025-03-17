@@ -1,4 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "automatic",
-    "cmake.sourceDirectory": "/Users/denio/Documents/Heidi/App/Rodgau/KODIApp/linux"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "cmake.sourceDirectory": "/Users/denio/Documents/Heidi/App/Rodgau/KODIApp/linux",
+  "dart.flutterSdkPath": ".fvm/versions/3.24.3"
 }

@@ -47,3 +47,6 @@ android/app/build/
 
 #env files
 assets/env/.envRatingen
+
+# FVM Version Cache
+.fvm/
