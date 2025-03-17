@@ -374,7 +374,15 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                 child: AppUploadImage(
                   title:
                       Translate.of(context).translate('upload_feature_image'),
-                  image: context.read<CreateProductCubit>().selectedImage?.path ?? '${Application.picturesURL}${widget.product?.productImages?.last}',
+                  image: (context
+                              .read<CreateProductCubit>()
+                              .selectedImage
+                              ?.path !=
+                          null)
+                      ? context.read<CreateProductCubit>().selectedImage?.path
+                      : ((widget.product?.productImages ?? []).isNotEmpty)
+                          ? '${Application.picturesURL}${widget.product?.productImages?.last}'
+                          : null,
                   profile: false,
                   forumGroup: false,
                   allowPdf: false,
