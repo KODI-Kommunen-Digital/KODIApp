@@ -156,16 +156,20 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
           'shelves': shelves,
           'isOwner': widget.isOwner
         }).then((approvedOrDeleted) async {
-      if (approvedOrDeleted != null) {
-        if (approvedOrDeleted == true) {
-          setState(() {
-            requests = [];
-          });
-          pageNo = 1;
-          requests = await getInitialRequests();
-          setState(() {});
-        }
-      }
+      refresh(approvedOrDeleted as bool?);
     });
+  }
+
+  Future<void> refresh(bool? approvedOrDeleted) async {
+    if (approvedOrDeleted != null) {
+      if (approvedOrDeleted == true) {
+        setState(() {
+          requests = [];
+        });
+        pageNo = 1;
+        requests = await getInitialRequests();
+        setState(() {});
+      }
+    }
   }
 }
