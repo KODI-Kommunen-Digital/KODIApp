@@ -1033,14 +1033,14 @@ class ContainerRepository {
                     10)) %
             10;
         return check == val;
-      case 10: // ISBN
+      /*case 10: // ISBN
         int check = int.parse(barcode[9]);
         int sum = 0;
         for (int i = 0; i < 9; i++) {
           sum += int.parse(barcode[i]) * (i + 1);
         }
         int val = sum % 11;
-        return val == 10 ? barcode[9].toLowerCase() == 'x' : check == val;
+        return val == 10 ? barcode[9].toLowerCase() == 'x' : check == val;*/
       case 12: // UPC
         int check = int.parse(barcode[11]);
         int val = (10 -
