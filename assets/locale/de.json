@@ -643,5 +643,7 @@
   "login_required_qr_code": "Du musst eingeloggt sein, um deinen QR Code einzusehen.",
   "valid_until": "Gültig bis",
   "generate_new_qr": "Generiere neuen QR-Code",
-  "are_you_sure_new_qr": "Bist du sicher, dass du einen neuen QR-Code generieren möchtest? Damit überschreibst du deinen aktuellen QR-Code!"
+  "are_you_sure_new_qr": "Bist du sicher, dass du einen neuen QR-Code generieren möchtest? Damit überschreibst du deinen aktuellen QR-Code!",
+  "subcategory_exist_category": "Es existieren Unterkategorien für diese Kategorie. Entferne diese zuerst.",
+  "active_products_category_exist": "Es gibt Produkte, die dieser Unterkategorie zugeordnet sind. Bitte entferne diese Produkte oder ordne sie einer anderen Unterkategorie zu."
 }

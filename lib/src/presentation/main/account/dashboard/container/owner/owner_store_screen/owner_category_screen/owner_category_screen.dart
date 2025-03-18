@@ -81,7 +81,7 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
               await context.read<OwnerCategoryCubit>().newCategories(++pageNo);
         }
         categories.addAll(newCategories);
-        if(newCategories.isEmpty) {
+        if (newCategories.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         setState(() {
@@ -158,7 +158,9 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
                                           borderRadius:
                                               BorderRadius.circular(12),
                                           child: CachedNetworkImage(
-                                            imageUrl: (category.image != '' && !category.image.contains('encryptedtbn0.gstatic.com'))
+                                            imageUrl: (category.image != '' &&
+                                                    !category.image.contains(
+                                                        'encryptedtbn0.gstatic.com'))
                                                 ? category.image.trim()
                                                 : '${Application.picturesURL}admin/eatOrDrink.jpeg',
                                             cacheManager: memoryCacheManager,
@@ -409,6 +411,10 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
       } else {
         if (response.message.contains('not found')) {
           message = 'category_already_removed';
+        } else if (response.message
+            .toLowerCase()
+            .contains('subcategory exist for this category')) {
+          message = 'subcategory_exist_category';
         } else {
           message = 'error_message';
         }
@@ -473,8 +479,13 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
           if (response.success) {
             message = 'subcategory_removed_successfully';
           } else {
-            if (response.message.contains('not found') || response.message.contains('not added')) {
+            if (response.message.contains('not found') ||
+                response.message.contains('not added')) {
               message = 'subcategory_already_removed';
+            } else if (response.message
+                .toLowerCase()
+                .contains('active products exist for this sub category')) {
+              message = 'active_products_category_exist';
             } else {
               message = 'error_message';
             }
