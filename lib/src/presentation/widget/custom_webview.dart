@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -93,6 +95,13 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 });
               },
               onLoadStop: (controller, url) async {
+                if (Platform.isIOS) {
+                  await controller.evaluateJavascript(source: """
+                  var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
+                  metaTags.forEach(function(tag) { tag.parentNode.removeChild(tag); });
+                """);
+                }
+
                 setState(() {
                   isLoading = false;
                 });
@@ -104,8 +113,13 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 // );
               },
               initialSettings: InAppWebViewSettings(
-                javaScriptEnabled: true,
-              ),
+                  javaScriptEnabled: true,
+                  domStorageEnabled: true,
+                  allowsInlineMediaPlayback: true,
+                  mediaPlaybackRequiresUserGesture: false,
+                  iframeAllow: "camera; microphone",
+                  userAgent:
+                      "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"),
               onReceivedServerTrustAuthRequest: (controller, challenge) async {
                 return ServerTrustAuthResponse(
                     action: ServerTrustAuthResponseAction.PROCEED);
