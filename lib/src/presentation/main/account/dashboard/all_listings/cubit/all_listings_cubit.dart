@@ -1,4 +1,7 @@
 import 'package:bloc/bloc.dart';
+
+// ignore: depend_on_referenced_packages
+import 'package:collection/collection.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -6,6 +9,7 @@ import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
@@ -73,7 +77,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
         if (listing.categoryId != null &&
             listing.subcategoryId != null &&
             listing.subcategoryId != 0) {
-          subcategoryName = await getSubcategoryName(
+          subcategoryName = await getSubcategoryTranslation(
               listing.categoryId!, listing.subcategoryId!);
         }
 
@@ -117,7 +121,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
     return listDataList;
   }
 
-  static Future<String?> getSubcategoryName(
+  static Future<String?> getSubcategoryTranslation(
       int categoryId, int subcategoryId) async {
     final subcategories =
         await Api.requestSubmitSubCategory(categoryId: categoryId);
@@ -125,7 +129,14 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       var jsonCategory = subcategories.data;
       final item =
           jsonCategory.firstWhere((item) => item['id'] == subcategoryId);
-      return item['name'];
+      final List<String> translations =
+          ListCubit.getSubCategories().values.toList();
+      String? subcategoryTranslation = translations.firstWhereOrNull(
+          (element) => element
+              .toLowerCase()
+              .trim()
+              .contains(item['name'].toString().toLowerCase().trim()));
+      return subcategoryTranslation ?? item['name'];
     }
     return null;
   }
