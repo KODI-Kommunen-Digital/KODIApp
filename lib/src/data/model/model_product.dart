@@ -235,6 +235,8 @@ class ProductModel {
       category = "Umfrage";
     } else if (json['categoryId'] == 47) {
       category = "Über uns";
+    } else if (json['categoryId'] == 13) {
+      category = "Essen & Trinken";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
