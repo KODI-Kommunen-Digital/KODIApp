@@ -15,6 +15,7 @@ import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 import 'cubit/cubit.dart';
@@ -101,6 +102,11 @@ class _ListProductScreenState extends State<ListProductScreen> {
     }
   }
 
+  void openUrl(String link) async {
+    await launchUrl(
+        Uri.parse(link),
+        mode: LaunchMode.inAppWebView);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,9 +147,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
                               arguments: {
                                 "multifilter": multiFilter
                               }).then((filter) => {
-                            if (filter != null)
-                              {_updateSelectedFilter(filter as MultiFilter)}
-                          });
+                                if (filter != null)
+                                  {_updateSelectedFilter(filter as MultiFilter)}
+                              });
                         },
                       ),
                       IconButton(
@@ -153,8 +159,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
                           icon: Icon(
                             Icons.search,
                             color:
-                            Theme.of(context).textTheme.bodyLarge?.color ??
-                                Colors.white,
+                                Theme.of(context).textTheme.bodyLarge?.color ??
+                                    Colors.white,
                           ))
                     ],
                   );
@@ -163,6 +169,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
             ),
           ],
         ),
+        floatingActionButton: (widget.arguments['id'] == 7)
+            ? FloatingActionButton(
+                onPressed: () {
+                  openUrl('https://www.salzkotten.de/de/unternehmensverzeichnis/registrierung.php');
+                },
+                child: const Icon(Icons.add),
+              )
+            : null,
         body: BlocConsumer<ListCubit, ListState>(
           listener: (context, state) {
             state.maybeWhen(

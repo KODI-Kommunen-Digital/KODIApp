@@ -67,17 +67,13 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
 
-  Future<String?> getCityLink() async {
-    final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
+  Future<String?> getLink(int id) async {
     Map<int, String> cityWebsites = {
-      0: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger",
-      1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86974&behoerde=29997690498&gemeinde=325524110678",
-      2: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86925&behoerde=70664072559&gemeinde=006746347678",
-      3: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86944&behoerde=93996542745&gemeinde=208079671678",
+      2: "",
+      20: "https://www.salzkotten.de/de/unternehmensverzeichnis/"
     };
 
-    return cityWebsites[cityId];
+    return cityWebsites[id];
   }
 
   Future<void> setServiceValue(String preference, String? type, int? id) async {
@@ -140,6 +136,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageUrl: Images.service10,
         imageLink: "10",
         arguments: 10,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service20,
+        imageLink: "20",
       ),
     ];
   }
