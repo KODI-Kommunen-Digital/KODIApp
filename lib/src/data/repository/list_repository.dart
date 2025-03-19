@@ -377,6 +377,7 @@ class ListRepository {
       "media": '',
       "categoryId": categoryId,
       "address": address,
+      "zipcode": (zipcode?.isEmpty == true) ? null : zipcode,
       "email": email,
       "phone": phone,
       "website": website,
