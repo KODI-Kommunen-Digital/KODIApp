@@ -62,7 +62,7 @@ class UtilValidator {
 
       ///Phone pattern
       case ValidateType.phone:
-        const pattern = r'^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]*$';
+        const pattern = r'^(?:\(([0-9]{3})\))?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$';
         final phoneRegex = RegExp(pattern);
         if (!phoneRegex.hasMatch(data)) {
           return errorPhone;

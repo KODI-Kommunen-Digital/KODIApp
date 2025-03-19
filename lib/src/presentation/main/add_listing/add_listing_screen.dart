@@ -79,7 +79,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorPhone;
   String? _errorPoll;
 
-  // String? _errorEmail;
+  String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
@@ -602,6 +602,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               place: _textPlaceController.text,
               description: description,
               address: _textAddressController.text,
+              zipcode: _textZipCodeController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
@@ -728,11 +729,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
-    // _errorEmail = UtilValidator.validate(
-    //   _textEmailController.text,
-    //   type: ValidateType.email,
-    //   allowEmpty: true,
-    // );
+    _errorEmail = UtilValidator.validate(
+      _textEmailController.text,
+      type: ValidateType.email,
+      allowEmpty: true,
+    );
 
     _errorWebsite = UtilValidator.validate(
       _textWebsiteController.text,
@@ -793,7 +794,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorContent,
       _errorCategory,
       _errorPhone,
-      // _errorEmail,
+      _errorEmail,
       _errorWebsite,
       _errorStatus,
       _errorSDate,
@@ -804,7 +805,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorContent != null ||
         _errorCategory != null ||
         _errorPhone != null ||
-        // _errorEmail != null ||
+        _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
         _errorSDate != null ||
@@ -1557,19 +1558,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_email'),
-                // errorText: _errorEmail,
+                errorText: _errorEmail,
                 controller: _textEmailController,
                 focusNode: _focusEmail,
                 textInputAction: TextInputAction.next,
-                // onChanged: (text) {
-                //   setState(() {
-                //     _errorEmail = UtilValidator.validate(
-                //       _textEmailController.text,
-                //       type: ValidateType.email,
-                //       allowEmpty: true,
-                //     );
-                //   });
-                // },
+                onChanged: (text) {
+                  setState(() {
+                    _errorEmail = UtilValidator.validate(
+                      _textEmailController.text,
+                      type: ValidateType.email,
+                      allowEmpty: true,
+                    );
+                  });
+                },
                 onSubmitted: (text) {
                   Utils.fieldFocusChange(
                     context,
