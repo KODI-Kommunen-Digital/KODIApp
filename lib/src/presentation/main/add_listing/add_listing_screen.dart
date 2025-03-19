@@ -4,6 +4,7 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_appointment_service.dart';
+import 'package:collection/collection.dart';
 
 // import 'package:heidi/src/data/model/model_holiday.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
@@ -287,8 +288,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = jsonCategory.firstWhere(
           (element) => element["id"] == widget.item!.categoryId)["name"];
-      selectedSubCategory = listSubCategory.firstWhere(
-          (element) => element["id"] == widget.item!.subcategoryId)["name"];
+      dynamic subCat = listSubCategory.firstWhereOrNull(
+          (element) => element["id"] == widget.item!.subcategoryId);
+      if(subCat != null) {
+        selectedSubCategory = subCat['name'];
+      }
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
