@@ -231,7 +231,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
-        service.imageLink == "6" ||
         service.imageLink == "7" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
@@ -239,7 +238,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "13" ||
         service.imageLink == "14" ||
         service.imageLink == "15" ||
-        service.imageLink == "17") {
+        service.imageLink == "17" ||
+        service.imageLink == "20" ||
+    service.imageLink == "21" ||
+    service.imageLink == "22") {
       await launchUrl(
           Uri.parse(
               await AppBloc.discoveryCubit.getServiceLink(service.imageLink) ??
@@ -247,6 +249,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
       Navigator.pushNamed(context, Routes.wasteCalendar);
+    } else if (service.imageLink == "6") {
+      Navigator.pushNamed(context, Routes.discoveryDetail,
+          arguments: {"id": 6});
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
