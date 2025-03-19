@@ -178,7 +178,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     Map<String, String> serviceLinks = {
       "6": "https:/www.google.com",
       "16": "https://www.google.com",
-      "17": "https://www.google.com"
+      "17": "https://www.google.com",
+      "20": "https://www.stadt-ratingen.de/verkehr/verkehrsinfo",
+      "21": "https://www.stadtwerke-ratingen.de/mobilitaet/oeffentliche-ladestationen",
+      "22": "https://www.stadt-ratingen.de/notfall"
     };
     return serviceLinks[imageLink];
   }

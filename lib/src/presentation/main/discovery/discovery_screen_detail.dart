@@ -166,7 +166,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     if (service.arguments == 61) {
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://troisdorf.dksr.city/map/"));
+        ..loadRequest(Uri.parse("https://www.rheinbahn.de/fahren/verbindungen/fahrplanbuch"));
 
       await showModalBottomSheet(
         context: context,

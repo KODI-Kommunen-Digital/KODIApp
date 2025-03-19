@@ -22,6 +22,30 @@
     "imageLink": "16",
     "arguments": 43,
     "categoryId": 43
+  },
+  {
+    "imageUrl": "assets/images/services-6.png",
+    "imageLink": "6",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-20.png",
+    "imageLink": "20",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-21.png",
+    "imageLink": "21",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-22.png",
+    "imageLink": "22",
+    "arguments": null,
+    "categoryId": null
   }
 ]
   
