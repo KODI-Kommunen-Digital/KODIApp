@@ -664,6 +664,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               website: _textWebsiteController.text,
               expiryDate: submitExpiryDate,
               startDate: _startDate,
+              zipcode: _textZipCodeController.text,
               endDate: _endDate,
               expiryTime: submitExpiryTime,
               timeless: _isExpiryDateEnabled ? 0 : 1,
