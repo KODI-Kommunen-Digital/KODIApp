@@ -26,6 +26,9 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
+    if(!isRefreshLoader) {
+      emit(const HomeState.loading());
+    }
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
     }

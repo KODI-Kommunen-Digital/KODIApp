@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? banner;
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
+  List<String>? cacheLocation = [];
   List<ProductModel>? recent = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
@@ -261,7 +262,9 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: <Widget>[
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
-                      cityTitlesList: cityTitles,
+                      cityTitlesList: (state is HomeStateLoading)
+                          ? cacheLocation
+                          : cityTitles,
                       hintText:
                           Translate.of(context).translate('hselect_location'),
                       selectedOption: (selectedCityId > 0)
@@ -270,6 +273,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       expandedHeight: MediaQuery.of(context).size.height * 0.3,
                       banners: banner,
                       setLocationCallback: (data) async {
+                        cacheLocation = cityTitles;
                         for (final list in location!) {
                           if (list.title == data) {
                             _onUpdateCategory();
@@ -313,7 +317,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               : _buildCategory(AppBloc.homeCubit
                                   .getCategoriesWithoutHidden(category ?? [])),
                           _buildLocation(location),
-                          _buildRecent(recent, selectedCityId, location),
+                          (categoryLoading || state is HomeStateLoading)
+                              ? const Padding(
+                                  padding: EdgeInsets.only(top: 16.0),
+                                  child: CircularProgressIndicator.adaptive(),
+                                )
+                              : _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
                             const CircularProgressIndicator.adaptive(),
                           const SizedBox(height: 50),
