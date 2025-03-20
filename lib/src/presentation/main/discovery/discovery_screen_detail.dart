@@ -166,7 +166,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     if (service.arguments == 61) {
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse("https://www.rheinbahn.de/fahren/verbindungen/fahrplanbuch"));
+        ..loadRequest(Uri.parse(
+            "https://www.rheinbahn.de/fahren/verbindungen/fahrplanbuch"));
 
       await showModalBottomSheet(
         context: context,
@@ -192,17 +193,17 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                           Navigator.of(context).pop();
                         },
                       ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'smartAPP',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
+                      // const Expanded(
+                      //   child: Center(
+                      //     child: Text(
+                      //       'smartAPP',
+                      //       style: TextStyle(
+                      //           color: Colors.white,
+                      //           fontSize: 18,
+                      //           fontWeight: FontWeight.w600),
+                      //     ),
+                      //   ),
+                      // ),
                       const SizedBox(
                           width:
                               48), // Placeholder to balance the space taken by the IconButton
