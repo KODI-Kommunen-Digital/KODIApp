@@ -2,7 +2,7 @@
 
 import 'dart:async';
 import 'dart:io';
-import 'package:connectivity/connectivity.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -20,6 +20,7 @@ import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart
 
 // import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -470,75 +471,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final url = getServiceUrl(item.id);
 
       if (url.isNotEmpty) {
-        final webViewController = WebViewController();
-        webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
-        webViewController.loadRequest(Uri.parse(url));
-
-        final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-          Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer(),
-          ),
-        };
-
-        await showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return SafeArea(
-              top: false,
-              bottom: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    color: Colors.black,
-                    padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              url,
-                              maxLines: 1,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 48),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height -
-                        kToolbarHeight -
-                        30,
-                    child: WebViewWidget(
-                      controller: webViewController,
-                      gestureRecognizers: gestureRecognizers,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-
-        await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';",
-        );
+        CustomWebViewScreen.showAsBottomSheet(context: context, url: url);
       }
     }
   }
@@ -562,61 +495,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
-
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+    CustomWebViewScreen.showAsBottomSheet(context: context, url: link);
   }
 
   void _onProductDetail(ProductModel item) {
@@ -979,6 +858,16 @@ class _FullScreenWebViewState extends State<FullScreenWebView> {
           } else {
             bool hasPermission = snapshot.data ?? false;
             return Scaffold(
+              appBar: AppBar(
+                leading: IconButton(
+                  icon: const Icon(
+                    Icons.close,
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ),
               body: SafeArea(
                 child: (!hasPermission)
                     ? Center(

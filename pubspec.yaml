@@ -3,7 +3,7 @@ description: A new Flutter project.
 version: 1.0.6
 
 environment:
-  sdk: '>=2.19.6 <3.0.0'
+  sdk: ^3.6.2
 
 dependencies:
   flutter:
@@ -16,8 +16,8 @@ dependencies:
 
   ### Logging
   loggy: ^2.0.3
-  flutter_loggy: ^2.0.2
-  cupertino_icons: ^1.0.2
+  flutter_loggy: ^2.0.3+1
+  cupertino_icons: ^1.0.8
   sentry_flutter: ^8.3.0
 
   ### l10n
@@ -38,7 +38,7 @@ dependencies:
   hive_flutter: ^1.1.0
 
   ###Matomo
-  matomo_tracker: ^5.0.0+1
+  matomo_tracker: ^5.1.0
 
   ### Networking
   dio: ^5.4.3+1
@@ -53,10 +53,10 @@ dependencies:
 
 
   ### Device Permission
-  device_info: 2.0.3
+  device_info_plus: ^9.1.2
   permission_handler: ^11.0.1
   url_launcher: ^6.3.1
-  connectivity: ^3.0.6
+  connectivity_plus: ^5.0.2
   device_calendar: ^4.3.2
   geolocator: ^12.0.0
 
@@ -64,7 +64,7 @@ dependencies:
   location: ^6.0.2
 
   ### ui
-  flutter_svprogresshud: ^1.0.1
+  flutter_svprogresshud: ^1.1.0
   shimmer: ^3.0.0
   dotted_border: ^2.1.0
   font_awesome_flutter: ^10.7.0
@@ -79,11 +79,14 @@ dependencies:
   flutter_inappwebview: ^6.1.5
 
   ### Firebase
-  firebase_core: ^3.11.0
-  firebase_messaging: ^15.2.2
+  firebase_core: ^3.12.0
+  firebase_messaging: ^15.2.3
 
   ### File Reading
-  open_filex: ^4.4.0
+  open_file_plus:
+    git:
+      url: https://github.com/postflow/open_file_plus.git
+      ref: main
   image_picker: ^1.1.2
   flutter_slidable: ^3.0.0
   file_picker: ^8.0.5
@@ -98,7 +101,7 @@ dependencies:
   calendar_date_picker2: ^1.1.5
   package_info_plus: ^4.2.0
   flutter_dotenv: ^5.1.0
-  add_2_calendar: ^2.2.5
+  add_2_calendar: ^3.0.1
   table_calendar: ^3.0.9
   flutter_typeahead: ^5.2.0
   shared_preferences: ^2.2.3
