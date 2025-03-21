@@ -51,3 +51,5 @@ app.*.map.json
 # Ignore environment files
 assets/env/*
 
+# FVM Version Cache
+.fvm/
