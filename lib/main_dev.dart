@@ -50,7 +50,7 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    // options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();

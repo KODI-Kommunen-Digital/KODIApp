@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/mobilitat_helper.dart';
@@ -168,66 +169,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       MobilitatHelper.showMobilitat(context);
     } else if (service.arguments == 62) {
       Routes.trackMatomoEvent(false, null, 62, null);
-      final webViewController = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse(
-            "https://troisdorf.dksr.city/public-dashboards/f4dd7e02258d4a13a610ea463946f510?orgId=1"));
 
-      await showModalBottomSheet(
+      CustomWebViewScreen.showAsBottomSheet(
         context: context,
-        isScrollControlled: true,
-        builder: (BuildContext context) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Parken',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 48),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height:
-                      MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(
-                    controller: webViewController,
-                    gestureRecognizers: gestureRecognizers,
-                  ),
-                ),
-              ],
-            ),
-          );
-        },
+        url:
+            "https://troisdorf.dksr.city/public-dashboards/f4dd7e02258d4a13a610ea463946f510?orgId=1",
+        title: 'Parken',
       );
-
-      await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';");
     } else if (service.arguments == 161) {
       Navigator.pushNamed(context, Routes.trolleyMakerMyCredit);
     } else if (service.arguments == 162) {

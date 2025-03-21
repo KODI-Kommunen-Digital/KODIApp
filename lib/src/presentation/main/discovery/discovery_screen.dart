@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -241,10 +242,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       String? serviceLink =
           await AppBloc.discoveryCubit.getServiceLink(imageLink);
       if (serviceLink != null && serviceLink.isNotEmpty) {
-        await launchUrl(
-          Uri.parse(serviceLink),
-          mode: LaunchMode.inAppWebView,
-        );
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context, url: serviceLink);
         // }
       }
     }
@@ -262,75 +261,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           await AppBloc.discoveryCubit.getServiceLink(service.imageLink);
 
       if (url != null && url.isNotEmpty) {
-        final webViewController = WebViewController();
-        webViewController.setJavaScriptMode(JavaScriptMode.unrestricted);
-        webViewController.loadRequest(Uri.parse(url));
-
-        final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-          Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer(),
-          ),
-        };
-
-        await showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (BuildContext context) {
-            return SafeArea(
-              top: false,
-              bottom: false,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    color: Colors.black,
-                    padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
-                    child: Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(
-                            Icons.close,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                        ),
-                        Expanded(
-                          child: Center(
-                            child: Text(
-                              url,
-                              maxLines: 1,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 48),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height -
-                        kToolbarHeight -
-                        30,
-                    child: WebViewWidget(
-                      controller: webViewController,
-                      gestureRecognizers: gestureRecognizers,
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-
-        await webViewController.runJavaScript(
-          "document.querySelector('.flex').style.display = 'none';",
-        );
+        CustomWebViewScreen.showAsBottomSheet(context: context, url: url);
       }
 
       if (service.imageLink == "4" ||
@@ -341,7 +272,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         Routes.trackMatomoEvent(
             false, null, int.parse(service.imageLink), null);
       }
-    } else if (service.imageLink == "11" || service.imageLink == "7" ) {
+    } else if (service.imageLink == "11" || service.imageLink == "7") {
       Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       await launchContestPage(context, service.imageLink);
     } else if (service.imageLink == "6") {
