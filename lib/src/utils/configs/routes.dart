@@ -619,7 +619,6 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return CreateProductScreen(
-              sellerId: arguments['sellerId'],
               product: arguments['product'],
             );
           },

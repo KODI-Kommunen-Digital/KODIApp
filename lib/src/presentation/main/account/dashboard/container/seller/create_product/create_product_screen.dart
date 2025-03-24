@@ -20,9 +20,8 @@ import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class CreateProductScreen extends StatefulWidget {
   final ContainerProductModel? product;
-  final int sellerId;
 
-  const CreateProductScreen({super.key, this.product, required this.sellerId});
+  const CreateProductScreen({super.key, this.product});
 
   @override
   State<CreateProductScreen> createState() => _CreateProductScreenState();
@@ -73,7 +72,6 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
                     stores: stores,
                     selectedCity: selectedCity,
                     product: widget.product,
-                    sellerId: widget.sellerId,
                     categories: categories,
                     subCategories: subCategories,
                     productDetails: productDetails,
@@ -91,7 +89,6 @@ class CreateProductLoaded extends StatefulWidget {
   final List<StoreModel> stores;
   final int? selectedCity;
   final ContainerProductModel? product;
-  final int sellerId;
   final List<CategoryModel> categories;
   final List<CategoryModel>? subCategories;
   final Map<String, dynamic>? productDetails;
@@ -103,7 +100,6 @@ class CreateProductLoaded extends StatefulWidget {
       {super.key,
       required this.cities,
       required this.stores,
-      required this.sellerId,
       required this.categories,
       this.subCategories,
       this.selectedCity,

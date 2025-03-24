@@ -119,7 +119,7 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
 
   void updateProduct(ContainerProductModel item) async {
     await Navigator.pushNamed(context, Routes.createProductScreen,
-        arguments: {'product': item, 'sellerId': item.sellerId});
+        arguments: {'product': item});
     context.read<OwnerProductsCubit>().onLoad(false);
   }
 
@@ -291,7 +291,9 @@ class _OwnerProductsLoadedState extends State<OwnerProductsLoaded> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
+                                      if(item.subCategoryName != null)
                                       const SizedBox(height: 4),
+                                      if(item.subCategoryName != null)
                                       Text(item.subCategoryName ?? '',
                                           style: Theme.of(context)
                                               .textTheme
