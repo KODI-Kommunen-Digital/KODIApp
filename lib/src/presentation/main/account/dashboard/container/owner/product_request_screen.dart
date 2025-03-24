@@ -26,6 +26,7 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   List<ProductRequestModel> requests = [];
 
   bool isLoadingMore = false;
+  bool isLoadingInitial = false;
   int pageNo = 1;
 
   Future<void> _scrollListener() async {
@@ -56,6 +57,7 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
+    getInitialRequests();
   }
 
   @override
@@ -66,16 +68,25 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   }
 
   Future<List<ProductRequestModel>> getInitialRequests() async {
-    if (requests.isEmpty) {
-      late List<ProductRequestModel> newRequests;
-      if (widget.isOwner) {
-        newRequests = await context.read<OwnerProductsCubit>().newRequests(1);
-      } else {
-        newRequests = await context.read<SellerCubit>().newRequests(1);
-      }
-      return newRequests;
+    setState(() {
+      requests = [];
+      isLoadingInitial = true;
+    });
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(0);
     }
-    return [];
+    late List<ProductRequestModel> newRequests;
+    if (widget.isOwner) {
+      newRequests = await context.read<OwnerProductsCubit>().newRequests(1);
+    } else {
+      newRequests = await context.read<SellerCubit>().newRequests(1);
+    }
+    setState(() {
+      isLoadingInitial = false;
+      requests = newRequests;
+    });
+    _scrollController.addListener(_scrollListener);
+    return newRequests;
   }
 
   @override
@@ -85,64 +96,49 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
           title: Text(Translate.of(context).translate('product_request')),
           centerTitle: true,
         ),
-        body: FutureBuilder(
-            future: getInitialRequests(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                requests.addAll(snapshot.data ?? []);
-                return (requests.isNotEmpty)
-                    ? ListView.builder(
-                        controller: _scrollController,
-                        itemBuilder: (context, index) {
-                          if (index < requests.length) {
-                            ProductRequestModel item = requests[index];
-                            return InkWell(
-                              onTap: () async {
-                                navigateToDetail(item);
-                              },
-                              child: AppListTitle(
-                                title: dom.DocumentFragment.html(item.title)
-                                        .text ??
-                                    '',
-                                subtitle:
-                                    dom.DocumentFragment.html(item.description)
-                                            .text ??
-                                        '',
-                                trailing: Text("${item.price.toString()}€"),
-                              ),
-                            );
-                          } else {
-                            return (isLoadingMore)
-                                ? const Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  )
-                                : Container();
-                          }
-                        },
-                        itemCount: requests.length + 1,
-                      )
-                    : Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            const Icon(Icons.sentiment_satisfied),
-                            Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                Translate.of(context)
-                                    .translate('list_is_empty'),
-                                style: Theme.of(context).textTheme.bodyLarge,
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            }));
+        body: (isLoadingInitial)
+            ? Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    const Icon(Icons.sentiment_satisfied),
+                    Padding(
+                      padding: const EdgeInsets.all(4.0),
+                      child: Text(
+                        Translate.of(context).translate('list_is_empty'),
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            : ListView.builder(
+                controller: _scrollController,
+                itemBuilder: (context, index) {
+                  if (index < requests.length) {
+                    ProductRequestModel item = requests[index];
+                    return InkWell(
+                      onTap: () async {
+                        navigateToDetail(item);
+                      },
+                      child: AppListTitle(
+                        title: dom.DocumentFragment.html(item.title).text ?? '',
+                        subtitle:
+                            dom.DocumentFragment.html(item.description).text ??
+                                '',
+                        trailing: Text("${item.price.toString()}€"),
+                      ),
+                    );
+                  } else {
+                    return (isLoadingMore)
+                        ? const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          )
+                        : Container();
+                  }
+                },
+                itemCount: requests.length + 1,
+              ));
   }
 
   void navigateToDetail(ProductRequestModel item) async {
@@ -163,12 +159,8 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
   Future<void> refresh(bool? approvedOrDeleted) async {
     if (approvedOrDeleted != null) {
       if (approvedOrDeleted == true) {
-        setState(() {
-          requests = [];
-        });
         pageNo = 1;
         requests = await getInitialRequests();
-        setState(() {});
       }
     }
   }
