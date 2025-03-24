@@ -471,7 +471,8 @@ class _HomeScreenState extends State<HomeScreen> {
       final url = getServiceUrl(item.id);
 
       if (url.isNotEmpty) {
-        CustomWebViewScreen.showAsBottomSheet(context: context, url: url);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context, url: url, title: getServiceName(item.id));
       }
     }
   }
@@ -488,6 +489,17 @@ class _HomeScreenState extends State<HomeScreen> {
         return "https://troisdorf.dksr.city/poimap/";
       default:
         return "";
+    }
+  }
+
+  String? getServiceName(int id) {
+    switch (id) {
+      case 6:
+        return "Online Dienste";
+      case 8:
+        return "Freizeitkarte";
+      default:
+        return null;
     }
   }
 

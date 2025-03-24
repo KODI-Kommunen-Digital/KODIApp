@@ -56,7 +56,9 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Translate.of(context).translate('cust_services')),
+          title: Text((widget.arguments['id'] == 16)
+              ? "TroCARD"
+              : Translate.of(context).translate('cust_services')),
         ),
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
           listener: (context, state) {
@@ -117,6 +119,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
+
   @override
   void initState() {
     super.initState();

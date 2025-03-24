@@ -17,6 +17,7 @@ class TokenInterceptor extends Interceptor {
   ) async {
     String token = prefBox.getKeyValue(Preferences.trolleyMakerApiToken, "");
     if (token.isNotEmpty) {
+      options.queryParameters.addAll({'retain': '1'});
       options.headers.putIfAbsent('X-API-Token', () => token);
     }
     super.onRequest(options, handler);
