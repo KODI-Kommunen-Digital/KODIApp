@@ -304,7 +304,7 @@ class ProductModel {
       rateText: json['post_status'] ?? '',
       status: status,
       favorite: json['wishlist'] ?? false,
-      address: json['place'] ?? '',
+      address: json['address'] ?? '',
       zipCode: json['zip_code'] ?? '',
       phone: json['phone'] ?? '',
       fax: json['fax'] ?? '',
