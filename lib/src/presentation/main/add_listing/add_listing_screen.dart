@@ -50,7 +50,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _textContentController = TextEditingController();
   final _textTagsController = TextEditingController();
   final _textAddressController = TextEditingController();
-  final _textZipCodeController = TextEditingController();
+  //final _textZipCodeController = TextEditingController();
   final _textPhoneController = TextEditingController();
   final _textFaxController = TextEditingController();
   final _textEmailController = TextEditingController();
@@ -64,7 +64,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _focusTitle = FocusNode();
   final _focusContent = FocusNode();
   final _focusAddress = FocusNode();
-  final _focusZipCode = FocusNode();
+  //final _focusZipCode = FocusNode();
   final _focusPhone = FocusNode();
   final _focusFax = FocusNode();
   final _focusEmail = FocusNode();
@@ -76,7 +76,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   bool _processing = false;
   String? _errorTitle;
   String? _errorContent;
-  String? _errorZipCode;
+  //String? _errorZipCode;
   String? _errorPhone;
   String? _errorPoll;
 
@@ -169,7 +169,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _textContentController.dispose();
     _textTagsController.dispose();
     _textAddressController.dispose();
-    _textZipCodeController.dispose();
+    //_textZipCodeController.dispose();
     _textPhoneController.dispose();
     _textFaxController.dispose();
     _textEmailController.dispose();
@@ -181,7 +181,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _focusTitle.dispose();
     _focusContent.dispose();
     _focusAddress.dispose();
-    _focusZipCode.dispose();
+    //_focusZipCode.dispose();
     _focusPhone.dispose();
     _focusFax.dispose();
     _focusEmail.dispose();
@@ -281,7 +281,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _textTitleController.text = widget.item!.title;
       _textContentController.text = clearedText(widget.item!.description);
       _textAddressController.text = widget.item!.address;
-      _textZipCodeController.text = widget.item?.zipCode ?? '';
+      //_textZipCodeController.text = widget.item?.zipCode ?? '';
       _textPhoneController.text = widget.item?.phone ?? '';
       _textEmailController.text = widget.item?.email ?? '';
       _textWebsiteController.text = widget.item?.website ?? '';
@@ -606,7 +606,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               place: _textPlaceController.text,
               description: description,
               address: _textAddressController.text,
-              zipcode: _textZipCodeController.text,
+              //zipcode: _textZipCodeController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
               website: _textWebsiteController.text,
@@ -664,7 +664,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               website: _textWebsiteController.text,
               expiryDate: submitExpiryDate,
               startDate: _startDate,
-              zipcode: _textZipCodeController.text,
+              //: _textZipCodeController.text,
               endDate: _endDate,
               expiryTime: submitExpiryTime,
               timeless: _isExpiryDateEnabled ? 0 : 1,
@@ -722,11 +722,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   bool _validData() {
-    _errorZipCode = UtilValidator.validate(
+    /*_errorZipCode = UtilValidator.validate(
       _textZipCodeController.text,
       type: ValidateType.number,
       allowEmpty: true,
-    );
+    );*/
 
     _errorPhone = UtilValidator.validate(
       _textPhoneController.text,
@@ -1492,14 +1492,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Utils.fieldFocusChange(
                     context,
                     _focusAddress,
-                    _focusZipCode,
+                    _focusPhone,
                   );
                 },
                 leading: Icon(
                   Icons.home_outlined,
                   color: Theme.of(context).hintColor,
                 ),
-              ),
+              ),/*
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_zipcode'),
@@ -1529,7 +1529,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   Icons.wallet_travel_outlined,
                   color: Theme.of(context).hintColor,
                 ),
-              ),
+              ),*/
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_phone'),
