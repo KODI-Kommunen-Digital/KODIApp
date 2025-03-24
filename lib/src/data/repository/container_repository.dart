@@ -17,6 +17,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
+import 'package:html/parser.dart' as html_parser;
 
 class ContainerRepository {
   final Preferences prefs;
@@ -1148,5 +1149,22 @@ class ContainerRepository {
     } else {
       return QRCode.fromJson(response.data);
     }
+  }
+
+  static String removeDoubleEnumHtml(String htmlString) {
+    final document = html_parser.parse(htmlString);
+
+    final olElements = document.getElementsByTagName('ol');
+    for (final ol in olElements) {
+      final listItems = ol.getElementsByTagName('li');
+      for (final li in listItems) {
+        final text = li.text.trim();
+        final doubleEnumRegex = RegExp(r'^\d+\.\s+');
+        if (doubleEnumRegex.hasMatch(text)) {
+          li.innerHtml = li.innerHtml.replaceFirst(doubleEnumRegex, '');
+        }
+      }
+    }
+    return document.body!.innerHtml;
   }
 }

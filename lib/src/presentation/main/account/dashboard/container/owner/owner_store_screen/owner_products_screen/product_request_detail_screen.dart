@@ -70,7 +70,9 @@ class _ProductRequestDetailScreenState
                 const SizedBox(
                   height: 8,
                 ),
-                Html(data: widget.request.description),
+                Html(
+                    data: ContainerRepository.removeDoubleEnumHtml(
+                        widget.request.description)),
                 const SizedBox(
                   height: 16,
                 ),

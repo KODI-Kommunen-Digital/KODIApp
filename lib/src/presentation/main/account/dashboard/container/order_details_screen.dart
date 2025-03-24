@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_cart_item.dart';
 import 'package:heidi/src/data/model/model_order.dart';
 import 'package:heidi/src/data/model/model_seller_order.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -150,7 +151,10 @@ class OrderDetailsScreen extends StatelessWidget {
                                                             FontWeight.bold),
                                               ),
                                               const SizedBox(height: 8),
-                                              Html(data: product.description),
+                                              Html(
+                                                  data: ContainerRepository
+                                                      .removeDoubleEnumHtml(
+                                                          product.description)),
                                               const SizedBox(height: 4),
                                               Text(
                                                 "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",

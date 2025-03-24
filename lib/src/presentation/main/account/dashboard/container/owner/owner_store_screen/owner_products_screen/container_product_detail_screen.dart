@@ -216,7 +216,8 @@ class _ContainerProductDetailScreenState
                 ),
                 (RegExp(r'<[^>]+>').hasMatch(widget.product.description))
                     ? Html(
-                        data: widget.product.description,
+                        data: ContainerRepository.removeDoubleEnumHtml(
+                            widget.product.description),
                       )
                     : Text(
                         widget.product.description,

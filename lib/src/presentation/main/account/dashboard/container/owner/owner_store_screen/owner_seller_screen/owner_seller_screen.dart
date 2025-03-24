@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_seller.dart';
 import 'package:heidi/src/data/model/model_store.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/cubit/owner_seller_state.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
@@ -153,9 +154,11 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                         child: Stack(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Expanded(
                                     child: Column(
@@ -166,17 +169,21 @@ class _OwnerSellerLoadedState extends State<OwnerSellerLoaded> {
                                           height: 8,
                                         ),
                                         Text(
-                                            item.title ?? '',
-                                            maxLines: 2,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleMedium!
-                                                .copyWith(
-                                                    fontWeight: FontWeight.bold),
-                                          ),
+                                          item.title ?? '',
+                                          maxLines: 2,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .titleMedium!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
                                         const SizedBox(height: 4),
                                         Html(
-                                          data: item.description ?? '',
+                                          data: (item.description != null)
+                                              ? ContainerRepository
+                                                  .removeDoubleEnumHtml(
+                                                      item.description!)
+                                              : '',
                                         ),
                                         const SizedBox(height: 4),
                                         Row(

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:heidi/src/data/model/model_seller_request.dart';
 import 'package:heidi/src/data/model/model_store.dart';
+import 'package:heidi/src/data/repository/container_repository.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/cubit/seller_requests_view_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/cubit/seller_requests_view_state.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -70,7 +71,7 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
         });
         final newRequests =
             await context.read<SellerRequestsViewCubit>().newOrders(++pageNo);
-        if(newRequests.isEmpty) {
+        if (newRequests.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
         setState(() {
@@ -158,7 +159,9 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                         ),
                                         const SizedBox(height: 8),
                                         Html(
-                                          data: request.description,
+                                          data: ContainerRepository
+                                              .removeDoubleEnumHtml(
+                                                  request.description),
                                         ),
                                         const SizedBox(height: 16),
                                         Row(
@@ -204,7 +207,9 @@ class _SellerRequestsViewLoadedState extends State<SellerRequestsViewLoaded> {
                                                   ),
                                             ),
                                             Text(
-                                              request.username ?? Translate.of(context).translate('undefined'),
+                                              request.username ??
+                                                  Translate.of(context)
+                                                      .translate('undefined'),
                                               overflow: TextOverflow.ellipsis,
                                               maxLines: 2,
                                               style: Theme.of(context)

@@ -50,7 +50,9 @@ class SellerRequestDetails extends StatelessWidget {
                       ),
                 ),
                 const SizedBox(height: 16.0),
-                Html(data: request.description),
+                Html(
+                    data: ContainerRepository.removeDoubleEnumHtml(
+                        request.description)),
                 const SizedBox(height: 8.0),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,23 +72,24 @@ class SellerRequestDetails extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        Translate.of(context).translate('maccount'),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                      Text(
-                        request.username ?? Translate.of(context).translate('undefined'),
-                        style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      Translate.of(context).translate('maccount'),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                    Text(
+                      request.username ??
+                          Translate.of(context).translate('undefined'),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 64.0),
                 if (isOwner)
                   Row(
