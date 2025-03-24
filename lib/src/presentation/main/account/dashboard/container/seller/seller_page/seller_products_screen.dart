@@ -376,8 +376,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
         shape: const CircleBorder(),
         backgroundColor: Theme.of(context).primaryColor,
         onPressed: () {
-          Navigator.pushNamed(context, Routes.createProductScreen,
-              arguments: {'sellerId': widget.user.id});
+          Navigator.pushNamed(context, Routes.createProductScreen);
         },
         child: const Center(
           child: Icon(
@@ -425,7 +424,7 @@ class _SellerLoadedState extends State<SellerProductsLoaded> {
 
   void updateProduct(ContainerProductModel item) async {
     await Navigator.pushNamed(context, Routes.createProductScreen,
-        arguments: {'product': item, 'sellerId': widget.user.id});
+        arguments: {'product': item});
     context.read<SellerCubit>().onLoad(false, true);
   }
 

@@ -131,31 +131,35 @@ class _OwnerLoadedState extends State<OwnerLoaded> {
                                         store.name,
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodySmall!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        store.description ?? '',
-                                        maxLines: 2,
-                                        style: Theme.of(context)
-                                            .textTheme
                                             .titleSmall!
                                             .copyWith(
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        store.address ?? '',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall!
-                                            .copyWith(
                                               fontWeight: FontWeight.bold,
                                             ),
                                       ),
+                                      if (store.description != null)
+                                        const SizedBox(height: 8),
+                                      if (store.description != null)
+                                        Text(
+                                          store.description!,
+                                          maxLines: 2,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                        ),
+                                      if (store.address != null)
+                                        const SizedBox(height: 4),
+                                      if (store.address != null)
+                                        Text(
+                                          store.address ?? '',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodySmall!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
                                       Row(
                                         mainAxisAlignment:
                                             MainAxisAlignment.spaceBetween,
