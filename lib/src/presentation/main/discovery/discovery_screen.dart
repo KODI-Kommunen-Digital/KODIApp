@@ -261,7 +261,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           await AppBloc.discoveryCubit.getServiceLink(service.imageLink);
 
       if (url != null && url.isNotEmpty) {
-        CustomWebViewScreen.showAsBottomSheet(context: context, url: url);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            url: url,
+            title:
+                AppBloc.discoveryCubit.getServiceLinkTitle(service.imageLink));
       }
 
       if (service.imageLink == "4" ||

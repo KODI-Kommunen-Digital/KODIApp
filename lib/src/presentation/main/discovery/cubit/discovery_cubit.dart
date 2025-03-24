@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+
 // import 'package:heidi/src/data/remote/local/link_manager.dart';
 import 'package:heidi/src/data/remote/local/service_manager.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
@@ -198,5 +199,15 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/"
     };
     return serviceLinks[imageLink];
+  }
+
+  String? getServiceLinkTitle(String imageLink) {
+    Map<String, String> serviceTitles = {
+      "4": "Online Dienste",
+      "8": "Anliegen melden",
+      "9": "Freizeitkarte",
+    };
+    String? title = serviceTitles[imageLink];
+    return title;
   }
 }
