@@ -8,6 +8,7 @@ class CitiesDropDown extends StatefulWidget {
   final List<String>? cityTitlesList;
   final String? hintText;
   final String? selectedOption;
+  final bool showQR;
 
   const CitiesDropDown({
     super.key,
@@ -15,6 +16,7 @@ class CitiesDropDown extends StatefulWidget {
     required this.cityTitlesList,
     this.hintText,
     this.selectedOption,
+    this.showQR = true
   });
 
   @override
@@ -59,11 +61,13 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
             }).toList(),
             decoration: InputDecoration(
               contentPadding: contentPadding,
-              suffixIcon: IconButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Routes.qrCodeScreen);
-                  },
-                  icon: const Icon(Icons.qr_code)),
+              suffixIcon: (widget.showQR)
+                  ? IconButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, Routes.qrCodeScreen);
+                      },
+                      icon: const Icon(Icons.qr_code))
+                  : null,
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.white),
               ),

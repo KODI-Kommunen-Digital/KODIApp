@@ -448,6 +448,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                     }
                   }
                 },
+                showQR: false,
                 cityTitlesList: cityTitles,
                 hintText: Translate.of(context).translate('hselect_location'),
                 selectedOption: (selectedCityId != 0)
@@ -503,32 +504,30 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                     ),
                   const SizedBox(height: 16),
                   if (selectedStore != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 32),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color:
-                                Theme.of(context).appBarTheme.backgroundColor),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              selectedStore!.name,
-                              style: (widget.product == null)
-                                  ? Theme.of(context).textTheme.titleSmall!
-                                  : Theme.of(context).textTheme.titleMedium!,
-                            ),
-                            if (widget.product == null)
-                              IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      selectedStore = null;
-                                    });
-                                  },
-                                  icon: const Icon(Icons.close))
-                          ],
-                        ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 2),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Theme.of(context).appBarTheme.backgroundColor),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            selectedStore!.name,
+                            style: (widget.product == null)
+                                ? Theme.of(context).textTheme.titleSmall!
+                                : Theme.of(context).textTheme.titleMedium!,
+                          ),
+                          if (widget.product == null)
+                            IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    selectedStore = null;
+                                  });
+                                },
+                                icon: const Icon(Icons.close, size: 20,))
+                        ],
                       ),
                     ),
                   if (selectedStore != null) const SizedBox(height: 32),
