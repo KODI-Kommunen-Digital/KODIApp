@@ -616,10 +616,10 @@ class Routes {
       case createProductScreen:
         return MaterialPageRoute(
           builder: (context) {
-            final Map<String, dynamic> arguments =
-                settings.arguments as Map<String, dynamic>;
+            final Map<String, dynamic>? arguments =
+                settings.arguments as Map<String, dynamic>?;
             return CreateProductScreen(
-              product: arguments['product'],
+              product: arguments?['product'],
             );
           },
         );
