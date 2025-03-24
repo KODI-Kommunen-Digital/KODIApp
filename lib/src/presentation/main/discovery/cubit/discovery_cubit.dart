@@ -181,7 +181,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "17": "https://www.google.com",
       "20": "https://www.stadt-ratingen.de/verkehr/verkehrsinfo",
       "21": "https://www.stadtwerke-ratingen.de/mobilitaet/oeffentliche-ladestationen",
-      "22": "https://www.stadt-ratingen.de/notfall"
+      "22": "https://www.stadt-ratingen.de/notfall",
+      "30": "https://www.ratingen.de"
     };
     return serviceLinks[imageLink];
   }
