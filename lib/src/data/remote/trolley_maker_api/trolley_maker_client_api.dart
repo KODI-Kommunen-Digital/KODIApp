@@ -34,12 +34,15 @@ abstract class TrolleyMakerClientApi {
   @GET('/api/v1/partners')
   Future<List<TrolleyMakerPartners>> getPartnersList();
 
-  @GET('/api/v1/news')
-  Future<List<TrolleyNews>> getNews();
-
   @GET('/api/v1/partners/{gguid}')
   Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(
       @Path("gguid") String gguid);
+
+  @GET('/api/v1/news')
+  Future<List<TrolleyNews>> getNews();
+
+  @GET('/api/v1/news/{newsId}')
+  Future<TrolleyNews> getNewsDetails(@Path("newsId") int newsId);
 
   @POST('/api/v2/add-card')
   Future<dynamic> addCard(@Body() TrolleyMakerAddCardRequest request);

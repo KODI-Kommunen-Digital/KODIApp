@@ -195,6 +195,39 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
   }
 
   @override
+  Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(String gguid) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    const Map<String, dynamic>? _data = null;
+    final _options = _setStreamType<TrolleyMakerPartnerDetailsInfo>(Options(
+      method: 'GET',
+      headers: _headers,
+      extra: _extra,
+    )
+        .compose(
+          _dio.options,
+          '/api/v1/partners/${gguid}',
+          queryParameters: queryParameters,
+          data: _data,
+        )
+        .copyWith(
+            baseUrl: _combineBaseUrls(
+          _dio.options.baseUrl,
+          baseUrl,
+        )));
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late TrolleyMakerPartnerDetailsInfo _value;
+    try {
+      _value = TrolleyMakerPartnerDetailsInfo.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options);
+      rethrow;
+    }
+    return _value;
+  }
+
+  @override
   Future<List<TrolleyNews>> getNews() async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
@@ -230,19 +263,19 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
   }
 
   @override
-  Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(String gguid) async {
+  Future<TrolleyNews> getNewsDetails(int newsId) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<TrolleyMakerPartnerDetailsInfo>(Options(
+    final _options = _setStreamType<TrolleyNews>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
         .compose(
           _dio.options,
-          '/api/v1/partners/${gguid}',
+          '/api/v1/news/${newsId}',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -252,9 +285,9 @@ class _TrolleyMakerClientApi implements TrolleyMakerClientApi {
           baseUrl,
         )));
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late TrolleyMakerPartnerDetailsInfo _value;
+    late TrolleyNews _value;
     try {
-      _value = TrolleyMakerPartnerDetailsInfo.fromJson(_result.data!);
+      _value = TrolleyNews.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options);
       rethrow;

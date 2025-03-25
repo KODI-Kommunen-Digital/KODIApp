@@ -266,7 +266,7 @@ class TrolleyMakerRepository {
   }
 
   Future<Either<TrolleyMakerErrorResponse, List<TrolleyNews>>>
-  getNewsList() async {
+      getNewsList() async {
     int retryCount = 0;
     const int maxRetries = 1;
     while (retryCount <= maxRetries) {
@@ -276,10 +276,10 @@ class TrolleyMakerRepository {
       } on DioException catch (exception) {
         try {
           final responseMap =
-          jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
           final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
           if ((errorResponse.isInvalidToken() ||
-              errorResponse.isExpiredToken()) &&
+                  errorResponse.isExpiredToken()) &&
               _hasRefreshToken(exception)) {
             retryCount++;
             continue;
@@ -289,6 +289,44 @@ class TrolleyMakerRepository {
           return Left(TrolleyMakerErrorResponse.unknownError());
         }
       } catch (e) {
+        return Left(TrolleyMakerErrorResponse.unknownError());
+      }
+    }
+    return Left(TrolleyMakerErrorResponse.unknownError());
+  }
+
+  Future<Either<TrolleyMakerErrorResponse, TrolleyNews>> getTrolleyNewsDetails(
+      int newsId) async {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
+      try {
+        final result = await api.getNewsDetails(newsId);
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+              jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+                  errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (error, stackTrace) {
+          if (kDebugMode) {
+            print('Error: $error');
+            print('Stack trace: $stackTrace');
+          }
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
+      } catch (error, stackTrace) {
+        if (kDebugMode) {
+          print('Error: $error');
+          print('Stack trace: $stackTrace');
+        }
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
     }

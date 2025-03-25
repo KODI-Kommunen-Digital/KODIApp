@@ -1,4 +1,6 @@
 import 'package:bloc/bloc.dart';
+import 'package:dartz/dartz.dart';
+import 'package:heidi/src/data/model/model_trolley_news.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/trolley_news/cubit/trolley_news_state.dart';
 import 'package:html/parser.dart' show parse;
@@ -21,6 +23,22 @@ class TrolleyNewsCubit extends Cubit<TrolleyNewsState> {
       emit(const TrolleyNewsState.error(
           "Etwas ist schiefgegangen. Bitte versuchen Sie es später erneut."));
     }
+  }
+
+  Future<Either<TrolleyNews?, String?>> getTrolleyNewsDetails(int newsId) async {
+    try {
+      var result = await repository.getTrolleyNewsDetails(newsId);
+      dynamic value = result.fold((error) => null,
+              (responseModel) {
+            return responseModel;
+          });
+      if(value is TrolleyNews?) {
+        return Left(value);
+      }
+    } catch (error) {
+      return Right(error as String?);
+    }
+    return const Left(null);
   }
 
   String trimHtml(String htmlContent, {int maxChars = 200}) {

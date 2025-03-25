@@ -182,11 +182,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             ProductModel product = settings.arguments as ProductModel;
-            if (product.city?.id != null || product.cityId != null) {
+            if ((product.city?.id != null || product.cityId != null) &&
+                product.userId != 0) {
               trackMatomoEvent(false, product.title, product.id,
                   product.cityId ?? product.city?.id);
             }
-            return ProductDetailScreen(item: product);
+            return ProductDetailScreen(
+              item: product,
+              isRealProduct: product.userId != 0,
+            );
           },
         );
 
