@@ -60,6 +60,7 @@ import 'package:heidi/src/presentation/main/trolley_maker/partner/trolley_maker_
 import 'package:heidi/src/presentation/main/trolley_maker/partner_details/trolley_maker_partner_details_screen_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker_register_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
+import 'package:heidi/src/presentation/main/trolley_maker/trolley_news/trolley_news_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
 
@@ -146,6 +147,7 @@ class Routes {
   static const String trolleyMakerMyCredit = "/trolleyMakerMyCredit";
   static const String trolleyMakerPartner = "/trolleyMakerPartner";
   static const String trolleyMakerSignUp = '/trolleyMakerSignUp';
+  static const String trolleyNewsScreen = '/trolleyNewsScreen';
   static const String trolleyMakerPartnerDetails =
       "/trolleyMakerPartnerDetails";
 
@@ -606,6 +608,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return TrolleyMakerPartnerDetailsScreen(gguid, companyName);
+          },
+        );
+
+      case trolleyNewsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return TrolleyNewsScreen();
           },
         );
 
