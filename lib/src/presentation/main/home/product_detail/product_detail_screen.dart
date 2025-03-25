@@ -1330,6 +1330,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       controller: _scrollController,
       slivers: <Widget>[
         SliverAppBar(
+          backgroundColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(
               Icons.arrow_back,
