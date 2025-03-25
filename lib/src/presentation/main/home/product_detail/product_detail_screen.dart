@@ -42,6 +42,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
+  bool faultyImage = false;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -688,11 +689,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       banner = product.pdf == ''
           ? InkWell(
               onTap: () {
-                Navigator.pushNamed(context, Routes.imageZoom, arguments: {
-                  'sourceId': product.sourceId,
-                  'imageList': product.imageLists,
-                  'pdf': null,
-                });
+                if (!faultyImage) {
+                  Navigator.pushNamed(context, Routes.imageZoom, arguments: {
+                    'sourceId': product.sourceId,
+                    'imageList': product.imageLists,
+                    'pdf': null,
+                  });
+                }
               },
               child: Column(
                 children: [
@@ -745,6 +748,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   child: Image.network(
                                     imageUrlString!,
                                     fit: BoxFit.fitHeight,
+                                    errorBuilder: (BuildContext context,
+                                        Object error, StackTrace? stackTrace) {
+                                      faultyImage = true;
+                                      return Image.network(
+                                        "${Application.picturesURL}admin/News.jpeg",
+                                        // your fallback image
+                                        fit: BoxFit.contain,
+                                      );
+                                    },
                                     loadingBuilder: (BuildContext context,
                                         Widget child,
                                         ImageChunkEvent? loadingProgress) {
@@ -808,19 +820,21 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         AllowMultipleGestureRecognizer>(
                   () => AllowMultipleGestureRecognizer(), //constructor
                   (AllowMultipleGestureRecognizer instance) {
-                    instance.onTap = () async {
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.imageZoom,
-                          arguments: {
-                            'sourceId': product.sourceId,
-                            'imageList': product.imageLists,
-                            'pdf':
-                                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                          }
-                          // arguments:
-                          //     "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                          );
-                    };
+                    if (!faultyImage) {
+                      instance.onTap = () async {
+                        if (!mounted) return;
+                        Navigator.pushNamed(context, Routes.imageZoom,
+                            arguments: {
+                              'sourceId': product.sourceId,
+                              'imageList': product.imageLists,
+                              'pdf':
+                                  "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                            }
+                            // arguments:
+                            //     "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+                            );
+                      };
+                    }
                   },
                 )
               },
