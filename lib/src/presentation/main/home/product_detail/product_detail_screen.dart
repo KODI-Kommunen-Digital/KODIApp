@@ -27,9 +27,11 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class ProductDetailScreen extends StatefulWidget {
-  const ProductDetailScreen({super.key, required this.item});
+  const ProductDetailScreen(
+      {super.key, required this.item, this.isRealProduct = true});
 
   final ProductModel item;
+  final bool isRealProduct;
 
   @override
   State<ProductDetailScreen> createState() => _ProductDetailScreenState();
@@ -716,21 +718,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           items: product.imageLists?.map((imageUrl) {
                             return Builder(
                               builder: (BuildContext context) {
-                                String? imageUrlString = product.sourceId ==
-                                            2 &&
-                                        imageUrl.logo != null &&
-                                        imageUrl.logo != 'admin/News.jpeg'
-                                    ? imageUrl.logo
-                                    : product.sourceId == 3 &&
-                                            imageUrl.logo != null
-                                        ? (imageUrl.logo!.startsWith('admin')
-                                            ? "${Application.picturesURL}${imageUrl.logo}"
-                                            : imageUrl.logo)
-                                        : imageUrl.logo != null &&
-                                                imageUrl.logo!
+                                String? imageUrlString = (widget.isRealProduct)
+                                    ? product.sourceId == 2 &&
+                                            imageUrl.logo != null &&
+                                            imageUrl.logo != 'admin/News.jpeg'
+                                        ? imageUrl.logo
+                                        : product.sourceId == 3 &&
+                                                imageUrl.logo != null
+                                            ? (imageUrl.logo!
                                                     .startsWith('admin')
-                                            ? "${Application.picturesURL}${imageUrl.logo}"
-                                            : "${Application.picturesURL}${imageUrl.logo}";
+                                                ? "${Application.picturesURL}${imageUrl.logo}"
+                                                : imageUrl.logo)
+                                            : imageUrl.logo != null &&
+                                                    imageUrl.logo!
+                                                        .startsWith('admin')
+                                                ? "${Application.picturesURL}${imageUrl.logo}"
+                                                : "${Application.picturesURL}${imageUrl.logo}"
+                                    : product.image;
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
                                   margin: const EdgeInsets.symmetric(
@@ -1174,7 +1178,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                 ),
-                if (product.category!.toLowerCase() == "events")
+                if (product.category?.toLowerCase() == "events")
                   IconButton(
                       icon: const Icon(Icons.event),
                       onPressed: _requestPermissions,
@@ -1355,27 +1359,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocProvider(
-        create: (context) => _productDetailCubit,
-        child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
-          builder: (context, state) {
-            ProductModel? product;
-            List<FavoriteModel>? favoriteList;
-            UserModel? userDetail;
-            bool isDarkMode = true;
-            bool isLoggedIn = false;
-            if (state is ProductDetailLoaded) {
-              product = state.product;
-              favoriteList = state.favoritesList;
-              isLoggedIn = state.isLoggedIn;
-              userDetail = state.userDetail;
-              isDarkMode = state.isDarkMode;
-            }
-            return _buildContent(
-                product, favoriteList, userDetail, isLoggedIn, isDarkMode);
-          },
-        ),
-      ),
-    );
+        body: (widget.isRealProduct)
+            ? BlocProvider(
+                create: (context) => _productDetailCubit,
+                child: BlocBuilder<ProductDetailCubit, ProductDetailState>(
+                  builder: (context, state) {
+                    ProductModel? product;
+                    List<FavoriteModel>? favoriteList;
+                    UserModel? userDetail;
+                    bool isDarkMode = true;
+                    bool isLoggedIn = false;
+                    if (state is ProductDetailLoaded) {
+                      product = state.product;
+                      favoriteList = state.favoritesList;
+                      isLoggedIn = state.isLoggedIn;
+                      userDetail = state.userDetail;
+                      isDarkMode = state.isDarkMode;
+                    }
+                    return _buildContent(product, favoriteList, userDetail,
+                        isLoggedIn, isDarkMode);
+                  },
+                ),
+              )
+            : _buildContent(widget.item, null, null, false,
+                Theme.of(context).brightness == Brightness.dark));
   }
 }

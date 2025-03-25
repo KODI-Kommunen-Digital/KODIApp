@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/data/model/model_trolley_news.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
@@ -12,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class TrolleyNewsScreen extends StatefulWidget {
@@ -72,6 +74,7 @@ class TrolleyNewsLoaded extends StatefulWidget {
 
 class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
   final ScrollController _scrollController = ScrollController();
+  OverlayEntry? _loader;
 
   @override
   void dispose() {
@@ -116,11 +119,53 @@ class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
           );
   }
 
+  void showOverlayLoader() {
+    _loader = OverlayEntry(
+      builder: (_) => const Stack(
+        children: [
+          Opacity(
+            opacity: 0.3,
+            child: ModalBarrier(dismissible: false, color: Colors.black),
+          ),
+          Center(child: CircularProgressIndicator()),
+        ],
+      ),
+    );
+
+    Overlay.of(context).insert(_loader!);
+  }
+
+  void hideOverlayLoader() {
+    _loader?.remove();
+    _loader = null;
+  }
+
+  void _onItem(TrolleyNews item) async {
+    showOverlayLoader();
+    final response =
+        await context.read<TrolleyNewsCubit>().getTrolleyNewsDetails(item.id);
+    hideOverlayLoader();
+    response.fold(
+        (responseModel) => {
+              if (responseModel != null)
+                Navigator.pushNamed(context, Routes.productDetail,
+                    arguments: ProductModel.fromTrolleyNews(responseModel))
+            }, (error) {
+      if (error != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error),
+          ),
+        );
+      }
+    });
+  }
+
   Widget _buildItem(TrolleyNews item) {
     final memoryCacheManager = DefaultCacheManager();
     return InkWell(
-      onTap: () async {
-        //TODO navigate to Details
+      onTap: () {
+        _onItem(item);
       },
       child: Stack(
         children: [
@@ -190,17 +235,16 @@ class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
                     const SizedBox(
                       height: 8,
                     ),
-                    HtmlWidget(context.read<TrolleyNewsCubit>().trimHtml(item.content, maxChars: 150)),
-                    if(item.link != null)
-                    const SizedBox(height: 8),
-                    if(item.link != null)
+                    HtmlWidget(context
+                        .read<TrolleyNewsCubit>()
+                        .trimHtml(item.content, maxChars: 150)),
+                    if (item.link != null) const SizedBox(height: 8),
+                    if (item.link != null)
                       Text(
                         'Quelle: ${item.link!}',
                         maxLines: 2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall!
-                            .copyWith(),
+                        style:
+                            Theme.of(context).textTheme.bodySmall!.copyWith(),
                       ),
                     const SizedBox(height: 8),
                     const Row(
