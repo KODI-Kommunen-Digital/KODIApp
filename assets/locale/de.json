@@ -626,6 +626,7 @@
   "add_card": "Karte hinzufügen",
   "production_number": "Produktionsnummer",
   "add_new_card": "Neue Karte hinzufügen",
-  "current_password_incorrect": "Das aktuelle Passwort ist falsch"
+  "current_password_incorrect": "Das aktuelle Passwort ist falsch",
+  "retry": "Versuche erneut"
 }
 

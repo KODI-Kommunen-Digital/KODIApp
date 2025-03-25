@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_trolley_maker_partners.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_sign_up_values.dart';
+import 'package:heidi/src/data/model/model_trolley_news.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'trolley_maker_client_api.g.dart';
@@ -32,6 +33,9 @@ abstract class TrolleyMakerClientApi {
 
   @GET('/api/v1/partners')
   Future<List<TrolleyMakerPartners>> getPartnersList();
+
+  @GET('/api/v1/news')
+  Future<List<TrolleyNews>> getNews();
 
   @GET('/api/v1/partners/{gguid}')
   Future<TrolleyMakerPartnerDetailsInfo> getPartnerDetails(

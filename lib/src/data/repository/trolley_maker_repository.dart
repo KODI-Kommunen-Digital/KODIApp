@@ -15,6 +15,7 @@ import 'package:heidi/src/data/model/model_trolley_maker_register_request.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_register_response.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_country.dart';
 import 'package:heidi/src/data/model/model_trolley_maker_sign_up_values.dart';
+import 'package:heidi/src/data/model/model_trolley_news.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_api.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/secure_storage.dart';
@@ -23,6 +24,7 @@ class TrolleyMakerRepository {
   final Preferences prefs;
   final TrolleyMakerClientApi api;
   final SecureStorage secureStorage;
+
   TrolleyMakerRepository(this.prefs, this.api, this.secureStorage);
 
   Future<Either<TrolleyMakerErrorResponse, TrolleyMakerLoginResponse>> login(
@@ -257,6 +259,36 @@ class TrolleyMakerRepository {
           print('Error: $error');
           print('Stack trace: $stackTrace');
         }
+        return Left(TrolleyMakerErrorResponse.unknownError());
+      }
+    }
+    return Left(TrolleyMakerErrorResponse.unknownError());
+  }
+
+  Future<Either<TrolleyMakerErrorResponse, List<TrolleyNews>>>
+  getNewsList() async {
+    int retryCount = 0;
+    const int maxRetries = 1;
+    while (retryCount <= maxRetries) {
+      try {
+        final result = await api.getNews();
+        return Right(result);
+      } on DioException catch (exception) {
+        try {
+          final responseMap =
+          jsonDecode(exception.response.toString()) as Map<String, dynamic>;
+          final errorResponse = TrolleyMakerErrorResponse.fromJson(responseMap);
+          if ((errorResponse.isInvalidToken() ||
+              errorResponse.isExpiredToken()) &&
+              _hasRefreshToken(exception)) {
+            retryCount++;
+            continue;
+          }
+          return Left(errorResponse);
+        } catch (e) {
+          return Left(TrolleyMakerErrorResponse.unknownError());
+        }
+      } catch (e) {
         return Left(TrolleyMakerErrorResponse.unknownError());
       }
     }
