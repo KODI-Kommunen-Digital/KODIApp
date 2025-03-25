@@ -202,19 +202,48 @@ class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
                     );
                   },
                   errorWidget: (context, url, error) {
-                    return AppPlaceholder(
-                      child: Container(
-                        width: 120,
-                        height: 140,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8),
-                            bottomLeft: Radius.circular(8),
+                    return CachedNetworkImage(
+                      imageUrl: "${Application.picturesURL}admin/News.jpeg",
+                      cacheManager: memoryCacheManager,
+                      placeholder: (context, url) {
+                        return AppPlaceholder(
+                          child: Container(
+                            width: 120,
+                            height: 140,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                            ),
                           ),
-                        ),
-                        child: const Icon(Icons.error),
-                      ),
+                        );
+                      },
+                      imageBuilder: (context, imageProvider) {
+                        return Container(
+                          width: 120,
+                          height: 140,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: imageProvider,
+                              fit: BoxFit.fitHeight,
+                            ),
+                          ),
+                        );
+                      },
+                      errorWidget: (context, url, error) {
+                        return AppPlaceholder(
+                          child: Container(
+                            width: 120,
+                            height: 140,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
+                            ),
+                            child: const Icon(Icons.error),
+                          ),
+                        );
+                      },
                     );
                   },
                 ),
@@ -237,15 +266,15 @@ class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
                     ),
                     HtmlWidget(context
                         .read<TrolleyNewsCubit>()
-                        .trimHtml(item.content, maxChars: 150)),
-                    if (item.link != null) const SizedBox(height: 8),
+                        .trimHtml(item.content, maxChars: 85)),
+                    /*if (item.link != null) const SizedBox(height: 8),
                     if (item.link != null)
                       Text(
                         'Quelle: ${item.link!}',
                         maxLines: 2,
                         style:
                             Theme.of(context).textTheme.bodySmall!.copyWith(),
-                      ),
+                      ),*/
                     const SizedBox(height: 8),
                     const Row(
                       children: <Widget>[

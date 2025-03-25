@@ -96,9 +96,9 @@ class TrolleyNewsCubit extends Cubit<TrolleyNewsState> {
     final match = RegExp(r'(</\w+>)\s*$').firstMatch(trimmedHtml);
     if (match != null) {
       final insertIndex = match.start;
-      return '${trimmedHtml.substring(0, insertIndex)}[...]${trimmedHtml.substring(insertIndex)}';
+      return '${trimmedHtml.substring(0, insertIndex)}${trimmedHtml.substring(insertIndex)}';
     }
 
-    return '$trimmedHtml[...]';
+    return trimmedHtml;
   }
 }
