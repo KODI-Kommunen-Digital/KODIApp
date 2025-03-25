@@ -754,7 +754,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                       return Image.network(
                                         "${Application.picturesURL}admin/News.jpeg",
                                         // your fallback image
-                                        fit: BoxFit.contain,
+                                        fit: BoxFit.fitHeight,
                                       );
                                     },
                                     loadingBuilder: (BuildContext context,
