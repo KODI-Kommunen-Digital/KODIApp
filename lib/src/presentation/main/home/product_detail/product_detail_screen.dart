@@ -146,7 +146,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(option.title),
+                  Expanded(child: Text(option.title)),
                   Text(option.votes.toString()),
                 ],
               ),
