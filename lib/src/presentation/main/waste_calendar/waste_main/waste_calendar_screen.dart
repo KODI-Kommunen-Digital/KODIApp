@@ -213,12 +213,18 @@ class _WasteCalendarState extends State<WasteCalendar> {
                             "Keine Abholungen für den ausgewählten Tag verfügbar");
                       }
                       return Column(
-                        children: collectionsForSelectedDay
+                        children: removeMultiples(collectionsForSelectedDay)
                             .map((collection) => ListTile(
                                   leading: Icon(Icons.delete,
                                       color: _wasteCalenderCubit
                                           .getColorForType(collection.type)),
-                                  title: Text(collection.type),
+                                  title: Text(
+                                    (collection.type
+                                            .toLowerCase()
+                                            .contains('restmüll'))
+                                        ? 'Restmüll'
+                                        : collection.type,
+                                  ),
                                 ))
                             .toList(),
                       );
@@ -233,6 +239,24 @@ class _WasteCalendarState extends State<WasteCalendar> {
         ),
       ),
     );
+  }
+
+  List<WasteCollection> removeMultiples(
+      List<WasteCollection> collectionsForSelectedDay) {
+    final List<WasteCollection> filteredCollections = [];
+    bool restmuellSeen = false;
+
+    for (var collection in collectionsForSelectedDay) {
+      final isRestmuell = collection.type.toLowerCase().contains('restmüll');
+
+      if (isRestmuell) {
+        if (restmuellSeen) continue;
+        restmuellSeen = true;
+      }
+
+      filteredCollections.add(collection);
+    }
+    return filteredCollections;
   }
 
   Widget _buildWasteCard(WasteCollection collection) {
@@ -254,7 +278,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
             ),
             const SizedBox(height: 8),
             Text(
-              collection.type,
+              (collection.type.toLowerCase().contains('restmüll'))
+                  ? 'Restmüll'
+                  : collection.type,
               style: const TextStyle(color: Colors.black, fontSize: 14),
               textAlign: TextAlign.center,
             ),
