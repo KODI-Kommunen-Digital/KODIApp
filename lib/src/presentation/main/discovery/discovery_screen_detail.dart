@@ -185,6 +185,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Navigator.pushNamed(context, Routes.trolleyMakerCards);
     } else if (service.arguments == 163) {
       Navigator.pushNamed(context, Routes.trolleyMakerPartner);
+    } else if (service.arguments == 164) {
+      Navigator.pushNamed(context, Routes.trolleyNewsScreen);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

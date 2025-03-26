@@ -617,5 +617,6 @@
   "add_card": "Add Card",
   "production_number": "Production Number",
   "add_new_card": "Add New Card",
-  "current_password_incorrect": "Current password is incorrect"
+  "current_password_incorrect": "Current password is incorrect",
+  "retry": "Retry"
 }

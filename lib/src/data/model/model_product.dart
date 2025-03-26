@@ -7,6 +7,7 @@ import 'package:heidi/src/data/model/model_file.dart';
 import 'package:heidi/src/data/model/model_image.dart';
 import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/data/model/model_trolley_news.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
 import 'package:html/parser.dart';
@@ -358,6 +359,40 @@ class ProductModel {
         priceDisplay: priceDisplay,
         imageLists: imagesList,
         viewCount: json['viewCount']);
+  }
+
+  factory ProductModel.fromTrolleyNews(TrolleyNews trolleyNews) {
+    return ProductModel(
+        id: trolleyNews.id,
+        title: trolleyNews.title,
+        image: trolleyNews.featuredImage ?? '',
+        expiryDate: "",
+        startDate: "",
+        endDate: "",
+        createDate: formatTrolleyNewsDate(trolleyNews.date),
+        favorite: false,
+        address: "",
+        phone: "",
+        email: "",
+        website: trolleyNews.link ?? '',
+        pdf: '',
+        externalId: "",
+        description: trolleyNews.content,
+        imageLists: (trolleyNews.featuredImage != null)
+            ? [ImageListModel(logo: trolleyNews.featuredImage!)]
+            : null,
+        userId: 0);
+  }
+
+  static String formatTrolleyNewsDate(String input) {
+    final dateTime = DateTime.parse(input);
+    twoDigits(int n) => n.toString().padLeft(2, '0');
+
+    final day = twoDigits(dateTime.day);
+    final month = twoDigits(dateTime.month);
+    final year = dateTime.year;
+
+    return '$day.$month.$year';
   }
 
   factory ProductModel.fromNotification(Map<String, dynamic> json) {
