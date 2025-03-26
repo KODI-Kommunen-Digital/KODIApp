@@ -28,7 +28,7 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
           final collection = WasteCollection.fromJson(item);
           if ((collection.type.contains("wöchentlich")) ||
               collection.type.contains("14")) {
-            continue;
+            //continue;
           }
           wasteCollections.add(collection);
           final DateTime collectionDate = DateTime(
