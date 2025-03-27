@@ -408,6 +408,8 @@ class ListCubit extends Cubit<ListState> {
           return "category_immobilien";
         case 15:
           return "category_finanzen";
+        case 22:
+          return "category_weitere";
       }
     } else if (categoryId == 46 && subCategoryId != null) {
       switch (subCategoryId) {

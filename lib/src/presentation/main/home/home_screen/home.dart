@@ -594,6 +594,12 @@ class _HomeScreenState extends State<HomeScreen> {
             subCategoryId: 0,
             type: "subCategoryService",
           ),
+          CitizenServiceModel(
+              imageUrl: "8.6",
+              imageLink: Images.service8_6,
+              categoryId: 0,
+              subCategoryId: 0,
+              type: "subCategoryService"),
         ],
         'title': 'Gastro',
       });
