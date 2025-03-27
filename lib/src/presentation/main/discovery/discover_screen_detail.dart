@@ -78,6 +78,31 @@ class DiscoveryScreenDetail extends StatelessWidget {
                 );
                 Navigator.pushNamed(context, Routes.productDetail,
                     arguments: item);
+              } else if (services[index].imageUrl == "8.6" &&
+                  services[index].categoryId == 0) {
+                final item = ProductModel(
+                  id: 5604,
+                  allCities: [2],
+                  cityId: 2,
+                  categoryId: 1,
+                  title: '',
+                  image: '',
+                  expiryDate: '',
+                  startDate: '',
+                  endDate: '',
+                  createDate: '',
+                  favorite: false,
+                  address: '',
+                  phone: '',
+                  email: '',
+                  website: '',
+                  externalId: '',
+                  description: '',
+                  button: "Jetzt reservieren",
+                  userId: 3,
+                );
+                Navigator.pushNamed(context, Routes.productDetail,
+                    arguments: item);
               }
             },
             child: ClipRRect(

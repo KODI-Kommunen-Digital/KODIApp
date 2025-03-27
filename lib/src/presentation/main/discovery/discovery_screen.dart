@@ -242,6 +242,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
               imageLink: Images.service35,
               categoryId: 45,
               subCategoryId: 15,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "36",
+              imageLink: Images.service36,
+              categoryId: 45,
+              subCategoryId: 22,
               type: "subCategoryService")
         ],
         'title': 'Dienstleister',
@@ -279,6 +285,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           CitizenServiceModel(
               imageUrl: "8.4",
               imageLink: Images.service8_4,
+              categoryId: 0,
+              subCategoryId: 0,
+              type: "subCategoryService"),
+          CitizenServiceModel(
+              imageUrl: "8.6",
+              imageLink: Images.service8_6,
               categoryId: 0,
               subCategoryId: 0,
               type: "subCategoryService"),

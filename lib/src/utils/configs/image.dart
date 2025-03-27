@@ -29,6 +29,7 @@ class Images {
   static const String service8_3 = "assets/images/services-8.3.png";
   static const String service8_4 = "assets/images/services-8.4.png";
   static const String service8_5 = "assets/images/services-8.5.png";
+  static const String service8_6 = "assets/images/services-8.6.png";
   static const String service9 = "assets/images/services-9.png";
   static const String service10 = "assets/images/services-10.png";
   static const String service11 = "assets/images/services-11.png";
@@ -43,6 +44,7 @@ class Images {
   static const String service33 = "assets/images/services-33.png";
   static const String service34 = "assets/images/services-34.png";
   static const String service35 = "assets/images/services-35.png";
+  static const String service36 = "assets/images/services-36.png";
 
   static const String defaultListing = "assets/images/default_image.jpeg";
 

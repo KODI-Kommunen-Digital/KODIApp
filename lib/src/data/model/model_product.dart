@@ -182,6 +182,8 @@ class ProductModel {
 
     if (json['title'] == "Liefer King - Online Bestellung") {
       button = "Jetzt bestellen";
+    } else if (json['title'] == "Tischreservierung") {
+      button = "Jetzt reservieren";
     } else {
       button = null;
     }

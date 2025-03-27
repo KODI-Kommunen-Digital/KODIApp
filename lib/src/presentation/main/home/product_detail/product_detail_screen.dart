@@ -1100,7 +1100,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
       booking = InkWell(
         onTap: () {
-          _makeTechAction(product.website);
+          if (product.website == null || product.website.trim().isEmpty) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                contentPadding: const EdgeInsets.fromLTRB(20, 20, 20, 10),
+                content: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0, right: 8.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            "Hier wird in Kürze ein neuer Service eingebunden",
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 20),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("OK"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            _makeTechAction(product.website);
+          }
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
@@ -1122,7 +1157,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ),
         ),
       );
-
       info = Padding(
         padding: const EdgeInsets.only(left: 16, right: 16),
         child: Column(
