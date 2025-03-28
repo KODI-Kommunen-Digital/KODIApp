@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -51,8 +53,10 @@ class WishListLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator.adaptive(),
+      ),
     );
   }
 }

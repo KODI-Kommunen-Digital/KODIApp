@@ -252,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '2.4.4';
+                          latestAppStoreVersion = appStoreVersion ?? '3.0.0';
                         });
                       }
                     },
@@ -364,10 +364,8 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (bool didPop, dynamic result) async {
-            if (didPop) return;
-            Navigator.pop(context, null);
+          onPopInvokedWithResult: (pop, result) async {
+            Navigator.pop(context, searchTerm);
           },
           child: SimpleDialog(
               title: Center(
@@ -723,7 +721,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 style: Theme.of(context)
                     .textTheme
-                    .titleMedium!
+                    .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(
@@ -812,7 +810,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Translate.of(context).translate('recent_listings'),
                 style: Theme.of(context)
                     .textTheme
-                    .titleMedium!
+                    .titleLarge!
                     .copyWith(fontWeight: FontWeight.bold),
               ),
               Text(

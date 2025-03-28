@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +81,7 @@ class _ListGroupScreenState extends State<ListGroupScreen> {
   }
 
   Future<void> loadListingsList() async {
-    await context.read<ListCubit>().onLoad(widget.arguments['id']);
+    await context.read<ListCubit>().onLoad(widget.arguments['id'], true);
   }
 
   void _onAddGroup() async {

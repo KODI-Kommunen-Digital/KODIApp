@@ -12,6 +12,30 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_l
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit/all_requests_cubit.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/container_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/customer/customer_page/customer_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/order_details_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/edit_store/edit_store_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_screen/owner_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_category_screen/owner_category_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_orders_screen/owner_orders_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/owner_products_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/container_product_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_products_screen/product_request_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_seller_screen/owner_seller_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/add_shelf_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/owner_shelves_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/owner_store_screen/owner_shelves_screen/shelf_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/store_detail_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/qr_code/qr_code_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/create_product/create_product_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/owner/product_request_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_order_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_page/seller_products_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_request/seller_request_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_request_details.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_requests_view/seller_requests_view_screen.dart';
+import 'package:heidi/src/presentation/main/account/dashboard/container/seller/seller_select_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/dashboard_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/cubit/my_groups_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/my_groups/my_groups_screen.dart';
@@ -122,6 +146,33 @@ class Routes {
   static const String addPosts = "/addPosts";
   static const String myListings = "/myListings";
   static const String filterScreen = "/filterScreen";
+  static const String containerScreen = "/containerScreen";
+  static const String sellerSelectScreen = "/sellerSelectScreen";
+  static const String sellerRequest = "/sellerRequest";
+  static const String sellerOrderScreen = "/sellerOrderScreen";
+  static const String sellerProductsScreen = "/sellerProductsScreen";
+  static const String productRequestScreen = "/productRequestScreen";
+  static const String customerScreen = "/customerScreen";
+  static const String createProductScreen = "/createProductScreen";
+  static const String ownerScreen = "/ownerScreen";
+  static const String orderDetailsScreen = "/orderDetailsScreen";
+  static const String customerCardScreen = "/customerCardScreen";
+  static const String sellerRequestsViewScreen = "/sellerRequestsView";
+  static const String sellerRequestDetailsScreen = "/sellerRequestDetails";
+  static const String storeDetailScreen = "/storeDetailScreen";
+  static const String ownerOrdersScreen = "/ownerOrdersScreen";
+  static const String ownerSellerScreen = "/ownerSellerScreen";
+  static const String ownerShelvesScreen = "/ownerShelvesScreen";
+  static const String ownerProductsScreen = "/ownerProductsScreen";
+  static const String ownerCategoryScreen = "/ownerCategoryScreen";
+  static const String shelfDetailScreen = "/shelfDetailScreen";
+  static const String addShelfScreen = "/addShelfScreen";
+  static const String productRequestDetailScreen =
+      "/productRequestDetailScreen";
+  static const String editStoreScreen = "/editStoreScreen";
+  static const String containerProductDetailScreen =
+      "/containerProductDetailScreen";
+  static const String qrCodeScreen = "/qrCodeScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -499,9 +550,237 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            return FilterScreen(
-              multiFilter: arguments["multifilter"]
+            return FilterScreen(multiFilter: arguments["multifilter"]);
+          },
+        );
+
+      case containerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return ContainerScreen();
+          },
+        );
+
+      case sellerRequest:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const SellerRequestScreen();
+          },
+        );
+
+      case sellerSelectScreen:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return SellerSelectScreen(user: arguments['user']);
+          },
+        );
+
+      case sellerOrderScreen:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return SellerOrderScreen(user: arguments['user']);
+          },
+        );
+
+      case sellerProductsScreen:
+        final Map<String, dynamic> arguments =
+            settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return SellerProductsScreen(user: arguments['user']);
+          },
+        );
+
+      case productRequestScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ProductRequestScreen(
+              isOwner: arguments["isOwner"],
             );
+          },
+        );
+
+      case customerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const CustomerScreen();
+          },
+        );
+
+      case createProductScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic>? arguments =
+                settings.arguments as Map<String, dynamic>?;
+            return CreateProductScreen(
+              product: arguments?['product'],
+            );
+          },
+        );
+
+      case ownerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const OwnerScreen();
+          },
+        );
+
+      case orderDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OrderDetailsScreen(
+                order: arguments['order'],
+                sellerOrder: arguments['sellerOrder']);
+          },
+        );
+
+      case sellerRequestsViewScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return SellerRequestsViewScreen(
+              isOwner: arguments['isOwner'],
+              store: arguments['store'],
+            );
+          },
+        );
+
+      case sellerRequestDetailsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return SellerRequestDetails(
+                request: arguments['request'], isOwner: arguments['isOwner']);
+          },
+        );
+
+      case storeDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return StoreDetailScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerOrdersScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerOrdersScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerProductsScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerProductsScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerCategoryScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerCategoryScreen(
+              stores: arguments['stores'],
+            );
+          },
+        );
+
+      case ownerSellerScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerSellerScreen(store: arguments['store']);
+          },
+        );
+
+      case ownerShelvesScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return OwnerShelvesScreen(store: arguments['store']);
+          },
+        );
+
+      case shelfDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ShelfDetailsScreen(
+              shelf: arguments['shelf'],
+            );
+          },
+        );
+
+      case addShelfScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return AddShelfScreen(
+              store: arguments['store'],
+            );
+          },
+        );
+
+      case productRequestDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ProductRequestDetailScreen(
+                request: arguments['request'],
+                shelves: arguments['shelves'],
+                isOwner: arguments['isOwner']);
+          },
+        );
+
+      case editStoreScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return EditStoreScreen(
+              cityId: arguments['cityId'],
+              storeId: arguments['storeId'],
+            );
+          },
+        );
+
+      case containerProductDetailScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final Map<String, dynamic> arguments =
+                settings.arguments as Map<String, dynamic>;
+            return ContainerProductDetailScreen(
+              product: arguments['product'],
+            );
+          },
+        );
+
+      case qrCodeScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            return QrCodeScreen();
           },
         );
 

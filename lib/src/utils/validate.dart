@@ -1,12 +1,4 @@
-enum ValidateType {
-  normal,
-  email,
-  number,
-  phone,
-  tag,
-  cpassword,
-  website,
-}
+enum ValidateType { normal, email, number, phone, tag, cpassword, website, tax, price}
 
 class UtilValidator {
   static const String errorEmpty = "value_not_empty";
@@ -20,6 +12,8 @@ class UtilValidator {
   static const String errorWebsite = "value_not_website";
   static const String valueNotMatch = "value_not_match";
   static const String valueNotIsTag = "value_not_is_tag";
+  static const String errorTax = "value_not_tax";
+  static const String errorPrice = "value_not_price";
 
   static String? validate(String data,
       {ValidateType? type = ValidateType.normal,
@@ -89,6 +83,20 @@ class UtilValidator {
             r"^(https?|ftp):\/\/(?:www\.)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:\/[^\s]*)?$");
         if (!websiteRegex.hasMatch(data)) {
           return errorWebsite;
+        }
+        break;
+
+      case ValidateType.tax:
+        final taxRegex = RegExp(r'^(0(\.\d+)?|([1-9]?\d(\.\d+)?|100(\.0+)?))$');
+        if (!taxRegex.hasMatch(data)) {
+          return errorTax;
+        }
+        break;
+
+        case ValidateType.price:
+        final priceRegex = RegExp(r'^([0-9]+|\d+(?:\.(?:[0-9]{1,2})|\,(?:[0-9]{1,2})))?$');
+        if (!priceRegex.hasMatch(data)) {
+          return errorPrice;
         }
         break;
       default:

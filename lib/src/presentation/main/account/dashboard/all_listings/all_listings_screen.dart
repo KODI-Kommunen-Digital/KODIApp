@@ -372,17 +372,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                                 .circular(10),
                                                       ),
                                                       child: ElevatedButton(
-                                                        style: ElevatedButton
-                                                            .styleFrom(
-                                                          backgroundColor:
-                                                              Theme.of(context)
-                                                                  .primaryColor,
-                                                          shape:
-                                                              RoundedRectangleBorder(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        8),
+                                                        style: ElevatedButton.styleFrom(
+                                                          backgroundColor: Theme.of(context).primaryColor,
+                                                          shape: RoundedRectangleBorder(
+                                                            borderRadius: BorderRadius.circular(8),
                                                           ),
                                                         ),
                                                         onPressed: () async {
@@ -474,11 +467,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
       context: context,
       builder: (BuildContext context) {
         return PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (bool didPop, dynamic result) {
-            if (!didPop) {
-              Navigator.pop(context, searchTerm);
-            }
+          onPopInvokedWithResult: (pop, result) async {
+            Navigator.pop(context, searchTerm);
           },
           child: SimpleDialog(
               title: Center(

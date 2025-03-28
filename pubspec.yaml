@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.9
+version: 3.0.0
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
@@ -18,10 +18,13 @@ dependencies:
   loggy: ^2.0.3
   flutter_loggy: ^2.0.2
   cupertino_icons: ^1.0.2
-  sentry_flutter: ^8.3.0
+  sentry_flutter: ^8.11.0
 
   ### l10n
   intl: ^0.19.0
+
+  ### Barcode
+  simple_barcode_scanner: ^0.1.1
 
   ### State Management
   bloc: ^8.1.4
@@ -51,7 +54,8 @@ dependencies:
   ### Device Permission
   device_info: 2.0.3
   permission_handler: ^11.3.1
-  url_launcher: ^6.3.0
+  url_launcher: ^6.3.1
+  url_launcher_ios: ^6.3.2
   connectivity: ^3.0.6
 
   ### Location
@@ -66,14 +70,18 @@ dependencies:
   cached_network_image: ^3.3.1
   flutter_html: ^3.0.0-beta.1
   photo_view: ^0.15.0
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
+  flutter_typeahead: ^5.2.0
+  multi_dropdown: ^2.0.0
+  syncfusion_flutter_barcodes: ^27.1.48
+  qr_flutter: ^4.1.0
 
 #  webview_flutter: ^4.2.2
   flutter_widget_from_html: ^0.15.1
 
   ### Firebase
   firebase_core: ^3.1.1
-  firebase_messaging: ^15.0.2
+  firebase_messaging: ^15.2.4
 
   ### File Reading
   open_filex: ^4.4.0

@@ -106,6 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           password: _textPassController.text,
         );
         Navigator.pop(context);
+        //LoginCubit.showRedirectContainerCard(context);
       } else {
         if (result.message.contains('is already registered')) {
           if (!mounted) return;

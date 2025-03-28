@@ -21,7 +21,6 @@ class LoginCubit extends Cubit<LoginState> {
           await UserRepository.requestUserDetails(response.data['userId']);
       if (userDetailResponse != null) {
         await AppBloc.authenticateCubit.onSave(userDetailResponse);
-
         emit(const LoginState.loaded());
       } else {
         emit(const LoginState.initial());
@@ -53,4 +52,61 @@ class LoginCubit extends Cubit<LoginState> {
     AppBloc.authenticateCubit.onClear();
     AppBloc.userCubit.onDeleteUser();
   }
+
+  /*static void showRedirectContainerCard(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            Translate.of(context).translate('associate_container_card'),
+          ),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                  Translate.of(context)
+                      .translate('associate_container_card_message'),
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(
+                  height: 2,
+                ),
+                Text(
+                  "(${Translate.of(context).translate('associate_container_card_reminder')})",
+                  style: Theme.of(context).textTheme.bodySmall!.copyWith(fontSize: 10),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            AppButton(
+              Translate.of(context).translate('never'),
+              onPressed: () {
+                saveRemindContainerCard();
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+            AppButton(
+              Translate.of(context).translate('later'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+            AppButton(
+              Translate.of(context).translate('connect'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, Routes.addCustomerCardScreen);
+              },
+              type: ButtonType.text,
+            ),
+          ],
+        );
+      },
+    );
+  }*/
 }

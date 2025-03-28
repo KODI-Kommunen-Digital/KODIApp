@@ -21,6 +21,8 @@ class AppTextInput extends StatefulWidget {
   final int? maxLength;
   final bool readOnly;
   final bool hasDelete;
+  final bool showCharacters;
+  final int characterLimit;
 
   const AppTextInput(
       {super.key,
@@ -41,7 +43,9 @@ class AppTextInput extends StatefulWidget {
       this.maxLength,
       this.readOnly = false,
       this.hasDelete = true,
-      this.autofillHint});
+      this.autofillHint,
+      this.showCharacters = false,
+      this.characterLimit = 255});
 
   @override
   State<AppTextInput> createState() => _AppTextInputState();
@@ -168,7 +172,19 @@ class _AppTextInputState extends State<AppTextInput> {
                       children: [
                         widget.trailing ?? Container(),
                         deleteAction,
-                        const SizedBox(width: 12)
+                        const SizedBox(width: 4),
+                        if(widget.showCharacters)
+                          Column(mainAxisAlignment: MainAxisAlignment.end,children: [
+                            Text(
+                              '${widget.controller!.text.length.toString()}/${widget.characterLimit.toString()}',
+                              style: Theme.of(context).textTheme.bodySmall!.copyWith(
+                                  fontWeight: FontWeight.normal,
+                                  color: (widget.controller!.text.length > widget.characterLimit)
+                                      ? Colors.red
+                                      : Theme.of(context).textTheme.bodySmall!.color!),
+                            ),
+                          ],),
+                        const SizedBox(width: 8,)
                       ],
                     ),
                     border: InputBorder.none,

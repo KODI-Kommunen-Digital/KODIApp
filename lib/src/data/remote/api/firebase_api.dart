@@ -88,7 +88,7 @@ class FirebaseApi {
   }
 
   Future<void> uploadToken(int userId, String token) async {
-    final response = await Api.uploadToken(userId, {"firebaseToken": token});
+    final response = await Api.uploadToken(userId, {"token": token});
     logInfo("FCM token upload success: ${response.success}");
   }
 
