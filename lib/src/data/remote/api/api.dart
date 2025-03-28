@@ -483,44 +483,44 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
+  static Future<ResultApiModel> requestCatList(params, cityId, pageNo, {eventFilter}) async {
     if (params == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId${eventFilter ?? ''}&showExternalListings=$showExternalListings';
         final result = await HTTPManager(apiType: '').get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true${eventFilter ?? ''}&showExternalListings=$showExternalListings';
         final result = await HTTPManager(apiType: '').get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId${eventFilter ?? ''}&showExternalListings=$showExternalListings';
         final result = await HTTPManager(apiType: '').get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19${eventFilter ?? ''}&showExternalListings=$showExternalListings';
         final result = await HTTPManager(apiType: '').get(url: list);
         return ResultApiModel.fromJson(result);
       }
     }
   }
 
-  static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
+  static Future<ResultApiModel> requestSubCatList(params, pageNo, {eventFilter}) async {
     var list =
-        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+        '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19${eventFilter ?? ''}&showExternalListings=$showExternalListings';
     final result = await HTTPManager(apiType: '').get(url: list);
     return ResultApiModel.fromJson(result);
   }
 
-  static Future<ResultApiModel> requestLocList(params, pageNo) async {
+  static Future<ResultApiModel> requestLocList(params, pageNo, {event}) async {
     var list =
-        '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+        '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19${event ?? ''}&showExternalListings=$showExternalListings';
     final result = await HTTPManager(apiType: '').get(url: list);
     return ResultApiModel.fromJson(result);
   }

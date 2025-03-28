@@ -49,9 +49,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
     if (isCity) {
       await context.read<ListCubit>().setCategoryFilter(0, null);
     }
-    await context
-        .read<ListCubit>()
-        .onLoad(selectedFilter?.currentLocation ?? widget.arguments['id']);
+    await context.read<ListCubit>().onLoad(
+        selectedFilter?.currentLocation ?? widget.arguments['id'], true);
   }
 
   MultiFilter whatCanFilter(bool isEvent) {
@@ -82,18 +81,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   void _updateSelectedFilter(MultiFilter? filter) {
     selectedFilter = filter;
-    final loadedList = context.read<ListCubit>().getLoadedList();
     setState(() {
       if (filter?.hasProductEventFilter ?? false) {
         context.read<ListCubit>().onDateProductFilter(
-            filter?.currentProductEventFilter,
-            loadedList,
-            filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
+            filter?.currentProductEventFilter, filter?.currentLocation);
       } else if (filter?.hasLocationFilter ?? false) {
         loadListingsList();
       }
-
       if (filter?.hasCategoryFilter ?? false) {
         context.read<ListCubit>().setCategoryFilter(
             filter?.currentCategory ?? 0,
@@ -342,7 +336,7 @@ class _ListLoadedState extends State<ListLoaded> {
     setState(() {
       isLoading = true;
     });
-    await context.read<ListCubit>().onLoad(widget.selectedId);
+    await context.read<ListCubit>().onLoad(widget.selectedId, false);
     setState(() {
       isLoading = false;
     });

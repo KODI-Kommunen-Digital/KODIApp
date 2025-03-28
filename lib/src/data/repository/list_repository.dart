@@ -10,6 +10,7 @@ import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
@@ -25,14 +26,27 @@ class ListRepository {
     required categoryId,
     required type,
     required pageNo,
+    ProductFilter? eventFilter,
     cityId,
   }) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    late String event;
+    switch(eventFilter) {
+      case ProductFilter.week:
+        event = '&dateFilter=week';
+        break;
+      case ProductFilter.month:
+        event = '&dateFilter=month';
+        break;
+      default:
+        event = '';
+        break;
+    }
 
     if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo);
+      final response = await Api.requestCatList(params, cityId, pageNo, eventFilter: event);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -44,7 +58,7 @@ class ListRepository {
       }
     } else if (type == "location") {
       int params = cityId;
-      final response = await Api.requestLocList(params, pageNo);
+      final response = await Api.requestLocList(params, pageNo, event: event);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -54,7 +68,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo, eventFilter: event);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
