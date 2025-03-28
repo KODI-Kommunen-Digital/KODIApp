@@ -241,7 +241,9 @@ class ListCubit extends Cubit<ListState> {
 
   int _getWeekNumber(DateTime date) {
     final startOfYear = DateTime(date.year, 1, 1);
-    final daysSinceStartOfYear = date.difference(startOfYear).inDays;
+    final daysSinceStartOfYear = date
+        .difference(startOfYear)
+        .inDays;
     return (daysSinceStartOfYear / 7).ceil();
   }
 
