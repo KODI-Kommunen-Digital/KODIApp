@@ -148,17 +148,10 @@ class ContainerRepository {
     Map<String, dynamic> params = {
       'name': name,
       'address': address,
-      'description': description
+      'description': description,
+      'longitude': 1, //Dummy Data
+      'latitude': 1 //Dummy Data
     };
-
-    if (longitude != null) {
-      params['longitude'] = double.parse(longitude);
-    }
-
-    if (latitude != null) {
-      params['latitude'] = double.parse(latitude);
-    }
-
     final response = await Api.editStoreDetails(cityId, storeId, params);
     if (response.success) {
       return true;

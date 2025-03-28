@@ -63,6 +63,7 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
   int? selectedStore;
 
   bool isLoadingMore = false;
+  List<bool> expandDescription = [];
   int pageNo = 1;
 
   Future _scrollListener() async {
@@ -81,6 +82,7 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
               await context.read<OwnerCategoryCubit>().newCategories(++pageNo);
         }
         categories.addAll(newCategories);
+        updateExpandDescriptions();
         if (newCategories.isEmpty) {
           _scrollController.removeListener(_scrollListener);
         }
@@ -91,10 +93,19 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
     }
   }
 
+  void updateExpandDescriptions() {
+    if (categories.length > expandDescription.length) {
+      for (int i = expandDescription.length; i < categories.length; i++) {
+        expandDescription.add(false);
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     categories.addAll(widget.categories);
+    updateExpandDescriptions();
     _scrollController.addListener(_scrollListener);
   }
 
@@ -235,11 +246,32 @@ class _OwnerCategoryLoadedState extends State<OwnerCategoryLoaded> {
                                               ),
                                               Text(
                                                 category.description ?? '',
-                                                maxLines: 2,
+                                                maxLines:
+                                                    (expandDescription[index])
+                                                        ? null
+                                                        : 2,
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .bodyMedium!,
                                               ),
+                                              const SizedBox(
+                                                height: 8,
+                                              ),
+                                              Center(
+                                                child: IconButton(
+                                                  icon: Icon(
+                                                      (expandDescription[index])
+                                                          ? Icons.expand_less
+                                                          : Icons.expand_more),
+                                                  onPressed: () {
+                                                    setState(() {
+                                                      expandDescription[index] =
+                                                          !expandDescription[
+                                                              index];
+                                                    });
+                                                  },
+                                                ),
+                                              )
                                             ],
                                           ),
                                         ),
