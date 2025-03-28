@@ -96,7 +96,7 @@ class _ProductRequestScreenState extends State<ProductRequestScreen> {
           title: Text(Translate.of(context).translate('product_request')),
           centerTitle: true,
         ),
-        body: (isLoadingInitial)
+        body: (isLoadingInitial || requests.isEmpty)
             ? Center(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
