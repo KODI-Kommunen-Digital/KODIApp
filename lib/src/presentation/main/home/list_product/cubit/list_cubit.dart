@@ -444,6 +444,7 @@ class ListCubit extends Cubit<ListState> {
       11: "category_public_transport",
       12: "category_offers",
       13: "category_food",
+      17: "category_free",
       29: "category_handel",
       44: "category_job",
       43: "category_gastro",
