@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +50,7 @@ Future<void> main() async {
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
-
+  //HttpOverrides.global = MyHttpOverrides();
   await SentryFlutter.init((options) {
     options.dsn =
         'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
@@ -143,5 +145,13 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+}
+
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
   }
 }
