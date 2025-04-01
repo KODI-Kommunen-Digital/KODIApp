@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:photo_view/photo_view.dart';
 
-class ForumImageZoomScreen extends StatelessWidget {
+class ForumImageZoomScreen extends StatefulWidget {
   final String imageUrl;
 
   const ForumImageZoomScreen({super.key, required this.imageUrl});
 
+  @override
+  State<ForumImageZoomScreen> createState() => _ForumImageZoomScreenState();
+}
+
+class _ForumImageZoomScreenState extends State<ForumImageZoomScreen> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
@@ -20,9 +25,9 @@ class ForumImageZoomScreen extends StatelessWidget {
             Center(
               child: SizedBox(
                 height: height * 0.8,
-                child: imageUrl.contains('.pdf')
+                child: widget.imageUrl.contains('.pdf')
                     ? const PDF().cachedFromUrl(
-                        imageUrl,
+                        widget.imageUrl,
                         placeholder: (progress) =>
                             Center(child: Text('$progress %')),
                         errorWidget: (error) => Center(
@@ -30,14 +35,18 @@ class ForumImageZoomScreen extends StatelessWidget {
                             error.toString(),
                           ),
                         ),
-                      )
+                    whenDone: (a) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        setState(() {});
+                      });
+                    })
                     : PhotoView(
                         imageProvider: CachedNetworkImageProvider(
-                            imageUrl.contains('admin/News.jpeg')
-                                ? imageUrl
-                                : imageUrl.contains('instagram')
-                                    ? imageUrl
-                                    : imageUrl),
+                            widget.imageUrl.contains('admin/News.jpeg')
+                                ? widget.imageUrl
+                                : widget.imageUrl.contains('instagram')
+                                    ? widget.imageUrl
+                                    : widget.imageUrl),
                         minScale: PhotoViewComputedScale.contained * 0.8,
                         maxScale: PhotoViewComputedScale.covered * 2.0,
                         initialScale: PhotoViewComputedScale.contained,
