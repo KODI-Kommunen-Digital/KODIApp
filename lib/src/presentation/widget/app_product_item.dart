@@ -20,6 +20,7 @@ class AppProductItem extends StatelessWidget {
       required this.type,
       this.trailing,
       required this.isRefreshLoader,
+      this.forceImage = false,
       this.cityName});
 
   final ProductModel? item;
@@ -28,6 +29,7 @@ class AppProductItem extends StatelessWidget {
   final Widget? trailing;
   final bool isRefreshLoader;
   final String? cityName;
+  final bool forceImage;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,9 @@ class AppProductItem extends StatelessWidget {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: imageProvider,
-                                fit: BoxFit.fitHeight,
+                                fit: (forceImage)
+                                    ? BoxFit.contain
+                                    : BoxFit.fitHeight,
                               ),
                             ),
                           );
@@ -399,7 +403,9 @@ class AppProductItem extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
                                     image: imageProvider,
-                                    fit: BoxFit.fitHeight,
+                                    fit: (forceImage)
+                                        ? BoxFit.contain
+                                        : BoxFit.fitHeight,
                                   ),
                                 ),
                               );
