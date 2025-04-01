@@ -463,6 +463,7 @@ class _ListLoadedState extends State<ListLoaded> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: AppProductItem(
               isRefreshLoader: true,
+              forceImage: item.categoryId == 10,
               cityName: context
                   .read<ListCubit>()
                   .getCityNameFromId(widget.listCity, item.cityId ?? 0),
@@ -484,6 +485,7 @@ class _ListLoadedState extends State<ListLoaded> {
       default:
         if (item != null) {
           return AppProductItem(
+            forceImage: item.categoryId == 10,
             isRefreshLoader: true,
             onPressed: () {
               _onProductDetail(item);
