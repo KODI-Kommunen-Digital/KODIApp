@@ -38,16 +38,19 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
               child: SizedBox(
                 height: height * 0.8,
                 child: widget.pdf != ''
-                    ? const PDF().cachedFromUrl(
-                        widget.pdf,
+                    ? const PDF().cachedFromUrl(widget.pdf,
                         placeholder: (progress) =>
                             Center(child: Text('$progress %')),
                         errorWidget: (error) => Center(
-                          child: Text(
-                            error.toString(),
-                          ),
-                        ),
-                      )
+                              child: Text(
+                                error.toString(),
+                              ),
+                            ),
+                        whenDone: (a) {
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            setState(() {});
+                          });
+                        })
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
