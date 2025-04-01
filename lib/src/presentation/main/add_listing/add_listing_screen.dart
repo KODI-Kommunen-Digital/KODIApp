@@ -586,8 +586,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final success = _validData();
     if (success) {
       if (widget.item != null) {
-        await context.read<AddListingCubit>().setCategoryId(
-            selectedCategory?.toLowerCase());
+        await context
+            .read<AddListingCubit>()
+            .setCategoryId(selectedCategory?.toLowerCase());
         if (isImageChanged) {
           await context
               .read<AddListingCubit>()
@@ -697,6 +698,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
         } else {
+          ScaffoldMessenger.of(context).removeCurrentSnackBar();
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                Translate.of(context).translate("error_message"),
+              ),
+            ),
+          );
           setState(() {
             isLoading = false;
           });
