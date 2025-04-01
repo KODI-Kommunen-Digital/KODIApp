@@ -74,7 +74,7 @@ class AppProductItem extends StatelessWidget {
                                 : item?.image != null &&
                                         item!.image.startsWith('admin')
                                     ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                                    : "${Application.picturesURL}${(item?.image ?? '').isEmpty ? 'admin/News.jpeg' : item?.image}",
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
@@ -242,7 +242,7 @@ class AppProductItem extends StatelessWidget {
                             : item!.image)
                         : item?.image != null && item!.image.startsWith('admin')
                             ? "${Application.picturesURL}${item!.image}"
-                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            : "${Application.picturesURL}${(item?.image ?? '').isEmpty ? 'admin/News.jpeg' : item?.image}",
                 cacheManager: memoryCacheManager,
                 imageBuilder: (context, imageProvider) {
                   return Container(
@@ -383,7 +383,7 @@ class AppProductItem extends StatelessWidget {
                                     : item?.image != null &&
                                             item!.image.startsWith('admin')
                                         ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                                        : "${Application.picturesURL}${(item?.image ?? '').isEmpty ? 'admin/News.jpeg' : item?.image}",
                             cacheManager: memoryCacheManager,
                             placeholder: (context, url) {
                               return AppPlaceholder(
