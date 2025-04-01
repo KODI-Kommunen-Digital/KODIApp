@@ -253,7 +253,7 @@ class AppProductItem extends StatelessWidget {
                       ),
                       image: DecorationImage(
                         image: imageProvider,
-                        fit: BoxFit.cover,
+                        fit: (forceImage) ? BoxFit.contain : BoxFit.cover,
                       ),
                     ),
                     child: Column(
