@@ -863,6 +863,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           _onProductDetail(item);
                         },
                         item: item,
+                        forceImage: item.categoryId == 10,
                         type: ProductViewType.small,
                         isRefreshLoader: isRefreshLoader,
                         cityName: AppBloc.homeCubit
@@ -878,6 +879,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       isRefreshLoader: isRefreshLoader,
                       item: item,
                       type: ProductViewType.small,
+                      forceImage: item.categoryId == 10,
                       cityName: AppBloc.homeCubit
                           .getCityName(cities, item.cityId ?? 0)),
                 );
