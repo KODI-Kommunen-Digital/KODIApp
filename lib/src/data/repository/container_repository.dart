@@ -1150,14 +1150,19 @@ class ContainerRepository {
     final olElements = document.getElementsByTagName('ol');
     for (final ol in olElements) {
       final listItems = ol.getElementsByTagName('li');
-      for (final li in listItems) {
+      for (int i = 0; i < listItems.length; i++) {
+        final li = listItems[i];
         final text = li.text.trim();
-        final doubleEnumRegex = RegExp(r'^\d+\.\s+');
-        if (doubleEnumRegex.hasMatch(text)) {
-          li.innerHtml = li.innerHtml.replaceFirst(doubleEnumRegex, '');
+
+        final expectedPrefix = '${i + 1}.';
+        if (text.startsWith(expectedPrefix)) {
+          final regex = RegExp('^${RegExp.escape(expectedPrefix)}\\s*');
+          li.innerHtml = li.innerHtml.replaceFirst(regex, '');
         }
       }
     }
+
     return document.body!.innerHtml;
   }
+
 }
