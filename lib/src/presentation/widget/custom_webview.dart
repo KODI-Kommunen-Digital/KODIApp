@@ -94,7 +94,27 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                   isLoading = true;
                 });
               },
-              onLoadStop: (controller, url) async {
+              onProgressChanged: (controller, progress) async {
+                if (progress == 100) {
+                  if (Platform.isIOS) {
+                    await controller.evaluateJavascript(source: """
+                  var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
+                  metaTags.forEach(function(tag) { tag.parentNode.removeChild(tag); });
+                """);
+                  }
+
+                  setState(() {
+                    isLoading = false;
+                  });
+
+                  // // Hide elements with the "flex" class - Commenting it since Daniel don't remember why it was added
+                  // await controller.evaluateJavascript(
+                  //   source:
+                  //       "document.querySelector('.flex').style.display = 'none';",
+                  // );
+                }
+              },
+              /*onLoadStop: (controller, url) async {
                 if (Platform.isIOS) {
                   await controller.evaluateJavascript(source: """
                   var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
@@ -111,7 +131,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 //   source:
                 //       "document.querySelector('.flex').style.display = 'none';",
                 // );
-              },
+              },*/
               initialSettings: InAppWebViewSettings(
                   javaScriptEnabled: true,
                   domStorageEnabled: true,
