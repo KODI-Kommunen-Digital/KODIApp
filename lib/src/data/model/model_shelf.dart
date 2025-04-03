@@ -1,4 +1,4 @@
-import 'package:heidi/src/data/model/model_container_product.dart';
+import 'package:heidi/src/data/model/model_container_shelf_product.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +13,7 @@ class ShelfModel {
   final String? title;
   final String? description;
   final double? pricePerQuantity;
-  final ContainerProductModel? product;
+  final ContainerShelfProductModel? product;
 
   ShelfModel({
     required this.id,
@@ -31,10 +31,10 @@ class ShelfModel {
 
   factory ShelfModel.fromJson(Map<String, dynamic> json, int cityId) {
     Map<String, dynamic>? productJson = json['product'];
-    ContainerProductModel? productModel;
+    ContainerShelfProductModel? productModel;
     if (productJson?['description'] != null ||
         productJson?['inventory'] != null) {
-      productModel = ContainerProductModel.fromJson(productJson!, cityId);
+      productModel = ContainerShelfProductModel.fromJson(productJson!, cityId);
     }
 
     return ShelfModel(

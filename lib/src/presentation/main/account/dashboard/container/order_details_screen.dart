@@ -150,11 +150,14 @@ class OrderDetailsScreen extends StatelessWidget {
                                                         fontWeight:
                                                             FontWeight.bold),
                                               ),
-                                              const SizedBox(height: 8),
-                                              Html(
-                                                  data: ContainerRepository
-                                                      .removeDoubleEnumHtml(
-                                                          product.description)),
+                                              if (product.description != null)
+                                                const SizedBox(height: 8),
+                                              if (product.description != null)
+                                                Html(
+                                                    data: ContainerRepository
+                                                        .removeDoubleEnumHtml(
+                                                            product
+                                                                .description!)),
                                               const SizedBox(height: 4),
                                               Text(
                                                 "${Translate.of(context).translate('price_per_quantity')}: ${shelf.pricePerQuantity.toString()}€",
