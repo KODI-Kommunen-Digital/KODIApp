@@ -264,6 +264,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     //     ),
                     //   ),
                     // ),
+                    IconButton(
+                        onPressed: () {
+                          webViewController.goBack();
+                        },
+                        icon: const Icon(Icons.arrow_back)),
                     const Spacer(),
                     IconButton(
                       icon: Icon(
