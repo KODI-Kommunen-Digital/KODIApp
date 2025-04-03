@@ -235,6 +235,8 @@ class ProductModel {
       category = "Amtliche Mitteilung";
     } else if (json['categoryId'] == 25) {
       category = "Umfrage";
+    } else if (json['categoryId'] == 48) {
+      category = "Bürgerservice Verwaltung";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
