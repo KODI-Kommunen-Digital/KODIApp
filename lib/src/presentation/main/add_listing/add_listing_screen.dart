@@ -819,6 +819,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       16: "category_official_notification",
       17: "category_freetime",
       25: "category_polls",
+      48: "category_citizen_service"
     };
     return categories[id];
   }
