@@ -120,7 +120,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   }
 
   List<CitizenServiceModel> initializeServices() {
-    return [
+    List<CitizenServiceModel> services = [
       // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
       // CitizenServiceModel(
       //     imageUrl: Images.service3,
@@ -178,6 +178,13 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       //   arguments: 10,
       // ),
     ];
+
+    if (currentCity == 2) {
+      services.add(
+        CitizenServiceModel(imageUrl: Images.service37, imageLink: "37"),
+      );
+    }
+    return services;
   }
 
   Future<int?> getCitySelected() async {
