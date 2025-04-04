@@ -464,7 +464,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onService(CategoryModel item) async {
     Routes.trackMatomoEvent(true, null, item.id, null);
-    if (item.id == 5) {
+    if (item.id == 5 || item.id == 8) {
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => const FullScreenWebView()));
     } else {
