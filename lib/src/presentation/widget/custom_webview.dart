@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
@@ -44,12 +45,19 @@ class CustomWebViewScreen extends StatefulWidget {
 class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
   InAppWebViewController? webViewController;
   bool isLoading = true;
+  Timer? _timer;
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory<VerticalDragGestureRecognizer>(
       () => VerticalDragGestureRecognizer(),
     ),
   };
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -93,26 +101,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 setState(() {
                   isLoading = true;
                 });
-              },
-              onProgressChanged: (controller, progress) async {
-                if (progress == 100) {
-                  if (Platform.isIOS) {
-                    await controller.evaluateJavascript(source: """
-                  var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
-                  metaTags.forEach(function(tag) { tag.parentNode.removeChild(tag); });
-                """);
-                  }
-
-                  setState(() {
-                    isLoading = false;
-                  });
-
-                  // // Hide elements with the "flex" class - Commenting it since Daniel don't remember why it was added
-                  // await controller.evaluateJavascript(
-                  //   source:
-                  //       "document.querySelector('.flex').style.display = 'none';",
-                  // );
-                }
+                _startProgressTimer();
               },
               onLoadStop: (controller, url) async {
                 if (Platform.isIOS) {
@@ -122,6 +111,8 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 """);
                 }
 
+                _timer?.cancel;
+                _timer = null;
                 setState(() {
                   isLoading = false;
                 });
@@ -184,5 +175,15 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
       );
       // ignore: empty_catches
     } catch (e) {}
+  }
+
+  void _startProgressTimer() {
+    _timer = Timer(const Duration(seconds: 20), () {
+      if (isLoading) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    });
   }
 }
