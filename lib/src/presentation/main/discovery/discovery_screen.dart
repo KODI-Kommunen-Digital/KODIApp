@@ -182,6 +182,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
           mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "37") {
+      await launchUrl(Uri.parse("https://www.rodgaucard.de/"),
+          mode: LaunchMode.inAppWebView);
     } else if (service.imageLink == "10") {
       final cityId = await context.read<DiscoveryCubit>().getCitySelected();
       if (cityId != 0) {
