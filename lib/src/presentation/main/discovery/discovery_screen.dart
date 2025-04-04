@@ -263,6 +263,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       if (url != null && url.isNotEmpty) {
         CustomWebViewScreen.showAsBottomSheet(
             context: context,
+            needGeoLocation: (service.imageLink == "9") ? true : false,
             url: url,
             title:
                 AppBloc.discoveryCubit.getServiceLinkTitle(service.imageLink));

@@ -5,19 +5,52 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:heidi/src/utils/mobilitat_helper.dart';
+import 'package:heidi/src/utils/translate.dart';
+import 'package:loggy/loggy.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomWebViewScreen extends StatefulWidget {
   final String url;
   final String? title;
+  final bool hasGeoLocation;
 
-  const CustomWebViewScreen({super.key, required this.url, this.title});
+  const CustomWebViewScreen(
+      {super.key, required this.url, this.title, this.hasGeoLocation = false});
 
   @override
   State<CustomWebViewScreen> createState() => _CustomWebViewScreenState();
 
   static void showAsBottomSheet(
-      {required BuildContext context, required String url, String? title}) {
+      {required BuildContext context,
+      required String url,
+      String? title,
+      bool needGeoLocation = false}) async {
+    if (needGeoLocation) {
+      // Show loading dialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+
+      final bool hasPermission = await requestGeoPermission();
+
+      // Close the loading dialog
+      Navigator.of(context, rootNavigator: true).pop();
+      if (!hasPermission) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                Translate.of(context).translate('geo_permission_needed'))));
+        return;
+      }
+    }
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -33,6 +66,7 @@ class CustomWebViewScreen extends StatefulWidget {
               child: CustomWebViewScreen(
                 url: url,
                 title: title,
+                hasGeoLocation: needGeoLocation,
               ),
             ),
           ],
@@ -40,6 +74,39 @@ class CustomWebViewScreen extends StatefulWidget {
       },
     );
   }
+}
+
+Future<bool> requestGeoPermission() async {
+  bool permissionGranted = false;
+  bool openSettings = true;
+  bool exit = false;
+
+  while (!permissionGranted) {
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.always ||
+        permission == LocationPermission.whileInUse) {
+      try {
+        //await Geolocator.getCurrentPosition(
+        //    desiredAccuracy: LocationAccuracy.high);
+        permissionGranted = true;
+      } catch (e) {
+        logError('Error getting current position: $e');
+      }
+    } else if ((permission == LocationPermission.unableToDetermine ||
+            permission == LocationPermission.denied) &&
+        openSettings == true) {
+      await Geolocator.requestPermission();
+      openSettings = false;
+    } else {
+      if (exit == false) {
+        await openAppSettings();
+        exit = true;
+      } else {
+        return false;
+      }
+    }
+  }
+  return permissionGranted;
 }
 
 class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
@@ -123,7 +190,18 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 //       "document.querySelector('.flex').style.display = 'none';",
                 // );
               },
+              onPermissionRequest: (widget.hasGeoLocation)
+                  ? (InAppWebViewController controller,
+                      PermissionRequest request) async {
+                      return PermissionResponse(
+                        resources: request.resources,
+                        action: PermissionResponseAction.GRANT,
+                      );
+                    }
+                  : null,
               initialSettings: InAppWebViewSettings(
+                  useWideViewPort: (widget.hasGeoLocation) ? true : null,
+                  geolocationEnabled: (widget.hasGeoLocation) ? true : null,
                   javaScriptEnabled: true,
                   domStorageEnabled: true,
                   allowsInlineMediaPlayback: true,
@@ -135,15 +213,25 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 return ServerTrustAuthResponse(
                     action: ServerTrustAuthResponseAction.PROCEED);
               },
+              onGeolocationPermissionsShowPrompt: (widget.hasGeoLocation)
+                  ? (InAppWebViewController controller, String origin) async {
+                      return GeolocationPermissionShowPromptResponse(
+                          origin: origin, allow: true, retain: true);
+                    }
+                  : null,
               shouldOverrideUrlLoading: (controller, navigationAction) async {
-                final url = navigationAction.request.url.toString();
+                if (widget.hasGeoLocation) {
+                  return MobilitatHelper.getUrlLoading(navigationAction);
+                } else {
+                  final url = navigationAction.request.url.toString();
 
-                if (url.startsWith("https://go.ridedott.com/vehicles/")) {
-                  _launchUrlExternally(url);
-                  return NavigationActionPolicy
-                      .CANCEL; // Prevent navigation inside WebView
+                  if (url.startsWith("https://go.ridedott.com/vehicles/")) {
+                    _launchUrlExternally(url);
+                    return NavigationActionPolicy
+                        .CANCEL; // Prevent navigation inside WebView
+                  }
+                  return NavigationActionPolicy.ALLOW;
                 }
-                return NavigationActionPolicy.ALLOW;
               },
             ),
           ),

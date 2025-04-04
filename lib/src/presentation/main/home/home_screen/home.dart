@@ -464,9 +464,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onService(CategoryModel item) async {
     Routes.trackMatomoEvent(true, null, item.id, null);
-    if (item.id == 5 || item.id == 8) {
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => const FullScreenWebView()));
+    if (item.id == 5) {
+      CustomWebViewScreen.showAsBottomSheet(
+          context: context,
+          url: 'https://troisdorf.dksr.city/map/',
+          title: 'Mobilitätskarte',
+          needGeoLocation: true);
+    } else if (item.id == 8) {
+      CustomWebViewScreen.showAsBottomSheet(
+          context: context,
+          url: 'https://troisdorf.dksr.city/poimap/',
+          title: 'Freizeitkarte',
+          needGeoLocation: true);
     } else {
       final url = getServiceUrl(item.id);
 
@@ -809,117 +818,5 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (!mounted) return;
     Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  }
-}
-
-class FullScreenWebView extends StatefulWidget {
-  const FullScreenWebView({super.key});
-
-  @override
-  State<FullScreenWebView> createState() => _FullScreenWebViewState();
-}
-
-class _FullScreenWebViewState extends State<FullScreenWebView> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<bool> requestGeoPermission() async {
-    bool permissionGranted = false;
-    bool openSettings = true;
-    bool exit = false;
-
-    while (!permissionGranted) {
-      LocationPermission permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.always ||
-          permission == LocationPermission.whileInUse) {
-        try {
-          await Geolocator.getCurrentPosition(
-              desiredAccuracy: LocationAccuracy.high);
-          permissionGranted = true;
-        } catch (e) {
-          logError('Error getting current position: $e');
-        }
-      } else if ((permission == LocationPermission.unableToDetermine ||
-              permission == LocationPermission.denied) &&
-          openSettings == true) {
-        await Geolocator.requestPermission();
-        openSettings = false;
-      } else {
-        if (exit == false) {
-          await openAppSettings();
-          exit = true;
-        } else {
-          return false;
-        }
-      }
-    }
-    return permissionGranted;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: requestGeoPermission(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            bool hasPermission = snapshot.data ?? false;
-            return Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                  icon: const Icon(
-                    Icons.close,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ),
-              body: SafeArea(
-                child: (!hasPermission)
-                    ? Center(
-                        child: Text(Translate.of(context)
-                            .translate('geo_permission_needed')),
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                              child: InAppWebView(
-                            initialUrlRequest: URLRequest(
-                                url: WebUri.uri(Uri.parse(
-                                    'https://troisdorf.dksr.city/map/'))),
-                            onGeolocationPermissionsShowPrompt:
-                                (InAppWebViewController controller,
-                                    String origin) async {
-                              return GeolocationPermissionShowPromptResponse(
-                                  origin: origin, allow: true, retain: true);
-                            },
-                            initialSettings: InAppWebViewSettings(
-                                useWideViewPort: true,
-                                geolocationEnabled: true,
-                                allowsInlineMediaPlayback: true),
-                            shouldOverrideUrlLoading: (controller,
-                                    navigationAction) =>
-                                MobilitatHelper.getUrlLoading(navigationAction),
-                            onPermissionRequest:
-                                (InAppWebViewController controller,
-                                    PermissionRequest request) async {
-                              return PermissionResponse(
-                                resources: request.resources,
-                                action: PermissionResponseAction.GRANT,
-                              );
-                            },
-                          )),
-                        ],
-                      ),
-              ),
-            );
-          }
-        });
   }
 }
