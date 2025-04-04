@@ -24,10 +24,15 @@ class CustomWebViewScreen extends StatefulWidget {
         return Wrap(
           children: [
             Container(
-              height: MediaQuery.of(context).size.height,
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height,
               padding: const EdgeInsets.only(top: kToolbarHeight),
               decoration: BoxDecoration(
-                color: Theme.of(context).scaffoldBackgroundColor,
+                color: Theme
+                    .of(context)
+                    .scaffoldBackgroundColor,
               ),
               child: CustomWebViewScreen(
                 url: url,
@@ -47,7 +52,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory<VerticalDragGestureRecognizer>(
-      () => VerticalDragGestureRecognizer(),
+          () => VerticalDragGestureRecognizer(),
     ),
   };
 
@@ -84,7 +89,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
           SizedBox(
             child: InAppWebView(
               initialUrlRequest:
-                  URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
+              URLRequest(url: WebUri.uri(Uri.parse(widget.url))),
               gestureRecognizers: gestureRecognizers,
               onWebViewCreated: (controller) {
                 webViewController = controller;
@@ -114,7 +119,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                   // );
                 }
               },
-              /*onLoadStop: (controller, url) async {
+              onLoadStop: (controller, url) async {
                 if (Platform.isIOS) {
                   await controller.evaluateJavascript(source: """
                   var metaTags = document.querySelectorAll('meta[http-equiv="Content-Security-Policy"]');
@@ -131,7 +136,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 //   source:
                 //       "document.querySelector('.flex').style.display = 'none';",
                 // );
-              },*/
+              },
               initialSettings: InAppWebViewSettings(
                   javaScriptEnabled: true,
                   domStorageEnabled: true,
@@ -139,7 +144,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                   mediaPlaybackRequiresUserGesture: false,
                   iframeAllow: "camera; microphone",
                   userAgent:
-                      "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"),
+                  "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1"),
               onReceivedServerTrustAuthRequest: (controller, challenge) async {
                 return ServerTrustAuthResponse(
                     action: ServerTrustAuthResponseAction.PROCEED);
