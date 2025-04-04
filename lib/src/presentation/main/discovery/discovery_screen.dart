@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -241,7 +242,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       // if (shouldLaunch) {
       String? serviceLink =
           await AppBloc.discoveryCubit.getServiceLink(imageLink);
-      if (serviceLink != null && serviceLink.isNotEmpty) {
+      if (imageLink == "7" && serviceLink != null && Platform.isIOS) {
+        await launchUrl(
+          Uri.parse(serviceLink),
+          mode: LaunchMode.inAppWebView,
+        );
+      } else if (serviceLink != null && serviceLink.isNotEmpty) {
         CustomWebViewScreen.showAsBottomSheet(
             context: context, url: serviceLink);
         // }
