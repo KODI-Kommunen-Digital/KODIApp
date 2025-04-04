@@ -178,7 +178,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
   }
 
   void _startProgressTimer() {
-    _timer = Timer(const Duration(seconds: 10), () {
+    _timer = Timer(const Duration(seconds: 5), () {
       if (isLoading) {
         setState(() {
           isLoading = false;
