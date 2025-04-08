@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
@@ -6,6 +7,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -251,6 +253,14 @@ class UserRepository {
           categoryDetails = categories.singleWhere((element) =>
               element.id == favoriteListResponse.data['categoryId']);
 
+          String? logo = favoriteListResponse.data['logo'];
+          if ((logo ?? '').isEmpty) {
+            int ranId = Random().nextInt(9) + 1;
+            logo =
+                "${Application.picturesURL}admin/News/Defaultimage$ranId.png";
+          } else if (!logo!.contains('http')) {
+            logo = "${Application.picturesURL}$logo";
+          }
           favoriteList.add(FavoriteDetailsModel(
             favoriteListResponse.data['id'],
             favoriteListResponse.data['userId'],
@@ -267,7 +277,7 @@ class UserRepository {
             favoriteListResponse.data['website'],
             favoriteListResponse.data['price'],
             favoriteListResponse.data['discountPrice'],
-            favoriteListResponse.data['logo'],
+            logo,
             favoriteListResponse.data['statusId'],
             favoriteListResponse.data['sourceId'],
             favoriteListResponse.data['longitude'],
