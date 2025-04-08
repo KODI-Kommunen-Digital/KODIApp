@@ -40,8 +40,8 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       body: SingleChildScrollView(
         child: PopScope(
+          canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
-            if (didPop) return;
             Navigator.pop(
                 context,
                 MultiFilter(
