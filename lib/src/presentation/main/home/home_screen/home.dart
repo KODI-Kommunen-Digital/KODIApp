@@ -319,10 +319,12 @@ class _HomeScreenState extends State<HomeScreen> {
               slivers: <Widget>[
                 SliverPersistentHeader(
                   delegate: AppBarHomeSliver(
-                    hintText: Translate.of(context).translate('welcome'),
-                    expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                    banners: banner,
-                  ),
+                      hintText: Translate.of(context).translate('welcome'),
+                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                      banners: banner,
+                      onSearch: () {
+                        _searchListings();
+                      }),
                   pinned: false,
                 ),
                 const SliverToBoxAdapter(
@@ -362,26 +364,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future _searchListings() async {
-  //   String? searchResult = await openSearchDialog();
-  //   if (searchResult is String && searchResult.trim() != "") {
-  //     pageNo = 1;
-  //     isSearching = true;
-  //     searchTerm = searchResult.trim();
-  //     setState(() {
-  //       recent = [];
-  //     });
-  //     recent =
-  //         await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
-  //     setState(() {});
-  //   } else if ((searchResult == null || searchResult.trim() == "") &&
-  //       isSearching) {
-  //     pageNo = 1;
-  //     isSearching = false;
-  //     searchTerm = "";
-  //     await context.read<HomeCubit>().onLoad(false);
-  //   }
-  // }
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult.trim();
+      setState(() {
+        recent = [];
+      });
+      recent =
+          await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
+      setState(() {});
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<HomeCubit>().onLoad(false);
+    }
+  }
 
   Future<String?> openSearchDialog() async {
     String? searchRequest = await showDialog(

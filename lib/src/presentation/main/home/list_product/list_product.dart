@@ -11,7 +11,6 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
-import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -29,7 +28,7 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
-  final TextEditingController _searchController = TextEditingController();
+  //final TextEditingController _searchController = TextEditingController();
   late bool isCity;
   late bool isCategoryService;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -165,16 +164,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                                     });
                           },
                         ),
-                      IconButton(
-                          onPressed: () {
-                            _searchListings();
-                          },
-                          icon: Icon(
-                            Icons.search,
-                            color:
-                                Theme.of(context).textTheme.bodyLarge?.color ??
-                                    Colors.white,
-                          ))
                     ],
                   );
                 }
@@ -217,7 +206,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     );
   }
 
-  Future _searchListings() async {
+  /*Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
       context.read<ListCubit>().searchListing(searchResult.trim(), true);
@@ -277,7 +266,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       },
     );
     return searchRequest;
-  }
+  }*/
 }
 
 class ListLoading extends StatelessWidget {
