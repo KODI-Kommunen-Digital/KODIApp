@@ -21,7 +21,7 @@ class ContainerShelfProductModel {
       Map<String, dynamic> json, int cityId) {
     return ContainerShelfProductModel(
       id: json['id'],
-      title: json['title'],
+      title: json['title'] ?? '',
       description: json['description'],
       price: json['price'].toDouble(),
       tax: (json['tax'] ?? 0).toDouble(),
