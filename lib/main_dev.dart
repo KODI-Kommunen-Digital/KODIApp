@@ -50,7 +50,7 @@ Future<void> main() async {
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
-  //HttpOverrides.global = MyHttpOverrides();
+  HttpOverrides.global = CustomHttpOverrides();
   await SentryFlutter.init((options) {
     options.dsn =
         'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
@@ -148,10 +148,17 @@ class _HeidiAppState extends State<HeidiApp> {
   }
 }
 
-class MyHttpOverrides extends HttpOverrides{
+class CustomHttpOverrides extends HttpOverrides {
   @override
-  HttpClient createHttpClient(SecurityContext? context){
+  HttpClient createHttpClient(SecurityContext? context) {
     return super.createHttpClient(context)
-      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        // Bypass certificate validation ONLY for www.pressig.de
+        if (host == 'www.pressig.de') {
+          logInfo('⚠️ Bypassing SSL verification for $host');
+          return true;
+        }
+        return false; // Keep SSL validation for all other hosts
+      };
   }
 }
