@@ -307,7 +307,7 @@ class ProductModel {
           imageUrl = parsedUrl;
         }
       } else if (!isNaN) {
-        imageUrl = image;
+        imageUrl = image.replaceAll('https', 'http');
       }
     }
 
