@@ -7,6 +7,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final String? banners;
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
+  final VoidCallback? onSearch;
   String? hintText;
   String? selectedOption;
 
@@ -15,6 +16,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
       this.setLocationCallback,
       this.cityTitlesList,
       this.banners,
+      this.onSearch,
       this.hintText,
       this.selectedOption});
 
@@ -33,6 +35,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
         // ),
         CitiesDropDown(
           displayText: hintText,
+          onSearch: onSearch,
         ),
       ],
     );

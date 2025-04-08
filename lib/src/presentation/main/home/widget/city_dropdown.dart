@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 
 class CitiesDropDown extends StatelessWidget {
   final String? displayText;
+  final VoidCallback? onSearch;
 
-  const CitiesDropDown({
-    super.key,
-    this.displayText,
-  });
+  const CitiesDropDown({super.key, this.displayText, this.onSearch});
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +24,27 @@ class CitiesDropDown extends StatelessWidget {
                 color: Colors.white, width: 1.0), // Added white border
           ),
           elevation: 2,
-          child: Container(
-            padding: contentPadding,
-            height: 50,
-            alignment: Alignment.center,
-            child: Text(
-              displayText ?? 'Default Text',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
+          child: Row(
+            children: [
+              if (onSearch != null) const Spacer(),
+              const Spacer(),
+              Container(
+                padding: contentPadding,
+                height: 50,
+                alignment: Alignment.center,
+                child: Text(
+                  displayText ?? 'Default Text',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.normal,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
               ),
-              textAlign: TextAlign.center,
-            ),
+              const Spacer(),
+              if (onSearch != null)
+                IconButton(onPressed: onSearch, icon: const Icon(Icons.search))
+            ],
           ),
         ),
       ),
