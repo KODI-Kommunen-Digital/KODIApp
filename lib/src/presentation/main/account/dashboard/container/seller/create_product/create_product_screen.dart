@@ -219,7 +219,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             minCount: int.parse(_textMinCountController.text),
             categoryId: selectedCategory!.id,
             subCategoryId: selectedSubCategory?.id,
-            barcode: _textBarcodeController.text,
+            barcode: (_textBarcodeController.text.trim().isNotEmpty) ? _textBarcodeController.text : null,
             image: context.read<CreateProductCubit>().selectedImage,
             isImageChanged: context.read<CreateProductCubit>().isImageChanged);
       } else {
@@ -237,7 +237,7 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
             minCount: int.parse(_textMinCountController.text),
             isActive: isActive,
             localProduct: widget.product!,
-            barcode: _textBarcodeController.text,
+            barcode: (_textBarcodeController.text.trim().isNotEmpty) ? _textBarcodeController.text : null,
             image: context.read<CreateProductCubit>().selectedImage,
             isImageChanged: context.read<CreateProductCubit>().isImageChanged);
       }
@@ -274,11 +274,12 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
       _errorStore = null;
     }
 
-    if (_textBarcodeController.text.length < 12) {
-      _errorBarcode = 'barcode_required';
-    } else if (!ContainerRepository.isValidBarcode(
-        _textBarcodeController.text)) {
-      _errorBarcode = 'value_not_barcode';
+    if (_textBarcodeController.text.trim().isNotEmpty) {
+      if (!ContainerRepository.isValidBarcode(_textBarcodeController.text)) {
+        _errorBarcode = 'value_not_barcode';
+      } else {
+        _errorBarcode = null;
+      }
     } else {
       _errorBarcode = null;
     }
@@ -505,7 +506,8 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                   const SizedBox(height: 16),
                   if (selectedStore != null)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 2),
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(20),
                           color: Theme.of(context).appBarTheme.backgroundColor),
@@ -526,7 +528,10 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                                     selectedStore = null;
                                   });
                                 },
-                                icon: const Icon(Icons.close, size: 20,))
+                                icon: const Icon(
+                                  Icons.close,
+                                  size: 20,
+                                ))
                         ],
                       ),
                     ),
@@ -721,15 +726,6 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
                                 .textTheme
                                 .titleMedium!
                                 .copyWith(fontWeight: FontWeight.bold),
-                            children: const <TextSpan>[
-                              TextSpan(
-                                text: ' *',
-                                style: TextStyle(
-                                  color: Colors.red,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
                           ),
                         ),
                       ]),

@@ -320,7 +320,7 @@ class ContainerRepository {
       required int minCount,
       required ContainerProductModel localProduct,
       required bool isActive,
-      required String barcode,
+      required String? barcode,
       File? image,
       bool isImageChanged = false}) async {
     Map<String, dynamic> params = {};
@@ -341,7 +341,7 @@ class ContainerRepository {
       params['tax'] = tax;
     }
 
-    if (barcode != localProduct.barcode) {
+    if (barcode != null && barcode != localProduct.barcode) {
       params['barcode'] = barcode;
     }
 
@@ -542,7 +542,7 @@ class ContainerRepository {
       required int minCount,
       required int categoryId,
       required int? subCategoryId,
-      required String barcode,
+      required String? barcode,
       File? image,
       bool isImageChanged = false}) async {
     Map<String, dynamic> params = {
@@ -553,8 +553,11 @@ class ContainerRepository {
       "inventory": inventory,
       "minCount": minCount,
       "categoryId": categoryId,
-      "barcode": barcode
     };
+
+    if(barcode != null) {
+      params['barcode'] = barcode;
+    }
 
     if (subCategoryId != null) {
       params["subCategoryId"] = subCategoryId;
