@@ -126,15 +126,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                               children: <Widget>[
                                 widget.favoritesList[index].pdf == ''
                                     ? CachedNetworkImage(
-                                        imageUrl: widget.favoritesList[index]
-                                                    .sourceId ==
-                                                2
-                                            ? "${Application.picturesURL}${widget.favoritesList[index].logo}"
-                                            : (widget.favoritesList[index]
-                                                        .logo ==
-                                                    null
-                                                ? "${Application.picturesURL}admin/News.jpeg"
-                                                : "${Application.picturesURL}${widget.favoritesList[index].logo}"),
+                                        imageUrl: widget.favoritesList[index].logo ?? '',
                                         cacheManager: memoryCacheManager,
                                         imageBuilder: (context, imageProvider) {
                                           return Container(
@@ -143,7 +135,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 image: imageProvider,
-                                                fit: BoxFit.cover,
+                                                fit: BoxFit.contain,
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(11),
