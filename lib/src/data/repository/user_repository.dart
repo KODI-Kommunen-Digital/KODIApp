@@ -248,8 +248,13 @@ class UserRepository {
             data['cityId'], data['listingId']);
 
         if (favoriteListResponse.success) {
-          categoryDetails = categories.singleWhere((element) =>
-              element.id == favoriteListResponse.data['categoryId']);
+          if (favoriteListResponse.data['categoryId'] == 14) {
+            categoryDetails = CategoryModel(
+                id: 14, title: "Rathaus", image: "");
+          } else {
+            categoryDetails = categories.singleWhere((element) =>
+            element.id == favoriteListResponse.data['categoryId']);
+          }
 
           favoriteList.add(FavoriteDetailsModel(
             favoriteListResponse.data['id'],
