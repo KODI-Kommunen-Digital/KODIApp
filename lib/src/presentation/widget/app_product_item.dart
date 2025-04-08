@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
@@ -76,6 +77,9 @@ class AppProductItem extends StatelessWidget {
                                     ? "${Application.picturesURL}${item!.image}"
                                     : "${Application.picturesURL}${(item?.image ?? '').isEmpty ? 'admin/News.jpeg' : item?.image}",
                         cacheManager: memoryCacheManager,
+                        errorListener: (msg) {
+                          logError(msg);
+                        },
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
