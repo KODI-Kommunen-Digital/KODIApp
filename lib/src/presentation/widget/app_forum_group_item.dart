@@ -265,5 +265,6 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
       // });
       // }
     }
+    await context.read<ListGroupsCubit>().onLoad();
   }
 }
