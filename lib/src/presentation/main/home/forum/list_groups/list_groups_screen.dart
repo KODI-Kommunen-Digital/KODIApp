@@ -228,6 +228,12 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   @override
+  void didChangeDependencies() {
+    list = widget.list;
+    super.didChangeDependencies();
+  }
+
+  @override
   void dispose() {
     _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
