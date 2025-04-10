@@ -39,24 +39,24 @@ class _FilterScreenState extends State<FilterScreen> {
         title: const Text("Filter"),
       ),
       body: SingleChildScrollView(
-        child: PopScope(
-          canPop: false,
-          onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        child: WillPopScope(
+          onWillPop: () async {
             Navigator.pop(
-                context,
-                MultiFilter(
-                    currentLocation: currentCity,
-                    currentProductEventFilter: currentProductEventFilter,
-                    currentListingStatus: currentListingStatus,
-                    currentForumGroupFilter: currentForumGroupFilter,
-                    currentCategory: currentCategory,
-                    hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
-                    hasProductEventFilter:
-                        widget.multiFilter.hasProductEventFilter,
-                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
-                    hasListingStatusFilter:
-                        widget.multiFilter.hasListingStatusFilter,
-                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
+              context,
+              MultiFilter(
+                currentLocation: currentCity,
+                currentProductEventFilter: currentProductEventFilter,
+                currentListingStatus: currentListingStatus,
+                currentForumGroupFilter: currentForumGroupFilter,
+                currentCategory: currentCategory,
+                hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
+                hasProductEventFilter: widget.multiFilter.hasProductEventFilter,
+                hasLocationFilter: widget.multiFilter.hasLocationFilter,
+                hasListingStatusFilter: widget.multiFilter.hasListingStatusFilter,
+                hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
+              ),
+            );
+            return false;
           },
           child: Column(
             children: [
