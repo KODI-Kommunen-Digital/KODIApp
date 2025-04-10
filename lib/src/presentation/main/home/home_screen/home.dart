@@ -213,17 +213,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.transparent,
-      //   elevation: 0,
-      //   actions: [
-      //     IconButton(
-      //         onPressed: () {
-      //           _searchListings();
-      //         },
-      //         icon: const Icon(Icons.search))
-      //   ],
-      // ),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        actions: [
+          IconButton(
+              onPressed: () {
+                _searchListings();
+              },
+              icon: const Icon(Icons.search))
+        ],
+      ),
       extendBodyBehindAppBar: true,
       body: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
@@ -390,26 +390,26 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // Future _searchListings() async {
-  //   String? searchResult = await openSearchDialog();
-  //   if (searchResult is String && searchResult.trim() != "") {
-  //     pageNo = 1;
-  //     isSearching = true;
-  //     searchTerm = searchResult.trim();
-  //     setState(() {
-  //       recent = [];
-  //     });
-  //     recent =
-  //         await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
-  //     setState(() {});
-  //   } else if ((searchResult == null || searchResult.trim() == "") &&
-  //       isSearching) {
-  //     pageNo = 1;
-  //     isSearching = false;
-  //     searchTerm = "";
-  //     await context.read<HomeCubit>().onLoad(false);
-  //   }
-  // }
+  Future _searchListings() async {
+    String? searchResult = await openSearchDialog();
+    if (searchResult is String && searchResult.trim() != "") {
+      pageNo = 1;
+      isSearching = true;
+      searchTerm = searchResult.trim();
+      setState(() {
+        recent = [];
+      });
+      recent =
+          await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
+      setState(() {});
+    } else if ((searchResult == null || searchResult.trim() == "") &&
+        isSearching) {
+      pageNo = 1;
+      isSearching = false;
+      searchTerm = "";
+      await context.read<HomeCubit>().onLoad(false);
+    }
+  }
 
   Future<String?> openSearchDialog() async {
     String? searchRequest = await showDialog(
