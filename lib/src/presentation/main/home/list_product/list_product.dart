@@ -29,7 +29,7 @@ class ListProductScreen extends StatefulWidget {
 }
 
 class _ListProductScreenState extends State<ListProductScreen> {
-  final TextEditingController _searchController = TextEditingController();
+  //final TextEditingController _searchController = TextEditingController();
   late bool isCity;
   late bool isCategoryService;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
@@ -165,16 +165,6 @@ class _ListProductScreenState extends State<ListProductScreen> {
                                     });
                           },
                         ),
-                      IconButton(
-                          onPressed: () {
-                            _searchListings();
-                          },
-                          icon: Icon(
-                            Icons.search,
-                            color:
-                                Theme.of(context).textTheme.bodyLarge?.color ??
-                                    Colors.white,
-                          ))
                     ],
                   );
                 }
@@ -217,6 +207,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
     );
   }
 
+/*
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
@@ -277,7 +268,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
       },
     );
     return searchRequest;
-  }
+  }*/
 }
 
 class ListLoading extends StatelessWidget {
