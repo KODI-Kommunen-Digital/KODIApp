@@ -174,10 +174,24 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.imageLink == "2" || service.imageLink == "20") {
+    if (service.imageLink == "2" ||
+        service.imageLink == "20" ||
+        service.imageLink == "7") {
       await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit.getLink(int.parse(service.imageLink)) ?? ""),
+          Uri.parse(await AppBloc.discoveryCubit
+                  .getLink(int.parse(service.imageLink)) ??
+              ""),
           mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "7") {
+      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+      if (cityId != 0) {
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.listGroups,
+            arguments: {'id': service.arguments, 'title': 'forums'});
+      } else {
+        if (!mounted) return;
+        _showCitySelectionPopup(context);
+      }
     } else if (service.imageLink == "10") {
       final cityId = await context.read<DiscoveryCubit>().getCitySelected();
       if (cityId != 0) {

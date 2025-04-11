@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.0';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.1';
                         });
                       }
                     },
@@ -510,6 +510,8 @@ class _HomeScreenState extends State<HomeScreen> {
           if (!mounted) return;
           _showCitySelectionPopup(context);
         }
+      } else if (item.id == 10) {
+        _makeAction("https://www.salzkotten.de/de/unternehmensverzeichnis/");
       } else {
         final prefs = await Preferences.openBox();
         prefs.setKeyValue(Preferences.categoryId, item.id);
@@ -624,17 +626,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (category != null) {
       List<CategoryModel> listBuild = category;
-      final more = CategoryModel.fromJson({
-        "id": -1,
-        "name": Translate.of(context).translate("more"),
-        "icon": "fas fa-ellipsis",
-        "color": "#36454F",
-      });
+      // final more = CategoryModel.fromJson({
+      //   "id": -1,
+      //   "name": Translate.of(context).translate("more"),
+      //   "icon": "fas fa-ellipsis",
+      //   "color": "#36454F",
+      // });
 
-      if (category.length >= 7) {
-        listBuild = category.take(7).toList();
-        listBuild.add(more);
-      }
+      // if (category.length >= 7) {
+      //   listBuild = category.take(7).toList();
+      //   listBuild.add(more);
+      // }
 
       content = Wrap(
         runSpacing: 8,
