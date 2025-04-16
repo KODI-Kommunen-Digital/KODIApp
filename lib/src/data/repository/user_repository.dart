@@ -251,9 +251,21 @@ class UserRepository {
           if (favoriteListResponse.data['categoryId'] == 48) {
             categoryDetails = CategoryModel(
                 id: 48, title: "Bürgerservice Verwaltung", image: "");
+          } else if (favoriteListResponse.data['categoryId'] == 7) {
+            categoryDetails = CategoryModel(
+                id: 7, title: "Neubürgerinformationen", image: "");
+          } else if (favoriteListResponse.data['categoryId'] == 9) {
+            categoryDetails =
+                CategoryModel(id: 9, title: "Fundhaus", image: "");
+          } else if (favoriteListResponse.data['categoryId'] == 16) {
+            categoryDetails =
+                CategoryModel(id: 7, title: "Amtliche Mitteilungen", image: "");
+          } else if (favoriteListResponse.data['categoryId'] == 25) {
+            categoryDetails =
+                CategoryModel(id: 25, title: "Umfragen", image: "");
           } else {
             categoryDetails = categories.singleWhere((element) =>
-            element.id == favoriteListResponse.data['categoryId']);
+                element.id == favoriteListResponse.data['categoryId']);
           }
 
           favoriteList.add(FavoriteDetailsModel(
