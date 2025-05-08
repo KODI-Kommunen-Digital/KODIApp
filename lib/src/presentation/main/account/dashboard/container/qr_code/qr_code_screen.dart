@@ -185,46 +185,48 @@ class QrCodeLogin extends StatelessWidget {
         body: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  Translate.of(context).translate('login_required'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  Translate.of(context).translate('login_required_qr_code'),
-                  style: Theme.of(context).textTheme.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                AppButton(
-                  Translate.of(context).translate('login'),
-                  onPressed: () {
-                    login(context);
-                  },
-                  type: ButtonType.normal,
-                ),
-                const SizedBox(
-                  height: 2,
-                ),
-                AppButton(
-                  Translate.of(context).translate('back'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  type: ButtonType.normal,
-                ),
-              ],
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    Translate.of(context).translate('login_required'),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleLarge!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Text(
+                    Translate.of(context).translate('login_required_qr_code'),
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  AppButton(
+                    Translate.of(context).translate('login'),
+                    onPressed: () {
+                      login(context);
+                    },
+                    type: ButtonType.normal,
+                  ),
+                  const SizedBox(
+                    height: 2,
+                  ),
+                  AppButton(
+                    Translate.of(context).translate('back'),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    type: ButtonType.normal,
+                  ),
+                ],
+              ),
             ),
           ],
         ));
