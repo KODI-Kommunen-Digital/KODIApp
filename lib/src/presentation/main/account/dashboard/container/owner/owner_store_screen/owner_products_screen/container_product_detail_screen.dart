@@ -424,16 +424,18 @@ class _ContainerProductDetailScreenState
                   ),
                 if (ContainerRepository.isValidBarcode(
                     widget.product.barcode ?? ''))
-                  SizedBox(
-                      height: 120,
-                      width: 400,
-                      child: SfBarcodeGenerator(
-                        value: widget.product.barcode,
-                        showValue: true,
-                        symbology: (widget.product.barcode!.length == 12)
-                            ? UPCA()
-                            : EAN13(),
-                      ))
+                  Center(
+                    child: SizedBox(
+                        height: 120,
+                        width: 400,
+                        child: SfBarcodeGenerator(
+                          value: widget.product.barcode,
+                          showValue: true,
+                          symbology: (widget.product.barcode!.length == 12)
+                              ? UPCA()
+                              : EAN13(),
+                        )),
+                  )
               ],
             )),
       ),
