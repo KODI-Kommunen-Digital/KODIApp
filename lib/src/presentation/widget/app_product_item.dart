@@ -50,12 +50,13 @@ class AppProductItem extends StatelessWidget {
                       child: SizedBox(
                           width: 120,
                           height: 140,
-                          child: const PDF().cachedFromUrl(
+                          child: PDF().cachedFromUrl(
                             "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                             placeholder: (progress) =>
                                 Center(child: Text('$progress %')),
                             errorWidget: (error) =>
                                 Center(child: Text(error.toString())),
+                            key: UniqueKey(),
                           )),
                     )
                   : ClipRRect(
@@ -357,12 +358,13 @@ class AppProductItem extends StatelessWidget {
                           child: SizedBox(
                               width: 120,
                               height: 140,
-                              child: const PDF().cachedFromUrl(
+                              child: PDF().cachedFromUrl(
                                 "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
                                 placeholder: (progress) =>
                                     Center(child: Text('$progress %')),
                                 errorWidget: (error) =>
                                     Center(child: Text(error.toString())),
+                                key: UniqueKey()
                               )),
                         )
                       : ClipRRect(
