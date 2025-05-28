@@ -117,8 +117,8 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<String?>(
-                      future: _getStoredLocation(),
+                    home: FutureBuilder<bool?>(
+                      future: _shouldShowMainScreen(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -153,8 +153,10 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
-  Future<String?> _getStoredLocation() async {
+  Future<bool> _shouldShowMainScreen() async {
     final prefs = await Preferences.openBox();
-    return prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
+    return location != null || introSkipped;
   }
 }

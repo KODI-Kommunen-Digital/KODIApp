@@ -45,6 +45,13 @@ class IntroPageState extends State<IntroPage> {
     });
   }
 
+  Future<void> _skipIntro() async {
+    final prefs = await Preferences.openBox();
+    // Set a flag to indicate the intro was skipped
+    await prefs.setKeyValue(Preferences.introSkipped, true);
+    Navigator.pushReplacementNamed(context, '/home');
+  }
+
   void _selectLocation(String locationId, String locationName) async {
     final prefs = await Preferences.openBox();
     final previousLocationId =
@@ -159,9 +166,7 @@ class IntroPageState extends State<IntroPage> {
               ),
               const SizedBox(height: 20),
               TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/home');
-                },
+                onPressed: _skipIntro,
                 child: const Text('Überspringen'),
               ),
               const SizedBox(height: 20),

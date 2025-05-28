@@ -229,8 +229,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     } else if (service.arguments == 62) {
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
-        ..loadRequest(Uri.parse(
-            "https://troisdorf.dksr.city/public-dashboards/f4dd7e02258d4a13a610ea463946f510?orgId=1"));
+        ..loadRequest(
+            Uri.parse("https://ratingen-marketing.de/carparksListing/"));
 
       await showModalBottomSheet(
         context: context,

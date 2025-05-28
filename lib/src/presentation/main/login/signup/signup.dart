@@ -359,13 +359,80 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void _showErrorSnackBar([String? message]) {
-    final translatedMessage = message?.isNotEmpty == true
-        ? message
-        : Translate.of(context).translate("register_fail");
+    String translationKey;
+
+    switch (message) {
+      case "Empty payload sent":
+        translationKey = "empty_payload_sent";
+        break;
+      case "Incorrect language given":
+        translationKey = "incorrect_language_given";
+        break;
+      case "Username is not present":
+        translationKey = "username_not_present";
+        break;
+      case "Username too long. Maximum 40 characters allowed.":
+        translationKey = "username_too_long";
+        break;
+      case "Username is not valid":
+        translationKey = "username_not_valid";
+        break;
+      case "Email is not present":
+        translationKey = "email_not_present";
+        break;
+      case "Firstname is not present":
+        translationKey = "firstname_not_present";
+        break;
+      case "Firstname too long. Maximum 40 characters allowed":
+        translationKey = "firstname_too_long";
+        break;
+      case "Lastname is not present":
+        translationKey = "lastname_not_present";
+        break;
+      case "Lastname too long. Maximum 40 characters allowed":
+        translationKey = "lastname_too_long";
+        break;
+      case "Password is not present":
+        translationKey = "password_not_present";
+        break;
+      case "Password too long. Maximum 64 characters allowed.":
+        translationKey = "password_too_long";
+        break;
+      case "Invalid Password.":
+        translationKey = "invalid_password";
+        break;
+      case "Phone number is not valid":
+        translationKey = "phone_number_not_valid";
+        break;
+      case "Length of Description cannot exceed 255 characters":
+        translationKey = "description_too_long";
+        break;
+      case "Invalid input given for social media":
+        translationKey = "invalid_social_media_input_general";
+        break;
+      default:
+        if (message?.contains("User with username") == true &&
+            message?.contains("already exists") == true) {
+          translationKey = "username_already_exists";
+        } else if (message?.contains("User with email") == true &&
+            message?.contains("already registered") == true) {
+          translationKey = "email_already_registered";
+        } else if (message?.contains("Unsupported social media") == true) {
+          translationKey = "unsupported_social_media";
+        } else if (message?.contains("Invalid input given for social media") ==
+            true) {
+          translationKey = "invalid_social_media_input";
+        } else {
+          translationKey = "register_fail";
+        }
+        break;
+    }
+
+    final translatedMessage = Translate.of(context).translate(translationKey);
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(translatedMessage!),
+        content: Text(translatedMessage),
       ),
     );
   }
