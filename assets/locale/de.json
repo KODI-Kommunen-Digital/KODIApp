@@ -570,6 +570,25 @@
   "option_title": "Optionstitel",
   "error_poll": "Mindestens 2 Optionen benötigt",
   "error_poll_option_title": "Titel für Option benötigt",
-  "error_poll_option_same_title": "Titel für Optionen kann nicht gleich sein"
+  "error_poll_option_same_title": "Titel für Optionen kann nicht gleich sein",
+    "empty_payload_sent": "Leere Daten gesendet",
+  "incorrect_language_given": "Falsche Sprache angegeben",
+  "username_not_present": "Benutzername ist nicht vorhanden",
+  "username_too_long": "Benutzername zu lang. Maximal 40 Zeichen erlaubt.",
+  "username_already_exists": "Benutzer mit diesem Benutzernamen existiert bereits",
+  "username_not_valid": "Benutzername ist nicht gültig",
+  "email_not_present": "E-Mail ist nicht vorhanden",
+  "firstname_not_present": "Vorname ist nicht vorhanden",
+  "firstname_too_long": "Vorname zu lang. Maximal 40 Zeichen erlaubt",
+  "lastname_not_present": "Nachname ist nicht vorhanden",
+  "lastname_too_long": "Nachname zu lang. Maximal 40 Zeichen erlaubt",
+  "password_not_present": "Passwort ist nicht vorhanden",
+  "password_too_long": "Passwort zu lang. Maximal 64 Zeichen erlaubt.",
+  "invalid_password": "Ungültiges Passwort.",
+  "phone_number_not_valid": "Telefonnummer ist nicht gültig",
+  "description_too_long": "Beschreibung darf nicht länger als 255 Zeichen sein",
+  "unsupported_social_media": "Nicht unterstützte Social Media Plattform",
+  "invalid_social_media_input": "Ungültige Eingabe für Social Media Plattform",
+  "invalid_social_media_input_general": "Ungültige Eingabe für Social Media"
 }
 

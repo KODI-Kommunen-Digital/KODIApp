@@ -425,6 +425,74 @@ class _HomeScreenState extends State<HomeScreen> {
           if (!mounted) return;
           _showCitySelectionPopup(context);
         }
+      } else if (item.id == 5) {
+        final webViewController = WebViewController()
+          ..setJavaScriptMode(JavaScriptMode.unrestricted)
+          ..loadRequest(
+              Uri.parse("https://ratingen-marketing.de/carparksListing/"));
+
+        await showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.fromLTRB(5, 32, 16, 0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                        const Expanded(
+                          child: Center(
+                            child: Padding(
+                              padding: EdgeInsets.only(top: 16),
+                              child: Text(
+                                'Parken',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                            width:
+                                48), // Placeholder to balance the space taken by the IconButton
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height -
+                        kToolbarHeight -
+                        30,
+                    child: WebViewWidget(
+                      controller: webViewController,
+                      gestureRecognizers: gestureRecognizers,
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+
+        await webViewController.runJavaScript(
+            "document.querySelector('.flex').style.display = 'none';");
       } else {
         final prefs = await Preferences.openBox();
         prefs.setKeyValue(Preferences.categoryId, item.id);
@@ -562,11 +630,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   _onCategoryItem(CategoryModel item, List<CategoryModel> category) {
-    if (item.id == 5 ||
-        item.id == 6 ||
-        item.id == 8 ||
-        item.id == 9 ||
-        item.id == 26) {
+    if (item.id == 6 || item.id == 8 || item.id == 9 || item.id == 26) {
       _onService(item);
     } else {
       _onCategory(item, category);
