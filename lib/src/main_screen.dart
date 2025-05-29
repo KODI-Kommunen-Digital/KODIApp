@@ -44,8 +44,6 @@ class _MainScreenState extends State<MainScreen> {
         ),
       ),
       bottomNavigationBar: _buildBottomMenu(),
-      floatingActionButton: _buildSubmit(),
-      floatingActionButtonLocation: submitPosition,
     );
   }
 
@@ -158,6 +156,11 @@ class _MainScreenState extends State<MainScreen> {
           'maccount',
         );
         break;
+      case Routes.listProduct:
+        iconData = Icons.calendar_month;
+        title = "category_events";
+        break;
+
       default:
         iconData = Icons.home_outlined;
         title = 'home';
@@ -193,31 +196,6 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  Widget? _buildSubmit() {
-    return FloatingActionButton(
-      backgroundColor: Theme.of(context).primaryColor,
-      shape: const CircleBorder(),
-      onPressed: _onSubmit,
-      child: const Icon(
-        Icons.add,
-        color: Color(0xFF1D1D1B),
-      ),
-    );
-  }
-
-  void _onSubmit() async {
-    if (AppBloc.userCubit.state == null) {
-      final result = await Navigator.pushNamed(
-        context,
-        Routes.signIn,
-        arguments: Routes.submit,
-      );
-      if (result == null) return;
-    }
-    if (!mounted) return;
-    Navigator.pushNamed(context, Routes.submit, arguments: {'isNewList': true});
-  }
-
   Widget _buildBottomMenu() {
     return BottomAppBar(
       height: 64,
@@ -228,8 +206,8 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
-            const SizedBox(width: 56),
-            _buildMenuItem(Routes.wishList),
+            _buildMenuItem(Routes.listProduct),
+            _buildMenuItem(Routes.discovery),
             _buildMenuItem(Routes.account),
           ],
         ),

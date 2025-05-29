@@ -20,7 +20,7 @@ class AppTheme {
   ///Default Theme
   static final ThemeModel defaultTheme = ThemeModel.fromJson({
     "name": "default",
-    "primary": '#ECFB04',
+    "primary": '#FFC40C',
     "secondary": "#FFFFFF",
   });
 
@@ -28,19 +28,9 @@ class AppTheme {
   static final List themeSupport = [
     {
       "name": "default",
-      "primary": '#ECFB04',
+      "primary": '#FFC40C',
       "secondary": "#FFFFFF",
     },
-    {
-      "name": "green",
-      "primary": 'ff82B541',
-      "secondary": "ffff8a65",
-    },
-    {
-      "name": "orange",
-      "primary": 'fff4a261',
-      "secondary": "ff2A9D8F",
-    }
   ].map((item) => ThemeModel.fromJson(item)).toList();
 
   ///Dark Theme option
