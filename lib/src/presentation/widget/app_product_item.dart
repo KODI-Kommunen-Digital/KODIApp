@@ -41,6 +41,137 @@ class AppProductItem extends StatelessWidget {
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
+      case ProductViewType.horizontalList:
+        if (item == null) {
+          return const EmptyProductItem();
+        }
+        return InkWell(
+          onTap: () async {
+            onPressed!();
+          },
+          child: item?.pdf != '' && item?.image == 'admin/News.jpeg'
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                      width: 120,
+                      height: 140,
+                      child: Stack(
+                        children: [
+                          Positioned.fill(
+                            child: const PDF().cachedFromUrl(
+                              "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                              placeholder: (progress) =>
+                                  Center(child: Text('$progress %')),
+                              errorWidget: (error) =>
+                                  Center(child: Text(error.toString())),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 8,
+                            left: 8,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: Colors.black54,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                item!.startDate.split(' ').first,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      )),
+                )
+              : ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: SizedBox(
+                    width: 120,
+                    height: 140,
+                    child: Stack(
+                      children: [
+                        Positioned.fill(
+                          child: CachedNetworkImage(
+                            imageUrl: item?.sourceId == 2 &&
+                                    item?.image != null &&
+                                    item?.image != 'admin/News.jpeg'
+                                ? item!.image
+                                : item?.sourceId == 3 && item?.image != null
+                                    ? (item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : item!.image)
+                                    : item?.image != null &&
+                                            item!.image.startsWith('admin')
+                                        ? "${Application.picturesURL}${item!.image}"
+                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            cacheManager: memoryCacheManager,
+                            placeholder: (context, url) {
+                              return AppPlaceholder(
+                                child: Container(
+                                  width: 120,
+                                  height: 140,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              );
+                            },
+                            imageBuilder: (context, imageProvider) {
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              );
+                            },
+                            errorWidget: (context, url, error) {
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                        getDefaultImagePath(item?.category)),
+                                    fit: BoxFit.fitHeight,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 8,
+                          left: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 6, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: Colors.black54,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: Text(
+                              item!.startDate.split(' ').first,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+        );
       case ProductViewType.small:
         if (item == null) {
           return const EmptyProductItem();

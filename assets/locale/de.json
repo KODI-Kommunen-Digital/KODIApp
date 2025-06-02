@@ -543,6 +543,8 @@
   "group_name": "Gruppenname",
   "new_message": "Neue Nachricht",
   "intro_login": "",
-  "welcomeTitle": ""
+  "welcomeTitle": "",
+  "events": "Veranstaltungen",
+  "current_events": "Alle aktuellen Events in deiner Nähe"
 }
 
