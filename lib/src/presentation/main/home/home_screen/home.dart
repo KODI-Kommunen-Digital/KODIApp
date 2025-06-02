@@ -57,6 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? banner;
   List<CategoryModel>? category = [];
   List<CategoryModel>? location = [];
+  List<ProductModel>? currentEvents = [];
   List<dynamic>? recent = [];
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
@@ -96,7 +97,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void connectivityInternet() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
       AppBloc.homeCubit.onLoad(false);
     });
   }
@@ -186,6 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
             banner = state.banner;
             category = state.category;
             location = state.location;
+            currentEvents = state.currentEvents;
             if (!isSearching) recent = state.recent;
             isRefreshLoader = true;
             categoryLoading = false;
@@ -340,7 +344,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : _buildCategory(AppBloc.homeCubit
                                     .getCategoriesWithoutHidden(
                                         category ?? [])),
-                            _buildLocation(location),
+                            _buildEvents(currentEvents),
                             _buildRecent(recent, selectedCityId, location),
                             if (isLoading)
                               const CircularProgressIndicator.adaptive(),
@@ -642,6 +646,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  /*
   Future<void> _onLocation(CategoryModel item) async {
     if (item.id == -1) {
       _onPopUpCatError();
@@ -658,6 +663,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _onPopUpCatError();
     }
   }
+*/
 
   void _makeAction(String link, int id) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
@@ -779,7 +785,79 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLocation(List<CategoryModel>? location) {
+  Widget _buildEvents(List<ProductModel>? events) {
+    Widget content = ListView.builder(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      itemBuilder: (context, index) {
+        return const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          child: AppCategory(
+            type: CategoryView.cardLarge,
+          ),
+        );
+      },
+      itemCount: List.generate(8, (index) => index).length,
+    );
+    if (events != null) {
+      content = ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        itemBuilder: (context, index) {
+          final item = events[index];
+          return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: AppProductItem(
+                type: ProductViewType.horizontalList,
+                isRefreshLoader: isRefreshLoader,
+                item: item,
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.productDetail,
+                      arguments: item);
+                },
+              ));
+        },
+        itemCount: events.length,
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                Translate.of(context).translate(
+                  'events',
+                ),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+              Text(
+                Translate.of(context).translate(
+                  'current_events',
+                ),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+        Container(
+          height: 180,
+          padding: const EdgeInsets.only(top: 4),
+          child: content,
+        ),
+      ],
+    );
+  }
+
+  /*  Widget _buildLocation(List<CategoryModel>? location) {
     Widget content = ListView.builder(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -862,7 +940,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
-  }
+  }*/
 
   Widget _buildRecent(
       List<dynamic>? recent, int selectedCity, List<CategoryModel>? cities) {

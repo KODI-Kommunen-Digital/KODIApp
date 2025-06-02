@@ -18,6 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic category;
   dynamic location;
   dynamic recent;
+  dynamic currentEvents;
   dynamic sliders;
   dynamic categoryCount;
   dynamic selectedCity;
@@ -80,9 +81,19 @@ class HomeCubit extends Cubit<HomeState> {
         recent = List.from(listingsRequestResponse.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
+        final currentEventsRequest = await Api.requestCatList(
+            3, selectedCity.id, 1);
+        currentEvents = List.from(currentEventsRequest.data ?? []).map((item) {
+          return ProductModel.fromJson(item);
+        }).toList();
       } else {
         final listingsRequestResponse = await Api.requestRecentListings(1);
         recent = List.from(listingsRequestResponse.data ?? []).map((item) {
+          return ProductModel.fromJson(item);
+        }).toList();
+        final currentEventsRequest =
+            await Api.requestCatList(3, 1, 1); //cat: 3; city: 1; pageNo: 1;
+        currentEvents = List.from(currentEventsRequest.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
       }
@@ -118,8 +129,8 @@ class HomeCubit extends Cubit<HomeState> {
       // List<CategoryModel> formattedCategories =
       //     await formatCategoriesList(category, categoryCount, selectedCity?.id);
 
-      emit(HomeStateLoaded(
-          banner, category, location, recent, isRefreshLoader, selectedCity));
+      emit(HomeStateLoaded(banner, category, location, recent, isRefreshLoader,
+          selectedCity, currentEvents));
     } catch (e) {
       emit(HomeState.error("Error loading data: ${e.toString()}"));
     } finally {
@@ -172,8 +183,8 @@ class HomeCubit extends Cubit<HomeState> {
   void scrollUp() {
     emit(const HomeStateLoading());
     const banner = Images.slider;
-    emit(HomeStateLoaded(
-        banner, category, location, recent, false, selectedCity));
+    emit(HomeStateLoaded(banner, category, location, recent, false,
+        selectedCity, currentEvents));
   }
 
   bool getDoesScroll() {
@@ -212,7 +223,8 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void sendToMatomo(int id, String website) {
-    ListRepository.saveEventToMatomo(type: MatomoType.ad, name: website, adId: id);
+    ListRepository.saveEventToMatomo(
+        type: MatomoType.ad, name: website, adId: id);
   }
 
   Future<void> saveCityId(int cityId) async {
