@@ -29,6 +29,7 @@ import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/discovery/discover_screen_detail.dart';
+import 'package:heidi/src/presentation/main/events/events_screen.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
@@ -129,6 +130,7 @@ class Routes {
   static const String filterScreen = "/filterScreen";
   static const String discoveryDetail = "/discovery_detail";
   static const String welcomeScreen = "/welcomeScreen";
+  static const String eventsScreen = "/eventsScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -539,6 +541,15 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const WelcomeScreen();
+          },
+        );
+
+      case eventsScreen:
+        final Map<String, dynamic> arguments =
+        settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (context) {
+            return EventsScreen(arguments: arguments);
           },
         );
 

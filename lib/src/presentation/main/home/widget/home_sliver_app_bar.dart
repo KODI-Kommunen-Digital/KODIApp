@@ -6,11 +6,13 @@ import 'dart:io';
 
 class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final double expandedHeight;
-  final Function onSearch;
+  final Function? onSearch;
+  final bool isHome;
 
   AppBarHomeSliver({
     required this.expandedHeight,
     required this.onSearch,
+    this.isHome = true
   });
 
   @override
@@ -41,6 +43,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
             ),
           ),
         ),
+        if (isHome)
         Positioned(
           bottom: 10,
           right: 16,
@@ -51,7 +54,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
                 color: Colors.white,
                 size: 30,
               ),
-              onPressed: () => onSearch(),
+              onPressed: () => onSearch!(),
             ),
           ),
         ),
