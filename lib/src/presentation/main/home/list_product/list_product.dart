@@ -35,6 +35,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   late bool isCity;
   int? _subCategoryId;
   int? _categoryId;
+  bool includeFloatingActionButton = true;
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
   };
@@ -48,6 +49,10 @@ class _ListProductScreenState extends State<ListProductScreen> {
     super.initState();
     isCity = widget.arguments['title'] != '';
     _subCategoryId = widget.arguments['subCategoryId'];
+    if (widget.arguments['includeFloatingActionButton'] != null &&
+        widget.arguments['includeFloatingActionButton'] == false) {
+      includeFloatingActionButton = false;
+    }
     loadListingsList();
   }
 
@@ -207,7 +212,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton: (includeFloatingActionButton) ? FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           shape: const CircleBorder(),
           onPressed: () {
@@ -217,7 +222,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             Icons.add,
             color: Color(0xFF1D1D1B),
           ),
-        ),
+        ) : null,
       ),
     );
   }

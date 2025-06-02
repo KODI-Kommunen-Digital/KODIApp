@@ -6,7 +6,6 @@ import 'package:heidi/src/presentation/main/account/account_profile/account_scre
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
-import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -38,13 +37,14 @@ class _MainScreenState extends State<MainScreen> {
           index: _exportIndexed(_selectedPage),
           children: const <Widget>[
             HomeScreen(),
-            DiscoveryScreen(),
+            DiscoveryScreen(type: DiscoveryType.explore,),
             ListProductScreen(arguments: {
-              'id': 1,
+              'id': 3,
               'title': '',
               'type': 'category',
+              'includeFloatingActionButton': false
             }),
-            WishListScreen(),
+            DiscoveryScreen(type: DiscoveryType.services,),
             AccountScreen()
           ],
         ),
@@ -57,7 +57,9 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
       case Routes.discovery:
+      case Routes.explore:
       case Routes.account:
+      case Routes.listProduct:
         return false;
       default:
         return true;
@@ -68,12 +70,14 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
         return 0;
-      case Routes.discovery:
+      case Routes.explore:
         return 1;
       case Routes.listProduct:
         return 2;
-      case Routes.account:
+      case Routes.discovery:
         return 3;
+      case Routes.account:
+        return 4;
       default:
         return 0;
     }
@@ -125,6 +129,7 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.wishListCubit.scrollUp();
         break;
       case Routes.discovery:
+      case Routes.explore:
         AppBloc.discoveryCubit.setDoesScroll(true);
         AppBloc.discoveryCubit.scrollUp();
         break;
@@ -150,10 +155,10 @@ class _MainScreenState extends State<MainScreen> {
           'services',
         );
         break;
-      case Routes.wishList:
-        iconData = Icons.bookmark_outline;
+      case Routes.explore:
+        iconData = Icons.search;
         title = Translate.of(context).translate(
-          'wish_list',
+          'discover',
         );
         break;
       case Routes.account:
@@ -211,7 +216,7 @@ class _MainScreenState extends State<MainScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             _buildMenuItem(Routes.home),
-            _buildMenuItem(Routes.discovery),
+            _buildMenuItem(Routes.explore),
             _buildMenuItem(Routes.listProduct),
             _buildMenuItem(Routes.discovery),
             _buildMenuItem(Routes.account),
