@@ -9,6 +9,7 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_requests/cubit
 import 'package:heidi/src/presentation/main/account/edit_profile/cubit/edit_profile_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/discovery_cubit.dart';
+import 'package:heidi/src/presentation/main/events/cubit/events_cubit.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
@@ -33,8 +34,10 @@ class AppBloc {
   static final changePasswordCubit = ChangePasswordCubit();
   static final homeCubit = HomeCubit();
   static final discoveryCubit = DiscoveryCubit();
+
   //static final listCubit = ListCubit();
   static final wishListCubit = WishListCubit();
+
   // static final reviewCubit = ReviewCubit();
   // static final messageCubit = MessageCubit();
   // static final submitCubit = SubmitCubit();
@@ -43,6 +46,7 @@ class AppBloc {
   static final contactUsCubit = ContactUsCubit();
   static final allListingsCubit = AllListingsCubit();
   static final allRequestsCubit = AllRequestsCubit();
+  static final eventsCubit = EventsCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
@@ -110,6 +114,9 @@ class AppBloc {
     ),
     BlocProvider<ContactUsCubit>(
       create: (context) => contactUsCubit,
+    ),
+    BlocProvider<EventsCubit>(
+      create: (context) => eventsCubit,
     ),
     // BlocProvider<SearchCubit>(
     //   create: (context) => searchCubit,

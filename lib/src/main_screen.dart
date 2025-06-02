@@ -4,8 +4,8 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
+import 'package:heidi/src/presentation/main/events/events_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
-import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -38,12 +38,7 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(type: DiscoveryType.explore,),
-            ListProductScreen(arguments: {
-              'id': 3,
-              'title': '',
-              'type': 'category',
-              'includeFloatingActionButton': false
-            }),
+            EventsScreen(),
             DiscoveryScreen(type: DiscoveryType.services,),
             AccountScreen()
           ],

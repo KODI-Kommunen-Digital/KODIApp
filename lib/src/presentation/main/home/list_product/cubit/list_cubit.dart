@@ -292,7 +292,7 @@ class ListCubit extends Cubit<ListState> {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
+        final startDate = parseDate(product.startDate);
         if (startDate != null) {
           final startMonth = startDate.month;
           final currentMonth = currentDate.month;
@@ -309,10 +309,10 @@ class ListCubit extends Cubit<ListState> {
       emit(ListStateUpdated(filteredList, listCity));
     } else if (type == ProductFilter.week) {
       filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
+        final startDate = parseDate(product.startDate);
         if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
+          final startWeek = getWeekNumber(startDate);
+          final currentWeek = getWeekNumber(currentDate);
           if (filterLocation && (currentCity ?? []).isNotEmpty) {
             return (startWeek == currentWeek) &&
                 (currentCity!.contains(product.cityId));
@@ -339,7 +339,7 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  DateTime? _parseDate(String dateTimeString) {
+  static DateTime? parseDate(String dateTimeString) {
     try {
       final dateAndTimeParts = dateTimeString.split(' ');
       if (dateAndTimeParts.isNotEmpty) {
@@ -380,7 +380,7 @@ class ListCubit extends Cubit<ListState> {
     return "";
   }
 
-  int _getWeekNumber(DateTime date) {
+  static int getWeekNumber(DateTime date) {
     final startOfYear = DateTime(date.year, 1, 1);
     final daysSinceStartOfYear = date.difference(startOfYear).inDays;
     return (daysSinceStartOfYear / 7).ceil();
