@@ -75,9 +75,6 @@ class IntroPageState extends State<IntroPage> {
 
     final newTopic =
         repository.getTopicFromHash(getStreetNameHash(locationName));
-
-    debugPrint("New topic name in hash= $newTopic,  name=$locationName" );
-
     await firebaseApi.subscribeToTopic(newTopic);
 
     // final streetId = int.parse(locationId);
