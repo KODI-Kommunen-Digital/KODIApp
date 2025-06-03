@@ -49,4 +49,8 @@ class WasteCalendarRepository {
   String getTopicString(int locationId) {
     return "WasteTruck_1_$locationId";
   }
+
+  String getTopicFromHash(String hash) {
+    return "WasteTruck_1_$hash";
+  }
 }

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
@@ -11,6 +10,7 @@ import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/widget/intro_waste.dart';
@@ -50,8 +50,8 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
@@ -84,6 +84,8 @@ class HeidiApp extends StatefulWidget {
 }
 
 class _HeidiAppState extends State<HeidiApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
@@ -133,7 +135,7 @@ class _HeidiAppState extends State<HeidiApp> {
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
                     home: FutureBuilder<String?>(
-                      future: _getStoredLocation(),
+                      future: clearLocationId(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
@@ -168,8 +170,32 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
-  Future<String?> _getStoredLocation() async {
+  Future<String?> clearLocationId() async {
     final prefs = await Preferences.openBox();
+
+    String? location = _getStoredLocation(prefs);
+
+    if (location != null &&
+        prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
+      await prefs.setKeyValue(Preferences.selectedLocationName, null);
+      await prefs.setKeyValue(Preferences.selectedLocationId, null);
+      location = null;
+
+      final previousLocationId =
+          prefs.getKeyValue(Preferences.selectedLocationId, null);
+      final firebaseApi = FirebaseApi(navigatorKey, prefs);
+      if (previousLocationId != null) {
+        final previousTopic = WasteCalendarRepository(prefs)
+            .getTopicString(int.parse(previousLocationId));
+        await firebaseApi.unsubscribeFromTopic(previousTopic);
+      }
+    }
+
+    await prefs.setKeyValue(Preferences.isAppInstalled, true);
+    return location;
+  }
+
+  String? _getStoredLocation(prefs) {
     return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }
 
