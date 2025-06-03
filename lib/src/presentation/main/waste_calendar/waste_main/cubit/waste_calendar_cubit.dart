@@ -59,7 +59,7 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       case 'Biotonne 2-wö.':
         return Colors.brown;
       case 'Papiertonne 4-wö.':
-        return Colors.blue;
+        return Colors.green;
       case 'Wertstofftonne oder -sack 4-wö.':
         return Colors.orange;
       case 'Weihnachtsbaumabfuhr':
@@ -78,7 +78,7 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       //   return Colors.lightGreen;
       case 'Wertstoff-Container (2-wö.)':
       case 'Wertstoff-Container (4-wö.)':
-        return Colors.yellow;
+        return Colors.orange;
       default:
         return Colors.white;
     }
