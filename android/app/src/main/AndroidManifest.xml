@@ -13,7 +13,7 @@
     <application
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
-        android:label="63inside"
+        android:label="Gera App"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
