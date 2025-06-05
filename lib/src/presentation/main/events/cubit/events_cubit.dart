@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
+
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 
@@ -19,10 +20,15 @@ class EventsCubit extends Cubit<EventsState> {
   int cityId = 0;
   MultiFilter? filter;
   List<ProductModel> loadedEvents = [];
+  String? searchTerm;
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    if (!isRefreshLoader) emit(const EventsState.loading());
+    if (!isRefreshLoader) {
+      emit(const EventsState.loading());
+      searchTerm = null;
+    }
     final prefs = await Preferences.openBox();
+    List<CategoryModel>? filterCities;
     if (filter?.currentLocation != null) {
       cityId = filter!.currentLocation;
     } else {
@@ -31,11 +37,12 @@ class EventsCubit extends Cubit<EventsState> {
         emit(const EventsState.error("no_valid_data"));
         return;
       }
-      for(var city in cities) {
+      for (var city in cities) {
         locations[city.id] = city.title;
       }
       final int savedCityId = prefs.getKeyValue(Preferences.cityId, 0);
       cityId = matchCityId(cities, savedCityId);
+      filterCities = cities;
     }
 
     final eventsResponse = await ListRepository.loadList(
@@ -43,16 +50,21 @@ class EventsCubit extends Cubit<EventsState> {
 
     List<ProductModel> eventsList = [];
 
-    if(eventsResponse != null) {
+    if (eventsResponse != null) {
       eventsList = eventsResponse[0];
     }
-    if(filter != null && filter!.currentProductEventFilter != null) {
-      final List<ProductModel>? formattedList = formatListDateFilter(filter!.currentProductEventFilter, eventsList, false, null);
-      if(formattedList != null) {
+    if (filter != null && filter!.currentProductEventFilter != null) {
+      final List<ProductModel>? formattedList = formatListDateFilter(
+          filter!.currentProductEventFilter, eventsList, false, null);
+      if (formattedList != null) {
         eventsList = formattedList;
       }
     }
-    filter ??= MultiFilter(hasLocationFilter: true, hasProductEventFilter: true, currentLocation: cityId);
+    filter ??= MultiFilter(
+        hasLocationFilter: true,
+        hasProductEventFilter: true,
+        currentLocation: cityId,
+        cities: filterCities);
 
     loadedEvents.addAll(eventsList);
     emit(EventsState.loaded(eventsList));
@@ -63,7 +75,7 @@ class EventsCubit extends Cubit<EventsState> {
         categoryId: 3, type: "category", pageNo: pageNo, cityId: cityId);
     List<ProductModel> eventsList = [];
 
-    if(eventsResponse != null) {
+    if (eventsResponse != null) {
       eventsList = eventsResponse[0];
       loadedEvents.addAll(eventsList);
     }
@@ -71,8 +83,11 @@ class EventsCubit extends Cubit<EventsState> {
   }
 
   //This is not a good solution, filter from the backend!
-  List<ProductModel>? formatListDateFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, List<int>? currentCity) {
+  List<ProductModel>? formatListDateFilter(
+      ProductFilter? type,
+      List<ProductModel> loadedList,
+      bool filterLocation,
+      List<int>? currentCity) {
     List<ProductModel>? filteredList;
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
@@ -144,32 +159,21 @@ class EventsCubit extends Cubit<EventsState> {
     }
   }
 
-  Future<List<ProductModel>?> searchListing(content, int pageNo) async {
-    /*
-    int currentListingFilter = await getCurrentStatus();
-    int currentCityFilter = await getCurrentCityFilter();
-    List<ProductModel>? listDataList = [];
-    MultiFilter multiFilter = MultiFilter(
-        hasLocationFilter: true,
-        hasListingStatusFilter: true,
-        currentListingStatus: currentListingFilter,
-        currentLocation: currentCityFilter);
-
-    final result = await ListRepository.searchListing(
-        content: content, multiFilter: multiFilter, pageNo: pageNo);
-    final List<ProductModel>? listUpdated = result?[0];
-
-    if (listUpdated != null) {
-      if (pageNo == 1) {
-        posts = [];
-      }
-      posts.addAll(listUpdated);
-    }
-
-    listDataList = await loadFullProducts(posts.cast<ProductModel>());
-
-    return listDataList;*/
+  Future<void> searchListing(content) async {
+    emit(const EventsState.loading());
+    searchTerm = content;
+    await Future.delayed(const Duration(seconds: 2));
+    //TODO: Implement search logic
+    loadedEvents = [];
+    emit(const EventsState.loaded([]));
   }
 
-  Future<dynamic> newListings(int pageNo) async {}
+  Future<void> onFilter(MultiFilter selectedFilter) async {
+    emit(const EventsState.loading());
+    filter = selectedFilter;
+    await Future.delayed(const Duration(seconds: 2));
+    //TODO: Implement filter logic
+    loadedEvents = [];
+    emit(const EventsState.loaded([]));
+  }
 }

@@ -21,6 +21,10 @@ class AppTextInput extends StatefulWidget {
   final int? maxLength;
   final bool readOnly;
   final bool hasDelete;
+  final TextStyle? inputTextStyle;
+  final TextStyle? hintTextStyle;
+  final Color? clearColor;
+  final VoidCallback? onDelete;
 
   const AppTextInput(
       {super.key,
@@ -41,7 +45,11 @@ class AppTextInput extends StatefulWidget {
       this.maxLength,
       this.readOnly = false,
       this.hasDelete = true,
-      this.autofillHint});
+      this.autofillHint,
+      this.hintTextStyle,
+      this.inputTextStyle,
+      this.clearColor,
+      this.onDelete});
 
   @override
   State<AppTextInput> createState() => _AppTextInputState();
@@ -112,7 +120,9 @@ class _AppTextInputState extends State<AppTextInput> {
       );
     }
 
-    if (widget.controller != null && widget.controller!.text.isNotEmpty && widget.hasDelete) {
+    if (widget.controller != null &&
+        widget.controller!.text.isNotEmpty &&
+        widget.hasDelete) {
       deleteAction = Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -126,8 +136,14 @@ class _AppTextInputState extends State<AppTextInput> {
                   widget.onChanged!(widget.controller!.text);
                 });
               }
+              if (widget.onDelete != null) {
+                widget.onDelete!();
+              }
             },
-            child: const Icon(Icons.clear),
+            child: Icon(
+              Icons.clear,
+              color: widget.clearColor,
+            ),
           ),
         ],
       );
@@ -159,9 +175,11 @@ class _AppTextInputState extends State<AppTextInput> {
                   textInputAction: widget.textInputAction,
                   maxLines: widget.maxLines,
                   maxLength: widget.maxLength,
+                  style: widget.inputTextStyle,
                   decoration: InputDecoration(
                     counterText: "",
                     hintText: widget.hintText,
+                    hintStyle: widget.hintTextStyle,
                     suffixIcon: Row(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,

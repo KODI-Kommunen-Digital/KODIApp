@@ -538,5 +538,6 @@
   "views": "Views",
   "new_message": "New Message",
   "events": "Events",
-  "current_events": "All current events near you"
+  "current_events": "All current events near you",
+  "find_event": "Find event"
 }
