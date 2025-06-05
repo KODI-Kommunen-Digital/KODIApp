@@ -55,6 +55,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         ? currentCities
                         : currentCity,
                     currentProductEventFilter: currentProductEventFilter,
+                    cities: widget.multiFilter.cities,
                     currentListingStatus: currentListingStatus,
                     currentForumGroupFilter: currentForumGroupFilter,
                     currentCategory: currentCategory,

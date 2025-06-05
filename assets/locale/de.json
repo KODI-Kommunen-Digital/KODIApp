@@ -545,6 +545,7 @@
   "intro_login": "",
   "welcomeTitle": "",
   "events": "Veranstaltungen",
-  "current_events": "Alle aktuellen Events in deiner Nähe"
+  "current_events": "Alle aktuellen Events in deiner Nähe",
+  "find_event": "Veranstaltung finden"
 }
 

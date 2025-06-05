@@ -6,6 +6,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/events/cubit/events_cubit.dart';
 import 'package:heidi/src/presentation/main/events/cubit/events_state.dart';
+import 'package:heidi/src/presentation/main/events/events_search.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -65,66 +66,95 @@ class _EventsScreenState extends State<EventsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(
-          parent: AlwaysScrollableScrollPhysics(),
+      body: BlocBuilder<EventsCubit, EventsState>(
+        builder: (context, state) => state.maybeWhen(
+          loading: () => _buildLoading(),
+          loaded: (events) {
+            pageNo = 1;
+            return _buildLoaded(events);
+          },
+          updated: (events) => _buildLoaded(events),
+          orElse: () => ErrorWidget(Translate.of(context).translate('error')),
         ),
-        controller: _scrollController,
-        slivers: <Widget>[
-          SliverPersistentHeader(
-            delegate: AppBarHomeSliver(
-                expandedHeight: MediaQuery.of(context).size.height * 0.25,
-                onSearch: null,
-                isHome: false),
-            pinned: false,
-          ),
-          SliverToBoxAdapter(
-            child: Transform.translate(
-              offset: const Offset(0, -45),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Material(
-                  color: Colors.transparent,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.surface,
-                      borderRadius: BorderRadius.circular(8),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          offset: const Offset(0, 4),
-                          blurRadius: 8,
-                        ),
-                      ],
-                    ),
-                    child: BlocBuilder<EventsCubit, EventsState>(
-                      builder: (context, state) => state.maybeWhen(
-                        loading: () => const CircularProgressIndicator(),
-                        loaded: (events) => Container(),
-                        updated: (events) => Container(),
-                        orElse: () => ErrorWidget('Failed to load Accounts.'),
-                      ),
-                    ), //TODO: Implement Search bar,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          CupertinoSliverRefreshControl(
-            onRefresh: _onRefresh,
-          ),
-          BlocBuilder<EventsCubit, EventsState>(
-            builder: (context, state) => state.maybeWhen(
-              loading: () =>
-                  const SliverToBoxAdapter(child: CircularProgressIndicator()),
-              loaded: (events) => _buildContent(events),
-              updated: (events) => _buildContent(events),
-              orElse: () => ErrorWidget('Failed to load Accounts.'),
-            ),
-          ),
-        ],
       ),
+    );
+  }
+
+  Widget _buildLoaded(List<ProductModel> events) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      controller: _scrollController,
+      slivers: <Widget>[
+        SliverPersistentHeader(
+          delegate: AppBarHomeSliver(
+              expandedHeight: MediaQuery.of(context).size.height * 0.25,
+              onSearch: null,
+              isHome: false),
+          pinned: false,
+        ),
+        SliverToBoxAdapter(
+          child: Transform.translate(
+            offset: const Offset(0, -45),
+            child: Material(
+              color: Colors.transparent,
+              child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: EventsSearchWidget(
+                      onSearch: (searchTerm) {
+                        context.read<EventsCubit>().searchListing(searchTerm);
+                      },
+                      searchTerm: context.read<EventsCubit>().searchTerm,
+                      onDelete: () {
+                        if (context.read<EventsCubit>().searchTerm != null) {
+                          context.read<EventsCubit>().onLoad(false);
+                        }
+                      },
+                      onFilter: (multiFilter) {
+                        if (multiFilter != null) {
+                          context.read<EventsCubit>().onFilter(multiFilter);
+                        }
+                      },
+                      filter: context.read<EventsCubit>().filter!)),
+            ),
+          ),
+        ),
+        CupertinoSliverRefreshControl(
+          onRefresh: _onRefresh,
+        ),
+        _buildContent(events)
+      ],
+    );
+  }
+
+  Widget _buildLoading() {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      controller: _scrollController,
+      slivers: <Widget>[
+        SliverPersistentHeader(
+          delegate: AppBarHomeSliver(
+            expandedHeight: MediaQuery.of(context).size.height * 0.25,
+            onSearch: null,
+            isHome: false,
+          ),
+          pinned: false,
+        ),
+        SliverToBoxAdapter(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

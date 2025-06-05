@@ -6,9 +6,10 @@ class AppFilterButton extends StatelessWidget {
   final MultiFilter? multiFilter;
   final Function(MultiFilter filter)? filterCallBack;
   final VoidCallback? voidCallback;
+  final Color? color;
 
   const AppFilterButton(
-      {super.key, this.multiFilter, this.filterCallBack, this.voidCallback});
+      {super.key, this.multiFilter, this.filterCallBack, this.voidCallback, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class AppFilterButton extends StatelessWidget {
       ),
       icon: Icon(
         Icons.filter_list_rounded,
-        color: Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
+        color: color ?? Theme.of(context).textTheme.bodyLarge?.color ?? Colors.white,
       ),
     );
   }
