@@ -48,6 +48,8 @@ class Preferences {
   static const String trolleyMakerApiToken = 'trolleyMakerApiToken';
   static const String trolleyMakerCardName = 'trolleyMakerCardName';
 
+  static const String isAppInstalled = "isAppInstalled";
+
   Preferences._(this._box);
 
   static Future<Preferences> openBox() async {
