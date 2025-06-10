@@ -2,11 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/cubit/waste_calendar_cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/data/model/model_waste_location.dart';
-import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+
+import '../../utils/street_name_hash.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key});
@@ -63,13 +65,16 @@ class IntroPageState extends State<IntroPage> {
     });
 
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
-    if (previousLocationId != null) {
-      final previousTopic =
-          repository.getTopicString(int.parse(previousLocationId));
-      await firebaseApi.unsubscribeFromTopic(previousTopic);
-    }
+    // if (previousLocationId != null) {
+    //   final previousTopic =
+    //       repository.getTopicString(int.parse(previousLocationId));
+    //   await firebaseApi.unsubscribeFromTopic(previousTopic);
+    // }
 
-    final newTopic = repository.getTopicString(int.parse(locationId));
+    // final newTopic = repository.getTopicString(int.parse(locationId));
+
+    final newTopic =
+        repository.getTopicFromHash(getStreetNameHash(locationName));
     await firebaseApi.subscribeToTopic(newTopic);
 
     // final streetId = int.parse(locationId);

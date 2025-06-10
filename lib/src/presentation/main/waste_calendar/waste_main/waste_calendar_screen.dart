@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'cubit/waste_calendar_cubit.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -78,13 +79,19 @@ class _WasteCalendarState extends State<WasteCalendar> {
     });
 
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
-    if (previousLocationId != null) {
-      final previousTopic =
-          repository.getTopicString(int.parse(previousLocationId));
-      await firebaseApi.unsubscribeFromTopic(previousTopic);
-    }
 
-    final newTopic = repository.getTopicString(int.parse(locationId));
+    // As now we do not need to unsubscribe because we are using hash for sub
+
+    // if (previousLocationId != null) {
+    //   final previousTopic =
+    //       repository.getTopicString(int.parse(previousLocationId));
+    //   await firebaseApi.unsubscribeFromTopic(previousTopic);
+    // }
+
+    //final newTopic = repository.getTopicString(int.parse(locationId));
+
+    final newTopic = repository.getTopicFromHash(getStreetNameHash(locationName));
+
     await firebaseApi.subscribeToTopic(newTopic);
 
     // final streetId = int.parse(locationId);
@@ -469,7 +476,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                       item.name.toLowerCase().startsWith(pattern.toLowerCase()))
                   .toList();
             },
-            onSelected: (WasteLocation suggestion) async {
+            onSelected: (WasteLocation suggestion) {
               typeAheadController.text = suggestion.name;
               _selectLocation(suggestion.id.toString(), suggestion.name);
               Navigator.pop(context);
