@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
-import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -23,7 +22,6 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -531,102 +529,6 @@ class _HomeScreenState extends State<HomeScreen> {
         if (!mounted) return;
         _showCitySelectionPopup(context);
       }
-      return;
-    }
-
-    if (item.id == 500) {
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': selectedCityId,
-        'services': [
-          CitizenServiceModel(
-              imageUrl: "29",
-              imageLink: Images.service29,
-              categoryId: 46,
-              subCategoryId: 20,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "12",
-              imageLink: Images.service12,
-              categoryId: 46,
-              subCategoryId: 19,
-              type: "subCategoryService")
-        ],
-        'title': 'Shopping'
-      });
-      return;
-    }
-
-    if (item.id == 43) {
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': selectedCityId,
-        'services': [
-          CitizenServiceModel(
-            imageUrl: "8.1",
-            imageLink: Images.service8_1,
-            categoryId: 43,
-            subCategoryId: 16,
-            type: "subCategoryService",
-          ),
-          CitizenServiceModel(
-            imageUrl: "8.2",
-            imageLink: Images.service8_2,
-            categoryId: 43,
-            subCategoryId: 17,
-            type: "subCategoryService",
-          ),
-          CitizenServiceModel(
-            imageUrl: "8.3",
-            imageLink: Images.service8_3,
-            categoryId: 43,
-            subCategoryId: 18,
-            type: "subCategoryService",
-          ),
-          CitizenServiceModel(
-            imageUrl: "8.5",
-            imageLink: Images.service8_5,
-            categoryId: 43,
-            subCategoryId: 21,
-            type: "subCategoryService",
-          ),
-          CitizenServiceModel(
-            imageUrl: "8.4",
-            imageLink: Images.service8_4,
-            categoryId: 0,
-            subCategoryId: 0,
-            type: "subCategoryService",
-          ),
-          CitizenServiceModel(
-              imageUrl: "8.6",
-              imageLink: Images.service8_6,
-              categoryId: 0,
-              subCategoryId: 0,
-              type: "subCategoryService"),
-        ],
-        'title': 'Gastro',
-      });
-      return;
-    }
-
-    if (item.id == 44) {
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': selectedCityId,
-        'services': [
-          CitizenServiceModel(
-            imageUrl: "31.1",
-            imageLink: Images.service31,
-            categoryId: 44,
-            type: "categoryService",
-          ),
-          CitizenServiceModel(
-            imageUrl: "31.2",
-            imageLink: Images.service31_2,
-          ),
-        ],
-        'title': 'Jobs',
-      });
       return;
     }
 

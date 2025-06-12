@@ -24,28 +24,9 @@ class Images {
   static const String service6 = "assets/images/services-6.png";
   static const String service7 = "assets/images/services-7.png";
   static const String service8 = "assets/images/services-8.png";
-  static const String service8_1 = "assets/images/services-8.1.png";
-  static const String service8_2 = "assets/images/services-8.2.png";
-  static const String service8_3 = "assets/images/services-8.3.png";
-  static const String service8_4 = "assets/images/services-8.4.png";
-  static const String service8_5 = "assets/images/services-8.5.png";
-  static const String service8_6 = "assets/images/services-8.6.png";
   static const String service9 = "assets/images/services-9.png";
   static const String service10 = "assets/images/services-10.png";
   static const String service11 = "assets/images/services-11.png";
-  static const String service12 = "assets/images/services-12.png";
-  static const String service17 = "assets/images/services-17.png";
-  static const String service29 = "assets/images/services-29.png";
-  static const String service500 = "assets/images/services-500.png";
-  static const String service501 = "assets/images/services-501.png";
-  static const String service31 = "assets/images/services-31.png";
-  static const String service31_2 = "assets/images/services-31_2.png";
-  static const String service32 = "assets/images/services-32.png";
-  static const String service33 = "assets/images/services-33.png";
-  static const String service34 = "assets/images/services-34.png";
-  static const String service35 = "assets/images/services-35.png";
-  static const String service36 = "assets/images/services-36.png";
-  static const String service37 = "assets/images/services-37.png";
 
   static const String defaultListing = "assets/images/default_image.jpeg";
 

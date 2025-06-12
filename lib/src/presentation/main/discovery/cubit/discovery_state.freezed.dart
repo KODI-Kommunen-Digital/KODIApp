@@ -20,7 +20,9 @@ mixin _$DiscoveryState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) =>
@@ -29,7 +31,9 @@ mixin _$DiscoveryState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) =>
@@ -38,7 +42,9 @@ mixin _$DiscoveryState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -140,7 +146,9 @@ class _$DiscoveryStateInitialImpl implements DiscoveryStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -152,7 +160,9 @@ class _$DiscoveryStateInitialImpl implements DiscoveryStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -164,7 +174,9 @@ class _$DiscoveryStateInitialImpl implements DiscoveryStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -265,7 +277,9 @@ class _$DiscoveryStateLoadingImpl implements DiscoveryStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -277,7 +291,9 @@ class _$DiscoveryStateLoadingImpl implements DiscoveryStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -289,7 +305,9 @@ class _$DiscoveryStateLoadingImpl implements DiscoveryStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -351,7 +369,8 @@ abstract class _$$DiscoveryStateLoadedImplCopyWith<$Res> {
           $Res Function(_$DiscoveryStateLoadedImpl) then) =
       __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<CitizenServiceModel> list});
+  $Res call(
+      {List<CitizenServiceModel> services, List<CitizenServiceModel> explore});
 }
 
 /// @nodoc
@@ -367,12 +386,17 @@ class __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? list = null,
+    Object? services = null,
+    Object? explore = null,
   }) {
     return _then(_$DiscoveryStateLoadedImpl(
-      null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
+      null == services
+          ? _value._services
+          : services // ignore: cast_nullable_to_non_nullable
+              as List<CitizenServiceModel>,
+      null == explore
+          ? _value._explore
+          : explore // ignore: cast_nullable_to_non_nullable
               as List<CitizenServiceModel>,
     ));
   }
@@ -381,20 +405,30 @@ class __$$DiscoveryStateLoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
-  const _$DiscoveryStateLoadedImpl(final List<CitizenServiceModel> list)
-      : _list = list;
+  const _$DiscoveryStateLoadedImpl(final List<CitizenServiceModel> services,
+      final List<CitizenServiceModel> explore)
+      : _services = services,
+        _explore = explore;
 
-  final List<CitizenServiceModel> _list;
+  final List<CitizenServiceModel> _services;
   @override
-  List<CitizenServiceModel> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
+  List<CitizenServiceModel> get services {
+    if (_services is EqualUnmodifiableListView) return _services;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
+    return EqualUnmodifiableListView(_services);
+  }
+
+  final List<CitizenServiceModel> _explore;
+  @override
+  List<CitizenServiceModel> get explore {
+    if (_explore is EqualUnmodifiableListView) return _explore;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_explore);
   }
 
   @override
   String toString() {
-    return 'DiscoveryState.loaded(list: $list)';
+    return 'DiscoveryState.loaded(services: $services, explore: $explore)';
   }
 
   @override
@@ -402,12 +436,15 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$DiscoveryStateLoadedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list));
+            const DeepCollectionEquality().equals(other._services, _services) &&
+            const DeepCollectionEquality().equals(other._explore, _explore));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_services),
+      const DeepCollectionEquality().hash(_explore));
 
   /// Create a copy of DiscoveryState
   /// with the given fields replaced by the non-null parameter values.
@@ -424,11 +461,13 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) {
-    return loaded(list);
+    return loaded(services, explore);
   }
 
   @override
@@ -436,11 +475,13 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(list);
+    return loaded?.call(services, explore);
   }
 
   @override
@@ -448,13 +489,15 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(list);
+      return loaded(services, explore);
     }
     return orElse();
   }
@@ -501,10 +544,11 @@ class _$DiscoveryStateLoadedImpl implements DiscoveryStateLoaded {
 }
 
 abstract class DiscoveryStateLoaded implements DiscoveryState {
-  const factory DiscoveryStateLoaded(final List<CitizenServiceModel> list) =
-      _$DiscoveryStateLoadedImpl;
+  const factory DiscoveryStateLoaded(final List<CitizenServiceModel> services,
+      final List<CitizenServiceModel> explore) = _$DiscoveryStateLoadedImpl;
 
-  List<CitizenServiceModel> get list;
+  List<CitizenServiceModel> get services;
+  List<CitizenServiceModel> get explore;
 
   /// Create a copy of DiscoveryState
   /// with the given fields replaced by the non-null parameter values.
@@ -592,7 +636,9 @@ class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -604,7 +650,9 @@ class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -616,7 +664,9 @@ class _$DiscoveryStateUpdatedImpl implements DiscoveryStateUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -752,7 +802,9 @@ class _$DiscoveryStateErrorImpl implements DiscoveryStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<CitizenServiceModel> list) loaded,
+    required TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)
+        loaded,
     required TResult Function(List<CategoryModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -764,7 +816,9 @@ class _$DiscoveryStateErrorImpl implements DiscoveryStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<CitizenServiceModel> list)? loaded,
+    TResult? Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult? Function(List<CategoryModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -776,7 +830,9 @@ class _$DiscoveryStateErrorImpl implements DiscoveryStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<CitizenServiceModel> list)? loaded,
+    TResult Function(List<CitizenServiceModel> services,
+            List<CitizenServiceModel> explore)?
+        loaded,
     TResult Function(List<CategoryModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),

@@ -7,9 +7,6 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
-import 'package:heidi/src/utils/configs/image.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,12 +14,15 @@ import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
   final DiscoveryType type;
+
   const DiscoveryScreen({super.key, required this.type});
 
   @override
   State<DiscoveryScreen> createState() => _DiscoveryScreenState();
 }
-enum DiscoveryType {explore, services}
+
+enum DiscoveryType { explore, services }
+
 class _DiscoveryScreenState extends State<DiscoveryScreen> {
   int? selectedLocationId;
   ProductFilter? selectedFilter;
@@ -49,12 +49,15 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(Translate.of(context).translate((widget.type == DiscoveryType.services) ? 'cust_services' : 'discover')),
+        title: Text(Translate.of(context).translate(
+            (widget.type == DiscoveryType.services)
+                ? 'cust_services'
+                : 'discover')),
         actions: [
           BlocConsumer<DiscoveryCubit, DiscoveryState>(
             listener: (context, state) {},
             builder: (context, state) => state.maybeWhen(
-                loaded: (list) => AppFilterButton(
+                loaded: (services, explore) => AppFilterButton(
                       multiFilter: MultiFilter(
                         hasLocationFilter: true,
                         currentLocation:
@@ -85,8 +88,10 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           loading: () {
             return const DiscoveryLoading();
           },
-          loaded: (list) => DiscoveryLoaded(
-            services: list,
+          loaded: (services, explore) => DiscoveryLoaded(
+            services: services,
+            explore: explore,
+            type: widget.type,
           ),
           updated: (list) {
             return Container();
@@ -114,11 +119,14 @@ class DiscoveryLoading extends StatelessWidget {
 
 class DiscoveryLoaded extends StatefulWidget {
   final List<CitizenServiceModel> services;
+  final List<CitizenServiceModel> explore;
+  final DiscoveryType type;
 
-  const DiscoveryLoaded({
-    super.key,
-    required this.services,
-  });
+  const DiscoveryLoaded(
+      {super.key,
+      required this.services,
+      required this.explore,
+      required this.type});
 
   @override
   State<DiscoveryLoaded> createState() => _DiscoveryLoadedState();
@@ -128,11 +136,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   bool isLoading = false;
   final _scrollController = ScrollController();
   List<CitizenServiceModel> services = [];
+  List<CitizenServiceModel> explore = [];
 
   @override
   void initState() {
     super.initState();
     services = widget.services;
+    explore = widget.explore;
   }
 
   void scrollUp() {
@@ -155,17 +165,25 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             crossAxisSpacing: 10.0,
             mainAxisSpacing: 10.0,
             mainAxisExtent: 300.0),
-        itemCount: services.length,
+        itemCount: (widget.type == DiscoveryType.services)
+            ? services.length
+            : explore.length,
         controller: _scrollController,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
             onTap: () {
-              navigateToLink(services[index]);
+              if (widget.type == DiscoveryType.services) {
+                navigateToLink(services[index]);
+              } else {
+                navigateToLink(explore[index]);
+              }
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
               child: Image.asset(
-                services[index].imageUrl,
+                (widget.type == DiscoveryType.services)
+                    ? services[index].imageUrl
+                    : explore[index].imageUrl,
                 fit: BoxFit.cover,
               ),
             ),
@@ -176,162 +194,46 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.imageLink == "1") {
-      await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
-          mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "2") {
-      await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit.getCityLink() ?? ""),
-          mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "37") {
-      await launchUrl(Uri.parse("https://www.rodgaucard.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (service.imageLink == "10") {
-      final cityId = await context.read<DiscoveryCubit>().getCitySelected();
-      if (cityId != 0) {
-        if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listGroups,
-            arguments: {'id': service.arguments, 'title': 'forums'});
-      } else {
-        if (!mounted) return;
-        _showCitySelectionPopup(context);
-      }
-    } else if (service.imageLink == "500") {
-      int? currentLocation =
-          await context.read<DiscoveryCubit>().getCitySelected();
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': currentLocation ?? 0,
-        'services': [
-          CitizenServiceModel(
-              imageUrl: "29",
-              imageLink: Images.service29,
-              categoryId: 46,
-              subCategoryId: 20,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "12",
-              imageLink: Images.service12,
-              categoryId: 46,
-              subCategoryId: 19,
-              type: "subCategoryService")
-        ],
-        'title': 'Shopping',
-      });
-    } else if (service.imageLink == "501") {
-      int? currentLocation =
-          await context.read<DiscoveryCubit>().getCitySelected();
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': currentLocation ?? 0,
-        'services': [
-          CitizenServiceModel(
-              imageUrl: "32",
-              imageLink: Images.service32,
-              categoryId: 45,
-              subCategoryId: 12,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "33",
-              imageLink: Images.service33,
-              categoryId: 45,
-              subCategoryId: 13,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "34",
-              imageLink: Images.service34,
-              categoryId: 45,
-              subCategoryId: 14,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "35",
-              imageLink: Images.service35,
-              categoryId: 45,
-              subCategoryId: 15,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "36",
-              imageLink: Images.service36,
-              categoryId: 45,
-              subCategoryId: 22,
-              type: "subCategoryService")
-        ],
-        'title': 'Dienstleister',
-      });
-    } else if (service.imageLink == "8") {
-      int? currentLocation =
-          await context.read<DiscoveryCubit>().getCitySelected();
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': currentLocation ?? 0,
-        'services': [
-          CitizenServiceModel(
-              imageUrl: "8.1",
-              imageLink: Images.service8_1,
-              categoryId: 43,
-              subCategoryId: 16,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "8.2",
-              imageLink: Images.service8_2,
-              categoryId: 43,
-              subCategoryId: 17,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "8.3",
-              imageLink: Images.service8_3,
-              categoryId: 43,
-              subCategoryId: 18,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "8.5",
-              imageLink: Images.service8_5,
-              categoryId: 43,
-              subCategoryId: 21,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "8.4",
-              imageLink: Images.service8_4,
-              categoryId: 0,
-              subCategoryId: 0,
-              type: "subCategoryService"),
-          CitizenServiceModel(
-              imageUrl: "8.6",
-              imageLink: Images.service8_6,
-              categoryId: 0,
-              subCategoryId: 0,
-              type: "subCategoryService"),
-        ],
-        'title': 'Gastro',
-      });
-    } else if (service.imageLink == "31") {
-      int? currentLocation =
-          await context.read<DiscoveryCubit>().getCitySelected();
-      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
-        'id': currentLocation ?? 0,
-        'services': [
-          CitizenServiceModel(
-              imageUrl: "31.1",
-              imageLink: Images.service31,
-              categoryId: 44,
-              type: "categoryService"),
-          CitizenServiceModel(
-            imageUrl: "31.2",
-            imageLink: Images.service31_2,
-          ),
-        ],
-        'title': 'Jobs',
-      });
-    } else {
-      AppBloc.discoveryCubit
-          .setServiceValue(Preferences.type, service.type, null);
-      if (service.categoryId != null) {
-        AppBloc.discoveryCubit
-            .setServiceValue(Preferences.categoryId, null, service.categoryId);
-      }
-      Navigator.pushNamed(context, Routes.listProduct,
-          arguments: {'id': service.arguments, 'title': ''});
+    switch (service.imageLink) {
+      case "17":
+        await launchUrl(Uri.parse('https://www.gera.de/serviceportal'),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case "18":
+        break;
+      case "19":
+        break;
+      case "20":
+        await launchUrl(
+            Uri.parse(
+                'https://cockpit.gera.de/d/KsIwvw5nz/cockpit?orgId=1&refresh=15m'),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case "21":
+        await launchUrl(
+            Uri.parse('https://geoportal.gera.de/portalserver/#/portal/gera'),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case "22":
+        break;
+      case "23":
+        await launchUrl(
+            Uri.parse('https://www.gvbgera.de/fahrplaene/gvb-liniennetz'),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case "24":
+        await launchUrl(Uri.parse('https://www.gvbgera.de/tickets/fahrscheine'),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case "25":
+        break;
     }
+
+    /*await launchUrl(Uri.parse('https://mitreden.ilzerland.bayern/ringelai'),
+          mode: LaunchMode.inAppWebView);*/
   }
 
-  void _showCitySelectionPopup(BuildContext context) {
+/*void _showCitySelectionPopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -355,5 +257,5 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         );
       },
     );
-  }
+  }*/
 }
