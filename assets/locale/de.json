@@ -546,6 +546,12 @@
   "welcomeTitle": "",
   "events": "Veranstaltungen",
   "current_events": "Alle aktuellen Events in deiner Nähe",
-  "find_event": "Veranstaltung finden"
+  "find_event": "Veranstaltung finden",
+  "go_to_register" : "Zur Registrierung",
+  "go_to_login" : "Zur Anmeldung",
+  "view_terms_of_use": "Nutzungsbedingungen anzeigen",
+  "verify_terms_of_use": "Bestätige, dass du unsere Bedingungen gelesen hast und zustimmst.",
+  "must_verify_terms_of_use": "Du musst den Nutzungsbedingungen zustimmen, um die App nutzen zu können!",
+  "proceed": "Weiter"
 }
 

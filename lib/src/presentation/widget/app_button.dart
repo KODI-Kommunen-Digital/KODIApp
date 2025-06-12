@@ -13,6 +13,7 @@ class AppButton extends StatelessWidget {
   final Widget? icon;
   final MainAxisSize mainAxisSize;
   final ButtonSize size;
+  final Color? color;
 
   const AppButton(
     this.text, {
@@ -24,6 +25,7 @@ class AppButton extends StatelessWidget {
     this.type = ButtonType.normal,
     this.mainAxisSize = MainAxisSize.min,
     this.size = ButtonSize.large,
+    this.color,
   });
 
   @override
@@ -52,7 +54,7 @@ class AppButton extends StatelessWidget {
                 Text(
                   text,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: Theme.of(context).primaryColor,
+                      color: color ?? Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -75,7 +77,7 @@ class AppButton extends StatelessWidget {
               Text(
                 text,
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).primaryColor,
+                    color: color ?? Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold),
               ),
             ],
@@ -95,7 +97,7 @@ class AppButton extends StatelessWidget {
                 Text(
                   text,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                      color: Theme.of(context).primaryColor,
+                      color: color ?? Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold),
                 ),
               ],
@@ -112,7 +114,7 @@ class AppButton extends StatelessWidget {
               Text(
                 text,
                 style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).primaryColor,
+                    color: color ?? Theme.of(context).primaryColor,
                     fontWeight: FontWeight.bold),
               ),
             ],
@@ -146,7 +148,7 @@ class AppButton extends StatelessWidget {
         return ElevatedButton(
           onPressed: disabled ? null : onPressed,
           style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).primaryColor,
+            backgroundColor: color ?? Theme.of(context).primaryColor,
             minimumSize: buttonSize,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
