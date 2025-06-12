@@ -115,11 +115,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           Radius.circular(8),
                         )),
                     child: Center(
-                      child: Expanded(
                         child: Text(
-                            Translate.of(context).translate('go_to_register')),
-                      ),
-                    ),
+                            Translate.of(context).translate('go_to_register'))),
                   ),
                 ),
                 const SizedBox(
@@ -139,7 +136,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                         )),
                     child: Center(
                       child:
-                          Expanded(child: Text(Translate.of(context).translate('go_to_login'))),
+                          Text(Translate.of(context).translate('go_to_login')),
                     ),
                   ),
                 ),
