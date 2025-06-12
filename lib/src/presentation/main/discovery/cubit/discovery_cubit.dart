@@ -22,6 +22,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<CategoryModel> location = [];
   final List<CitizenServiceModel> hiddenServices = [];
   late List<CitizenServiceModel> services;
+  late List<CitizenServiceModel> explore;
   bool doesScroll = false;
   int? currentCity;
 
@@ -31,18 +32,19 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    services = initializeServices();
+    services = initializeServices()[0];
+    explore = initializeServices()[1];
 
     List<CitizenServiceModel> servicesCopy = List.from(services);
 
-    for (var element in servicesCopy) {
+    /*for (var element in servicesCopy) {
       if (element.categoryId != null || element.type == "subCategoryService") {
         // bool hasContent = await element.hasContent();
         // if (!hasContent) {
         //   hiddenServices.add(element);
         // }
       }
-    }
+    }*/
 
     services.removeWhere((element) => hiddenServices.contains(element));
 
@@ -50,6 +52,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     emit(DiscoveryStateLoaded(
       services,
+      explore
     ));
   }
 
@@ -88,19 +91,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     ListRepository.saveEventToMatomo(type: MatomoType.city, name: cityName);
   }
 
-  Future<String?> getCityLink() async {
-    final prefs = await Preferences.openBox();
-    int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
-    Map<int, String> cityWebsites = {
-      0: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger",
-      1: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86974&behoerde=29997690498&gemeinde=325524110678",
-      2: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86925&behoerde=70664072559&gemeinde=006746347678",
-      3: "https://www.bayernportal.de/suche/lebenslage/hierarchisch/buerger?plz=86944&behoerde=93996542745&gemeinde=208079671678",
-    };
-
-    return cityWebsites[cityId];
-  }
-
   Future<void> setServiceValue(String preference, String? type, int? id) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(preference, type ?? id);
@@ -116,75 +106,61 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   void scrollUp() {
     emit(const DiscoveryStateLoading());
-    emit(DiscoveryStateLoaded(services));
+    emit(DiscoveryStateLoaded(services, explore));
   }
 
-  List<CitizenServiceModel> initializeServices() {
+  List<List<CitizenServiceModel>> initializeServices() {
     List<CitizenServiceModel> services = [
-      // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
-      // CitizenServiceModel(
-      //     imageUrl: Images.service3,
-      //     imageLink: "3",
-      //     type: "subCategoryService",
-      //     arguments: 4),
       CitizenServiceModel(
-          imageUrl: Images.service5,
-          imageLink: "5",
-          arguments: 5,
-          categoryId: 3),
+        imageUrl: Images.service11,
+        imageLink: "17",
+        arguments: 17,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service4,
-          imageLink: "4",
-          arguments: 4,
-          categoryId: 1),
+        imageUrl: Images.service11,
+        imageLink: "18",
+        arguments: 18,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service8,
-          imageLink: "8",
-          arguments: 8,
-          categoryId: 43),
+        imageUrl: Images.service11,
+        imageLink: "19",
+        arguments: 19,
+      ),
+    ];
+    List<CitizenServiceModel> explore = [
       CitizenServiceModel(
-          imageUrl: Images.service6,
-          imageLink: "6",
-          arguments: 6,
-          categoryId: 4),
+        imageUrl: Images.service11,
+        imageLink: "20",
+        arguments: 20,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service500,
-          imageLink: "500",
-          arguments: 500,
-          categoryId: 46),
+        imageUrl: Images.service11,
+        imageLink: "21",
+        arguments: 21,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service31,
-          imageLink: "31",
-          arguments: 31,
-          categoryId: 44),
+        imageUrl: Images.service11,
+        imageLink: "22",
+        arguments: 22,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service501,
-          imageLink: "501",
-          arguments: 501,
-          categoryId: 45),
+        imageUrl: Images.service11,
+        imageLink: "23",
+        arguments: 23,
+      ),
       CitizenServiceModel(
-          imageUrl: Images.service17,
-          imageLink: "17",
-          arguments: 17,
-          categoryId: 17),
-      // CitizenServiceModel(
-      //     imageUrl: Images.service11,
-      //     imageLink: "11",
-      //     arguments: 11,
-      //     categoryId: 5),
-      // CitizenServiceModel(
-      //   imageUrl: Images.service10,
-      //   imageLink: "10",
-      //   arguments: 10,
-      // ),
+        imageUrl: Images.service11,
+        imageLink: "24",
+        arguments: 24,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service11,
+        imageLink: "25",
+        arguments: 25,
+      ),
     ];
 
-    if (currentCity == 2) {
-      services.add(
-        CitizenServiceModel(imageUrl: Images.service37, imageLink: "37"),
-      );
-    }
-    return services;
+    return [services, explore];
   }
 
   Future<int?> getCitySelected() async {
