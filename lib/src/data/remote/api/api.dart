@@ -723,6 +723,19 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestWasteStreets(int cityId) async {
+    var list = '/cities/1/wasteCalender/streets';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestWastePickup(
+      int cityId, String streetId) async {
+    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates';
+    final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 
