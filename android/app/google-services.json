@@ -1,21 +1,40 @@
 {
   "project_info": {
-    "project_number": "422735035970",
-    "project_id": "inside-app-4d24b",
-    "storage_bucket": "inside-app-4d24b.firebasestorage.app"
+    "project_number": "977790605614",
+    "project_id": "gera-172d7",
+    "storage_bucket": "gera-172d7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:422735035970:android:247c201b6af9910b3477db",
+        "mobilesdk_app_id": "1:977790605614:android:7a5696ff38fb15fcdc82bf",
         "android_client_info": {
-          "package_name": "com.sixtythreeinside.app"
+          "package_name": "com.gera.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDrLIB5Q6TCntVXM1hlvdKXgSK-AsICIsQ"
+          "current_key": "AIzaSyCVYYuPwoeB41nVsZ97GimO7laBBdqPEFc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977790605614:android:cbdf45cacbde5234dc82bf",
+        "android_client_info": {
+          "package_name": "de.gera.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCVYYuPwoeB41nVsZ97GimO7laBBdqPEFc"
         }
       ],
       "services": {
