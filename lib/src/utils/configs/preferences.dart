@@ -40,6 +40,8 @@ class Preferences {
   static const String receiveNotification = "receiveNotification";
   static const String allListingCityFilter = "allListingCityFilter";
   static const String keyboardHeight = "0.0";
+  static const String selectedLocationId = "selectedLocationId";
+  static const String selectedLocationName = "selectedLocationName";
 
   static const String forumChatTopics = 'forumChatTopics';
 
