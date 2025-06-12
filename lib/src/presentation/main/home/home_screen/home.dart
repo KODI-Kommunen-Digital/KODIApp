@@ -83,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
         prefs.getBool('hasOpenedAppBefore', defaultValue: false);
 
     if (!hasOpenedAppBefore) {
-      await prefs.setBool('hasOpenedAppBefore', true);
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.welcomeScreen);
     }
