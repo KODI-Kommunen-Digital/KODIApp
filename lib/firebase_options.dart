@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDrLIB5Q6TCntVXM1hlvdKXgSK-AsICIsQ',
-    appId: '1:422735035970:android:247c201b6af9910b3477db',
-    messagingSenderId: '422735035970',
-    projectId: 'inside-app-4d24b',
-    storageBucket: 'inside-app-4d24b.firebasestorage.app',
+    apiKey: 'AIzaSyCVYYuPwoeB41nVsZ97GimO7laBBdqPEFc',
+    appId: '1:977790605614:android:cbdf45cacbde5234dc82bf',
+    messagingSenderId: '977790605614',
+    projectId: 'gera-172d7',
+    storageBucket: 'gera-172d7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDznUB66hpCYdUDt-zXzEWJFmvLx5x_ZHU',
-    appId: '1:422735035970:ios:7b4e25d886f5a1f33477db',
-    messagingSenderId: '422735035970',
-    projectId: 'inside-app-4d24b',
-    storageBucket: 'inside-app-4d24b.firebasestorage.app',
-    iosBundleId: 'com.sixtythreeinside.app',
+    apiKey: 'AIzaSyAowFILb233CLRc70EPa_aYSBhCDDQgfYQ',
+    appId: '1:977790605614:ios:f03ad1a3e46298b6dc82bf',
+    messagingSenderId: '977790605614',
+    projectId: 'gera-172d7',
+    storageBucket: 'gera-172d7.firebasestorage.app',
+    iosBundleId: 'de.gera.app',
   );
 
 }
