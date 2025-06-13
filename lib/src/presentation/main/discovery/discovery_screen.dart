@@ -196,33 +196,37 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     switch (service.imageLink) {
       case "17":
+        await launchUrl(
+            Uri.parse(
+                'https://cockpit.gera.de/d/KsIwvw5nz/cockpit?orgId=1&refresh=15m'),
+            mode: LaunchMode.inAppWebView);
         await launchUrl(Uri.parse('https://www.gera.de/serviceportal'),
             mode: LaunchMode.inAppWebView);
         break;
       case "18":
+        await launchUrl(
+            Uri.parse('https://geoportal.gera.de/portalserver/#/portal/gera'),
+            mode: LaunchMode.inAppWebView);
         break;
       case "19":
         break;
       case "20":
         await launchUrl(
-            Uri.parse(
-                'https://cockpit.gera.de/d/KsIwvw5nz/cockpit?orgId=1&refresh=15m'),
+            Uri.parse('https://www.gvbgera.de/fahrplaene/gvb-liniennetz'),
             mode: LaunchMode.inAppWebView);
         break;
       case "21":
-        await launchUrl(
-            Uri.parse('https://geoportal.gera.de/portalserver/#/portal/gera'),
+        await launchUrl(Uri.parse('https://www.gvbgera.de/tickets/fahrscheine'),
             mode: LaunchMode.inAppWebView);
         break;
       case "22":
         break;
       case "23":
-        await launchUrl(
-            Uri.parse('https://www.gvbgera.de/fahrplaene/gvb-liniennetz'),
+        await launchUrl(Uri.parse('https://www.gera.de/serviceportal'),
             mode: LaunchMode.inAppWebView);
         break;
       case "24":
-        await launchUrl(Uri.parse('https://www.gvbgera.de/tickets/fahrscheine'),
+        await launchUrl(Uri.parse('https://www.awv-ot.de/App/'),
             mode: LaunchMode.inAppWebView);
         break;
       case "25":

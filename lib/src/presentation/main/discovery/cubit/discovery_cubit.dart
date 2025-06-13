@@ -50,10 +50,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
     await getCitySelected();
 
-    emit(DiscoveryStateLoaded(
-      services,
-      explore
-    ));
+    emit(DiscoveryStateLoaded(services, explore));
   }
 
   Future<void> onLocationFilter(int locationId, bool calledExternal) async {
@@ -112,51 +109,51 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<List<CitizenServiceModel>> initializeServices() {
     List<CitizenServiceModel> services = [
       CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "17",
-        arguments: 17,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "18",
-        arguments: 18,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "19",
-        arguments: 19,
-      ),
-    ];
-    List<CitizenServiceModel> explore = [
-      CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "20",
-        arguments: 20,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "21",
-        arguments: 21,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service11,
-        imageLink: "22",
-        arguments: 22,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service11,
+        imageUrl: Images.service23,
         imageLink: "23",
         arguments: 23,
       ),
       CitizenServiceModel(
-        imageUrl: Images.service11,
+        imageUrl: Images.service24,
         imageLink: "24",
         arguments: 24,
       ),
       CitizenServiceModel(
-        imageUrl: Images.service11,
+        imageUrl: Images.service25,
         imageLink: "25",
         arguments: 25,
+      ),
+    ];
+    List<CitizenServiceModel> explore = [
+      CitizenServiceModel(
+        imageUrl: Images.service17,
+        imageLink: "17",
+        arguments: 17,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service18,
+        imageLink: "18",
+        arguments: 18,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service19,
+        imageLink: "19",
+        arguments: 19,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service20,
+        imageLink: "20",
+        arguments: 20,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service21,
+        imageLink: "21",
+        arguments: 21,
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service22,
+        imageLink: "22",
+        arguments: 22,
       ),
     ];
 

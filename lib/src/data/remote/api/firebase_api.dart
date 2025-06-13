@@ -70,12 +70,12 @@ class FirebaseApi {
     final receiveNotification =
         await prefs.getKeyValue(Preferences.receiveNotification, "true");
 
-    if (pushNotificationsPermission == "authorized" &&
-        receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
-    } else {
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
-    }
+    // if (pushNotificationsPermission == "authorized" &&
+    //     receiveNotification == "true") {
+    //   await _firebaseMessaging.subscribeToTopic("warnings");
+    // } else {
+    //   await _firebaseMessaging.unsubscribeFromTopic("warnings");
+    // }
 
     int uId = await getLoggedUserId();
     if (uId > 0) {
