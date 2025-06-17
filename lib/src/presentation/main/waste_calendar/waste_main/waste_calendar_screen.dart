@@ -67,7 +67,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
     });
   }
 
-  void _selectLocation(String locationId, String locationName) async {
+  void _selectLocation(String locationId, String locationName, String hashedNameStreet) async {
     final prefs = await Preferences.openBox();
     final previousLocationId =
         prefs.getKeyValue(Preferences.selectedLocationId, null);
@@ -90,7 +90,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
     //final newTopic = repository.getTopicString(int.parse(locationId));
 
-    final newTopic = repository.getTopicFromHash(getStreetNameHash(locationName));
+    final newTopic = repository.getTopicFromHash(hashedNameStreet);
 
     await firebaseApi.subscribeToTopic(newTopic);
 
@@ -478,7 +478,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
             },
             onSelected: (WasteLocation suggestion) {
               typeAheadController.text = suggestion.name;
-              _selectLocation(suggestion.id.toString(), suggestion.name);
+              _selectLocation(suggestion.id.toString(), suggestion.name,suggestion.hashedStreetName);
               Navigator.pop(context);
             },
           ),

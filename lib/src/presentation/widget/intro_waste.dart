@@ -53,7 +53,7 @@ class IntroPageState extends State<IntroPage> {
     }
   }
 
-  void _selectLocation(String locationId, String locationName) async {
+  void _selectLocation(String locationId, String locationName, String hashedStreetName) async {
     final prefs = await Preferences.openBox();
     final previousLocationId =
         prefs.getKeyValue(Preferences.selectedLocationId, null);
@@ -74,7 +74,7 @@ class IntroPageState extends State<IntroPage> {
     // final newTopic = repository.getTopicString(int.parse(locationId));
 
     final newTopic =
-        repository.getTopicFromHash(getStreetNameHash(locationName));
+        repository.getTopicFromHash(hashedStreetName);
     await firebaseApi.subscribeToTopic(newTopic);
 
     // final streetId = int.parse(locationId);
@@ -163,7 +163,7 @@ class IntroPageState extends State<IntroPage> {
                 },
                 onSelected: (WasteLocation suggestion) async {
                   typeAheadController.text = suggestion.name;
-                  _selectLocation(suggestion.id.toString(), suggestion.name);
+                  _selectLocation(suggestion.id.toString(), suggestion.name,suggestion.hashedStreetName);
                 },
               ),
               const SizedBox(height: 20),
