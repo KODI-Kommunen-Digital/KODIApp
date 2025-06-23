@@ -94,6 +94,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   TimeOfDay? _startTime;
   TimeOfDay? _endTime;
   bool _isExpiryDateEnabled = true;
+  bool _isAllDayEnabled = false;
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
@@ -606,7 +607,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               isImageChanged: isImageChanged,
               statusId: statusId,
               imagesList: selectedImages,
-            );
+              isAllDayEvent: _isAllDayEnabled
+        );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
           setState(() {
@@ -642,6 +644,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               endTime: _endTime,
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
+              isAllDayEvent: _isAllDayEnabled
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
@@ -712,7 +715,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
           allowEmpty: false);
     }
 
-    if (selectedCategory?.toLowerCase() == "events") {
+    if (selectedCategory?.toLowerCase() == "events" && !_isAllDayEnabled) {
       if (_startDate == null || _startDate == "" || _startTime == null) {
         _errorSDate = "value_not_date_empty";
       } else {
@@ -1318,7 +1321,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 8),
             AppTextInput(
-              hintText: Translate.of(context).translate('input_website'),
+              hintText: Translate.of(context).translate('all_day_event'),
               errorText: _errorWebsite,
               controller: _textWebsiteController,
               focusNode: _focusWebsite,
@@ -1336,124 +1339,181 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 color: Theme.of(context).hintColor,
               ),
             ),
+            SizedBox(height: 8,),
             Visibility(
               visible: selectedCategory?.toLowerCase() == "events",
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('start_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
-                        TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: _isAllDayEnabled,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            _isAllDayEnabled = value!;
+                            if(_isAllDayEnabled){
+                              _endTime = const TimeOfDay(hour: 0, minute: 0);
+                              _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+                              _startTime = const TimeOfDay(hour: 0, minute: 0);
+                            } else {
+                              _startDate = null;
+                              _startTime = null;
+                              _endDate = null;
+                              _endTime = null;
+                            }
+                          });
+                        },
+                        activeColor: Theme.of(context).primaryColor,
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isAllDayEnabled = !_isAllDayEnabled;
+                              if(_isAllDayEnabled){
+                                _endTime = const TimeOfDay(hour: 0, minute: 0);
+                                _startDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+                                _startTime = const TimeOfDay(hour: 0, minute: 0);
+                              } else {
+                                _startDate = null;
+                                _startTime = null;
+                                _endDate = null;
+                                _endTime = null;
+                              }
+                            });
+                          },
+                          child: Text(
+                            Translate.of(context).translate('all_day_event'),
+                            style: Theme.of(context).textTheme.bodyMedium,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _startDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowStartDatePicker(_startDate);
-                    },
-                  ),
-                  const SizedBox(height: 8),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('start_time'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                      children: const <TextSpan>[
+                  Visibility(
+                      visible: !_isAllDayEnabled,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 16),
+                      Text.rich(
                         TextSpan(
-                          text: ' *',
-                          style: TextStyle(
-                            color: Colors.red,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          text: Translate.of(context).translate('start_date'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                          children: const <TextSpan>[
+                            TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                      leading: Icon(
-                        Icons.access_time,
-                        color: Theme.of(context).hintColor,
                       ),
-                      value: _startTime?.format(context),
-                      title: Translate.of(context).translate(
-                        'choose_stime',
+                      const SizedBox(height: 8),
+                      AppPickerItem(
+                        leading: Icon(
+                          Icons.calendar_today_outlined,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        value: _startDate,
+                        title: Translate.of(context).translate(
+                          'choose_date',
+                        ),
+                        onPressed: () async {
+                          _onShowStartDatePicker(_startDate);
+                        },
                       ),
-                      onPressed: () async {
-                        _onShowStartTimePicker(_startTime);
-                      }),
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('end_date'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.calendar_today_outlined,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _endDate,
-                    title: Translate.of(context).translate(
-                      'choose_date',
-                    ),
-                    onPressed: () async {
-                      _onShowEndDatePicker(_endDate);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  Text.rich(
-                    TextSpan(
-                      text: Translate.of(context).translate('end_time'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleMedium!
-                          .copyWith(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  AppPickerItem(
-                    leading: Icon(
-                      Icons.access_time,
-                      color: Theme.of(context).hintColor,
-                    ),
-                    value: _endTime?.format(context),
-                    title: Translate.of(context).translate(
-                      'choose_etime',
-                    ),
-                    onPressed: () async {
-                      _onShowEndTimePicker(_endTime);
-                    },
-                  ),
+                      const SizedBox(height: 8),
+                      Text.rich(
+                        TextSpan(
+                          text: Translate.of(context).translate('start_time'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                          children: const <TextSpan>[
+                            TextSpan(
+                              text: ' *',
+                              style: TextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      AppPickerItem(
+                          leading: Icon(
+                            Icons.access_time,
+                            color: Theme.of(context).hintColor,
+                          ),
+                          value: _startTime?.format(context),
+                          title: Translate.of(context).translate(
+                            'choose_stime',
+                          ),
+                          onPressed: () async {
+                            _onShowStartTimePicker(_startTime);
+                          }),
+                      const SizedBox(height: 16),
+                      Text.rich(
+                        TextSpan(
+                          text: Translate.of(context).translate('end_date'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      AppPickerItem(
+                        leading: Icon(
+                          Icons.calendar_today_outlined,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        value: _endDate,
+                        title: Translate.of(context).translate(
+                          'choose_date',
+                        ),
+                        onPressed: () async {
+                          _onShowEndDatePicker(_endDate);
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Text.rich(
+                        TextSpan(
+                          text: Translate.of(context).translate('end_time'),
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      AppPickerItem(
+                        leading: Icon(
+                          Icons.access_time,
+                          color: Theme.of(context).hintColor,
+                        ),
+                        value: _endTime?.format(context),
+                        title: Translate.of(context).translate(
+                          'choose_etime',
+                        ),
+                        onPressed: () async {
+                          _onShowEndTimePicker(_endTime);
+                        },
+                      ),
+                      const SizedBox(height: 8,),
+                    ],
+                  )),
                 ],
               ),
             ),

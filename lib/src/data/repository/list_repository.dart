@@ -346,6 +346,7 @@ class ListRepository {
     List<File>? imagesList,
     bool isImageChanged,
     int? timeless,
+    bool? isAllDayEvent
   ) async {
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
@@ -427,7 +428,8 @@ class ListRepository {
       "startDate": combinedStartDateTime,
       "endDate": combinedEndDateTime,
       "subcategoryId": subCategoryId,
-      "timeless": timeless
+      "timeless": timeless,
+      "isAllDayEvent": isAllDayEvent
     };
     final response =
         await Api.requestSaveProduct(cityId, params, isImageChanged);
@@ -497,6 +499,7 @@ class ListRepository {
     TimeOfDay? endTime,
     List<File>? imagesList,
     int? timeless,
+    bool? isAllDayEvent
   ) async {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
@@ -589,7 +592,8 @@ class ListRepository {
         {"id": null, "imageOrder": null, "listingId": null, "logo": ""}
       ],
       "cityId": cityId,
-      "timeless": timeless
+      "timeless": timeless,
+      "isAllDayEvent": isAllDayEvent
     };
 
     final response =
