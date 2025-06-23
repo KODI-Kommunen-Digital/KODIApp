@@ -862,27 +862,45 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.endDate.isNotEmpty) {
-        endDate = Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              Translate.of(context).translate(
-                'end_date',
+      bool isAllDayEvent = product.isAllDayEvent ?? false;
+
+      if (product.endDate.isNotEmpty || isAllDayEvent) {
+        if(isAllDayEvent){
+          endDate = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                Translate.of(context).translate(
+                  'all_day_event',
+                ),
+                style: Theme.of(context).textTheme.bodySmall,
               ),
-              style: Theme.of(context).textTheme.bodySmall,
-            ),
-            const SizedBox(width: 8),
-            Text(
-              product.endDate,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleSmall!
-                  .copyWith(fontWeight: FontWeight.bold),
-            )
-          ],
-        );
+            ],
+          );
+        } else {
+          endDate = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                Translate.of(context).translate(
+                  'end_date',
+                ),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                product.endDate,
+                style: Theme.of(context)
+                    .textTheme
+                    .titleSmall!
+                    .copyWith(fontWeight: FontWeight.bold),
+              )
+            ],
+          );
+        }
       }
+
+      if(isAllDayEvent)
 
       ///Create Date
       if (product.createDate.isNotEmpty) {

@@ -70,6 +70,7 @@ class ProductModel {
   final String? priceDisplay;
   List<ImageListModel>? imageLists;
   int? timeless;
+  final bool? isAllDayEvent;
 
   ProductModel(
       {required this.id,
@@ -131,7 +132,9 @@ class ProductModel {
       this.sourceId,
       this.imageLists,
       this.showExternal,
-      this.timeless});
+      this.timeless,
+      this.isAllDayEvent
+      });
 
   factory ProductModel.fromJson(Map<String, dynamic> json,
       {SettingModel? setting, int? cityId}) {
@@ -235,7 +238,6 @@ class ProductModel {
     if (bookingUse) {
       priceDisplay = json['booking_price_display'];
     }
-
     return ProductModel(
       id: json['id'],
       userId: json['userId'] ?? 0,
@@ -298,7 +300,7 @@ class ProductModel {
       bookingStyle: json['booking_style'] ?? '',
       priceDisplay: priceDisplay,
       imageLists: imagesList,
-    );
+      isAllDayEvent: json['isAllDayEvent']);
   }
 
   factory ProductModel.fromNotification(Map<String, dynamic> json) {
@@ -355,6 +357,7 @@ class ProductModel {
       bookingStyle: '',
       priceDisplay: '',
       imageLists: json['otherlogos'],
+      isAllDayEvent: false
     );
   }
 
