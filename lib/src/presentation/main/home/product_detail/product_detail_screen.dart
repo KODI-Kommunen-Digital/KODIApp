@@ -839,6 +839,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         );
       }
+      bool isAllDayEvent = product.isAllDayEvent ?? false;
 
       if (product.startDate.isNotEmpty || product.endDate != "") {
         startDate = Row(
@@ -852,7 +853,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              product.startDate,
+              isAllDayEvent ? "${product.startDate} - ${Translate.of(context).translate('all_day_event')}": product.startDate,
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
@@ -862,45 +863,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      bool isAllDayEvent = product.isAllDayEvent ?? false;
-
-      if (product.endDate.isNotEmpty || isAllDayEvent) {
-        if(isAllDayEvent){
-          endDate = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                Translate.of(context).translate(
-                  'all_day_event',
-                ),
-                style: Theme.of(context).textTheme.bodySmall,
+      if (product.endDate.isNotEmpty) {
+        endDate = Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              Translate.of(context).translate(
+                'end_date',
               ),
-            ],
-          );
-        } else {
-          endDate = Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                Translate.of(context).translate(
-                  'end_date',
-                ),
-                style: Theme.of(context).textTheme.bodySmall,
-              ),
-              const SizedBox(width: 8),
-              Text(
-                product.endDate,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
-              )
-            ],
-          );
-        }
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              product.endDate,
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontWeight: FontWeight.bold),
+            )
+          ],
+        );
       }
-
-      if(isAllDayEvent)
 
       ///Create Date
       if (product.createDate.isNotEmpty) {
