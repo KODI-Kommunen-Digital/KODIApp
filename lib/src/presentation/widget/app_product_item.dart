@@ -32,6 +32,7 @@ class AppProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    bool isAllDayEvent = item?.isAllDayEvent ?? false;
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case ProductViewType.small:
@@ -170,7 +171,8 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            item?.isAllDayEvent ?? false ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
+                            isAllDayEvent
+                                ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
                                 : "${item?.startDate}",
                             style: Theme.of(context)
                                 .textTheme
@@ -180,26 +182,6 @@ class AppProductItem extends StatelessWidget {
                         ),
                       ),
                     ),
-    //                 Visibility(
-    //                   visible : item!.isAllDayEvent?? false,
-    //                   child: Container(
-    //                     decoration: BoxDecoration(
-    //                       color: Colors.white30,
-    //                       borderRadius: BorderRadius.circular(10),
-    //                     ),
-    //                     child: Padding(
-    //                       padding: const EdgeInsets.all(3.5),
-    //                       child: Text(
-    // item?.isAllDayEvent ?? false ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
-    //                             : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
-    //                         style: Theme.of(context)
-    //                             .textTheme
-    //                             .bodySmall!
-    //                             .copyWith(fontWeight: FontWeight.bold),
-    //                       ),
-    //                     ),
-    //                   ),
-    //                 ),
                     Visibility(
                       visible: item?.categoryId == 1,
                       child: Container(
@@ -250,6 +232,7 @@ class AppProductItem extends StatelessWidget {
         if (item == null) {
           return const EmptyProductItem();
         }
+
         return InkWell(
           onTap: () async {
             onPressed!();
@@ -497,8 +480,10 @@ class AppProductItem extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              item?.endDate == ""
-                                  ? "${item?.startDate}"
+                              isAllDayEvent
+                                  ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
+                                  : item?.endDate == ""
+                                      ? "${item?.startDate}"
                                   : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
                               style: Theme.of(context)
                                   .textTheme
