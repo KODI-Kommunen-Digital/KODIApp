@@ -115,12 +115,13 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                               : '${Application.picturesURL}admin/News.jpeg',
                           cacheManager: memoryCacheManager,
                           placeholder: (context, url) {
-                            return AppPlaceholder(
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
+                            return Container(
+                              width: 100,
+                              height: 100,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/listing_default_image.png'),
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             );
@@ -136,18 +137,14 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                             );
                           },
                           errorWidget: (context, url, error) {
-                            return AppPlaceholder(
-                              child: Container(
-                                height: 100,
-                                width: 100,
-                                decoration: const BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8),
-                                    bottomLeft: Radius.circular(8),
-                                  ),
+                            return Container(
+                              width: 100,
+                              height: 100,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/listing_default_image.png'),
+                                  fit: BoxFit.cover,
                                 ),
-                                child: const Icon(Icons.error),
                               ),
                             );
                           },

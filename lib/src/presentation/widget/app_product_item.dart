@@ -47,75 +47,76 @@ class AppProductItem extends StatelessWidget {
             children: <Widget>[
               item?.pdf != '' && item?.image == 'admin/News.jpeg'
                   ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: SizedBox(
-                          width: 120,
-                          height: 140,
-                          child: const PDF().cachedFromUrl(
-                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                            placeholder: (progress) =>
-                                Center(child: Text('$progress %')),
-                            errorWidget: (error) =>
-                                Center(child: Text(error.toString())),
-                          )),
-                    )
+                borderRadius: BorderRadius.circular(12),
+                child: SizedBox(
+                    width: 120,
+                    height: 140,
+                    child: const PDF().cachedFromUrl(
+                      "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                      placeholder: (progress) =>
+                          Center(child: Text('$progress %')),
+                      errorWidget: (error) =>
+                          Center(child: Text(error.toString())),
+                    )),
+              )
                   : ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: item?.sourceId == 2 &&
-                                item?.image != null &&
-                                item?.image != 'admin/News.jpeg'
-                            ? item!.image
-                            : item?.sourceId == 3 && item?.image != null
-                                ? (item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : item!.image)
-                                : item?.image != null &&
-                                        item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
-                        cacheManager: memoryCacheManager,
-                        placeholder: (context, url) {
-                          return AppPlaceholder(
-                            child: Container(
-                              width: 120,
-                              height: 140,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                              ),
-                            ),
-                          );
-                        },
-                        imageBuilder: (context, imageProvider) {
-                          return Container(
-                            width: 120,
-                            height: 140,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.fitHeight,
-                              ),
-                            ),
-                          );
-                        },
-                        errorWidget: (context, url, error) {
-                          return AppPlaceholder(
-                            child: Container(
-                              width: 120,
-                              height: 140,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                ),
-                              ),
-                              child: const Icon(Icons.error),
-                            ),
-                          );
-                        },
+                borderRadius: BorderRadius.circular(12),
+                child: CachedNetworkImage(
+                  imageUrl: item?.sourceId == 2 &&
+                      item?.image != null &&
+                      item?.image != 'admin/News.jpeg'
+                      ? item!.image
+                      : item?.sourceId == 3 && item?.image != null
+                      ? (item!.image.startsWith('admin')
+                      ? "${Application.picturesURL}${item!.image}"
+                      : item!.image)
+                      : item?.image != null &&
+                      item!.image.startsWith('admin')
+                      ? "${Application.picturesURL}${item!.image}"
+                      : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                  cacheManager: memoryCacheManager,
+                  placeholder: (context, url) {
+                    return Container(
+                      width: 120,
+                      height: 140,
+                      decoration: const BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/listing_default_image.png'),
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
+                    );
+                  },
+                  imageBuilder: (context, imageProvider) {
+                    return Container(
+                      width: 120,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.fitHeight,
+                        ),
+                      ),
+                    );
+                  },
+                  errorWidget: (context, url, error) {
+                    return Container(
+                      width: 120,
+                      height: 140,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/listing_default_image.png'),
+                          fit: BoxFit.cover,
+                        ),
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                          bottomLeft: Radius.circular(8),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -287,29 +288,24 @@ class AppProductItem extends StatelessWidget {
                   );
                 },
                 placeholder: (context, url) {
-                  return AppPlaceholder(
-                    child: Container(
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                        color: Colors.white,
+                  return Container(
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/listing_default_image.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   );
                 },
                 errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+                  return Container(
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/listing_default_image.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: const Icon(Icons.error),
                     ),
                   );
                 },
@@ -404,12 +400,13 @@ class AppProductItem extends StatelessWidget {
                                         : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                             cacheManager: memoryCacheManager,
                             placeholder: (context, url) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  width: 120,
-                                  height: 140,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/listing_default_image.png'),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               );
@@ -427,18 +424,14 @@ class AppProductItem extends StatelessWidget {
                               );
                             },
                             errorWidget: (context, url, error) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  width: 120,
-                                  height: 140,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8),
-                                    ),
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/listing_default_image.png'),
+                                    fit: BoxFit.cover,
                                   ),
-                                  child: const Icon(Icons.error),
                                 ),
                               );
                             },

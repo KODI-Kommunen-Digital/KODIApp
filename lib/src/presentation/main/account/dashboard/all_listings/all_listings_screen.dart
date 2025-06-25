@@ -255,13 +255,13 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                           : "${Application.picturesURL}${item.image}",
                                               cacheManager: memoryCacheManager,
                                               placeholder: (context, url) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
+                                                return Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration: const BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: AssetImage('assets/images/listing_default_image.png'),
+                                                      fit: BoxFit.cover,
                                                     ),
                                                   ),
                                                 );
@@ -281,23 +281,14 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                               },
                                               errorWidget:
                                                   (context, url, error) {
-                                                return AppPlaceholder(
-                                                  child: Container(
-                                                    width: 120,
-                                                    height: 140,
-                                                    decoration:
-                                                        const BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        topLeft:
-                                                            Radius.circular(8),
-                                                        bottomLeft:
-                                                            Radius.circular(8),
-                                                      ),
+                                                return Container(
+                                                  width: 120,
+                                                  height: 140,
+                                                  decoration: const BoxDecoration(
+                                                    image: DecorationImage(
+                                                      image: AssetImage('assets/images/listing_default_image.png'),
+                                                      fit: BoxFit.cover,
                                                     ),
-                                                    child:
-                                                        const Icon(Icons.error),
                                                   ),
                                                 );
                                               },
