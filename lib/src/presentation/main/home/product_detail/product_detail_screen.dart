@@ -839,6 +839,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           ],
         );
       }
+      bool isAllDayEvent = product.isAllDayEvent ?? false;
 
       if (product.startDate.isNotEmpty || product.endDate != "") {
         startDate = Row(
@@ -852,7 +853,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              product.startDate,
+              isAllDayEvent ? "${product.startDate} - ${Translate.of(context).translate('all_day_event')}": product.startDate,
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!

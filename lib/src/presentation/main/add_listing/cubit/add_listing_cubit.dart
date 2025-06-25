@@ -57,6 +57,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? endTime,
     List<File>? imagesList,
     isImageChanged,
+    bool? isAllDayEvent
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -82,7 +83,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           endTime,
           imagesList,
           isImageChanged,
-          timeless);
+          timeless,
+          isAllDayEvent
+      );
       if (response.success) {
         return true;
       } else {
@@ -130,6 +133,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     TimeOfDay? endTime,
     required bool isImageChanged,
     List<File>? imagesList,
+    bool? isAllDayEvent
   }) async {
     try {
       final response = await _repo.editProduct(
@@ -160,7 +164,9 @@ class AddListingCubit extends Cubit<AddListingState> {
           startTime,
           endTime,
           imagesList,
-          timeless);
+          timeless,
+          isAllDayEvent
+      );
       if (response.success) {
         return true;
       } else {

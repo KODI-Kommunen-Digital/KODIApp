@@ -32,6 +32,7 @@ class AppProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+    bool isAllDayEvent = item?.isAllDayEvent ?? false;
     final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case ProductViewType.small:
@@ -170,7 +171,9 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.startDate}",
+                            isAllDayEvent
+                                ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
+                                : "${item?.startDate}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -477,8 +480,10 @@ class AppProductItem extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              item?.endDate == ""
-                                  ? "${item?.startDate}"
+                              isAllDayEvent
+                                  ? "${item?.startDate} - ${Translate.of(context).translate('all_day_event')}"
+                                  : item?.endDate == ""
+                                      ? "${item?.startDate}"
                                   : "${item?.startDate} ${Translate.of(context).translate('to')} ${item?.endDate}",
                               style: Theme.of(context)
                                   .textTheme
