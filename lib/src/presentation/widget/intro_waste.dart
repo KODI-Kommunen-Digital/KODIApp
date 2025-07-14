@@ -2,11 +2,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/cubit/waste_calendar_cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/data/model/model_waste_location.dart';
+import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key});
@@ -17,11 +18,17 @@ class IntroPage extends StatefulWidget {
 
 class IntroPageState extends State<IntroPage> {
   final TextEditingController typeAheadController = TextEditingController();
+
   List<WasteLocation> locations = [];
+  List<WasteType> wasteTypes = [];
+  List<WasteType> selectedWasteTypes = [];
   late WasteCalendarRepository repository;
   final _wasteCalenderCubit = WasteCalendarCubit();
   String? _selectedLocationId;
   String? _selectedLocationName;
+  String? _selectedHashedStreetName;
+  bool _showWasteTypeSelection = false;
+  bool _isConfirming = false;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
@@ -30,10 +37,12 @@ class IntroPageState extends State<IntroPage> {
     _initializeRepository();
   }
 
+
   Future<void> _initializeRepository() async {
     final prefs = await Preferences.openBox();
     repository = WasteCalendarRepository(prefs);
-    _loadLocations();
+    await _loadLocations();
+    await _loadWasteTypes(); // Load waste types immediately
   }
 
   Future<void> _loadLocations() async {
@@ -45,6 +54,15 @@ class IntroPageState extends State<IntroPage> {
     });
   }
 
+  Future<void> _loadWasteTypes() async {
+    final fetchedWasteTypes = await repository.loadWasteTypes(1);
+    setState(() {
+      if (fetchedWasteTypes != null) {
+        wasteTypes = fetchedWasteTypes;
+      }
+    });
+  }
+
   Future<void> _skipIntro() async {
     final prefs = await Preferences.openBox();
     // Set a flag to indicate the intro was skipped
@@ -52,37 +70,58 @@ class IntroPageState extends State<IntroPage> {
     Navigator.pushReplacementNamed(context, '/home');
   }
 
-  void _selectLocation(String locationId, String locationName) async {
-    final prefs = await Preferences.openBox();
-    final previousLocationId =
-        prefs.getKeyValue(Preferences.selectedLocationId, null);
-    await prefs.setKeyValue(Preferences.selectedLocationId, locationId);
-    await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
+  void _selectLocation(String locationId, String locationName, String hashedStreetName) {
     setState(() {
       _selectedLocationId = locationId;
       _selectedLocationName = locationName;
+      _selectedHashedStreetName = hashedStreetName;
+      _showWasteTypeSelection = true;
+      typeAheadController.text = locationName;
     });
+  }
 
-    final firebaseApi = FirebaseApi(navigatorKey, prefs);
-    if (previousLocationId != null) {
-      final previousTopic =
-          repository.getTopicString(int.parse(previousLocationId));
-      await firebaseApi.unsubscribeFromTopic(previousTopic);
+  void _selectWasteTypes(List<WasteType> wasteTypes) {
+    setState(() {
+      selectedWasteTypes = wasteTypes;
+    });
+  }
+
+  void _confirmSelection() async {
+    if (_selectedLocationId == null || _selectedLocationName == null || _selectedHashedStreetName == null || selectedWasteTypes.isEmpty) {
+      return;
     }
 
-    final newTopic = repository.getTopicString(int.parse(locationId));
-    await firebaseApi.subscribeToTopic(newTopic);
+    setState(() {
+      _isConfirming = true;
+    });
 
-    // final streetId = int.parse(locationId);
-    _wasteCalenderCubit.updateStreetId(locationId);
-    Navigator.pushReplacementNamed(context, '/home');
+    try {
+      // Use common subscription method
+      await repository.updateSubscription(
+        navigatorKey: navigatorKey,
+        cityId: 1,
+        locationId: _selectedLocationId,
+        locationName: _selectedLocationName,
+        hashedStreetName: _selectedHashedStreetName,
+        wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+      );
+
+      _wasteCalenderCubit.updateStreetId(_selectedLocationId!, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());
+      Navigator.pushReplacementNamed(context, '/home');
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isConfirming = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ort auswählen'),
+        title: const Text('Ort und Abfallart auswählen'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -112,18 +151,12 @@ class IntroPageState extends State<IntroPage> {
                         children: [
                           Text(
                             'Wähle deinen Ort',
-                            style: TextStyle(
-                                fontSize: 22,
-                                color: Colors.red,
-                                fontWeight: FontWeight.bold),
+                            style: TextStyle(fontSize: 22, color: Colors.red, fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Für Müllabfuhrmeldungen',
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
+                            'Und deine Abfallarten',
+                            style: TextStyle(fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
                           ),
                         ],
                       ),
@@ -133,14 +166,29 @@ class IntroPageState extends State<IntroPage> {
               ),
               const SizedBox(height: 16),
               TypeAheadField(
-                builder: (context, typeAheadController, focusNode) {
+                controller: typeAheadController,
+                builder: (context, controller, focusNode) {
                   return TextField(
-                    controller: typeAheadController,
+                    controller: controller,
                     focusNode: focusNode,
-                    decoration: const InputDecoration(
+                    decoration: InputDecoration(
                       hintText: 'Straßennamen eingeben',
-                      border: OutlineInputBorder(),
-                      suffixIcon: Icon(Icons.arrow_drop_down),
+                      border: const OutlineInputBorder(),
+                      suffixIcon: _selectedLocationId != null
+                          ? IconButton(
+                              icon: const Icon(Icons.clear),
+                              onPressed: () {
+                                controller.clear();
+                                setState(() {
+                                  _selectedLocationId = null;
+                                  _selectedLocationName = null;
+                                  _selectedHashedStreetName = null;
+                                  _showWasteTypeSelection = false;
+                                  selectedWasteTypes.clear();
+                                });
+                              },
+                            )
+                          : const Icon(Icons.arrow_drop_down),
                     ),
                   );
                 },
@@ -148,11 +196,7 @@ class IntroPageState extends State<IntroPage> {
                   if (pattern.isEmpty) {
                     return locations;
                   }
-                  return locations
-                      .where((item) => item.name
-                          .toLowerCase()
-                          .contains(pattern.toLowerCase()))
-                      .toList();
+                  return locations.where((item) => item.name.toLowerCase().contains(pattern.toLowerCase())).toList();
                 },
                 itemBuilder: (context, WasteLocation suggestion) {
                   return ListTile(
@@ -160,18 +204,47 @@ class IntroPageState extends State<IntroPage> {
                   );
                 },
                 onSelected: (WasteLocation suggestion) async {
+                  // unfocus through context 
+                  FocusScope.of(context).unfocus();
                   typeAheadController.text = suggestion.name;
-                  _selectLocation(suggestion.id.toString(), suggestion.name);
+                  _selectLocation(suggestion.id.toString(), suggestion.name, suggestion.hashedStreetName);
                 },
               ),
               const SizedBox(height: 20),
+              if (_showWasteTypeSelection) ...[
+                AppMultiSelectTypeAhead(
+                  items: wasteTypes,
+                  selectedItems: selectedWasteTypes,
+                  onSelectionChanged: (selectedTypes) {
+                        _selectWasteTypes(selectedTypes);
+                      },
+                  hintText: 'Abfallarten eingeben',
+                  enabled: !_isConfirming,
+                ),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: selectedWasteTypes.isNotEmpty && !_isConfirming
+                      ? _confirmSelection
+                      : null,
+                  child: _isConfirming
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : const Text('Bestätigen'),
+                ),
+                const SizedBox(height: 10),
+              ],
               TextButton(
                 onPressed: _skipIntro,
                 child: const Text('Überspringen'),
               ),
               const SizedBox(height: 20),
               const Text(
-                'Wenn du diesen Standort wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du den Ort später auf der Seite des Abfallkalenders ändern.',
+                'Wenn du deinen Standort und deine Abfallarten wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du beides später auf der Seite des Abfallkalenders ändern.',
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 14, color: Colors.grey),
               ),

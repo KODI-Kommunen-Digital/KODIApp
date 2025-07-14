@@ -9,7 +9,7 @@ part 'waste_calendar_state.dart';
 class WasteCalendarCubit extends Cubit<WasteCalendarState> {
   WasteCalendarCubit() : super(WasteCalendarLoading());
 
-  void loadWasteCollections(int cityId, String? streetId) async {
+  void loadWasteCollections(int cityId, String? streetId, {List<int>? selectedWasteTypeIds}) async {
     try {
       final result =
           await WasteCalendarRepository.loadWastePickup(cityId, streetId!);
@@ -50,8 +50,8 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
     }
   }
 
-  void updateStreetId(String newStreetId) {
-    loadWasteCollections(1, newStreetId);
+  void updateStreetId(String newStreetId, {List<int>? selectedWasteTypeIds}) {
+    loadWasteCollections(1, newStreetId, selectedWasteTypeIds: selectedWasteTypeIds);
   }
 
   Color getColorForType(String type) {
