@@ -122,7 +122,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
     }
   }
 
-  void _showWasteTypeDialog() {
+  void _showWasteTypeDialog()  {
+ 
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -182,7 +183,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
           },
         );
       },
-    );
+    ).then((value) {
+      _loadSelectedWasteTypes();
+    });
   }
 
   void _scrollToValues() {
