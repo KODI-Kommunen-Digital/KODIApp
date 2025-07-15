@@ -62,7 +62,7 @@ class WasteCalendarRepository {
   }
 
   String getTopicString(int cityId, String hashedStreetName, int wasteTypeId) {
-    return "Waste_Truck_1_${hashedStreetName}_$wasteTypeId";
+    return "WasteTruck_1_${hashedStreetName}_$wasteTypeId";
   }
 
   Future<void> updateSubscription({
