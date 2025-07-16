@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'dart:io';
 
@@ -22,7 +21,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           width: double.infinity,
           height: expandedHeight - shrinkOffset,
           child: CachedNetworkImage(
-            imageUrl: "${Application.picturesURL}admin/Homepage1.png",
+            imageUrl: "http://116.203.13.95:3000/static/media/City.3eb12d44ec0d128551c9.png",
             fit: BoxFit.cover,
             placeholder: (context, url) => AppPlaceholder(
               child: Container(
