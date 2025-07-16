@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info/device_info.dart';
@@ -32,6 +33,7 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final bool defect;
 
   const AppUploadImage({
     super.key,
@@ -42,6 +44,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.defect = false,
   });
 
   @override
@@ -116,9 +119,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return InkWell(
       onTap: widget.profile
           ? _uploadImage
-          : selectedAssets.length > 1
+          : widget.defect
               ? selectImages
-              : showChooseFileTypeDialog,
+              : selectedAssets.length > 1
+                  ? selectImages
+                  : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -212,7 +217,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
           if (!profile) {
             await ListRepository.uploadImage(_file!, profile);
-             _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
+            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
           }
           if (forumGroup) {
             await ForumRepository.uploadImage(_file!, forumGroup);
@@ -356,12 +361,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       if (!profile) {
                         if (_file != null) {
                           await ListRepository.uploadImage(_file!, profile);
-                          _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
+                          _buildContext
+                              ?.read<AddListingCubit>()
+                              .clearSavedPdfFile();
                         }
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
-                            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
+                        _buildContext
+                            ?.read<AddListingCubit>()
+                            .clearSavedPdfFile();
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;
@@ -394,12 +403,16 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
+                        _buildContext
+                            ?.read<AddListingCubit>()
+                            .clearSavedPdfFile();
                         // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
-                            _buildContext?.read<AddListingCubit>().clearSavedPdfFile();
+                        _buildContext
+                            ?.read<AddListingCubit>()
+                            .clearSavedPdfFile();
                         if (response!.data['status'] == 'success') {
                           setState(() {
                             isImageUploaded = true;
@@ -599,9 +612,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
-      resultList = await _picker.pickMultiImage(
-        limit: 8,
-      );
+      if (widget.defect) {
+        final XFile? pickedFile =
+            await _picker.pickImage(source: ImageSource.gallery);
+        if (pickedFile != null) {
+          resultList = [pickedFile];
+        } else {
+          return;
+        }
+      } else {
+        resultList = await _picker.pickMultiImage(limit: 8);
+      }
       selectedAssets = resultList;
       if (resultList.isNotEmpty) {
         if (!mounted) return;
@@ -678,6 +699,21 @@ class _AppUploadImageState extends State<AppUploadImage> {
             });
           }
         }
+      }
+      if (widget.defect) {
+        final XFile asset = resultList.first;
+        final Uint8List imageData = await asset.readAsBytes();
+        final tempDir = await getTemporaryDirectory();
+        final filePath = '${tempDir.path}/${asset.name}';
+
+        final imageFile = File(filePath);
+        await imageFile.writeAsBytes(imageData);
+
+        setState(() {
+          _file = imageFile;
+          images = [imageFile];
+          widget.onChange(images);
+        });
       }
     } on Exception catch (e) {
       logError('Error Selecting Multiple Images', e);

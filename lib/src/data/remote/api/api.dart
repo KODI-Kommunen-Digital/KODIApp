@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:dio/dio.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
@@ -721,6 +722,22 @@ class Api {
       url: filepath,
     );
     return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> requestReportDefect(FormData formData) async {
+    try {
+      final result = await HTTPManager(forum: false).post(
+        url: '/reportDefect',
+        formData: formData,
+        loading: true,
+      );
+
+      return ResultApiModel.fromJson(result);
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
+      logError('Report Defect Error', e);
+      rethrow;
+    }
   }
 
   ///Singleton factory
