@@ -300,6 +300,18 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         ],
         'title': 'Gastro',
       });
+    } else if (service.imageLink == "15") {
+      if (AppBloc.userCubit.state == null) {
+        final result = await Navigator.pushNamed(
+          context,
+          Routes.signIn,
+          arguments: Routes.submit,
+        );
+        if (result == null) return;
+      }
+      if (!mounted) return;
+      Navigator.pushNamed(context, Routes.defectReport,
+          arguments: {'id': service.arguments, 'title': 'defect_report'});
     } else if (service.imageLink == "31") {
       int? currentLocation =
           await context.read<DiscoveryCubit>().getCitySelected();
@@ -318,6 +330,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         ],
         'title': 'Jobs',
       });
+    } else if (service.imageLink == "38") {
+      await launchUrl(Uri.parse('https://www.ladbergen.de/optigov-views/'),
+          mode: LaunchMode.inAppWebView);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

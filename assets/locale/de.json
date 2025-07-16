@@ -542,6 +542,7 @@
   "group_name": "Gruppenname",
   "new_message": "Neue Nachricht",
   "intro_login": "",
-  "welcomeTitle": ""
+  "welcomeTitle": "",
+  "title_and_description_required": "Bitte gebe Titel und Beschreibung an"
 }
 
