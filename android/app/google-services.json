@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "422735035970",
-    "project_id": "inside-app-4d24b",
-    "storage_bucket": "inside-app-4d24b.firebasestorage.app"
+    "project_number": "1069363617926",
+    "project_id": "ladbergen-496e7",
+    "storage_bucket": "ladbergen-496e7.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:422735035970:android:247c201b6af9910b3477db",
+        "mobilesdk_app_id": "1:1069363617926:android:7c6ee1ee1146c9b74d7107",
         "android_client_info": {
-          "package_name": "com.sixtythreeinside.app"
+          "package_name": "com.ladbergen.app"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDrLIB5Q6TCntVXM1hlvdKXgSK-AsICIsQ"
+          "current_key": "AIzaSyAo8bbkvylXamRS31vvYwf2gxyk_8JgHrY"
         }
       ],
       "services": {

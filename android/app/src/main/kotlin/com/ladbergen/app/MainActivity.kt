@@ -1,4 +1,4 @@
-package com.sixtythreeinside.app
+package com.ladbergen.app
 
 import io.flutter.embedding.android.FlutterActivity
 
