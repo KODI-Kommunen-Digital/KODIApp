@@ -16,10 +16,8 @@ import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
-import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
-import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
@@ -96,7 +94,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void connectivityInternet() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
       AppBloc.homeCubit.onLoad(false);
     });
   }
@@ -147,9 +147,9 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onUpdateCategory() async {
+  /*Future<void> _onUpdateCategory() async {
     await AppBloc.homeCubit.onLoad(false);
-  }
+  }*/
 
   void scrollUp() {
     _scrollController.animateTo(0,
@@ -262,6 +262,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(
                   child: Transform.translate(
                     offset: const Offset(0, -45),
+                    child: const Padding(
+                        padding: EdgeInsets.all(16)),
+                  ),
+                ),
+                /*SliverToBoxAdapter(
+                  child: Transform.translate(
+                    offset: const Offset(0, -45),
                     child: Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 16, vertical: 4),
@@ -322,7 +329,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                ),
+                ),*/
                 CupertinoSliverRefreshControl(
                   onRefresh: _onRefresh,
                 ),
@@ -340,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : _buildCategory(AppBloc.homeCubit
                                     .getCategoriesWithoutHidden(
                                         category ?? [])),
-                            _buildLocation(location),
+                            //_buildLocation(location),
                             _buildRecent(recent, selectedCityId, location),
                             if (isLoading)
                               const CircularProgressIndicator.adaptive(),
@@ -642,7 +649,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _onLocation(CategoryModel item) async {
+  /*Future<void> _onLocation(CategoryModel item) async {
     if (item.id == -1) {
       _onPopUpCatError();
       return;
@@ -657,7 +664,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
     }
-  }
+  }*/
 
   void _makeAction(String link, int id) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
@@ -779,7 +786,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildLocation(List<CategoryModel>? location) {
+  /*Widget _buildLocation(List<CategoryModel>? location) {
     Widget content = ListView.builder(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -862,7 +869,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
-  }
+  }*/
 
   Widget _buildRecent(
       List<dynamic>? recent, int selectedCity, List<CategoryModel>? cities) {
@@ -914,7 +921,7 @@ class _HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           const Icon(Icons.sentiment_satisfied),
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 32),
             child: Text(
               Translate.of(context).translate('list_is_empty'),
               style: Theme.of(context).textTheme.bodyLarge,
