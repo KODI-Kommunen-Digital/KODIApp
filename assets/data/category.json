@@ -16,38 +16,6 @@
             "icon": "fas fa-newspaper",
             "color": "#FF8000",
             "categoryType" : "category"
-        },
-        {
-            "id": 43,
-            "name": "Gastro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
-            "color": "#FF8000",
-            "categoryType" : "category"
-        },
-        {
-            "id": 4,
-            "name": "Vereine",
-            "noOfSubcategories": 0,
-            "icon": "far fa-handshake",
-            "color": "#FF8000",
-            "categoryType" : "category"
-        },
-        {
-            "id": 500,
-            "name": "Shopping",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#FF8000",
-            "categoryType" : "category"
-        },
-        {
-            "id": 44,
-            "name": "Jobs",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#FF8000",
-            "categoryType" : "category"
         }
     ]
 }
