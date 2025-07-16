@@ -50,20 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDrLIB5Q6TCntVXM1hlvdKXgSK-AsICIsQ',
-    appId: '1:422735035970:android:247c201b6af9910b3477db',
-    messagingSenderId: '422735035970',
-    projectId: 'inside-app-4d24b',
-    storageBucket: 'inside-app-4d24b.firebasestorage.app',
+    apiKey: 'AIzaSyAo8bbkvylXamRS31vvYwf2gxyk_8JgHrY',
+    appId: '1:1069363617926:android:7c6ee1ee1146c9b74d7107',
+    messagingSenderId: '1069363617926',
+    projectId: 'ladbergen-496e7',
+    storageBucket: 'ladbergen-496e7.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDznUB66hpCYdUDt-zXzEWJFmvLx5x_ZHU',
-    appId: '1:422735035970:ios:7b4e25d886f5a1f33477db',
-    messagingSenderId: '422735035970',
-    projectId: 'inside-app-4d24b',
-    storageBucket: 'inside-app-4d24b.firebasestorage.app',
-    iosBundleId: 'com.sixtythreeinside.app',
+    apiKey: 'AIzaSyAz22QdxHGtIL6h53y0_VJamErknKmq2L4',
+    appId: '1:1069363617926:ios:309601c0be7f28ad4d7107',
+    messagingSenderId: '1069363617926',
+    projectId: 'ladbergen-496e7',
+    storageBucket: 'ladbergen-496e7.firebasestorage.app',
+    iosBundleId: 'com.ladbergen.app',
   );
 
 }

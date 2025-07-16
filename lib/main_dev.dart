@@ -22,9 +22,7 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:provider/provider.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -46,7 +44,7 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
 
-  await SentryFlutter.init((options) {
+  /*await SentryFlutter.init((options) {
     options.dsn =
         'https://d1100c58538e514e0b59f343260bc9a6@o4507264812908544.ingest.de.sentry.io/4508444268888144';
     options.tracesSampleRate = 0.01;
@@ -55,13 +53,15 @@ Future<void> main() async {
   await MatomoTracker.instance.initialize(
     siteId: '1',
     url: 'https://63inside-app.matomo.cloud/matomo.php',
-  );
+  );*/
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+
+  runApp(HeidiApp(prefBox));
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
