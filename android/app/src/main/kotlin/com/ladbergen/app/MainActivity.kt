@@ -1,4 +1,4 @@
-package com.ladbergen.app
+package de.ladbergen.app
 
 import io.flutter.embedding.android.FlutterActivity
 

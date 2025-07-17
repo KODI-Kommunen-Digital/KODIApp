@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1069363617926:android:7c6ee1ee1146c9b74d7107",
+        "mobilesdk_app_id": "1:1069363617926:android:b5632c02f44157494d7107",
         "android_client_info": {
-          "package_name": "com.ladbergen.app"
+          "package_name": "de.ladbergen.app"
         }
       },
       "oauth_client": [],

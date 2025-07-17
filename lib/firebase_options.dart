@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAo8bbkvylXamRS31vvYwf2gxyk_8JgHrY',
-    appId: '1:1069363617926:android:7c6ee1ee1146c9b74d7107',
+    appId: '1:1069363617926:android:b5632c02f44157494d7107',
     messagingSenderId: '1069363617926',
     projectId: 'ladbergen-496e7',
     storageBucket: 'ladbergen-496e7.firebasestorage.app',
@@ -59,11 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyAz22QdxHGtIL6h53y0_VJamErknKmq2L4',
-    appId: '1:1069363617926:ios:309601c0be7f28ad4d7107',
+    appId: '1:1069363617926:ios:f90143ebdf69555b4d7107',
     messagingSenderId: '1069363617926',
     projectId: 'ladbergen-496e7',
     storageBucket: 'ladbergen-496e7.firebasestorage.app',
-    iosBundleId: 'com.ladbergen.app',
+    iosBundleId: 'de.ladbergen.app',
   );
 
 }
