@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
-    checkFirstTime();
+    // checkFirstTime();
   }
 
   Future<void> checkFirstTime() async {
@@ -234,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.2';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.0';
                         });
                       }
                     },
@@ -262,8 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SliverToBoxAdapter(
                   child: Transform.translate(
                     offset: const Offset(0, -45),
-                    child: const Padding(
-                        padding: EdgeInsets.all(16)),
+                    child: const Padding(padding: EdgeInsets.all(16)),
                   ),
                 ),
                 /*SliverToBoxAdapter(
