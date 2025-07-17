@@ -80,13 +80,15 @@ class _HeidiAppState extends State<HeidiApp> {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
                 return UpgradeAlert(
+                  shouldPopScope: () => true,
+                  barrierDismissible: true,
+                    dialogStyle: Platform.isIOS
+                        ? UpgradeDialogStyle.cupertino
+                        : UpgradeDialogStyle.material,
                   upgrader: Upgrader(
-                      shouldPopScope: () => true,
-                      canDismissDialog: true,
+
                       durationUntilAlertAgain: const Duration(days: 1),
-                      dialogStyle: Platform.isIOS
-                          ? UpgradeDialogStyle.cupertino
-                          : UpgradeDialogStyle.material),
+                      ),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
