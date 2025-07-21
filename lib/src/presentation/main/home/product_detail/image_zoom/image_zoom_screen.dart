@@ -74,15 +74,15 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                                                     2 &&
                                                 imageItem.logo != null &&
                                                 imageItem.logo !=
-                                                    'admin/News.jpeg'
+                                                    'admin/News/Defaultimage6.png'
                                             ? imageItem.logo!
                                             : widget.sourceId == 3 &&
                                                     imageItem.logo != null &&
                                                     imageItem.logo != "" &&
                                                     imageItem.logo !=
-                                                        'admin/News.jpeg'
+                                                        'admin/News/Defaultimage6.png'
                                                 ? imageItem.logo!
-                                                : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
+                                                : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News/Defaultimage6.png'}";
                                         return Container(
                                           width:
                                               MediaQuery.of(context).size.width,

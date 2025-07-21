@@ -131,7 +131,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                             : (widget.favoritesList[index]
                                                         .logo ==
                                                     null
-                                                ? "${Application.picturesURL}admin/News.jpeg"
+                                                ? "${Application.picturesURL}admin/News/Defaultimage6.png"
                                                 : "${Application.picturesURL}${widget.favoritesList[index].logo}"),
                                         cacheManager: memoryCacheManager,
                                         imageBuilder: (context, imageProvider) {
@@ -272,7 +272,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
     ProductModel product = ProductModel(
         id: favoritesList.id,
         title: favoritesList.title,
-        image: favoritesList.logo ?? 'admin/News.jpeg',
+        image: favoritesList.logo ?? 'admin/News/Defaultimage6.png',
         description: favoritesList.description,
         userId: favoritesList.userId,
         statusId: favoritesList.statusId!,

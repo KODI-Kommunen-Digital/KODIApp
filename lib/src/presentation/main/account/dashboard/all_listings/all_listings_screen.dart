@@ -246,23 +246,35 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: CachedNetworkImage(
-                                              imageUrl: item.sourceId == 2 &&
-                                                      item.image != null &&
-                                                      item.image !=
-                                                          'admin/News.jpeg'
-                                                  ? item.image
-                                                  : item.sourceId == 3 &&
-                                                          item.image != null
+                                              imageUrl: item.sourceId == 1
+                                                  ? "${Application.picturesURL}${item.image}"
+                                                  : item.sourceId == 2 &&
+                                                          item.image !=
+                                                              'admin/News/Defaultimage6.png'
                                                       ? (item.image.startsWith(
-                                                              'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : item.image)
-                                                      : item.image != null &&
+                                                                  'https:') ||
                                                               item.image
                                                                   .startsWith(
+                                                                      'admin'))
+                                                          ? item.image
+                                                          : "${Application.picturesURL}admin/News/Defaultimage6.png"
+                                                      : item.sourceId == 3
+                                                          ? (item.image.startsWith(
+                                                                      'https:') ||
+                                                                  item.image
+                                                                      .startsWith(
+                                                                          'admin'))
+                                                              ? (item.image
+                                                                      .startsWith(
+                                                                          'admin')
+                                                                  ? "${Application.picturesURL}${item.image}"
+                                                                  : item.image)
+                                                              : "${Application.picturesURL}admin/News/Defaultimage6.png"
+                                                          : item.image
+                                                                  .startsWith(
                                                                       'admin')
-                                                          ? "${Application.picturesURL}${item.image}"
-                                                          : "${Application.picturesURL}${item.image}",
+                                                              ? "${Application.picturesURL}${item.image}"
+                                                              : "${Application.picturesURL}${item.image.startsWith('https:') ? item.image : 'admin/News/Defaultimage6.png'}",
                                               cacheManager: memoryCacheManager,
                                               placeholder: (context, url) {
                                                 return AppPlaceholder(

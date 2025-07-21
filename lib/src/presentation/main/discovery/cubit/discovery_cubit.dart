@@ -128,16 +128,17 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       //     type: "subCategoryService",
       //     arguments: 4),
 
-      CitizenServiceModel(
-          imageUrl: Images.service5,
-          imageLink: "5",
-          arguments: 5,
-          categoryId: 3),
-      CitizenServiceModel(
-          imageUrl: Images.service4,
-          imageLink: "4",
-          arguments: 4,
-          categoryId: 1),/*
+      // CitizenServiceModel(
+      //     imageUrl: Images.service5,
+      //     imageLink: "5",
+      //     arguments: 5,
+      //     categoryId: 3),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service4,
+      //     imageLink: "4",
+      //     arguments: 4,
+      //     categoryId: 1),
+      /*
       CitizenServiceModel(
           imageUrl: Images.service8,
           imageLink: "8",
@@ -177,6 +178,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageUrl: Images.service38,
         imageLink: "38",
       ),
+      CitizenServiceModel(
+          imageUrl: Images.service9,
+          imageLink: "9",
+          arguments: 9,
+          categoryId: 9),
       // CitizenServiceModel(
       //     imageUrl: Images.service11,
       //     imageLink: "11",

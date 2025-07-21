@@ -59,7 +59,8 @@ class ProfileLoaded extends StatefulWidget {
   final List<ProductModel> userListings;
   final bool isEditable;
 
-  const ProfileLoaded(this.user, this.userListings, this.isEditable, {super.key});
+  const ProfileLoaded(this.user, this.userListings, this.isEditable,
+      {super.key});
 
   @override
   State<ProfileLoaded> createState() => _ProfileLoadedState();
@@ -216,7 +217,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                               children: <Widget>[
                                                 item.pdf != '' &&
                                                         item.image ==
-                                                            'admin/News.jpeg'
+                                                            'admin/News/Defaultimage6.png'
                                                     ? ClipRRect(
                                                         borderRadius:
                                                             BorderRadius
@@ -245,7 +246,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                 2
                                                             ? item.image
                                                             : item.image ==
-                                                                    'admin/News.jpeg'
+                                                                    'admin/News/Defaultimage6.png'
                                                                 ? "${Application.picturesURL}${item.image}"
                                                                 : "${Application.picturesURL}${item.image}?cacheKey=$uniqueKey",
                                                         cacheManager:

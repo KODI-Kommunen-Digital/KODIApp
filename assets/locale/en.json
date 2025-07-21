@@ -424,6 +424,7 @@
   "input_city": "Select City",
   "input_village": "Select Village",
   "input_category": "Select Category",
+  "input_type": "Select Type",
   "input_subcategory": "Select Sub Category (if any)",
   "select_city": "Select City",
   "categorization": "Categorization",

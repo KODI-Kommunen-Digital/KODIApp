@@ -1139,18 +1139,32 @@ class _AddListingScreenState extends State<AddListingScreen> {
             Row(
               children: [
                 Expanded(
-                  child: listCity.isEmpty
-                      ? const LinearProgressIndicator()
-                      : CitySelection(listCity, _selectedCities, _errorCity,
-                          (List<String> selectedCities) {
-                          _selectedCities = selectedCities;
-                          if (_selectedCities.isNotEmpty &&
-                              _errorCity != null) {
-                            setState(() {
-                              _errorCity = null;
-                            });
-                          }
-                        }),
+                  child: Builder(
+                    builder: (_) {
+                      // Preselect city if only one and nothing selected yet
+                      if (listCity.length == 1 && _selectedCities.isEmpty) {
+                        final cityName = listCity.first['name'] as String;
+                        _selectedCities = [cityName];
+                      }
+
+                      return listCity.isEmpty
+                          ? const LinearProgressIndicator()
+                          : CitySelection(
+                              listCity,
+                              _selectedCities,
+                              _errorCity,
+                              (List<String> selectedCities) {
+                                _selectedCities = selectedCities;
+                                if (_selectedCities.isNotEmpty &&
+                                    _errorCity != null) {
+                                  setState(() {
+                                    _errorCity = null;
+                                  });
+                                }
+                              },
+                            );
+                    },
+                  ),
                 ),
               ],
             ),

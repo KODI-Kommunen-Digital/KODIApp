@@ -33,7 +33,7 @@ class ForumImageZoomScreen extends StatelessWidget {
                       )
                     : PhotoView(
                         imageProvider: CachedNetworkImageProvider(
-                            imageUrl.contains('admin/News.jpeg')
+                            imageUrl.contains('admin/News/Defaultimage6.png')
                                 ? imageUrl
                                 : imageUrl.contains('instagram')
                                     ? imageUrl

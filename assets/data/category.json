@@ -16,6 +16,31 @@
             "icon": "fas fa-newspaper",
             "color": "#FF8000",
             "categoryType" : "category"
+        },
+        {
+            "id": 9,
+            "name": "Fundbüro",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-question",
+            "color": "#FF8000",
+            "categoryType" : "category"
+        },
+        {
+            "id": 16,
+            "name": "Amtliche Mitteilungen",
+            "noOfSubcategories": 0,
+            "icon": "fas fa-newspaper",
+            "color": "#FF8000",
+            "categoryType" : "category"
+        },
+        {
+            "id": 4,
+            "name": "Vereinsnews",
+            "noOfSubcategories": 0,
+            "icon": "far fa-handshake",
+            "color": "#FF8000",
+            "categoryType" : "category"
         }
+
     ]
 }

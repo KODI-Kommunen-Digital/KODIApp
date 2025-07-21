@@ -630,18 +630,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 String? imageUrlString = product.sourceId ==
                                             2 &&
                                         imageUrl.logo != null &&
-                                        imageUrl.logo != 'admin/News.jpeg'
-                                    ? imageUrl.logo
+                                        imageUrl.logo !=
+                                            'admin/News/Defaultimage6.png'
+                                    ? (imageUrl.logo!.startsWith('https:') ||
+                                            imageUrl.logo!.startsWith('admin')
+                                        ? imageUrl.logo
+                                        : "${Application.picturesURL}admin/News/Defaultimage6.png")
                                     : product.sourceId == 3 &&
                                             imageUrl.logo != null
-                                        ? (imageUrl.logo!.startsWith('admin')
-                                            ? "${Application.picturesURL}${imageUrl.logo}"
-                                            : imageUrl.logo)
-                                        : imageUrl.logo != null &&
+                                        ? (imageUrl.logo!
+                                                    .startsWith('https:') ||
                                                 imageUrl.logo!
                                                     .startsWith('admin')
+                                            ? (imageUrl.logo!
+                                                    .startsWith('admin')
+                                                ? "${Application.picturesURL}${imageUrl.logo}"
+                                                : imageUrl.logo)
+                                            : "${Application.picturesURL}admin/News/Defaultimage6.png")
+                                        : imageUrl.logo != null
                                             ? "${Application.picturesURL}${imageUrl.logo}"
-                                            : "${Application.picturesURL}${imageUrl.logo}";
+                                            : "${Application.picturesURL}admin/News/Defaultimage6.png";
+
                                 return Container(
                                   width: MediaQuery.of(context).size.width,
                                   margin: const EdgeInsets.symmetric(
@@ -1016,7 +1025,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       if (product.description.isNotEmpty) {
         String modifiedDescription = product.description;
 
-        modifiedDescription = modifiedDescription.replaceAll('\n', '<br>');
+        modifiedDescription =
+            modifiedDescription.replaceAll(RegExp(r'\n+'), '<br>');
 
         modifiedDescription = modifiedDescription
             .replaceAllMapped(

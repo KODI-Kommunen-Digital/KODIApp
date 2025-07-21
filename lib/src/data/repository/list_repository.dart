@@ -331,6 +331,7 @@ class ListRepository {
     final requestSubmitResponse =
         await Api.requestSubmitSubCategory(categoryId: categoryId);
     final jsonSubCategory = requestSubmitResponse.data;
+    jsonSubCategory.removeWhere((subCat) => subCat['id'] == 10);
     if (!jsonSubCategory.isEmpty) {
       final subCategoryId = jsonSubCategory.last['id'];
       prefs.setKeyValue(Preferences.subCategoryId, subCategoryId as int);
@@ -798,8 +799,6 @@ class ListRepository {
       default:
         return;
     }
-
-
 
     MatomoTracker.instance.trackEvent(
         eventInfo: EventInfo(
