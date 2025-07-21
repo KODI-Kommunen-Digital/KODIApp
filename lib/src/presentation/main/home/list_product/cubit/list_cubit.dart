@@ -189,7 +189,7 @@ class ListCubit extends Cubit<ListState> {
         combinedList.addAll(productList);
       }
 
-      list.addAll(combinedList);
+      list.addAll(combinedList.whereType<ProductModel>());
       emit(ListStateLoaded(list, listCity));
     }
 
@@ -448,6 +448,7 @@ class ListCubit extends Cubit<ListState> {
       29: "category_handel",
       44: "category_job",
       43: "category_gastro",
+      16: "category_official_notification",
     };
     return categories[categoryId];
   }
@@ -484,6 +485,7 @@ class ListCubit extends Cubit<ListState> {
       12: "category_offers",
       45: "category_dienstleister",
       46: "category_shopping",
+      16: "category_official_notification",
     };
   }
 }

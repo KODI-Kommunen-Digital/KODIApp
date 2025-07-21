@@ -20,6 +20,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
       var formData = FormData.fromMap({
         'title': title,
         'description': description,
+        'address': address,
         //'language': 'de', // You might want to make this configurable
         'image': await MultipartFile.fromFile(
           image.path,

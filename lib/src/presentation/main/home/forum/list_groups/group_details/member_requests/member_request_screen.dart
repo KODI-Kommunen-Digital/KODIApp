@@ -112,7 +112,7 @@ class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
                         child: CachedNetworkImage(
                           imageUrl: widget.membersList?[index].image != null
                               ? '${Application.picturesURL}${widget.membersList?[index].image}'
-                              : '${Application.picturesURL}admin/News.jpeg',
+                              : '${Application.picturesURL}admin/News/Defaultimage6.png',
                           cacheManager: memoryCacheManager,
                           placeholder: (context, url) {
                             return AppPlaceholder(

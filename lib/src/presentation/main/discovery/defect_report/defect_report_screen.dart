@@ -140,6 +140,46 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       TextSpan(
                         children: [
                           TextSpan(
+                            text: Translate.of(context).translate('input_type'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    DropdownButton(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      underline: const SizedBox(),
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      hint: Text(Translate.of(context).translate('input_type')),
+                      value: currentMaengelTyp,
+                      items: context
+                          .read<DefectReportCubit>()
+                          .getMaengelTypen()
+                          .map((type) {
+                        return DropdownMenuItem(value: type, child: Text(type));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          if (value != null) {
+                            currentMaengelTyp = value;
+                          }
+                        });
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
                             text: Translate.of(context)
                                 .translate('input_address'),
                             style: Theme.of(context)
@@ -162,47 +202,6 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       maxLines: 3,
                     ),
                     const SizedBox(height: 16),
-                    Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: Translate.of(context)
-                                .translate('input_category'),
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleMedium!
-                                .copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const TextSpan(
-                            text: ' *',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    DropdownButton(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      underline: const SizedBox(),
-                      isExpanded: true,
-                      menuMaxHeight: 200,
-                      hint: Text(
-                          Translate.of(context).translate('input_category')),
-                      value: currentMaengelTyp,
-                      items: context
-                          .read<DefectReportCubit>()
-                          .getMaengelTypen()
-                          .map((type) {
-                        return DropdownMenuItem(value: type, child: Text(type));
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          if (value != null) {
-                            currentMaengelTyp = value;
-                          }
-                        });
-                      },
-                    ),
                   ],
                 ),
               ),

@@ -3,10 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
-import 'package:heidi/src/data/model/model_multifilter.dart';
+// import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
-import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
-import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
+// import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+// import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -24,7 +25,7 @@ class DiscoveryScreen extends StatefulWidget {
 
 class _DiscoveryScreenState extends State<DiscoveryScreen> {
   int? selectedLocationId;
-  ProductFilter? selectedFilter;
+  // ProductFilter? selectedFilter;
 
   @override
   void initState() {
@@ -53,21 +54,21 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
           BlocConsumer<DiscoveryCubit, DiscoveryState>(
             listener: (context, state) {},
             builder: (context, state) => state.maybeWhen(
-                loaded: (list) => AppFilterButton(
-                      multiFilter: MultiFilter(
-                        hasLocationFilter: true,
-                        currentLocation:
-                            context.read<DiscoveryCubit>().currentCity ?? 0,
-                        cities: context.read<DiscoveryCubit>().location,
-                      ),
-                      filterCallBack: (filter) async {
-                        if (filter.currentLocation != null) {
-                          context
-                              .read<DiscoveryCubit>()
-                              .onLocationFilter(filter.currentLocation!, true);
-                        }
-                      },
-                    ),
+                // loaded: (list) => AppFilterButton(
+                //       multiFilter: MultiFilter(
+                //         hasLocationFilter: true,
+                //         currentLocation:
+                //             context.read<DiscoveryCubit>().currentCity ?? 0,
+                //         cities: context.read<DiscoveryCubit>().location,
+                //       ),
+                //       filterCallBack: (filter) async {
+                //         if (filter.currentLocation != null) {
+                //           context
+                //               .read<DiscoveryCubit>()
+                //               .onLocationFilter(filter.currentLocation!, true);
+                //         }
+                //       },
+                //     ),
                 orElse: () => Container()),
           )
         ],
@@ -331,8 +332,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         'title': 'Jobs',
       });
     } else if (service.imageLink == "38") {
-      await launchUrl(Uri.parse('https://www.ladbergen.de/optigov-views/'),
-          mode: LaunchMode.inAppWebView);
+      CustomWebViewScreen.showAsBottomSheet(
+          context: context,
+          title: 'Serviceportal.Münsterland',
+          url: 'https://www.ladbergen.de/optigov-views/');
+      // await launchUrl(Uri.parse('https://www.ladbergen.de/optigov-views/'),
+      //     mode: LaunchMode.inAppWebView);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

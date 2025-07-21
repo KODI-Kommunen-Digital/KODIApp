@@ -200,27 +200,40 @@ class ProductModel {
     } else if (json['categoryId'] == 3) {
       category = "Events";
       final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
-      if ((json['endDate']) != null) {
+
+      // Check if time is midnight
+      if (parsedDateTime.hour == 0 && parsedDateTime.minute == 0) {
+        startDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      } else {
+        startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
+      }
+
+      if (json['endDate'] != null) {
         final parsedEDateTime = DateTime.parse(json['endDate']);
+        final isMidnight =
+            parsedEDateTime.hour == 0 && parsedEDateTime.minute == 0;
+
         if (parsedDateTime.year == parsedEDateTime.year &&
             parsedDateTime.month == parsedEDateTime.month &&
             parsedDateTime.day == parsedEDateTime.day) {
-          endDate = DateFormat('HH:mm').format(parsedEDateTime);
+          endDate =
+              isMidnight ? "" : DateFormat('HH:mm').format(parsedEDateTime);
         } else {
-          endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+          endDate = isMidnight
+              ? DateFormat('dd.MM.yyyy').format(parsedEDateTime)
+              : DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
         }
       } else {
         endDate = "";
       }
     } else if (json['categoryId'] == 4) {
-      category = "Vereine";
+      category = "Vereinsnews";
     } else if (json['categoryId'] == 5) {
       category = "Regionale Produkte";
     } else if (json['categoryId'] == 6) {
       category = "Biete/Suche";
     } else if (json['categoryId'] == 9) {
-      category = "Verloren gefunden";
+      category = "Fundbüro";
     } else if (json['categoryId'] == 10) {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
@@ -239,6 +252,8 @@ class ProductModel {
       category = "Dienstleister";
     } else if (json['categoryId'] == 46) {
       category = "Shopping";
+    } else if (json['categoryId'] == 16) {
+      category = "Amtliche Mitteilungen";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {

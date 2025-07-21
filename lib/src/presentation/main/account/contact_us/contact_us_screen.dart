@@ -26,7 +26,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   void initState() {
     super.initState();
     _textEmailController.text =
-        'markus@rodgauerleben.de, tball@labtec-life-solutions.de';
+        'eggert@ladbergen.de, spieker@ladbergen.de, eschmann@ladbergen.de';
     _textInfoController.text = '';
   }
 
@@ -81,7 +81,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: const Text(
-                      'markus@rodgauerleben.de, tball@labtec-life-solutions.de',
+                      'eggert@ladbergen.de, spieker@ladbergen.de, eschmann@ladbergen.de',
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ),

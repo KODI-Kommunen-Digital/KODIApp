@@ -21,11 +21,19 @@ class _CitySelectionState extends State<CitySelection> {
 
   @override
   void initState() {
+    final onlyOneCity = widget.cityList.length == 1;
+
     cityListDropDownItems = widget.cityList.map((city) {
       final String cityName = city['name'];
-      final selected = widget.selectedCities.contains(cityName);
+      final selected = onlyOneCity || widget.selectedCities.contains(cityName);
       return DropdownItem(label: cityName, value: cityName, selected: selected);
     }).toList();
+
+    if (onlyOneCity) {
+      final cityName = widget.cityList.first['name'] as String;
+      widget.onChangeSelection.call([cityName]);
+    }
+
     super.initState();
   }
 
@@ -39,13 +47,16 @@ class _CitySelectionState extends State<CitySelection> {
   Widget build(BuildContext context) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final textColor = isDarkMode ? Colors.white : Colors.black;
-    final selectedBackgroundColor = isDarkMode ? const Color.fromARGB(255, 57, 57, 57) : const Color.fromARGB(255, 231, 231, 231);
+    final selectedBackgroundColor = isDarkMode
+        ? const Color.fromARGB(255, 57, 57, 57)
+        : const Color.fromARGB(255, 231, 231, 231);
     return Stack(
       children: [
         MultiDropdown<String>(
           controller: controller,
           items: cityListDropDownItems,
-          chipDecoration: ChipDecoration(backgroundColor: selectedBackgroundColor),
+          chipDecoration:
+              ChipDecoration(backgroundColor: selectedBackgroundColor),
           fieldDecoration: FieldDecoration(
             hintText: Translate.of(context).translate('choose_city'),
             hintStyle: TextStyle(color: textColor),
@@ -66,22 +77,24 @@ class _CitySelectionState extends State<CitySelection> {
             maxHeight: 500,
           ),
           dropdownItemDecoration: DropdownItemDecoration(
-            textColor: textColor,
-            backgroundColor: Theme.of(context).colorScheme.surface,
-            selectedBackgroundColor: selectedBackgroundColor
-          ),
+              textColor: textColor,
+              backgroundColor: Theme.of(context).colorScheme.surface,
+              selectedBackgroundColor: selectedBackgroundColor),
           onSelectionChange: (selectedItems) {
             widget.onChangeSelection.call(selectedItems);
           },
         ),
         if (widget.errorText != null)
-          Positioned(left: 12,bottom: 0,
-            child: Text(textAlign: TextAlign.start,
+          Positioned(
+            left: 12,
+            bottom: 0,
+            child: Text(
+              textAlign: TextAlign.start,
               Translate.of(context).translate(widget.errorText!),
               style: Theme.of(context)
-                    .textTheme
-                    .bodySmall!
-                    .copyWith(color: Theme.of(context).colorScheme.error),
+                  .textTheme
+                  .bodySmall!
+                  .copyWith(color: Theme.of(context).colorScheme.error),
             ),
           ),
       ],

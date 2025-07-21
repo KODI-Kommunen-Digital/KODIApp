@@ -423,6 +423,7 @@
   "input_city": "Ort auswählen",
   "input_village": "Dorf auswählen",
   "input_category": "Kategorie Wählen",
+  "input_type": "Art auswählen",
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
   "subCategory": "Unterkategorie",
   "select_city": "Ort wählen",
@@ -543,6 +544,7 @@
   "new_message": "Neue Nachricht",
   "intro_login": "",
   "welcomeTitle": "",
-  "title_and_description_required": "Bitte gebe Titel und Beschreibung an"
+  "title_and_description_required": "Bitte gebe Titel und Beschreibung an",
+  "submit_defect_success_message": "Sie haben die Daten erfolgreich übermittelt. Ihre Daten werden im Mängelmelder-Verzeichnis angezeigt."
 }
 
