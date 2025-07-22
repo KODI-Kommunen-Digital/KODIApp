@@ -39,7 +39,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.hasslachtal.gera"
+    namespace "de.gera.app"
     compileSdkVersion 34
     ndkVersion "27.0.12077973"
 
