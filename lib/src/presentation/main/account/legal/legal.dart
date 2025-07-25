@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('http://116.203.13.95:3000/ImprintPage');
+                _makeAction('https://www.ladbergen.de/hinweise/impressum/');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('http://116.203.13.95:3000/PrivacyPolicy');
+                _makeAction('https://www.ladbergen.de/hinweise/datenschutz/');
               },
               trailing: Row(
                 children: <Widget>[
@@ -76,23 +76,23 @@ class _LegalScreenState extends State<LegalScreen> {
                 ],
               ),
             ),
-            AppListTitle(
-              title: Translate.of(context).translate('terms_of_use'),
-              onPressed: () {
-                _makeAction('http://116.203.13.95:3000/TermsOfUse');
-              },
-              trailing: Row(
-                children: <Widget>[
-                  RotatedBox(
-                    quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                    child: const Icon(
-                      Icons.keyboard_arrow_right,
-                      textDirection: TextDirection.ltr,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // AppListTitle(
+            //   title: Translate.of(context).translate('terms_of_use'),
+            //   onPressed: () {
+            //     _makeAction('http://116.203.13.95:3000/TermsOfUse');
+            //   },
+            //   trailing: Row(
+            //     children: <Widget>[
+            //       RotatedBox(
+            //         quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+            //         child: const Icon(
+            //           Icons.keyboard_arrow_right,
+            //           textDirection: TextDirection.ltr,
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),
