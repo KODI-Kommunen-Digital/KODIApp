@@ -19,7 +19,7 @@ dependencies:
   loggy: ^2.0.3
   flutter_loggy: ^2.0.3+1
   cupertino_icons: ^1.0.8
-  sentry_flutter: ^8.3.0
+  sentry_flutter: ^9.0.0
   crypto: ^3.0.6
 
   ### l10n
