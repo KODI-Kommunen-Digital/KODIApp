@@ -338,6 +338,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           url: 'https://www.ladbergen.de/optigov-views/');
       // await launchUrl(Uri.parse('https://www.ladbergen.de/optigov-views/'),
       //     mode: LaunchMode.inAppWebView);
+    } else if (service.imageLink == "39") {
+      CustomWebViewScreen.showAsBottomSheet(
+          context: context,
+          title: 'Grundschule',
+          url: 'https://www.ladbergen.de/familie-bildung/bildung/grundschule/');
+      // await launchUrl(Uri.parse('https://www.ladbergen.de/optigov-views/'),
+      //     mode: LaunchMode.inAppWebView);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
