@@ -100,28 +100,28 @@ PODS:
   - GoogleDataTransport (10.1.0):
     - nanopb (~> 3.30910.0)
     - PromisesObjC (~> 2.4)
-  - GoogleUtilities/AppDelegateSwizzler (8.0.2):
+  - GoogleUtilities/AppDelegateSwizzler (8.1.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Environment (8.0.2):
+  - GoogleUtilities/Environment (8.1.0):
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Logger (8.0.2):
+  - GoogleUtilities/Logger (8.1.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Network (8.0.2):
+  - GoogleUtilities/Network (8.1.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Privacy
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (8.0.2)":
+  - "GoogleUtilities/NSData+zlib (8.1.0)":
     - GoogleUtilities/Privacy
-  - GoogleUtilities/Privacy (8.0.2)
-  - GoogleUtilities/Reachability (8.0.2):
+  - GoogleUtilities/Privacy (8.1.0)
+  - GoogleUtilities/Reachability (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
-  - GoogleUtilities/UserDefaults (8.0.2):
+  - GoogleUtilities/UserDefaults (8.1.0):
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - image_picker_ios (0.0.1):
@@ -149,14 +149,14 @@ PODS:
     - Flutter
   - PromisesObjC (2.4.0)
   - ReachabilitySwift (5.2.4)
-  - SDWebImage (5.21.0):
-    - SDWebImage/Core (= 5.21.0)
-  - SDWebImage/Core (5.21.0)
-  - Sentry/HybridSDK (8.40.1)
-  - sentry_flutter (8.10.1):
+  - SDWebImage (5.21.1):
+    - SDWebImage/Core (= 5.21.1)
+  - SDWebImage/Core (5.21.1)
+  - Sentry/HybridSDK (8.52.1)
+  - sentry_flutter (9.5.0):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.40.1)
+    - Sentry/HybridSDK (= 8.52.1)
   - shared_preferences_foundation (0.0.1):
     - Flutter
     - FlutterMacOS
@@ -335,7 +335,7 @@ SPEC CHECKSUMS:
   flutter_svprogresshud: c45a3ae9c4709387affe7f9e3bbd94ed4eb15c1b
   geolocator_apple: 1560c3c875af2a412242c7a923e15d0d401966ff
   GoogleDataTransport: aae35b7ea0c09004c3797d53c8c41f66f219d6a7
-  GoogleUtilities: 26a3abef001b6533cf678d3eb38fd3f614b7872d
+  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   just_audio: 6c031bb61297cf218b4462be616638e81c058e97
   location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
@@ -348,9 +348,9 @@ SPEC CHECKSUMS:
   pointer_interceptor_ios: ec847ef8b0915778bed2b2cef636f4d177fa8eed
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
-  SDWebImage: f84b0feeb08d2d11e6a9b843cb06d75ebf5b8868
-  Sentry: e9215d7b17f7902692b4f8700e061e4f853e3521
-  sentry_flutter: ba644c90ccccb202066a5218a593d1c35584cd37
+  SDWebImage: f29024626962457f3470184232766516dee8dfea
+  Sentry: 2cbbe3592f30050c60e916c63c7f5a2fa584005e
+  sentry_flutter: fcd61ad26b7890479c182deff29f1f0714319b52
   shared_preferences_foundation: 9e1978ff2562383bd5676f64ec4e9aa8fa06a6f7
   sqflite_darwin: 20b2a3a3b70e43edae938624ce550a3cbf66a3d0
   sqlite3: 7559e33dae4c78538df563795af3a86fc887ee71
