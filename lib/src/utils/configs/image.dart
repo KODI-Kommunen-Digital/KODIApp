@@ -14,6 +14,8 @@ class Images {
   static const String service13 = "assets/images/services-13.png";
   static const String service14 = "assets/images/services-14.png";
   static const String service15 = "assets/images/services-15.png";
+  static const String service17 = "assets/images/services-17.png";
+  static const String service18 = "assets/images/services-18.png";
   static const String garbage = "assets/images/garbage.jpg";
   static const String defaultListing = "assets/images/default_image.jpeg";
 

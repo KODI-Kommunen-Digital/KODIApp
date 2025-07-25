@@ -1,11 +1,11 @@
-[ 
- {
-  "imageUrl": "assets/images/services-2.png",
-  "imageLink": "2",
-  "arguments": 3,
-  "categoryId": 3
- },
- {
+[
+  {
+    "imageUrl": "assets/images/services-2.png",
+    "imageLink": "2",
+    "arguments": 3,
+    "categoryId": 3
+  },
+  {
     "imageUrl": "assets/images/services-1.png",
     "imageLink": "1",
     "arguments": 1,
@@ -41,59 +41,71 @@
     "arguments": null,
     "categoryId": null
   },
-    {
-      "imageUrl": "assets/images/services-7.png",
-      "imageLink": "7",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-8.png",
-      "imageLink": "8",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-3.png",
-      "imageLink": "3",
-      "arguments": null,
-      "categoryId": null
-    },   
-    {
-      "imageUrl": "assets/images/services-5.png",
-      "imageLink": "5",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-10.png",
-      "imageLink": "10",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-11.png",
-      "imageLink": "11",
-      "arguments": null,
-      "categoryId": null
-     },
-    {
-      "imageUrl": "assets/images/services-12.png",
-      "imageLink": "12",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-14.png",
-      "imageLink": "14",
-      "arguments": null,
-      "categoryId": null
-    },
-    {
-      "imageUrl": "assets/images/services-15.png",
-      "imageLink": "15",
-      "arguments": null,
-      "categoryId": null
-    }
+  {
+    "imageUrl": "assets/images/services-7.png",
+    "imageLink": "7",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-8.png",
+    "imageLink": "8",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-3.png",
+    "imageLink": "3",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-5.png",
+    "imageLink": "5",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-10.png",
+    "imageLink": "10",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-11.png",
+    "imageLink": "11",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-12.png",
+    "imageLink": "12",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-14.png",
+    "imageLink": "14",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-15.png",
+    "imageLink": "15",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-17.png",
+    "imageLink": "17",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-18.png",
+    "imageLink": "18",
+    "arguments": null,
+    "categoryId": null
+  }
 ]
   

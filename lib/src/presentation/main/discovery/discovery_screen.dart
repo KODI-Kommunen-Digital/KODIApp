@@ -262,7 +262,9 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "12" ||
         service.imageLink == "13" ||
         service.imageLink == "14" ||
-        service.imageLink == "15") {
+        service.imageLink == "15" ||
+        service.imageLink == "17" ||
+        service.imageLink == "18") {
       final url =
           await AppBloc.discoveryCubit.getServiceLink(service.imageLink);
 
@@ -272,7 +274,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             needGeoLocation: (service.imageLink == "9") ? true : false,
             url: url,
             title:
-                AppBloc.discoveryCubit.getServiceLinkTitle(service.imageLink));
+            AppBloc.discoveryCubit.getServiceLinkTitle(service.imageLink));
       }
 
       if (service.imageLink == "4" ||
