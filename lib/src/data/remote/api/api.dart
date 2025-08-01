@@ -329,7 +329,7 @@ class Api {
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
     final listings =
-        "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
+        "/listings?statusId=1&pageNo=$params&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
