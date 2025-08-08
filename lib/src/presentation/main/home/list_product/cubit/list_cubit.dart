@@ -13,6 +13,7 @@ import 'cubit.dart';
 enum ProductFilter {
   week,
   month,
+  custom
 }
 
 class ListCubit extends Cubit<ListState> {
@@ -288,7 +289,8 @@ class ListCubit extends Cubit<ListState> {
   }
 
   void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, List<int>? currentCity) {
+      bool filterLocation, List<int>? currentCity, DateTime? selectedDate) {
+    print("Data is emitting 4 $selectedDate");
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -323,7 +325,25 @@ class ListCubit extends Cubit<ListState> {
         return false;
       }).toList();
       emit(ListStateUpdated(filteredList, listCity));
-    } else if (type == null &&
+    } else if (type == ProductFilter.custom && selectedDate != null) {
+      filteredList = loadedList.where((product) {
+        final productDate = parseDate(product.startDate);
+        if (productDate != null) {
+          final isSameDay = productDate.year == selectedDate.year &&
+              productDate.month == selectedDate.month &&
+              productDate.day == selectedDate.day;
+
+          if (filterLocation && (currentCity ?? []).isNotEmpty) {
+            return isSameDay && (currentCity!.contains(product.cityId));
+          } else {
+            return isSameDay;
+          }
+        }
+        return false;
+      }).toList();
+      emit(ListStateUpdated(filteredList, listCity));
+    }
+    else if (type == null &&
         filterLocation &&
         (currentCity ?? []).isNotEmpty) {
       if ((currentCity ?? []).contains(0)) {

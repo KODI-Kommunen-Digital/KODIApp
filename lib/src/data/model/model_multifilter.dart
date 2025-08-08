@@ -20,6 +20,7 @@ class MultiFilter {
   final bool hasLocationFilter;
   final bool hasCategoryFilter;
   final bool hasSubCategoryFilter;
+  final DateTime? startAfterDate;
 
   final bool multipleCityFilter;
 
@@ -38,5 +39,7 @@ class MultiFilter {
         this.hasLocationFilter = false,
         this.hasCategoryFilter = false,
         this.multipleCityFilter = false,
-        this.hasSubCategoryFilter = false});
+        this.hasSubCategoryFilter = false,
+        this.startAfterDate
+      });
 }
