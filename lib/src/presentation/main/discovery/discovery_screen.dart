@@ -159,36 +159,40 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       scrollUp();
     }
     return Scaffold(
-      body: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.0,
-            mainAxisSpacing: 10.0,
-            mainAxisExtent: 300.0),
-        itemCount: (widget.type == DiscoveryType.services)
-            ? services.length
-            : explore.length,
-        controller: _scrollController,
-        itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-            onTap: () {
-              if (widget.type == DiscoveryType.services) {
-                navigateToLink(services[index]);
-              } else {
-                navigateToLink(explore[index]);
-              }
-            },
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15.0),
-              child: Image.asset(
-                (widget.type == DiscoveryType.services)
-                    ? services[index].imageUrl
-                    : explore[index].imageUrl,
-                fit: BoxFit.cover,
+      body: Padding(
+        padding:  const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
+        child: GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+
+              crossAxisCount: 2,
+              crossAxisSpacing: 10.0,
+              mainAxisSpacing: 10.0,
+              mainAxisExtent: 300.0),
+          itemCount: (widget.type == DiscoveryType.services)
+              ? services.length
+              : explore.length,
+          controller: _scrollController,
+          itemBuilder: (BuildContext context, int index) {
+            return InkWell(
+              onTap: () {
+                if (widget.type == DiscoveryType.services) {
+                  navigateToLink(services[index]);
+                } else {
+                  navigateToLink(explore[index]);
+                }
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(15.0),
+                child: Image.asset(
+                  (widget.type == DiscoveryType.services)
+                      ? services[index].imageUrl
+                      : explore[index].imageUrl,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }
