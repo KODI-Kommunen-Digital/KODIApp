@@ -3,11 +3,14 @@ import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
-Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
+Future<void> handleBackgroundMessage(RemoteMessage? message) async {
+  debugPrint("Background notification received");
+}
 
 class FirebaseApi {
   final _firebaseMessaging = FirebaseMessaging.instance;
@@ -37,6 +40,7 @@ class FirebaseApi {
   }
 
   Future<void> handleForegroundNotification(RemoteMessage message) async {
+    debugPrint("Foreground notification received");
     await _firebaseMessaging.setForegroundNotificationPresentationOptions(
       alert: false,
       badge: false,
@@ -45,6 +49,7 @@ class FirebaseApi {
   }
 
   Future<void> initNotifications() async {
+    debugPrint("initialise notification ");
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: false,
@@ -69,18 +74,22 @@ class FirebaseApi {
         await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
     final receiveNotification =
         await prefs.getKeyValue(Preferences.receiveNotification, "true");
+    debugPrint("pushNotificationsPermission: $pushNotificationsPermission");
+    debugPrint("receiveNotification: $receiveNotification");
 
-    // if (pushNotificationsPermission == "authorized" &&
-    //     receiveNotification == "true") {
-    //   await _firebaseMessaging.subscribeToTopic("warnings");
-    // } else {
-    //   await _firebaseMessaging.unsubscribeFromTopic("warnings");
-    // }
+    if (pushNotificationsPermission == "authorized" &&
+        receiveNotification == "true") {
+      await _firebaseMessaging.subscribeToTopic("warnings");
+    } else {
+      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+    }
 
     int uId = await getLoggedUserId();
     if (uId > 0) {
       String? token = await FirebaseMessaging.instance.getToken();
+      debugPrint("FCM token: $token");
       if (token != null) uploadToken(uId, token);
+
     }
 
     FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -115,7 +124,8 @@ class FirebaseApi {
   }
 
   Future<void> uploadToken(int userId, String token) async {
-    final response = await Api.uploadToken(userId, {"firebaseToken": token});
+    final deviceId= await Utils.getDeviceId();
+    final response = await Api.uploadToken(userId, {"firebaseToken": token,"deviceId": deviceId??"1"},);
     logInfo("FCM token upload success: ${response.success}");
   }
 

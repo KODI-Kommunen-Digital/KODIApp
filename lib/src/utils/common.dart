@@ -19,6 +19,20 @@ class Utils {
     FocusScope.of(context).requestFocus(FocusNode());
   }
 
+  static Future<String?> getDeviceId() async {
+    final DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      return androidInfo.id; // OR: androidInfo.androidId (preferred)
+    } else if (Platform.isIOS) {
+      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+      return iosInfo.identifierForVendor; // Unique per app install
+    } else {
+      return null;
+    }
+  }
+
   static Future<DeviceModel?> getDeviceInfo() async {
     final deviceInfoPlugin = DeviceInfoPlugin();
     try {

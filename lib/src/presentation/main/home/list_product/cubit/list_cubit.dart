@@ -188,8 +188,8 @@ class ListCubit extends Cubit<ListState> {
       } else {
         combinedList.addAll(productList);
       }
-
-      list.addAll(combinedList);
+      //we will not abel to show ads and product in same list
+      list.addAll(combinedList.whereType<ProductModel>());
       emit(ListStateLoaded(list, listCity));
     }
 
