@@ -80,7 +80,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: const Text(
-                      ' ',
+                      'smartcity@gera.de',
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ),
