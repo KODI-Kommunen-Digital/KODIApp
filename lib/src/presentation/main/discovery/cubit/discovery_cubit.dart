@@ -144,17 +144,26 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageLink: "19",
         arguments: 19,
       ),
+
       CitizenServiceModel(
-        title: "ÖPNV Fahrplan",
-        imageUrl: Images.service20,
-        imageLink: "20",
-        arguments: 20,
-      ),
-      CitizenServiceModel(
-        title: "GVB Info+Tarife",
-        imageUrl: Images.service21,
-        imageLink: "21",
-        arguments: 21,
+        title: "Mobilität ",
+        imageUrl: Images.service26,
+        imageLink: "26",
+        arguments: 26,
+        subServices: [
+          CitizenServiceModel(
+            title: "ÖPNV Fahrplan",
+            imageUrl: Images.service20,
+            imageLink: "20",
+            arguments: 20,
+          ),
+          CitizenServiceModel(
+            title: "GVB Info+Tarife",
+            imageUrl: Images.service21,
+            imageLink: "21",
+            arguments: 21,
+          ),
+        ]
       ),
       // CitizenServiceModel(
       //   imageUrl: Images.service22,

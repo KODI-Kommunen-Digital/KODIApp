@@ -116,7 +116,8 @@ class _EventsScreenState extends State<EventsScreen> {
                       },
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
-                          context.read<EventsCubit>().onFilter(multiFilter);
+                          ///Todo need to update while  filter working
+                          // context.read<EventsCubit>().onFilter(multiFilter);
                         }
                       },
                       filter: context.read<EventsCubit>().filter!)),

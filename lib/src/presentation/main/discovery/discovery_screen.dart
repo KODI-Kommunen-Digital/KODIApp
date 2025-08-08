@@ -9,8 +9,10 @@ import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.d
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
+import 'package:heidi/src/presentation/main/discovery/sub_discovery_screen.dart';
 import 'package:heidi/src/utils/translate.dart';
 
+import '../../../utils/configs/routes.dart';
 import 'cubit/cubit.dart';
 
 class DiscoveryScreen extends StatefulWidget {
@@ -361,6 +363,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             url: 'https://www.awv-ot.de/App/');
         break;
       case "25":
+
+      case "26":
+        Navigator.pushNamed(context, Routes.subDiscoveryScreen,
+            arguments: service);
         break;
     }
 

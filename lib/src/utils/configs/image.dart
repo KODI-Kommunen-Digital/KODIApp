@@ -36,6 +36,7 @@ class Images {
   static const String service23 = "assets/images/services-23.png";
   static const String service24 = "assets/images/services-24.png";
   static const String service25 = "assets/images/services-25.png";
+  static const String service26 = "assets/images/services-26.png";
 
   static const String defaultListing = "assets/images/default_image.jpeg";
 

@@ -8,6 +8,7 @@ class CitizenServiceModel {
   final int? categoryId;
   final int? arguments;
   final int? subCategoryId;
+  final List<CitizenServiceModel>? subServices;
 
   CitizenServiceModel({
     required this.title,
@@ -17,6 +18,7 @@ class CitizenServiceModel {
     this.categoryId,
     this.arguments,
     this.subCategoryId,
+    this.subServices,
   });
 
   Future<bool> hasContent() async {
