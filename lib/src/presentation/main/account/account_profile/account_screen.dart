@@ -151,21 +151,21 @@ class _AccountLoadedState extends State<AccountLoaded> {
                         ),
                       ),
                     ),
-                    if (user != null)
-                      AppListTitle(
-                        title: Translate.of(context).translate('my_listings'),
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.profile,
-                              arguments: {'user': user, 'editable': true});
-                        },
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                      ),
+                    // if (user != null)
+                    //   AppListTitle(
+                    //     title: Translate.of(context).translate('my_listings'),
+                    //     onPressed: () {
+                    //       Navigator.pushNamed(context, Routes.profile,
+                    //           arguments: {'user': user, 'editable': true});
+                    //     },
+                    //     trailing: RotatedBox(
+                    //       quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    //       child: const Icon(
+                    //         Icons.keyboard_arrow_right,
+                    //         textDirection: TextDirection.ltr,
+                    //       ),
+                    //     ),
+                    //   ),
                     if (user != null)
                       AppListTitle(
                         title: Translate.of(context).translate('wish_list'),
@@ -180,21 +180,21 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
-                    if (user != null)
-                      AppListTitle(
-                        title: Translate.of(context).translate('dashboard'),
-                        onPressed: () {
-                          Navigator.pushNamed(context, Routes.dashboard,
-                              arguments: {'user': user, 'editable': true});
-                        },
-                        trailing: RotatedBox(
-                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                          child: const Icon(
-                            Icons.keyboard_arrow_right,
-                            textDirection: TextDirection.ltr,
-                          ),
-                        ),
-                      ),
+                    // if (user != null)
+                    //   AppListTitle(
+                    //     title: Translate.of(context).translate('dashboard'),
+                    //     onPressed: () {
+                    //       Navigator.pushNamed(context, Routes.dashboard,
+                    //           arguments: {'user': user, 'editable': true});
+                    //     },
+                    //     trailing: RotatedBox(
+                    //       quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    //       child: const Icon(
+                    //         Icons.keyboard_arrow_right,
+                    //         textDirection: TextDirection.ltr,
+                    //       ),
+                    //     ),
+                    //   ),
                     if (user != null)
                       AppListTitle(
                         title: Translate.of(context).translate('contact'),
@@ -209,19 +209,19 @@ class _AccountLoadedState extends State<AccountLoaded> {
                           ),
                         ),
                       ),
-                    AppListTitle(
-                      title: Translate.of(context).translate('faq'),
-                      onPressed: () {
-                        _onNavigate(Routes.faq);
-                      },
-                      trailing: RotatedBox(
-                        quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                        child: const Icon(
-                          Icons.keyboard_arrow_right,
-                          textDirection: TextDirection.ltr,
-                        ),
-                      ),
-                    ),
+                    // AppListTitle(
+                    //   title: Translate.of(context).translate('faq'),
+                    //   onPressed: () {
+                    //     _onNavigate(Routes.faq);
+                    //   },
+                    //   trailing: RotatedBox(
+                    //     quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                    //     child: const Icon(
+                    //       Icons.keyboard_arrow_right,
+                    //       textDirection: TextDirection.ltr,
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 4),
