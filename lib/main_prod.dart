@@ -116,6 +116,7 @@ class _HeidiAppState extends State<HeidiApp> {
                     debugShowCheckedModeBanner: false,
                     navigatorKey: globalNavKey,
                     theme: theme.lightTheme,
+                    themeMode: ThemeMode.light,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,
                     locale: lang,
