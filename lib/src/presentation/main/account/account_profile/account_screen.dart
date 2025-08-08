@@ -168,6 +168,20 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       ),
                     if (user != null)
                       AppListTitle(
+                        title: Translate.of(context).translate('wish_list'),
+                        onPressed: () {
+                          Navigator.pushNamed(context, Routes.wishList);
+                        },
+                        trailing: RotatedBox(
+                          quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                          child: const Icon(
+                            Icons.keyboard_arrow_right,
+                            textDirection: TextDirection.ltr,
+                          ),
+                        ),
+                      ),
+                    if (user != null)
+                      AppListTitle(
                         title: Translate.of(context).translate('dashboard'),
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.dashboard,

@@ -57,6 +57,8 @@ import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 import 'package:heidi/src/presentation/main/welcome/welcome_screen.dart';
 
+import '../../presentation/main/wishlist/wishlist_screen.dart';
+
 class RouteArguments<T> {
   final T? item;
   final VoidCallback? callback;
@@ -541,6 +543,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const WelcomeScreen();
+          },
+        );
+
+      case wishList:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const WishListScreen();
           },
         );
 

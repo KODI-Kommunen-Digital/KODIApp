@@ -7,8 +7,8 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'cubit/cubit.dart';
 
@@ -196,38 +196,49 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     switch (service.imageLink) {
       case "17":
-        await launchUrl(
-            Uri.parse(
-                'https://cockpit.gera.de/d/KsIwvw5nz/cockpit?orgId=1&refresh=15m'),
-            mode: LaunchMode.inAppWebView);
-        await launchUrl(Uri.parse('https://www.gera.de/serviceportal'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'GERA Cockpit',
+            url:
+                'https://cockpit.gera.de/d/KsIwvw5nz/cockpit?orgId=1&refresh=15m');
         break;
       case "18":
-        await launchUrl(
-            Uri.parse('https://geoportal.gera.de/portalserver/#/portal/gera'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'Geo Portal',
+            url: 'https://geoportal.gera.de/portalserver/#/portal/gera');
         break;
       case "19":
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'Stadt Touren',
+            url: 'https://app.spotar.de/gera');
         break;
       case "20":
-        await launchUrl(
-            Uri.parse('https://www.gvbgera.de/fahrplaene/gvb-liniennetz'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'ÖPNV Fahrplan',
+            url: 'https://www.gvbgera.de/fahrplaene/gvb-liniennetz');
         break;
       case "21":
-        await launchUrl(Uri.parse('https://www.gvbgera.de/tickets/fahrscheine'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'GVB Info+Tarife',
+            url: 'https://www.gvbgera.de/tickets/fahrscheine');
         break;
       case "22":
         break;
       case "23":
-        await launchUrl(Uri.parse('https://www.gera.de/serviceportal'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'Serviceportal',
+            url: 'https://www.gera.de/serviceportal');
         break;
       case "24":
-        await launchUrl(Uri.parse('https://www.awv-ot.de/App/'),
-            mode: LaunchMode.inAppWebView);
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: 'Abfall App',
+            url: 'https://www.awv-ot.de/App/');
         break;
       case "25":
         break;
