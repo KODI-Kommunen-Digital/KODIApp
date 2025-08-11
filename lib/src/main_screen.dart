@@ -188,15 +188,6 @@ class _MainScreenState extends State<MainScreen> {
             color: color,
           ),
           const SizedBox(height: 2),
-          Text(
-            Translate.of(context).translate(title),
-            style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                  fontSize: 10,
-                  color: color,
-                ),
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          )
         ],
       ),
     );

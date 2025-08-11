@@ -25,9 +25,8 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   @override
   void initState() {
     super.initState();
-    _textEmailController.text =
-        'markus@rodgauerleben.de, tball@labtec-life-solutions.de';
-    _textInfoController.text = '';
+    _textEmailController.text = 'smartcity@gera.de';
+    _textInfoController.text = 'smartcity@gera.de';
   }
 
   @override
@@ -81,7 +80,7 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: const Text(
-                      'markus@rodgauerleben.de, tball@labtec-life-solutions.de',
+                      'smartcity@gera.de',
                       style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ),

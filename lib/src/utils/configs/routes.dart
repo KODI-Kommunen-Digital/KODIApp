@@ -57,6 +57,10 @@ import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 import 'package:heidi/src/presentation/main/welcome/welcome_screen.dart';
 
+import '../../data/model/model_citizen_service.dart';
+import '../../presentation/main/discovery/sub_discovery_screen.dart';
+import '../../presentation/main/wishlist/wishlist_screen.dart';
+
 class RouteArguments<T> {
   final T? item;
   final VoidCallback? callback;
@@ -131,6 +135,7 @@ class Routes {
   static const String discoveryDetail = "/discovery_detail";
   static const String welcomeScreen = "/welcomeScreen";
   static const String eventsScreen = "/eventsScreen";
+  static const String subDiscoveryScreen="/subDiscoveryScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -544,12 +549,28 @@ class Routes {
           },
         );
 
+      case wishList:
+        return MaterialPageRoute(
+          builder: (context) {
+            return const WishListScreen();
+          },
+        );
+
       case eventsScreen:
         final Map<String, dynamic> arguments =
         settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (context) {
             return EventsScreen(arguments: arguments);
+          },
+        );
+
+      case subDiscoveryScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final CitizenServiceModel arguments =
+            settings.arguments as CitizenServiceModel;
+            return SubDiscoveryScreen(service: settings.arguments as CitizenServiceModel);
           },
         );
 
