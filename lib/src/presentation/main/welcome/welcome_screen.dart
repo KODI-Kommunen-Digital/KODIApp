@@ -166,7 +166,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Die Gera-App sendet dir Mitterilungen bei Events in deiner Nähe, schickt dir zu deinen städtischen Anträgen Updates und erinnert dich, wenn der Müll raus muss.\nBitte bestätige, dass du mit derartigen Push-Nachrichten einverstanden bist.",
+                  "Die Gera-App sendet dir Mitterilungen bei Events in deiner Nähe, schickt dir zu deinen städtischen Anträgen Updates und erinnert dich, wenn der Müll raus muss.\nBitte bestätige, dass sie mit derartigen Push-Nachrichten einverstanden bist.",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -238,7 +238,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Bevor es losgeht, akzeptiere bitte unsere Nutzungsbedingungen.\nOhne Zustimmungs kannst du die Gera-App leider nicht nutzen.",
+                  "Bevor es losgeht, akzeptiere bitte unsere Nutzungsbedingungen.\nOhne Zustimmungs kannst sie die Gera-App leider nicht nutzen.",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
