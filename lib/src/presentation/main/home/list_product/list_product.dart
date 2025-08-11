@@ -83,7 +83,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasLocationFilter: true,
           currentLocation: selectedFilter?.currentLocation ?? [_selectedCityId],
           cities: AppBloc.discoveryCubit.location,
-          multipleCityFilter: true);
+          multipleCityFilter: true,
+          startAfterDate: selectedFilter?.startAfterDate
+      );
     } else {
       return MultiFilter(
           hasLocationFilter: true,
@@ -103,7 +105,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
           filter.currentProductEventFilter,
           loadedList,
           filter.hasLocationFilter,
-          filter.currentLocation);
+          filter.currentLocation,
+        filter.startAfterDate
+      );
     } else if (filter?.hasLocationFilter ?? false) {
       loadListingsList();
     }

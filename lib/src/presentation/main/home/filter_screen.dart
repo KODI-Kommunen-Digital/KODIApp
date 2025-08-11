@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:intl/intl.dart';
 
 class FilterScreen extends StatefulWidget {
   final MultiFilter multiFilter;
@@ -20,6 +21,7 @@ class _FilterScreenState extends State<FilterScreen> {
   int? currentListingStatus;
   ProductFilter? currentProductEventFilter;
   GroupFilter? currentForumGroupFilter;
+  DateTime? startAfterDate;
 
   @override
   void initState() {
@@ -33,6 +35,7 @@ class _FilterScreenState extends State<FilterScreen> {
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
     currentForumGroupFilter = widget.multiFilter.currentForumGroupFilter;
+    startAfterDate = widget.multiFilter.startAfterDate;
   }
 
   @override
@@ -65,7 +68,9 @@ class _FilterScreenState extends State<FilterScreen> {
                     hasLocationFilter: widget.multiFilter.hasLocationFilter,
                     hasListingStatusFilter:
                         widget.multiFilter.hasListingStatusFilter,
-                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter));
+                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
+                  startAfterDate: startAfterDate,
+                ));
           },
           child: Column(
             children: [
@@ -177,6 +182,7 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 currentListingStatus = 0;
+                startAfterDate = null;
               });
             },
           ),
@@ -295,6 +301,7 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 currentProductEventFilter = null;
+                startAfterDate = null;
               });
             },
           ),
@@ -315,6 +322,7 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 currentProductEventFilter = ProductFilter.month;
+                startAfterDate = null;
               });
             },
           ),
@@ -335,9 +343,45 @@ class _FilterScreenState extends State<FilterScreen> {
             onSelected: (selected) {
               setState(() {
                 currentProductEventFilter = ProductFilter.week;
+                startAfterDate = null;
               });
             },
           ),
+          // Custom date filter
+          ChoiceChip(
+            label: Text(
+              startAfterDate == null
+                  ? Translate.of(context).translate('custom_date')
+                  : DateFormat('yyyy-MM-dd').format(startAfterDate!),
+            ),
+            selected: currentProductEventFilter == ProductFilter.custom,
+            onSelected: (selected) async {
+              final pickedDate = await showDatePicker(
+                context: context,
+                initialDate: startAfterDate ??
+                    DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+              );
+              if (pickedDate != null) {
+                setState(() {
+                  startAfterDate = pickedDate;
+                  currentProductEventFilter = ProductFilter.custom;
+                });
+              }
+            },
+          ),
+          // Clear custom date filter
+          if (startAfterDate != null)
+            ChoiceChip(
+              label: Text(Translate.of(context).translate('clear_date')),
+              selected: false,
+              onSelected: (selected) {
+                setState(() {
+                  startAfterDate = null;
+                });
+              },
+            ),
         ]),
       )
     ];

@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -26,6 +27,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   bool doesScroll = false;
   int? currentCity;
 
+  String searchTerm = '';
+  bool isSearching = false;
+  List<CitizenServiceModel> originalServices = [];
+  List<CitizenServiceModel> originalExplore = [];
+
   Future<void> onLoad() async {
     emit(const DiscoveryState.loading());
     final cityRequestResponse = await Api.requestCities();
@@ -35,24 +41,17 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     services = initializeServices()[0];
     explore = initializeServices()[1];
 
-    List<CitizenServiceModel> servicesCopy = List.from(services);
+    originalServices = List.from(services);
+    originalExplore = List.from(explore);
 
-    /*for (var element in servicesCopy) {
-      if (element.categoryId != null || element.type == "subCategoryService") {
-        // bool hasContent = await element.hasContent();
-        // if (!hasContent) {
-        //   hiddenServices.add(element);
-        // }
-      }
-    }*/
+    List<CitizenServiceModel> servicesCopy = List.from(services);
 
     services.removeWhere((element) => hiddenServices.contains(element));
 
     await getCitySelected();
 
-    emit(DiscoveryStateLoaded(services, explore));
+    emit(DiscoveryState.loaded(services, explore));
   }
-
   Future<void> onLocationFilter(int locationId, bool calledExternal) async {
     await saveCityId(locationId);
     emit(const DiscoveryState.loading());
@@ -109,11 +108,13 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   List<List<CitizenServiceModel>> initializeServices() {
     List<CitizenServiceModel> services = [
       CitizenServiceModel(
+        title: "Service portal",
         imageUrl: Images.service23,
         imageLink: "23",
         arguments: 23,
       ),
       CitizenServiceModel(
+        title: "Abfall App",
         imageUrl: Images.service24,
         imageLink: "24",
         arguments: 24,
@@ -126,29 +127,43 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     ];
     List<CitizenServiceModel> explore = [
       CitizenServiceModel(
+        title: "GERA Cockpit",
         imageUrl: Images.service17,
         imageLink: "17",
         arguments: 17,
       ),
       CitizenServiceModel(
+        title: "Geo Portal",
         imageUrl: Images.service18,
         imageLink: "18",
         arguments: 18,
       ),
       CitizenServiceModel(
+        title: "Stadt Touren",
         imageUrl: Images.service19,
         imageLink: "19",
         arguments: 19,
       ),
+
       CitizenServiceModel(
-        imageUrl: Images.service20,
-        imageLink: "20",
-        arguments: 20,
-      ),
-      CitizenServiceModel(
-        imageUrl: Images.service21,
-        imageLink: "21",
-        arguments: 21,
+        title: "Mobilität ",
+        imageUrl: Images.service26,
+        imageLink: "26",
+        arguments: 26,
+        subServices: [
+          CitizenServiceModel(
+            title: "ÖPNV Fahrplan",
+            imageUrl: Images.service20,
+            imageLink: "20",
+            arguments: 20,
+          ),
+          CitizenServiceModel(
+            title: "GVB Info+Tarife",
+            imageUrl: Images.service21,
+            imageLink: "21",
+            arguments: 21,
+          ),
+        ]
       ),
       // CitizenServiceModel(
       //   imageUrl: Images.service22,
@@ -165,5 +180,33 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
     currentCity = cityId;
     return cityId;
+  }
+
+  Future<void> searchServices(String term, DiscoveryType type) async {
+    isSearching = true;
+    searchTerm = term.toLowerCase();
+
+    if (type == DiscoveryType.services) {
+      services = originalServices.where((service) =>
+          service.title.toLowerCase().contains(searchTerm)).toList();
+    } else {
+      explore = originalExplore.where((item) =>
+          item.title.toLowerCase().contains(searchTerm)).toList();
+    }
+
+    emit(DiscoveryState.loaded(services, explore));
+  }
+
+  Future<void> cancelSearch(DiscoveryType type) async {
+    isSearching = false;
+    searchTerm = '';
+
+    if (type == DiscoveryType.services) {
+      services = List.from(originalServices);
+    } else {
+      explore = List.from(originalExplore);
+    }
+
+    emit(DiscoveryState.loaded(services, explore));
   }
 }

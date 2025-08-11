@@ -40,36 +40,47 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
             borderRadius: BorderRadius.circular(12),
           ),
           elevation: 2,
-          child: DropdownButtonFormField<String>(
-            value: chosenOption,
-            onChanged: (newValue) {
-              setState(() {
-                widget.setLocationCallback!(newValue!);
-                chosenOption = newValue;
-              });
-            },
-            items: widget.cityTitlesList?.map((String option) {
-              return DropdownMenuItem<String>(
-                value: option,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      vertical: 0.0, horizontal: 10.0),
-                  child: Text(option, style: const TextStyle(fontSize: 16)),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minWidth: 50,
+              maxWidth: MediaQuery.of(context).size.width - 40,
+            ),
+            child: DropdownButtonFormField<String>(
+              isExpanded: true,
+              value: chosenOption,
+              onChanged: (newValue) {
+                setState(() {
+                  widget.setLocationCallback!(newValue!);
+                  chosenOption = newValue;
+                });
+              },
+              items: widget.cityTitlesList?.map((String option) {
+                return DropdownMenuItem<String>(
+                  value: option,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 0.0, horizontal: 10.0),
+                    child: Text(
+                      option,
+                      style: const TextStyle(fontSize: 16),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                );
+              }).toList(),
+              decoration: InputDecoration(
+                contentPadding: contentPadding,
+                focusedBorder: const OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.white),
                 ),
-              );
-            }).toList(),
-            decoration: InputDecoration(
-              contentPadding: contentPadding,
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+                labelText: widget.hintText ??
+                    Translate.of(context).translate('select_location'),
+                labelStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodyLarge?.color ??
+                      Colors.white,
+                ),
+                border: const OutlineInputBorder(),
               ),
-              labelText: widget.hintText ??
-                  Translate.of(context).translate('select_location'),
-              labelStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    Colors.white,
-              ),
-              border: const OutlineInputBorder(),
             ),
           ),
         ),
