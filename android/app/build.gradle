@@ -39,7 +39,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "com.ladbergen.app"
+    namespace "de.ladbergen.app"
     compileSdkVersion 35
     ndkVersion "27.0.12077973"
 
