@@ -61,7 +61,7 @@ class _FilterScreenState extends State<FilterScreen> {
         actions: [
           IconButton(onPressed: () {
             setState(() {
-              currentCity = null;
+              currentCity = 0;
               startAfterDate = null;
               endAfterDate = null;
               currentSubCategory = null;
