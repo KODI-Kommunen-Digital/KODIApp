@@ -31,7 +31,7 @@ class _EventsScreenState extends State<EventsScreen> {
   void initState() {
     super.initState();
     _scrollController.addListener(_scrollListener);
-    context.read<EventsCubit>().onLoad(false);
+    context.read<EventsCubit>().onLoad(false, pageNo);
   }
 
   @override
@@ -56,7 +56,7 @@ class _EventsScreenState extends State<EventsScreen> {
   }
 
   Future<void> _onRefresh() async {
-    await AppBloc.eventsCubit.onLoad(true);
+    await AppBloc.eventsCubit.onLoad(true, pageNo);
     setState(() {
       pageNo = 1;
     });
@@ -106,18 +106,17 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                   child: EventsSearchWidget(
                       onSearch: (searchTerm) {
-                        context.read<EventsCubit>().searchListing(searchTerm);
+                        context.read<EventsCubit>().searchListing(searchTerm, pageNo);
                       },
                       searchTerm: context.read<EventsCubit>().searchTerm,
                       onDelete: () {
                         if (context.read<EventsCubit>().searchTerm != null) {
-                          context.read<EventsCubit>().onLoad(false);
+                          context.read<EventsCubit>().onLoad(false, pageNo);
                         }
                       },
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
-                          ///Todo need to update while  filter working
-                          // context.read<EventsCubit>().onFilter(multiFilter);
+                          context.read<EventsCubit>().onFilter(multiFilter, pageNo);
                         }
                       },
                       filter: context.read<EventsCubit>().filter!)),

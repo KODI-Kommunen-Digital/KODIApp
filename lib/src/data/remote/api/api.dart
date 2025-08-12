@@ -493,32 +493,70 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
-    if (params == 3) {
+  static Future<ResultApiModel> requestCatList(categoryId, cityId, pageNo) async {
+    if (categoryId == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(forum: false).get(url: list, loading: true);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            'listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
+    }
+  }
+
+  ///Get Filter list
+  static Future<ResultApiModel> requestFilteredList(
+      {categoryId, cityId, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
+    var list = "";
+    if (categoryId == 3) {
+      list +=
+          "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
+
+      if (cityId!=null && cityId!=0){
+        list += "&cityId=$cityId";
+      }
+      if (searchTerm!= null && searchTerm!="") {
+        list += "&searchQuery=$searchTerm";
+      }
+
+      if (subCategoryId!=null && subCategoryId!=0){
+        list+= "&subcategoryId=$subCategoryId";
+      }
+
+      if (timeFilter!=null &&  timeFilter!=""){
+        list+= "&timeFilter=$timeFilter";
+      }
+
+      if(startDate!=null && endDate!=null) {
+        list+= "&startAfterDate=$startDate&endBeforeDate=$endDate";
+      }
+
+      final result =
+          await HTTPManager(forum: false).get(url: list, loading: true);
+      return ResultApiModel.fromJson(result);
+    } else {
+      list =
+          'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+      final result = await HTTPManager(forum: false).get(url: list);
+      return ResultApiModel.fromJson(result);
     }
   }
 
