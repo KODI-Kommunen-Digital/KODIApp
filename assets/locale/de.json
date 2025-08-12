@@ -259,6 +259,7 @@
   "choose_table_message": "Bitte Tisch auswählen",
   "choose_category": "Kategorien wählen",
   "all_Categories": "Alle Kategorien",
+  "all_sub_Categories": "Alle Unterkategorien",
   "functionNotAvail": "Funktion nicht verfügbar",
   "functionNotAvailBody": "Diese Funktion wird bald verfügbar sein.",
   "choose_facilities": "Wählen Sie Einrichtungen",
@@ -552,6 +553,15 @@
   "view_terms_of_use": "Nutzungsbedingungen anzeigen",
   "verify_terms_of_use": "Bestätige, dass sie unsere Bedingungen gelesen hast und zustimmst.",
   "must_verify_terms_of_use": "Sie musst den Nutzungsbedingungen zustimmen, um die App nutzen zu können!",
-  "proceed": "Weiter"
+  "proceed": "Weiter",
+  "all_times_of_the_day": "Alle Tageszeiten",
+  "morning_time": "Vormittags, 06-12 Uhr",
+  "day_time": "Tagsüber, 06-18 Uhr",
+  "afternoon_time": "Nachmittags, 12-18 Uhr",
+  "evening_time": "Abends, 18-22 Uhr",
+  "night_time": "Nachts, 22-06 Uhr",
+  "select_time_of_the_day": "Wählen Sie die Tageszeit",
+  "please_select_start_date_first": "Bitte wählen Sie zuerst das Startdatum aus",
+  "please_select_end_date_to_apply_filter": "Bitte wählen Sie das Enddatum aus, um den Filter anzuwenden."
 }
 

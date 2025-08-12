@@ -16,6 +16,15 @@ enum ProductFilter {
   custom
 }
 
+enum DayTimeFilter {
+  all,
+  morning,
+  daytime,
+  afternoon,
+  evening,
+  night
+}
+
 class ListCubit extends Cubit<ListState> {
   final ListRepository repo;
 
@@ -483,6 +492,16 @@ class ListCubit extends Cubit<ListState> {
       9: "subcategory_road",
       10: "subcategory_official_notification",
       11: "subcategory_timeless_news"
+    };
+  }
+
+  static Map<DayTimeFilter, String> getDayTimeFilters() {
+    return {
+      DayTimeFilter.morning: "morning_time",
+      DayTimeFilter.daytime: "day_time",
+      DayTimeFilter.afternoon: "afternoon_time",
+      DayTimeFilter.evening: "evening_time",
+      DayTimeFilter.night: "night_time",
     };
   }
 
