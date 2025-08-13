@@ -28,8 +28,9 @@ class ListRepository {
     required categoryId,
     required type,
     required pageNo,
-    cityId,
+    int? cityId,
     int? subCategoryId,
+    String? searchTerm
   }) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = cityId ?? prefs.getKeyValue(Preferences.cityId, 0);
@@ -47,7 +48,7 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "location") {
-      int params = cityId;
+      int params = cityId ?? 0;
       final response = await Api.requestLocList(params, pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
@@ -72,6 +73,54 @@ class ListRepository {
       int params = categoryId;
       final response = await Api.requestSubCatList(
           params, selectedCityId, pageNo, subCategoryId);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        if (selectedCityId != 0) {
+          list.removeWhere((element) => element.cityId != selectedCityId);
+        }
+        return [list, response.pagination];
+      }
+    }
+    return null;
+  }
+
+  static Future<List?> loadFilteredList({
+    required categoryId,
+    required String type,
+    required pageNo,
+    int? cityId,
+    int? subCategoryId,
+    String? startDate,
+    String? endDate,
+    String? timeFilter,
+    String? searchTerm
+  }) async {
+    final prefs = await Preferences.openBox();
+    int selectedCityId = cityId ?? prefs.getKeyValue(Preferences.cityId, 0);
+
+    if (type == "filterType") {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId,
+          cityId: cityId,
+          subCategoryId: subCategoryId,
+          startDate: startDate,
+          endDate: endDate,
+          timeFilter: timeFilter,
+          pageNo: pageNo);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        if (cityId != 0) {
+          list.removeWhere((element) => element.cityId != cityId);
+        }
+        return [list, response.pagination];
+      }
+    } else if (type == "searchListings" && searchTerm!=null) {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId, cityId: cityId, pageNo: pageNo, searchTerm: searchTerm);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

@@ -11,6 +11,7 @@ import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:intl/intl.dart';
 import 'events_state.dart';
 
 class EventsCubit extends Cubit<EventsState> {
@@ -22,7 +23,7 @@ class EventsCubit extends Cubit<EventsState> {
   List<ProductModel> loadedEvents = [];
   String? searchTerm;
 
-  Future<void> onLoad(bool isRefreshLoader) async {
+  Future<void> onLoad(bool isRefreshLoader, int pageNo) async {
     if (!isRefreshLoader) {
       emit(const EventsState.loading());
       searchTerm = null;
@@ -53,16 +54,55 @@ class EventsCubit extends Cubit<EventsState> {
     if (eventsResponse != null) {
       eventsList = eventsResponse[0];
     }
-    if (filter != null && filter!.currentProductEventFilter != null) {
-      final List<ProductModel>? formattedList = formatListDateFilter(
-          filter!.currentProductEventFilter, eventsList, false, null);
-      if (formattedList != null) {
-        eventsList = formattedList;
+
+    // if (filter != null && filter!.currentProductEventFilter != null) {
+    //   final List<ProductModel>? formattedList = formatListDateFilter(
+    //       filter!.currentProductEventFilter, eventsList, false, null);
+    //   if (formattedList != null) {
+    //     eventsList = formattedList;
+    //   }
+    // }
+
+    if (filter != null && filter!.startAfterDate != null && filter!.endAfterDate != null) {
+      int cityId = filter!.currentLocation;
+      int? subCategoryId = filter!.currentSubCategory;
+      String? startDate = filter!.startAfterDate != null ? formatDate(
+          filter!.startAfterDate!) : null;
+      String? endDate = filter!.endAfterDate != null ? formatDate(
+          filter!.endAfterDate!) : null;
+      String? timeFilter = filter!.currentDayTimeFilter != null
+          ? getDayTimeType(filter!.currentDayTimeFilter!)
+          : null;
+      final eventsResponse = await ListRepository.loadFilteredList(
+        categoryId: 3,
+        type: "filterType",
+        pageNo: pageNo,
+        cityId: cityId,
+        subCategoryId: subCategoryId,
+        startDate: startDate,
+        endDate: endDate,
+        timeFilter: timeFilter,
+      );
+      List<ProductModel> eventsList = [];
+      if (eventsResponse != null) {
+        eventsList = eventsResponse[0];
+        loadedEvents = eventsList;
       }
     }
+
+    Map<int, String> subcategories = ListCubit.getSubCategories();
+    Map<DayTimeFilter, String> dayTimeMap = ListCubit.getDayTimeFilters();
+
+
+
+
     filter ??= MultiFilter(
         hasLocationFilter: true,
-        hasProductEventFilter: true,
+        hasDateRangeFilter: true,
+        hasDayTimeFilter: true,
+        hasSubCategoryFilter: true,
+        subCategoriesMap: subcategories,
+        dayTimeMap: dayTimeMap,
         currentLocation: cityId,
         cities: filterCities);
 
@@ -159,21 +199,74 @@ class EventsCubit extends Cubit<EventsState> {
     }
   }
 
-  Future<void> searchListing(content) async {
+  Future<void> searchListing(String content, int pageNo) async {
     emit(const EventsState.loading());
     searchTerm = content;
-    await Future.delayed(const Duration(seconds: 2));
-    //TODO: Implement search logic
-    loadedEvents = [];
-    emit(const EventsState.loaded([]));
+
+    final eventsResponse = await ListRepository.loadFilteredList(
+        categoryId: 3,
+        type: "searchListings",
+        pageNo: pageNo,
+        searchTerm: searchTerm);
+    List<ProductModel> eventsList = [];
+
+    if (eventsResponse != null) {
+      eventsList = eventsResponse[0];
+      loadedEvents = eventsList;
+    }
+    emit(EventsState.loaded(loadedEvents));
   }
 
-  Future<void> onFilter(MultiFilter selectedFilter) async {
+  Future<void> onFilter(MultiFilter selectedFilter, int pageNo) async {
     emit(const EventsState.loading());
     filter = selectedFilter;
-    await Future.delayed(const Duration(seconds: 2));
-    //TODO: Implement filter logic
-    loadedEvents = [];
-    emit(const EventsState.loaded([]));
+    int cityId = selectedFilter.currentLocation;
+    int? subCategoryId = selectedFilter.currentSubCategory;
+    String? startDate = selectedFilter.startAfterDate != null ? formatDate(
+        selectedFilter.startAfterDate!) : null;
+    String? endDate = selectedFilter.endAfterDate != null ? formatDate(
+        selectedFilter.endAfterDate!) : null;
+    String? timeFilter = selectedFilter.currentDayTimeFilter != null
+        ? getDayTimeType(selectedFilter.currentDayTimeFilter!)
+        : null;
+
+    final eventsResponse = await ListRepository.loadFilteredList(
+      categoryId: 3,
+      type: "filterType",
+      pageNo: pageNo,
+      cityId: cityId,
+      subCategoryId: subCategoryId,
+      startDate: startDate,
+      endDate: endDate,
+      timeFilter: timeFilter,
+    );
+    List<ProductModel> eventsList = [];
+
+    if (eventsResponse != null) {
+      eventsList = eventsResponse[0];
+      loadedEvents = eventsList;
+    }
+    emit(EventsState.loaded(loadedEvents));
+  }
+
+  String formatDate(DateTime date) {
+    return DateFormat('yyyy-MM-dd').format(date);
+  }
+
+  String? getDayTimeType(DayTimeFilter dayTimeFilter) {
+    switch (dayTimeFilter) {
+      case DayTimeFilter.morning:
+        return "morning";
+      case DayTimeFilter.daytime:
+        return "daytime";
+      case DayTimeFilter.afternoon:
+        return "afternoon";
+      case DayTimeFilter.evening:
+        return "evening";
+      case DayTimeFilter.night:
+        return "night";
+      default:
+        return null;
+    }
   }
 }

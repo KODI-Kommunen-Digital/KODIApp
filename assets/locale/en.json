@@ -263,6 +263,7 @@
   "choose_table_message": "Please choose table",
   "choose_category": "Choose categories",
   "all_Categories": "All categories",
+  "all_sub_Categories": "All Sub-Categories",
   "choose_facilities": "Choose facilities",
   "tags": "Tags",
   "input_tags": "Input tags",
@@ -479,6 +480,7 @@
   "subcategory_sports": "Sports",
   "subcategory_day_topic": "Topic of the day",
   "subcategory_local": "Local",
+  "subcategory_road": "Roadworks/Traffic",
   "subcategory_club_news": "Club news",
   "subcategory_official_notification": "Official Notification",
   "subcategory_timeless_news": "Timeless News",
@@ -545,5 +547,14 @@
   "view_terms_of_use": "View terms of use",
   "verify_terms_of_use": "Verify that oyu have read our terms of use and that you accept them.",
   "must_verify_terms_of_use": "You must verify our terms of use to be able to use the app!",
-  "proceed": "Proceed"
+  "proceed": "Proceed",
+  "all_times_of_the_day": "All times of the day",
+  "morning_time": "Mornings, 6 a.m. - 12 p.m.",
+  "day_time": "Daytime, 6 a.m. - 6 p.m.",
+  "afternoon_time": "Afternoon, 12-6 p.m.",
+  "evening_time": "Evening, 6-10 p.m.",
+  "night_time": "At night, 10 p.m. - 6 a.m.",
+  "select_time_of_the_day": "Select time of the day",
+  "please_select_start_date_first": "Please select start date first",
+  "please_select_end_date_to_apply_filter": "Please select end date to apply filter"
 }

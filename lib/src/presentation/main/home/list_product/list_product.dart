@@ -83,7 +83,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           hasLocationFilter: true,
           currentLocation: selectedFilter?.currentLocation ?? [_selectedCityId],
           cities: AppBloc.discoveryCubit.location,
-          multipleCityFilter: true,
+          hasMultipleCityFilter: true,
           startAfterDate: selectedFilter?.startAfterDate
       );
     } else {
