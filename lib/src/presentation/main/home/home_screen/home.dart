@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!hasOpenedAppBefore) {
       await prefs.setBool('hasOpenedAppBefore', true);
       if (!mounted) return;
-      Navigator.pushNamed(context, Routes.welcomeScreen);
+      // Navigator.pushNamed(context, Routes.welcomeScreen);
     }
   }
 
@@ -96,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void connectivityInternet() {
-    Connectivity().onConnectivityChanged.listen((List<ConnectivityResult> result) {
+    Connectivity()
+        .onConnectivityChanged
+        .listen((List<ConnectivityResult> result) {
       AppBloc.homeCubit.onLoad(false);
     });
   }
@@ -234,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         String? minAppVersion}) {
                       if (display != null) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.2';
+                          latestAppStoreVersion = appStoreVersion ?? '1.0.0';
                         });
                       }
                     },
@@ -663,7 +665,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    context.read<HomeCubit>().sendToMatomo(id, link);
+    // context.read<HomeCubit>().sendToMatomo(id, link);
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(link));

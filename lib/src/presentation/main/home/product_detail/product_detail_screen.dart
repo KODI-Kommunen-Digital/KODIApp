@@ -11,7 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
+// import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
@@ -40,7 +40,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   final _productDetailCubit = ProductDetailCubit();
   Color? _iconColor = Colors.white;
   int currentImageIndex = 0;
-  AdDataModel? _adData;
+  // AdDataModel? _adData;
   int minWordsForAds = 0;
   int positionForAds = 0;
 
@@ -53,41 +53,41 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     super.initState();
     _scrollController.addListener(_onScroll);
     _productDetailCubit.onLoad(widget.item);
-    _loadAdData();
-    _checkShowAdWords();
+    // _loadAdData();
+    // _checkShowAdWords();
   }
 
-  void _loadAdData() async {
-    _adData = await ProductDetailCubit.loadAdData();
-    setState(() {});
-  }
+  // void _loadAdData() async {
+  //   _adData = await ProductDetailCubit.loadAdData();
+  //   setState(() {});
+  // }
 
-  void _checkShowAdWords() async {
-    try {
-      final remoteConfig = FirebaseRemoteConfig.instance;
-      await remoteConfig.setConfigSettings(RemoteConfigSettings(
-        fetchTimeout: const Duration(seconds: 10),
-        minimumFetchInterval: const Duration(seconds: 10),
-      ));
-      await remoteConfig.fetchAndActivate();
-      await remoteConfig.setDefaults({
-        'minWordsAds': 50,
-        'positionAds': 100,
-      });
-      int minWordsAds = remoteConfig.getInt('mininumWordsForAd');
-      int positionAds = remoteConfig.getInt('positionOfAds');
-      setState(() {
-        minWordsForAds = minWordsAds;
-        positionForAds = positionAds;
-      });
-    } catch (e, stackTrace) {
-      await Sentry.captureException(e, stackTrace: stackTrace);
-      setState(() {
-        minWordsForAds = 0;
-        positionForAds = 0;
-      });
-    }
-  }
+  // void _checkShowAdWords() async {
+  //   try {
+  //     final remoteConfig = FirebaseRemoteConfig.instance;
+  //     await remoteConfig.setConfigSettings(RemoteConfigSettings(
+  //       fetchTimeout: const Duration(seconds: 10),
+  //       minimumFetchInterval: const Duration(seconds: 10),
+  //     ));
+  //     await remoteConfig.fetchAndActivate();
+  //     await remoteConfig.setDefaults({
+  //       'minWordsAds': 50,
+  //       'positionAds': 100,
+  //     });
+  //     int minWordsAds = remoteConfig.getInt('mininumWordsForAd');
+  //     int positionAds = remoteConfig.getInt('positionOfAds');
+  //     setState(() {
+  //       minWordsForAds = minWordsAds;
+  //       positionForAds = positionAds;
+  //     });
+  //   } catch (e, stackTrace) {
+  //     await Sentry.captureException(e, stackTrace: stackTrace);
+  //     setState(() {
+  //       minWordsForAds = 0;
+  //       positionForAds = 0;
+  //     });
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -1046,23 +1046,23 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         int? insertPosition =
             words.length >= (positionForAds) ? positionForAds : words.length;
 
-        if (_adData != null && words.length > minWordsForAds) {
-          String adBanner = '''
-    <div style="position: relative; display: inline-block; width: 100%;">
-      <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
-        <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: 100%; display: block;">
-        <div style="position: absolute; top: 0; right: 0; color: white; padding: 4px 8px; font-size: 10px; font-weight: bold; z-index: 2; text-align: right; text-decoration: none;"> 
-          Anzeige
-        </div>
-      </a>
-    </div>
-    ''';
+        //     if (_adData != null && words.length > minWordsForAds) {
+        //       String adBanner = '''
+        // <div style="position: relative; display: inline-block; width: 100%;">
+        //   <a href="${_adData?.link}?isAd=true" style="text-decoration: none; display: inline-block; width: 100%;">
+        //     <img src="${Application.picturesURL}${_adData?.image}" alt="Ad Banner" style="width: 100%; max-height: 300px; height: 100%; display: block;">
+        //     <div style="position: absolute; top: 0; right: 0; color: white; padding: 4px 8px; font-size: 10px; font-weight: bold; z-index: 2; text-align: right; text-decoration: none;">
+        //       Anzeige
+        //     </div>
+        //   </a>
+        // </div>
+        // ''';
 
-          List<String> beforeAd = words.sublist(0, insertPosition);
-          List<String> afterAd = words.sublist(insertPosition);
-          modifiedDescription =
-              '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
-        }
+        //       List<String> beforeAd = words.sublist(0, insertPosition);
+        //       List<String> afterAd = words.sublist(insertPosition);
+        //       modifiedDescription =
+        //           '${beforeAd.join(' ')} $adBanner ${afterAd.join(' ')}';
+        //     }
 
         description = HtmlWidget(
           modifiedDescription,

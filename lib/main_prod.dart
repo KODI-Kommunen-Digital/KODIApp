@@ -23,7 +23,6 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -44,10 +43,7 @@ Future<void> main() async {
 
   await Upgrader.clearSavedSettings();
 
-  await MatomoTracker.instance.initialize(
-    siteId: '1',
-    url: 'https://63inside-app.matomo.cloud/matomo.php',
-  );
+  
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

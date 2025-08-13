@@ -241,7 +241,7 @@ class Routes {
           builder: (context) {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
-            
+
             return AddListingScreen(
               item: arguments['item'] as ProductModel?,
               isNewList: arguments['isNewList'] as bool,
@@ -367,15 +367,15 @@ class Routes {
           fullscreenDialog: true,
         );
 
-      case faq:
-        return MaterialPageRoute(
-          builder: (context) {
-            return BlocProvider(
-              create: (context) => FaqCubit(),
-              child: const FaqScreen(),
-            );
-          },
-        );
+      // case faq:
+      //   return MaterialPageRoute(
+      //     builder: (context) {
+      //       return BlocProvider(
+      //         create: (context) => FaqCubit(),
+      //         child: const FaqScreen(),
+      //       );
+      //     },
+      //   );
 
       case myGroups:
         return MaterialPageRoute(

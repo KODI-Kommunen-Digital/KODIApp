@@ -1,28 +1,20 @@
 {
     "status": "success",
     "data": [ 
+          {
+            "id": 1,
+            "name": "News",
+            "noOfSubcategories": 8,
+            "icon": "fas fa-newspaper",
+            "color": "#16A349",
+            "categoryType" : "category"
+        },
         {
             "id": 3,
             "name": "Events",
             "noOfSubcategories": 0,
             "icon": "far fa-calendar-check",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 1,
-            "name": "News",
-            "noOfSubcategories": 8,
-            "icon": "fas fa-newspaper",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 43,
-            "name": "Gastro",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-utensils",
-            "color": "#ECFB04",
+            "color": "#16A349",
             "categoryType" : "category"
         },
         {
@@ -30,23 +22,7 @@
             "name": "Vereine",
             "noOfSubcategories": 0,
             "icon": "far fa-handshake",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 500,
-            "name": "Shopping",
-            "noOfSubcategories": 0,                
-            "icon": "fas fa-cart-shopping",
-            "color": "#ECFB04",
-            "categoryType" : "category"
-        },
-        {
-            "id": 44,
-            "name": "Jobs",
-            "noOfSubcategories": 0,
-            "icon": "fas fa-briefcase",
-            "color": "#ECFB04",
+            "color": "#16A349",
             "categoryType" : "category"
         }
     ]

@@ -22,7 +22,6 @@ import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
@@ -52,10 +51,7 @@ Future<void> main() async {
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
 
-  await MatomoTracker.instance.initialize(
-    siteId: '1',
-    url: 'https://63inside-app.matomo.cloud/matomo.php',
-  );
+
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

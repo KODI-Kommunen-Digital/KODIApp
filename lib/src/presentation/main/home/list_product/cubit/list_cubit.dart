@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
+// import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -30,7 +30,7 @@ class ListCubit extends Cubit<ListState> {
   List listCity = [];
   bool isSearching = false;
   String? searchTerm;
-  int _adIndex = 0;
+  // int _adIndex = 0;
 
   Future<void> onLoad(cityId, int? subCategoryId) async {
     pageNo = 1;
@@ -68,31 +68,31 @@ class ListCubit extends Cubit<ListState> {
 
       bool shouldAddAds = !(categoryId == 43 && subCategoryId == 17);
 
-      if (shouldAddAds) {
-        // Fetch ads
-        List<AdDataModel> ads = await ListRepository.fetchAds();
-        if (ads.isNotEmpty) {
-          List<dynamic> combinedList = [];
-          int currentAdIndex = _adIndex;
-          int itemCounter = 0;
+      // if (shouldAddAds) {
+      //   // Fetch ads
+      //   List<AdDataModel> ads = await ListRepository.fetchAds();
+      //   if (ads.isNotEmpty) {
+      //     List<dynamic> combinedList = [];
+      //     int currentAdIndex = _adIndex;
+      //     int itemCounter = 0;
 
-          for (int i = 0; i < list.length; i++) {
-            combinedList.add(list[i]);
-            itemCounter++;
+      //     for (int i = 0; i < list.length; i++) {
+      //       combinedList.add(list[i]);
+      //       itemCounter++;
 
-            if (itemCounter == 9 && i + 1 < list.length) {
-              if (list[i + 1] is! AdDataModel) {
-                combinedList.add(ads[currentAdIndex]);
-                currentAdIndex = (currentAdIndex + 1) % ads.length;
-                itemCounter = 0;
-              }
-            }
-          }
+      //       if (itemCounter == 9 && i + 1 < list.length) {
+      //         if (list[i + 1] is! AdDataModel) {
+      //           combinedList.add(ads[currentAdIndex]);
+      //           currentAdIndex = (currentAdIndex + 1) % ads.length;
+      //           itemCounter = 0;
+      //         }
+      //       }
+      //     }
 
-          _adIndex = currentAdIndex;
-          list = combinedList;
-        }
-      }
+      //     _adIndex = currentAdIndex;
+      //     list = combinedList;
+      //   }
+      // }
 
       listLoaded = list;
       emit(ListStateLoaded(list, listCity));
@@ -161,33 +161,32 @@ class ListCubit extends Cubit<ListState> {
 
       bool shouldAddAds = !(categoryId == 43 && subCategoryId == 17);
 
-      if (shouldAddAds) {
-        // Fetch ads
-        List<AdDataModel> ads = await ListRepository.fetchAds();
-        if (ads.isNotEmpty) {
-          int currentAdIndex = _adIndex;
-          int itemCounter = 0;
+      // if (shouldAddAds) {
+      //   // Fetch ads
+      //   List<AdDataModel> ads = await ListRepository.fetchAds();
+      //   if (ads.isNotEmpty) {
+      //     int currentAdIndex = _adIndex;
+      //     int itemCounter = 0;
 
-          for (int i = 0; i < productList.length; i++) {
-            combinedList.add(productList[i]);
-            itemCounter++;
+      //     for (int i = 0; i < productList.length; i++) {
+      //       combinedList.add(productList[i]);
+      //       itemCounter++;
 
-            if (itemCounter == 9 && i + 1 < productList.length) {
-              if (productList[i + 1] is! AdDataModel) {
-                combinedList.add(ads[currentAdIndex]);
-                currentAdIndex = (currentAdIndex + 1) % ads.length;
-                itemCounter = 0;
-              }
-            }
-          }
+      //       if (itemCounter == 9 && i + 1 < productList.length) {
+      //         if (productList[i + 1] is! AdDataModel) {
+      //           combinedList.add(ads[currentAdIndex]);
+      //           currentAdIndex = (currentAdIndex + 1) % ads.length;
+      //           itemCounter = 0;
+      //         }
+      //       }
+      //     }
 
-          _adIndex = currentAdIndex;
-        } else {
-          combinedList.addAll(productList);
-        }
-      } else {
-        combinedList.addAll(productList);
-      }
+      //     _adIndex = currentAdIndex;
+      //   } else {
+      //     combinedList.addAll(productList);
+      //   }
+      // } else {
+      combinedList.addAll(productList);
 
       list.addAll(combinedList);
       emit(ListStateLoaded(list, listCity));

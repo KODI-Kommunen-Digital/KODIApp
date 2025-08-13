@@ -353,7 +353,8 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   String? getSubCategoryTranslation(dynamic subcategory) {
     final id = subcategory['id'];
-    if (categoryId == 1 || selectedCategory?.toLowerCase() == "news") {
+    if (subcategory['categoryId'] == 1 ||
+        selectedCategory?.toLowerCase() == "news") {
       Map<int, String> subCategories = ListCubit.getSubCategories();
       return subCategories[id] ?? subcategory['name'];
     }

@@ -1,8 +1,8 @@
-import 'dart:math';
+// import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
+// import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -18,8 +18,8 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
   List<FavoriteModel> favoritesList = [];
   bool isFavorite = false;
   UserModel? userDetail;
-  static int _adIndex = 0;
-  static final Random _random = Random();
+  // static int _adIndex = 0;
+  // static final Random _random = Random();
 
   void onLoad(ProductModel item) async {
     final int userId = await UserRepository.getLoggedUserId();
@@ -125,25 +125,25 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     }
   }
 
-  static Future<AdDataModel> loadAdData() async {
-    List<AdDataModel> ads = await ListRepository.fetchAds();
+  // static Future<AdDataModel> loadAdData() async {
+  //   List<AdDataModel> ads = await ListRepository.fetchAds();
 
-    if (ads.isEmpty) {
-      throw Exception("No ads available");
-    }
+  //   if (ads.isEmpty) {
+  //     throw Exception("No ads available");
+  //   }
 
-    if (_adIndex == 0) {
-      ads.shuffle(_random);
-    }
+  //   if (_adIndex == 0) {
+  //     ads.shuffle(_random);
+  //   }
 
-    AdDataModel selectedAd = ads[_adIndex];
+  //   AdDataModel selectedAd = ads[_adIndex];
 
-    _adIndex = (_adIndex + 1) % ads.length;
+  //   _adIndex = (_adIndex + 1) % ads.length;
 
-    return AdDataModel(
-      link: selectedAd.link,
-      image: selectedAd.image,
-      id: selectedAd.id,
-    );
-  }
+  //   return AdDataModel(
+  //     link: selectedAd.link,
+  //     image: selectedAd.image,
+  //     id: selectedAd.id,
+  //   );
+  // }
 }

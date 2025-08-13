@@ -1,15 +1,12 @@
 import 'package:bloc/bloc.dart';
 
 // ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
-import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
-import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
 import 'discovery_state.dart';
 
@@ -70,22 +67,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<void> saveCityId(int cityId) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
-    saveToMatomo(cityId);
-  }
-
-  Future<void> saveToMatomo(int cityId) async {
-    String? cityName;
-    if (cityId != 0) {
-      cityName =
-          location.firstWhereOrNull((element) => element.id == cityId)?.title;
-      if (cityName == null) {
-        logError('[MATOMO] Could not find name for cityId: $cityId');
-        return;
-      }
-    } else {
-      cityName = 'Alle-Orte';
-    }
-    ListRepository.saveEventToMatomo(type: MatomoType.city, name: cityName);
   }
 
   Future<String?> getCityLink() async {
@@ -137,36 +118,36 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
           imageLink: "4",
           arguments: 4,
           categoryId: 1),
-      CitizenServiceModel(
-          imageUrl: Images.service8,
-          imageLink: "8",
-          arguments: 8,
-          categoryId: 43),
-      CitizenServiceModel(
-          imageUrl: Images.service6,
-          imageLink: "6",
-          arguments: 6,
-          categoryId: 4),
-      CitizenServiceModel(
-          imageUrl: Images.service500,
-          imageLink: "500",
-          arguments: 500,
-          categoryId: 46),
-      CitizenServiceModel(
-          imageUrl: Images.service31,
-          imageLink: "31",
-          arguments: 31,
-          categoryId: 44),
-      CitizenServiceModel(
-          imageUrl: Images.service501,
-          imageLink: "501",
-          arguments: 501,
-          categoryId: 45),
-      CitizenServiceModel(
-          imageUrl: Images.service17,
-          imageLink: "17",
-          arguments: 17,
-          categoryId: 17),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service8,
+      //     imageLink: "8",
+      //     arguments: 8,
+      //     categoryId: 43),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service6,
+      //     imageLink: "6",
+      //     arguments: 6,
+      //     categoryId: 4),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service500,
+      //     imageLink: "500",
+      //     arguments: 500,
+      //     categoryId: 46),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service31,
+      //     imageLink: "31",
+      //     arguments: 31,
+      //     categoryId: 44),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service501,
+      //     imageLink: "501",
+      //     arguments: 501,
+      //     categoryId: 45),
+      // CitizenServiceModel(
+      //     imageUrl: Images.service17,
+      //     imageLink: "17",
+      //     arguments: 17,
+      //     categoryId: 17),
       // CitizenServiceModel(
       //     imageUrl: Images.service11,
       //     imageLink: "11",

@@ -53,12 +53,12 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.sixtythreeinside.app"
+        applicationId "de.wiesenburgmark.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 30
+        minSdkVersion 34
         targetSdkVersion flutter.targetSdkVersion
-        versionCode 7
+        versionCode 1
         versionName flutterVersionName
         //Change for Daniel
         multiDexEnabled true

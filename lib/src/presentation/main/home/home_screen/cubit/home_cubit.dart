@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:heidi/src/data/model/model_ad.dart';
+// import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -24,7 +24,7 @@ class HomeCubit extends Cubit<HomeState> {
   bool calledExternally = false;
   bool doesScroll = false;
   bool _isLoading = false;
-  int _adIndex = 0;
+  // int _adIndex = 0;
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -88,23 +88,23 @@ class HomeCubit extends Cubit<HomeState> {
       }
 
       // Fetch ads
-      List<AdDataModel> ads = await ListRepository.fetchAds();
+      // List<AdDataModel> ads = await ListRepository.fetchAds();
 
-      int currentAdIndex = _adIndex;
+      // int currentAdIndex = _adIndex;
 
-      List<dynamic> combinedRecent = [];
-      for (int i = 0; i < recent.length; i++) {
-        combinedRecent.add(recent[i]);
+      // List<dynamic> combinedRecent = [];
+      // for (int i = 0; i < recent.length; i++) {
+      //   combinedRecent.add(recent[i]);
 
-        if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
-          combinedRecent.add(ads[currentAdIndex]);
-          currentAdIndex = (currentAdIndex + 1) % ads.length;
-        }
-      }
+      //   if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
+      //     combinedRecent.add(ads[currentAdIndex]);
+      //     currentAdIndex = (currentAdIndex + 1) % ads.length;
+      //   }
+      // }
 
-      _adIndex = currentAdIndex;
+      // _adIndex = currentAdIndex;
 
-      recent = combinedRecent;
+      // recent = combinedRecent;
 
       // final categoryCountRequestResponse =
       //     await Api.requestCategoryCount(selectedCity?.id);
@@ -211,12 +211,7 @@ class HomeCubit extends Cubit<HomeState> {
     return categories;
   }
 
-  void sendToMatomo(int id, String website) {
-    ListRepository.saveEventToMatomo(type: MatomoType.ad, name: website, adId: id);
-  }
-
   Future<void> saveCityId(int cityId) async {
-    //Dont send to Matomo, because it is already sent in Discovery which is always being called
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
   }
@@ -267,23 +262,23 @@ class HomeCubit extends Cubit<HomeState> {
     }).toList();
 
     // Fetch ads
-    List<AdDataModel> ads = await ListRepository.fetchAds();
+    // List<AdDataModel> ads = await ListRepository.fetchAds();
 
-    int currentAdIndex = _adIndex;
+    // int currentAdIndex = _adIndex;
 
-    List<dynamic> combinedList = [];
-    for (int i = 0; i < newRecent.length; i++) {
-      combinedList.add(newRecent[i]);
+    // List<dynamic> combinedList = [];
+    // for (int i = 0; i < newRecent.length; i++) {
+    //   combinedList.add(newRecent[i]);
 
-      if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
-        combinedList.add(ads[currentAdIndex]);
-        currentAdIndex = (currentAdIndex + 1) % ads.length;
-      }
-    }
+    //   if ((i + 1) % 6 == 0 && ads.isNotEmpty) {
+    //     combinedList.add(ads[currentAdIndex]);
+    //     currentAdIndex = (currentAdIndex + 1) % ads.length;
+    //   }
+    // }
 
-    AppBloc.homeCubit._adIndex = currentAdIndex;
+    // AppBloc.homeCubit._adIndex = currentAdIndex;
 
-    recent.addAll(combinedList);
+    recent.addAll(newRecent);
 
     return recent;
   }

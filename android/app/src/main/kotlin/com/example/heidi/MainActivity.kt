@@ -1,4 +1,4 @@
-package com.sixtythreeinside.app
+package de.wiesenburgmark.app
 
 import io.flutter.embedding.android.FlutterActivity
 
