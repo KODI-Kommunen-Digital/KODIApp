@@ -6,6 +6,7 @@ import '../../presentation/main/home/forum/list_groups/cubit/list_groups_cubit.d
 class MultiFilter {
   final ProductFilter? currentProductEventFilter; //ListProduct filter
   final GroupFilter? currentForumGroupFilter; //Forum group filter
+  final DayTimeFilter? currentDayTimeFilter;
   final int? currentListingStatus; //Listing status in All Listings
   final int? currentCategory; //Listing category in ListProduct city
   final int? currentSubCategory; //Listing sub category in ListProduct city
@@ -13,33 +14,42 @@ class MultiFilter {
   final List<CategoryModel>? cities; //All cities
   final List<CategoryModel>? categories;
   final dynamic currentLocation; //Location IDs
-
+  final Map<int,String>? subCategoriesMap;
+  final Map<DayTimeFilter,String>? dayTimeMap;
   final bool hasListingStatusFilter;
   final bool hasForumGroupFilter;
   final bool hasProductEventFilter;
   final bool hasLocationFilter;
   final bool hasCategoryFilter;
   final bool hasSubCategoryFilter;
+  final bool hasDateRangeFilter;
+  final bool hasDayTimeFilter;
   final DateTime? startAfterDate;
-
-  final bool multipleCityFilter;
+  final DateTime? endAfterDate;
+  final bool hasMultipleCityFilter;
 
   MultiFilter(
       {this.currentLocation,
         this.cities,
         this.categories,
+        this.subCategoriesMap,
+        this.dayTimeMap,
+        this.currentDayTimeFilter,
         this.currentForumGroupFilter,
         this.currentListingStatus,
         this.currentProductEventFilter,
         this.currentCategory,
         this.currentSubCategory,
+        this.hasDayTimeFilter = false,
+        this.hasDateRangeFilter = false,
         this.hasListingStatusFilter = false,
         this.hasForumGroupFilter = false,
         this.hasProductEventFilter = false,
         this.hasLocationFilter = false,
         this.hasCategoryFilter = false,
-        this.multipleCityFilter = false,
+        this.hasMultipleCityFilter = false,
         this.hasSubCategoryFilter = false,
-        this.startAfterDate
+        this.startAfterDate,
+        this.endAfterDate
       });
 }

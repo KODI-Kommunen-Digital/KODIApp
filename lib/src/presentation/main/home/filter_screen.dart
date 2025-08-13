@@ -18,24 +18,37 @@ class _FilterScreenState extends State<FilterScreen> {
   int? currentCity;
   List<int> currentCities = [];
   int? currentCategory;
+  int? currentSubCategory;
   int? currentListingStatus;
   ProductFilter? currentProductEventFilter;
   GroupFilter? currentForumGroupFilter;
+  Map<int,String>? subCategoriesMap;
+   Map<DayTimeFilter,String>? dayTimeMap;
   DateTime? startAfterDate;
+  DateTime? endAfterDate;
+  DayTimeFilter? currentDayTimeFilter;
 
   @override
   void initState() {
     super.initState();
-    if (widget.multiFilter.multipleCityFilter) {
+    if (widget.multiFilter.hasMultipleCityFilter) {
       currentCities = widget.multiFilter.currentLocation.cast<int>();
     } else {
       currentCity = widget.multiFilter.currentLocation;
+    }
+    if(widget.multiFilter.hasSubCategoryFilter){
+      subCategoriesMap = widget.multiFilter.subCategoriesMap;
+    }
+    if(widget.multiFilter.hasDateRangeFilter) {
+      dayTimeMap = widget.multiFilter.dayTimeMap;
     }
     currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;
     currentForumGroupFilter = widget.multiFilter.currentForumGroupFilter;
     startAfterDate = widget.multiFilter.startAfterDate;
+    endAfterDate = widget.multiFilter.endAfterDate;
+    currentSubCategory = widget.multiFilter.currentSubCategory;
   }
 
   @override
@@ -45,32 +58,64 @@ class _FilterScreenState extends State<FilterScreen> {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("Filter"),
+        actions: [
+          IconButton(onPressed: () {
+            setState(() {
+              currentCity = 0;
+              startAfterDate = null;
+              endAfterDate = null;
+              currentSubCategory = null;
+              currentDayTimeFilter = null;
+            });
+          }, icon: const Icon(Icons.refresh))
+        ],
       ),
       body: SingleChildScrollView(
         child: PopScope(
           canPop: false,
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
             if (didPop) return;
-            Navigator.pop(
-                context,
-                MultiFilter(
-                    currentLocation: (widget.multiFilter.multipleCityFilter)
-                        ? currentCities
-                        : currentCity,
-                    currentProductEventFilter: currentProductEventFilter,
-                    cities: widget.multiFilter.cities,
-                    currentListingStatus: currentListingStatus,
-                    currentForumGroupFilter: currentForumGroupFilter,
-                    currentCategory: currentCategory,
-                    hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
-                    hasProductEventFilter:
-                        widget.multiFilter.hasProductEventFilter,
-                    hasLocationFilter: widget.multiFilter.hasLocationFilter,
-                    hasListingStatusFilter:
-                        widget.multiFilter.hasListingStatusFilter,
-                    hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
-                  startAfterDate: startAfterDate,
-                ));
+            if(startAfterDate!=null && endAfterDate ==null) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    Translate.of(context).translate(
+                        'please_select_end_date_to_apply_filter'),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              return;
+            } else {
+              Navigator.pop(
+                  context,
+                  MultiFilter(
+                      currentLocation: (widget.multiFilter.hasMultipleCityFilter)
+                          ? currentCities
+                          : currentCity,
+                      currentProductEventFilter: currentProductEventFilter,
+                      cities: widget.multiFilter.cities,
+                      currentListingStatus: currentListingStatus,
+                      currentForumGroupFilter: currentForumGroupFilter,
+                      currentCategory: currentCategory,
+                      hasForumGroupFilter: widget.multiFilter.hasForumGroupFilter,
+                      hasProductEventFilter:
+                      widget.multiFilter.hasProductEventFilter,
+                      hasLocationFilter: widget.multiFilter.hasLocationFilter,
+                      hasListingStatusFilter:
+                      widget.multiFilter.hasListingStatusFilter,
+                      hasCategoryFilter: widget.multiFilter.hasCategoryFilter,
+                      startAfterDate: startAfterDate,
+                      endAfterDate: endAfterDate,
+                      currentSubCategory: currentSubCategory,
+                      currentDayTimeFilter: currentDayTimeFilter,
+                      subCategoriesMap: subCategoriesMap,
+                      dayTimeMap: dayTimeMap,
+                      hasSubCategoryFilter:
+                      widget.multiFilter.hasSubCategoryFilter,
+                      hasDayTimeFilter: widget.multiFilter.hasDayTimeFilter,
+                      hasDateRangeFilter: widget.multiFilter.hasDateRangeFilter));
+            }
           },
           child: Column(
             children: [
@@ -78,12 +123,21 @@ class _FilterScreenState extends State<FilterScreen> {
                 ..._buildLocationFilter(),
               if (widget.multiFilter.hasProductEventFilter == true)
                 ..._buildProductEventFilter(),
+              if (widget.multiFilter.hasDateRangeFilter == true)
+                ..._buildDateRangeFilter(),
               if (widget.multiFilter.hasListingStatusFilter == true)
                 ..._buildListingStatusFilter(),
               if (widget.multiFilter.hasForumGroupFilter == true)
                 ..._buildForumGroupFilter(),
               if (widget.multiFilter.hasCategoryFilter == true)
                 ..._buildCategoryFilter(),
+              if (widget.multiFilter.hasSubCategoryFilter == true)
+                ..._buildSubCategoryFilter(),
+              if (widget.multiFilter.hasSubCategoryFilter == true)
+                ..._buildDayTimeFilter(),
+              const SizedBox(
+                height: 12,
+              ),
             ],
           ),
         ),
@@ -107,7 +161,7 @@ class _FilterScreenState extends State<FilterScreen> {
       Container(
         padding: const EdgeInsets.all(8.0),
         child: Wrap(spacing: 8.0, children: [
-          (widget.multiFilter.multipleCityFilter)
+          (widget.multiFilter.hasMultipleCityFilter)
               ? ChoiceChip(
                   label:
                       Text(Translate.of(context).translate('select_location')),
@@ -130,12 +184,13 @@ class _FilterScreenState extends State<FilterScreen> {
                   },
                 ),
           ...widget.multiFilter.cities!.map((city) {
-            return (widget.multiFilter.multipleCityFilter)
+            return (widget.multiFilter.hasMultipleCityFilter)
                 ? ChoiceChip(
                     label: Text(city.title),
                     selected: currentCities.contains(city.id),
                     onSelected: (selected) {
                       setState(() {
+
                         if (currentCities.contains(city.id)) {
                           currentCities.remove(city.id);
                         } else {
@@ -412,19 +467,234 @@ class _FilterScreenState extends State<FilterScreen> {
               });
             },
           ),
-          ...widget.multiFilter.categories!.map((category) {
-            return ChoiceChip(
-              label: Text(category.title),
-              selected: category.id == currentCategory,
-              onSelected: (selected) {
-                setState(() {
-                  currentCategory = category.id;
-                });
-              },
-            );
-          }),
+          if(widget.multiFilter.categories!=null)
+            ...widget.multiFilter.categories!.map((category) {
+              return ChoiceChip(
+                label: Text(category.title),
+                selected: category.id == currentCategory,
+                onSelected: (selected) {
+                  setState(() {
+                    currentCategory = category.id;
+                  });
+                },
+              );
+            }),
         ]),
       )
     ];
   }
+
+  List<Widget> _buildDateRangeFilter() {
+    return [
+      const SizedBox(height: 8),
+      Center(
+        child: Text(
+          Translate.of(context).translate('choose_time_period'),
+          style: Theme.of(context)
+              .textTheme
+              .titleMedium!
+              .copyWith(fontWeight: FontWeight.bold),
+        ),
+      ),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          /// Start date chip
+          ChoiceChip(
+            label: Text(
+              startAfterDate == null
+                  ? Translate.of(context).translate('start_date')
+                  : DateFormat('yyyy-MM-dd').format(startAfterDate!),
+            ),
+            selected: startAfterDate != null,
+            onSelected: (selected) async {
+              final pickedDate = await showDatePicker(
+                context: context,
+                initialDate: startAfterDate ?? DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+              );
+              if (pickedDate != null) {
+                setState(() {
+                  startAfterDate = pickedDate;
+                  currentProductEventFilter = ProductFilter.custom;
+
+                  if (endAfterDate != null &&
+                      endAfterDate!.isBefore(pickedDate)) {
+                    endAfterDate = null;
+                  }
+                });
+              }
+            },
+          ),
+
+          /// Clear start date
+          if (startAfterDate != null)
+            ChoiceChip(
+              label: Text(Translate.of(context).translate('clear_date')),
+              selected: false,
+              onSelected: (_) {
+                setState(() {
+                  startAfterDate = null;
+                  endAfterDate = null;
+                });
+              },
+            ),
+
+          /// End date chip
+          ChoiceChip(
+            label: Text(
+              endAfterDate == null
+                  ? Translate.of(context).translate('end_date')
+                  : DateFormat('yyyy-MM-dd').format(endAfterDate!),
+            ),
+            selected: endAfterDate != null,
+            onSelected: (selected) async {
+              if (startAfterDate == null) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      Translate.of(context).translate(
+                          'please_select_start_date_first'),
+                    ),
+                    backgroundColor: Colors.red,
+                  ),
+                );
+                return;
+              }
+              final pickedDate = await showDatePicker(
+                context: context,
+                initialDate: endAfterDate ?? startAfterDate!,
+                firstDate: startAfterDate!,
+                lastDate: DateTime(2100),
+              );
+              if (pickedDate != null) {
+                setState(() {
+                  endAfterDate = pickedDate;
+                });
+              }
+            },
+          ),
+
+          /// Clear end date
+          if (endAfterDate != null)
+            ChoiceChip(
+              label: Text(Translate.of(context).translate('clear_date')),
+              selected: false,
+              onSelected: (_) {
+                setState(() {
+                  endAfterDate = null;
+                });
+              },
+            ),
+        ]),
+      ),
+    ];
+  }
+
+  List<Widget> _buildSubCategoryFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+            Translate.of(context).translate('input_subcategory'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('all_sub_Categories')),
+            selected: 0 == currentSubCategory,
+            onSelected: (selected) {
+              setState(() {
+                if (currentSubCategory == 0) {
+                  currentSubCategory = null;
+                } else {
+                  currentSubCategory = 0;
+                }
+              });
+            },
+          ),
+          if (widget.multiFilter.subCategoriesMap != null)
+            ...widget.multiFilter.subCategoriesMap!.entries.map((entry) {
+              final subCategoryId = entry.key;    // int
+              final subCategoryName = entry.value; // String
+              return ChoiceChip(
+                label: Text(Translate.of(context).translate(subCategoryName)),
+                selected: subCategoryId == currentSubCategory,
+                onSelected: (selected) {
+                  setState(() {
+                    if (currentSubCategory == subCategoryId) {
+                      currentSubCategory = null;
+                    } else {
+                      currentSubCategory = subCategoryId;
+                    }
+                  });
+                },
+              );
+            }).toList(),
+        ]),
+      )
+    ];
+  }
+
+  List<Widget> _buildDayTimeFilter() {
+    return [
+      const SizedBox(
+        height: 8,
+      ),
+      Center(
+          child: Text(
+            Translate.of(context).translate('select_time_of_the_day'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
+          )),
+      Container(
+        padding: const EdgeInsets.all(8.0),
+        child: Wrap(spacing: 8.0, children: [
+          ChoiceChip(
+            label: Text(Translate.of(context).translate('all_times_of_the_day')),
+            selected: DayTimeFilter.all == currentDayTimeFilter,
+            onSelected: (selected) {
+              setState(() {
+                if(currentDayTimeFilter == DayTimeFilter.all) {
+                  currentDayTimeFilter = null;
+                } else {
+                  currentDayTimeFilter = DayTimeFilter.all;
+                }
+              });
+            },
+          ),
+          if (widget.multiFilter.dayTimeMap != null)
+            ...widget.multiFilter.dayTimeMap!.entries.map((entry) {
+              DayTimeFilter filterType = entry.key;
+              String filterName = entry.value;
+              return ChoiceChip(
+                label: Text(Translate.of(context).translate(filterName)),
+                selected: filterType == currentDayTimeFilter,
+                onSelected: (selected) {
+                  setState(() {
+                    if(currentDayTimeFilter == filterType) {
+                      currentDayTimeFilter = null;
+                    } else {
+                      currentDayTimeFilter = filterType;
+                    }
+                  });
+                },
+              );
+            }).toList(),
+        ]),
+      )
+    ];
+  }
+
+
 }
