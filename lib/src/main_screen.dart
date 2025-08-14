@@ -38,7 +38,6 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
-            WishListScreen(),
             AccountScreen()
           ],
         ),
@@ -66,10 +65,8 @@ class _MainScreenState extends State<MainScreen> {
         return 0;
       case Routes.discovery:
         return 1;
-      case Routes.wishList:
-        return 2;
       case Routes.account:
-        return 3;
+        return 2;
       default:
         return 0;
     }
@@ -116,10 +113,6 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.homeCubit.scrollUp();
         break;
 
-      case Routes.wishList:
-        AppBloc.wishListCubit.setDoesScroll(true);
-        AppBloc.wishListCubit.scrollUp();
-        break;
       case Routes.discovery:
         AppBloc.discoveryCubit.setDoesScroll(true);
         AppBloc.discoveryCubit.scrollUp();
@@ -146,12 +139,7 @@ class _MainScreenState extends State<MainScreen> {
           'services',
         );
         break;
-      case Routes.wishList:
-        iconData = Icons.bookmark_outline;
-        title = Translate.of(context).translate(
-          'wish_list',
-        );
-        break;
+
       case Routes.account:
         iconData = Icons.account_circle_outlined;
         title = Translate.of(context).translate(
@@ -229,7 +217,6 @@ class _MainScreenState extends State<MainScreen> {
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
             // const SizedBox(width: 56),
-            _buildMenuItem(Routes.wishList),
             _buildMenuItem(Routes.account),
           ],
         ),
