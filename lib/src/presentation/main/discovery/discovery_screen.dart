@@ -360,7 +360,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         CustomWebViewScreen.showAsBottomSheet(
             context: context,
             title: service.title,
-            url: 'https://www.awv-ot.de/App/');
+            url: 'https://www.awv-ot.de/tourenauskunft/stadt_gera_app.php');
         break;
       case "25":
 
