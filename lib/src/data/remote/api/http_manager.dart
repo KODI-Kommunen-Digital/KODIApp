@@ -51,6 +51,7 @@ class HTTPManager {
         _printRequest(options);
         return handler.next(options);
       }, onResponse: (response, handler) {
+        _printResponse(response);
         handler.next(response);
       }, onError: (error, handler) async {
         _logApiErrorInSentry(error);
@@ -283,6 +284,13 @@ class HTTPManager {
     } else {
       UtilLogger.log("DATA", options.data);
     }
+  }
+  ///response
+  void _printResponse(Response response) {
+    UtilLogger.log("AFTER RESPONSE =====================================");
+    UtilLogger.log("URL", response.requestOptions.uri);
+    UtilLogger.log("STATUSCODE", response.statusCode);
+    UtilLogger.log("DATA", response.data);
   }
 
   ///Error common handle
