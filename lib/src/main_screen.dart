@@ -4,6 +4,7 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
+import 'package:heidi/src/presentation/main/gis/gis.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -38,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
+            GIS(),
             AccountScreen()
           ],
         ),
@@ -52,6 +54,7 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
       case Routes.discovery:
+      case Routes.gis:
       case Routes.account:
         return false;
       default:
@@ -65,8 +68,10 @@ class _MainScreenState extends State<MainScreen> {
         return 0;
       case Routes.discovery:
         return 1;
-      case Routes.account:
+      case Routes.gis:
         return 2;
+      case Routes.account:
+        return 3;
       default:
         return 0;
     }
@@ -137,6 +142,13 @@ class _MainScreenState extends State<MainScreen> {
         iconData = Icons.touch_app_rounded;
         title = Translate.of(context).translate(
           'services',
+        );
+        break;
+
+      case Routes.gis:
+        iconData = Icons.pin_drop;
+        title = Translate.of(context).translate(
+          'gis',
         );
         break;
 
@@ -216,6 +228,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
+            _buildMenuItem(Routes.gis),
             // const SizedBox(width: 56),
             _buildMenuItem(Routes.account),
           ],
