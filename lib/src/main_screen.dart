@@ -6,7 +6,6 @@ import 'package:heidi/src/presentation/main/account/account_profile/account_scre
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/gis/gis.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
-import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
