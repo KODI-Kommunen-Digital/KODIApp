@@ -90,7 +90,7 @@ class EventsCubit extends Cubit<EventsState> {
       }
     }
 
-    Map<int, String> subcategories = ListCubit.getSubCategories();
+    Map<int, String> subcategories = ListCubit.getSubCategoriesEvents();
     Map<DayTimeFilter, String> dayTimeMap = ListCubit.getDayTimeFilters();
 
 
