@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -26,6 +27,7 @@ class _EventsScreenState extends State<EventsScreen> {
   bool isLoading = false;
   bool isSearching = false;
   int pageNo = 1;
+  MultiFilter? selectedFilter;
 
   @override
   void initState() {
@@ -117,6 +119,7 @@ class _EventsScreenState extends State<EventsScreen> {
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
                           context.read<EventsCubit>().onFilter(multiFilter, pageNo);
+                          multiFilter = multiFilter;
                         }
                       },
                       filter: context.read<EventsCubit>().filter!)),
@@ -126,7 +129,7 @@ class _EventsScreenState extends State<EventsScreen> {
         CupertinoSliverRefreshControl(
           onRefresh: _onRefresh,
         ),
-        _buildContent(events)
+        _buildContent(events, )
       ],
     );
   }
@@ -169,7 +172,7 @@ class _EventsScreenState extends State<EventsScreen> {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                  Translate.of(context).translate('list_is_empty'),
+                    (selectedFilter!=null && selectedFilter!.hasLocationFilter) ? Translate.of(context).translate('no_posts_in_the_selected_district') : Translate.of(context).translate('list_is_empty'),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
