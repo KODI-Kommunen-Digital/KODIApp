@@ -5,6 +5,8 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import '../../../utils/configs/image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -40,13 +42,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
-                Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
@@ -87,13 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
-                Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
                   "Registrieren Sie sich mit einem eigenen Profil und nutzen Sie weitere Vorteile, wie Lieblingsbeiträge zu favorisieren oder mit Ihren Liebsten zu teilen!",
                   style: Theme.of(context).textTheme.titleMedium,
@@ -158,13 +148,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
-                Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
                   "Die Gera-App sendet Ihnen Benachrichtigungen über Veranstaltungen in Ihrer Umgebung, Updates zu Ihren kommunalen Anträgen und Erinnerungen, wenn es Zeit ist, den Müll herauszubringen.\n Bitte bestätigen Sie, dass Sie mit dem Erhalt solcher Push-Benachrichtigungen einverstanden sind.",
                   style: Theme.of(context).textTheme.titleMedium,
@@ -230,13 +214,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
-                Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
                   "Bevor Sie beginnen, akzeptieren Sie bitte unsere Nutzungsbedingungen. Leider können Sie die Gera-App ohne Ihre Zustimmung nicht nutzen.",
                   style: Theme.of(context).textTheme.titleMedium,
@@ -330,6 +308,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         onDone: () {
           _onDone();
         },
+        globalFooter: Container(
+          color: Colors.white, // set background color
+          child: Image.asset(Images.skyline),
+        ),
       )),
     );
   }

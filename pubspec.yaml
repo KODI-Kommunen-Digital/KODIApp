@@ -63,6 +63,7 @@ dependencies:
   location: ^6.0.2
 
   ### ui
+  flutter_svg: ^2.2.0
   flutter_svprogresshud: ^1.0.1
   shimmer: ^3.0.0
   dotted_border: ^2.1.0
@@ -124,7 +125,7 @@ dependency_overrides:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/images/logo.png"
+  image_path: "assets/images/GeraFavicon.png"
   min_sdk_android: 21 # android min sdk min:16, default 21
   web:
     generate: true

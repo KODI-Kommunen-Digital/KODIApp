@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:heidi/src/utils/configs/image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -23,7 +24,8 @@ class SplashScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Image.asset(Images.logo),
+                  // Image.asset(Images.geraLogo),
+                  SvgPicture.asset(Images.geraLogoSVG,width: 100,height: 100,),
                 ],
               ),
             ),
