@@ -3,6 +3,8 @@ class Images {
   static const String intro2 = "assets/images/intro_2.png";
   static const String intro3 = "assets/images/intro_3.png";
   static const String logo = "assets/images/logo.png";
+  static const String logo_dark = "assets/images/dark_logo.jpg";
+  static const String logo_light = "assets/images/light_logo.jpg";
   static const String slider = "assets/images/slider.jpg";
   static const String whatsapp = "assets/images/whatsapp.png";
   static const String telegram = "assets/images/telegram.png";

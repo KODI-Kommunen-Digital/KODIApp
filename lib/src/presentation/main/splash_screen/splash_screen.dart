@@ -6,25 +6,25 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final logo = isDarkMode ? Images.logo_dark : Images.logo_light;
+    final backgroundColor = isDarkMode ? Colors.black : Colors.white;
+
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.black,
+          color: backgroundColor,
           border: Border.all(
-            color: Colors.black,
+            color: backgroundColor,
           ),
         ),
         child: Stack(
           alignment: Alignment.center,
           children: <Widget>[
             Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Image.asset(Images.logo),
-                ],
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 64.0),
+                child: Image.asset(logo),
               ),
             ),
             const Padding(

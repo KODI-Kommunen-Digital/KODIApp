@@ -11,6 +11,7 @@ import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
