@@ -31,7 +31,12 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     final hasShownSplash =
         prefBox.getKeyValue(Preferences.hasShownSplash, false);
 
-    if (hasShownSplash == false) {
+    emit(const ApplicationState.loading());
+    //prefBox.setKeyValue(Preferences.hasShownSplash, true);
+    Timer(const Duration(seconds: 4), () {
+      emit(const ApplicationState.loaded());
+    });
+    /*if (hasShownSplash == false) {
       emit(const ApplicationState.loading());
       prefBox.setKeyValue(Preferences.hasShownSplash, true);
       Timer(const Duration(seconds: 4), () {
@@ -39,7 +44,7 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       });
     } else {
       emit(const ApplicationState.loaded());
-    }
+    }*/
 
     if (oldDomain != '') {
       Application.domain = oldDomain;
