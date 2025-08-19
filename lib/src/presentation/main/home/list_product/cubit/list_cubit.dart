@@ -495,6 +495,32 @@ class ListCubit extends Cubit<ListState> {
     };
   }
 
+  static Map<int, String> getSubCategoriesEvents() {
+    return {
+      21: "Führungen",
+      22: "Kinder und Jugendliche",
+      23: "Familienangebote",
+      24: "Ausstellung",
+      25: "Aufführung",
+      26: "Comedy & Kabarett",
+      27: "Konzerte",
+      28: "Lesungen & Vorträge",
+      29: "Bildung & Wissenschaft",
+      30: "Theater",
+      31: "Sport",
+      32: "Feste & Open-Air Veranstaltungen",
+      33: "Seniorinnen und Senioren",
+      34: "Partys & Discos",
+      35: "Gesundheit",
+      36: "Tanzshow",
+      37: "Messen, Tagungen & Kongresse",
+      38: "Natur & Umwelt",
+      39: "SMARTCity",
+      40: "Geraer Volkshochschule Aenne Biermann",
+      41: "Märkte"
+    };
+  }
+
   static Map<DayTimeFilter, String> getDayTimeFilters() {
     return {
       DayTimeFilter.morning: "morning_time",
