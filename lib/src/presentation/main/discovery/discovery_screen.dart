@@ -247,10 +247,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         ? widget.services
         : widget.explore;
 
-    if (widget.isSearching && currentList.isEmpty) {
+    if (currentList.isEmpty) {
       return Center(
         child: Text(
-          Translate.of(context).translate('no_results_found'),
+          Translate.of(context).translate('no_services_available'),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       );

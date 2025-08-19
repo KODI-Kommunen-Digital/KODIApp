@@ -45,7 +45,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('http://116.203.1.1:3000/ImprintPage');
+                _makeAction('https://www.gera.de/rechtliches/impressum');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +62,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('http://116.203.1.1:3000/PrivacyPolicy');
+                _makeAction('https://www.gera.de/rechtliches/datenschutz');
               },
               trailing: Row(
                 children: <Widget>[

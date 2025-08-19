@@ -65,7 +65,7 @@
   "type_message": "Nachricht eingeben...",
   "location": "Standort",
   "apply": "Anwenden",
-  "contact_us": "Kontaktiere uns",
+  "contact_us": "Kontaktieren Sie uns",
   "send": "Senden",
   "name": "Name",
   "input_name": "Gib deinen Namen ein",
@@ -493,8 +493,8 @@
   "subcategory_official_notification": "Amtliche Bekanntmachungen",
   "subcategory_road": "Straßenarbeiten/Verkehr",
   "subcategory_timeless_news": "Zeitlose News",
-  "delete_Account": "Lösche den Account", 
-  "delete_Account_Confirmation": "Möchtest sie deinen Account wirklich löschen?",
+  "delete_Account": "Löschen Sie das Konto.",
+    "delete_Account_Confirmation": "Sind Sie sicher, dass Sie Ihr Konto löschen möchten?",
   "delete_account_success": "Konto erfolgreich gelöscht",
   "delete_account_fail": "Das Löschen des Kontos ist fehlgeschlagen. Bitte versuch es später.",
   "hselect_location":"Ort auswählen",
@@ -551,7 +551,7 @@
   "go_to_register" : "Zur Registrierung",
   "go_to_login" : "Zur Anmeldung",
   "view_terms_of_use": "Nutzungsbedingungen anzeigen",
-  "verify_terms_of_use": "Bestätige, dass sie unsere Bedingungen gelesen hast und zustimmst.",
+  "verify_terms_of_use": "Bestätigen Sie, dass Sie unsere Allgemeinen Geschäftsbedingungen gelesen haben und ihnen zustimmen.",
   "must_verify_terms_of_use": "Sie musst den Nutzungsbedingungen zustimmen, um die App nutzen zu können!",
   "proceed": "Weiter",
   "all_times_of_the_day": "Alle Tageszeiten",
@@ -562,6 +562,8 @@
   "night_time": "Nachts, 22-06 Uhr",
   "select_time_of_the_day": "Wählen Sie die Tageszeit",
   "please_select_start_date_first": "Bitte wählen Sie zuerst das Startdatum aus",
-  "please_select_end_date_to_apply_filter": "Bitte wählen Sie das Enddatum aus, um den Filter anzuwenden."
+  "please_select_end_date_to_apply_filter": "Bitte wählen Sie das Enddatum aus, um den Filter anzuwenden.",
+  "no_services_available" : "Keine Dienste verfügbar",
+  "no_posts_in_the_selected_district" : "Keine Beiträge im ausgewählten Bezirk"
 }
 

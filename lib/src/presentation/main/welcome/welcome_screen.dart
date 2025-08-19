@@ -53,7 +53,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                     children: [
                       const TextSpan(
-                          text: "Egal, ob zu Besuch oder zu Hause, dein "),
+                          text: "Ob auf Reisen oder zu Hause, Ihr "),
                       const TextSpan(
                         text: "Gera-",
                         style: TextStyle(color: Colors.red),
@@ -95,7 +95,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Registriere dich mit einem eigenen Profil und nutze so weitere Vorteile wie Lieblingsbeiträge zu favorisieren oder mit deinen Liebsten zu teilen!",
+                  "Registrieren Sie sich mit einem eigenen Profil und nutzen Sie weitere Vorteile, wie Lieblingsbeiträge zu favorisieren oder mit Ihren Liebsten zu teilen!",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -166,7 +166,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Die Gera-App sendet dir Mitterilungen bei Events in deiner Nähe, schickt dir zu deinen städtischen Anträgen Updates und erinnert dich, wenn der Müll raus muss.\nBitte bestätige, dass sie mit derartigen Push-Nachrichten einverstanden bist.",
+                  "Die Gera-App sendet Ihnen Benachrichtigungen über Veranstaltungen in Ihrer Umgebung, Updates zu Ihren kommunalen Anträgen und Erinnerungen, wenn es Zeit ist, den Müll herauszubringen.\n Bitte bestätigen Sie, dass Sie mit dem Erhalt solcher Push-Benachrichtigungen einverstanden sind.",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -238,7 +238,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Bevor es losgeht, akzeptiere bitte unsere Nutzungsbedingungen.\nOhne Zustimmungs kannst sie die Gera-App leider nicht nutzen.",
+                  "Bevor Sie beginnen, akzeptieren Sie bitte unsere Nutzungsbedingungen. Leider können Sie die Gera-App ohne Ihre Zustimmung nicht nutzen.",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
