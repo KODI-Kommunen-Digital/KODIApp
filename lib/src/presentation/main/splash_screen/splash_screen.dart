@@ -25,7 +25,7 @@ class SplashScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   // Image.asset(Images.geraLogo),
-                  SvgPicture.asset(Images.geraLogoSVG,width: 100,height: 100,),
+                  Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
                 ],
               ),
             ),

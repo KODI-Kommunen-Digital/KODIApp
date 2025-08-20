@@ -11,6 +11,8 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
+import '../../../../utils/configs/image.dart';
+
 class SignInScreen extends StatefulWidget {
   static const loginSuccessResult = "login_success";
 
@@ -64,6 +66,7 @@ class _SignInScreenState extends State<SignInScreen> {
             },
           ),
         ),
+        bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
       ),
     );
   }

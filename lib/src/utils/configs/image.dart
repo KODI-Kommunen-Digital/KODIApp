@@ -2,7 +2,8 @@ class Images {
   static const String intro1 = "assets/images/intro_1.png";
   static const String intro2 = "assets/images/intro_2.png";
   static const String intro3 = "assets/images/intro_3.png";
-  // static const String logo = "assets/images/logo.png";
+  static const String logo = "assets/images/logo.png";
+  static const String logoDark = "assets/images/logo_dark.png";
   static const String geraLogo = "assets/images/GeraFavicon.png";
   static const String geraLogoSVG = "assets/images/GeraFavicon.svg";
   static const String skyline = "assets/images/skyline.png";
