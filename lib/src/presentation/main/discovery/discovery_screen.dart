@@ -11,7 +11,8 @@ import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/presentation/main/discovery/sub_discovery_screen.dart';
 import 'package:heidi/src/utils/translate.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../utils/configs/image.dart';
 import '../../../utils/configs/routes.dart';
 import 'cubit/cubit.dart';
 
@@ -312,6 +313,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           },
         ),
       ),
+      bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
     );
   }
 

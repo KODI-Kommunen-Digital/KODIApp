@@ -15,6 +15,8 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 
+import '../../../../utils/configs/image.dart';
+
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
 
@@ -229,6 +231,8 @@ class _AccountLoadedState extends State<AccountLoaded> {
             ),
           ),
         ),
+        bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
+
       );
     });
   }
