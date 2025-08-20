@@ -119,7 +119,7 @@ class _EventsScreenState extends State<EventsScreen> {
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
                           context.read<EventsCubit>().onFilter(multiFilter, pageNo);
-                          multiFilter = multiFilter;
+                          selectedFilter = multiFilter;
                         }
                       },
                       filter: context.read<EventsCubit>().filter!)),
@@ -172,7 +172,12 @@ class _EventsScreenState extends State<EventsScreen> {
               Padding(
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
-                    (selectedFilter!=null && selectedFilter!.hasLocationFilter) ? Translate.of(context).translate('no_posts_in_the_selected_district') : Translate.of(context).translate('list_is_empty'),
+                  (selectedFilter != null &&
+                          selectedFilter!.hasLocationFilter &&
+                          selectedFilter!.currentLocation != 0)
+                      ? Translate.of(context)
+                          .translate('no_posts_in_the_selected_district')
+                      : Translate.of(context).translate('list_is_empty'),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
