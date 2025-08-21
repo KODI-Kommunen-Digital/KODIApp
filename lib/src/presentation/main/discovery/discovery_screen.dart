@@ -58,42 +58,42 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             (widget.type == DiscoveryType.services)
                 ? 'cust_services'
                 : 'discover')),
-        actions: [
-          BlocConsumer<DiscoveryCubit, DiscoveryState>(
-            listener: (context, state) {},
-            builder: (context, state) => state.maybeWhen(
-                loaded: (services, explore) => Row(
-                  children: [
-                    AppFilterButton(
-                      multiFilter: MultiFilter(
-                        hasLocationFilter: true,
-                        currentLocation:
-                        context.read<DiscoveryCubit>().currentCity ?? 0,
-                        cities: context.read<DiscoveryCubit>().location,
-                      ),
-                      filterCallBack: (filter) async {
-                        if (filter.currentLocation != null) {
-                          context
-                              .read<DiscoveryCubit>()
-                              .onLocationFilter(filter.currentLocation!, true);
-                        }
-                      },
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          _searchServices();
-                        },
-                        icon: Icon(
-                          Icons.search,
-                          color:
-                          Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
-                        ))
-                  ],
-                ),
-                orElse: () => Container()),
-          )
-        ],
+        // actions: [
+        //   BlocConsumer<DiscoveryCubit, DiscoveryState>(
+        //     listener: (context, state) {},
+        //     builder: (context, state) => state.maybeWhen(
+        //         loaded: (services, explore) => Row(
+        //           children: [
+        //             AppFilterButton(
+        //               multiFilter: MultiFilter(
+        //                 hasLocationFilter: true,
+        //                 currentLocation:
+        //                 context.read<DiscoveryCubit>().currentCity ?? 0,
+        //                 cities: context.read<DiscoveryCubit>().location,
+        //               ),
+        //               filterCallBack: (filter) async {
+        //                 if (filter.currentLocation != null) {
+        //                   context
+        //                       .read<DiscoveryCubit>()
+        //                       .onLocationFilter(filter.currentLocation!, true);
+        //                 }
+        //               },
+        //             ),
+        //             IconButton(
+        //                 onPressed: () {
+        //                   _searchServices();
+        //                 },
+        //                 icon: Icon(
+        //                   Icons.search,
+        //                   color:
+        //                   Theme.of(context).textTheme.bodyLarge?.color ??
+        //                       Colors.white,
+        //                 ))
+        //           ],
+        //         ),
+        //         orElse: () => Container()),
+        //   )
+        // ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
         listener: (context, state) {
