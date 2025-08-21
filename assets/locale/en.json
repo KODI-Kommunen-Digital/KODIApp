@@ -545,7 +545,7 @@
   "go_to_register": "Go to Sign Up",
   "go_to_login" : "Go to Sign In",
   "view_terms_of_use": "View terms of use",
-  "verify_terms_of_use": "Verify that oyu have read our terms of use and that you accept them.",
+  "verify_terms_of_use": "Please confirm our terms of use. This allows us to provide you with a secure and reliable app.",
   "must_verify_terms_of_use": "You must verify our terms of use to be able to use the app!",
   "proceed": "Proceed",
   "all_times_of_the_day": "All times of the day",
