@@ -32,18 +32,24 @@ class _WishListScreenState extends State<WishListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<WishListCubit, WishListState>(
-      listener: (context, state) {
-        state.maybeWhen(
-          error: (msg) => ScaffoldMessenger.of(context)
-              .showSnackBar(SnackBar(content: Text(msg))),
-          orElse: () {},
-        );
-      },
-      builder: (context, state) => state.maybeWhen(
-        loading: () => const WishListLoading(),
-        loaded: (favoritesList) => WishListLoaded(favoritesList: favoritesList),
-        orElse: () => ErrorWidget('Failed to load Accounts.'),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(Translate.of(context).translate('wish_list')),
+      ),
+      body: BlocConsumer<WishListCubit, WishListState>(
+        listener: (context, state) {
+          state.maybeWhen(
+            error: (msg) => ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(content: Text(msg))),
+            orElse: () {},
+          );
+        },
+        builder: (context, state) => state.maybeWhen(
+          loading: () => const WishListLoading(),
+          loaded: (favoritesList) => WishListLoaded(favoritesList: favoritesList),
+          orElse: () => ErrorWidget('Failed to load Accounts.'),
+        ),
       ),
     );
   }
@@ -88,12 +94,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(Translate.of(context).translate('wish_list')),
-      ),
-      body: RefreshIndicator(
+    return  RefreshIndicator(
         onRefresh: _onRefresh,
         child: Stack(
           children: [
@@ -253,8 +254,7 @@ class _WishListLoadedState extends State<WishListLoaded> {
               ),
           ],
         ),
-      ),
-    );
+      );
   }
 
   Future<void> _onRefresh() async {
