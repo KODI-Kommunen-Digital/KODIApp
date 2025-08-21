@@ -1,0 +1,2 @@
+C:/Users/fiftyfivetech/AndroidStudioProjects/flutterFlow/KODIApp/android/app/.cxx/RelWithDebInfo/4jm5w4o5/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/fiftyfivetech/AndroidStudioProjects/flutterFlow/KODIApp/android/app/.cxx/RelWithDebInfo/4jm5w4o5/armeabi-v7a/CMakeFiles/rebuild_cache.dir
