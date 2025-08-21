@@ -558,5 +558,7 @@
   "please_select_start_date_first": "Please select start date first",
   "please_select_end_date_to_apply_filter": "Please select end date to apply filter",
   "no_services_available": "No services available",
-  "no_posts_in_the_selected_district": "No posts in the selected district"
+  "no_posts_in_the_selected_district": "No posts in the selected district",
+  "from_date": "From Date",
+  "to_date": "To Date"
 }

@@ -346,7 +346,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             //     : _buildCategory(AppBloc.homeCubit
                             //         .getCategoriesWithoutHidden(
                             //             category ?? [])),
-                            _buildLocation(location),
+                            // _buildLocation(location),
                             _buildRecent(recent, selectedCityId, location),
                             if (isLoading)
                               const CircularProgressIndicator.adaptive(),
