@@ -53,18 +53,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     style: Theme.of(context).textTheme.titleLarge,
                     children: [
                       const TextSpan(
-                          text: "Ob auf Reisen oder zu Hause, Ihr "),
+                          text: "Willkommen in deiner Gera City-App!\n"),
+                      const TextSpan(
+                          text: "Die Stadt in deiner Tasche – hier beginnt dein "),
                       const TextSpan(
                         text: "Gera-",
                         style: TextStyle(color: Colors.red),
                       ),
                       TextSpan(
-                        text: "Gefühl",
+                        text: "Gefühl:",
                         style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                       const TextSpan(
                         text:
-                            " beginnt genau hier - personalisiert und voller Inspiration.",
+                            " persönlich, aktuell und voller Inspiration.",
                       ),
                     ],
                   ),
@@ -95,7 +97,22 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Registrieren Sie sich mit einem eigenen Profil und nutzen Sie weitere Vorteile, wie Lieblingsbeiträge zu favorisieren oder mit Ihren Liebsten zu teilen!",
+                  "Registriere dich und sichere dir noch mehr Vorteile:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Eigene Veranstaltungen speichern",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "•  Push-Benachrichtigungen zu deinen zugeschnittenen Inhalten",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Und viel mehr!",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -166,7 +183,32 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Die Gera-App sendet Ihnen Benachrichtigungen über Veranstaltungen in Ihrer Umgebung, Updates zu Ihren kommunalen Anträgen und Erinnerungen, wenn es Zeit ist, den Müll herauszubringen.\n Bitte bestätigen Sie, dass Sie mit dem Erhalt solcher Push-Benachrichtigungen einverstanden sind.",
+                  "Bleib immer auf dem Laufenden!",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Die App informiert dich über:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Veranstaltungen (in deiner Nähe)",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Updates zu deinen Anträgen (später, da dies noch nicht als Funktion vorhanden ist)",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Erinnerungen zur Müllabfuhr",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Aktuelle Pressemitteilungen",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -205,7 +247,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           const Expanded(
                               child: Text(
-                            "Ich möchte bei für mich wichtigen Infos benachrichtigt werden.",
+                            "Bitte bestätige, dass du Push-Benachrichtigungen erhalten möchtest.",
                           )),
                         ],
                       ),
@@ -238,7 +280,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       .copyWith(fontSize: 90),
                 ),
                 Text(
-                  "Bevor Sie beginnen, akzeptieren Sie bitte unsere Nutzungsbedingungen. Leider können Sie die Gera-App ohne Ihre Zustimmung nicht nutzen.",
+                  "Bevor es losgeht",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
