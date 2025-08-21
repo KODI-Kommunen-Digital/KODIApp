@@ -341,7 +341,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-        Translate.of(context).translate('choose_time_period'),
+        Translate.of(context).translate('time_of_day'),
         style: Theme.of(context)
             .textTheme
             .titleMedium!
@@ -489,7 +489,7 @@ class _FilterScreenState extends State<FilterScreen> {
       const SizedBox(height: 8),
       Center(
         child: Text(
-          Translate.of(context).translate('choose_time_period'),
+          Translate.of(context).translate('time_of_day'),
           style: Theme.of(context)
               .textTheme
               .titleMedium!
@@ -503,7 +503,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ChoiceChip(
             label: Text(
               startAfterDate == null
-                  ? Translate.of(context).translate('start_date')
+                  ? Translate.of(context).translate('from_date')
                   : DateFormat('yyyy-MM-dd').format(startAfterDate!),
             ),
             selected: startAfterDate != null,
@@ -545,7 +545,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ChoiceChip(
             label: Text(
               endAfterDate == null
-                  ? Translate.of(context).translate('end_date')
+                  ? Translate.of(context).translate('to_date')
                   : DateFormat('yyyy-MM-dd').format(endAfterDate!),
             ),
             selected: endAfterDate != null,
@@ -599,7 +599,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('input_subcategory'),
+            Translate.of(context).translate('input_category'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
