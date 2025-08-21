@@ -651,7 +651,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('select_time_of_the_day'),
+            Translate.of(context).translate('time_of_day'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!

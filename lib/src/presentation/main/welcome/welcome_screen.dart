@@ -262,7 +262,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 12,
                 ),
                 Container(
-                  height: screenHeight / 15,
+                  // height: screenHeight / 15,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.7),

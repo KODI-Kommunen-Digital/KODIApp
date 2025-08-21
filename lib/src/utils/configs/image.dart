@@ -6,6 +6,7 @@ class Images {
   static const String logoDark = "assets/images/logo_dark.png";
   static const String geraLogo = "assets/images/gera_icon.png";
   static const String geraLogoSVG = "assets/images/GeraFavicon.svg";
+  static const String compass = "assets/images/compass.png";
   static const String skyline = "assets/images/skyline.png";
   static const String slider = "assets/images/slider.jpg";
   static const String whatsapp = "assets/images/whatsapp.png";
