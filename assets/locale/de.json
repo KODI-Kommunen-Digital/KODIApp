@@ -565,7 +565,11 @@
   "please_select_end_date_to_apply_filter": "Bitte wähle ein Enddatum aus",
   "no_services_available" : "Keine Dienste verfügbar",
   "no_posts_in_the_selected_district" : "Bitte wählen Sie ein Enddatum aus.",
+  "no_further_data":"Keine weiteren Daten",
   "from_date": "Von Datum",
-  "to_date": "Bis Datum"
+  "to_date": "Bis Datum",
+  "time_period": "Zeitraum",
+  "clear_date": "Datum löschen"
+
 }
 
