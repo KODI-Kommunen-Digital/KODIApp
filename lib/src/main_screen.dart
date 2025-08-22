@@ -185,7 +185,7 @@ class _MainScreenState extends State<MainScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           (iconData is String)?
-            Image.asset(iconData,height: 20,width: 20,color: color,):
+            Image.asset(iconData,height: 20,width: 20,color: color ?? (Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white),):
             Icon(
               iconData!,
               color: color,

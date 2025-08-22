@@ -530,6 +530,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
           /// Clear start date
           if (startAfterDate != null)
+
             ChoiceChip(
               label: Text(Translate.of(context).translate('clear_date')),
               selected: false,
@@ -651,7 +652,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('time_of_day'),
+            Translate.of(context).translate('time_period'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
