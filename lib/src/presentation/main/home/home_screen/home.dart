@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
   bool isLoading = false;
+  bool _hasReachedRecentEnd = false;
   bool categoryLoading = false;
   bool isRefreshLoader = false;
   String? banner;
@@ -117,31 +118,48 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
+      if (_scrollController.position.pixels != 0 &&
+          !isLoading &&
+          !_hasReachedRecentEnd) {
         setState(() {
           isLoading = true;
         });
+
+        final previousLength = recent?.length ?? 0;
         if (!isSearching) {
-          recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-            setState(() {
-              isLoading = false;
-            });
-          }).catchError(
-            (error, stackTrace) async {
+          try {
+            final newList = await AppBloc.homeCubit.newListings(++pageNo);
+            if (mounted) {
+              setState(() {
+                if (newList.length == previousLength) {
+                  _hasReachedRecentEnd = true;
+                }
+                recent = newList;
+                isLoading = false;
+              });
+            }
+          } catch (error, stackTrace) {
+            if (mounted) {
               setState(() {
                 isLoading = false;
               });
-              logError('Error loading new listings: $error');
-              await Sentry.captureException(error, stackTrace: stackTrace);
-            },
-          );
+            }
+            logError('Error loading new listings: $error');
+            await Sentry.captureException(error, stackTrace: stackTrace);
+          }
         } else {
-          recent = await context
+          final newList = await context
               .read<HomeCubit>()
               .searchListing(searchTerm, ++pageNo);
-          setState(() {
-            isLoading = false;
-          });
+          if (mounted) {
+            setState(() {
+              if (newList.length == previousLength) {
+                _hasReachedRecentEnd = true;
+              }
+              recent = newList;
+              isLoading = false;
+            });
+          }
         }
       }
     }
@@ -162,6 +180,7 @@ class _HomeScreenState extends State<HomeScreen> {
     await AppBloc.homeCubit.onLoad(true);
     setState(() {
       pageNo = 1;
+      _hasReachedRecentEnd = false;
     });
   }
 
@@ -371,6 +390,7 @@ class _HomeScreenState extends State<HomeScreen> {
       pageNo = 1;
       isSearching = true;
       searchTerm = searchResult.trim();
+      _hasReachedRecentEnd = false;
       setState(() {
         recent = [];
       });
@@ -382,6 +402,7 @@ class _HomeScreenState extends State<HomeScreen> {
       pageNo = 1;
       isSearching = false;
       searchTerm = "";
+      _hasReachedRecentEnd = false;
       await context.read<HomeCubit>().onLoad(false);
     }
   }
@@ -928,6 +949,16 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: content,
         ),
+        if (_hasReachedRecentEnd && recent != null && recent.isNotEmpty)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                Translate.of(context).translate('no_further_data'),
+                style: Theme.of(context).textTheme.bodySmall,
+              ),
+            ),
+          ),
       ],
     );
   }

@@ -560,5 +560,6 @@
   "no_services_available": "No services available",
   "no_posts_in_the_selected_district": "No posts in the selected district",
   "from_date": "From Date",
-  "to_date": "To Date"
+  "to_date": "To Date",
+  "no_further_data": "No further data"
 }
