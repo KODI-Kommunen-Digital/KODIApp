@@ -567,6 +567,9 @@
   "no_posts_in_the_selected_district" : "Bitte wähle ein Enddatum aus",
   "no_further_data":"Keine weiteren Daten",
   "from_date": "Von Datum",
-  "to_date": "Bis Datum"
+  "to_date": "Bis Datum",
+  "time_period": "Zeitraum",
+  "clear_date": "Datum löschen"
+
 }
 

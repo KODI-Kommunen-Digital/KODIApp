@@ -532,7 +532,7 @@
   "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
   "openSettings" : "Open Settings",
   "enableNotification": "Enable Notifications",
-  "choose_time_period": "Choose time period",
+  "time_period": "Time period",
   "choose_listing_status": "Choose listing status",
   "choose_forum": "Choose forum",
   "all": "All",
@@ -561,5 +561,6 @@
   "no_posts_in_the_selected_district": "No posts in the selected district",
   "from_date": "From Date",
   "to_date": "To Date",
-  "no_further_data": "No further data"
+  "no_further_data": "No further data",
+  "clear_date": "Clear Date"
 }
