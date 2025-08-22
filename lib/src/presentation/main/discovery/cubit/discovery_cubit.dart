@@ -139,7 +139,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         arguments: 18,
       ),
       CitizenServiceModel(
-        title: "Stadt entdecken",
+        title: "Stadt Touren",
         imageUrl: Images.service19,
         imageLink: "19",
         arguments: 19,

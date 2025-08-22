@@ -562,9 +562,9 @@
   "night_time": "Nachts, 22-06 Uhr",
   "select_time_of_the_day": "Wählen Sie die Tageszeit",
   "please_select_start_date_first": "Bitte wählen Sie zuerst das Startdatum aus",
-  "please_select_end_date_to_apply_filter": "Bitte wählen Sie das Enddatum aus, um den Filter anzuwenden.",
+  "please_select_end_date_to_apply_filter": "Bitte wähle ein Enddatum aus",
   "no_services_available" : "Keine Dienste verfügbar",
-  "no_posts_in_the_selected_district" : "Bitte wähle ein Enddatum aus",
+  "no_posts_in_the_selected_district" : "Bitte wählen Sie ein Enddatum aus.",
   "from_date": "Von Datum",
   "to_date": "Bis Datum"
 }
