@@ -8,6 +8,8 @@ import 'package:introduction_screen/introduction_screen.dart';
 import '../../../utils/configs/image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../../cubit/app_bloc.dart';
+
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
 
@@ -370,7 +372,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     } else {
       final prefs = await Preferences.openBox();
       await prefs.setBool('hasOpenedAppBefore', true);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      AppBloc.applicationCubit.goToMainScreen();
     }
   }
 

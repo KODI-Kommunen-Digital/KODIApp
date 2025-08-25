@@ -73,19 +73,19 @@ class _HomeScreenState extends State<HomeScreen> {
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
-    checkFirstTime();
+    // checkFirstTime();
   }
 
-  Future<void> checkFirstTime() async {
-    final prefs = await Preferences.openBox();
-    final hasOpenedAppBefore =
-        prefs.getBool('hasOpenedAppBefore', defaultValue: false);
-
-    if (!hasOpenedAppBefore) {
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.welcomeScreen);
-    }
-  }
+  // Future<void> checkFirstTime() async {
+  //   final prefs = await Preferences.openBox();
+  //   final hasOpenedAppBefore =
+  //       prefs.getBool('hasOpenedAppBefore', defaultValue: false);
+  //
+  //   if (!hasOpenedAppBefore) {
+  //     if (!mounted) return;
+  //     Navigator.pushNamed(context, Routes.welcomeScreen);
+  //   }
+  // }
 
   Future<void> getIgnoreAppVersion() async {
     String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
