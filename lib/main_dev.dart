@@ -10,6 +10,7 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
+import 'package:heidi/src/presentation/main/welcome/welcome_screen.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -124,6 +125,9 @@ class _HeidiAppState extends State<HeidiApp> {
                     home: Scaffold(
                       body: BlocBuilder<ApplicationCubit, ApplicationState>(
                         builder: (context, state) {
+                          if (state == const ApplicationState.onboardingLoaded()) {
+                            return const WelcomeScreen();
+                          }
                           if (state == const ApplicationState.loaded()) {
                             return const MainScreen();
                           }

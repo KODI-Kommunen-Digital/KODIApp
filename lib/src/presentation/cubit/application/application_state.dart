@@ -8,5 +8,7 @@ class ApplicationState with _$ApplicationState {
 
   const factory ApplicationState.loaded() = ApplicationLoaded;
 
+  const factory ApplicationState.onboardingLoaded() = ApplicationOnBoardingLoaded;
+
   const factory ApplicationState.error() = ApplicationError;
 }
