@@ -18,6 +18,7 @@ import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
+import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
@@ -945,9 +946,12 @@ class _HomeScreenState extends State<HomeScreen> {
           Center(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ElevatedButton(
+              child: AppButton(
+                Translate.of(context).translate('more_posts'),
+                mainAxisSize: MainAxisSize.min,
+                type: ButtonType.normal,
+                size: ButtonSize.small,
                 onPressed: _loadMoreRecent,
-                child: Text(Translate.of(context).translate('more_posts')),
               ),
             ),
           ),
