@@ -40,6 +40,9 @@ class _FilterScreenState extends State<FilterScreen> {
     if(widget.multiFilter.hasDateRangeFilter) {
       dayTimeMap = widget.multiFilter.dayTimeMap;
     }
+    if(widget.multiFilter.hasDayTimeFilter) {
+      currentDayTimeFilter = widget.multiFilter.currentDayTimeFilter;
+    }
     currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
     currentListingStatus = widget.multiFilter.currentListingStatus;

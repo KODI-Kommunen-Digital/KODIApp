@@ -173,8 +173,7 @@ class _EventsScreenState extends State<EventsScreen> {
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
                   (selectedFilter != null &&
-                          selectedFilter!.hasLocationFilter &&
-                          selectedFilter!.currentLocation != 0)
+                      (selectedFilter!.hasMultipleCityFilter && selectedFilter!.selectedCities![0]!=0))
                       ? Translate.of(context)
                           .translate('no_posts_in_the_selected_district')
                       : Translate.of(context).translate('currently_no_events_available'),
