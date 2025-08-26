@@ -585,7 +585,7 @@ class _ListLoadedState extends State<ListLoaded> {
                   Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      Translate.of(context).translate('list_is_empty'),
+                      Translate.of(context).translate('currently_no_events_available'),
                       style: Theme.of(context).textTheme.bodyLarge,
                     ),
                   ),

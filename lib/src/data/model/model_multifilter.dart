@@ -27,6 +27,7 @@ class MultiFilter {
   final DateTime? startAfterDate;
   final DateTime? endAfterDate;
   final bool hasMultipleCityFilter;
+  final List<int>? selectedCities;
 
   MultiFilter(
       {this.currentLocation,
@@ -50,6 +51,7 @@ class MultiFilter {
         this.hasMultipleCityFilter = false,
         this.hasSubCategoryFilter = false,
         this.startAfterDate,
-        this.endAfterDate
+        this.endAfterDate,
+        this.selectedCities
       });
 }

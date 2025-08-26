@@ -31,10 +31,8 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.multiFilter.hasMultipleCityFilter) {
-      currentCities = widget.multiFilter.currentLocation.cast<int>();
-    } else {
-      currentCity = widget.multiFilter.currentLocation;
+    if (widget.multiFilter.hasMultipleCityFilter|| widget.multiFilter.hasLocationFilter) {
+      currentCities = widget.multiFilter.selectedCities??[0];
     }
     if(widget.multiFilter.hasSubCategoryFilter){
       subCategoriesMap = widget.multiFilter.subCategoriesMap;
@@ -49,6 +47,7 @@ class _FilterScreenState extends State<FilterScreen> {
     startAfterDate = widget.multiFilter.startAfterDate;
     endAfterDate = widget.multiFilter.endAfterDate;
     currentSubCategory = widget.multiFilter.currentSubCategory;
+    currentCities = widget.multiFilter.selectedCities ?? [0];
   }
 
   @override
@@ -62,6 +61,7 @@ class _FilterScreenState extends State<FilterScreen> {
           IconButton(onPressed: () {
             setState(() {
               currentCity = 0;
+              currentCities = [0];
               startAfterDate = null;
               endAfterDate = null;
               currentSubCategory = null;
@@ -114,7 +114,10 @@ class _FilterScreenState extends State<FilterScreen> {
                       hasSubCategoryFilter:
                       widget.multiFilter.hasSubCategoryFilter,
                       hasDayTimeFilter: widget.multiFilter.hasDayTimeFilter,
-                      hasDateRangeFilter: widget.multiFilter.hasDateRangeFilter));
+                      hasDateRangeFilter: widget.multiFilter.hasDateRangeFilter,
+                      hasMultipleCityFilter: widget.multiFilter.hasMultipleCityFilter,
+                      selectedCities: currentCities
+                  ));
             }
           },
           child: Column(

@@ -524,14 +524,17 @@ class Api {
 
   ///Get Filter list
   static Future<ResultApiModel> requestFilteredList(
-      {categoryId, cityId, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
+      {categoryId, cityId, cityIds, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
     var list = "";
     if (categoryId == 3) {
       list +=
           "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
 
-      if (cityId!=null && cityId!=0){
-        list += "&cityId=$cityId";
+      if (cityIds!=null){
+        if(cityIds!=null && cityIds.isNotEmpty && cityIds[0]!=0){
+          String result = cityIds.join(",");
+          list += "&cityId=$result";
+        }
       }
       if (searchTerm!= null && searchTerm!="") {
         list += "&searchQuery=$searchTerm";
