@@ -497,7 +497,7 @@ class Api {
     if (categoryId == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(forum: false).get(url: list, loading: true);
         return ResultApiModel.fromJson(result);
@@ -528,7 +528,7 @@ class Api {
     var list = "";
     if (categoryId == 3) {
       list +=
-          "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
+          "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&sortByStartDate=true&showExternalListings=$showExternalListings";
 
       if (cityIds!=null){
         if(cityIds!=null && cityIds.isNotEmpty && cityIds[0]!=0){
@@ -580,7 +580,7 @@ class Api {
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
     var list =
-        'listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+        'listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
