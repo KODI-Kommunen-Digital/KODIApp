@@ -67,25 +67,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
-    checkFirstTime();
+    // checkFirstTime();
   }
 
-  Future<void> checkFirstTime() async {
-    final prefs = await Preferences.openBox();
-    final hasOpenedAppBefore =
-        prefs.getBool('hasOpenedAppBefore', defaultValue: false);
-
-    if (!hasOpenedAppBefore) {
-      if (!mounted) return;
-      Navigator.pushNamed(context, Routes.welcomeScreen);
-    }
-  }
+  // Future<void> checkFirstTime() async {
+  //   final prefs = await Preferences.openBox();
+  //   final hasOpenedAppBefore =
+  //       prefs.getBool('hasOpenedAppBefore', defaultValue: false);
+  //
+  //   if (!hasOpenedAppBefore) {
+  //     if (!mounted) return;
+  //     Navigator.pushNamed(context, Routes.welcomeScreen);
+  //   }
+  // }
 
   Future<void> getIgnoreAppVersion() async {
     String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
@@ -105,7 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-    _scrollController.removeListener(_scrollListener);
     _scrollController.dispose();
   }
 
@@ -116,52 +114,41 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0 &&
-          !isLoading &&
-          !_hasReachedRecentEnd) {
-        setState(() {
-          isLoading = true;
-        });
+  Future<void> _loadMoreRecent() async {
+    if (isLoading || _hasReachedRecentEnd) return;
 
-        final previousLength = recent?.length ?? 0;
-        if (!isSearching) {
-          try {
-            final newList = await AppBloc.homeCubit.newListings(++pageNo);
-            if (mounted) {
-              setState(() {
-                if (newList.length == previousLength) {
-                  _hasReachedRecentEnd = true;
-                }
-                recent = newList;
-                isLoading = false;
-              });
-            }
-          } catch (error, stackTrace) {
-            if (mounted) {
-              setState(() {
-                isLoading = false;
-              });
-            }
-            logError('Error loading new listings: $error');
-            await Sentry.captureException(error, stackTrace: stackTrace);
-          }
-        } else {
-          final newList = await context
-              .read<HomeCubit>()
-              .searchListing(searchTerm, ++pageNo);
-          if (mounted) {
-            setState(() {
-              if (newList.length == previousLength) {
-                _hasReachedRecentEnd = true;
-              }
-              recent = newList;
-              isLoading = false;
-            });
-          }
-        }
+    setState(() {
+      isLoading = true;
+    });
+
+    final previousLength = recent?.length ?? 0;
+    try {
+      List<dynamic> newList;
+      if (!isSearching) {
+        newList = await AppBloc.homeCubit.newListings(++pageNo);
+      } else {
+        newList = await context
+            .read<HomeCubit>()
+            .searchListing(searchTerm, ++pageNo);
       }
+
+      if (mounted) {
+        setState(() {
+          if (newList.length == previousLength) {
+            _hasReachedRecentEnd = true;
+          }
+          recent = newList;
+          isLoading = false;
+        });
+      }
+    } catch (error, stackTrace) {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+      logError('Error loading new listings: $error');
+      await Sentry.captureException(error, stackTrace: stackTrace);
     }
   }
 
@@ -367,8 +354,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             //             category ?? [])),
                             // _buildLocation(location),
                             _buildRecent(recent, selectedCityId, location),
-                            if (isLoading)
-                              const CircularProgressIndicator.adaptive(),
                             const SizedBox(height: 50),
                           ],
                         ),
@@ -949,6 +934,23 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: content,
         ),
+        if (isLoading)
+          const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(
+              child: CircularProgressIndicator.adaptive(),
+            ),
+          )
+        else if (recent != null && recent.isNotEmpty && !_hasReachedRecentEnd)
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: ElevatedButton(
+                onPressed: _loadMoreRecent,
+                child: Text(Translate.of(context).translate('more_posts')),
+              ),
+            ),
+          ),
         if (_hasReachedRecentEnd && recent != null && recent.isNotEmpty)
           Center(
             child: Padding(
