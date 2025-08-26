@@ -20,6 +20,7 @@ mixin _$ApplicationState {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function() loaded,
+    required TResult Function() onboardingLoaded,
     required TResult Function() error,
   }) =>
       throw _privateConstructorUsedError;
@@ -27,6 +28,7 @@ mixin _$ApplicationState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function()? loaded,
+    TResult? Function()? onboardingLoaded,
     TResult? Function()? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -34,6 +36,7 @@ mixin _$ApplicationState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function()? loaded,
+    TResult Function()? onboardingLoaded,
     TResult Function()? error,
     required TResult orElse(),
   }) =>
@@ -42,6 +45,8 @@ mixin _$ApplicationState {
   TResult map<TResult extends Object?>({
     required TResult Function(ApplicationLoading value) loading,
     required TResult Function(ApplicationLoaded value) loaded,
+    required TResult Function(ApplicationOnBoardingLoaded value)
+        onboardingLoaded,
     required TResult Function(ApplicationError value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -49,6 +54,7 @@ mixin _$ApplicationState {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ApplicationLoading value)? loading,
     TResult? Function(ApplicationLoaded value)? loaded,
+    TResult? Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult? Function(ApplicationError value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -56,6 +62,7 @@ mixin _$ApplicationState {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ApplicationLoading value)? loading,
     TResult Function(ApplicationLoaded value)? loaded,
+    TResult Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult Function(ApplicationError value)? error,
     required TResult orElse(),
   }) =>
@@ -126,6 +133,7 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function() loaded,
+    required TResult Function() onboardingLoaded,
     required TResult Function() error,
   }) {
     return loading();
@@ -136,6 +144,7 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function()? loaded,
+    TResult? Function()? onboardingLoaded,
     TResult? Function()? error,
   }) {
     return loading?.call();
@@ -146,6 +155,7 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function()? loaded,
+    TResult Function()? onboardingLoaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -160,6 +170,8 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult map<TResult extends Object?>({
     required TResult Function(ApplicationLoading value) loading,
     required TResult Function(ApplicationLoaded value) loaded,
+    required TResult Function(ApplicationOnBoardingLoaded value)
+        onboardingLoaded,
     required TResult Function(ApplicationError value) error,
   }) {
     return loading(this);
@@ -170,6 +182,7 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ApplicationLoading value)? loading,
     TResult? Function(ApplicationLoaded value)? loaded,
+    TResult? Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult? Function(ApplicationError value)? error,
   }) {
     return loading?.call(this);
@@ -180,6 +193,7 @@ class _$ApplicationLoadingImpl implements ApplicationLoading {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ApplicationLoading value)? loading,
     TResult Function(ApplicationLoaded value)? loaded,
+    TResult Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult Function(ApplicationError value)? error,
     required TResult orElse(),
   }) {
@@ -237,6 +251,7 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function() loaded,
+    required TResult Function() onboardingLoaded,
     required TResult Function() error,
   }) {
     return loaded();
@@ -247,6 +262,7 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function()? loaded,
+    TResult? Function()? onboardingLoaded,
     TResult? Function()? error,
   }) {
     return loaded?.call();
@@ -257,6 +273,7 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function()? loaded,
+    TResult Function()? onboardingLoaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -271,6 +288,8 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult map<TResult extends Object?>({
     required TResult Function(ApplicationLoading value) loading,
     required TResult Function(ApplicationLoaded value) loaded,
+    required TResult Function(ApplicationOnBoardingLoaded value)
+        onboardingLoaded,
     required TResult Function(ApplicationError value) error,
   }) {
     return loaded(this);
@@ -281,6 +300,7 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ApplicationLoading value)? loading,
     TResult? Function(ApplicationLoaded value)? loaded,
+    TResult? Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult? Function(ApplicationError value)? error,
   }) {
     return loaded?.call(this);
@@ -291,6 +311,7 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ApplicationLoading value)? loading,
     TResult Function(ApplicationLoaded value)? loaded,
+    TResult Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult Function(ApplicationError value)? error,
     required TResult orElse(),
   }) {
@@ -303,6 +324,129 @@ class _$ApplicationLoadedImpl implements ApplicationLoaded {
 
 abstract class ApplicationLoaded implements ApplicationState {
   const factory ApplicationLoaded() = _$ApplicationLoadedImpl;
+}
+
+/// @nodoc
+abstract class _$$ApplicationOnBoardingLoadedImplCopyWith<$Res> {
+  factory _$$ApplicationOnBoardingLoadedImplCopyWith(
+          _$ApplicationOnBoardingLoadedImpl value,
+          $Res Function(_$ApplicationOnBoardingLoadedImpl) then) =
+      __$$ApplicationOnBoardingLoadedImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$ApplicationOnBoardingLoadedImplCopyWithImpl<$Res>
+    extends _$ApplicationStateCopyWithImpl<$Res,
+        _$ApplicationOnBoardingLoadedImpl>
+    implements _$$ApplicationOnBoardingLoadedImplCopyWith<$Res> {
+  __$$ApplicationOnBoardingLoadedImplCopyWithImpl(
+      _$ApplicationOnBoardingLoadedImpl _value,
+      $Res Function(_$ApplicationOnBoardingLoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ApplicationState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$ApplicationOnBoardingLoadedImpl implements ApplicationOnBoardingLoaded {
+  const _$ApplicationOnBoardingLoadedImpl();
+
+  @override
+  String toString() {
+    return 'ApplicationState.onboardingLoaded()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ApplicationOnBoardingLoadedImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() loading,
+    required TResult Function() loaded,
+    required TResult Function() onboardingLoaded,
+    required TResult Function() error,
+  }) {
+    return onboardingLoaded();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? loading,
+    TResult? Function()? loaded,
+    TResult? Function()? onboardingLoaded,
+    TResult? Function()? error,
+  }) {
+    return onboardingLoaded?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? loading,
+    TResult Function()? loaded,
+    TResult Function()? onboardingLoaded,
+    TResult Function()? error,
+    required TResult orElse(),
+  }) {
+    if (onboardingLoaded != null) {
+      return onboardingLoaded();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(ApplicationLoading value) loading,
+    required TResult Function(ApplicationLoaded value) loaded,
+    required TResult Function(ApplicationOnBoardingLoaded value)
+        onboardingLoaded,
+    required TResult Function(ApplicationError value) error,
+  }) {
+    return onboardingLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(ApplicationLoading value)? loading,
+    TResult? Function(ApplicationLoaded value)? loaded,
+    TResult? Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
+    TResult? Function(ApplicationError value)? error,
+  }) {
+    return onboardingLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(ApplicationLoading value)? loading,
+    TResult Function(ApplicationLoaded value)? loaded,
+    TResult Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
+    TResult Function(ApplicationError value)? error,
+    required TResult orElse(),
+  }) {
+    if (onboardingLoaded != null) {
+      return onboardingLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class ApplicationOnBoardingLoaded implements ApplicationState {
+  const factory ApplicationOnBoardingLoaded() =
+      _$ApplicationOnBoardingLoadedImpl;
 }
 
 /// @nodoc
@@ -348,6 +492,7 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult when<TResult extends Object?>({
     required TResult Function() loading,
     required TResult Function() loaded,
+    required TResult Function() onboardingLoaded,
     required TResult Function() error,
   }) {
     return error();
@@ -358,6 +503,7 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? loading,
     TResult? Function()? loaded,
+    TResult? Function()? onboardingLoaded,
     TResult? Function()? error,
   }) {
     return error?.call();
@@ -368,6 +514,7 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? loading,
     TResult Function()? loaded,
+    TResult Function()? onboardingLoaded,
     TResult Function()? error,
     required TResult orElse(),
   }) {
@@ -382,6 +529,8 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult map<TResult extends Object?>({
     required TResult Function(ApplicationLoading value) loading,
     required TResult Function(ApplicationLoaded value) loaded,
+    required TResult Function(ApplicationOnBoardingLoaded value)
+        onboardingLoaded,
     required TResult Function(ApplicationError value) error,
   }) {
     return error(this);
@@ -392,6 +541,7 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(ApplicationLoading value)? loading,
     TResult? Function(ApplicationLoaded value)? loaded,
+    TResult? Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult? Function(ApplicationError value)? error,
   }) {
     return error?.call(this);
@@ -402,6 +552,7 @@ class _$ApplicationErrorImpl implements ApplicationError {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(ApplicationLoading value)? loading,
     TResult Function(ApplicationLoaded value)? loaded,
+    TResult Function(ApplicationOnBoardingLoaded value)? onboardingLoaded,
     TResult Function(ApplicationError value)? error,
     required TResult orElse(),
   }) {
