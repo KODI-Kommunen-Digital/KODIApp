@@ -294,7 +294,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           child: CitiesDropDown(
                             hintText: Translate.of(context)
-                                .translate('hselect_location'),
+                                .translate('select_location'),
                             cityTitlesList: cityTitles,
                             setLocationCallback: (data) async {
                               if (data ==
