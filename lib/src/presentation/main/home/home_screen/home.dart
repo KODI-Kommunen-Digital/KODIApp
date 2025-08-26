@@ -919,7 +919,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Text(
-              Translate.of(context).translate('list_is_empty'),
+              Translate.of(context).translate('no_posts_in_the_selected_district'),
               style: Theme.of(context).textTheme.bodyLarge,
             ),
           ),

@@ -218,6 +218,7 @@
   "explore_product": "Explore Product",
   "view_list": "View List",
   "list_is_empty": "List is Empty",
+  "currently_no_events_available": "Currently no  events available",
   "cannot_connect_to_server": "Can't connect to server",
   "reload": "Reload",
   "change_password_success": "Change password success",

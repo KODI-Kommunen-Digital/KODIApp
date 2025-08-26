@@ -177,7 +177,7 @@ class _EventsScreenState extends State<EventsScreen> {
                           selectedFilter!.currentLocation != 0)
                       ? Translate.of(context)
                           .translate('no_posts_in_the_selected_district')
-                      : Translate.of(context).translate('list_is_empty'),
+                      : Translate.of(context).translate('currently_no_events_available'),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
