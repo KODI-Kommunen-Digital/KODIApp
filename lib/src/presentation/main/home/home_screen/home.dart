@@ -280,56 +280,26 @@ class _HomeScreenState extends State<HomeScreen> {
                           horizontal: 16, vertical: 4),
                       child: Material(
                         color: Colors.transparent,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.surface,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                offset: const Offset(0, 4),
-                                blurRadius: 8,
-                              ),
-                            ],
-                          ),
-                          child: CitiesDropDown(
-                            hintText: Translate.of(context)
-                                .translate('select_location'),
-                            cityTitlesList: cityTitles,
-                            setLocationCallback: (data) async {
-                              if (data ==
-                                  Translate.of(context)
-                                      .translate('select_location')) {
-                                setState(() {
-                                  selectedCityId = 0;
-                                  selectedCityTitle = Translate.of(context)
-                                      .translate('select_location');
-                                });
-                                await AppBloc.homeCubit
-                                    .saveCityId(selectedCityId);
-                                await AppBloc.discoveryCubit
-                                    .onLocationFilter(selectedCityId, false);
-
-                                _onUpdateCategory();
-                              } else {
-                                for (final list in location!) {
-                                  if (list.title == data) {
-                                    _onUpdateCategory();
-                                    setState(() {
-                                      selectedCityTitle = data;
-                                      selectedCityId = list.id;
-                                    });
-                                    await AppBloc.discoveryCubit
-                                        .onLocationFilter(
-                                            selectedCityId, false);
-                                  }
-                                }
+                        child: Padding(
+                          padding: const EdgeInsets.only(top : 80, left: 20, right: 20),
+                          child: AppTextInput(
+                            onDelete: (){
+                              _searchController.clear();
+                              _searchListings('');
+                            },
+                            hintText: Translate.of(context).translate('search_title'),
+                            keyboardType: TextInputType.text,
+                            controller: _searchController,
+                            onChanged: (content) async {
+                              if(content.length>2){
+                                await _searchListings(content);
                               }
                             },
-                            selectedOption: (selectedCityId > 0)
-                                ? selectedCityTitle
-                                : Translate.of(context)
-                                    .translate('select_location'),
+                            // trailing: IconButton(icon : const Icon(Icons.clear), onPressed: (){
+                            //   _searchController.clear();
+                            //   _searchListings('');
+                            // }
+                            // ,),
                           ),
                         ),
                       ),
@@ -370,8 +340,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Future _searchListings() async {
-    String? searchResult = await openSearchDialog();
+  Future _searchListings(String? searchResult) async {
+    // String? searchResult = await openSearchDialog();
+
     if (searchResult is String && searchResult.trim() != "") {
       pageNo = 1;
       isSearching = true;
