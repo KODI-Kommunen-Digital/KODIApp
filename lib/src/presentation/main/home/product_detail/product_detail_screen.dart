@@ -193,7 +193,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Colors.black,
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
@@ -1357,7 +1356,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           iconTheme: Theme.of(context).iconTheme.copyWith(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.white
-                    : const Color(0xFF1D1D1B),
+                    : Theme.of(context).primaryColor,
+
               ),
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.none,
