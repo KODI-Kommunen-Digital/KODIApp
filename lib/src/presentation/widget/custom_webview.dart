@@ -147,10 +147,15 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(
-              Icons.close,
+              Icons.arrow_back,
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
+            onPressed: () async {
+              if(webViewController != null && await webViewController!.canGoBack()){
+                webViewController!.goBack();
+              }
+              else {
+                Navigator.of(context).pop();
+              }
             },
           ),
           centerTitle: true,
@@ -164,6 +169,16 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
               fontWeight: FontWeight.w600,
             ),
           ),
+          actions: [
+            IconButton(
+              icon: const Icon(
+                Icons.close,
+              ),
+              onPressed: ()  {
+                  Navigator.of(context).pop();
+              },
+            )
+          ],
         ),
         body: Stack(
           children: [
