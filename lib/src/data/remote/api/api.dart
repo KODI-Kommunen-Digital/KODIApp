@@ -699,7 +699,7 @@ class Api {
   static Future<ResultApiModel> requestSearchListing(
       content, filter, pageNo) async {
     var list =
-        'listings?searchQuery=$content$filter&pageNo=$pageNo&pageSize=6';
+        'listings?searchQuery=$content$filter&pageNo=$pageNo&pageSize=6&showExternalListings=true';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
