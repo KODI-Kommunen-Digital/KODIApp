@@ -35,21 +35,27 @@ if (keystorePropertiesFile.exists()) {
  }
 
  ext {
-    buildToolsVersion = "34.0.0"
+    buildToolsVersion = "35.0.0"
 }
 
 android {
     namespace "de.gera.app"
-    compileSdkVersion 34
-    ndkVersion "27.0.12077973"
+    compileSdkVersion 35
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = '21'
+    }
+
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(21))
+        }
     }
 
     sourceSets {
@@ -61,8 +67,8 @@ android {
         applicationId "de.gera.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 30
-        targetSdkVersion 34
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion 35
         versionCode 1
         versionName flutterVersionName
         //Change for Daniel
