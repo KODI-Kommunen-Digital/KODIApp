@@ -124,7 +124,7 @@ class _HeidiAppState extends State<HeidiApp> {
                           return const CircularProgressIndicator();
                         } else {
                           final location = snapshot.data;
-                          if (location != null) {
+                          if (location == true) {
                             return const MainScreen();
                           } else {
                             return const IntroPage();
@@ -155,7 +155,8 @@ class _HeidiAppState extends State<HeidiApp> {
   Future<bool> _shouldShowMainScreen() async {
     final prefs = await Preferences.openBox();
     final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final wasteTypes = prefs.getSelectedWasteTypes();
     final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
-    return location != null || introSkipped;
+    return (location != null && wasteTypes.isNotEmpty) || introSkipped;
   }
 }

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
@@ -45,6 +46,8 @@ class Preferences {
   static const String listingDesc = "listingDesc";
   static const String selectedLocationId = 'selectedLocationId';
   static const String selectedLocationName = 'selectedLocationName';
+  static const String selectedStreetHashedName = 'selectedStreetHashedName';
+  static const String selectedWasteTypes = 'selectedWasteTypes';
   static const String introSkipped = 'introSkipped';
 
   Preferences._(this._box);
@@ -87,4 +90,20 @@ class Preferences {
       _getValue<bool>(key, defaultValue);
 
   Future<void> setBool(String key, bool value) => _setValue<bool>(key, value);
+
+  List<int> getSelectedWasteTypes() {
+    final jsonString = _getValue<String?>(selectedWasteTypes, null);
+    try {
+      if (jsonString == null) return [];
+      final List<dynamic> decoded = json.decode(jsonString);
+      return decoded.cast<int>();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> setSelectedWasteTypes(List<int> wasteTypeIds) async {
+    final jsonString = json.encode(wasteTypeIds);
+    await _setValue(selectedWasteTypes, jsonString);
+  }
 }
