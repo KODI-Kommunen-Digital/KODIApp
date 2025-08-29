@@ -207,17 +207,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
             },
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          shape: const CircleBorder(),
-          onPressed: () {
-            _navigateToAddListingScreen(context);
-          },
-          child: const Icon(
-            Icons.add,
-            color: Color(0xFF1D1D1B),
-          ),
-        ),
+
       ),
     );
   }

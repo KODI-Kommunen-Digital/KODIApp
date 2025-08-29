@@ -97,7 +97,7 @@ class AppTheme {
 
       /// Custom
       fontFamily: font,
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),

@@ -253,7 +253,7 @@ class ProductModel {
     } else if (json['categoryId'] == 46) {
       category = "Shopping";
     } else if (json['categoryId'] == 16) {
-      category = "Amtliche";
+      category = "Amtliches";
     }
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {

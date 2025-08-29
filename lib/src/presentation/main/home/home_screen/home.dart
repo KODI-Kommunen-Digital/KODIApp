@@ -214,38 +214,41 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           return UpgradeAlert(
+            showLater: false,
+            shouldPopScope: () => true,
+            barrierDismissible: true,
+            dialogStyle: Platform.isIOS
+                ? UpgradeDialogStyle.cupertino
+                : UpgradeDialogStyle.material,
+            onUpdate: () {
+              return true;
+            },
+            onIgnore: () {
+              AppBloc.homeCubit
+                  .saveIgnoreAppVersion(latestAppStoreVersion);
+              return true;
+            },
             upgrader: ignoreAppStoreVersion == latestAppStoreVersion
                 ? null
                 : Upgrader(
                     debugLogging: true,
                     debugDisplayAlways: true,
                     countryCode: 'DE',
-                    showLater: false,
-                    shouldPopScope: () => true,
-                    canDismissDialog: true,
+                    minAppVersion: '1.0.1',
                     durationUntilAlertAgain: const Duration(seconds: 30),
-                    dialogStyle: Platform.isIOS
-                        ? UpgradeDialogStyle.cupertino
-                        : UpgradeDialogStyle.material,
-                    willDisplayUpgrade: (
-                        {String? appStoreVersion,
-                        bool? display,
-                        String? installedVersion,
-                        String? minAppVersion}) {
-                      if (display != null) {
-                        setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '1.0.1';
-                        });
-                      }
-                    },
-                    onUpdate: () {
-                      return true;
-                    },
-                    onIgnore: () {
-                      AppBloc.homeCubit
-                          .saveIgnoreAppVersion(latestAppStoreVersion);
-                      return true;
-                    }),
+
+                    // willDisplayUpgrade: (
+                    //     {String? appStoreVersion,
+                    //     bool? display,
+                    //     String? installedVersion,
+                    //     String? minAppVersion}) {
+                    //   if (display != null) {
+                    //     setState(() {
+                    //       latestAppStoreVersion = appStoreVersion ?? '1.0.1';
+                    //     });
+                    //   }
+                    // },
+                    ),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
@@ -669,7 +672,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    context.read<HomeCubit>().sendToMatomo(id, link);
+    // context.read<HomeCubit>().sendToMatomo(id, link);
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(link));

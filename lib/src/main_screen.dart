@@ -4,8 +4,8 @@ import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
+import 'package:heidi/src/presentation/main/gis/gis.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
-import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -38,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
-            WishListScreen(),
+            GIS(),
             AccountScreen()
           ],
         ),
@@ -53,6 +53,7 @@ class _MainScreenState extends State<MainScreen> {
     switch (route) {
       case Routes.home:
       case Routes.discovery:
+      case Routes.gis:
       case Routes.account:
         return false;
       default:
@@ -66,7 +67,7 @@ class _MainScreenState extends State<MainScreen> {
         return 0;
       case Routes.discovery:
         return 1;
-      case Routes.wishList:
+      case Routes.gis:
         return 2;
       case Routes.account:
         return 3;
@@ -116,10 +117,6 @@ class _MainScreenState extends State<MainScreen> {
         AppBloc.homeCubit.scrollUp();
         break;
 
-      case Routes.wishList:
-        AppBloc.wishListCubit.setDoesScroll(true);
-        AppBloc.wishListCubit.scrollUp();
-        break;
       case Routes.discovery:
         AppBloc.discoveryCubit.setDoesScroll(true);
         AppBloc.discoveryCubit.scrollUp();
@@ -146,12 +143,14 @@ class _MainScreenState extends State<MainScreen> {
           'services',
         );
         break;
-      case Routes.wishList:
-        iconData = Icons.bookmark_outline;
+
+      case Routes.gis:
+        iconData = Icons.pin_drop;
         title = Translate.of(context).translate(
-          'wish_list',
+          'gis',
         );
         break;
+
       case Routes.account:
         iconData = Icons.account_circle_outlined;
         title = Translate.of(context).translate(
@@ -228,8 +227,8 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
+            _buildMenuItem(Routes.gis),
             // const SizedBox(width: 56),
-            _buildMenuItem(Routes.wishList),
             _buildMenuItem(Routes.account),
           ],
         ),

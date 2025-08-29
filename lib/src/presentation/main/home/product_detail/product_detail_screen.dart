@@ -1331,9 +1331,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           pinned: false,
           actions: action,
           iconTheme: Theme.of(context).iconTheme.copyWith(
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : const Color(0xFF1D1D1B),
+                color: Colors.orange,
               ),
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.none,

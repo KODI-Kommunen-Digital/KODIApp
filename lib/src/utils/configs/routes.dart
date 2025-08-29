@@ -69,6 +69,8 @@ class Routes {
   static const String home = "/home";
   static const String main = "/home";
   static const String discovery = "/discovery";
+  static const String gis = "/gis";
+
   static const String wishList = "/wishList";
   static const String account = "/account";
   static const String signIn = "/signIn";
