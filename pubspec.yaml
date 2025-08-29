@@ -18,7 +18,7 @@ dependencies:
   loggy: ^2.0.3
   flutter_loggy: ^2.0.2
   cupertino_icons: ^1.0.2
-  sentry_flutter: ^8.3.0
+  sentry_flutter: ^9.0.0
 
   ### l10n
   intl: ^0.19.0
@@ -98,6 +98,7 @@ dependencies:
   table_calendar: ^3.0.9
   flutter_typeahead: ^5.2.0
   shared_preferences: ^2.2.3
+  multi_dropdown: ^3.0.1
 
 dev_dependencies:
   sentry_dart_plugin: ^2.4.1
