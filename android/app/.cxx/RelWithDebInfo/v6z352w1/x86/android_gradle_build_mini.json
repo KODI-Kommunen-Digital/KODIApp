@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "C:\\Users\\fiftyfivetech\\fvm\\versions\\3.29.3\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\fiftyfivetech\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\fiftyfivetech\\AndroidStudioProjects\\flutterFlow\\KODIApp\\android\\app\\.cxx\\RelWithDebInfo\\v6z352w1\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\fiftyfivetech\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\fiftyfivetech\\AndroidStudioProjects\\flutterFlow\\KODIApp\\android\\app\\.cxx\\RelWithDebInfo\\v6z352w1\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

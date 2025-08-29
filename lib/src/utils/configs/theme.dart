@@ -87,7 +87,7 @@ class AppTheme {
 
       /// Custom
       fontFamily: font,
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -106,7 +106,7 @@ class AppTheme {
       dividerTheme: const DividerThemeData(
         thickness: 0.8,
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(
+      bottomAppBarTheme: const BottomAppBarThemeData(
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme
