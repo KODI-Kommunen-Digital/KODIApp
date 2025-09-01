@@ -4,10 +4,10 @@ import 'main.dart';
 
 Future<void> main() async {
   Application.init(
-    envDomain: AppEnv.production.domain,
-    envPicturesURL: AppEnv.production.picturesURL,
-    envDefaultPictureURL: AppEnv.production.defaultPictureURL,
-    debugMode: AppEnv.production.debug,
+    envDomain: AppEnv.staging.domain,
+    envPicturesURL: AppEnv.staging.picturesURL,
+    envDefaultPictureURL: AppEnv.staging.defaultPictureURL,
+    debugMode: AppEnv.staging.debug,
   );
   mainApp();
 }

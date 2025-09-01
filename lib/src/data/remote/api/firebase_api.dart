@@ -42,9 +42,9 @@ class FirebaseApi {
   Future<void> handleForegroundNotification(RemoteMessage message) async {
     debugPrint("Foreground notification received");
     await _firebaseMessaging.setForegroundNotificationPresentationOptions(
-      alert: false,
-      badge: false,
-      sound: false,
+      alert: true,
+      badge: true,
+      sound: true,
     );
   }
 
@@ -52,9 +52,9 @@ class FirebaseApi {
     debugPrint("initialise notification ");
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
-      alert: false,
-      badge: false,
-      sound: false,
+      alert: true,
+      badge: true,
+      sound: true,
     );
 
     NotificationSettings settings = await _firebaseMessaging.requestPermission(
@@ -91,9 +91,6 @@ class FirebaseApi {
       if (token != null) uploadToken(uId, token);
 
     }
-
-    FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-        alert: false, badge: false, sound: false);
 
     _firebaseMessaging.getInitialMessage().then(handleMessageOnUserInteraction);
     FirebaseMessaging.onMessage.listen(handleForegroundNotification);
