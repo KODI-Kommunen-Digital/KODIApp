@@ -554,7 +554,7 @@ class _FilterScreenState extends State<FilterScreen> {
       const SizedBox(height: 8),
       Center(
         child: Text(
-          Translate.of(context).translate('time_of_day'),
+          Translate.of(context).translate('time_period'),
           style: Theme.of(context)
               .textTheme
               .titleMedium!
@@ -717,7 +717,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('time_period'),
+            Translate.of(context).translate('time_of_day'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
