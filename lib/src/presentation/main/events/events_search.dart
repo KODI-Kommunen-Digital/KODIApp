@@ -4,6 +4,8 @@ import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+
 
 class EventsSearchWidget extends StatefulWidget {
   final Function(String) onSearch;
@@ -37,8 +39,59 @@ class _EventsSearchWidgetState extends State<EventsSearchWidget> {
     }
   }
 
+  bool _isFilterApplied(MultiFilter filter) {
+    if (filter.hasMultipleCityFilter) {
+      if (filter.selectedCities != null &&
+          (filter.selectedCities!.length != 1 ||
+              filter.selectedCities!.first != 0)) {
+        return true;
+      }
+    } else if (filter.hasLocationFilter) {
+      if (filter.currentLocation is int &&
+          filter.currentLocation != 0) {
+        return true;
+      }
+    }
+
+    if (filter.hasCategoryFilter &&
+        filter.currentCategory != null &&
+        filter.currentCategory != 0) {
+      return true;
+    }
+
+    if (filter.hasSubCategoryFilter &&
+        filter.currentSubCategory != null &&
+        filter.currentSubCategory != 0) {
+      return true;
+    }
+
+    if (filter.hasListingStatusFilter &&
+        filter.currentListingStatus != null &&
+        filter.currentListingStatus != 0) {
+      return true;
+    }
+
+    if (filter.hasProductEventFilter && filter.currentProductEventFilter != null) {
+      return true;
+    }
+
+    if (filter.hasDateRangeFilter &&
+        (filter.startAfterDate != null || filter.endAfterDate != null)) {
+      return true;
+    }
+
+    if (filter.hasDayTimeFilter &&
+        filter.currentDayTimeFilter != null &&
+        filter.currentDayTimeFilter != DayTimeFilter.all) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isApplied = _isFilterApplied(widget.filter);
     EdgeInsets contentPadding = Platform.isIOS
         ? const EdgeInsets.symmetric(vertical: 0.0, horizontal: 5.0)
         : const EdgeInsets.symmetric(vertical: 0.0, horizontal: 10.0);
@@ -68,10 +121,19 @@ class _EventsSearchWidgetState extends State<EventsSearchWidget> {
             onSubmitted: widget.onSearch,
             inputTextStyle: const TextStyle(color: Colors.white),
             hintTextStyle: const TextStyle(color: Colors.white),
-            trailing: AppFilterButton(
-              multiFilter: widget.filter,
-              color: Colors.white,
-              filterCallBack: widget.onFilter,
+            trailing: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isApplied ? Colors.white:Colors.transparent,
+                ),
+                child: AppFilterButton(
+                  multiFilter: widget.filter,
+                  color:isApplied ? Colors.amber: Colors.white,
+                  filterCallBack: widget.onFilter,
+                ),
+              ),
             ),
             controller: _textEditingController,
           ),

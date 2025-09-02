@@ -53,6 +53,56 @@ class _FilterScreenState extends State<FilterScreen> {
     currentCities = widget.multiFilter.selectedCities ?? [0];
   }
 
+  bool _isFilterApplied() {
+    if (widget.multiFilter.hasMultipleCityFilter) {
+      if (currentCities.length != 1 || currentCities.first != 0) return true;
+    } else if (widget.multiFilter.hasLocationFilter) {
+      if (currentCity != null && currentCity != 0) return true;
+    }
+
+    if (widget.multiFilter.hasCategoryFilter &&
+        currentCategory != null &&
+        currentCategory != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasSubCategoryFilter &&
+        currentSubCategory != null &&
+        currentSubCategory != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasListingStatusFilter &&
+        currentListingStatus != null &&
+        currentListingStatus != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasProductEventFilter &&
+        currentProductEventFilter != null) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasForumGroupFilter &&
+        currentForumGroupFilter != null &&
+        currentForumGroupFilter != GroupFilter.allGroups) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasDateRangeFilter &&
+        (startAfterDate != null || endAfterDate != null)) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasDayTimeFilter &&
+        currentDayTimeFilter != null &&
+        currentDayTimeFilter != DayTimeFilter.all) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -61,16 +111,25 @@ class _FilterScreenState extends State<FilterScreen> {
         centerTitle: true,
         title: const Text("Filter"),
         actions: [
-          IconButton(onPressed: () {
-            setState(() {
-              currentCity = 0;
-              currentCities = [0];
-              startAfterDate = null;
-              endAfterDate = null;
-              currentSubCategory = null;
-              currentDayTimeFilter = null;
-            });
-          }, icon: const Icon(Icons.refresh))
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  currentCity = 0;
+                  currentCities = [0];
+                  startAfterDate = null;
+                  endAfterDate = null;
+                  currentSubCategory = null;
+                  currentDayTimeFilter = null;
+                  currentCategory = 0;
+                  currentProductEventFilter = null;
+                  currentListingStatus = 0;
+                  currentForumGroupFilter = GroupFilter.allGroups;
+                });
+              },
+              icon: Icon(Icons.refresh,
+                  color: _isFilterApplied()
+                      ? Theme.of(context).primaryColor
+                      : null))
         ],
       ),
       body: SingleChildScrollView(

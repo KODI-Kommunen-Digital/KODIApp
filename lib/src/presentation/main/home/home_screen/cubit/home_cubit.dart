@@ -77,22 +77,22 @@ class HomeCubit extends Cubit<HomeState> {
 
       if (selectedCity != null) {
         final listingsRequestResponse =
-            await Api.requestLocList(selectedCity.id, 1);
+            await Api.requestLocList(selectedCity.id, 1,1);
         recent = List.from(listingsRequestResponse.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
         final currentEventsRequest = await Api.requestCatList(
-            3, selectedCity.id, 1);
+            1, selectedCity.id, 1);
         currentEvents = List.from(currentEventsRequest.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
       } else {
-        final listingsRequestResponse = await Api.requestRecentListings(1);
+        final listingsRequestResponse = await Api.requestRecentListings(1,0);
         recent = List.from(listingsRequestResponse.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
         final currentEventsRequest =
-            await Api.requestCatList(3, 1, 1); //cat: 3; city: 1; pageNo: 1;
+            await Api.requestCatList(1, 1, 1); //cat: 1; city: 1; pageNo: 1;
         currentEvents = List.from(currentEventsRequest.data ?? []).map((item) {
           return ProductModel.fromJson(item);
         }).toList();
@@ -267,13 +267,13 @@ class HomeCubit extends Cubit<HomeState> {
     return null;
   }
 
-  Future<dynamic> newListings(int pageNo) async {
+  Future<dynamic> newListings(int pageNo,int cityId) async {
     if (!await hasInternet()) {
       emit(const HomeState.error("no_internet"));
       return;
     }
 
-    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
+    final listingsRequestResponse = await Api.requestRecentListings(pageNo,cityId);
     final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();

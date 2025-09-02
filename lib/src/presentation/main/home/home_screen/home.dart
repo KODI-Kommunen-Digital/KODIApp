@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       List<dynamic> newList;
       if (!isSearching) {
-        newList = await AppBloc.homeCubit.newListings(++pageNo);
+        newList = await AppBloc.homeCubit.newListings(++pageNo,selectedCityId);
       } else {
         newList = await context
             .read<HomeCubit>()
@@ -307,11 +307,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     selectedCityTitle = Translate.of(context)
                                         .translate('select_location');
                                   });
-                                  await AppBloc.homeCubit
+                                  AppBloc.homeCubit
                                       .saveCityId(selectedCityId);
-                                  await AppBloc.discoveryCubit
+                                  AppBloc.discoveryCubit
                                       .onLocationFilter(selectedCityId, false);
-
+                                  pageNo=1;
                                   _onUpdateCategory();
                                 } else {
                                   for (final list in location!) {

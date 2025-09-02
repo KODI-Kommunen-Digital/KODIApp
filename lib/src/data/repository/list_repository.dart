@@ -49,7 +49,7 @@ class ListRepository {
       }
     } else if (type == "location") {
       int params = cityId ?? 0;
-      final response = await Api.requestLocList(params, pageNo);
+      final response = await Api.requestLocList(params, pageNo,null);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);

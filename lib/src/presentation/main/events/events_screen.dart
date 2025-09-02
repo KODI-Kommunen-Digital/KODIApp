@@ -49,7 +49,7 @@ class _EventsScreenState extends State<EventsScreen> {
         setState(() {
           isLoading = true;
         });
-        await context.read<EventsCubit>().newEvents(++pageNo);
+          await context.read<EventsCubit>().newEvents(++pageNo,selectedFilter);
         setState(() {
           isLoading = false;
         });
@@ -108,16 +108,19 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                   child: EventsSearchWidget(
                       onSearch: (searchTerm) {
+                        pageNo=1;
                         context.read<EventsCubit>().searchListing(searchTerm, pageNo);
                       },
                       searchTerm: context.read<EventsCubit>().searchTerm,
                       onDelete: () {
                         if (context.read<EventsCubit>().searchTerm != null) {
+                          pageNo=1;
                           context.read<EventsCubit>().onLoad(false, pageNo);
                         }
                       },
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
+                          pageNo=1;
                           context.read<EventsCubit>().onFilter(multiFilter, pageNo);
                           selectedFilter = multiFilter;
                         }
