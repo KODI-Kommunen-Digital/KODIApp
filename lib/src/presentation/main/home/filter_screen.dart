@@ -40,6 +40,9 @@ class _FilterScreenState extends State<FilterScreen> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: Colors.orange,
+        ),
         centerTitle: true,
         title: const Text("Filter"),
       ),

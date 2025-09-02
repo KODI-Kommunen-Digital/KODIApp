@@ -44,6 +44,9 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(
+              iconTheme: Theme.of(context).iconTheme.copyWith(
+                color: Colors.orange,
+              ),
               centerTitle: true,
               title: Text(
                   Translate.of(context).translate('category_defect_report')),

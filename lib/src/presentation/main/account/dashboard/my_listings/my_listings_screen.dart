@@ -90,6 +90,9 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
     final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: Colors.orange,
+        ),
         centerTitle: true,
         title: Text(
           Translate.of(context).translate('my_listings'),

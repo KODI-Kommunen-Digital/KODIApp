@@ -946,8 +946,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           product.website,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          overflow: TextOverflow.visible,
                           style: Theme.of(context)
                               .textTheme
                               .bodyLarge!
@@ -1256,7 +1255,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             openHours,
             attachments,
             const SizedBox(height: 16),
-            Container(
+           /* Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
@@ -1311,7 +1310,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 showDirectionIcon:
                     product.sourceId != 2 && product.sourceId != 3,
               ),
-            ),
+            ),*/
             const SizedBox(height: 16),
           ],
         ),

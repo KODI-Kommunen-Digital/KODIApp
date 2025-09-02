@@ -53,6 +53,9 @@ class AllRequestsLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          iconTheme: Theme.of(context).iconTheme.copyWith(
+            color: Colors.orange,
+          ),
           centerTitle: true,
           title: Text(
             Translate.of(context).translate('all_requests'),
@@ -123,6 +126,9 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: Colors.orange,
+        ),
         centerTitle: true,
         title: Text(
           Translate.of(context).translate('all_requests'),
