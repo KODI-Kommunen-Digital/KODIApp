@@ -37,14 +37,6 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
                     child: Image.asset(logo),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.only(top: 300),
-                  child: SizedBox(
-                    width: 26,
-                    height: 26,
-                    child: CircularProgressIndicator.adaptive(),
-                  ),
-                )
               ],
             ),
           ),
@@ -54,9 +46,9 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
           right: 16,
           child: SafeArea(
             child: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.search,
-                color: Colors.white,
+                color: isDarkMode ? Colors.white : Colors.black,
                 size: 30,
               ),
               onPressed: () => onSearch(),
