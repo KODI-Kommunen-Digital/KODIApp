@@ -11,7 +11,7 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
 
   AppBarHomeSliver({
     required this.expandedHeight,
-    required this.onSearch,
+    this.onSearch,
     this.isHome = true
   });
 
@@ -43,8 +43,8 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
             ),
           ),
         ),
-        if (isHome)
-        Positioned(
+        if (isHome && onSearch!=null)
+          Positioned(
           bottom: 10,
           right: 16,
           child: SafeArea(
