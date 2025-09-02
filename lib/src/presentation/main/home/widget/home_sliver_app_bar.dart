@@ -43,21 +43,21 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
             ),
           ),
         ),
-        // if (isHome)
-        // Positioned(
-        //   bottom: 10,
-        //   right: 16,
-        //   child: SafeArea(
-        //     child: IconButton(
-        //       icon: const Icon(
-        //         Icons.search,
-        //         color: Colors.white,
-        //         size: 30,
-        //       ),
-        //       onPressed: () => onSearch!(),
-        //     ),
-        //   ),
-        // ),
+        if (isHome)
+        Positioned(
+          bottom: 10,
+          right: 16,
+          child: SafeArea(
+            child: IconButton(
+              icon: const Icon(
+                Icons.search,
+                color: Colors.white,
+                size: 30,
+              ),
+              onPressed: () => onSearch!(),
+            ),
+          ),
+        ),
         if (Platform.isAndroid)
           Positioned(
             top: expandedHeight - shrinkOffset + 20,
