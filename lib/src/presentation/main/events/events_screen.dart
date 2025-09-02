@@ -28,6 +28,7 @@ class _EventsScreenState extends State<EventsScreen> {
   bool isSearching = false;
   int pageNo = 1;
   MultiFilter? selectedFilter;
+  bool _hasMore = true;
 
   @override
   void initState() {
@@ -46,10 +47,31 @@ class _EventsScreenState extends State<EventsScreen> {
   Future<void> _scrollListener() async {
     if (_scrollController.position.atEdge) {
       if (_scrollController.position.pixels != 0) {
+        if (!_hasMore) return;
         setState(() {
           isLoading = true;
         });
-          await context.read<EventsCubit>().newEvents(++pageNo,selectedFilter);
+
+        final beforeCount = context.read<EventsCubit>().state.whenOrNull(
+              loaded: (events) => events.length,
+              updated: (events) => events.length,
+            ) ??
+            -1;
+
+        await context.read<EventsCubit>().newEvents(++pageNo, selectedFilter);
+
+        final afterCount = context.read<EventsCubit>().state.whenOrNull(
+              loaded: (events) => events.length,
+              updated: (events) => events.length,
+            ) ??
+            -1;
+
+        if (beforeCount == afterCount) {
+          setState(() {
+            _hasMore = false;
+          });
+        }
+
         setState(() {
           isLoading = false;
         });
@@ -61,6 +83,7 @@ class _EventsScreenState extends State<EventsScreen> {
     await AppBloc.eventsCubit.onLoad(true, pageNo);
     setState(() {
       pageNo = 1;
+      _hasMore = true;
     });
   }
 
@@ -73,6 +96,7 @@ class _EventsScreenState extends State<EventsScreen> {
           loading: () => _buildLoading(),
           loaded: (events) {
             pageNo = 1;
+            _hasMore = true;
             return _buildLoaded(events);
           },
           updated: (events) => _buildLoaded(events),
@@ -108,20 +132,24 @@ class _EventsScreenState extends State<EventsScreen> {
                   ),
                   child: EventsSearchWidget(
                       onSearch: (searchTerm) {
-                        pageNo=1;
-                        context.read<EventsCubit>().searchListing(searchTerm, pageNo);
+                        pageNo = 1;
+                        context
+                            .read<EventsCubit>()
+                            .searchListing(searchTerm, pageNo);
                       },
                       searchTerm: context.read<EventsCubit>().searchTerm,
                       onDelete: () {
                         if (context.read<EventsCubit>().searchTerm != null) {
-                          pageNo=1;
+                          pageNo = 1;
                           context.read<EventsCubit>().onLoad(false, pageNo);
                         }
                       },
                       onFilter: (multiFilter) {
                         if (multiFilter != null) {
-                          pageNo=1;
-                          context.read<EventsCubit>().onFilter(multiFilter, pageNo);
+                          pageNo = 1;
+                          context
+                              .read<EventsCubit>()
+                              .onFilter(multiFilter, pageNo);
                           selectedFilter = multiFilter;
                         }
                       },
@@ -132,7 +160,9 @@ class _EventsScreenState extends State<EventsScreen> {
         CupertinoSliverRefreshControl(
           onRefresh: _onRefresh,
         ),
-        _buildContent(events, )
+        _buildContent(
+          events,
+        )
       ],
     );
   }
@@ -176,10 +206,12 @@ class _EventsScreenState extends State<EventsScreen> {
                 padding: const EdgeInsets.all(4.0),
                 child: Text(
                   (selectedFilter != null &&
-                      (selectedFilter!.hasMultipleCityFilter && selectedFilter!.selectedCities![0]!=0))
+                          (selectedFilter!.hasMultipleCityFilter &&
+                              selectedFilter!.selectedCities![0] != 0))
                       ? Translate.of(context)
                           .translate('no_posts_in_the_selected_district')
-                      : Translate.of(context).translate('currently_no_events_available'),
+                      : Translate.of(context)
+                          .translate('currently_no_events_available'),
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
@@ -195,16 +227,21 @@ class _EventsScreenState extends State<EventsScreen> {
             final item = events[index];
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: _buildItem(events[index]),
+              child: _buildItem(item),
             );
           } else {
-            (isLoading)
-                ? const Center(
-                    child: CircularProgressIndicator.adaptive(),
-                  )
-                : Container();
+            if (!_hasMore) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Center(
+                    child: Text(Translate.of(context)
+                        .translate('no_further_data'))),
+              );
+            }
+            return isLoading
+                ? const Center(child: CircularProgressIndicator.adaptive())
+                : const SizedBox();
           }
-          return null;
         },
         childCount: events.length + 1,
       ),
