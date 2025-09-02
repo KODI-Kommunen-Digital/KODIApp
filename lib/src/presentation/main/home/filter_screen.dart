@@ -189,34 +189,33 @@ class _FilterScreenState extends State<FilterScreen> {
                     });
                   },
                 ),
-          ///Todo uncomment when scraper issue fix
-          // ...widget.multiFilter.cities!.map((city) {
-          //   return (widget.multiFilter.hasMultipleCityFilter)
-          //       ? ChoiceChip(
-          //           label: Text(city.title),
-          //           selected: currentCities.contains(city.id),
-          //           onSelected: (selected) {
-          //             setState(() {
-          //
-          //               if (currentCities.contains(city.id)) {
-          //                 currentCities.remove(city.id);
-          //               } else {
-          //                 currentCities.add(city.id);
-          //                 currentCities.remove(0);
-          //               }
-          //             });
-          //           },
-          //         )
-          //       : ChoiceChip(
-          //           label: Text(city.title),
-          //           selected: city.id == currentCity,
-          //           onSelected: (selected) {
-          //             setState(() {
-          //               currentCity = city.id;
-          //             });
-          //           },
-          //         );
-          // }),
+                ...widget.multiFilter.cities!.map((city) {
+                  return (widget.multiFilter.hasMultipleCityFilter)
+                      ? ChoiceChip(
+                          label: Text(city.title),
+                          selected: currentCities.contains(city.id),
+                          onSelected: (selected) {
+                            setState(() {
+
+                              if (currentCities.contains(city.id)) {
+                                currentCities.remove(city.id);
+                              } else {
+                                currentCities.add(city.id);
+                                currentCities.remove(0);
+                              }
+                            });
+                          },
+                        )
+                      : ChoiceChip(
+                          label: Text(city.title),
+                          selected: city.id == currentCity,
+                          onSelected: (selected) {
+                            setState(() {
+                              currentCity = city.id;
+                            });
+                          },
+                        );
+                }),
         ]),
       )
     ];
