@@ -326,9 +326,15 @@ class Api {
   }
 
   ///Get Recent Listings
-  static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings =
-        "listings?categoryId=1&statusId=1&pageNo=$params&pageSize=6&showExternalListings=$showExternalListings";
+  static Future<ResultApiModel> requestRecentListings(params,cityId) async {
+    String path='';
+    if(cityId!=0){
+      path="listings?categoryId=1&statusId=1&pageNo=$params&pageSize=6&cityId=$cityId&showExternalListings=$showExternalListings";
+    }
+    else{
+      path="listings?categoryId=1&statusId=1&pageNo=$params&pageSize=6&showExternalListings=$showExternalListings";
+    }
+    final listings =path;
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -578,9 +584,15 @@ class Api {
     }
   }
 
-  static Future<ResultApiModel> requestLocList(params, pageNo) async {
-    var list =
-        'listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
+  static Future<ResultApiModel> requestLocList(params, pageNo,int? categoryId,) async {
+    String list;
+    if(categoryId!=null) {
+      list =
+      'listings?cityId=$params&categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
+    }
+    else{
+      list='listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
+    }
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }

@@ -40,7 +40,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
       listingsRequestResponse =
           await Api.requestStatusLocList(currentCityFilter, 1, status);
     } else {
-      listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1);
+      listingsRequestResponse = await Api.requestLocList(currentCityFilter, 1,null);
     }
 
     List<ProductModel> productData =
@@ -188,7 +188,7 @@ class AllListingsCubit extends Cubit<AllListingsState> {
           await Api.requestStatusLocList(currentCityFilter, pageNo, status);
     } else {
       listingsRequestResponse =
-          await Api.requestLocList(currentCityFilter, pageNo);
+          await Api.requestLocList(currentCityFilter, pageNo,null);
     }
 
     final newProductData =
