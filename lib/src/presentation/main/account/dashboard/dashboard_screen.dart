@@ -14,6 +14,9 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: Theme.of(context).iconTheme.copyWith(
+          color: Colors.orange,
+        ),
         title: Text(Translate.of(context).translate('dashboard')),
       ),
       body: Center(

@@ -116,7 +116,7 @@ class AppTheme {
       dividerTheme: const DividerThemeData(
         thickness: 0.8,
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(
+      bottomAppBarTheme: const BottomAppBarThemeData(
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme

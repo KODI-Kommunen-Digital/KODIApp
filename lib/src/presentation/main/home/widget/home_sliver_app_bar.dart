@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'dart:io';
+import 'package:heidi/src/utils/configs/image.dart';
 
 import 'package:heidi/src/utils/configs/application.dart';
 
@@ -17,28 +18,34 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final logo = isDarkMode ? Images.logo_dark : Images.logo_light;
+    final backgroundColor = isDarkMode ? Colors.black : Colors.white;
     return Stack(
       children: [
         SizedBox(
           width: double.infinity,
           height: expandedHeight - shrinkOffset,
-          child: CachedNetworkImage(
-            imageUrl: "${Application.picturesURL}admin/Homepage1.jpg",
-            fit: BoxFit.cover,
-            placeholder: (context, url) => AppPlaceholder(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
+          child: Container(
+            color: backgroundColor,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 64.0),
+                    child: Image.asset(logo),
+                  ),
                 ),
-              ),
-            ),
-            errorWidget: (context, url, error) => AppPlaceholder(
-              child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: const Icon(Icons.error),
-              ),
+                const Padding(
+                  padding: EdgeInsets.only(top: 300),
+                  child: SizedBox(
+                    width: 26,
+                    height: 26,
+                    child: CircularProgressIndicator.adaptive(),
+                  ),
+                )
+              ],
             ),
           ),
         ),

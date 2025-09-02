@@ -30,6 +30,7 @@ class AppProductItem extends StatelessWidget {
   final String? cityName;
 
   String getDefaultImagePath(String? category) {
+    print("Category URL => ${category}");
     if (category == null || category.isEmpty) {
       return "${Application.picturesURL}admin/Events/Defaultimage1.png";
     }
@@ -68,34 +69,14 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: item!.sourceId == 1
-                            ? "${Application.picturesURL}${item!.image}"
-                            : item!.sourceId == 2 &&
-                                    item!.image !=
-                                        'admin/News/Defaultimage6.png'
-                                ? (item!.image.startsWith('https:') ||
-                                        item!.image.startsWith('admin'))
-                                    ? item!.image
-                                    : "${Application.picturesURL}admin/News/Defaultimage6.png"
-                                : item!.sourceId == 3
-                                    ? (item!.image.startsWith('https:') ||
-                                            item!.image.startsWith('admin'))
-                                        ? (item!.image.startsWith('admin')
-                                            ? "${Application.picturesURL}${item!.image}"
-                                            : item!.image)
-                                        : "${Application.picturesURL}admin/News/Defaultimage6.png"
-                                    : item!.image.startsWith('admin')
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item!.image.startsWith('https:') ? item!.image : 'admin/News/Defaultimage6.png'}",
+                        imageUrl: getImageUrl(item),
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
                               width: 120,
                               height: 140,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                              ),
+                              color: Colors.white,
                             ),
                           );
                         },
@@ -117,15 +98,14 @@ class AppProductItem extends StatelessWidget {
                             height: 140,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(
-                                    getDefaultImagePath(item?.category)),
+                                image: NetworkImage(getDefaultImagePath(item?.category)),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
                           );
                         },
                       ),
-                    ),
+              ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -525,6 +505,33 @@ class AppProductItem extends StatelessWidget {
 
       default:
         return Container(width: 160.0);
+    }
+  }
+  String getImageUrl(dynamic item) {
+    const defaultImage = "${Application.picturesURL}admin/News/Defaultimage6.png";
+
+    if (item == null || item.image == null || item.image.isEmpty) {
+      return defaultImage;
+    }
+
+    final image = item.image;
+    switch (item.sourceId) {
+      case 1:
+        return "${Application.picturesURL}$image";
+      case 2:
+        return image.startsWith('https')
+            ? image
+            : "${Application.picturesURL}$image";
+      case 3:
+        if (image.startsWith('https')) return image;
+        if (image.startsWith('admin')) {
+          return "${Application.picturesURL}$image";
+        }
+        return defaultImage;
+      default:
+        return image.startsWith('https')
+            ? image
+            : "${Application.picturesURL}$image";
     }
   }
 

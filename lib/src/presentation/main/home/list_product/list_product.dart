@@ -118,6 +118,9 @@ class _ListProductScreenState extends State<ListProductScreen> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          iconTheme: const IconThemeData(
+            color: Colors.orange,
+          ),
           centerTitle: true,
           title: widget.arguments['title'] != ''
               ? Text(widget.arguments['title'])
