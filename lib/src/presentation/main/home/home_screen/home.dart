@@ -293,9 +293,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               keyboardType: TextInputType.text,
                               controller: _searchController,
                               onChanged: (content) async {
-                                if(content.length>2){
                                   await _searchListings(content);
-                                }
                               },
                               // trailing: IconButton(icon : const Icon(Icons.clear), onPressed: (){
                               //   _searchController.clear();
