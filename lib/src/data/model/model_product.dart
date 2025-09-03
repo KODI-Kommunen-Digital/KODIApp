@@ -233,7 +233,7 @@ class ProductModel {
     } else if (json['categoryId'] == 6) {
       category = "Biete/Suche";
     } else if (json['categoryId'] == 9) {
-      category = "Fündburo";
+      category = "Fundbüro";
     } else if (json['categoryId'] == 10) {
       category = "Firmenporträts";
     } else if (json['categoryId'] == 11) {
