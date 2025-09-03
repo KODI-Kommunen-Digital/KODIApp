@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
-import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
+import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/gis/gis.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
             HomeScreen(),
             DiscoveryScreen(),
             GIS(),
-            AccountScreen()
+            SettingsScreen(),
           ],
         ),
       ),
@@ -54,7 +54,7 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.home:
       case Routes.discovery:
       case Routes.gis:
-      case Routes.account:
+      case Routes.setting:
         return false;
       default:
         return true;
@@ -69,7 +69,7 @@ class _MainScreenState extends State<MainScreen> {
         return 1;
       case Routes.gis:
         return 2;
-      case Routes.account:
+      case Routes.setting:
         return 3;
       default:
         return 0;
@@ -151,10 +151,10 @@ class _MainScreenState extends State<MainScreen> {
         );
         break;
 
-      case Routes.account:
-        iconData = Icons.account_circle_outlined;
+      case Routes.setting:
+        iconData = Icons.settings;
         title = Translate.of(context).translate(
-          'maccount',
+          'setting',
         );
         break;
       default:
@@ -229,7 +229,7 @@ class _MainScreenState extends State<MainScreen> {
             _buildMenuItem(Routes.discovery),
             _buildMenuItem(Routes.gis),
             // const SizedBox(width: 56),
-            _buildMenuItem(Routes.account),
+            _buildMenuItem(Routes.setting),
           ],
         ),
       ),
