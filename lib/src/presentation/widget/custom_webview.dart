@@ -111,6 +111,14 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
   InAppWebViewController? webViewController;
   bool isLoading = true;
   Timer? _timer;
+  bool canGoBack = false;
+
+  Future<void> _checkCanGoBack() async {
+    if (webViewController != null) {
+      final canGo = await webViewController!.canGoBack();
+      setState(() => canGoBack = canGo);
+    }
+  }
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory<VerticalDragGestureRecognizer>(
@@ -130,6 +138,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
     final backgroundColor = theme.scaffoldBackgroundColor;
     final loaderColor = theme.colorScheme.primary;
 
+
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (bool didPop, object) async {
@@ -145,19 +154,20 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back,
-            ),
+          automaticallyImplyLeading: false,
+          leading: canGoBack
+              ? IconButton(
+            icon: const Icon(Icons.arrow_back),
             onPressed: () async {
-              if(webViewController != null && await webViewController!.canGoBack()){
-                webViewController!.goBack();
-              }
-              else {
+              if (await webViewController!.canGoBack()) {
+                await webViewController!.goBack();
+                _checkCanGoBack();
+              } else {
                 Navigator.of(context).pop();
               }
             },
-          ),
+          )
+              : null,
           centerTitle: true,
           backgroundColor: backgroundColor,
           title: Text(
@@ -209,7 +219,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                   setState(() {
                     isLoading = false;
                   });
-
+                  _checkCanGoBack();
                   // // Hide elements with the "flex" class - Commenting it since Daniel don't remember why it was added
                   // await controller.evaluateJavascript(
                   //   source:
@@ -235,6 +245,9 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                     iframeAllow: "camera; microphone",
                     userAgent:
                         "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"),
+                onUpdateVisitedHistory: (controller, url, androidIsReload) async {
+                  await _checkCanGoBack();
+                },
                 onReceivedServerTrustAuthRequest: (controller, challenge) async {
                   return ServerTrustAuthResponse(
                       action: ServerTrustAuthResponseAction.PROCEED);
