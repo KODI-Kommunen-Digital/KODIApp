@@ -237,7 +237,7 @@ class Routes {
             final Map<String, dynamic> arguments =
                 settings.arguments as Map<String, dynamic>;
             return SettingsScreen(
-              user: arguments['user'] as UserModel?,
+              //user: arguments['user'] as UserModel?,
             );
           },
         );

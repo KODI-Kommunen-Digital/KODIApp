@@ -7,7 +7,6 @@ import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
-import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/configs/theme.dart';
@@ -15,9 +14,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatefulWidget {
-  const SettingsScreen({super.key, this.user});
-
-  final UserModel? user;
+  const SettingsScreen();
 
   @override
   State<SettingsScreen> createState() => _SettingsScreenState();
@@ -221,24 +218,6 @@ class _SettingsScreenState extends State<SettingsScreen>
                 },
               ),
             ),
-            if (widget.user != null)
-              AppListTitle(
-                title: Translate.of(context).translate('profile_settings'),
-                onPressed: () {
-                  _onNavigate(Routes.profileSettings);
-                },
-                trailing: Row(
-                  children: <Widget>[
-                    RotatedBox(
-                      quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                      child: const Icon(
-                        Icons.keyboard_arrow_right,
-                        textDirection: TextDirection.ltr,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             AppListTitle(
               title: Translate.of(context).translate('legal'),
               onPressed: () {

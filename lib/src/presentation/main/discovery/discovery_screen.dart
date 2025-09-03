@@ -302,14 +302,6 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         'title': 'Gastro',
       });
     } else if (service.imageLink == "15") {
-      if (AppBloc.userCubit.state == null) {
-        final result = await Navigator.pushNamed(
-          context,
-          Routes.signIn,
-          arguments: Routes.submit,
-        );
-        if (result == null) return;
-      }
       if (!mounted) return;
       Navigator.pushNamed(context, Routes.defectReport,
           arguments: {'id': service.arguments, 'title': 'defect_report'});
