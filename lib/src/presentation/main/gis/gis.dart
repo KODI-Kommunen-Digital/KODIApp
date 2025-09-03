@@ -43,7 +43,7 @@ class _GISState extends State<GIS> {
         body: SafeArea(
           child:InAppWebView(
             initialUrlRequest: URLRequest(
-              url: WebUri("https://iwebgis.net/ladbergen/buergergis/?lon=7.737199005970660&lat=52.136548437355030&zoom=10&select=false"),
+              url: WebUri("https://iwebgis.net/ladbergen/buergergis/?lon=7.739632170597163&lat=52.13664495400431&zoom=18&select=false"),
             ),
             initialSettings: InAppWebViewSettings(
               javaScriptEnabled: true,
