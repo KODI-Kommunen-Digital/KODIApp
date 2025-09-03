@@ -30,6 +30,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
+    emit(HomeStateLoading());
     if (_isLoading) {
       return;
     }

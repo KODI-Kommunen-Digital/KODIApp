@@ -41,7 +41,7 @@ class _EventsSearchWidgetState extends State<EventsSearchWidget> {
 
   bool _isFilterApplied(MultiFilter filter) {
     if (filter.hasMultipleCityFilter) {
-      if (filter.selectedCities != null &&
+      if (filter.selectedCities != null &&  filter.selectedCities!.isNotEmpty &&
           (filter.selectedCities!.length != 1 ||
               filter.selectedCities!.first != 0)) {
         return true;

@@ -261,129 +261,136 @@ class _HomeScreenState extends State<HomeScreen> {
                       //   }
                       // },
                     ),
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                controller: _scrollController,
-                slivers: <Widget>[
-                  SliverPersistentHeader(
-                    delegate: AppBarHomeSliver(
-                      expandedHeight: MediaQuery.of(context).size.height * 0.25,
-                      // onSearch: _searchListings,
+              child: Stack(
+                children: [
+                  CustomScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
                     ),
-                    pinned: false,
-                  ),
-                  SliverToBoxAdapter(
-                    child: Transform.translate(
-                      offset: const Offset(0, -45),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Material(
-                          color: Colors.transparent,
+                    controller: _scrollController,
+                    slivers: <Widget>[
+                      SliverPersistentHeader(
+                        delegate: AppBarHomeSliver(
+                          expandedHeight: MediaQuery.of(context).size.height * 0.25,
+                          // onSearch: _searchListings,
+                        ),
+                        pinned: false,
+                      ),
+                      SliverToBoxAdapter(
+                        child: Transform.translate(
+                          offset: const Offset(0, -45),
                           child: Padding(
-                            padding: const EdgeInsets.only(top : 80, left: 20, right: 20),
-                            child: AppTextInput(
-                              onDelete: (){
-                                _searchController.clear();
-                                _searchListings('');
-                              },
-                              hintText: Translate.of(context).translate('search_title'),
-                              keyboardType: TextInputType.text,
-                              controller: _searchController,
-                              onChanged: (content) async {
-                                  await _searchListings(content);
-                              },
-                              // trailing: IconButton(icon : const Icon(Icons.clear), onPressed: (){
-                              //   _searchController.clear();
-                              //   _searchListings('');
-                              // }
-                              // ,),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 4),
+                            child: Material(
+                              color: Colors.transparent,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top : 80, left: 20, right: 20),
+                                child: AppTextInput(
+                                  onDelete: (){
+                                    _searchController.clear();
+                                    _searchListings('');
+                                  },
+                                  hintText: Translate.of(context).translate('search_title'),
+                                  keyboardType: TextInputType.text,
+                                  controller: _searchController,
+                                  onChanged: (content) async {
+                                      await _searchListings(content);
+                                  },
+                                  // trailing: IconButton(icon : const Icon(Icons.clear), onPressed: (){
+                                  //   _searchController.clear();
+                                  //   _searchListings('');
+                                  // }
+                                  // ,),
+                                ),
+                              ),
+                              // child: Container(
+                              //   decoration: BoxDecoration(
+                              //     color: Theme.of(context).colorScheme.surface,
+                              //     borderRadius: BorderRadius.circular(8),
+                              //     boxShadow: [
+                              //       BoxShadow(
+                              //         color: Colors.black.withOpacity(0.1),
+                              //         offset: const Offset(0, 4),
+                              //         blurRadius: 8,
+                              //       ),
+                              //     ],
+                              //   ),
+                              //   child: CitiesDropDown(
+                              //     hintText: Translate.of(context)
+                              //         .translate('select_location'),
+                              //     cityTitlesList: cityTitles,
+                              //     setLocationCallback: (data) async {
+                              //       if (data ==
+                              //           Translate.of(context)
+                              //               .translate('select_location')) {
+                              //         setState(() {
+                              //           selectedCityId = 0;
+                              //           selectedCityTitle = Translate.of(context)
+                              //               .translate('select_location');
+                              //         });
+                              //         AppBloc.homeCubit
+                              //             .saveCityId(selectedCityId);
+                              //         AppBloc.discoveryCubit
+                              //             .onLocationFilter(selectedCityId, false);
+                              //         pageNo=1;
+                              //         _onUpdateCategory();
+                              //       } else {
+                              //         for (final list in location!) {
+                              //           if (list.title == data) {
+                              //             _onUpdateCategory();
+                              //             setState(() {
+                              //               selectedCityTitle = data;
+                              //               selectedCityId = list.id;
+                              //             });
+                              //             await AppBloc.discoveryCubit
+                              //                 .onLocationFilter(
+                              //                 selectedCityId, false);
+                              //           }
+                              //         }
+                              //       }
+                              //     },
+                              //     selectedOption: (selectedCityId > 0)
+                              //         ? selectedCityTitle
+                              //         : Translate.of(context)
+                              //         .translate('select_location'),
+                              //   ),
+                              // ),
                             ),
                           ),
-                          // child: Container(
-                          //   decoration: BoxDecoration(
-                          //     color: Theme.of(context).colorScheme.surface,
-                          //     borderRadius: BorderRadius.circular(8),
-                          //     boxShadow: [
-                          //       BoxShadow(
-                          //         color: Colors.black.withOpacity(0.1),
-                          //         offset: const Offset(0, 4),
-                          //         blurRadius: 8,
-                          //       ),
-                          //     ],
-                          //   ),
-                          //   child: CitiesDropDown(
-                          //     hintText: Translate.of(context)
-                          //         .translate('select_location'),
-                          //     cityTitlesList: cityTitles,
-                          //     setLocationCallback: (data) async {
-                          //       if (data ==
-                          //           Translate.of(context)
-                          //               .translate('select_location')) {
-                          //         setState(() {
-                          //           selectedCityId = 0;
-                          //           selectedCityTitle = Translate.of(context)
-                          //               .translate('select_location');
-                          //         });
-                          //         AppBloc.homeCubit
-                          //             .saveCityId(selectedCityId);
-                          //         AppBloc.discoveryCubit
-                          //             .onLocationFilter(selectedCityId, false);
-                          //         pageNo=1;
-                          //         _onUpdateCategory();
-                          //       } else {
-                          //         for (final list in location!) {
-                          //           if (list.title == data) {
-                          //             _onUpdateCategory();
-                          //             setState(() {
-                          //               selectedCityTitle = data;
-                          //               selectedCityId = list.id;
-                          //             });
-                          //             await AppBloc.discoveryCubit
-                          //                 .onLocationFilter(
-                          //                 selectedCityId, false);
-                          //           }
-                          //         }
-                          //       }
-                          //     },
-                          //     selectedOption: (selectedCityId > 0)
-                          //         ? selectedCityTitle
-                          //         : Translate.of(context)
-                          //         .translate('select_location'),
-                          //   ),
-                          // ),
                         ),
                       ),
-                    ),
-                  ),
-                  CupertinoSliverRefreshControl(
-                    onRefresh: _onRefresh,
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Transform.translate(
-                        offset: const Offset(0, -20),
-                        child: SafeArea(
-                          top: false,
-                          bottom: false,
-                          child: Column(
-                            children: <Widget>[
-                              // categoryLoading
-                              //     ? const CircularProgressIndicator.adaptive()
-                              //     : _buildCategory(AppBloc.homeCubit
-                              //         .getCategoriesWithoutHidden(
-                              //             category ?? [])),
-                              // _buildLocation(location),
-                              _buildRecent(recent, selectedCityId, location),
-                              const SizedBox(height: 50),
-                            ],
-                          ),
-                        ),
+                      CupertinoSliverRefreshControl(
+                        onRefresh: _onRefresh,
+                      ),
+                      SliverList(
+                        delegate: SliverChildListDelegate([
+                          Transform.translate(
+                            offset: const Offset(0, -20),
+                            child: SafeArea(
+                              top: false,
+                              bottom: false,
+                              child: Column(
+                                children: <Widget>[
+                                  // categoryLoading
+                                  //     ? const CircularProgressIndicator.adaptive()
+                                  //     : _buildCategory(AppBloc.homeCubit
+                                  //         .getCategoriesWithoutHidden(
+                                  //             category ?? [])),
+                                  // _buildLocation(location),
+                                  if(state is HomeStateLoaded)
+                                    _buildRecent(recent, selectedCityId, location),
+                                  const SizedBox(height: 50),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]),
                       )
-                    ]),
-                  )
+                    ],
+                  ),
+                  if(state is HomeStateLoading)
+                    Center(child: CircularProgressIndicator()),
                 ],
               ),
             );
@@ -880,7 +887,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildRecent(
       List<dynamic>? recent, int selectedCity, List<CategoryModel>? cities) {
     Widget content;
-
     if (recent != null && recent.isNotEmpty) {
       content = ListView.builder(
         shrinkWrap: true,
@@ -921,7 +927,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         itemCount: recent.length,
       );
-    } else {
+    }
+    else {
       content = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
