@@ -5,9 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-// import 'package:heidi/src/utils/translate.dart';
-// import 'package:loggy/loggy.dart';
-// import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CustomWebViewScreen extends StatefulWidget {
@@ -57,7 +54,7 @@ class CustomWebViewScreen extends StatefulWidget {
           children: [
             Container(
               height: MediaQuery.of(context).size.height,
-              padding: const EdgeInsets.only(top: kToolbarHeight),
+              padding: const EdgeInsets.only(top: kToolbarHeight*0.7),
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
@@ -111,14 +108,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
   InAppWebViewController? webViewController;
   bool isLoading = true;
   Timer? _timer;
-  bool canGoBack = false;
 
-  Future<void> _checkCanGoBack() async {
-    if (webViewController != null) {
-      final canGo = await webViewController!.canGoBack();
-      setState(() => canGoBack = canGo);
-    }
-  }
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory<VerticalDragGestureRecognizer>(
@@ -155,19 +145,18 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          leading: canGoBack
-              ? IconButton(
+          leading:IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () async {
-              if (await webViewController!.canGoBack()) {
-                await webViewController!.goBack();
-                _checkCanGoBack();
+              if (webViewController != null && await webViewController!.canGoBack()) {
+                webViewController!.goBack();
               } else {
-                Navigator.of(context).pop();
+                if (mounted) {
+                  Navigator.of(context).pop();
+                }
               }
             },
-          )
-              : null,
+          ),
           centerTitle: true,
           backgroundColor: backgroundColor,
           title: Text(
@@ -200,7 +189,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                 onWebViewCreated: (controller) {
                   webViewController = controller;
                 },
-                onLoadStart: (controller, url) {
+                onLoadStart: (controller, url) async{
                   setState(() {
                     isLoading = true;
                   });
@@ -219,7 +208,6 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                   setState(() {
                     isLoading = false;
                   });
-                  _checkCanGoBack();
                   // // Hide elements with the "flex" class - Commenting it since Daniel don't remember why it was added
                   // await controller.evaluateJavascript(
                   //   source:
@@ -245,9 +233,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
                     iframeAllow: "camera; microphone",
                     userAgent:
                         "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"),
-                onUpdateVisitedHistory: (controller, url, androidIsReload) async {
-                  await _checkCanGoBack();
-                },
+
                 onReceivedServerTrustAuthRequest: (controller, challenge) async {
                   return ServerTrustAuthResponse(
                       action: ServerTrustAuthResponseAction.PROCEED);

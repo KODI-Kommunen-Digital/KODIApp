@@ -5,10 +5,12 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../../utils/configs/image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../cubit/app_bloc.dart';
+import '../../widget/custom_webview.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -21,6 +23,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _introKey = GlobalKey<IntroductionScreenState>();
   bool verifyTerms = false;
   bool getPushNots = false;
+
+  Future<void> _makeAction(String link) async {
+    await launchUrl(
+      Uri.parse(link),
+      mode: LaunchMode.inAppWebView,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -269,7 +278,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    //TODO: NAvigate to terms of use
+                    CustomWebViewScreen.showAsBottomSheet(
+                        context: context,
+                        title: Translate.of(context)
+                            .translate('view_terms_of_use'),
+                        url:
+                        'https://www.gera.de/rechtliches/impressum/nutzungsbedingungen-gera-city-app');
                   },
                   child: Container(
                     height: screenHeight / 15,
