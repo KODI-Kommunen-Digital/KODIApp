@@ -538,5 +538,7 @@
   "welcomeForum": "Here you can create new groups using the blue plus icon. You can create private and public groups. Members can join public groups at any time and make a request for private groups. Have fun!",
   "views": "Views",
   "new_message": "New Message",
-  "title_and_description_required": "Please enter a title and description"
+  "title_and_description_required": "Please enter a title and description",
+  "submit_defect_success_message": "You have successfully submitted the data. Your data will be displayed in the defect report directory."
+
 }
