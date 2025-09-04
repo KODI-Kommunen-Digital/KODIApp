@@ -248,6 +248,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     final address = _addressController.text.trim();
     final email = _emailController.text.trim();
 
+    final emailRegex = RegExp(r'^(([^<>()[\.,;:\s@"]+(\.[^<>()[\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
     if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -271,6 +273,10 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     } else if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translate.of(context).translate('email_message')),
+      ));
+    } else if (!emailRegex.hasMatch(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('value_not_valid_email')),
       ));
     } else {
       context.read<DefectReportCubit>().submitReport(
