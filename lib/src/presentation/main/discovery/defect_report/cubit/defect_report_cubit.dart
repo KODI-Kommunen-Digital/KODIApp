@@ -12,7 +12,8 @@ class DefectReportCubit extends Cubit<DefectReportState> {
       {required String title,
       required String description,
       required File image,
-      required String address}) async {
+      required String address,
+      required String email}) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
       List<String> parts = image.path.split('.');
@@ -21,6 +22,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
         'title': title,
         'description': description,
         'address': address,
+        'email': email,
         //'language': 'de', // You might want to make this configurable
         'image': await MultipartFile.fromFile(
           image.path,

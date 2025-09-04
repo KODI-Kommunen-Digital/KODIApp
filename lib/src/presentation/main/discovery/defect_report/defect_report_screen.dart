@@ -20,6 +20,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _addressController = TextEditingController();
+  final _emailController = TextEditingController();
   File? _selectedImage;
   String? currentMaengelTyp;
 
@@ -28,6 +29,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     _titleController.dispose();
     _descriptionController.dispose();
     _addressController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
@@ -86,6 +88,30 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                           });
                         },
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context).translate('email'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AppTextInput(
+                      hintText: Translate.of(context).translate('email'),
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: 16),
                     Text.rich(
@@ -220,6 +246,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
         "${_titleController.text.trim()} | ${currentMaengelTyp ?? ""}";
     final description = _descriptionController.text.trim();
     final address = _addressController.text.trim();
+    final email = _emailController.text.trim();
 
     if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -241,12 +268,18 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     } else if (currentMaengelTyp == null || currentMaengelTyp == "") {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(Translate.of(context).translate('category_require'))));
+    } else if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('email_message')),
+      ));
     } else {
       context.read<DefectReportCubit>().submitReport(
-          title: title,
-          description: description,
-          image: _selectedImage!,
-          address: address);
+            title: title,
+            description: description,
+            image: _selectedImage!,
+            address: address,
+            email: email,
+          );
     }
   }
 }
