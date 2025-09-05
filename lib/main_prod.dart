@@ -1,6 +1,7 @@
 import 'package:heidi/src/utils/configs/app_env.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'main.dart';
+import 'src/production/firebase_options.dart';
 
 Future<void> main() async {
   Application.init(
@@ -9,5 +10,5 @@ Future<void> main() async {
     envDefaultPictureURL: AppEnv.production.defaultPictureURL,
     debugMode: AppEnv.production.debug,
   );
-  mainApp();
+  mainApp(firebaseOptions: ProductionDefaultFirebaseOptions.currentPlatform);
 }
