@@ -154,7 +154,7 @@ class _MainScreenState extends State<MainScreen> {
       case Routes.setting:
         iconData = Icons.settings;
         title = Translate.of(context).translate(
-          'setting',
+          'app',
         );
         break;
       default:
