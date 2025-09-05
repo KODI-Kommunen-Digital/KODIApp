@@ -530,6 +530,7 @@
   "quelle":"Source",
   "notificationPermission" : "Notifications are disabled for this app. To enable them, please open the app settings and grant permission",
   "openSettings" : "Open Settings",
+  "app": "App",
   "enableNotification": "Enable Notifications",
   "choose_time_period": "Choose time period",
   "choose_listing_status": "Choose listing status",
