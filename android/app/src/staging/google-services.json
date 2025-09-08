@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "248378738903",
+    "project_id": "gera-stage",
+    "storage_bucket": "gera-stage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248378738903:android:8f898ddf9d3c1668a2c892",
+        "android_client_info": {
+          "package_name": "de.gera.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSEewJEw3KHiXmsf3qP6s66rgOrEJzoCQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

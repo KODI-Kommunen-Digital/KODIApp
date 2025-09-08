@@ -295,4 +295,12 @@ class UserRepository {
     }
     return favoriteList;
   }
+
+  static Future<ResultApiModel> loadCities() async {
+    final response = await Api.requestSubmitCities();
+    var jsonCity = response.data;
+    final selectedCity = jsonCity.first['name'];
+    return response;
+  }
+
 }

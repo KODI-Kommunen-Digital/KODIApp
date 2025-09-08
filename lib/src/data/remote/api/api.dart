@@ -326,9 +326,15 @@ class Api {
   }
 
   ///Get Recent Listings
-  static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings =
-        "listings?categoryId=1&statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
+  static Future<ResultApiModel> requestRecentListings(params,cityId) async {
+    String path='';
+    if(cityId!=0){
+      path="listings?categoryId=1&statusId=1&pageNo=$params&pageSize=6&cityId=$cityId&showExternalListings=$showExternalListings";
+    }
+    else{
+      path="listings?categoryId=1&statusId=1&pageNo=$params&pageSize=6&showExternalListings=$showExternalListings";
+    }
+    final listings =path;
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -497,7 +503,7 @@ class Api {
     if (categoryId == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(forum: false).get(url: list, loading: true);
         return ResultApiModel.fromJson(result);
@@ -524,14 +530,17 @@ class Api {
 
   ///Get Filter list
   static Future<ResultApiModel> requestFilteredList(
-      {categoryId, cityId, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
+      {categoryId, cityId, cityIds, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
     var list = "";
     if (categoryId == 3) {
       list +=
-          "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
+          "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&sortByStartDate=true&showExternalListings=$showExternalListings";
 
-      if (cityId!=null && cityId!=0){
-        list += "&cityId=$cityId";
+      if (cityIds!=null){
+        if(cityIds!=null && cityIds.isNotEmpty && cityIds[0]!=0){
+          String result = cityIds.join(",");
+          list += "&cityId=$result";
+        }
       }
       if (searchTerm!= null && searchTerm!="") {
         list += "&searchQuery=$searchTerm";
@@ -575,9 +584,15 @@ class Api {
     }
   }
 
-  static Future<ResultApiModel> requestLocList(params, pageNo) async {
-    var list =
-        'listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+  static Future<ResultApiModel> requestLocList(params, pageNo,int? categoryId,) async {
+    String list;
+    if(categoryId!=null) {
+      list =
+      'listings?cityId=$params&categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
+    }
+    else{
+      list='listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=6&showExternalListings=$showExternalListings';
+    }
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }
@@ -696,7 +711,7 @@ class Api {
   static Future<ResultApiModel> requestSearchListing(
       content, filter, pageNo) async {
     var list =
-        'listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10';
+        'listings?searchQuery=$content$filter&pageNo=$pageNo&pageSize=6&showExternalListings=true';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }

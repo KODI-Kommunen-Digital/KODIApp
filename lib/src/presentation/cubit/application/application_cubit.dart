@@ -15,6 +15,21 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(const ApplicationLoading());
 
+  Future<void> checkFirstTime() async {
+    final prefs = await Preferences.openBox();
+    final hasOpenedAppBefore =
+    prefs.getBool('hasOpenedAppBefore', defaultValue: false);
+
+    if (!hasOpenedAppBefore) {
+
+      emit(const ApplicationState.onboardingLoaded());
+      // Navigator.pushNamed(context, Routes.welcomeScreen);
+    }
+    else{
+      goToMainScreen();
+    }
+  }
+
   void onSetup() async {
     final prefBox = await Preferences.openBox();
 
@@ -35,10 +50,10 @@ class ApplicationCubit extends Cubit<ApplicationState> {
       emit(const ApplicationState.loading());
       prefBox.setKeyValue(Preferences.hasShownSplash, true);
       Timer(const Duration(seconds: 4), () {
-        emit(const ApplicationState.loaded());
+        checkFirstTime();
       });
     } else {
-      emit(const ApplicationState.loaded());
+      checkFirstTime();
     }
 
     if (oldDomain != '') {
@@ -82,5 +97,9 @@ class ApplicationCubit extends Cubit<ApplicationState> {
     );
 
     AppBloc.authenticateCubit.onCheck();
+  }
+
+  void goToMainScreen() {
+    emit(const ApplicationState.loaded());
   }
 }

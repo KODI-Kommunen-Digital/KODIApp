@@ -11,7 +11,8 @@ import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/presentation/main/discovery/sub_discovery_screen.dart';
 import 'package:heidi/src/utils/translate.dart';
-
+import 'package:flutter_svg/flutter_svg.dart';
+import '../../../utils/configs/image.dart';
 import '../../../utils/configs/routes.dart';
 import 'cubit/cubit.dart';
 
@@ -57,42 +58,42 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
             (widget.type == DiscoveryType.services)
                 ? 'cust_services'
                 : 'discover')),
-        actions: [
-          BlocConsumer<DiscoveryCubit, DiscoveryState>(
-            listener: (context, state) {},
-            builder: (context, state) => state.maybeWhen(
-                loaded: (services, explore) => Row(
-                  children: [
-                    AppFilterButton(
-                      multiFilter: MultiFilter(
-                        hasLocationFilter: true,
-                        currentLocation:
-                        context.read<DiscoveryCubit>().currentCity ?? 0,
-                        cities: context.read<DiscoveryCubit>().location,
-                      ),
-                      filterCallBack: (filter) async {
-                        if (filter.currentLocation != null) {
-                          context
-                              .read<DiscoveryCubit>()
-                              .onLocationFilter(filter.currentLocation!, true);
-                        }
-                      },
-                    ),
-                    IconButton(
-                        onPressed: () {
-                          _searchServices();
-                        },
-                        icon: Icon(
-                          Icons.search,
-                          color:
-                          Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
-                        ))
-                  ],
-                ),
-                orElse: () => Container()),
-          )
-        ],
+        // actions: [
+        //   BlocConsumer<DiscoveryCubit, DiscoveryState>(
+        //     listener: (context, state) {},
+        //     builder: (context, state) => state.maybeWhen(
+        //         loaded: (services, explore) => Row(
+        //           children: [
+        //             AppFilterButton(
+        //               multiFilter: MultiFilter(
+        //                 hasLocationFilter: true,
+        //                 currentLocation:
+        //                 context.read<DiscoveryCubit>().currentCity ?? 0,
+        //                 cities: context.read<DiscoveryCubit>().location,
+        //               ),
+        //               filterCallBack: (filter) async {
+        //                 if (filter.currentLocation != null) {
+        //                   context
+        //                       .read<DiscoveryCubit>()
+        //                       .onLocationFilter(filter.currentLocation!, true);
+        //                 }
+        //               },
+        //             ),
+        //             IconButton(
+        //                 onPressed: () {
+        //                   _searchServices();
+        //                 },
+        //                 icon: Icon(
+        //                   Icons.search,
+        //                   color:
+        //                   Theme.of(context).textTheme.bodyLarge?.color ??
+        //                       Colors.white,
+        //                 ))
+        //           ],
+        //         ),
+        //         orElse: () => Container()),
+        //   )
+        // ],
       ),
       body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
         listener: (context, state) {
@@ -247,10 +248,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         ? widget.services
         : widget.explore;
 
-    if (widget.isSearching && currentList.isEmpty) {
+    if (currentList.isEmpty) {
       return Center(
         child: Text(
-          Translate.of(context).translate('no_results_found'),
+          Translate.of(context).translate('no_services_available'),
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
@@ -312,6 +313,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           },
         ),
       ),
+      bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
     );
   }
 
@@ -360,7 +362,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         CustomWebViewScreen.showAsBottomSheet(
             context: context,
             title: service.title,
-            url: 'https://www.awv-ot.de/App/');
+            url: 'https://www.awv-ot.de/tourenauskunft/stadt_gera_app.php');
         break;
       case "25":
 

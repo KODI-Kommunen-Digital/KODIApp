@@ -31,16 +31,17 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.multiFilter.hasMultipleCityFilter) {
-      currentCities = widget.multiFilter.currentLocation.cast<int>();
-    } else {
-      currentCity = widget.multiFilter.currentLocation;
+    if (widget.multiFilter.hasMultipleCityFilter|| widget.multiFilter.hasLocationFilter) {
+      currentCities = widget.multiFilter.selectedCities??[0];
     }
     if(widget.multiFilter.hasSubCategoryFilter){
       subCategoriesMap = widget.multiFilter.subCategoriesMap;
     }
     if(widget.multiFilter.hasDateRangeFilter) {
       dayTimeMap = widget.multiFilter.dayTimeMap;
+    }
+    if(widget.multiFilter.hasDayTimeFilter) {
+      currentDayTimeFilter = widget.multiFilter.currentDayTimeFilter;
     }
     currentCategory = widget.multiFilter.currentCategory;
     currentProductEventFilter = widget.multiFilter.currentProductEventFilter;
@@ -49,6 +50,57 @@ class _FilterScreenState extends State<FilterScreen> {
     startAfterDate = widget.multiFilter.startAfterDate;
     endAfterDate = widget.multiFilter.endAfterDate;
     currentSubCategory = widget.multiFilter.currentSubCategory;
+    currentCities = widget.multiFilter.selectedCities ?? [0];
+  }
+
+  bool _isFilterApplied() {
+    if (widget.multiFilter.hasMultipleCityFilter) {
+      if (currentCities.length != 1 || currentCities.first != 0) return true;
+    } else if (widget.multiFilter.hasLocationFilter) {
+      if (currentCity != null && currentCity != 0) return true;
+    }
+
+    if (widget.multiFilter.hasCategoryFilter &&
+        currentCategory != null &&
+        currentCategory != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasSubCategoryFilter &&
+        currentSubCategory != null &&
+        currentSubCategory != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasListingStatusFilter &&
+        currentListingStatus != null &&
+        currentListingStatus != 0) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasProductEventFilter &&
+        currentProductEventFilter != null) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasForumGroupFilter &&
+        currentForumGroupFilter != null &&
+        currentForumGroupFilter != GroupFilter.allGroups) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasDateRangeFilter &&
+        (startAfterDate != null || endAfterDate != null)) {
+      return true;
+    }
+
+    if (widget.multiFilter.hasDayTimeFilter &&
+        currentDayTimeFilter != null &&
+        currentDayTimeFilter != DayTimeFilter.all) {
+      return true;
+    }
+
+    return false;
   }
 
   @override
@@ -59,15 +111,25 @@ class _FilterScreenState extends State<FilterScreen> {
         centerTitle: true,
         title: const Text("Filter"),
         actions: [
-          IconButton(onPressed: () {
-            setState(() {
-              currentCity = 0;
-              startAfterDate = null;
-              endAfterDate = null;
-              currentSubCategory = null;
-              currentDayTimeFilter = null;
-            });
-          }, icon: const Icon(Icons.refresh))
+          IconButton(
+              onPressed: () {
+                setState(() {
+                  currentCity = 0;
+                  currentCities = [0];
+                  startAfterDate = null;
+                  endAfterDate = null;
+                  currentSubCategory = null;
+                  currentDayTimeFilter = null;
+                  currentCategory = 0;
+                  currentProductEventFilter = null;
+                  currentListingStatus = 0;
+                  currentForumGroupFilter = GroupFilter.allGroups;
+                });
+              },
+              icon: Icon(Icons.refresh,
+                  color: _isFilterApplied()
+                      ? Theme.of(context).primaryColor
+                      : null))
         ],
       ),
       body: SingleChildScrollView(
@@ -114,7 +176,10 @@ class _FilterScreenState extends State<FilterScreen> {
                       hasSubCategoryFilter:
                       widget.multiFilter.hasSubCategoryFilter,
                       hasDayTimeFilter: widget.multiFilter.hasDayTimeFilter,
-                      hasDateRangeFilter: widget.multiFilter.hasDateRangeFilter));
+                      hasDateRangeFilter: widget.multiFilter.hasDateRangeFilter,
+                      hasMultipleCityFilter: widget.multiFilter.hasMultipleCityFilter,
+                      selectedCities: currentCities
+                  ));
             }
           },
           child: Column(
@@ -183,33 +248,33 @@ class _FilterScreenState extends State<FilterScreen> {
                     });
                   },
                 ),
-          ...widget.multiFilter.cities!.map((city) {
-            return (widget.multiFilter.hasMultipleCityFilter)
-                ? ChoiceChip(
-                    label: Text(city.title),
-                    selected: currentCities.contains(city.id),
-                    onSelected: (selected) {
-                      setState(() {
+                ...widget.multiFilter.cities!.map((city) {
+                  return (widget.multiFilter.hasMultipleCityFilter)
+                      ? ChoiceChip(
+                          label: Text(city.title),
+                          selected: currentCities.contains(city.id),
+                          onSelected: (selected) {
+                            setState(() {
 
-                        if (currentCities.contains(city.id)) {
-                          currentCities.remove(city.id);
-                        } else {
-                          currentCities.add(city.id);
-                          currentCities.remove(0);
-                        }
-                      });
-                    },
-                  )
-                : ChoiceChip(
-                    label: Text(city.title),
-                    selected: city.id == currentCity,
-                    onSelected: (selected) {
-                      setState(() {
-                        currentCity = city.id;
-                      });
-                    },
-                  );
-          }),
+                              if (currentCities.contains(city.id)) {
+                                currentCities.remove(city.id);
+                              } else {
+                                currentCities.add(city.id);
+                                currentCities.remove(0);
+                              }
+                            });
+                          },
+                        )
+                      : ChoiceChip(
+                          label: Text(city.title),
+                          selected: city.id == currentCity,
+                          onSelected: (selected) {
+                            setState(() {
+                              currentCity = city.id;
+                            });
+                          },
+                        );
+                }),
         ]),
       )
     ];
@@ -341,7 +406,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-        Translate.of(context).translate('choose_time_period'),
+        Translate.of(context).translate('time_period'),
         style: Theme.of(context)
             .textTheme
             .titleMedium!
@@ -489,7 +554,7 @@ class _FilterScreenState extends State<FilterScreen> {
       const SizedBox(height: 8),
       Center(
         child: Text(
-          Translate.of(context).translate('choose_time_period'),
+          Translate.of(context).translate('time_period'),
           style: Theme.of(context)
               .textTheme
               .titleMedium!
@@ -503,7 +568,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ChoiceChip(
             label: Text(
               startAfterDate == null
-                  ? Translate.of(context).translate('start_date')
+                  ? Translate.of(context).translate('from_date')
                   : DateFormat('yyyy-MM-dd').format(startAfterDate!),
             ),
             selected: startAfterDate != null,
@@ -530,6 +595,7 @@ class _FilterScreenState extends State<FilterScreen> {
 
           /// Clear start date
           if (startAfterDate != null)
+
             ChoiceChip(
               label: Text(Translate.of(context).translate('clear_date')),
               selected: false,
@@ -545,7 +611,7 @@ class _FilterScreenState extends State<FilterScreen> {
           ChoiceChip(
             label: Text(
               endAfterDate == null
-                  ? Translate.of(context).translate('end_date')
+                  ? Translate.of(context).translate('to_date')
                   : DateFormat('yyyy-MM-dd').format(endAfterDate!),
             ),
             selected: endAfterDate != null,
@@ -599,7 +665,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('input_subcategory'),
+            Translate.of(context).translate('input_category'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!
@@ -651,7 +717,7 @@ class _FilterScreenState extends State<FilterScreen> {
       ),
       Center(
           child: Text(
-            Translate.of(context).translate('select_time_of_the_day'),
+            Translate.of(context).translate('time_of_day'),
             style: Theme.of(context)
                 .textTheme
                 .titleMedium!

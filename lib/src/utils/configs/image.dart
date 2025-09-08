@@ -3,6 +3,11 @@ class Images {
   static const String intro2 = "assets/images/intro_2.png";
   static const String intro3 = "assets/images/intro_3.png";
   static const String logo = "assets/images/logo.png";
+  static const String logoDark = "assets/images/logo_dark.png";
+  static const String geraLogo = "assets/images/gera_icon.png";
+  static const String geraLogoSVG = "assets/images/GeraFavicon.svg";
+  static const String compass = "assets/images/compass.png";
+  static const String skyline = "assets/images/skyline.png";
   static const String slider = "assets/images/slider.jpg";
   static const String whatsapp = "assets/images/whatsapp.png";
   static const String telegram = "assets/images/telegram.png";

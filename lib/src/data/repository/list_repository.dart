@@ -49,7 +49,7 @@ class ListRepository {
       }
     } else if (type == "location") {
       int params = cityId ?? 0;
-      final response = await Api.requestLocList(params, pageNo);
+      final response = await Api.requestLocList(params, pageNo,null);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -91,6 +91,7 @@ class ListRepository {
     required String type,
     required pageNo,
     int? cityId,
+    List<int>? cityIds,
     int? subCategoryId,
     String? startDate,
     String? endDate,
@@ -104,6 +105,7 @@ class ListRepository {
       final response = await Api.requestFilteredList(
           categoryId: categoryId,
           cityId: cityId,
+          cityIds: cityIds,
           subCategoryId: subCategoryId,
           startDate: startDate,
           endDate: endDate,
@@ -113,9 +115,9 @@ class ListRepository {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
-        if (cityId != 0) {
-          list.removeWhere((element) => element.cityId != cityId);
-        }
+        // if (cityId != 0) {
+        //   list.removeWhere((element) => element.cityId != cityId);
+        // }
         return [list, response.pagination];
       }
     } else if (type == "searchListings" && searchTerm!=null) {
