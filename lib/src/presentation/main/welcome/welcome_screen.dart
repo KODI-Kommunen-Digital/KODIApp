@@ -5,6 +5,12 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:introduction_screen/introduction_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../../../utils/configs/image.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../../cubit/app_bloc.dart';
+import '../../widget/custom_webview.dart';
 
 class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
@@ -17,6 +23,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   final _introKey = GlobalKey<IntroductionScreenState>();
   bool verifyTerms = false;
   bool getPushNots = false;
+
+  Future<void> _makeAction(String link) async {
+    await launchUrl(
+      Uri.parse(link),
+      mode: LaunchMode.inAppWebView,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,31 +53,27 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
-                Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
                     style: Theme.of(context).textTheme.titleLarge,
                     children: [
                       const TextSpan(
-                          text: "Egal, ob zu Besuch oder zu Hause, dein "),
+                          text: "Willkommen in deiner Gera City-App!\n"),
+                      const TextSpan(
+                          text: "Die Stadt in deiner Tasche – hier beginnt dein "),
                       const TextSpan(
                         text: "Gera-",
                         style: TextStyle(color: Colors.red),
                       ),
                       TextSpan(
-                        text: "Gefühl",
+                        text: "Gefühl:",
                         style: TextStyle(color: Theme.of(context).primaryColor),
                       ),
                       const TextSpan(
                         text:
-                            " beginnt genau hier - personalisiert und voller Inspiration.",
+                            " persönlich, aktuell und voller Inspiration.",
                       ),
                     ],
                   ),
@@ -87,15 +96,24 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
+                  "Registriere dich und sichere dir noch mehr Vorteile:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Registriere dich mit einem eigenen Profil und nutze so weitere Vorteile wie Lieblingsbeiträge zu favorisieren oder mit deinen Liebsten zu teilen!",
+                  "• Eigene Veranstaltungen speichern",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "•  Push-Benachrichtigungen zu deinen zugeschnittenen Inhalten",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "Und viel mehr!",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -158,15 +176,34 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
+                  "Bleib immer auf dem Laufenden!",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
                 ),
                 Text(
-                  "Die Gera-App sendet dir Mitterilungen bei Events in deiner Nähe, schickt dir zu deinen städtischen Anträgen Updates und erinnert dich, wenn der Müll raus muss.\nBitte bestätige, dass sie mit derartigen Push-Nachrichten einverstanden bist.",
+                  "Die App informiert dich über:",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Veranstaltungen (in deiner Nähe)",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Updates zu deinen Anträgen (später, da dies noch nicht als Funktion vorhanden ist)",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Erinnerungen zur Müllabfuhr",
+                  style: Theme.of(context).textTheme.titleMedium,
+                  textAlign: TextAlign.center,
+                ),
+                Text(
+                  "• Aktuelle Pressemitteilungen",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -174,7 +211,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 48,
                 ),
                 Container(
-                  height: screenHeight / 15,
+                  height: screenHeight / 10,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.7),
@@ -205,7 +242,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           const Expanded(
                               child: Text(
-                            "Ich möchte bei für mich wichtigen Infos benachrichtigt werden.",
+                            "Bitte bestätige, dass du Push-Benachrichtigungen erhalten möchtest.",
                           )),
                         ],
                       ),
@@ -230,15 +267,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 const SizedBox(
                   height: 64,
                 ),
+                SvgPicture.asset(Images.geraLogoSVG,height: 100,width: 100,),
                 Text(
-                  "GERA",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleLarge!
-                      .copyWith(fontSize: 90),
-                ),
-                Text(
-                  "Bevor es losgeht, akzeptiere bitte unsere Nutzungsbedingungen.\nOhne Zustimmungs kannst sie die Gera-App leider nicht nutzen.",
+                  "Bevor es losgeht",
                   style: Theme.of(context).textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -247,7 +278,12 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ),
                 InkWell(
                   onTap: () {
-                    //TODO: NAvigate to terms of use
+                    CustomWebViewScreen.showAsBottomSheet(
+                        context: context,
+                        title: Translate.of(context)
+                            .translate('view_terms_of_use'),
+                        url:
+                        'https://www.gera.de/rechtliches/impressum/nutzungsbedingungen-gera-city-app');
                   },
                   child: Container(
                     height: screenHeight / 15,
@@ -284,7 +320,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                   height: 12,
                 ),
                 Container(
-                  height: screenHeight / 15,
+                  height: screenHeight / 8,
                   width: double.infinity,
                   decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor.withOpacity(0.7),
@@ -330,6 +366,10 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         onDone: () {
           _onDone();
         },
+        globalFooter: Container(
+          color: Colors.white, // set background color
+          child: Image.asset(Images.skyline),
+        ),
       )),
     );
   }
@@ -346,7 +386,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     } else {
       final prefs = await Preferences.openBox();
       await prefs.setBool('hasOpenedAppBefore', true);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      AppBloc.applicationCubit.goToMainScreen();
     }
   }
 

@@ -4,6 +4,8 @@ import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../widget/custom_webview.dart';
+
 class LegalScreen extends StatefulWidget {
   const LegalScreen({super.key});
 
@@ -22,11 +24,16 @@ class _LegalScreenState extends State<LegalScreen> {
     super.dispose();
   }
 
-  Future<void> _makeAction(String link) async {
-    await launchUrl(
-      Uri.parse(link),
-      mode: LaunchMode.inAppWebView,
-    );
+  Future<void> _makeAction(String link, String title) async {
+    CustomWebViewScreen.showAsBottomSheet(
+        context: context,
+        title: Translate.of(context)
+            .translate(title),
+        url:link);
+    // await launchUrl(
+    //   Uri.parse(link),
+    //   mode: LaunchMode.inAppWebView,
+    // );
   }
 
   @override
@@ -45,7 +52,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('imprint'),
               onPressed: () {
-                _makeAction('http://116.203.1.1:3000/ImprintPage');
+                _makeAction('https://www.gera.de/rechtliches/impressum','imprint');
               },
               trailing: Row(
                 children: <Widget>[
@@ -62,7 +69,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('privacy_policy'),
               onPressed: () {
-                _makeAction('http://116.203.1.1:3000/PrivacyPolicy');
+                _makeAction('https://www.gera.de/rechtliches/datenschutz','privacy_policy');
               },
               trailing: Row(
                 children: <Widget>[
@@ -79,7 +86,7 @@ class _LegalScreenState extends State<LegalScreen> {
             AppListTitle(
               title: Translate.of(context).translate('terms_of_use'),
               onPressed: () {
-                _makeAction('http://116.203.1.1:3000/TermsOfUse');
+                _makeAction('https://www.gera.de/rechtliches/impressum/nutzungsbedingungen-gera-city-app','terms_of_use');
               },
               trailing: Row(
                 children: <Widget>[

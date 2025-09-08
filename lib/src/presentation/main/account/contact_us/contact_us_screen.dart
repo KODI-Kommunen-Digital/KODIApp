@@ -39,10 +39,15 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
     Utils.hiddenKeyboard(context);
     final result = await AppBloc.contactUsCubit
         .onSendFeedback(email: _textInfoController.text, token: user.token);
-    if (result) {
+    if (result=="success") {
       _onSuccess();
       if (!mounted) return;
     } else {
+      if (!mounted) return;
+      final snackBar = SnackBar(
+        content: Text(result),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       logError('Update User Result Error', result);
     }
   }

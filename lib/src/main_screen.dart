@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/main/account/account_profile/account_scre
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/events/events_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -136,7 +137,7 @@ class _MainScreenState extends State<MainScreen> {
     String title = Translate.of(context).translate(
       'home',
     );
-    IconData iconData = Icons.help_outline;
+    dynamic iconData = Icons.help_outline;
     switch (route) {
       case Routes.home:
         iconData = Icons.home_outlined;
@@ -151,7 +152,7 @@ class _MainScreenState extends State<MainScreen> {
         );
         break;
       case Routes.explore:
-        iconData = Icons.search;
+        iconData = Images.compass;
         title = Translate.of(context).translate(
           'discover',
         );
@@ -183,10 +184,12 @@ class _MainScreenState extends State<MainScreen> {
       icon: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            iconData,
-            color: color,
-          ),
+          (iconData is String)?
+            Image.asset(iconData,height: 20,width: 20,color: color ?? (Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white),):
+            Icon(
+              iconData!,
+              color: color,
+            ),
           const SizedBox(height: 2),
         ],
       ),

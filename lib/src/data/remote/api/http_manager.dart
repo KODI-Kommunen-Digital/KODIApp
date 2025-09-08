@@ -16,9 +16,10 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
+    final domain= Application.domain;
     _baseUrl = !forum
-        ? 'http://116.203.1.1:3001/v2/'
-        : 'http://116.203.1.1:3001/v2/';
+        ? domain
+        : domain;
 
     _dio = Dio(
       BaseOptions(

@@ -8,17 +8,17 @@ import '../../../../cubit/app_bloc.dart';
 class ContactUsCubit extends Cubit<ContactUsState> {
   ContactUsCubit() : super(const ContactUsState.loading());
 
-  Future<bool> onSendFeedback({
+  Future<String> onSendFeedback({
     required String email,
     required String token,
   }) async {
     Map<String, dynamic> params = {"email": email, "token": token};
     final sendFeedback = await Api.contactUs(params);
     if (sendFeedback.success) {
-      return true;
+      return "success";
     } else {
       logError('save Product Response Failed', sendFeedback.message);
-      return false;
+      return sendFeedback.message;
     }
   }
 

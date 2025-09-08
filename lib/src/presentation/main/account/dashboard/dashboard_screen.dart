@@ -3,6 +3,8 @@ import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
+import '../../../../utils/configs/image.dart';
+
 class DashboardScreen extends StatelessWidget {
   final UserModel user;
   final bool isEditable;
@@ -70,6 +72,7 @@ class DashboardScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
     );
   }
 }

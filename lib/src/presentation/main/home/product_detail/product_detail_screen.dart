@@ -14,6 +14,8 @@ import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
+import 'package:heidi/src/presentation/main/home/list_product/list_product.dart';
 import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
@@ -43,6 +45,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   AdDataModel? _adData;
   int minWordsForAds = 0;
   int positionForAds = 0;
+  List? listCity = [];
 
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory(() => EagerGestureRecognizer())
@@ -55,10 +58,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     _productDetailCubit.onLoad(widget.item);
     _loadAdData();
     _checkShowAdWords();
+    _loadCityData();
   }
 
   void _loadAdData() async {
     _adData = await ProductDetailCubit.loadAdData();
+    setState(() {});
+  }
+
+  void _loadCityData() async {
+    listCity = await ProductDetailCubit.getCityList();
     setState(() {});
   }
 
@@ -184,7 +193,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                color: Colors.black,
                 padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
                 child: Row(
                   children: [
@@ -316,6 +324,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     Widget website = Container();
     Widget startDate = Container();
     Widget endDate = Container();
+    Widget location = Container();
     Widget openHours = Container();
     Widget attachments = Container();
     Widget createdDate = Container();
@@ -651,7 +660,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                   ),
                                   child: Image.network(
                                     imageUrlString!,
-                                    fit: BoxFit.contain,
+                                    fit: BoxFit.fill,
                                     loadingBuilder: (BuildContext context,
                                         Widget child,
                                         ImageChunkEvent? loadingProgress) {
@@ -976,6 +985,29 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
+      if (product.cityId!=null) {
+
+        location = Row(
+          children: [
+            Text(
+              Translate.of(context).translate(
+                'location',
+              ),
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+            const SizedBox(width: 8),
+            Text(
+              context.read<ListCubit>().getCityNameFromId(
+                  listCity?? [], product.cityId ?? 0),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleSmall!
+                  .copyWith(fontWeight: FontWeight.bold),
+            )
+          ],
+        );
+      }
+
       if (product.endDate.isNotEmpty) {
         endDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1237,6 +1269,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 // priceRange,
               ],
             ),
+            location,
             description,
             address,
             phone,
@@ -1323,7 +1356,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           iconTheme: Theme.of(context).iconTheme.copyWith(
                 color: Theme.of(context).brightness == Brightness.dark
                     ? Colors.white
-                    : const Color(0xFF1D1D1B),
+                    : Theme.of(context).primaryColor,
+
               ),
           flexibleSpace: FlexibleSpaceBar(
             collapseMode: CollapseMode.none,

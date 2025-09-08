@@ -90,7 +90,7 @@ class EventsCubit extends Cubit<EventsState> {
       }
     }
 
-    Map<int, String> subcategories = ListCubit.getSubCategories();
+    Map<int, String> subcategories = ListCubit.getSubCategoriesEvents();
     Map<DayTimeFilter, String> dayTimeMap = ListCubit.getDayTimeFilters();
 
 
@@ -98,6 +98,7 @@ class EventsCubit extends Cubit<EventsState> {
 
     filter ??= MultiFilter(
         hasLocationFilter: true,
+        hasMultipleCityFilter: true,
         hasDateRangeFilter: true,
         hasDayTimeFilter: true,
         hasSubCategoryFilter: true,
@@ -110,14 +111,43 @@ class EventsCubit extends Cubit<EventsState> {
     emit(EventsState.loaded(eventsList));
   }
 
-  Future<void> newEvents(int pageNo) async {
-    final eventsResponse = await ListRepository.loadList(
-        categoryId: 3, type: "category", pageNo: pageNo, cityId: cityId);
+  Future<void> newEvents(int pageNo, MultiFilter? selectedFilter,) async {
     List<ProductModel> eventsList = [];
+    if(selectedFilter!=null){
+      filter = selectedFilter;
+      List<int>? cityIds = selectedFilter.selectedCities;
+      int? subCategoryId = selectedFilter.currentSubCategory;
+      String? startDate = selectedFilter.startAfterDate != null ? formatDate(
+          selectedFilter.startAfterDate!) : null;
+      String? endDate = selectedFilter.endAfterDate != null ? formatDate(
+          selectedFilter.endAfterDate!) : null;
+      String? timeFilter = selectedFilter.currentDayTimeFilter != null
+          ? getDayTimeType(selectedFilter.currentDayTimeFilter!)
+          : null;
 
-    if (eventsResponse != null) {
-      eventsList = eventsResponse[0];
-      loadedEvents.addAll(eventsList);
+      final eventsResponse = await ListRepository.loadFilteredList(
+        categoryId: 3,
+        type: "filterType",
+        pageNo: pageNo,
+        cityIds: cityIds ?? [0],
+        subCategoryId: subCategoryId,
+        startDate: startDate,
+        endDate: endDate,
+        timeFilter: timeFilter,
+      );
+      if (eventsResponse != null) {
+        eventsList = eventsResponse[0];
+        loadedEvents.addAll(eventsList);
+      }
+    }
+    else {
+      final eventsResponse = await ListRepository.loadList(
+          categoryId: 3, type: "category", pageNo: pageNo, cityId: cityId);
+
+      if (eventsResponse != null) {
+        eventsList = eventsResponse[0];
+        loadedEvents.addAll(eventsList);
+      }
     }
     emit(EventsState.updated(loadedEvents));
   }
@@ -220,7 +250,7 @@ class EventsCubit extends Cubit<EventsState> {
   Future<void> onFilter(MultiFilter selectedFilter, int pageNo) async {
     emit(const EventsState.loading());
     filter = selectedFilter;
-    int cityId = selectedFilter.currentLocation;
+    List<int>? cityIds = selectedFilter.selectedCities;
     int? subCategoryId = selectedFilter.currentSubCategory;
     String? startDate = selectedFilter.startAfterDate != null ? formatDate(
         selectedFilter.startAfterDate!) : null;
@@ -234,7 +264,7 @@ class EventsCubit extends Cubit<EventsState> {
       categoryId: 3,
       type: "filterType",
       pageNo: pageNo,
-      cityId: cityId,
+      cityIds: cityIds ?? [0],
       subCategoryId: subCategoryId,
       startDate: startDate,
       endDate: endDate,
