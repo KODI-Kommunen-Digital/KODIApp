@@ -54,8 +54,3 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    //change for Daniel
-    implementation 'androidx.multidex:multidex:2.0.1'
-}
