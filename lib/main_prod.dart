@@ -22,9 +22,11 @@ import 'package:loggy/loggy.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
+
+
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
-  WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -34,12 +36,13 @@ Future<void> main() async {
       ])
     ],
   );
-  await Hive.initFlutter();
+  //await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
-
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
+  runApp(HeidiApp(prefBox));
+
 }
+
 
 final globalNavKey = GlobalKey<NavigatorState>();
 
@@ -59,7 +62,9 @@ class _HeidiAppState extends State<HeidiApp> {
   @override
   void initState() {
     super.initState();
-    AppBloc.applicationCubit.onSetup();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppBloc.applicationCubit.onSetup();
+    });
   }
 
   @override
@@ -103,12 +108,13 @@ class _HeidiAppState extends State<HeidiApp> {
                     home: Scaffold(
                       body: BlocBuilder<ApplicationCubit, ApplicationState>(
                         builder: (context, state) {
-                          if (state == const ApplicationState.loaded()) {
-                            return const MainScreen();
-                          }
                           if (state == const ApplicationState.loading()) {
                             return const SplashScreen();
                           }
+                          if (state == const ApplicationState.loaded()) {
+                            return const MainScreen();
+                          }
+
                           return const MainScreen();
                         },
                       ),
