@@ -70,7 +70,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<String?> getLink(int id) async {
     Map<int, String> cityWebsites = {
       2: "",
-      20: "https://www.salzkotten.de/de/unternehmensverzeichnis/"
+      20: "https://www.salzkotten.de/de/unternehmensverzeichnis/",
+      21: "https://mein.salzkotten.de/"
     };
 
     return cityWebsites[id];
@@ -140,6 +141,10 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       CitizenServiceModel(
         imageUrl: Images.service20,
         imageLink: "20",
+      ),
+      CitizenServiceModel(
+        imageUrl: Images.service21,
+        imageLink: "21",
       ),
     ];
   }

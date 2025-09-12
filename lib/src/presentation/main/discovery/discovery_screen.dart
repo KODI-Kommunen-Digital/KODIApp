@@ -148,6 +148,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
     return Scaffold(
       body: GridView.builder(
+        padding: const EdgeInsets.only(bottom: 30),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Adjust the number of columns as desired
             crossAxisSpacing: 10.0,
@@ -176,6 +177,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.imageLink == "2" ||
         service.imageLink == "20" ||
+        service.imageLink == "21" ||
         service.imageLink == "7") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit
