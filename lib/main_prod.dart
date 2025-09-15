@@ -26,6 +26,7 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  HttpClient.enableTimelineLogging = false;
   Hive.registerAdapter(FormDataAdapter());
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),

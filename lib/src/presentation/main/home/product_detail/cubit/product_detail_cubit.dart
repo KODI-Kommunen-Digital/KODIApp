@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_favorite.dart';
@@ -122,10 +123,30 @@ class ProductDetailCubit extends Cubit<ProductDetailState> {
     }
   }
 
-  static Future<AdDataModel> loadAdData(cityId, listingId) async {
+  static Future<AdDataModel?> loadAdData(cityId, listingId) async {
     final response = await Api.requestAdData(cityId, listingId);
-    final responseData = response.data;
-    return AdDataModel(
-        link: responseData['link'], image: responseData['image']);
+
+    if (response.success && response.data != null) {
+      final data = response.data;
+
+      if (data is List && data.isNotEmpty) {
+        // case: list of ads
+        final first = data.first;
+        if (first is Map<String, dynamic>) {
+          return AdDataModel.fromJson(first);
+        }
+      } else if (data is Map<String, dynamic> && data.isNotEmpty) {
+        return AdDataModel.fromJson(data);
+      } else {
+        debugPrint("Ad data is empty or invalid: $data");
+        return null;
+      }
+    } else {
+      debugPrint(" Failed to load AdData: ${response.message}");
+      return null;
+    }
+    return null;
   }
+
+
 }
