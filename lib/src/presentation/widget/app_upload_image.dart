@@ -31,6 +31,7 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final int maxFiles;
 
   const AppUploadImage({
     super.key,
@@ -41,6 +42,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.maxFiles = 5,
   });
 
   @override
