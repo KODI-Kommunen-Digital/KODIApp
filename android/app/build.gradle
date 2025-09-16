@@ -45,16 +45,39 @@ android {
             storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
             storePassword keystoreProperties['storePassword']
         }
+        staging {
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+            storeFile keystoreProperties['storeFileStage'] ? file(keystoreProperties['storeFileStage']) : null
+            storePassword keystoreProperties['storePassword']
+        }
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig signingConfigs.release
-            minifyEnabled true
-            shrinkResources true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            debuggable false
+        }
+        debug {
+            signingConfig signingConfigs.staging
+            debuggable true
+        }
+    }
+
+    flavorDimensions "app"
+
+    productFlavors {
+        production {
+            dimension "app"
+            signingConfig signingConfigs.release
+            versionNameSuffix "-production"
+//            applicationIdSuffix ".production"
+        }
+        staging {
+            dimension "app"
+            signingConfig signingConfigs.staging
+            versionNameSuffix "-staging"
+//            applicationIdSuffix ".stage"
         }
     }
 }
