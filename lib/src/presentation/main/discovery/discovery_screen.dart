@@ -175,10 +175,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.imageLink == "2" ||
-        service.imageLink == "20" ||
-        service.imageLink == "21" ||
-        service.imageLink == "7") {
+    if (service.imageLink == "20" ||
+        service.imageLink == "21") {
       await launchUrl(
           Uri.parse(await AppBloc.discoveryCubit
                   .getLink(int.parse(service.imageLink)) ??

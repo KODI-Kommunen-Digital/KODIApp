@@ -69,7 +69,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
 
   Future<String?> getLink(int id) async {
     Map<int, String> cityWebsites = {
-      2: "",
+      // 2: "",
       20: "https://www.salzkotten.de/de/unternehmensverzeichnis/",
       21: "https://mein.salzkotten.de/"
     };
