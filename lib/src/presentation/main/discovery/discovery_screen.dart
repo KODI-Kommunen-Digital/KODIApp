@@ -177,11 +177,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   Future<void> navigateToLink(CitizenServiceModel service) async {
     if (service.imageLink == "20" ||
         service.imageLink == "21") {
-      await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit
-                  .getLink(int.parse(service.imageLink)) ??
-              ""),
-          mode: LaunchMode.inAppWebView);
+      await launchWebUrl(url : await AppBloc.discoveryCubit
+          .getLink(int.parse(service.imageLink)) ?? "");
     } else if (service.imageLink == "7") {
       final cityId = await context.read<DiscoveryCubit>().getCitySelected();
       if (cityId != 0) {
@@ -211,6 +208,18 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       }
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': service.arguments, 'title': ''});
+    }
+  }
+
+  static Future<void> launchWebUrl({required String url}) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.inAppWebView,
+      webViewConfiguration: const WebViewConfiguration(
+        enableJavaScript: true,
+      ),    )) {
+      throw 'Could not launch URL: $url';
     }
   }
 

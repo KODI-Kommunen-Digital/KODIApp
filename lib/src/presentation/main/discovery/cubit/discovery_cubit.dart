@@ -26,20 +26,20 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     location = List.from(cityRequestResponse.data ?? []).map((item) {
       return CategoryModel.fromJson(item);
     }).toList();
-    services = initializeServices();
+    services = await initializeServices();
 
-    List<CitizenServiceModel> servicesCopy = List.from(services);
+    // List<CitizenServiceModel> servicesCopy = List.from(services);
 
-    for (var element in servicesCopy) {
-      if (element.categoryId != null || element.type == "subCategoryService") {
-        bool hasContent = await element.hasContent();
-        if (!hasContent) {
-          hiddenServices.add(element);
-        }
-      }
-    }
+    // for (var element in servicesCopy) {
+    //   if (element.categoryId != null || element.type == "subCategoryService") {
+    //     bool hasContent = await element.hasContent();
+    //     if (!hasContent) {
+    //       hiddenServices.add(element);
+    //     }
+    //   }
+    // }
 
-    services.removeWhere((element) => hiddenServices.contains(element));
+    // services.removeWhere((element) => hiddenServices.contains(element));
 
     await getCitySelected();
 
@@ -95,8 +95,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     emit(DiscoveryStateLoaded(services));
   }
 
-  List<CitizenServiceModel> initializeServices() {
-    return [
+  Future<List<CitizenServiceModel>> initializeServices() async {
+
+    List<CitizenServiceModel> services = [
       // CitizenServiceModel(imageUrl: Images.service2, imageLink: "2"),
       // CitizenServiceModel(
       //     imageUrl: Images.service3,
@@ -147,6 +148,20 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageLink: "21",
       ),
     ];
+    List<CitizenServiceModel> filteredServices = [];
+
+    for (var element in services) {
+      if (element.categoryId != null || element.type == "subCategoryService") {
+        bool hasContent = await element.hasContent();
+        if (hasContent) {
+          filteredServices.add(element);
+        }
+      } else {
+        filteredServices.add(element);
+      }
+    }
+
+    return filteredServices;
   }
 
   Future<int?> getCitySelected() async {
