@@ -150,6 +150,7 @@ flutter:
     - assets/locale/
     - assets/data/
     - assets/env/.envTroisdorf
+    - assets/envStage/.envTroisdorfStage
     - assets/data/categories_config.json
     - assets/data/subcategories_config.json
     - assets/data/services_config.json

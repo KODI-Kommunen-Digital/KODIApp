@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/firebase_option_production/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
@@ -48,10 +48,11 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
-  );
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
 
   await SentryFlutter.init((options) {
     options.dsn =
