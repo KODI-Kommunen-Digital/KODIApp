@@ -158,8 +158,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         controller: _scrollController,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            onTap: () {
-              navigateToLink(services[index]);
+            onTap: () async{
+              await navigateToLink(services[index]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
@@ -213,12 +213,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   static Future<void> launchWebUrl({required String url}) async {
     final Uri uri = Uri.parse(url);
+
+    debugPrint('launch url:- $url');
     if (!await launchUrl(
       uri,
-      mode: LaunchMode.inAppWebView,
-      webViewConfiguration: const WebViewConfiguration(
-        enableJavaScript: true,
-      ),    )) {
+      mode: LaunchMode.inAppWebView,)) {
       throw 'Could not launch URL: $url';
     }
   }
