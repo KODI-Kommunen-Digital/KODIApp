@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +19,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 enum UploadImageType { circle, square }
 
@@ -142,8 +143,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   widget.onDelete!();
                   setState(() {
                     image = null;
-                    // images.removeAt(0);
                     if (selectedAssets.length > 1) {
+                      images.removeAt(0);
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
                     }
                     _file = null;
@@ -263,6 +264,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
       }
     } catch (e, stackTrace) {
       logError('Image Upload Permission Error', e);
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
@@ -372,7 +374,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for (final selectedImages in result.files) {
+                      for(final selectedImages in result.files){
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);
