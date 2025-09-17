@@ -11,6 +11,7 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+import 'package:heidi/src/firebase_option_staging/firebase_options.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/widget/intro_waste.dart';
@@ -50,11 +51,12 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
+  debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
   await MatomoTracker.instance.initialize(
     siteId: "1",
     url: 'https://troisdorf.matomo.cloud/matomo.php',
@@ -65,7 +67,7 @@ Future<void> main() async {
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envTroisdorf");
+  await dotenv.load(fileName: "assets/envStage/.envTroisdorfStage");
   await CategoryManager.loadCategories();
 }
 
