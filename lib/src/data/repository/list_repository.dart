@@ -24,7 +24,9 @@ class ListRepository {
       required type,
       required pageNo,
       cityId,
-      eventFilter}) async {
+      eventFilter,
+      int? subCategoryId,
+      }) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 

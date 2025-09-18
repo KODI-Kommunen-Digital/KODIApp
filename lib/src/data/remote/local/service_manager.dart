@@ -9,14 +9,26 @@ class ServiceManager {
     String jsonData = await rootBundle.loadString(configPath);
     List<dynamic> data = jsonDecode(jsonData);
 
-    return data
-        .map((item) => CitizenServiceModel(
-              imageUrl: item['imageUrl'],
-              imageLink: item['imageLink'],
-              arguments: item['arguments'],
-              categoryId: item['categoryId'],
-            ))
-        .toList();
+    return data.map((item) {
+      return CitizenServiceModel(
+        imageUrl: item['imageUrl'],
+        imageLink: item['imageLink'],
+        arguments: item['arguments'],
+        categoryId: item['categoryId'],
+        subCategoryId: item['subCategoryId'],
+        subServices: item['subServices'] != null
+            ? (item['subServices'] as List)
+            .map((sub) => CitizenServiceModel(
+          imageUrl: sub['imageUrl'],
+          imageLink: sub['imageLink'],
+          arguments: sub['arguments'],
+          categoryId: sub['categoryId'],
+          subCategoryId: sub['subCategoryId'],
+        ))
+            .toList()
+            : null,
+      );
+    }).toList();
   }
 
   static Future<List<CitizenServiceModel>> initializeServices6() async {
