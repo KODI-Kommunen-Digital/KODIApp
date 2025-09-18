@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665415094248",
+    "project_id": "troisdrof-stage",
+    "storage_bucket": "troisdrof-stage.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665415094248:android:111c12f6363117dbcede5d",
+        "android_client_info": {
+          "package_name": "com.troisdorf.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAJkKI6TYfozZ8zfbpoz3zLzZlbUhq9Py0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
