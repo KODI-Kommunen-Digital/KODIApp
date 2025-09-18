@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
@@ -25,6 +26,7 @@ import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
+import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
@@ -64,7 +66,7 @@ Future<void> main() async {
 
   await SentryFlutter.init((options) {
     options.dsn =
-    'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
+        'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
   await dotenv.load(fileName: "assets/env/.envTroisdorf");
@@ -77,9 +79,9 @@ class HeidiApp extends StatefulWidget {
   final Preferences prefBox;
 
   const HeidiApp(
-      this.prefBox, {
-        super.key,
-      });
+    this.prefBox, {
+    super.key,
+  });
 
   @override
   State<HeidiApp> createState() => _HeidiAppState();
@@ -92,6 +94,14 @@ class _HeidiAppState extends State<HeidiApp> {
   void initState() {
     super.initState();
     AppBloc.applicationCubit.onSetup();
+    // LOGIC TO UNSUBSCRIBE THE PREVIOUS TOPICS IF NEW UPDATED APP IS INSTALLED
+    // IMPLEMENTED FIRE AND FORGET APPROACH
+    // WILL NOT BLOCK MAIN THREAD i,e; RUN IN BACKGROUND
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.microtask(() {
+        unsubscribeToThePreviousTopics();
+      });
+    });
   }
 
   @override
@@ -155,7 +165,7 @@ class _HeidiAppState extends State<HeidiApp> {
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
                         textScaler:
-                        TextScaler.linear(theme.textScaleFactor ?? 1),
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -184,7 +194,7 @@ class _HeidiAppState extends State<HeidiApp> {
       location = null;
 
       final previousLocationId =
-      prefs.getKeyValue(Preferences.selectedLocationId, null);
+          prefs.getKeyValue(Preferences.selectedLocationId, null);
       final firebaseApi = FirebaseApi(navigatorKey, prefs);
       if (previousLocationId != null) {
         final previousTopic = WasteCalendarRepository(prefs)
@@ -195,6 +205,48 @@ class _HeidiAppState extends State<HeidiApp> {
 
     await prefs.setKeyValue(Preferences.isAppInstalled, true);
     return location;
+  }
+
+  Future<void> unsubscribeToThePreviousTopics() async {
+    try {
+      final prefs = await Preferences.openBox();
+      final firebaseApi = FirebaseApi(navigatorKey, prefs);
+
+      String? location = _getStoredLocation(prefs);
+
+      if (location != null &&
+          prefs.getKeyValue(Preferences.isOldTopicUnsubscribed, null) == null) {
+        WasteCalendarRepository repository = WasteCalendarRepository(prefs);
+
+        final list = await _loadLocations(repository);
+
+        for (WasteLocation wasteLocation in list) {
+          if (wasteLocation.name != location) {
+            debugPrint('unsubscribed to Name = ${wasteLocation.name}');
+            await firebaseApi.unsubscribeFromTopic(repository
+                .getTopicFromHash(getStreetNameHash(wasteLocation.name)));
+          }
+        }
+      }
+
+      await prefs.setKeyValue(Preferences.isOldTopicUnsubscribed, true);
+    } catch (e) {
+      debugPrint('Exception for unsubscribeToThePreviousTopics() : $e');
+    }
+  }
+
+  Future<List<WasteLocation>> _loadLocations(
+      WasteCalendarRepository repository) async {
+    try {
+      List<WasteLocation> locations = [];
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      if (fetchedLocations != null) {
+        locations = fetchedLocations;
+      }
+      return locations;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   String? _getStoredLocation(prefs) {
