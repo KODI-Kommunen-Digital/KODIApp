@@ -1,4 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:heidi/main_dev.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
@@ -79,10 +80,13 @@ class FirebaseApi {
 
   Future<void> subscribeToTopic(String topic) async {
     await _firebaseMessaging.subscribeToTopic(topic);
+    debugPrint('Topic Subscribed : $topic');
   }
 
   Future<void> unsubscribeFromTopic(String topic) async {
     await _firebaseMessaging.unsubscribeFromTopic(topic);
+    debugPrint('Topic Unsubscribed : $topic');
+
   }
 
   Future<void> refreshNotifications() async {

@@ -71,6 +71,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
     final prefs = await Preferences.openBox();
     final previousLocationId =
         prefs.getKeyValue(Preferences.selectedLocationId, null);
+
+    final previousLocationName =prefs.getKeyValue(Preferences.selectedLocationName, null);
+
     await prefs.setKeyValue(Preferences.selectedLocationId, locationId);
     await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
     setState(() {
@@ -80,21 +83,17 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
 
-    // As now we do not need to unsubscribe because we are using hash for sub
 
-    // if (previousLocationId != null) {
-    //   final previousTopic =
-    //       repository.getTopicString(int.parse(previousLocationId));
-    //   await firebaseApi.unsubscribeFromTopic(previousTopic);
-    // }
-
-    //final newTopic = repository.getTopicString(int.parse(locationId));
+    if (previousLocationId != null) {
+      final previousTopic =
+          repository.getTopicFromHash(getStreetNameHash(previousLocationName));
+      await firebaseApi.unsubscribeFromTopic(previousTopic);
+    }
 
     final newTopic = repository.getTopicFromHash(getStreetNameHash(locationName));
 
     await firebaseApi.subscribeToTopic(newTopic);
 
-    // final streetId = int.parse(locationId);
     _wasteCalenderCubit.updateStreetId(locationId);
   }
 
