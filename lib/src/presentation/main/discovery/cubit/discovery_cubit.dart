@@ -198,7 +198,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "15":
           "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/",
       "17": "https://www.rundblick-troisdorf.de/",
-      "18": "https://www.trowow.de/"
+      "18": "https://www.trowow.de/",
+      "19": "https://www.stadtwerke-troisdorf.de/",
     };
     return serviceLinks[imageLink];
   }
