@@ -254,16 +254,21 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       }
     }
 
+    if(service.imageLink == "13") {
+      Routes.trackMatomoEvent(true, null, int.parse(service.imageLink), null);
+      Navigator.pushNamed(context, Routes.subDiscoveryScreen,
+          arguments: service);
+    } else
     if (service.imageLink == "3" ||
         service.imageLink == "4" ||
         service.imageLink == "5" ||
         service.imageLink == "8" ||
         service.imageLink == "9" ||
         service.imageLink == "12" ||
-        service.imageLink == "13" ||
         service.imageLink == "14" ||
         service.imageLink == "15" ||
         service.imageLink == "17" ||
+        service.imageLink == "19" ||
         service.imageLink == "18") {
       final url =
           await AppBloc.discoveryCubit.getServiceLink(service.imageLink);
@@ -278,8 +283,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       }
 
       if (service.imageLink == "4" ||
-          service.imageLink == "9" ||
-          service.imageLink == "13") {
+          service.imageLink == "9" || service.imageLink == "19") {
         Routes.trackMatomoEvent(true, null, int.parse(service.imageLink), null);
       } else {
         Routes.trackMatomoEvent(
@@ -301,7 +305,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else if (service.imageLink == "16") {
       Navigator.pushNamed(context, Routes.trolleyMakerSignIn);
-    } else {
+    } else if(service.imageLink !="19"){
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
       if (service.categoryId != null) {
