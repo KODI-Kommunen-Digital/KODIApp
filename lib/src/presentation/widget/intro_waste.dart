@@ -56,7 +56,10 @@ class IntroPageState extends State<IntroPage> {
   void _selectLocation(String locationId, String locationName) async {
     final prefs = await Preferences.openBox();
     final previousLocationId =
-        prefs.getKeyValue(Preferences.selectedLocationId, null);
+    prefs.getKeyValue(Preferences.selectedLocationId, null);
+
+    final previousLocationName =prefs.getKeyValue(Preferences.selectedLocationName, null);
+
     await prefs.setKeyValue(Preferences.selectedLocationId, locationId);
     await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
     setState(() {
@@ -65,19 +68,18 @@ class IntroPageState extends State<IntroPage> {
     });
 
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
-    // if (previousLocationId != null) {
-    //   final previousTopic =
-    //       repository.getTopicString(int.parse(previousLocationId));
-    //   await firebaseApi.unsubscribeFromTopic(previousTopic);
-    // }
 
-    // final newTopic = repository.getTopicString(int.parse(locationId));
+
+    if (previousLocationId != null) {
+      final previousTopic =
+      repository.getTopicFromHash(getStreetNameHash(previousLocationName));
+      await firebaseApi.unsubscribeFromTopic(previousTopic);
+    }
 
     final newTopic =
         repository.getTopicFromHash(getStreetNameHash(locationName));
     await firebaseApi.subscribeToTopic(newTopic);
 
-    // final streetId = int.parse(locationId);
     _wasteCalenderCubit.updateStreetId(locationId);
     Navigator.pushReplacementNamed(context, '/home');
   }

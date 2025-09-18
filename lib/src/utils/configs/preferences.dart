@@ -49,6 +49,7 @@ class Preferences {
   static const String trolleyMakerCardName = 'trolleyMakerCardName';
 
   static const String isAppInstalled = "isAppInstalled";
+  static const String isOldTopicUnsubscribed = "isOldTopicUnsubscribed";
 
   Preferences._(this._box);
 
