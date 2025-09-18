@@ -103,7 +103,7 @@ class SubDiscoveryScreen extends StatelessWidget {
     if (url != null) {
       CustomWebViewScreen.showAsBottomSheet(
         context: context,
-        title: service.imageLink,
+        title: url,
         url: url,
       );
     }
