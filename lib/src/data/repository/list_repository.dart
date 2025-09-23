@@ -74,6 +74,56 @@ class ListRepository {
     return null;
   }
 
+  static Future<List?> loadFilteredList({
+    required categoryId,
+    required String type,
+    required pageNo,
+    int? cityId,
+    List<int>? cityIds,
+    int? subCategoryId,
+    String? startDate,
+    String? endDate,
+    String? timeFilter,
+    String? searchTerm
+  }) async {
+    final prefs = await Preferences.openBox();
+    int selectedCityId = cityId ?? prefs.getKeyValue(Preferences.cityId, 0);
+
+    if (type == "filterType") {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId,
+          cityId: cityId,
+          cityIds: cityIds,
+          subCategoryId: subCategoryId,
+          startDate: startDate,
+          endDate: endDate,
+          timeFilter: timeFilter,
+          pageNo: pageNo);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        // if (cityId != 0) {
+        //   list.removeWhere((element) => element.cityId != cityId);
+        // }
+        return [list, response.pagination];
+      }
+    } else if (type == "searchListings" && searchTerm!=null) {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId, cityId: cityId, pageNo: pageNo, searchTerm: searchTerm);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        if (selectedCityId != 0) {
+          list.removeWhere((element) => element.cityId != selectedCityId);
+        }
+        return [list, response.pagination];
+      }
+    }
+    return null;
+  }
+
   static Future<List<List<ProductModel>>?> searchListing(
       {required content,
       required MultiFilter multiFilter,
