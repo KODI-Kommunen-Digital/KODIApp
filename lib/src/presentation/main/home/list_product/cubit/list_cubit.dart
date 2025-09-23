@@ -152,8 +152,8 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, int? currentCity) {
+  void onDateProductFilter (ProductFilter? type, List<ProductModel> loadedList,
+      bool filterLocation, int? currentCity) async {
     final currentDate = DateTime.now();
     if (type == ProductFilter.month) {
       filteredList = loadedList.where((product) {
@@ -189,9 +189,21 @@ class ListCubit extends Cubit<ListState> {
       }).toList();
       emit(ListStateUpdated(filteredList, listCity));
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
-      filteredList = loadedList.where((product) {
-        return product.cityId == currentCity;
-      }).toList();
+      // filteredList = loadedList.where((product) {
+      //   return product.cityId == currentCity;
+      // }).toList();
+
+      final eventsResponse = await ListRepository.loadFilteredList(
+          categoryId: 3,
+          type: "filterType",
+          pageNo: pageNo,
+          cityId: currentCity);
+      List<ProductModel> eventsList = [];
+
+      if (eventsResponse != null) {
+        eventsList = eventsResponse[0];
+        filteredList = eventsList;
+      }
       emit(ListStateUpdated(filteredList, listCity));
     } else {
       emit(ListStateUpdated(loadedList, listCity));

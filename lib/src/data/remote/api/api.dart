@@ -634,6 +634,44 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  ///Get Filter list
+  static Future<ResultApiModel> requestFilteredList(
+      {categoryId, cityId, cityIds, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
+    var list = "";
+    if (categoryId == 3) {
+      list +=
+      "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
+
+      if (cityId!=null){
+          list += "&cityId=$cityId";
+      }
+      if (searchTerm!= null && searchTerm!="") {
+        list += "&searchQuery=$searchTerm";
+      }
+
+      if (subCategoryId!=null && subCategoryId!=0){
+        list+= "&subcategoryId=$subCategoryId";
+      }
+
+      if (timeFilter!=null &&  timeFilter!=""){
+        list+= "&timeFilter=$timeFilter";
+      }
+
+      if(startDate!=null && endDate!=null) {
+        list+= "&startAfterDate=$startDate&endBeforeDate=$endDate";
+      }
+
+      final result =
+      await HTTPManager(forum: false).get(url: list, loading: true);
+      return ResultApiModel.fromJson(result);
+    } else {
+      list =
+      'listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+      final result = await HTTPManager(forum: false).get(url: list);
+      return ResultApiModel.fromJson(result);
+    }
+  }
+
   static Future<ResultApiModel> requestSearchListing(
       content, filter, pageNo) async {
     var list =
