@@ -86,7 +86,8 @@ class _ListProductScreenState extends State<ListProductScreen> {
             filter?.currentProductEventFilter,
             loadedList,
             filter?.hasLocationFilter ?? false,
-            filter?.currentLocation);
+            filter?.currentLocation,
+            3);
       } else if (filter?.hasLocationFilter ?? false) {
         loadListingsList();
       }
