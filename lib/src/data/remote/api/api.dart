@@ -636,7 +636,7 @@ class Api {
 
   ///Get Filter list
   static Future<ResultApiModel> requestFilteredList(
-      {categoryId, cityId, cityIds, subCategoryId, startDate, endDate, timeFilter, searchTerm, pageNo}) async {
+      {categoryId, cityId, cityIds, subCategoryId, startDate, endDate, dateFilter, timeFilter, searchTerm, pageNo}) async {
     var list = "";
     if (categoryId == 3) {
       list +=
@@ -655,6 +655,10 @@ class Api {
 
       if (timeFilter!=null &&  timeFilter!=""){
         list+= "&timeFilter=$timeFilter";
+      }
+
+      if (dateFilter!=null &&  dateFilter!=""){
+        list+= "&dateFilter=$dateFilter";
       }
 
       if(startDate!=null && endDate!=null) {
