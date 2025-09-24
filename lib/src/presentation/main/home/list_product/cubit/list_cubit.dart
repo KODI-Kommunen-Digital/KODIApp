@@ -159,24 +159,18 @@ class ListCubit extends Cubit<ListState> {
       int? currentCity,
       int categoryId
       ) async {
-    final currentDate = DateTime.now();
-
-    DateTime? startDate;
-    DateTime? endDate;
+    String? dateFilter;
 
     if (type == ProductFilter.month) {
-      startDate = DateTime(currentDate.year, currentDate.month, 1);
-      endDate = DateTime(currentDate.year, currentDate.month + 1, 0);
+      dateFilter = "month";
     } else if (type == ProductFilter.week) {
-      startDate = currentDate.subtract(Duration(days: currentDate.weekday - 1));
-      endDate = currentDate.add(Duration(days: DateTime.daysPerWeek - currentDate.weekday));
+      dateFilter ="week";
     }
 
-    if (startDate != null && endDate != null) {
+    if (dateFilter!=null) {
       await _fetchAndEmit(
         currentCity: currentCity,
-        startDate: startDate,
-        endDate: endDate,
+        dateFilter: dateFilter,
         categoryId: categoryId
       );
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
@@ -188,16 +182,14 @@ class ListCubit extends Cubit<ListState> {
 
   Future<void> _fetchAndEmit({
     int? currentCity,
-    DateTime? startDate,
-    DateTime? endDate,
+    String? dateFilter,
     required int categoryId
   }) async {
     final eventsResponse = await ListRepository.loadFilteredList(
       categoryId: 3,
       type: "filterType",
       pageNo: pageNo,
-      startDate: startDate?.toIso8601String(),
-      endDate: endDate?.toIso8601String(),
+      dateFilter: dateFilter,
       cityId: currentCity,
     );
 

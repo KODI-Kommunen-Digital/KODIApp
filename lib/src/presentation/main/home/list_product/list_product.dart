@@ -356,13 +356,11 @@ class _ListLoadedState extends State<ListLoaded> {
             appBar: AppBar(title: Text(
                 link.split('/').last,
               style: const TextStyle(
-                color: Colors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.normal,
               ),
             )),
             body: const PDF(
-              autoSpacing: false,
             ).cachedFromUrl(
               link,
               placeholder: (progress) => Center(child: Text("$progress %")),

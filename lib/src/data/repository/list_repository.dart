@@ -84,6 +84,7 @@ class ListRepository {
     String? startDate,
     String? endDate,
     String? timeFilter,
+    String? dateFilter,
     String? searchTerm
   }) async {
     final prefs = await Preferences.openBox();
@@ -98,6 +99,7 @@ class ListRepository {
           startDate: startDate,
           endDate: endDate,
           timeFilter: timeFilter,
+          dateFilter: dateFilter,
           pageNo: pageNo);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
