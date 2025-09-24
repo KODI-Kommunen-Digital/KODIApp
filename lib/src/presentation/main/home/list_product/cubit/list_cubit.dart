@@ -152,61 +152,59 @@ class ListCubit extends Cubit<ListState> {
     onLoad(cityId);
   }
 
-  void onDateProductFilter (ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, int? currentCity) async {
+  void onDateProductFilter(
+      ProductFilter? type,
+      List<ProductModel> loadedList,
+      bool filterLocation,
+      int? currentCity,
+      int categoryId
+      ) async {
     final currentDate = DateTime.now();
+
+    DateTime? startDate;
+    DateTime? endDate;
+
     if (type == ProductFilter.month) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startMonth = startDate.month;
-          final currentMonth = currentDate.month;
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startMonth == currentMonth) &&
-                (product.cityId == currentCity);
-          } else {
-            return startMonth == currentMonth;
-          }
-        }
-        return false;
-      }).toList();
-
-      emit(ListStateUpdated(filteredList, listCity));
+      startDate = DateTime(currentDate.year, currentDate.month, 1);
+      endDate = DateTime(currentDate.year, currentDate.month + 1, 0);
     } else if (type == ProductFilter.week) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startWeek == currentWeek) &&
-                (product.cityId == currentCity);
-          } else {
-            return startWeek == currentWeek;
-          }
-        }
-        return false;
-      }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
+      startDate = currentDate.subtract(Duration(days: currentDate.weekday - 1));
+      endDate = currentDate.add(Duration(days: DateTime.daysPerWeek - currentDate.weekday));
+    }
+
+    if (startDate != null && endDate != null) {
+      await _fetchAndEmit(
+        currentCity: currentCity,
+        startDate: startDate,
+        endDate: endDate,
+        categoryId: categoryId
+      );
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
-      // filteredList = loadedList.where((product) {
-      //   return product.cityId == currentCity;
-      // }).toList();
-
-      final eventsResponse = await ListRepository.loadFilteredList(
-          categoryId: 3,
-          type: "filterType",
-          pageNo: pageNo,
-          cityId: currentCity);
-      List<ProductModel> eventsList = [];
-
-      if (eventsResponse != null) {
-        eventsList = eventsResponse[0];
-        filteredList = eventsList;
-      }
-      emit(ListStateUpdated(filteredList, listCity));
+      await _fetchAndEmit(currentCity: currentCity, categoryId: categoryId);
     } else {
       emit(ListStateUpdated(loadedList, listCity));
+    }
+  }
+
+  Future<void> _fetchAndEmit({
+    int? currentCity,
+    DateTime? startDate,
+    DateTime? endDate,
+    required int categoryId
+  }) async {
+    final eventsResponse = await ListRepository.loadFilteredList(
+      categoryId: 3,
+      type: "filterType",
+      pageNo: pageNo,
+      startDate: startDate?.toIso8601String(),
+      endDate: endDate?.toIso8601String(),
+      cityId: currentCity,
+    );
+
+    if (eventsResponse != null) {
+      final eventsList = eventsResponse[0] as List<ProductModel>;
+      filteredList = eventsList;
+      emit(ListStateUpdated(filteredList, listCity));
     }
   }
 

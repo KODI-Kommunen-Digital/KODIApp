@@ -642,7 +642,7 @@ class Api {
       list +=
       "listings?categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings";
 
-      if (cityId!=null){
+      if (cityId!=null && cityId!=0){
           list += "&cityId=$cityId";
       }
       if (searchTerm!= null && searchTerm!="") {
