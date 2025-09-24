@@ -69,7 +69,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? _errorZipCode;
   String? _errorPhone;
 
-  // String? _errorEmail;
+  String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
@@ -686,11 +686,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
       allowEmpty: true,
     );
 
-    // _errorEmail = UtilValidator.validate(
-    //   _textEmailController.text,
-    //   type: ValidateType.email,
-    //   allowEmpty: true,
-    // );
+    _errorEmail = UtilValidator.validate(
+      _textEmailController.text,
+      type: ValidateType.email,
+      allowEmpty: true,
+    );
 
     _errorWebsite = UtilValidator.validate(
       _textWebsiteController.text,
@@ -728,7 +728,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _errorContent,
       _errorCategory,
       _errorPhone,
-      // _errorEmail,
+      _errorEmail,
       _errorWebsite,
       _errorStatus,
       _errorSDate,
@@ -738,7 +738,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         _errorContent != null ||
         _errorCategory != null ||
         _errorPhone != null ||
-        // _errorEmail != null ||
+        _errorEmail != null ||
         _errorWebsite != null ||
         _errorStatus != null ||
         _errorSDate != null) {
@@ -1294,19 +1294,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
             const SizedBox(height: 8),
             AppTextInput(
               hintText: Translate.of(context).translate('input_email'),
-              // errorText: _errorEmail,
+              errorText: _errorEmail,
               controller: _textEmailController,
               focusNode: _focusEmail,
               textInputAction: TextInputAction.next,
-              // onChanged: (text) {
-              //   setState(() {
-              //     _errorEmail = UtilValidator.validate(
-              //       _textEmailController.text,
-              //       type: ValidateType.email,
-              //       allowEmpty: true,
-              //     );
-              //   });
-              // },
+              onChanged: (text) {
+                setState(() {
+                  _errorEmail = UtilValidator.validate(
+                    _textEmailController.text,
+                    type: ValidateType.email,
+                    allowEmpty: true,
+                  );
+                });
+              },
               onSubmitted: (text) {
                 Utils.fieldFocusChange(
                   context,
@@ -1321,7 +1321,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
             ),
             const SizedBox(height: 8),
             AppTextInput(
-              hintText: Translate.of(context).translate('all_day_event'),
+              hintText: Translate.of(context).translate('website'),
               errorText: _errorWebsite,
               controller: _textWebsiteController,
               focusNode: _focusWebsite,
@@ -1345,6 +1345,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Checkbox(
@@ -1398,7 +1399,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 8),
                       Text.rich(
                         TextSpan(
                           text: Translate.of(context).translate('start_date'),

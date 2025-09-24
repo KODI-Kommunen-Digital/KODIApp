@@ -31,13 +31,10 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
 
     return SafeArea(
       child: Container(
-        padding: const EdgeInsets.only(left: 10, right: 16, bottom: 8),
-        child: Card(
-          margin: const EdgeInsets.all(10),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 2,
+        width: MediaQuery.of(context).size.width,
+        padding: const EdgeInsets.only(left: 14, right: 14, bottom: 8, top: 12),
+        color: Theme.of(context).colorScheme.surface,
+        child: SizedBox(
           child: DropdownButtonFormField<String>(
             value: chosenOption,
             onChanged: (newValue) {
@@ -58,16 +55,19 @@ class _CitiesDropDownState extends State<CitiesDropDown> {
             }).toList(),
             decoration: InputDecoration(
               contentPadding: contentPadding,
-              focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Theme.of(context).textTheme.bodyLarge?.color ??
+                    Colors.white),
               ),
               labelText: widget.hintText ??
                   Translate.of(context).translate('select_location'),
               labelStyle: TextStyle(
-                color: Theme.of(context).textTheme.bodyMedium?.color ??
+                color: Theme.of(context).textTheme.bodyLarge?.color ??
                     Colors.white,
               ),
-              border: const OutlineInputBorder(),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
           ),
         ),
