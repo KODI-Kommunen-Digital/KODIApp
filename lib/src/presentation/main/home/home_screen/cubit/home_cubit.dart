@@ -156,12 +156,12 @@ class HomeCubit extends Cubit<HomeState> {
     for (var obj in categoryCount) {
       idToCountMap[obj.id] = obj.count;
     }
-    categories.sort((a, b) {
-      if (a.id == 17) return 1; // Move category with id 14 to the last index
-      if (b.id == 17) return -1;
-
-      return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
-    });
+    // categories.sort((a, b) {
+    //   if (a.id == 17) return 1; // Move category with id 14 to the last index
+    //   if (b.id == 17) return -1;
+    //
+    //   return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
+    // });
 
     //Forum always at index 6, before the more button
     int forumIndex = categories.indexWhere((element) => element.id == 17);

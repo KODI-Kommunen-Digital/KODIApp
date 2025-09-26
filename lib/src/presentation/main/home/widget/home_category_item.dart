@@ -58,7 +58,7 @@ class HomeCategoryItem extends StatelessWidget {
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   shape: BoxShape.rectangle,
-                  color: item!.color,
+                  color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10)),
               child: FaIcon(
                 item!.icon,

@@ -505,7 +505,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     item.id == 5 ||
                     item.id == 6 ||
                     item.id == 7 ||
-                    item.id == 8) {
+                    item.id == 8 ||
+                    item.id ==10) {
                   _onService(item);
                 } else {
                   _onCategory(item, category);
@@ -534,6 +535,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Uri.parse("https://freiraum-fichtelgebirge.de/ueber-uns/"),
           mode: LaunchMode.inAppWebView);*/
       Navigator.pushNamed(context, Routes.contact);
+    }else if(item.id==10){
+      await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
+          mode: LaunchMode.inAppWebView);
     }
     return;
   }
@@ -706,3 +710,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+
