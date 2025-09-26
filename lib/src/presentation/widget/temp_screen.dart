@@ -8,6 +8,7 @@ class TempScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
           child: Text(
         Translate.of(context).translate("this_feature_will_be_available_soon"),

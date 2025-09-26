@@ -13,6 +13,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/main/home/widget/banner_slider.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
@@ -265,7 +266,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           categoryLoading
                               ? const CircularProgressIndicator.adaptive()
                               : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
+                                  .getCategoriesWithoutHidden(
+                                      category ?? [])),
+                          const BannerSlider(),
+                          const SizedBox(height: 16),
+
                           _buildCompany(company),
                           _buildRecent(recent, selectedCityId, location),
                           if (isLoading)
