@@ -26,7 +26,7 @@ class ProductModel {
   final String expiryDate;
   final String startDate;
   final String endDate;
-  final String createDate;
+  final String? createDate;
   final String? username;
   final String? firstname;
   final String? lastname;
@@ -156,7 +156,7 @@ class ProductModel {
     String expiryDate = '';
     String startDate = '';
     String endDate = '';
-    String createDate = '';
+    String? createDate = '';
     String priceMin = '';
     String priceMax = '';
     String priceDisplay = '';
@@ -174,8 +174,8 @@ class ProductModel {
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
-      final parsedDateTime = DateTime.parse(json['createdAt']);
-      createDate = DateFormat('dd.MM.yyyy').format(parsedDateTime);
+      final parsedDateTime = json['createdAt']!=null ?DateTime.parse(json['createdAt']) : null;
+      createDate = parsedDateTime!=null ? DateFormat('dd.MM.yyyy').format(parsedDateTime) : null;
       if ((json['expiryDate']) != null) {
         final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
         expiryDate =

@@ -298,7 +298,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                       ? (item.endDate != ""
                                                           ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
                                                           : item.startDate)
-                                                      : item.createDate,
+                                                      : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!

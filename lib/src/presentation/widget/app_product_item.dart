@@ -487,7 +487,7 @@ class AppProductItem extends StatelessWidget {
                             ),
                           ),
                         Text(
-                          item?.categoryId == 1 ? "${item?.createDate}" : "",
+                          item?.categoryId == 1 ? "${(item?.createDate!=null)? item?.createDate : ""}" : "",
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     fontWeight: FontWeight.bold,

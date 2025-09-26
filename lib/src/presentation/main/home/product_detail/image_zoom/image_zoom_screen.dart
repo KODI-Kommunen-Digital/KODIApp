@@ -54,67 +54,40 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
                           GestureDetector(
                             onTap: () {},
                             child: CarouselSlider(
-                              options: CarouselOptions(
-                                height: 550.0,
-                                viewportFraction: 1.0,
-                                enlargeCenterPage: false,
-                                enableInfiniteScroll:
-                                    widget.imageList!.length > 1,
-                                onPageChanged: (index, reason) {
-                                  setState(() {
-                                    currentImageIndex = index;
-                                  });
-                                },
-                              ),
-                              items: widget.imageList?.map((imageItem) {
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        String imageUrlString = widget
-                                                        .sourceId ==
-                                                    2 &&
-                                                imageItem.logo != null &&
-                                                imageItem.logo !=
-                                                    'admin/News.jpeg'
-                                            ? imageItem.logo!
-                                            : widget.sourceId == 3 &&
-                                                    imageItem.logo != null &&
-                                                    imageItem.logo != "" &&
-                                                    imageItem.logo !=
-                                                        'admin/News.jpeg'
-                                                ? imageItem.logo!
-                                                : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
-                                        return Container(
-                                          width:
-                                              MediaQuery.of(context).size.width,
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 5.0),
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                          ),
-                                          child: GestureDetector(
-                                            onTap: () {},
-                                            child: PhotoView(
-                                              imageProvider:
-                                                  NetworkImage(imageUrlString),
-                                              minScale: PhotoViewComputedScale
-                                                  .contained,
-                                              maxScale: PhotoViewComputedScale
-                                                      .covered *
-                                                  2,
-                                              initialScale:
-                                                  PhotoViewComputedScale
-                                                      .contained,
-                                              heroAttributes:
-                                                  PhotoViewHeroAttributes(
-                                                      tag: imageUrlString),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  }).toList() ??
-                                  [],
-                            ),
+          options: CarouselOptions(
+          height: 550.0,
+          viewportFraction: 1.0,
+          enlargeCenterPage: false,
+          enableInfiniteScroll: widget.imageList!.length > 1,
+          onPageChanged: (index, reason) {
+            setState(() {
+              currentImageIndex = index;
+            });
+          },
+        ),
+        items: widget.imageList?.map((imageItem) {
+          String imageUrlString = widget.sourceId == 2 &&
+              imageItem.logo != null &&
+              imageItem.logo != 'admin/News.jpeg'
+              ? imageItem.logo!
+              : widget.sourceId == 3 &&
+              imageItem.logo != null &&
+              imageItem.logo != "" &&
+              imageItem.logo != 'admin/News.jpeg'
+              ? imageItem.logo!
+              : "${Application.picturesURL}${imageItem.logo!.isNotEmpty ? imageItem.logo : 'admin/News.jpeg'}";
+
+          return Builder(
+            builder: (BuildContext context) {
+              return Container(
+                width: MediaQuery.of(context).size.width,
+                margin: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: buildPhotoView(imageUrlString),
+              );
+            },
+          );
+        }).toList() ?? [],
+      ),
                           ),
                           const SizedBox(
                             height: 10.0,
@@ -158,4 +131,22 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
       ),
     );
   }
+
+  PhotoView buildPhotoView(String imageUrl) {
+    final provider = imageUrl.isNotEmpty
+        ? NetworkImage(imageUrl)
+        : const AssetImage('assets/images/listing_default_image.png') as ImageProvider;
+
+    return PhotoView(
+      imageProvider: provider,
+      minScale: PhotoViewComputedScale.contained,
+      maxScale: PhotoViewComputedScale.covered * 2,
+      initialScale: PhotoViewComputedScale.contained,
+      heroAttributes: PhotoViewHeroAttributes(tag: imageUrl),
+      errorBuilder: (context, error, stackTrace) {
+        return Image.asset('assets/images/listing_default_image.png', fit: BoxFit.contain);
+      },
+    );
+  }
+
 }
