@@ -330,7 +330,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                       ? (item.endDate != ""
                                                           ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
                                                           : item.startDate)
-                                                      : item.createDate,
+                                                      : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!

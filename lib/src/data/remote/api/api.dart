@@ -315,7 +315,7 @@ class Api {
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
     final listings =
-        "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
+        "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings&showRecentListings=true";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
@@ -517,7 +517,7 @@ class Api {
 
   static Future<ResultApiModel> requestLocList(params, pageNo) async {
     var list =
-        '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+        '/listings?cityId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings&showRecentListings=true';
     final result = await HTTPManager(forum: false).get(url: list);
     return ResultApiModel.fromJson(result);
   }

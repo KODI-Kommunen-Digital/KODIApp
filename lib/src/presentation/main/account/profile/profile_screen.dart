@@ -348,7 +348,7 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                                     : userListingsList[
                                                                             index]
                                                                         .startDate)
-                                                            : item.createDate,
+                                                            : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                         style: Theme.of(context)
                                                             .textTheme
                                                             .bodySmall!
