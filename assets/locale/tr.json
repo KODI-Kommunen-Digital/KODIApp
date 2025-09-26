@@ -330,5 +330,9 @@
   "share_qr_listing": "Girişi herkes için paylaşın",
   "user_link_copied": "Kullanıcı bağlantısı zaten panoya kopyalanıyor",
   "listing_link_copied": "Listeleme bağlantısı zaten panoya kopyalanıyor",
-  "file": "Dosya"
+  "file": "Dosya",
+  "business_forum": "İş Forumu",
+  "this_feature_will_be_available_soon": "Bu özellik yakında kullanıma sunulacak",
+  "job_matching": "İş Eşleştirme",
+  "start": "Başlama"
 }

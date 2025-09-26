@@ -330,5 +330,9 @@
   "share_qr_listing": "Del notering for alle",
   "user_link_copied": "Brugerlink er allerede kopieret til udklipsholder",
   "listing_link_copied": "Listelinket er allerede kopieret til udklipsholderen",
-  "file": "Fil"
+  "file": "Fil",
+  "this_feature_will_be_available_soon": "Denne funktion vil snart være tilgængelig",
+  "business_forum": "Business Forum",
+  "job_matching": "Jobmatchning",
+  "start": "Start"
 }

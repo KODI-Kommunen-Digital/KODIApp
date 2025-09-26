@@ -548,6 +548,9 @@
   "open_whatsapp": "Worüber wollen Sie diese Nummer öffnen?",
   "call": "Anruf",
   "funding_guide": "Fördermittelwegweiser",
-  "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein"
+  "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein",
+  "business_forum": "Wirtschaftsforum",
+  "this_feature_will_be_available_soon": "Diese Funktion wird in Kürze verfügbar sein",
+  "start": "Start",
+  "job_matching": "Job Matching"
 }
-

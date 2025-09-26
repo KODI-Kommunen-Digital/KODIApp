@@ -329,6 +329,10 @@
   "share_qr_profile": "Compartir perfil para todos",
   "share_qr_listing": "Compartir listado para todos",
   "user_link_copied": "El enlace de usuario ya se ha copiado en el portapapeles",
+  "start": "Empezar",
   "listing_link_copied": "El enlace de la lista ya se ha copiado en el portapapeles",
-  "file": "Archivo"
+  "file": "Archivo",
+  "job_matching": "Coincidencia de trabajo",
+  "business_forum": "Foro de negocios",
+  "this_feature_will_be_available_soon": "Esta función estará disponible pronto"
 }

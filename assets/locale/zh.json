@@ -330,5 +330,9 @@
   "share_qr_listing": "为大家分享清单",
   "user_link_copied": "用户链接已复制到剪贴板",
   "listing_link_copied": "列表链接已复制到剪贴板",
-  "file": "文件"
+  "file": "文件",
+  "business_forum": "商业论坛",
+  "this_feature_will_be_available_soon": "此功能即将推出。",
+  "job_matching": "职位匹配",
+  "start": "开始"
 }

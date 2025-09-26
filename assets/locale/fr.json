@@ -330,5 +330,9 @@
   "share_qr_listing": "Partager la liste pour tout le monde",
   "user_link_copied": "Le lien utilisateur est déjà copié dans le presse-papiers",
   "listing_link_copied": "Le lien de l'annonce est déjà copié dans le presse-papiers",
-  "file": "Dossier"
+  "file": "Dossier",
+  "business_forum": "Forum d'affaires",
+  "this_feature_will_be_available_soon": "Cette fonctionnalité sera bientôt disponible",
+  "job_matching": "Correspondance d'emploi",
+  "start": "Commencer"
 }

@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/main/account/account_profile/account_scre
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/portal/portal_screen.dart';
+import 'package:heidi/src/presentation/widget/temp_screen.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -38,20 +39,22 @@ class _MainScreenState extends State<MainScreen> {
           children: const <Widget>[
             HomeScreen(),
             DiscoveryScreen(),
+            TempScreen(),
             PortalScreen(),
             AccountScreen()
           ],
         ),
       ),
       bottomNavigationBar: _buildBottomMenu(),
-      floatingActionButton: _buildSubmit(),
-      floatingActionButtonLocation: submitPosition,
+      // floatingActionButton: _buildSubmit(),
+      // floatingActionButtonLocation: submitPosition,
     );
   }
 
   bool _requireAuth(String route) {
     switch (route) {
       case Routes.home:
+      case Routes.tempScreen:
       case Routes.discovery:
       case Routes.account:
       case Routes.portal:
@@ -67,10 +70,12 @@ class _MainScreenState extends State<MainScreen> {
         return 0;
       case Routes.discovery:
         return 1;
-      case Routes.portal:
+      case Routes.tempScreen:
         return 2;
-      case Routes.account:
+      case Routes.portal:
         return 3;
+      case Routes.account:
+        return 4;
       default:
         return 0;
     }
@@ -126,14 +131,14 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildMenuItem(String route) {
     Color? color;
     String title = Translate.of(context).translate(
-      'home',
+      'start',
     );
     IconData iconData = Icons.help_outline;
     switch (route) {
       case Routes.home:
         iconData = Icons.home_outlined;
         title = Translate.of(context).translate(
-          'home',
+          'start',
         );
         break;
       case Routes.discovery:
@@ -142,10 +147,16 @@ class _MainScreenState extends State<MainScreen> {
           'services',
         );
         break;
+      case Routes.tempScreen:
+        iconData = Icons.business_sharp;
+        title = Translate.of(context).translate(
+          'business_forum',
+        );
+        break;
       case Routes.portal:
         iconData = Icons.work;
         title = Translate.of(context).translate(
-          'portal',
+          'job_matching',
         );
         break;
       case Routes.account:
@@ -156,7 +167,7 @@ class _MainScreenState extends State<MainScreen> {
         break;
       default:
         iconData = Icons.home_outlined;
-        title = 'home';
+        title = 'start';
         break;
     }
     if (route == _selectedPage) {
@@ -224,7 +235,7 @@ class _MainScreenState extends State<MainScreen> {
           children: [
             _buildMenuItem(Routes.home),
             _buildMenuItem(Routes.discovery),
-            const SizedBox(width: 56),
+            _buildMenuItem(Routes.tempScreen),
             _buildMenuItem(Routes.portal),
             _buildMenuItem(Routes.account),
           ],

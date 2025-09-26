@@ -330,5 +330,9 @@
   "share_qr_listing": "모두를 위한 목록 공유",
   "user_link_copied": "사용자 링크가 이미 클립보드에 복사됨",
   "listing_link_copied": "목록 링크가 이미 클립보드에 복사됨",
-  "file": "파일"
+  "file": "파일",
+  "business_forum": "비즈니스 포럼",
+  "this_feature_will_be_available_soon": "이 기능은 곧 제공될 예정입니다.",
+  "job_matching": "작업 일치",
+  "start": "시작"
 }

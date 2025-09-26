@@ -330,5 +330,9 @@
   "share_qr_listing": "قائمة الأسهم للجميع",
   "user_link_copied": "تم نسخ ارتباط المستخدم بالفعل إلى الحافظة",
   "listing_link_copied": "رابط القائمة نسخ بالفعل إلى الحافظة",
-  "file": "ملف"
+  "file": "ملف",
+  "business_forum": "منتدى الأعمال",
+  "this_feature_will_be_available_soon": "هذه الميزة سوف تكون متاحة قريبا",
+  "job_matching": "مطابقة الوظائف",
+  "start": "يبدأ"
 }

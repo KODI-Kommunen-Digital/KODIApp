@@ -330,5 +330,9 @@
   "share_qr_listing": "全員のリストを共有する",
   "user_link_copied": "ユーザーリンクはすでにクリップボードにコピーされています",
   "listing_link_copied": "リスティング リンクは既にクリップボードにコピーされています",
-  "file": "ファイル"
+  "file": "ファイル",
+  "business_forum": "ビジネスフォーラム",
+  "this_feature_will_be_available_soon": "この機能はまもなく利用可能になります",
+  "job_matching": "ジョブマッチング",
+  "start": "始める"
 }

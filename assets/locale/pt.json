@@ -330,5 +330,9 @@
   "share_qr_listing": "Compartilhar listagem para todos",
   "user_link_copied": "O link do usuário já foi copiado para a área de transferência",
   "listing_link_copied": "Link de listagem já copiado para a área de transferência",
-  "file": "Arquivo"
+  "file": "Arquivo",
+  "business_forum": "Fórum de negócios",
+  "this_feature_will_be_available_soon": "Este recurso estará disponível em breve",
+  "job_matching": "Correspondência de trabalho",
+  "start": "Começar"
 }

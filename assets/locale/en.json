@@ -541,8 +541,12 @@
   "do_you_know": "Do you already know",
   "company_matching": "Matching of company profiles",
   "choose_profile_type": "Please choose your profile type",
+  "job_matching": "Job Matching",
   "company": "Company",
   "applicant": "Applicant",
   "open_whatsapp": "How do you want to open this number?",
-  "call": "Call"
+  "call": "Call",
+  "business_forum": "Business Forum",
+  "this_feature_will_be_available_soon": "This feature will be available soon",
+  "start": "Start"
 }

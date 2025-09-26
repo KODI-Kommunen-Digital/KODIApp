@@ -57,6 +57,8 @@ import 'package:heidi/src/presentation/main/account/contact_us/contact_us_succes
 import 'package:heidi/src/presentation/main/wishlist/cubit/wish_list_cubit.dart';
 import 'package:heidi/src/presentation/main/wishlist/wishlist_screen.dart';
 
+import '../../presentation/widget/temp_screen.dart';
+
 class RouteArguments<T> {
   final T? item;
   final VoidCallback? callback;
@@ -129,6 +131,7 @@ class Routes {
   static const String portal = "/portal";
   static const String contact = "/contact";
   static const String discoveryDetail = "/discoveryDetail";
+  static const String tempScreen = "/tempScreen";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -138,6 +141,10 @@ class Routes {
             return MainScreen();
           },
         );
+      case tempScreen:
+        return MaterialPageRoute(builder: (context) {
+          return TempScreen();
+        });
       case listProduct:
         final Map<String, dynamic> arguments =
             settings.arguments as Map<String, dynamic>;
