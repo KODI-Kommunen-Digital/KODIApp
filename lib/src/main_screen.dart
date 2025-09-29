@@ -176,7 +176,7 @@ class _MainScreenState extends State<MainScreen> {
     }
     return IconButton(
       onPressed: () {
-        if(route==Routes.tempScreen){
+        if(route==Routes.tempScreen || route==Routes.portal){
           Utils().showAlertMessage('this_feature_will_be_available_soon', context);
         }else {
           _onItemTapped(route);
@@ -184,7 +184,7 @@ class _MainScreenState extends State<MainScreen> {
       },
       padding: EdgeInsets.zero,
       icon: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Icon(
             iconData,
@@ -198,6 +198,7 @@ class _MainScreenState extends State<MainScreen> {
                   color: color,
                 ),
             maxLines: 2,
+            textAlign: TextAlign.center,
             overflow: TextOverflow.ellipsis,
           )
         ],
@@ -232,7 +233,6 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
-      height: 64,
       color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
       child: SizedBox(
         child: Row(
