@@ -7,6 +7,7 @@ import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/portal/portal_screen.dart';
 import 'package:heidi/src/presentation/widget/temp_screen.dart';
+import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
@@ -175,7 +176,11 @@ class _MainScreenState extends State<MainScreen> {
     }
     return IconButton(
       onPressed: () {
-        _onItemTapped(route);
+        if(route==Routes.tempScreen){
+          Utils().showAlertMessage('this_feature_will_be_available_soon', context);
+        }else {
+          _onItemTapped(route);
+        }
       },
       padding: EdgeInsets.zero,
       icon: Column(

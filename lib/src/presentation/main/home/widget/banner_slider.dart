@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-
-import '../../../../utils/configs/routes.dart';
+import '../../../../utils/common.dart';
+import '../../../../utils/translate.dart';
+import '../../../widget/app_button.dart';
 
 class BannerSlider extends StatefulWidget {
   const BannerSlider({super.key});
@@ -38,6 +39,20 @@ class _BannerSliderState extends State<BannerSlider> {
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                Translate.of(context).translate('apply_for_our_region'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleLarge!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
           SizedBox(
             height: 200,
             child: PageView.builder(
@@ -53,11 +68,7 @@ class _BannerSliderState extends State<BannerSlider> {
                   borderRadius: BorderRadius.circular(12),
                   child: GestureDetector(
                     onTap: (){
-                      Navigator.pushNamed(
-                        context,
-                        Routes.tempScreen,
-
-                      );
+                      Utils().showAlertMessage('this_feature_will_be_available_soon', context);
                     },
                     child: Stack(
                       children: [
@@ -83,22 +94,22 @@ class _BannerSliderState extends State<BannerSlider> {
           ),
           const SizedBox(height: 8),
           // Dots Indicator
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: List.generate(imageUrls.length, (index) {
-              return Container(
-                margin: const EdgeInsets.symmetric(horizontal: 4),
-                width: _currentPage == index ? 12 : 8,
-                height: _currentPage == index ? 12 : 8,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _currentPage == index
-                      ? Colors.blueAccent
-                      : Colors.grey.shade400,
-                ),
-              );
-            }),
-          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: List.generate(imageUrls.length, (index) {
+          //     return Container(
+          //       margin: const EdgeInsets.symmetric(horizontal: 4),
+          //       width: _currentPage == index ? 12 : 8,
+          //       height: _currentPage == index ? 12 : 8,
+          //       decoration: BoxDecoration(
+          //         shape: BoxShape.circle,
+          //         color: _currentPage == index
+          //             ? Colors.blueAccent
+          //             : Colors.grey.shade400,
+          //       ),
+          //     );
+          //   }),
+          // ),
         ],
       ),
     );

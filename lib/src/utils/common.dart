@@ -3,7 +3,12 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_device.dart';
+import 'package:heidi/src/utils/translate.dart';
 import 'package:location/location.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+import '../presentation/widget/app_button.dart';
+
 
 class Utils {
   static fieldFocusChange(
@@ -17,6 +22,35 @@ class Utils {
 
   static hiddenKeyboard(BuildContext context) {
     FocusScope.of(context).requestFocus(FocusNode());
+  }
+
+  void showAlertMessage(String message, BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: false,
+
+          content: Container(
+            padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+            child: Text(
+              Translate.of(context).translate(message),
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+          ),
+          actions: <Widget>[
+            AppButton(
+              Translate.of(context).translate('close'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              type: ButtonType.text,
+            ),
+          ],
+        );
+      },
+    );
   }
 
   static Future<DeviceModel?> getDeviceInfo() async {
