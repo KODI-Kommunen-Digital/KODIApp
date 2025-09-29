@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool checkSavedCity;
   final _scrollController = ScrollController();
   bool isLoading = false;
-  bool categoryLoading = false;
+  bool categoryLoading = true;
   bool isRefreshLoader = false;
   String? banner;
   List<CategoryModel>? category = [];
@@ -121,7 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onUpdateCategory() async {
+    setState(() {
+      categoryLoading = true;
+    });
     await AppBloc.homeCubit.onLoad(false);
+    setState(() {
+      categoryLoading = false;
+    });
   }
 
   void scrollUp() {
@@ -261,6 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       banners: banner,
                       setLocationCallback: (data) async {
                         for (final list in location!) {
+                          setState(() {
+                            categoryLoading = true;
+                          });
                           if (list.title == data) {
                             _onUpdateCategory();
                             setState(() {
@@ -293,18 +302,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SafeArea(
                       top: false,
                       bottom: false,
-                      child: Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Column(
+                          children: <Widget>[
+                            categoryLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : _buildCategory(AppBloc.homeCubit
+                                    .getCategoriesWithoutHidden(category ?? [])),
+                            _buildLocation(location),
+                            _buildRecent(recent, selectedCityId, location),
+                            if (isLoading)
+                              const CircularProgressIndicator.adaptive(),
+                            const SizedBox(height: 50),
+                          ],
+                        ),
                       ),
                     )
                   ]),

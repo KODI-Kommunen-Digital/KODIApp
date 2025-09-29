@@ -870,7 +870,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       bool isAllDayEvent = product.isAllDayEvent ?? false;
 
-      if (product.startDate.isNotEmpty || product.endDate != "") {
+      if ((product.startDate!=null && product.startDate!.isNotEmpty) || product.endDate != "") {
         startDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -882,7 +882,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              isAllDayEvent ? "${product.startDate} - ${Translate.of(context).translate('all_day_event')}": product.startDate,
+              isAllDayEvent ? "${(product.startDate!=null) ? product.startDate ?? '' : ''} - ${Translate.of(context).translate('all_day_event')}": (product.startDate!=null) ? product.startDate ?? '' : '',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
@@ -892,7 +892,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.endDate.isNotEmpty) {
+      if (product.endDate!=null && product.endDate!.isNotEmpty) {
         endDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -904,7 +904,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              product.endDate,
+              product.endDate ?? '',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!

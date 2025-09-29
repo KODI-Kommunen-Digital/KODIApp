@@ -298,9 +298,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .loadSubCategory(selectedCategory?.toLowerCase());
         listSubCategory = subCategoryResponse!.data;
       }
-      if (widget.item?.startDate != '') {
-        List<String> startDateTime = widget.item!.startDate.split(' ');
-        List<String> endDateTime = widget.item!.endDate.split(' ');
+      if (widget.item?.startDate != null && widget.item?.startDate != '') {
+        List<String> startDateTime = widget.item!.startDate!.split(' ');
+        List<String> endDateTime = (widget.item!.endDate!=null) ? widget.item!.endDate!.split(' ') : [];
 
         if (startDateTime.length == 2) {
           String dateString = startDateTime[0];
@@ -331,8 +331,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
           }
         }
       }
-      if (widget.item?.expiryDate != '') {
-        List<String> expiryDateTime = widget.item!.expiryDate.split(' ');
+      if (widget.item?.expiryDate!=null && widget.item?.expiryDate != '') {
+        List<String> expiryDateTime = widget.item!.expiryDate!.split(' ');
         String dateString = expiryDateTime[0];
         DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
         _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);

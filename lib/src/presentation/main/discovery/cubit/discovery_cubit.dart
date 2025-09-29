@@ -66,6 +66,12 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
   Future<void> saveCityId(int cityId) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
+    prefs.setKeyValue(Preferences.serviceCityId, cityId);
+  }
+
+  Future<void> resetCityId( ) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.serviceCityId, prefs.getKeyValue(Preferences.cityId, 0));
   }
 
   Future<String?> getCityLink() async {

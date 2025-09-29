@@ -480,17 +480,18 @@ class Api {
   }
 
   ///Get Product List
-  static Future<ResultApiModel> requestCatList(params, cityId, pageNo) async {
+  static Future<ResultApiModel> requestCatList(params, cityId, pageNo,
+      {eventFilter = ""}) async {
     if (params == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
-        final result = await HTTPManager(forum: false).get(url: list);
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&${eventFilter}cityId=$cityId&showExternalListings=$showExternalListings';
+        final result = await HTTPManager(forum: true).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
-        final result = await HTTPManager(forum: false).get(url: list);
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&${eventFilter}showExternalListings=$showExternalListings';
+        final result = await HTTPManager(forum: true).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
@@ -502,7 +503,7 @@ class Api {
       } else {
         var list =
             '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
-        final result = await HTTPManager(forum: false).get(url: list);
+        final result = await HTTPManager(forum: true).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     }
