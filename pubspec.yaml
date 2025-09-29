@@ -122,6 +122,7 @@ flutter_icons:
 flutter:
   assets:
     - assets/images/
+    - assets/images/home/
     - assets/locale/
     - assets/data/
 

@@ -6,7 +6,8 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'cubit.dart';
-
+import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:loggy/loggy.dart';
 enum ProductFilter {
   week,
   month,

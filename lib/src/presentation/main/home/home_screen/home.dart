@@ -1,8 +1,8 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
-
+import 'package:loggy/loggy.dart';
 import 'dart:async';
 import 'dart:io';
-
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -27,8 +27,12 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../utils/configs/application.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
+import 'package:loggy/loggy.dart';
+import '../list_product/cubit/cubit.dart';
+import '../list_product/list_product.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -66,10 +70,18 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollCompanyController.addListener(_scrollCompanyListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
+    loadNewsListing();
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
   }
+
+  loadNewsListing() async {
+    await context
+        .read<ListCubit>()
+        .onLoad(1); // 1 -> News category Id
+  }
+
 
   Future<void> getIgnoreAppVersion() async {
     String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
@@ -272,10 +284,20 @@ class _HomeScreenState extends State<HomeScreen> {
                           const SizedBox(height: 16),
 
                           _buildCompany(company),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
+                          // _buildRecent(recent, selectedCityId, location),
+                          _buildNewsListing(),
+                          FittedBox(
+                            child: Row(
+                              children: [
+                                Image.asset('assets/images/home/energie_logo.png'),
+                                Image.asset('assets/images/home/bayerisches_logo.jpg'),
+                                Image.asset('assets/images/home/heimat_logo.png'),
+                              ],
+                            ),
+                          ),
+                          // if (isLoading)
+                          //   const CircularProgressIndicator.adaptive(),
+                          // const SizedBox(height: 50),
                         ],
                       ),
                     )
@@ -724,6 +746,160 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+  _buildNewsListing() {
+    return Container(
+      constraints: const BoxConstraints(
+        minHeight: 100,
+        maxHeight: 580,
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding:
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                Translate.of(context).translate('news_listing'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          BlocConsumer<ListCubit, ListState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                error: (msg) => ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(msg))),
+                orElse: () {},
+              );
+            },
+            builder: (context, state) => state.when(
+              loading: () => const ListLoading(),
+              loaded: (list) => _buildNewsList(list),
+              updated: (list) {
+                return _buildNewsList(list);
+              },
+              error: (e) => ErrorWidget('Failed to load listings.'),
+              initial: () {
+                return Container();
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                final prefs = await Preferences.openBox();
+                prefs.setKeyValue(Preferences.categoryId, 1); //1 for News
+                prefs.setKeyValue(Preferences.type, "category");
+                if (!mounted) return;
+                Navigator.pushNamed(context, Routes.listProduct, arguments: {
+                  'id': selectedCityId,
+                  'title': '',
+                  'type': 'category',
+                });
+              },
+              child: Text(
+                Translate.of(context).translate('more_news'),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  final ProductViewType _listMode = Application.setting.listMode;
+
+  // lib/src/presentation/main/home/home_screen/home.dart
+
+  Widget _buildNewsList(List<ProductModel> list) {
+    // This check is redundant as it's inside a BlocBuilder, but kept for safety.
+    if (list.isEmpty) {
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.sentiment_satisfied),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                Translate.of(context).translate('list_is_empty'),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Replace SliverList with ListView.builder
+    return ListView.builder(
+      shrinkWrap: true, // Important: Allows ListView inside a Column
+      physics: const NeverScrollableScrollPhysics(), // Important: Prevents nested scrolling
+      padding: EdgeInsets.zero, // Remove any default padding
+      itemCount: (list.length < 3) ? list.length : 3,
+      itemBuilder: (BuildContext context, int index) {
+        final item = list[index];
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 16, top: 5),
+          child: _buildItem(item: item, type: _listMode),
+        );
+      },
+    );
+  }
+
+  Widget _buildItem({
+    ProductModel? item,
+    required ProductViewType type,
+  }) {
+    switch (type) {
+      case ProductViewType.list:
+        if (item != null) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AppProductItem(
+              isRefreshLoader: true,
+              onPressed: () {
+                _onProductDetail(item);
+              },
+              item: item,
+              type: _listMode,
+            ),
+          );
+        }
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppProductItem(
+            isRefreshLoader: true,
+            type: _listMode,
+          ),
+        );
+      default:
+        if (item != null) {
+          return AppProductItem(
+            isRefreshLoader: true,
+            onPressed: () {
+              _onProductDetail(item);
+            },
+            item: item,
+            type: _listMode,
+          );
+        }
+        return AppProductItem(
+          isRefreshLoader: true,
+          type: _listMode,
+        );
+    }
   }
 }
 
