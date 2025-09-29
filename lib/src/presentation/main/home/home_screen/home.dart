@@ -69,15 +69,16 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.addListener(_scrollListener);
     _scrollCompanyController.addListener(_scrollCompanyListener);
     checkSavedCity = true;
-    AppBloc.homeCubit.onLoad(false);
-    loadNewsListing();
+    AppBloc.homeCubit.onLoad(false).then((onValue){
+      loadNewsListing();
+    });
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
   }
 
-  loadNewsListing() async {
-    await context
+  loadNewsListing(){
+     context
         .read<ListCubit>()
         .onLoad(1); // 1 -> News category Id
   }
@@ -169,6 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
+    loadNewsListing();
     setState(() {
       pageNo = 1;
     });
@@ -270,23 +272,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 SliverList(
                   delegate: SliverChildListDelegate([
-                    SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(
-                                      category ?? [])),
-                          const BannerSlider(),
-                          const SizedBox(height: 16),
+                    Column(
+                      children: <Widget>[
+                        categoryLoading
+                            ? const CircularProgressIndicator.adaptive()
+                            : _buildCategory(AppBloc.homeCubit
+                                .getCategoriesWithoutHidden(
+                                    category ?? [])),
+                        const BannerSlider(),
+                        const SizedBox(height: 16),
 
-                          _buildCompany(company),
-                          // _buildRecent(recent, selectedCityId, location),
-                          _buildNewsListing(),
-                          FittedBox(
+                        _buildCompany(company),
+                        // _buildRecent(recent, selectedCityId, location),
+                        _buildNewsListing(),
+                        SizedBox(
+                          height: 100,
+                          child: FittedBox(
                             child: Row(
                               children: [
                                 Image.asset('assets/images/home/energie_logo.png'),
@@ -295,11 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          // if (isLoading)
-                          //   const CircularProgressIndicator.adaptive(),
-                          // const SizedBox(height: 50),
-                        ],
-                      ),
+                        ),
+                        // if (isLoading)
+                        //   const CircularProgressIndicator.adaptive(),
+                        // const SizedBox(height: 50),
+                      ],
                     )
                   ]),
                 )
@@ -456,7 +457,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             Navigator.of(context).pop();
                           }
                         },
-                        icon: const Icon(Icons.arrow_back)),
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,)),
                     Expanded(
                       child: Text(
                         link,
@@ -748,73 +751,67 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
   _buildNewsListing() {
-    return Container(
-      constraints: const BoxConstraints(
-        minHeight: 100,
-        maxHeight: 580,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-              child: Text(
-                Translate.of(context).translate('news_listing'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Align(
+          alignment: Alignment.topLeft,
+          child: Padding(
+            padding:
+            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+            child: Text(
+              Translate.of(context).translate('news_listing'),
+              style: Theme.of(context)
+                  .textTheme
+                  .titleMedium!
+                  .copyWith(fontWeight: FontWeight.bold),
             ),
           ),
-          BlocConsumer<ListCubit, ListState>(
-            listener: (context, state) {
-              state.maybeWhen(
-                error: (msg) => ScaffoldMessenger.of(context)
-                    .showSnackBar(SnackBar(content: Text(msg))),
-                orElse: () {},
-              );
+        ),
+        BlocConsumer<ListCubit, ListState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (msg) => ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(msg))),
+              orElse: () {},
+            );
+          },
+          builder: (context, state) => state.when(
+            loading: () => const ListLoading(),
+            loaded: (list,newsList) => _buildNewsList(newsList??[]),
+            updated: (list) {
+              return _buildNewsList(list);
             },
-            builder: (context, state) => state.when(
-              loading: () => const ListLoading(),
-              loaded: (list) => _buildNewsList(list),
-              updated: (list) {
-                return _buildNewsList(list);
-              },
-              error: (e) => ErrorWidget('Failed to load listings.'),
-              initial: () {
-                return Container();
-              },
+            error: (e) => ErrorWidget('Failed to load listings.'),
+            initial: () {
+              return Container();
+            },
+          ),
+        ),
+        Align(
+          alignment: Alignment.topRight,
+          child: TextButton(
+            onPressed: () async {
+              final prefs = await Preferences.openBox();
+              prefs.setKeyValue(Preferences.categoryId, 1); //1 for News
+              prefs.setKeyValue(Preferences.type, "category");
+              if (!mounted) return;
+              Navigator.pushNamed(context, Routes.listProduct, arguments: {
+                'id': 1,
+                'title': '',
+                'type': 'category',
+              });
+            },
+            child: Text(
+              Translate.of(context).translate('more_news'),
+              style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Theme.of(context).primaryColor),
+              textAlign: TextAlign.end,
             ),
           ),
-          Align(
-            alignment: Alignment.topRight,
-            child: TextButton(
-              onPressed: () async {
-                final prefs = await Preferences.openBox();
-                prefs.setKeyValue(Preferences.categoryId, 1); //1 for News
-                prefs.setKeyValue(Preferences.type, "category");
-                if (!mounted) return;
-                Navigator.pushNamed(context, Routes.listProduct, arguments: {
-                  'id': selectedCityId,
-                  'title': '',
-                  'type': 'category',
-                });
-              },
-              child: Text(
-                Translate.of(context).translate('more_news'),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.end,
-              ),
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

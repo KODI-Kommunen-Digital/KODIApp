@@ -20,7 +20,9 @@ mixin _$ListState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) =>
@@ -29,7 +31,8 @@ mixin _$ListState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) =>
@@ -38,7 +41,8 @@ mixin _$ListState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -89,6 +93,9 @@ class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -105,6 +112,9 @@ class __$$ListStateInitialImplCopyWithImpl<$Res>
   __$$ListStateInitialImplCopyWithImpl(_$ListStateInitialImpl _value,
       $Res Function(_$ListStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -131,7 +141,9 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -143,7 +155,8 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -155,7 +168,8 @@ class _$ListStateInitialImpl implements ListStateInitial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -225,6 +239,9 @@ class __$$ListStateLoadingImplCopyWithImpl<$Res>
   __$$ListStateLoadingImplCopyWithImpl(_$ListStateLoadingImpl _value,
       $Res Function(_$ListStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -251,7 +268,9 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -263,7 +282,8 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -275,7 +295,8 @@ class _$ListStateLoadingImpl implements ListStateLoading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -337,7 +358,7 @@ abstract class _$$ListStateLoadedImplCopyWith<$Res> {
           $Res Function(_$ListStateLoadedImpl) then) =
       __$$ListStateLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ProductModel> list});
+  $Res call({List<ProductModel> list, List<ProductModel>? recentList});
 }
 
 /// @nodoc
@@ -348,16 +369,23 @@ class __$$ListStateLoadedImplCopyWithImpl<$Res>
       _$ListStateLoadedImpl _value, $Res Function(_$ListStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? list = null,
+    Object? recentList = freezed,
   }) {
     return _then(_$ListStateLoadedImpl(
       null == list
           ? _value._list
           : list // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
+      freezed == recentList
+          ? _value._recentList
+          : recentList // ignore: cast_nullable_to_non_nullable
+              as List<ProductModel>?,
     ));
   }
 }
@@ -365,7 +393,10 @@ class __$$ListStateLoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ListStateLoadedImpl implements ListStateLoaded {
-  const _$ListStateLoadedImpl(final List<ProductModel> list) : _list = list;
+  const _$ListStateLoadedImpl(
+      final List<ProductModel> list, final List<ProductModel>? recentList)
+      : _list = list,
+        _recentList = recentList;
 
   final List<ProductModel> _list;
   @override
@@ -375,9 +406,19 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
     return EqualUnmodifiableListView(_list);
   }
 
+  final List<ProductModel>? _recentList;
+  @override
+  List<ProductModel>? get recentList {
+    final value = _recentList;
+    if (value == null) return null;
+    if (_recentList is EqualUnmodifiableListView) return _recentList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'ListState.loaded(list: $list)';
+    return 'ListState.loaded(list: $list, recentList: $recentList)';
   }
 
   @override
@@ -385,14 +426,20 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ListStateLoadedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list));
+            const DeepCollectionEquality().equals(other._list, _list) &&
+            const DeepCollectionEquality()
+                .equals(other._recentList, _recentList));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_list),
+      const DeepCollectionEquality().hash(_recentList));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
@@ -404,11 +451,13 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
-    return loaded(list);
+    return loaded(list, recentList);
   }
 
   @override
@@ -416,11 +465,12 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(list);
+    return loaded?.call(list, recentList);
   }
 
   @override
@@ -428,13 +478,14 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(list);
+      return loaded(list, recentList);
     }
     return orElse();
   }
@@ -481,11 +532,16 @@ class _$ListStateLoadedImpl implements ListStateLoaded {
 }
 
 abstract class ListStateLoaded implements ListState {
-  const factory ListStateLoaded(final List<ProductModel> list) =
+  const factory ListStateLoaded(
+          final List<ProductModel> list, final List<ProductModel>? recentList) =
       _$ListStateLoadedImpl;
 
   List<ProductModel> get list;
-  @JsonKey(ignore: true)
+  List<ProductModel>? get recentList;
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -507,6 +563,8 @@ class __$$ListStateUpdatedImplCopyWithImpl<$Res>
       $Res Function(_$ListStateUpdatedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -551,7 +609,9 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
@@ -563,7 +623,9 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -575,7 +637,8 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -587,7 +650,8 @@ class _$ListStateUpdatedImpl implements ListStateUpdated {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -644,7 +708,10 @@ abstract class ListStateUpdated implements ListState {
       _$ListStateUpdatedImpl;
 
   List<ProductModel> get list;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -666,6 +733,8 @@ class __$$ListStateErrorImplCopyWithImpl<$Res>
       _$ListStateErrorImpl _value, $Res Function(_$ListStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -704,7 +773,9 @@ class _$ListStateErrorImpl implements ListStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
@@ -716,7 +787,9 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ProductModel> list) loaded,
+    required TResult Function(
+            List<ProductModel> list, List<ProductModel>? recentList)
+        loaded,
     required TResult Function(List<ProductModel> list) updated,
     required TResult Function(String error) error,
   }) {
@@ -728,7 +801,8 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list)? loaded,
+    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult? Function(List<ProductModel> list)? updated,
     TResult? Function(String error)? error,
   }) {
@@ -740,7 +814,8 @@ class _$ListStateErrorImpl implements ListStateError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ProductModel> list)? loaded,
+    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
+        loaded,
     TResult Function(List<ProductModel> list)? updated,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -796,7 +871,10 @@ abstract class ListStateError implements ListState {
   const factory ListStateError(final String error) = _$ListStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

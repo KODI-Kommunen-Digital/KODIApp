@@ -9,7 +9,7 @@ class ListState with _$ListState {
 
   const factory ListState.loading() = ListStateLoading;
 
-  const factory ListState.loaded(List<ProductModel> list) =
+  const factory ListState.loaded(List<ProductModel> list,List<ProductModel>? recentList) =
       ListStateLoaded;
 
   const factory ListState.updated(List<ProductModel> list) =

@@ -24,6 +24,7 @@ class ListCubit extends Cubit<ListState> {
   List<ProductModel> list = [];
   PaginationModel? pagination;
   List<ProductModel> listLoaded = [];
+  List<ProductModel> newsLoaded = [];
   List<ProductModel> filteredList = [];
   bool isSearching = false;
   String? searchTerm;
@@ -31,7 +32,10 @@ class ListCubit extends Cubit<ListState> {
   Future<void> onLoad(categoryId) async {
     pageNo = 1;
     final prefs = await Preferences.openBox();
-    final type = prefs.getKeyValue(Preferences.type, '');
+    var type = prefs.getKeyValue(Preferences.type, '');
+    if(categoryId==1){
+      type="category";
+    }
     final result = await ListRepository.loadList(
       categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
@@ -42,7 +46,13 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(list));
+      if(categoryId==1){
+        newsLoaded=list;
+      }
+      emit(ListStateLoaded(list,newsLoaded));
+    }
+    else{
+      emit(const ListStateError("List is Empty"));
     }
   }
 

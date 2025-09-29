@@ -16,7 +16,7 @@ class _BannerSliderState extends State<BannerSlider> {
   int _currentPage = 0;
 
   final List<String> imageUrls = [
-    "https://drive.google.com/uc?export=view&id=1ttk3FqhwYiXw4yncFk18CAECbTOlcv0q",
+    "assets/images/home/banner.jpg"
   ];
   final List<String> titleList = [
     "Coming Soon",
@@ -72,11 +72,12 @@ class _BannerSliderState extends State<BannerSlider> {
                     },
                     child: Stack(
                       children: [
-                        CachedNetworkImage(
-                          fit: BoxFit.cover,
-                          width: double.infinity,
-                          imageUrl:imageUrls[index],
-                        ),
+                        Image.asset(imageUrls[index]),
+                        // CachedNetworkImage(
+                        //   fit: BoxFit.cover,
+                        //   width: double.infinity,
+                        //   imageUrl:imageUrls[index],
+                        // ),
                         Align(
                           alignment: Alignment.center,
                           child: Container(

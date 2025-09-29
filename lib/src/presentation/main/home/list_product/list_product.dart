@@ -88,7 +88,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list) => ListLoaded(
+            loaded: (list,newsList) => ListLoaded(
               list: list,
               selectedId: categoryId ?? 0,
             ),
