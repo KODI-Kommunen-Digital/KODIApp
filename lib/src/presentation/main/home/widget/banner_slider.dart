@@ -84,7 +84,10 @@ class _BannerSliderState extends State<BannerSlider> {
                             color: Colors.black38,
                               height: 20,
                               width:double.maxFinite,
-                              child: Center(child: Text(titleList[index]))),
+                              child: Center(child: Text(
+                                titleList[index],
+                                style: const TextStyle(color: Colors.white),
+                              ))),
                         )
                       ],
                     ),
