@@ -422,9 +422,19 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                 color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                padding: const EdgeInsets.fromLTRB(0, 32, 16, 0),
                 child: Row(
                   children: [
+                    IconButton(
+                        onPressed: () async {
+                          if(await webViewController.canGoBack()) {
+                            webViewController.goBack();
+                          }
+                          else{
+                            Navigator.of(context).pop();
+                          }
+                        },
+                        icon: const Icon(Icons.arrow_back)),
                     Expanded(
                       child: Text(
                         link,
@@ -541,8 +551,9 @@ class _HomeScreenState extends State<HomeScreen> {
           mode: LaunchMode.inAppWebView);*/
       Navigator.pushNamed(context, Routes.contact);
     }else if(item.id==10){
-      await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
-          mode: LaunchMode.inAppWebView);
+      _makeAction("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+      // await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
+      //     mode: LaunchMode.inAppWebView);
     }
     return;
   }
