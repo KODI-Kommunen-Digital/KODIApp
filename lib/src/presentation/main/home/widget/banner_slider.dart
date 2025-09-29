@@ -17,6 +17,9 @@ class _BannerSliderState extends State<BannerSlider> {
   final List<String> imageUrls = [
     "https://drive.google.com/uc?export=view&id=1ttk3FqhwYiXw4yncFk18CAECbTOlcv0q",
   ];
+  final List<String> titleList = [
+    "Coming Soon",
+  ];
 
   @override
   void initState() {
@@ -56,10 +59,22 @@ class _BannerSliderState extends State<BannerSlider> {
 
                       );
                     },
-                    child: CachedNetworkImage(
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      imageUrl:imageUrls[index],
+                    child: Stack(
+                      children: [
+                        CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          imageUrl:imageUrls[index],
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Container(
+                            color: Colors.black38,
+                              height: 20,
+                              width:double.maxFinite,
+                              child: Center(child: Text(titleList[index]))),
+                        )
+                      ],
                     ),
                   ),
                 );
