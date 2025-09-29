@@ -79,7 +79,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
   @override
   Widget build(BuildContext context) {
     DecorationImage? decorationImage;
-    BorderType borderType = BorderType.RRect;
     Widget circle = Container();
     if (widget.image != null) {
       if (!widget.image!.contains('pdf')) {
@@ -102,7 +101,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
     );
 
     if (widget.type == UploadImageType.circle) {
-      borderType = BorderType.Circle;
       decoration = BoxDecoration(
         shape: BoxShape.circle,
         image: decorationImage,
@@ -118,9 +116,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
       child: Stack(
         children: [
           DottedBorder(
-            borderType: borderType,
-            radius: const Radius.circular(8),
-            color: Theme.of(context).primaryColor,
+            options: RectDottedBorderOptions(
+              strokeWidth: 1.5,
+              dashPattern: const [4, 2],
+              color: Theme.of(context).primaryColor,
+            ),
             child: Container(
               decoration: decoration,
               alignment: Alignment.center,
@@ -373,7 +373,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for(final selectedImages in result.files){
+                      for (final selectedImages in result.files) {
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);

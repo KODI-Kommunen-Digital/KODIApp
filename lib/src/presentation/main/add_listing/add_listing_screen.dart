@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously, unrelated_type_equality_checks
 import 'dart:io';
+import 'dart:ui' as BorderType;
 
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -1628,19 +1629,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
               padding: const EdgeInsets.all(8.0),
               child: Stack(
                 children: [
-                  DottedBorder(
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(8),
-                    color: Theme.of(context).primaryColor,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: DottedBorder(
+                      options: RectDottedBorderOptions(
+                        dashPattern: [6, 3], // spacing of the dashes
+                        strokeWidth: 2,       // thickness of the border
                       ),
-                      // alignment: Alignment.center,
-                      child: Image.file(selectedImages![index + 1],
-                          fit: BoxFit.cover),
+                      child: SizedBox(
+                        width: 100,
+                        height: 100,
+                        child: Image.file(
+                          selectedImages![index],
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                   ),
                   Positioned(

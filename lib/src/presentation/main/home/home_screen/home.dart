@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.addListener(_scrollListener);
     _scrollCompanyController.addListener(_scrollCompanyListener);
     checkSavedCity = true;
-    AppBloc.homeCubit.onLoad(false).then((onValue){
+    AppBloc.homeCubit.onLoad(false).then((onValue) {
       loadNewsListing();
     });
     connectivityInternet();
@@ -77,12 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
     getIgnoreAppVersion();
   }
 
-  loadNewsListing(){
-     context
-        .read<ListCubit>()
-        .onLoad(1); // 1 -> News category Id
+  loadNewsListing() {
+    context.read<ListCubit>().onLoad(1); // 1 -> News category Id
   }
-
 
   Future<void> getIgnoreAppVersion() async {
     String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
@@ -220,32 +217,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     debugLogging: true,
                     debugDisplayAlways: true,
                     countryCode: 'DE',
-                    showLater: false,
-                    shouldPopScope: () => true,
-                    canDismissDialog: true,
                     durationUntilAlertAgain: const Duration(seconds: 30),
-                    dialogStyle: Platform.isIOS
-                        ? UpgradeDialogStyle.cupertino
-                        : UpgradeDialogStyle.material,
-                    willDisplayUpgrade: (
-                        {String? appStoreVersion,
-                        bool? display,
-                        String? installedVersion,
-                        String? minAppVersion}) {
-                      if (display != null) {
+                    willDisplayUpgrade: ({
+                      required bool display,
+                      String? installedVersion,
+                      UpgraderVersionInfo? versionInfo,
+                    }) {
+                      if (display) {
                         setState(() {
-                          latestAppStoreVersion = appStoreVersion ?? '';
+                          latestAppStoreVersion =
+                              versionInfo?.appStoreVersion?.build ?? '';
                         });
                       }
                     },
-                    onUpdate: () {
-                      return true;
-                    },
-                    onIgnore: () {
-                      AppBloc.homeCubit
-                          .saveIgnoreAppVersion(latestAppStoreVersion);
-                      return true;
-                    }),
+                  ),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
@@ -277,8 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         categoryLoading
                             ? const CircularProgressIndicator.adaptive()
                             : _buildCategory(AppBloc.homeCubit
-                                .getCategoriesWithoutHidden(
-                                    category ?? [])),
+                                .getCategoriesWithoutHidden(category ?? [])),
                         const BannerSlider(),
                         const SizedBox(height: 16),
 
@@ -290,9 +274,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: FittedBox(
                             child: Row(
                               children: [
-                                Image.asset('assets/images/home/energie_logo.png'),
-                                Image.asset('assets/images/home/bayerisches_logo.jpg'),
-                                Image.asset('assets/images/home/heimat_logo.png'),
+                                Image.asset(
+                                    'assets/images/home/energie_logo.png'),
+                                Image.asset(
+                                    'assets/images/home/bayerisches_logo.jpg'),
+                                Image.asset(
+                                    'assets/images/home/heimat_logo.png'),
                               ],
                             ),
                           ),
@@ -450,16 +437,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     IconButton(
                         onPressed: () async {
-                          if(await webViewController.canGoBack()) {
+                          if (await webViewController.canGoBack()) {
                             webViewController.goBack();
-                          }
-                          else{
+                          } else {
                             Navigator.of(context).pop();
                           }
                         },
                         icon: const Icon(
                           Icons.arrow_back,
-                          color: Colors.white,)),
+                          color: Colors.white,
+                        )),
                     Expanded(
                       child: Text(
                         link,
@@ -546,7 +533,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     item.id == 6 ||
                     item.id == 7 ||
                     item.id == 8 ||
-                    item.id ==10) {
+                    item.id == 10) {
                   _onService(item);
                 } else {
                   _onCategory(item, category);
@@ -575,8 +562,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Uri.parse("https://freiraum-fichtelgebirge.de/ueber-uns/"),
           mode: LaunchMode.inAppWebView);*/
       Navigator.pushNamed(context, Routes.contact);
-    }else if(item.id==10){
-      _makeAction("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+    } else if (item.id == 10) {
+      _makeAction(
+          "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
       // await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
       //     mode: LaunchMode.inAppWebView);
     }
@@ -750,6 +738,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
   _buildNewsListing() {
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -758,7 +747,7 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding:
-            const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             child: Text(
               Translate.of(context).translate('news_listing'),
               style: Theme.of(context)
@@ -778,7 +767,7 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
-            loaded: (list,newsList) => _buildNewsList(newsList??[]),
+            loaded: (list, newsList) => _buildNewsList(newsList ?? []),
             updated: (list) {
               return _buildNewsList(list);
             },
@@ -841,9 +830,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // Replace SliverList with ListView.builder
     return ListView.builder(
-      shrinkWrap: true, // Important: Allows ListView inside a Column
-      physics: const NeverScrollableScrollPhysics(), // Important: Prevents nested scrolling
-      padding: EdgeInsets.zero, // Remove any default padding
+      shrinkWrap: true,
+      // Important: Allows ListView inside a Column
+      physics: const NeverScrollableScrollPhysics(),
+      // Important: Prevents nested scrolling
+      padding: EdgeInsets.zero,
+      // Remove any default padding
       itemCount: (list.length < 3) ? list.length : 3,
       itemBuilder: (BuildContext context, int index) {
         final item = list[index];
@@ -899,5 +891,3 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 }
-
-

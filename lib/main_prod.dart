@@ -20,6 +20,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -81,12 +82,47 @@ class _HeidiAppState extends State<HeidiApp> {
               builder: (context, theme) {
                 return UpgradeAlert(
                   upgrader: Upgrader(
-                      shouldPopScope: () => true,
-                      canDismissDialog: true,
-                      durationUntilAlertAgain: const Duration(days: 1),
-                      dialogStyle: Platform.isIOS
-                          ? UpgradeDialogStyle.cupertino
-                          : UpgradeDialogStyle.material),
+                    debugLogging: true,
+                    debugDisplayAlways: true,
+                    countryCode: 'DE',
+                    durationUntilAlertAgain: const Duration(days: 1),
+                    willDisplayUpgrade: ({
+                      required bool display,
+                      String? installedVersion,
+                      UpgraderVersionInfo? versionInfo,
+                    }) {
+                      if (display) {
+                        final newVersion =
+                            versionInfo?.appStoreVersion?.build ?? 'N/A';
+                        final storeLink =
+                            versionInfo?.appStoreVersion?.build ?? '';
+
+                        showDialog(
+                          context: context,
+                          builder: (context) => AlertDialog(
+                            title: const Text('Update Available'),
+                            content: Text(
+                                'A new version ($newVersion) is available!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(context).pop(),
+                                child: const Text('Later'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  if (storeLink.isNotEmpty) {
+                                    _openStore(storeLink);
+                                  }
+                                },
+                                child: const Text('Update'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                    },
+                  ),
                   child: MaterialApp(
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
@@ -131,5 +167,15 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+
+  void _openStore(String storeUrl) async {
+    final uri = Uri.parse(storeUrl);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } else {
+      // handle error if store link can't be opened
+      print('Could not launch $storeUrl');
+    }
   }
 }
