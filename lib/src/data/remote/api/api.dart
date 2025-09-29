@@ -314,8 +314,11 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
+    final prefs = await Preferences.openBox();
+    final cityId = prefs.getKeyValue(Preferences.cityId, '');
+    final cityIdParam = cityId!=0 ? "&cityId=$cityId" : "";
     final listings =
-        "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings&showRecentListings=true";
+        "/listings?statusId=1&pageNo=$params&pageSize=19$cityIdParam&showExternalListings=$showExternalListings&showRecentListings=true";
     final result = await HTTPManager(forum: false).get(url: listings);
     return ResultApiModel.fromJson(result);
   }
