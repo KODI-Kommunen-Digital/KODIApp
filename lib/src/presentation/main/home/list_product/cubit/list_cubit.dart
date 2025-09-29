@@ -3,6 +3,7 @@ import 'package:heidi/src/data/model/model.dart';
 // import 'package:heidi/src/data/model/model_ad.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/data/model/model_product.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -40,6 +41,73 @@ class ListCubit extends Cubit<ListState> {
     listCity = await getCityList() ?? [];
     dynamic result;
 
+    if (cityId is List) {
+      result = [];
+      for (var city in cityId) {
+        final list = await ListRepository.loadList(
+          categoryId: (categoryId == 0) ? "" : categoryId,
+          type: type,
+          pageNo: pageNo,
+          cityId: city,
+          subCategoryId: subCategoryId,
+        );
+        result.addAll(list);
+      }
+    } else {
+      result = await ListRepository.loadList(
+        categoryId: (categoryId == 0) ? "" : categoryId,
+        type: type,
+        pageNo: pageNo,
+        cityId: cityId,
+        subCategoryId: subCategoryId,
+      );
+    }
+
+    if (result != null) {
+      list = result[0];
+      pagination = result[1];
+
+      bool shouldAddAds = !(categoryId == 43 && subCategoryId == 17);
+
+      // if (shouldAddAds) {
+      //   // Fetch ads
+      //   List<AdDataModel> ads = await ListRepository.fetchAds();
+      //   if (ads.isNotEmpty) {
+      //     List<dynamic> combinedList = [];
+      //     int currentAdIndex = _adIndex;
+      //     int itemCounter = 0;
+
+      //     for (int i = 0; i < list.length; i++) {
+      //       combinedList.add(list[i]);
+      //       itemCounter++;
+
+      //       if (itemCounter == 9 && i + 1 < list.length) {
+      //         if (list[i + 1] is! AdDataModel) {
+      //           combinedList.add(ads[currentAdIndex]);
+      //           currentAdIndex = (currentAdIndex + 1) % ads.length;
+      //           itemCounter = 0;
+      //         }
+      //       }
+      //     }
+
+      //     _adIndex = currentAdIndex;
+      //     list = combinedList;
+      //   }
+      // }
+
+      listLoaded = list;
+      emit(ListStateLoaded(list, listCity));
+    }
+  }
+
+  // For home screen
+  Future<void> loadNewsListing(cityId, int subCategoryId) async {
+    pageNo = 1;
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final type = await prefs.getKeyValue(Preferences.type, '');
+    listCity = await getCityList() ?? [];
+    dynamic result;
     if (cityId is List) {
       result = [];
       for (var city in cityId) {

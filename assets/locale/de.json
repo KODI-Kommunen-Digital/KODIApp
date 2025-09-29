@@ -138,7 +138,7 @@
   "more": "Mehr",
   "popular_location": "In der Nähe",
   "let_find_interesting": "Was passiert in den Gemeinden?",
-  "recent_listings": "Aktuelle Beiträge",
+  "news_listing": "Nachrichteneinträge",
   "what_happen": "Hier siehst du alles was kürzlich neu hochgeladen wurde",
   "shopping": "Shopping",
   "shopping_intro": "Lieblingsmarken und heißeste Trends.",
@@ -542,6 +542,7 @@
   "group_name": "Gruppenname",
   "new_message": "Neue Nachricht",
   "intro_login": "",
-  "welcomeTitle": ""
+  "welcomeTitle": "",
+  "more_news": "Weitere News"
 }
 

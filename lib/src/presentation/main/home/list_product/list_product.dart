@@ -323,14 +323,19 @@ class ListLoaded extends StatefulWidget {
   final List listCity;
   final bool updated;
   final int? subCategoryId;
+  final int? showLimit;
+  final bool enableScrolling;
 
-  const ListLoaded(
-      {super.key,
-      required this.list,
-      required this.selectedId,
-      required this.listCity,
-      this.updated = false,
-      this.subCategoryId});
+  const ListLoaded({
+    super.key,
+    required this.list,
+    required this.selectedId,
+    required this.listCity,
+    this.updated = false,
+    this.subCategoryId,
+    this.showLimit,
+    this.enableScrolling = true,
+  });
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -366,7 +371,7 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
+    if (_scrollController.position.atEdge && widget.showLimit == null) {
       if (_scrollController.position.pixels != 0) {
         setState(() {
           isLoadingMore = true;
@@ -435,7 +440,11 @@ class _ListLoadedState extends State<ListLoaded> {
             children: [
               Container(
                 color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                padding: EdgeInsets.fromLTRB(
+                    16,
+                    32,
+                    16,
+                    0),
                 child: Row(
                   children: [
                     Expanded(
@@ -540,6 +549,7 @@ class _ListLoadedState extends State<ListLoaded> {
         if (_pageType == PageType.list) {
           Widget contentList = CustomScrollView(
             controller: _scrollController,
+            physics: (widget.enableScrolling)? null :const NeverScrollableScrollPhysics(),
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
@@ -566,7 +576,9 @@ class _ListLoadedState extends State<ListLoaded> {
                       );
                     }
                   },
-                  childCount: list.length,
+                  childCount: (widget.showLimit != null)
+                      ? widget.showLimit
+                      : list.length,
                 ),
               ),
             ],

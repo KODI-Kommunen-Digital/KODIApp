@@ -14,6 +14,7 @@ import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
+import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/city_dropdown.dart';
@@ -31,7 +32,9 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-
+import 'package:loggy/loggy.dart';
+import '../list_product/cubit/cubit.dart';
+import '../list_product/list_product.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -70,10 +73,17 @@ class _HomeScreenState extends State<HomeScreen> {
     _scrollController.addListener(_scrollListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false);
+    loadNewsListing();
     connectivityInternet();
     checkUserExist();
     getIgnoreAppVersion();
     checkFirstTime();
+  }
+
+  loadNewsListing() async {
+    await context
+        .read<ListCubit>()
+        .loadNewsListing(0, 1); // 0 -> cityId, 1 -> News category Id
   }
 
   Future<void> checkFirstTime() async {
@@ -343,10 +353,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .getCategoriesWithoutHidden(
                                         category ?? [])),
                             _buildLocation(location),
-                            _buildRecent(recent, selectedCityId, location),
-                            if (isLoading)
-                              const CircularProgressIndicator.adaptive(),
-                            const SizedBox(height: 50),
+                            _buildNewsListing(),
+                            // _buildRecent(recent, selectedCityId, location),
+                            FittedBox(
+                              child: Row(
+                                children: [
+                                  Image.asset('assets/images/home/energie_logo.png'),
+                                  Image.asset('assets/images/home/bayerisches_logo.jpg'),
+                                  Image.asset('assets/images/home/heimat_logo.png'),
+                                ],
+                              ),
+                            ),
+                            // if (isLoading)
+                            //   const CircularProgressIndicator.adaptive(),
+                            // const SizedBox(height: 50),
                           ],
                         ),
                       ),
@@ -661,7 +681,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void _makeAction(String link, int id) async {
+  void _makeAction(String link, int? id) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
@@ -950,5 +970,183 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+
+  _buildNewsListing() {
+    return SizedBox(
+      height: 580,
+      child: Column(
+        children: [
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              child: Text(
+                Translate.of(context).translate('news_listing'),
+                style: Theme.of(context)
+                    .textTheme
+                    .titleMedium!
+                    .copyWith(fontWeight: FontWeight.bold),
+              ),
+            ),
+          ),
+          BlocConsumer<ListCubit, ListState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                error: (msg) => ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(msg))),
+                orElse: () {},
+              );
+            },
+            builder: (context, state) => state.when(
+              loading: () => const ListLoading(),
+              loaded: (list, listCity) => _buildNewsList(list, listCity),
+              updated: (list, listCity) {
+                return _buildNewsList(list, listCity);
+              },
+              error: (e) => ErrorWidget('Failed to load listings.'),
+              initial: () {
+                return Container();
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.topRight,
+            child: TextButton(
+              onPressed: () async {
+                loggy.warning('openBox');
+                final prefs = await Preferences.openBox();
+                prefs.setKeyValue(Preferences.categoryId, 1); //1 for News
+                prefs.setKeyValue(Preferences.type, "category");
+                loggy.warning('message');
+                if (!mounted) return;
+                loggy.warning('gaurav');
+                Navigator.pushNamed(context, Routes.listProduct, arguments: {
+                  'id': selectedCityId,
+                  'title': '',
+                  'type': 'category',
+                });
+              },
+              child: Text(
+                Translate.of(context).translate('more_news'),
+                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor),
+                textAlign: TextAlign.end,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  final ProductViewType _listMode = Application.setting.listMode;
+
+  // lib/src/presentation/main/home/home_screen/home.dart
+
+  Widget _buildNewsList(list, listCity) {
+    // This check is redundant as it's inside a BlocBuilder, but kept for safety.
+    if (list.isEmpty) {
+      return Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.sentiment_satisfied),
+            Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Text(
+                Translate.of(context).translate('list_is_empty'),
+                style: Theme.of(context).textTheme.bodyLarge,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    // Replace SliverList with ListView.builder
+    return ListView.builder(
+      shrinkWrap: true, // Important: Allows ListView inside a Column
+      physics: const NeverScrollableScrollPhysics(), // Important: Prevents nested scrolling
+      padding: EdgeInsets.zero, // Remove any default padding
+      itemCount: (list.length < 3) ? list.length : 3,
+      itemBuilder: (BuildContext context, int index) {
+        final item = list[index];
+        if (item is AdDataModel) {
+          return GestureDetector(
+            onTap: () {
+              _makeAction(item.link, null);
+            },
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 16),
+              child: Image.network(
+                "${Application.picturesURL}${item.image}",
+                fit: BoxFit.cover,
+              ),
+            ),
+          );
+        } else {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 16, top: 5),
+            child: _buildItem(
+              item: item,
+              type: _listMode,
+              listCity: listCity,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  Widget _buildItem({
+    ProductModel? item,
+    required ProductViewType type,
+    listCity,
+  }) {
+    switch (type) {
+      case ProductViewType.list:
+        if (item != null) {
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: AppProductItem(
+              isRefreshLoader: true,
+              cityName: context
+                  .read<ListCubit>()
+                  .getCityNameFromId(listCity, item.cityId ?? 0),
+              onPressed: () {
+                _onProductDetail(item);
+              },
+              item: item,
+              type: _listMode,
+            ),
+          );
+        }
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: AppProductItem(
+            isRefreshLoader: true,
+            type: _listMode,
+          ),
+        );
+      default:
+        if (item != null) {
+          return AppProductItem(
+            isRefreshLoader: true,
+            onPressed: () {
+              _onProductDetail(item);
+            },
+            item: item,
+            type: _listMode,
+          );
+        }
+        return AppProductItem(
+          isRefreshLoader: true,
+          type: _listMode,
+        );
+    }
   }
 }

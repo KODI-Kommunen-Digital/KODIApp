@@ -7,7 +7,8 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
+import 'package:loggy/loggy.dart';
+final loggy = Loggy('Api');
 class Api {
   static const String login = "/users/login";
   static const String user = "/users/";

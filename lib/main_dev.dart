@@ -31,7 +31,13 @@ Future<void> main() async {
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(
-    logPrinter: FirebaseCrashlyticsLogPrinter(),
+    logPrinter: const PrettyPrinter(
+      showColors: true,
+    ),
+    logOptions: const LogOptions(
+      LogLevel.all, // Show all logs from all levels
+      stackTraceLevel: LogLevel.error, // Show stack trace only for errors
+    ),
     filters: [
       BlacklistFilter([
         BlocLoggy,
@@ -50,8 +56,6 @@ Future<void> main() async {
         'https://d1100c58538e514e0b59f343260bc9a6@o4507264812908544.ingest.de.sentry.io/4508444268888144';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-
-
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
