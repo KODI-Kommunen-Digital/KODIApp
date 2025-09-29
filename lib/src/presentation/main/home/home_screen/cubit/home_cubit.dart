@@ -186,6 +186,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> saveCityId(int cityId) async {
     final prefs = await Preferences.openBox();
     prefs.setKeyValue(Preferences.cityId, cityId);
+    prefs.setKeyValue(Preferences.serviceCityId, cityId);
   }
 
   Future<bool> hasInternet() async {

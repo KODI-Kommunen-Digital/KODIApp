@@ -336,18 +336,14 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                         userListingsList[index]
                                                                     .categoryId ==
                                                                 3
-                                                            ? (userListingsList[
-                                                                            index]
-                                                                        .endDate !=
+                                                            ? ((userListingsList[index].endDate!=null) ? userListingsList[index].endDate ?? '' : '' !=
                                                                     ""
-                                                                ? "${userListingsList[index].startDate} ${Translate.of(context).translate('to')} ${userListingsList[index].endDate}"
+                                                                ? "${(userListingsList[index].startDate!=null) ? userListingsList[index].startDate ?? '' : ''} ${Translate.of(context).translate('to')} ${(userListingsList[index].endDate!=null) ? userListingsList[index].endDate ?? '' : ''}"
                                                                 : (userListingsList[index]
                                                                             .isAllDayEvent ??
                                                                         false)
-                                                                    ? "${userListingsList[index].startDate} - ${Translate.of(context).translate('all_day_event')}"
-                                                                    : userListingsList[
-                                                                            index]
-                                                                        .startDate)
+                                                                    ? "${(userListingsList[index].startDate!=null) ? userListingsList[index].startDate ?? '' : ''} - ${Translate.of(context).translate('all_day_event')}"
+                                                                    : (userListingsList[index].startDate!=null) ? userListingsList[index].startDate ?? '' : '')
                                                             : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                         style: Theme.of(context)
                                                             .textTheme

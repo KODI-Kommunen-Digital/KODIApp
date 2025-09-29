@@ -15,6 +15,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="Rodachtal"
         android:screenOrientation="portrait"
+        android:allowBackup="false"
         android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"

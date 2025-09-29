@@ -23,9 +23,9 @@ class ProductModel {
   final String? pdf;
   final String? videoURL;
   final String? category;
-  final String expiryDate;
-  final String startDate;
-  final String endDate;
+  final String? expiryDate;
+  final String? startDate;
+  final String? endDate;
   final String? createDate;
   final String? username;
   final String? firstname;
@@ -153,9 +153,9 @@ class ProductModel {
     CategoryModel? city;
     String status = '';
     String videoURL = '';
-    String expiryDate = '';
-    String startDate = '';
-    String endDate = '';
+    String? expiryDate = '';
+    String? startDate = '';
+    String? endDate = '';
     String? createDate = '';
     String priceMin = '';
     String priceMax = '';
@@ -174,28 +174,36 @@ class ProductModel {
 
     if (json['categoryId'] == 1) {
       category = "Nachricht";
-      final parsedDateTime = json['createdAt']!=null ?DateTime.parse(json['createdAt']) : null;
+      createDate = json['createdAt'];
+      final parsedDateTime = (createDate!=null && createDate.isNotEmpty) ?DateTime.parse(createDate) : null;
       createDate = parsedDateTime!=null ? DateFormat('dd.MM.yyyy').format(parsedDateTime) : null;
-      if ((json['expiryDate']) != null) {
-        final parsedExpiryDateTime = DateTime.parse(json['expiryDate']);
+
+      expiryDate = json['expiryDate'] as String?;
+
+      if (expiryDate!= null && expiryDate.isNotEmpty) {
+        final parsedExpiryDateTime = DateTime.parse(expiryDate);
         expiryDate =
             DateFormat('dd.MM.yyyy HH:mm').format(parsedExpiryDateTime);
       }
     } else if (json['categoryId'] == 3) {
       category = "Veranstaltungen";
-      final parsedDateTime = DateTime.parse(json['startDate']);
-      startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
-      if ((json['endDate']) != null) {
-        final parsedEDateTime = DateTime.parse(json['endDate']);
-        if (parsedDateTime.year == parsedEDateTime.year &&
-            parsedDateTime.month == parsedEDateTime.month &&
-            parsedDateTime.day == parsedEDateTime.day) {
-          endDate = DateFormat('HH:mm').format(parsedEDateTime);
+      startDate = json['startDate'];
+      final parsedDateTime = (startDate!=null && startDate.isNotEmpty) ? DateTime.parse(startDate) : null;
+      if (parsedDateTime != null) {
+        startDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedDateTime);
+        endDate = json['endDate'];
+        if (endDate != null && endDate.isNotEmpty) {
+          final parsedEDateTime = DateTime.parse(endDate);
+          if (parsedDateTime.year == parsedEDateTime.year &&
+              parsedDateTime.month == parsedEDateTime.month &&
+              parsedDateTime.day == parsedEDateTime.day) {
+            endDate = DateFormat('HH:mm').format(parsedEDateTime);
+          } else {
+            endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+          }
         } else {
-          endDate = DateFormat('dd.MM.yyyy HH:mm').format(parsedEDateTime);
+          endDate = "";
         }
-      } else {
-        endDate = "";
       }
     } else if (json['categoryId'] == 4) {
       category = "Vereine";
