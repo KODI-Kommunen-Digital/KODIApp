@@ -45,7 +45,7 @@ class HomeCategoryItem extends StatelessWidget {
     }
 
     return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.22,
+      width: MediaQuery.of(context).size.width * 0.23,
       child: GestureDetector(
         onTap: () => onPressed!(item!),
         child: Column(

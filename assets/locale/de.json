@@ -119,7 +119,7 @@
   "tap_rate": "Tippen Sie zum Bewerten auf einen Stern",
   "title": "Titel",
   "input_title": "Titel",
-  "services": "Infos",
+  "services": "Services",
   "cust_services": "Bürgerservices",
   "description": "Beschreibung",
   "input_feedback": "Geben Sie Ihr Feedback ein",
@@ -549,11 +549,11 @@
   "call": "Anruf",
   "funding_guide": "Fördermittelwegweiser",
   "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein",
-  "business_forum": "Wirtschaftskreise\n/Forum",
+  "business_forum": "Business\nCommunity / Forum",
   "this_feature_will_be_available_soon": "Diese Funktion wird in Kürze verfügbar sein",
   "start": "Start",
   "job_matching": "Job-Matching",
-  "news_listing": "Nachrichteneinträge",
+  "news_listing": "News Listing",
   "more_news": "Weitere News",
   "apply_for_our_region": "Bewirb dich auf unsere Region"
 }

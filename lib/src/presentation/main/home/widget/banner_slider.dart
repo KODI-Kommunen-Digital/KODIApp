@@ -19,7 +19,7 @@ class _BannerSliderState extends State<BannerSlider> {
     "assets/images/home/banner.jpg"
   ];
   final List<String> titleList = [
-    "Coming Soon",
+    "Suchst du nach einem Job? Oder suchst du Mitarbeiter:innen? Dann registriere dich jetzt und nutze unser Job-Matching! Finde deinen Traumjob oder die passenden Mitarbeitenden in der Region!",
   ];
 
   @override
@@ -81,12 +81,13 @@ class _BannerSliderState extends State<BannerSlider> {
                         Align(
                           alignment: Alignment.center,
                           child: Container(
+                            padding: EdgeInsets.all(8.0),
                             color: Colors.black38,
-                              height: 20,
-                              width:double.maxFinite,
                               child: Center(child: Text(
                                 titleList[index],
                                 style: const TextStyle(color: Colors.white),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 4,
                               ))),
                         )
                       ],

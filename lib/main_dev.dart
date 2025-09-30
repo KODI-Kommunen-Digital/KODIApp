@@ -31,13 +31,7 @@ Future<void> main() async {
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
   Loggy.initLoggy(
-    logPrinter: const PrettyPrinter(
-      showColors: true,
-    ),
-    logOptions: const LogOptions(
-      LogLevel.all, // Show all logs from all levels
-      stackTraceLevel: LogLevel.error, // Show stack trace only for errors
-    ),
+    logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
       BlacklistFilter([
         BlocLoggy,

@@ -1,4 +1,4 @@
-package com.smartauf
+package de.fichtel.app.business
 
 import io.flutter.embedding.android.FlutterActivity
 
