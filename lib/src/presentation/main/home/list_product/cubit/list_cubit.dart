@@ -46,7 +46,7 @@ class ListCubit extends Cubit<ListState> {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      if(categoryId==1){
+      if(categoryId==1 ){
         newsLoaded=list;
       }
       emit(ListStateLoaded(list,newsLoaded));
@@ -76,7 +76,7 @@ class ListCubit extends Cubit<ListState> {
 
   List<ProductModel> getLoadedList() => listLoaded;
 
-  Future<void> searchListing(content, bool newSearch) async {
+  Future<void> searchListing({content, required bool newSearch,bool isGlobalSearch=false,int? listingStatus}) async {
     if (newSearch) {
       emit(const ListState.loading());
       pageNo = 1;
@@ -88,7 +88,9 @@ class ListCubit extends Cubit<ListState> {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
-        hasCategoryFilter: true,
+        hasListingStatusFilter: listingStatus!=null,
+        currentListingStatus: listingStatus??1,
+        hasCategoryFilter: isGlobalSearch?false:true,
         hasLocationFilter: true,
         currentLocation: 1,
         currentCategory: categoryId);
@@ -131,7 +133,7 @@ class ListCubit extends Cubit<ListState> {
       );
     }
 
-    emit(ListStateUpdated(listDataList));
+    emit(ListStateUpdated(listDataList,newsLoaded));
   }
 
   Future<void> cancelSearch(int cityId) async {

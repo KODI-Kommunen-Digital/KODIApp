@@ -57,7 +57,7 @@ class HomeCubit extends Cubit<HomeState> {
       }).toList();
     }
 
-    final companyRequestResponse = await Api.requestCatList(10, savedCity, 1);
+    final companyRequestResponse = await Api.requestCatList(10, savedCity, 1,true);
     company = List.from(companyRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();
@@ -248,7 +248,7 @@ class HomeCubit extends Cubit<HomeState> {
       emit(const HomeState.error("no_internet"));
     }
 
-    final listingsRequestResponse = await Api.requestCatList(10, null, pageNo);
+    final listingsRequestResponse = await Api.requestCatList(10, null, pageNo,false);
     final newCompanies = List.from(listingsRequestResponse.data ?? []).map((item) {
       return ProductModel.fromJson(item);
     }).toList();

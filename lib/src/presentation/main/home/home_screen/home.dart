@@ -768,8 +768,8 @@ class _HomeScreenState extends State<HomeScreen> {
           builder: (context, state) => state.when(
             loading: () => const ListLoading(),
             loaded: (list, newsList) => _buildNewsList(newsList ?? []),
-            updated: (list) {
-              return _buildNewsList(list);
+            updated: (list,newsList) {
+              return _buildNewsList(newsList??[]);
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
             initial: () {
