@@ -499,19 +499,19 @@ class Api {
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&randomOrder=$isRandomOrder&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
     } else {
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&cityId=$cityId&randomOrder=$isRandomOrder&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&randomOrder=$isRandomOrder&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }

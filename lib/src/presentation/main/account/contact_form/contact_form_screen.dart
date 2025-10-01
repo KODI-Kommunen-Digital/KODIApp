@@ -6,6 +6,8 @@ import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 
+import '../../../widget/app_placeholder.dart';
+
 class ContactFormScreen extends StatefulWidget {
   const ContactFormScreen({super.key});
 
@@ -52,11 +54,13 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
     setState(() {
       _errorFirstName = UtilValidator.validate(
         _textFirstNameController.text,
-        type: ValidateType.normal, // Assuming ValidateType.name is for general non-empty name
+        type: ValidateType
+            .normal, // Assuming ValidateType.name is for general non-empty name
       );
       _errorLastName = UtilValidator.validate(
         _textLastNameController.text,
-        type: ValidateType.normal, // Assuming ValidateType.name is for general non-empty name
+        type: ValidateType
+            .normal, // Assuming ValidateType.name is for general non-empty name
       );
       _errorEmail = UtilValidator.validate(
         _textEmailController.text,
@@ -66,9 +70,7 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
         _textPhoneController.text,
         type: ValidateType.phone,
       );
-      _errorMessage = UtilValidator.validate(
-        _textMessageController.text,
-      );
+      _errorMessage = UtilValidator.validate(_textMessageController.text);
     });
 
     if (_errorFirstName == null &&
@@ -76,7 +78,8 @@ class _ContactFormScreenState extends State<ContactFormScreen> {
         _errorEmail == null &&
         _errorPhone == null &&
         _errorMessage == null) {
-      final String emailBodyContent = '''
+      final String emailBodyContent =
+          '''
 ${Translate.of(context).translate('first_name')}: ${_textFirstNameController.text}
 ${Translate.of(context).translate('last_name')}: ${_textLastNameController.text}
 ${Translate.of(context).translate('email')}: ${_textEmailController.text}
@@ -86,37 +89,44 @@ ${Translate.of(context).translate('message_label')}:
 ${_textMessageController.text}
           ''';
 
-      context.read<ContactFormCubit>().submitContactForm(
+      context
+          .read<ContactFormCubit>()
+          .submitContactForm(
             firstName: _textFirstNameController.text,
             lastName: _textLastNameController.text,
             email: _textEmailController.text,
             phone: _textPhoneController.text,
             message: _textMessageController.text,
-            ).then((success){
-        if (success) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(Translate.of(context).translate('message_sent_success')),
-              backgroundColor: Colors.green,
-            ),
-          );
-          _textFirstNameController.clear();
-          _textLastNameController.clear();
-          _textEmailController.clear();
-          _textPhoneController.clear();
-          _textMessageController.clear();
-          context.read<ContactFormCubit>().resetState();
-          Navigator.pop(context);
-        } else  {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(Translate.of(context).translate('error_message')),
-              backgroundColor: Colors.red,
-            ),
-          );
-          context.read<ContactFormCubit>().resetState();
-        }
-      });
+          )
+          .then((success) {
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    Translate.of(context).translate('message_sent_success'),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
+              _textFirstNameController.clear();
+              _textLastNameController.clear();
+              _textEmailController.clear();
+              _textPhoneController.clear();
+              _textMessageController.clear();
+              context.read<ContactFormCubit>().resetState();
+              Navigator.pop(context);
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    Translate.of(context).translate('error_message'),
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              context.read<ContactFormCubit>().resetState();
+            }
+          });
     }
   }
 
@@ -139,25 +149,49 @@ ${_textMessageController.text}
                     padding: const EdgeInsets.all(16),
                     children: <Widget>[
                       ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
-                          child: Image.asset(
-                            "assets/images/Kontakt.jpg",
-                            height: 250,
-                            fit: BoxFit.fill,
-                            width: double.infinity,
-
-                          )),
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          "assets/images/Kontakt.jpg",
+                          height: 250,
+                          fit: BoxFit.fill,
+                          width: double.infinity,
+                          frameBuilder:
+                              (
+                                BuildContext context,
+                                Widget child,
+                                int? frame,
+                                bool? wasSynchronouslyLoaded,
+                              ) {
+                                if ((wasSynchronouslyLoaded != null &&
+                                        wasSynchronouslyLoaded) ||
+                                    frame != null) {
+                                  return child;
+                                } else {
+                                  return AppPlaceholder(
+                                    child: Container(
+                                      height: 250,
+                                      width: double.infinity,
+                                      decoration: const BoxDecoration(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              },
+                        ),
+                      ),
                       const SizedBox(height: 15),
                       Text(
-                        Translate.of(context).translate('first_name'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        "${Translate.of(context).translate('first_name')}*",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AppTextInput(
-                        hintText: Translate.of(context).translate('input_first_name_hint'),
+                        hintText: Translate.of(
+                          context,
+                        ).translate('input_first_name_hint'),
                         errorText: _errorFirstName,
                         focusNode: _focusFirstName,
                         textInputAction: TextInputAction.next,
@@ -178,15 +212,16 @@ ${_textMessageController.text}
 
                       // Last Name
                       Text(
-                        Translate.of(context).translate('last_name'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        "${Translate.of(context).translate('last_name')}*",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AppTextInput(
-                        hintText: Translate.of(context).translate('input_last_name_hint'),
+                        hintText: Translate.of(
+                          context,
+                        ).translate('input_last_name_hint'),
                         errorText: _errorLastName,
                         focusNode: _focusLastName,
                         textInputAction: TextInputAction.next,
@@ -207,15 +242,16 @@ ${_textMessageController.text}
 
                       // Email
                       Text(
-                        Translate.of(context).translate('email'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        "${Translate.of(context).translate('email')}*",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AppTextInput(
-                        hintText: Translate.of(context).translate('input_email_hint'),
+                        hintText: Translate.of(
+                          context,
+                        ).translate('input_email_hint'),
                         errorText: _errorEmail,
                         focusNode: _focusEmail,
                         keyboardType: TextInputType.emailAddress,
@@ -237,15 +273,16 @@ ${_textMessageController.text}
 
                       // Phone Number
                       Text(
-                        Translate.of(context).translate('phone_number'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        "${Translate.of(context).translate('phone_number')}*",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AppTextInput(
-                        hintText: Translate.of(context).translate('input_phone_hint'),
+                        hintText: Translate.of(
+                          context,
+                        ).translate('input_phone_hint'),
                         errorText: _errorPhone,
                         focusNode: _focusPhone,
                         keyboardType: TextInputType.phone,
@@ -267,15 +304,16 @@ ${_textMessageController.text}
 
                       // Message
                       Text(
-                        Translate.of(context).translate('message_label'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleSmall!
-                            .copyWith(fontWeight: FontWeight.bold),
+                        "${Translate.of(context).translate('message_label')}*",
+                        style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 8),
                       AppTextInput(
-                        hintText: Translate.of(context).translate('input_message_hint_contact_form'),
+                        hintText: Translate.of(
+                          context,
+                        ).translate('input_message_hint_contact_form'),
                         errorText: _errorMessage,
                         focusNode: _focusMessage,
                         maxLines: 5,
@@ -299,7 +337,8 @@ ${_textMessageController.text}
                   padding: const EdgeInsets.all(16),
                   child: BlocBuilder<ContactFormCubit, ContactFormState>(
                     builder: (context, state) {
-                      final isLoading = state.status == ContactFormStatus.loading;
+                      final isLoading =
+                          state.status == ContactFormStatus.loading;
                       return AppButton(
                         Translate.of(context).translate('send'),
                         mainAxisSize: MainAxisSize.max,
@@ -309,7 +348,7 @@ ${_textMessageController.text}
                       );
                     },
                   ),
-                )
+                ),
               ],
             ),
           ),

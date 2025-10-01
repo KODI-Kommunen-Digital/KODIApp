@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import '../../../../utils/common.dart';
 import '../../../../utils/translate.dart';
-import '../../../widget/app_button.dart';
 
 class BannerSlider extends StatefulWidget {
   const BannerSlider({super.key});
@@ -74,6 +72,7 @@ class _BannerSliderState extends State<BannerSlider> {
                       children: [
                         Image.asset(imageUrls[index],
                           fit: BoxFit.fill,
+                          height: double.infinity,
                           width: double.infinity,),
                         // CachedNetworkImage(
                         //   fit: BoxFit.cover,
