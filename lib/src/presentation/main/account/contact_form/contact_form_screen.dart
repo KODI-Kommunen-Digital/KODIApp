@@ -142,7 +142,9 @@ ${_textMessageController.text}
                           borderRadius: BorderRadius.circular(12),
                           child: Image.asset(
                             "assets/images/Kontakt.jpg",
-                            height: 200,
+                            height: 250,
+                            fit: BoxFit.fill,
+                            width: double.infinity,
 
                           )),
                       const SizedBox(height: 15),

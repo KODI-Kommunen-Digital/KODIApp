@@ -72,7 +72,9 @@ class _BannerSliderState extends State<BannerSlider> {
                     },
                     child: Stack(
                       children: [
-                        Image.asset(imageUrls[index]),
+                        Image.asset(imageUrls[index],
+                          fit: BoxFit.fill,
+                          width: double.infinity,),
                         // CachedNetworkImage(
                         //   fit: BoxFit.cover,
                         //   width: double.infinity,
