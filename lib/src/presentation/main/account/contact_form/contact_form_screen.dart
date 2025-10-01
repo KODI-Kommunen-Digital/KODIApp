@@ -98,8 +98,8 @@ ${_textMessageController.text}
             phone: _textPhoneController.text,
             message: _textMessageController.text,
           )
-          .then((success) {
-            if (success) {
+          .then((value) {
+            if (value.$1) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
@@ -118,9 +118,7 @@ ${_textMessageController.text}
             } else {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(
-                    Translate.of(context).translate('error_message'),
-                  ),
+                  content: Text(value.$2),
                   backgroundColor: Colors.red,
                 ),
               );

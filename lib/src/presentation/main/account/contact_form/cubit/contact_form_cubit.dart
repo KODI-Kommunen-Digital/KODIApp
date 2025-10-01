@@ -10,7 +10,7 @@ part 'contact_form_state.dart';
 class ContactFormCubit extends Cubit<ContactFormState> {
   ContactFormCubit() : super(ContactFormState.initial());
 
-  Future<bool> submitContactForm({
+  Future<(bool,String)> submitContactForm({
     required String firstName,
     required String lastName,
     required String email,
@@ -28,16 +28,16 @@ class ContactFormCubit extends Cubit<ContactFormState> {
               enquiery: message)); 
       if (response.success) {
         emit(state.copyWith(status: ContactFormStatus.success));
-        return true;
+        return (true,response.message);
       } else {
         emit(state.copyWith(status: ContactFormStatus.error,errorMessage: response.message));
         logError('Submit Contact Form Failed', response.message);
-        return false;
+        return (false,response.message);
       }
     } catch (e, stackTrace) {
       emit(state.copyWith(status: ContactFormStatus.error, errorMessage: e.toString()));
       logError('Error submitting contact form: $e', e, stackTrace);
-      return false;
+      return (false,e.toString());
     }
   }
 
