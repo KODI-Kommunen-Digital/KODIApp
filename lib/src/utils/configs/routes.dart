@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/main/account/change_password/change_password_screen.dart';
+import 'package:heidi/src/presentation/main/account/contact_form/contact_form_screen.dart'; // Added import
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/all_listings_screen.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit/all_listings_cubit.dart';
 import 'package:heidi/src/presentation/main/account/dashboard/all_requests/all_requests_screen.dart';
@@ -84,6 +85,7 @@ class Routes {
   static const String changePassword = "/changePassword";
   static const String changeLanguage = "/changeLanguage";
   static const String contactUs = "/contactUs";
+  static const String contactForm = "/contactForm"; // Added route constant
   static const String aboutUs = "/aboutUs";
   static const String gallery = "/gallery";
   static const String themeSetting = "/themeSetting";
@@ -325,6 +327,13 @@ class Routes {
         return MaterialPageRoute(
           builder: (context) {
             return const ContactUsScreen();
+          },
+        );
+      
+      case contactForm: // Added case for ContactFormScreen
+        return MaterialPageRoute(
+          builder: (context) {
+            return const ContactFormScreen();
           },
         );
 

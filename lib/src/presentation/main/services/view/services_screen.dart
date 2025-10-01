@@ -9,6 +9,8 @@ import 'package:heidi/src/utils/extensions/string_extension.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/extensions/list_extension.dart';
 
+import '../../../../utils/configs/routes.dart';
+
 class ServicesScreen extends StatefulWidget {
   const ServicesScreen({super.key});
 
@@ -95,7 +97,7 @@ class _ServicesScreenState extends State<ServicesScreen> {
                     title: service.navigationUrl!,
                   );
                 } else if(service.type == ServiceType.contact){
-
+                  Navigator.pushNamed(context, Routes.contactForm);
                 }
               },
               child: Card(

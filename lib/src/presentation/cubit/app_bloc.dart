@@ -21,6 +21,7 @@ import 'package:heidi/src/presentation/main/login/signup/cubit/signup_cubit.dart
 import 'package:heidi/src/presentation/main/services/view/services_bloc.dart';
 import 'package:heidi/src/presentation/main/wishlist/cubit/cubit.dart';
 
+import '../main/account/contact_form/cubit/contact_form_cubit.dart';
 import 'bloc.dart';
 
 class AppBloc {
@@ -49,10 +50,14 @@ class AppBloc {
   static final allRequestsCubit = AllRequestsCubit();
   static final contactCubit = ContactCubit();
   static final wishListCubit = WishListCubit();
+  static final contactFormCubit = ContactFormCubit();
 
   static final List<BlocProvider> providers = [
     BlocProvider<ApplicationCubit>(
       create: (context) => applicationCubit,
+    ),
+    BlocProvider<ContactFormCubit>(
+      create: (context) => contactFormCubit,
     ),
     BlocProvider<UserCubit>(
       create: (context) => userCubit,

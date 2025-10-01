@@ -12,7 +12,7 @@ class ContactUsCubit extends Cubit<ContactUsState> {
     required String email,
     required String token,
   }) async {
-    Map<String, dynamic> params = {"email": email, "token": token};
+    Map<String, dynamic> params = {"email": email, "token": token,"key":"feedback"};
     final sendFeedback = await Api.contactUs(params);
     if (sendFeedback.success) {
       return true;

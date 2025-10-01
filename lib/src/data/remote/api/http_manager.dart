@@ -54,6 +54,7 @@ class HTTPManager {
         _printRequest(options);
         return handler.next(options);
       }, onResponse: (response, handler) {
+        _printResponse(response);
         handler.next(response);
       }, onError: (error, handler) async {
         if (error.response?.data['message'] ==
@@ -284,6 +285,15 @@ class HTTPManager {
     } else {
       UtilLogger.log("DATA", options.data);
     }
+  }
+
+  void _printResponse(Response response) {
+    UtilLogger.log("RESPONSE ====================================");
+    UtilLogger.log("STATUS CODE", response.statusCode);
+    UtilLogger.log("DATA", response.data);
+    UtilLogger.log("REQUEST OPTIONS", response.requestOptions.data);
+    UtilLogger.log(
+        "REQUEST PARAMETERS", response.requestOptions.queryParameters);
   }
 
   ///Error common handle

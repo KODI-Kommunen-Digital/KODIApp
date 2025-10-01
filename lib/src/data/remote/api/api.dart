@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_contact_form.dart';
 import 'package:heidi/src/data/remote/api/http_manager.dart';
 import 'package:heidi/src/utils/asset.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -647,6 +648,15 @@ class Api {
     var list =
         '/listings/search?searchQuery=$content$filter&pageNo=$pageNo&pageSize=10';
     final result = await HTTPManager(forum: false).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> sendContactForm(ContactForm contactForm) async {
+    final result = await HTTPManager(forum: false).post(
+      url: contact,
+      data: contactForm.toJson(),
+      loading: true,
+    );
     return ResultApiModel.fromJson(result);
   }
 

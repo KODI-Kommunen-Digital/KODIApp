@@ -558,4 +558,13 @@
   "apply_for_our_region": "Bewirb dich auf unsere Region",
   "err_load_service": "Fehler beim Laden services",
   "no_service": "Nicht services gefunden"
+  "contact_form_submission_subject": "Kontaktformular Übermittlung",
+  "phone_number": "Telefonnummer",
+  "message_label": "Nachricht",
+  "input_first_name_hint": "Gib deinen Vornamen ein",
+  "input_last_name_hint": "Gib deinen Nachnamen ein",
+  "input_email_hint": "Gib deine E-Mail-Adresse ein",
+  "input_phone_hint": "Gib deine Telefonnummer ein",
+  "input_message_hint_contact_form": "Gib deine Nachricht ein (z.B. bevorzugter Kontakt: Rückruf, Treffen)",
+  "contact_form_title": "Kontaktformular"
 }

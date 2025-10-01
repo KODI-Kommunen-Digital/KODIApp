@@ -553,5 +553,14 @@
   "more_news": "More News",
   "apply_for_our_region": "Apply for our Region",
   "err_load_service" : "Error loading services",
-  "no_service" : "No services found"
-}
+  "no_service" : "No services found",
+  "contact_form_submission_subject": "Contact Form Submission",
+  "phone_number": "Phone Number",
+  "message_label": "Message",
+  "input_first_name_hint": "Enter your first name",
+  "input_last_name_hint": "Enter your last name",
+  "input_email_hint": "Enter your email address",
+  "input_phone_hint": "Enter your phone number",
+  "input_message_hint_contact_form": "Enter your message (e.g., preferred contact: callback, meeting)",
+  "contact_form_title": "Contact Form"
+ }

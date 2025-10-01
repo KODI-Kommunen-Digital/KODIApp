@@ -6,7 +6,6 @@ list(APPEND FLUTTER_PLUGIN_LIST
   connectivity_plus
   file_selector_windows
   firebase_core
-  flutter_inappwebview_windows
   permission_handler_windows
   sentry_flutter
   sqlite3_flutter_libs

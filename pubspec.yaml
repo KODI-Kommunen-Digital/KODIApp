@@ -91,7 +91,7 @@ dependencies:
 
   ###From Dependencies
   custom_in_app_webview:
-    path: ../KODIApp/dependencies/custom_in_app_webview
+    path: dependencies/custom_in_app_webview
 
 dev_dependencies:
   flutter_test:
