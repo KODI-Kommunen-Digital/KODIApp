@@ -22,7 +22,7 @@ class ContactForm {
         firstname: json['firstname'],
         lastname: json['lastname'],
         enquiery: json['enquiery'],
-        phone: json['phone'],
+        phone: json['phoneNumber'],
         email: json['email'],
         key: json['key'],
     );
@@ -32,7 +32,7 @@ class ContactForm {
         'firstname': firstname,
         'lastname': lastname,
         'enquiery': enquiery,
-        'phone': phone,
+        'phoneNumber': phone,
         'email': email,
         'key': key,
       };
