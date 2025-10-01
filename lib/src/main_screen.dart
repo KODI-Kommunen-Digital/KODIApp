@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/main/account/account_profile/account_scre
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/home_screen/home.dart';
 import 'package:heidi/src/presentation/main/portal/portal_screen.dart';
+import 'package:heidi/src/presentation/main/services/view/services_screen.dart';
 import 'package:heidi/src/presentation/widget/temp_screen.dart';
 import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -39,7 +40,9 @@ class _MainScreenState extends State<MainScreen> {
           index: _exportIndexed(_selectedPage),
           children: const <Widget>[
             HomeScreen(),
-            DiscoveryScreen(),
+            ServicesScreen(),
+            //Replaced old screen discovery as per new requirements.
+            // DiscoveryScreen(),
             TempScreen(),
             PortalScreen(),
             AccountScreen()

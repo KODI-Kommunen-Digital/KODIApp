@@ -1,4 +1,5 @@
 // ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
+import 'package:custom_in_app_webview/custom_in_app_webview.dart';
 import 'package:loggy/loggy.dart';
 import 'dart:async';
 import 'dart:io';
@@ -389,7 +390,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (item.id != -1) {
       if (item.id == 17) {
-        final cityId = await context.read<DiscoveryCubit>().getCitySelected();
+        final prefs = await Preferences.openBox();
+        int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
         if (cityId != 0) {
           if (!mounted) return;
           Navigator.pushNamed(context, Routes.listGroups,
@@ -563,8 +565,12 @@ class _HomeScreenState extends State<HomeScreen> {
           mode: LaunchMode.inAppWebView);*/
       Navigator.pushNamed(context, Routes.contact);
     } else if (item.id == 10) {
-      _makeAction(
-          "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+      CustomInAppWebView.showAsBottomSheet(
+          context: context,
+          url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/",
+          title: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+      // _makeAction(
+      //     "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
       // await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
       //     mode: LaunchMode.inAppWebView);
     }

@@ -551,5 +551,7 @@
   "start": "Start",
   "news_listing": "News Listings",
   "more_news": "More News",
-  "apply_for_our_region": "Apply for our Region"
+  "apply_for_our_region": "Apply for our Region",
+  "err_load_service" : "Error loading services",
+  "no_service" : "No services found"
 }
