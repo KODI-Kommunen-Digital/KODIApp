@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,872 +9,484 @@ part of 'list_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$ListState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ListState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ListStateCopyWith<$Res> {
-  factory $ListStateCopyWith(ListState value, $Res Function(ListState) then) =
-      _$ListStateCopyWithImpl<$Res, ListState>;
+class $ListStateCopyWith<$Res>  {
+$ListStateCopyWith(ListState _, $Res Function(ListState) __);
 }
 
-/// @nodoc
-class _$ListStateCopyWithImpl<$Res, $Val extends ListState>
-    implements $ListStateCopyWith<$Res> {
-  _$ListStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [ListState].
+extension ListStatePatterns on ListState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ListStateInitial value)?  initial,TResult Function( ListStateLoading value)?  loading,TResult Function( ListStateLoaded value)?  loaded,TResult Function( ListStateUpdated value)?  updated,TResult Function( ListStateError value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case ListStateInitial() when initial != null:
+return initial(_that);case ListStateLoading() when loading != null:
+return loading(_that);case ListStateLoaded() when loaded != null:
+return loaded(_that);case ListStateUpdated() when updated != null:
+return updated(_that);case ListStateError() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ListStateInitial value)  initial,required TResult Function( ListStateLoading value)  loading,required TResult Function( ListStateLoaded value)  loaded,required TResult Function( ListStateUpdated value)  updated,required TResult Function( ListStateError value)  error,}){
+final _that = this;
+switch (_that) {
+case ListStateInitial():
+return initial(_that);case ListStateLoading():
+return loading(_that);case ListStateLoaded():
+return loaded(_that);case ListStateUpdated():
+return updated(_that);case ListStateError():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ListStateInitial value)?  initial,TResult? Function( ListStateLoading value)?  loading,TResult? Function( ListStateLoaded value)?  loaded,TResult? Function( ListStateUpdated value)?  updated,TResult? Function( ListStateError value)?  error,}){
+final _that = this;
+switch (_that) {
+case ListStateInitial() when initial != null:
+return initial(_that);case ListStateLoading() when loading != null:
+return loading(_that);case ListStateLoaded() when loaded != null:
+return loaded(_that);case ListStateUpdated() when updated != null:
+return updated(_that);case ListStateError() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<ProductModel> list,  List<ProductModel>? recentList)?  loaded,TResult Function( List<ProductModel> list,  List<ProductModel>? recentList)?  updated,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case ListStateInitial() when initial != null:
+return initial();case ListStateLoading() when loading != null:
+return loading();case ListStateLoaded() when loaded != null:
+return loaded(_that.list,_that.recentList);case ListStateUpdated() when updated != null:
+return updated(_that.list,_that.recentList);case ListStateError() when error != null:
+return error(_that.error);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<ProductModel> list,  List<ProductModel>? recentList)  loaded,required TResult Function( List<ProductModel> list,  List<ProductModel>? recentList)  updated,required TResult Function( String error)  error,}) {final _that = this;
+switch (_that) {
+case ListStateInitial():
+return initial();case ListStateLoading():
+return loading();case ListStateLoaded():
+return loaded(_that.list,_that.recentList);case ListStateUpdated():
+return updated(_that.list,_that.recentList);case ListStateError():
+return error(_that.error);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<ProductModel> list,  List<ProductModel>? recentList)?  loaded,TResult? Function( List<ProductModel> list,  List<ProductModel>? recentList)?  updated,TResult? Function( String error)?  error,}) {final _that = this;
+switch (_that) {
+case ListStateInitial() when initial != null:
+return initial();case ListStateLoading() when loading != null:
+return loading();case ListStateLoaded() when loaded != null:
+return loaded(_that.list,_that.recentList);case ListStateUpdated() when updated != null:
+return updated(_that.list,_that.recentList);case ListStateError() when error != null:
+return error(_that.error);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$ListStateInitialImplCopyWith<$Res> {
-  factory _$$ListStateInitialImplCopyWith(_$ListStateInitialImpl value,
-          $Res Function(_$ListStateInitialImpl) then) =
-      __$$ListStateInitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ListStateInitialImplCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateInitialImpl>
-    implements _$$ListStateInitialImplCopyWith<$Res> {
-  __$$ListStateInitialImplCopyWithImpl(_$ListStateInitialImpl _value,
-      $Res Function(_$ListStateInitialImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-}
-
-/// @nodoc
-
-class _$ListStateInitialImpl implements ListStateInitial {
-  const _$ListStateInitialImpl();
-
-  @override
-  String toString() {
-    return 'ListState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ListStateInitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ListStateInitial implements ListState {
-  const factory ListStateInitial() = _$ListStateInitialImpl;
-}
-
-/// @nodoc
-abstract class _$$ListStateLoadingImplCopyWith<$Res> {
-  factory _$$ListStateLoadingImplCopyWith(_$ListStateLoadingImpl value,
-          $Res Function(_$ListStateLoadingImpl) then) =
-      __$$ListStateLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ListStateLoadingImplCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoadingImpl>
-    implements _$$ListStateLoadingImplCopyWith<$Res> {
-  __$$ListStateLoadingImplCopyWithImpl(_$ListStateLoadingImpl _value,
-      $Res Function(_$ListStateLoadingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$ListStateLoadingImpl implements ListStateLoading {
-  const _$ListStateLoadingImpl();
 
-  @override
-  String toString() {
-    return 'ListState.loading()';
-  }
+class ListStateInitial implements ListState {
+  const ListStateInitial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$ListStateLoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListStateInitial);
 }
 
-abstract class ListStateLoading implements ListState {
-  const factory ListStateLoading() = _$ListStateLoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ListState.initial()';
 }
 
-/// @nodoc
-abstract class _$$ListStateLoadedImplCopyWith<$Res> {
-  factory _$$ListStateLoadedImplCopyWith(_$ListStateLoadedImpl value,
-          $Res Function(_$ListStateLoadedImpl) then) =
-      __$$ListStateLoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<ProductModel> list, List<ProductModel>? recentList});
+
 }
 
-/// @nodoc
-class __$$ListStateLoadedImplCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateLoadedImpl>
-    implements _$$ListStateLoadedImplCopyWith<$Res> {
-  __$$ListStateLoadedImplCopyWithImpl(
-      _$ListStateLoadedImpl _value, $Res Function(_$ListStateLoadedImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? list = null,
-    Object? recentList = freezed,
-  }) {
-    return _then(_$ListStateLoadedImpl(
-      null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
-      freezed == recentList
-          ? _value._recentList
-          : recentList // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>?,
-    ));
-  }
-}
+
 
 /// @nodoc
 
-class _$ListStateLoadedImpl implements ListStateLoaded {
-  const _$ListStateLoadedImpl(
-      final List<ProductModel> list, final List<ProductModel>? recentList)
-      : _list = list,
-        _recentList = recentList;
 
-  final List<ProductModel> _list;
-  @override
-  List<ProductModel> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
-  }
+class ListStateLoading implements ListState {
+  const ListStateLoading();
+  
 
-  final List<ProductModel>? _recentList;
-  @override
-  List<ProductModel>? get recentList {
-    final value = _recentList;
-    if (value == null) return null;
-    if (_recentList is EqualUnmodifiableListView) return _recentList;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
 
-  @override
-  String toString() {
-    return 'ListState.loaded(list: $list, recentList: $recentList)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ListStateLoadedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list) &&
-            const DeepCollectionEquality()
-                .equals(other._recentList, _recentList));
-  }
 
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(_list),
-      const DeepCollectionEquality().hash(_recentList));
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
-      __$$ListStateLoadedImplCopyWithImpl<_$ListStateLoadedImpl>(
-          this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) {
-    return loaded(list, recentList);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) {
-    return loaded?.call(list, recentList);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(list, recentList);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListStateLoading);
 }
 
-abstract class ListStateLoaded implements ListState {
-  const factory ListStateLoaded(
-          final List<ProductModel> list, final List<ProductModel>? recentList) =
-      _$ListStateLoadedImpl;
 
-  List<ProductModel> get list;
-  List<ProductModel>? get recentList;
+@override
+int get hashCode => runtimeType.hashCode;
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ListStateLoadedImplCopyWith<_$ListStateLoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'ListState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ListStateLoaded implements ListState {
+  const ListStateLoaded(final  List<ProductModel> list, final  List<ProductModel>? recentList): _list = list,_recentList = recentList;
+  
+
+ final  List<ProductModel> _list;
+ List<ProductModel> get list {
+  if (_list is EqualUnmodifiableListView) return _list;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_list);
+}
+
+ final  List<ProductModel>? _recentList;
+ List<ProductModel>? get recentList {
+  final value = _recentList;
+  if (value == null) return null;
+  if (_recentList is EqualUnmodifiableListView) return _recentList;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
+
+
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ListStateLoadedCopyWith<ListStateLoaded> get copyWith => _$ListStateLoadedCopyWithImpl<ListStateLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListStateLoaded&&const DeepCollectionEquality().equals(other._list, _list)&&const DeepCollectionEquality().equals(other._recentList, _recentList));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_list),const DeepCollectionEquality().hash(_recentList));
+
+@override
+String toString() {
+  return 'ListState.loaded(list: $list, recentList: $recentList)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ListStateUpdatedImplCopyWith<$Res> {
-  factory _$$ListStateUpdatedImplCopyWith(_$ListStateUpdatedImpl value,
-          $Res Function(_$ListStateUpdatedImpl) then) =
-      __$$ListStateUpdatedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<ProductModel> list});
+abstract mixin class $ListStateLoadedCopyWith<$Res> implements $ListStateCopyWith<$Res> {
+  factory $ListStateLoadedCopyWith(ListStateLoaded value, $Res Function(ListStateLoaded) _then) = _$ListStateLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<ProductModel> list, List<ProductModel>? recentList
+});
+
+
+
+
+}
+/// @nodoc
+class _$ListStateLoadedCopyWithImpl<$Res>
+    implements $ListStateLoadedCopyWith<$Res> {
+  _$ListStateLoadedCopyWithImpl(this._self, this._then);
+
+  final ListStateLoaded _self;
+  final $Res Function(ListStateLoaded) _then;
+
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? list = null,Object? recentList = freezed,}) {
+  return _then(ListStateLoaded(
+null == list ? _self._list : list // ignore: cast_nullable_to_non_nullable
+as List<ProductModel>,freezed == recentList ? _self._recentList : recentList // ignore: cast_nullable_to_non_nullable
+as List<ProductModel>?,
+  ));
 }
 
-/// @nodoc
-class __$$ListStateUpdatedImplCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateUpdatedImpl>
-    implements _$$ListStateUpdatedImplCopyWith<$Res> {
-  __$$ListStateUpdatedImplCopyWithImpl(_$ListStateUpdatedImpl _value,
-      $Res Function(_$ListStateUpdatedImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? list = null,
-  }) {
-    return _then(_$ListStateUpdatedImpl(
-      null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<ProductModel>,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$ListStateUpdatedImpl implements ListStateUpdated {
-  const _$ListStateUpdatedImpl(final List<ProductModel> list) : _list = list;
 
-  final List<ProductModel> _list;
-  @override
-  List<ProductModel> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
-  }
+class ListStateUpdated implements ListState {
+  const ListStateUpdated(final  List<ProductModel> list, final  List<ProductModel>? recentList): _list = list,_recentList = recentList;
+  
 
-  @override
-  String toString() {
-    return 'ListState.updated(list: $list)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ListStateUpdatedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list));
-  }
-
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
-
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
-      __$$ListStateUpdatedImplCopyWithImpl<_$ListStateUpdatedImpl>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) {
-    return updated(list);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) {
-    return updated?.call(list);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (updated != null) {
-      return updated(list);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) {
-    return updated(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) {
-    return updated?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (updated != null) {
-      return updated(this);
-    }
-    return orElse();
-  }
+ final  List<ProductModel> _list;
+ List<ProductModel> get list {
+  if (_list is EqualUnmodifiableListView) return _list;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_list);
 }
 
-abstract class ListStateUpdated implements ListState {
-  const factory ListStateUpdated(final List<ProductModel> list) =
-      _$ListStateUpdatedImpl;
+ final  List<ProductModel>? _recentList;
+ List<ProductModel>? get recentList {
+  final value = _recentList;
+  if (value == null) return null;
+  if (_recentList is EqualUnmodifiableListView) return _recentList;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(value);
+}
 
-  List<ProductModel> get list;
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ListStateUpdatedImplCopyWith<_$ListStateUpdatedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ListStateUpdatedCopyWith<ListStateUpdated> get copyWith => _$ListStateUpdatedCopyWithImpl<ListStateUpdated>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListStateUpdated&&const DeepCollectionEquality().equals(other._list, _list)&&const DeepCollectionEquality().equals(other._recentList, _recentList));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_list),const DeepCollectionEquality().hash(_recentList));
+
+@override
+String toString() {
+  return 'ListState.updated(list: $list, recentList: $recentList)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$ListStateErrorImplCopyWith<$Res> {
-  factory _$$ListStateErrorImplCopyWith(_$ListStateErrorImpl value,
-          $Res Function(_$ListStateErrorImpl) then) =
-      __$$ListStateErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String error});
+abstract mixin class $ListStateUpdatedCopyWith<$Res> implements $ListStateCopyWith<$Res> {
+  factory $ListStateUpdatedCopyWith(ListStateUpdated value, $Res Function(ListStateUpdated) _then) = _$ListStateUpdatedCopyWithImpl;
+@useResult
+$Res call({
+ List<ProductModel> list, List<ProductModel>? recentList
+});
+
+
+
+
+}
+/// @nodoc
+class _$ListStateUpdatedCopyWithImpl<$Res>
+    implements $ListStateUpdatedCopyWith<$Res> {
+  _$ListStateUpdatedCopyWithImpl(this._self, this._then);
+
+  final ListStateUpdated _self;
+  final $Res Function(ListStateUpdated) _then;
+
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? list = null,Object? recentList = freezed,}) {
+  return _then(ListStateUpdated(
+null == list ? _self._list : list // ignore: cast_nullable_to_non_nullable
+as List<ProductModel>,freezed == recentList ? _self._recentList : recentList // ignore: cast_nullable_to_non_nullable
+as List<ProductModel>?,
+  ));
 }
 
-/// @nodoc
-class __$$ListStateErrorImplCopyWithImpl<$Res>
-    extends _$ListStateCopyWithImpl<$Res, _$ListStateErrorImpl>
-    implements _$$ListStateErrorImplCopyWith<$Res> {
-  __$$ListStateErrorImplCopyWithImpl(
-      _$ListStateErrorImpl _value, $Res Function(_$ListStateErrorImpl) _then)
-      : super(_value, _then);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? error = null,
-  }) {
-    return _then(_$ListStateErrorImpl(
-      null == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$ListStateErrorImpl implements ListStateError {
-  const _$ListStateErrorImpl(this.error);
 
-  @override
-  final String error;
+class ListStateError implements ListState {
+  const ListStateError(this.error);
+  
 
-  @override
-  String toString() {
-    return 'ListState.error(error: $error)';
-  }
+ final  String error;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ListStateErrorImpl &&
-            (identical(other.error, error) || other.error == error));
-  }
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$ListStateErrorCopyWith<ListStateError> get copyWith => _$ListStateErrorCopyWithImpl<ListStateError>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, error);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
-      __$$ListStateErrorImplCopyWithImpl<_$ListStateErrorImpl>(
-          this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(
-            List<ProductModel> list, List<ProductModel>? recentList)
-        loaded,
-    required TResult Function(List<ProductModel> list) updated,
-    required TResult Function(String error) error,
-  }) {
-    return error(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult? Function(List<ProductModel> list)? updated,
-    TResult? Function(String error)? error,
-  }) {
-    return error?.call(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<ProductModel> list, List<ProductModel>? recentList)?
-        loaded,
-    TResult Function(List<ProductModel> list)? updated,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this.error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ListStateInitial value) initial,
-    required TResult Function(ListStateLoading value) loading,
-    required TResult Function(ListStateLoaded value) loaded,
-    required TResult Function(ListStateUpdated value) updated,
-    required TResult Function(ListStateError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ListStateInitial value)? initial,
-    TResult? Function(ListStateLoading value)? loading,
-    TResult? Function(ListStateLoaded value)? loaded,
-    TResult? Function(ListStateUpdated value)? updated,
-    TResult? Function(ListStateError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ListStateInitial value)? initial,
-    TResult Function(ListStateLoading value)? loading,
-    TResult Function(ListStateLoaded value)? loaded,
-    TResult Function(ListStateUpdated value)? updated,
-    TResult Function(ListStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ListStateError&&(identical(other.error, error) || other.error == error));
 }
 
-abstract class ListStateError implements ListState {
-  const factory ListStateError(final String error) = _$ListStateErrorImpl;
 
-  String get error;
+@override
+int get hashCode => Object.hash(runtimeType,error);
 
-  /// Create a copy of ListState
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$ListStateErrorImplCopyWith<_$ListStateErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+String toString() {
+  return 'ListState.error(error: $error)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class $ListStateErrorCopyWith<$Res> implements $ListStateCopyWith<$Res> {
+  factory $ListStateErrorCopyWith(ListStateError value, $Res Function(ListStateError) _then) = _$ListStateErrorCopyWithImpl;
+@useResult
+$Res call({
+ String error
+});
+
+
+
+
+}
+/// @nodoc
+class _$ListStateErrorCopyWithImpl<$Res>
+    implements $ListStateErrorCopyWith<$Res> {
+  _$ListStateErrorCopyWithImpl(this._self, this._then);
+
+  final ListStateError _self;
+  final $Res Function(ListStateError) _then;
+
+/// Create a copy of ListState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+  return _then(ListStateError(
+null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

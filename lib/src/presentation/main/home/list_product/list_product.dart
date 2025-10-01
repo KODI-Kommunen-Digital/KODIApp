@@ -41,7 +41,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
 
   Future<void> loadListingsList() async {
     if (searchTerm != null) {
-      await context.read<ListCubit>().searchListing(searchTerm, true);
+      await context.read<ListCubit>().searchListing(content: searchTerm,newSearch: true,isGlobalSearch: true);
     } else {
       await context.read<ListCubit>().onLoad(categoryId);
     }
@@ -91,12 +91,14 @@ class _ListProductScreenState extends State<ListProductScreen> {
             loaded: (list,newsList) => ListLoaded(
               list: list,
               selectedId: categoryId ?? 0,
+              isGlobalSearch: widget.arguments['search']!=null,
             ),
-            updated: (list) {
+            updated: (list,newsLoaded) {
               return ListLoaded(
                 list: list,
                 updated: true,
                 selectedId: categoryId ?? 0,
+                isGlobalSearch: widget.arguments['search']!=null,
               );
             },
             error: (e) => ErrorWidget('Failed to load listings.'),
@@ -112,7 +114,7 @@ class _ListProductScreenState extends State<ListProductScreen> {
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
-      context.read<ListCubit>().searchListing(searchResult.trim(), true);
+      context.read<ListCubit>().searchListing(content:searchResult.trim(),newSearch:true,listingStatus: 1);
     } else if ((searchResult == null || searchResult.trim() == "") &&
         context.read<ListCubit>().isSearching) {
       context.read<ListCubit>().cancelSearch(categoryId ?? 0);
@@ -185,12 +187,13 @@ class ListLoaded extends StatefulWidget {
   final List<ProductModel> list;
   final int selectedId;
   final bool updated;
+  final bool isGlobalSearch;
 
   const ListLoaded(
       {super.key,
       required this.list,
       required this.selectedId,
-      this.updated = false});
+      this.updated = false, this.isGlobalSearch=false});
 
   @override
   State<ListLoaded> createState() => _ListLoadedState();
@@ -234,7 +237,7 @@ class _ListLoadedState extends State<ListLoaded> {
         if (context.read<ListCubit>().isSearching) {
           context
               .read<ListCubit>()
-              .searchListing(context.read<ListCubit>().searchTerm, false);
+              .searchListing(content: context.read<ListCubit>().searchTerm,newSearch:false,isGlobalSearch: widget.isGlobalSearch,listingStatus: widget.isGlobalSearch?1:null);
         } else {
           list = await context
               .read<ListCubit>()

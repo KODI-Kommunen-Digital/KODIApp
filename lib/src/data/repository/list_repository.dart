@@ -33,7 +33,7 @@ class ListRepository {
 
     if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo);
+      final response = await Api.requestCatList(params, cityId, pageNo,false);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -55,7 +55,7 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo,false);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -94,7 +94,7 @@ class ListRepository {
     }
     if (multiFilter.hasCategoryFilter &&
         (multiFilter.currentCategory ?? 0) != 0) {
-      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
+      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}&excludeCategoryId=10";
     }
 
     final response =
