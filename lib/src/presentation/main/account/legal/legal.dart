@@ -1,8 +1,8 @@
+import 'package:custom_in_app_webview/custom_in_app_webview.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class LegalScreen extends StatefulWidget {
   const LegalScreen({super.key});
@@ -23,10 +23,9 @@ class _LegalScreenState extends State<LegalScreen> {
   }
 
   Future<void> _makeAction(String link) async {
-    await launchUrl(
-      Uri.parse(link),
-      mode: LaunchMode.inAppWebView,
-    );
+    CustomInAppWebView.showAsBottomSheet(
+      context: context,
+      url: link,);
   }
 
   @override

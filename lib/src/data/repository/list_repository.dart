@@ -94,9 +94,10 @@ class ListRepository {
     }
     if (multiFilter.hasCategoryFilter &&
         (multiFilter.currentCategory ?? 0) != 0) {
-      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}&excludeCategoryId=10";
+      linkFilter = "$linkFilter&categoryId=${multiFilter.currentCategory}";
     }
 
+    linkFilter = "$linkFilter&excludeCategoryId=10";
     final response =
         await Api.requestSearchListing(content, linkFilter, pageNo);
     if (response.success) {

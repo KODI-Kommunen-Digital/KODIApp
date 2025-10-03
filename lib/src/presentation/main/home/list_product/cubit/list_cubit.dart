@@ -6,8 +6,6 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
 import 'cubit.dart';
-import 'package:heidi/src/data/remote/api/api.dart';
-import 'package:loggy/loggy.dart';
 enum ProductFilter {
   week,
   month,
@@ -31,6 +29,8 @@ class ListCubit extends Cubit<ListState> {
 
   Future<void> onLoad(categoryId) async {
     pageNo = 1;
+    searchTerm='';
+    isSearching=false;
     final prefs = await Preferences.openBox();
     var type = prefs.getKeyValue(Preferences.type, '');
     if(categoryId==1){

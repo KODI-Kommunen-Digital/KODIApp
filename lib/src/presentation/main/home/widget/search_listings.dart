@@ -28,7 +28,7 @@ class _SearchListingsState extends State<SearchListings> {
         child: Card(
           margin: const EdgeInsets.all(10),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(5),
           ),
           elevation: 2,
           child: TextField(
@@ -36,10 +36,11 @@ class _SearchListingsState extends State<SearchListings> {
             onSubmitted: (value) {
               widget.onSearchCallback?.call(value);
             },
+            autofocus: false,
             decoration: InputDecoration(
                 contentPadding: const EdgeInsets.symmetric(
                   vertical: 0.0,
-                  horizontal: 15.0,
+                  horizontal: 0.0,
                 ),
                 focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: Colors.white),
