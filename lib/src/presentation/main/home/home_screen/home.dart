@@ -232,67 +232,73 @@ class _HomeScreenState extends State<HomeScreen> {
                       }
                     },
                   ),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  delegate: AppBarHomeSliver(
-                      cityTitlesList: [],
-                      hintText: Translate.of(context).translate('search_title'),
-                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                      banners: banner,
-                      setLocationCallback: (data) async {
-                        final prefs = await Preferences.openBox();
-                        prefs.setKeyValue(Preferences.type, 'search');
-                        // ignore: use_build_context_synchronously
-                        Navigator.pushNamed(context, Routes.listProduct,
-                            arguments: {'search': data, 'title': 'Suche'});
-                      }),
-                  pinned: true,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent, // important to detect taps on empty space
+              onTap: () {
+                FocusScope.of(context).unfocus(); // dismiss keyboard
+              },
+              child: CustomScrollView(
+                physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics(),
                 ),
-                CupertinoSliverRefreshControl(
-                  onRefresh: _onRefresh,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    Column(
-                      children: <Widget>[
-                        categoryLoading
-                            ? const CircularProgressIndicator.adaptive()
-                            : _buildCategory(AppBloc.homeCubit
-                                .getCategoriesWithoutHidden(category ?? [])),
-                        const BannerSlider(),
-                        const SizedBox(height: 16),
+                controller: _scrollController,
+                slivers: <Widget>[
+                  SliverPersistentHeader(
+                    delegate: AppBarHomeSliver(
+                        cityTitlesList: [],
+                        hintText: Translate.of(context).translate('search_title'),
+                        expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                        banners: banner,
+                        setLocationCallback: (data) async {
+                          final prefs = await Preferences.openBox();
+                          prefs.setKeyValue(Preferences.type, 'search');
+                          // ignore: use_build_context_synchronously
+                          Navigator.pushNamed(context, Routes.listProduct,
+                              arguments: {'search': data, 'title': 'Suche'});
+                        }),
+                    pinned: true,
+                  ),
+                  CupertinoSliverRefreshControl(
+                    onRefresh: _onRefresh,
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Column(
+                        children: <Widget>[
+                          categoryLoading
+                              ? const CircularProgressIndicator.adaptive()
+                              : _buildCategory(AppBloc.homeCubit
+                                  .getCategoriesWithoutHidden(category ?? [])),
+                          const BannerSlider(),
+                          const SizedBox(height: 16),
 
-                        _buildCompany(company),
-                        // _buildRecent(recent, selectedCityId, location),
-                        _buildNewsListing(),
-                        SizedBox(
-                          height: 100,
-                          child: FittedBox(
-                            child: Row(
-                              children: [
-                                Image.asset(
-                                    'assets/images/home/energie_logo.png'),
-                                Image.asset(
-                                    'assets/images/home/bayerisches_logo.jpg'),
-                                Image.asset(
-                                    'assets/images/home/heimat_logo.png'),
-                              ],
+                          _buildCompany(company),
+                          // _buildRecent(recent, selectedCityId, location),
+                          _buildNewsListing(),
+                          SizedBox(
+                            height: 100,
+                            child: FittedBox(
+                              child: Row(
+                                children: [
+                                  Image.asset(
+                                      'assets/images/home/energie_logo.png'),
+                                  Image.asset(
+                                      'assets/images/home/bayerisches_logo.jpg'),
+                                  Image.asset(
+                                      'assets/images/home/heimat_logo.png'),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        // if (isLoading)
-                        //   const CircularProgressIndicator.adaptive(),
-                        // const SizedBox(height: 50),
-                      ],
-                    )
-                  ]),
-                )
-              ],
+                          // if (isLoading)
+                          //   const CircularProgressIndicator.adaptive(),
+                          // const SizedBox(height: 50),
+                        ],
+                      )
+                    ]),
+                  )
+                ],
+              ),
             ),
           );
         },
@@ -418,73 +424,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
-
-    await showModalBottomSheet(
+    CustomInAppWebView.showAsBottomSheet(
       context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(0, 32, 16, 0),
-                child: Row(
-                  children: [
-                    IconButton(
-                        onPressed: () async {
-                          if (await webViewController.canGoBack()) {
-                            webViewController.goBack();
-                          } else {
-                            Navigator.of(context).pop();
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        )),
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+      url: link,);
   }
 
   void _onProductDetail(ProductModel item) {
@@ -567,8 +509,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (item.id == 10) {
       CustomInAppWebView.showAsBottomSheet(
           context: context,
-          url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/",
-          title: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+          url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/",);
       // _makeAction(
       //     "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
       // await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),

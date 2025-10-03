@@ -34,7 +34,7 @@ class CustomInAppWebView extends StatefulWidget {
               decoration: BoxDecoration(
                 color: Theme.of(context).scaffoldBackgroundColor,
               ),
-              child: CustomInAppWebView(url: url, title: title),
+              child: CustomInAppWebView(url: url, title: title??url),
             ),
           ],
         );

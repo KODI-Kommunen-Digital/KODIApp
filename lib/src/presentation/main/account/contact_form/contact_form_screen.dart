@@ -137,7 +137,7 @@ ${_textMessageController.text}
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
-            title: Text(Translate.of(context).translate('contact_form_title')),
+            title: Text(Translate.of(context).translate('contact')),
           ),
           body: SafeArea(
             child: Column(
