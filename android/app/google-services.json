@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "241988975776",
-    "project_id": "Coburg-df8ca",
-    "storage_bucket": "Coburg-df8ca.appspot.com"
+    "project_number": "804816711024",
+    "project_id": "rodachtal-app",
+    "storage_bucket": "rodachtal-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:241988975776:android:a3d635e126c5c193b19dc5",
+        "mobilesdk_app_id": "1:804816711024:android:c3578bc7ad21ef94c2f3b5",
         "android_client_info": {
-          "package_name": "com.coburgtest"
+          "package_name": "com.coburgapp"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA"
+          "current_key": "AIzaSyBsZXmDtcjl_huqLbkVb2aHyCA25LfoCFY"
         }
       ],
       "services": {

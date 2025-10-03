@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDt6Voxy_M_2U_IkoT-R9nm-uBPjefUJlA',
-    appId: '1:241988975776:android:a3d635e126c5c193b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'Coburg-df8ca',
-    storageBucket: 'Coburg-df8ca.appspot.com',
+    apiKey: 'AIzaSyBsZXmDtcjl_huqLbkVb2aHyCA25LfoCFY',
+    appId: '1:804816711024:android:c3578bc7ad21ef94c2f3b5',
+    messagingSenderId: '804816711024',
+    projectId: 'rodachtal-app',
+    storageBucket: 'rodachtal-app.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBt91UklC0sCKh6tfNXfXd6DF45SOguCY4',
-    appId: '1:241988975776:ios:a8cccbffaf984429b19dc5',
-    messagingSenderId: '241988975776',
-    projectId: 'Coburg-df8ca',
-    storageBucket: 'Coburg-df8ca.appspot.com',
-    iosBundleId: 'coburgapp',
+    apiKey: 'AIzaSyCCurN2fCn_Tmh5fp0hkWkun2WS1L9opQM',
+    appId: '1:804816711024:ios:d91bc8bf256992bfc2f3b5',
+    messagingSenderId: '804816711024',
+    projectId: 'rodachtal-app',
+    storageBucket: 'rodachtal-app.firebasestorage.app',
+    iosBundleId: 'com.coburgapp',
   );
 }
