@@ -17,9 +17,9 @@ class HTTPManager {
 
   HTTPManager({bool forum = false}) {
     _baseUrl =
-    !forum ? 'https://rodachtal.info/api/' : 'https://rodachtal.info/api/';
+    //!forum ? 'https://rodachtal.info/api/' : 'https://rodachtal.info/api/';
     //Staging url
-    // !forum ? 'http://88.99.173.141:3001/' : 'http://88.99.173.141:3001/';
+     !forum ? 'http://88.99.173.141:3001/' : 'http://88.99.173.141:3001/';
 
     _dio = Dio(
       BaseOptions(

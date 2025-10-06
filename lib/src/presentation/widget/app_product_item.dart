@@ -62,6 +62,9 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: CachedNetworkImage(
+                  memCacheWidth: 300,
+                  memCacheHeight: 300,
+                  useOldImageOnUrlChange: true,
                   imageUrl: item?.sourceId == 2 &&
                       item?.image != null &&
                       item?.image != 'admin/News.jpeg'
@@ -242,6 +245,9 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
+                memCacheWidth: 300,
+                memCacheHeight: 300,
+                useOldImageOnUrlChange: true,
                 imageUrl: item?.sourceId == 2 &&
                         item?.image != null &&
                         item?.image != 'admin/News.jpeg'
@@ -386,6 +392,9 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
+                            memCacheWidth: 300,
+                            memCacheHeight: 300,
+                            useOldImageOnUrlChange: true,
                             imageUrl: item?.sourceId == 2 &&
                                     item?.image != null &&
                                     item?.image != 'admin/News.jpeg'
