@@ -313,29 +313,28 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoadingMore = true;
-          //previousScrollPosition = _scrollController.position.pixels;
-        });
-        List<ProductModel>? newList;
-        if (context.read<ListCubit>().isSearching) {
-          context
-              .read<ListCubit>()
-              .searchListing(context.read<ListCubit>().searchTerm, false);
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent &&
+        !isLoadingMore) {
+      setState(() {
+        isLoadingMore = true;
+      });
+
+      final newPage = await context
+          .read<ListCubit>()
+          .newListings(++pageNo, widget.selectedId, widget.filter);
+
+      setState(() {
+        isLoadingMore = false;
+        if (newPage.isEmpty) {
+          _scrollController.removeListener(_scrollListener);
         } else {
-          newList = await context
-              .read<ListCubit>()
-              .newListings(++pageNo, widget.selectedId, widget.filter);
+          list.addAll(newPage);
         }
-        setState(() {
-          isLoadingMore = false;
-          if (newList != null) list = newList;
-        });
-      }
+      });
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

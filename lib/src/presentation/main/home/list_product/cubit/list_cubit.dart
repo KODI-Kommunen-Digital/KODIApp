@@ -33,7 +33,7 @@ class ListCubit extends Cubit<ListState> {
 
   Future<void> onLoad(cityId, MultiFilter? filter, {isUpdate = false}) async {
     emit(const ListState.loading());
-    multiFilter = multiFilter;
+    multiFilter = filter;
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -71,9 +71,12 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
-  Future<List<ProductModel>> newListings(int pageNo, cityId, MultiFilter? filter) async {
+  Future<List<ProductModel>> newListings(
+      int pageNo,
+      cityId,
+      MultiFilter? filter,
+      ) async {
     final prefs = await Preferences.openBox();
-    // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = prefs.getKeyValue(Preferences.type, '');
 
@@ -81,15 +84,43 @@ class ListCubit extends Cubit<ListState> {
       categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
-        cityId: cityId,
-        currentEventFilter: filter?.currentProductEventFilter);
+      cityId: cityId,
+      currentEventFilter: filter?.currentProductEventFilter,
+    );
 
-    final listUpdated = result?[0] ?? [];
-    if (listUpdated.isNotEmpty) {
-      list.addAll(listUpdated);
+    final newPage = result?[0] ?? [];
+    if (newPage.isNotEmpty) {
+      list.addAll(newPage);
     }
-    return list;
+
+    return newPage; // <– only return the newly fetched page
   }
+
+
+  // Future<List<ProductModel>> newListings(int pageNo, cityId, MultiFilter? filter) async {
+  //   final prefs = await Preferences.openBox();
+  //   final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+  //   final type = prefs.getKeyValue(Preferences.type, '');
+  //
+  //   final result = await ListRepository.loadList(
+  //     categoryId: (categoryId == 0) ? "" : categoryId,
+  //     type: type,
+  //     pageNo: pageNo,
+  //     cityId: cityId,
+  //     currentEventFilter: filter?.currentProductEventFilter,
+  //   );
+  //
+  //   final listUpdated = result?[0] ?? [];
+  //
+  //   // Only append if not empty
+  //   if (listUpdated.isNotEmpty) {
+  //     list.addAll(listUpdated);
+  //   }
+  //
+  //   // Return *only* the new page to the UI
+  //   return listUpdated;
+  // }
+
 
   List<ProductModel> getLoadedList() => listLoaded;
 
