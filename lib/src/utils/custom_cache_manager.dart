@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter/painting.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CustomCacheManager extends CacheManager {
@@ -19,33 +20,63 @@ class CustomCacheManager extends CacheManager {
     ),
   );
 
-  /// Clears all cached files
-  Future<void> clearCustomCache() async {
-    await emptyCache();
-    print('✅ Custom cache cleared!');
+  /// Print actual cache folder
+  Future<String> getCachePath() async {
+    final dir = await getTemporaryDirectory();
+    final path = '${dir.path}/$key';
+    print('📂 Cache directory: $path');
+    return path;
   }
 
-  /// Checks cache size and clears if it exceeds 100 MB
-  Future<void> clearIfExceedsLimit({int limitInMB = 100}) async {
-    final cacheDir = await getTemporaryDirectory();
-    final cacheFolder = Directory('${cacheDir.path}/$key');
+  /// Forcefully clear everything (disk + memory)
+  Future<void> forceClearCache() async {
+    try {
+      final path = await getCachePath();
+      final cacheDir = Directory(path);
 
-    if (!await cacheFolder.exists()) return;
-
-    int totalBytes = 0;
-    await for (var file in cacheFolder.list(recursive: true, followLinks: false)) {
-      if (file is File) {
-        totalBytes += await file.length();
+      if (await cacheDir.exists()) {
+        await cacheDir.delete(recursive: true);
+        print('✅ Cache directory deleted!');
+      } else {
+        print('⚠️ Cache directory not found');
       }
+
+      // Clear Flutter image cache
+      imageCache.clear();
+      imageCache.clearLiveImages();
+    } catch (e) {
+      print('❌ Error clearing cache: $e');
     }
+  }
 
-    double totalMB = totalBytes / (1024 * 1024);
+  /// Clears all cache (logical + disk)
+  Future<void> clearCacheCompletely() async {
+    await emptyCache(); // FlutterCacheManager cleanup
+    await forceClearCache(); // Ensure files are gone
+  }
 
-    print('📦 Current cache size: ${totalMB.toStringAsFixed(2)} MB');
+  /// Check size and auto clear if exceeds limit
+  Future<void> clearIfExceedsLimit({int limitMB = 100}) async {
+    try {
+      final path = await getCachePath();
+      final dir = Directory(path);
 
-    if (totalMB > limitInMB) {
-      print('⚠️ Cache size exceeded $limitInMB MB — clearing...');
-      await clearCustomCache();
+      if (!await dir.exists()) return;
+
+      int totalBytes = 0;
+      await for (var file in dir.list(recursive: true)) {
+        if (file is File) totalBytes += await file.length();
+      }
+
+      final sizeMB = totalBytes / (1024 * 1024);
+      print('📦 Cache size: ${sizeMB.toStringAsFixed(2)} MB');
+
+      if (sizeMB > limitMB) {
+        print('⚠️ Cache exceeds $limitMB MB — clearing...');
+        await clearCacheCompletely();
+      }
+    } catch (e) {
+      print('❌ Error checking cache size: $e');
     }
   }
 }

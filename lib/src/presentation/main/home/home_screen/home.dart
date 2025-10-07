@@ -105,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = true;
       });
-         CustomCacheManager().clearIfExceedsLimit(limitInMB: 100);
+         CustomCacheManager().clearIfExceedsLimit(limitMB: 100);
          await AppBloc.homeCubit.newListings(++pageNo).then((_) {
           setState(() {
             isLoading = false;
