@@ -146,8 +146,8 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Visibility(
-                      visible: item!.startDate!=null && item!.startDate!.isNotEmpty &&
-                          item!.endDate!=null && item!.endDate!=null && item!.endDate!.isNotEmpty,
+                      visible: item?.startDate!=null && item!.startDate!.isNotEmpty &&
+                          item?.endDate!=null && item?.endDate!=null && (item?.endDate!=null && item!.endDate!.isNotEmpty),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,

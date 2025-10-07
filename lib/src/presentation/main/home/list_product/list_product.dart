@@ -321,7 +321,7 @@ class _ListLoadedState extends State<ListLoaded> {
         isLoadingMore = true;
       });
 
-      await CustomCacheManager().clearIfExceedsLimit(limitInMB: 100);
+      await CustomCacheManager().clearIfExceedsLimit(limitMB: 100);
 
       final newPage = await context
           .read<ListCubit>()
