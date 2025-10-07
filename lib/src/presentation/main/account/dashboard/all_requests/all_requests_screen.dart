@@ -19,6 +19,7 @@ import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 // ignore: depend_on_referenced_packages
@@ -106,7 +107,7 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
   Widget build(BuildContext context) {
     posts = widget.posts;
     String uniqueKey = UniqueKey().toString();
-    final memoryCacheManager = DefaultCacheManager();
+    final memoryCacheManager = CustomCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(
