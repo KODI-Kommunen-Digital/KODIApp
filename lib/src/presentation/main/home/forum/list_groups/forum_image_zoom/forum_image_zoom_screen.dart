@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:photo_view/photo_view.dart';
 
+import '../../../../../../utils/custom_cache_manager.dart';
+
 class ForumImageZoomScreen extends StatelessWidget {
   final String imageUrl;
 
-  const ForumImageZoomScreen({super.key, required this.imageUrl});
+   ForumImageZoomScreen({super.key, required this.imageUrl});
+  final memoryCacheManager = CustomCacheManager();
+
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,7 @@ class ForumImageZoomScreen extends StatelessWidget {
                       )
                     : PhotoView(
                         imageProvider: CachedNetworkImageProvider(
+                          cacheManager: memoryCacheManager,
                             imageUrl.contains('admin/News.jpeg')
                                 ? imageUrl
                                 : imageUrl.contains('instagram')

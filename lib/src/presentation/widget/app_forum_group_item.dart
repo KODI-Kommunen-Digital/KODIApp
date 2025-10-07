@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart'
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class ForumGroupItem extends StatefulWidget {
@@ -33,7 +34,9 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
   bool isJoined = false;
   bool isRequested = false;
   String groupStatus = '';
+  final cacheManager = CustomCacheManager();
 
+  //final memoryManager = Custo
   @override
   void initState() {
     super.initState();
@@ -49,6 +52,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
+
 
     if (widget.item == null) {
       return const EmptyProductItem();
@@ -67,6 +71,7 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
           Row(
             children: <Widget>[
               CachedNetworkImage(
+                cacheManager: cacheManager,
                 imageUrl: widget.item?.image == 'admin/DefaultForum.jpeg'
                     ? "${Application.picturesURL}${widget.item?.image}"
                     : "${Application.picturesURL}${widget.item!.image}?cacheKey=$uniqueKey",

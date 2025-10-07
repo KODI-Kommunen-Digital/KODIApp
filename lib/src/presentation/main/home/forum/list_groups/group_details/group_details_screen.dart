@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class GroupDetailsScreen extends StatelessWidget {
@@ -62,7 +63,7 @@ class GroupDetailsLoaded extends StatefulWidget {
 }
 
 class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
-  final memoryCacheManager = DefaultCacheManager();
+  final memoryCacheManager = CustomCacheManager();
 
   void _onAddPost() async {
     if (AppBloc.userCubit.state == null) {
@@ -289,6 +290,7 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         child: Row(
                           children: <Widget>[
                             CachedNetworkImage(
+                              cacheManager: memoryCacheManager,
                               imageUrl: widget.posts[index].image == null
                                   ? '${Application.picturesURL}admin/DefaultForum.jpeg'
                                   : "${Application.picturesURL}${widget.posts[index].image}?cacheKey=$uniqueKey",

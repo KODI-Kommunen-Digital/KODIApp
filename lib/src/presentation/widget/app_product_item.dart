@@ -8,12 +8,13 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
 class AppProductItem extends StatelessWidget {
-  const AppProductItem(
+   AppProductItem(
       {super.key,
       this.item,
       this.onPressed,
@@ -29,11 +30,13 @@ class AppProductItem extends StatelessWidget {
   final bool isRefreshLoader;
   final String? cityName;
 
+  final memoryCacheManager = CustomCacheManager();
+
+
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
     bool isAllDayEvent = item?.isAllDayEvent ?? false;
-    final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -62,9 +65,7 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                 borderRadius: BorderRadius.circular(12),
                 child: CachedNetworkImage(
-                  memCacheWidth: 300,
-                  memCacheHeight: 300,
-                  useOldImageOnUrlChange: true,
+                  cacheManager: memoryCacheManager,
                   imageUrl: item?.sourceId == 2 &&
                       item?.image != null &&
                       item?.image != 'admin/News.jpeg'
@@ -77,7 +78,7 @@ class AppProductItem extends StatelessWidget {
                       item!.image.startsWith('admin')
                       ? "${Application.picturesURL}${item!.image}"
                       : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
-                  cacheManager: memoryCacheManager,
+                 // cacheManager: memoryCacheManager,
                   placeholder: (context, url) {
                     return Container(
                       width: 120,
@@ -245,9 +246,6 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                memCacheWidth: 300,
-                memCacheHeight: 300,
-                useOldImageOnUrlChange: true,
                 imageUrl: item?.sourceId == 2 &&
                         item?.image != null &&
                         item?.image != 'admin/News.jpeg'
@@ -392,9 +390,6 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            memCacheWidth: 300,
-                            memCacheHeight: 300,
-                            useOldImageOnUrlChange: true,
                             imageUrl: item?.sourceId == 2 &&
                                     item?.image != null &&
                                     item?.image != 'admin/News.jpeg'

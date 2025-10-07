@@ -98,12 +98,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoading = true;
-        });
-        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
+
+    if (!isLoading && _scrollController.position.atEdge && _scrollController.position.pixels != 0) {
+
+      setState(() {
+        isLoading = true;
+      });
+
+         await AppBloc.homeCubit.newListings(++pageNo).then((_) {
           setState(() {
             isLoading = false;
           });
@@ -116,7 +118,6 @@ class _HomeScreenState extends State<HomeScreen> {
             await Sentry.captureException(error, stackTrace: stackTrace);
           },
         );
-      }
     }
   }
 
@@ -608,8 +609,8 @@ class _HomeScreenState extends State<HomeScreen> {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       itemBuilder: (context, index) {
-        return const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8),
+        return  Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: AppCategory(
             type: CategoryView.cardLarge,
           ),
@@ -690,21 +691,22 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
       List<CategoryModel>? cities) {
-    Widget content = ListView.builder(
-      padding: const EdgeInsets.all(0),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
-        );
-      },
-      itemCount: 8,
-    );
+    Widget content = SizedBox.shrink();
+    // Widget content = ListView.builder(
+    //   padding: const EdgeInsets.all(0),
+    //   shrinkWrap: true,
+    //   physics: const NeverScrollableScrollPhysics(),
+    //   itemBuilder: (context, index) {
+    //     return Padding(
+    //       padding: const EdgeInsets.only(bottom: 16),
+    //       child: AppProductItem(
+    //           type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
+    //     );
+    //   },
+    //   itemCount: 8,
+    // );
 
-    if (recent != null) {
+   if (recent != null) {
       content = ListView.builder(
         shrinkWrap: true,
         padding: const EdgeInsets.all(0),
