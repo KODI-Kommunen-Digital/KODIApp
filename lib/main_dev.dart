@@ -32,7 +32,6 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
-  await CustomCacheManager().clearIfExceedsLimit(limitMB: 100);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -51,7 +50,6 @@ Future<void> main() async {
 
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
-  CustomCacheManager().clearCacheCompletely();
 
   PaintingBinding.instance.imageCache.maximumSize = 100;
   PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;

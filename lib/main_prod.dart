@@ -13,6 +13,7 @@ import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
@@ -44,6 +45,7 @@ Future<void> main() async {
 
   runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
+
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
