@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
-
 import 'dart:async';
 import 'dart:io';
 
@@ -311,22 +309,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Padding(
                         padding: const EdgeInsets.only(top: 6.0),
                         child: Column(
-                          children: <Widget>[
+                          children: [
                             categoryLoading
                                 ? const CircularProgressIndicator.adaptive()
-                                : _buildCategory(AppBloc.homeCubit
-                                    .getCategoriesWithoutHidden(category ?? [])),
+                                : _buildCategory(category),
                             _buildLocation(location),
-                            _buildRecent(recent, selectedCityId, location),
-                            if (isLoading)
-                              const CircularProgressIndicator.adaptive(),
-                            const SizedBox(height: 50),
                           ],
                         ),
                       ),
-                    )
+                    ),
                   ]),
-                )
+                ),
+                _buildRecentSliver(recent, selectedCityId, location),
               ],
             ),
           );
@@ -693,19 +687,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
       List<CategoryModel>? cities) {
     Widget content = SizedBox.shrink();
-    // Widget content = ListView.builder(
-    //   padding: const EdgeInsets.all(0),
-    //   shrinkWrap: true,
-    //   physics: const NeverScrollableScrollPhysics(),
-    //   itemBuilder: (context, index) {
-    //     return Padding(
-    //       padding: const EdgeInsets.only(bottom: 16),
-    //       child: AppProductItem(
-    //           type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
-    //     );
-    //   },
-    //   itemCount: 8,
-    // );
 
    if (recent != null) {
       content = ListView.builder(
@@ -778,4 +759,51 @@ class _HomeScreenState extends State<HomeScreen> {
       ],
     );
   }
+
+  SliverList _buildRecentSliver(
+      List<ProductModel>? recent,
+      int selectedCityId,
+      List<CategoryModel>? cities,
+      ) {
+    if (recent == null || recent.isEmpty) {
+      return SliverList.list(children: []);
+    }
+
+    final itemCount = isLoading ? recent.length + 1 : recent.length;
+
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+            (context, index) {
+          if (index == recent.length) {
+            return const Padding(
+              padding: EdgeInsets.symmetric(vertical: 16),
+              child: Center(child: CircularProgressIndicator.adaptive()),
+            );
+          }
+
+          final item = recent[index];
+
+          if (selectedCityId != 0 && item.cityId != selectedCityId) {
+            return const SizedBox.shrink();
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: AppProductItem(
+              onPressed: () => _onProductDetail(item),
+              item: item,
+              type: ProductViewType.small,
+              isRefreshLoader: isRefreshLoader,
+              cityName:
+              AppBloc.homeCubit.getCityName(cities, item.cityId ?? 0),
+            ),
+          );
+        },
+        childCount: itemCount,
+      ),
+    );
+  }
+
+
+
 }
