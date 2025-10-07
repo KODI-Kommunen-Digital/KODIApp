@@ -5,11 +5,15 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 
+import '../../../../utils/custom_cache_manager.dart';
+
 class HomeSwipe extends StatelessWidget {
   final double height;
   final String? images;
+  final memoryCacheManager = CustomCacheManager();
 
-  const HomeSwipe({
+
+   HomeSwipe({
     super.key,
     this.images,
     required this.height,
@@ -17,7 +21,6 @@ class HomeSwipe extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
     if (images != null) {
       return Swiper(
           itemBuilder: (BuildContext context, int index) {

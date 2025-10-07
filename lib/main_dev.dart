@@ -50,6 +50,10 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
 
+  PaintingBinding.instance.imageCache.maximumSize = 100;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;
+
+  
   await SentryFlutter.init((options) {
     options.dsn =
         'https://2fdb0f7775245ded02eb03e51bf3abeb@o4506393481510912.ingest.sentry.io/4506587728904192';

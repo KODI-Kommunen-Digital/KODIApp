@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 enum CategoryView { full, icon, cardLarge }
 
 class AppCategory extends StatelessWidget {
-  const AppCategory({
+   AppCategory({
     super.key,
     this.type = CategoryView.full,
     this.item,
@@ -20,10 +21,11 @@ class AppCategory extends StatelessWidget {
   final CategoryModel? item;
   final VoidCallback? onPressed;
   static const String profilePicUrl = Application.picturesURL;
+  final memoryCacheManager = CustomCacheManager();
+
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
     switch (type) {
       case CategoryView.full:
         if (item == null) {

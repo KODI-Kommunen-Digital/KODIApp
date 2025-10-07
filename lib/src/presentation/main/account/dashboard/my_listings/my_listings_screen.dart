@@ -13,6 +13,8 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 
+import '../../../../../utils/custom_cache_manager.dart';
+
 class MyListingsScreen extends StatelessWidget {
   final UserModel user;
   final bool isEditable;
@@ -69,6 +71,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
   int pageNo = 1;
   List<ProductModel> userListingsList = [];
   final _scrollController = ScrollController(initialScrollOffset: 0.0);
+  final memoryCacheManager = CustomCacheManager();
+
 
   @override
   void dispose() {
@@ -86,7 +90,6 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
