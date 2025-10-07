@@ -15,6 +15,7 @@ import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
 import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
@@ -31,6 +32,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  await CustomCacheManager().clearIfExceedsLimit(limitInMB: 100);
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -49,6 +51,7 @@ Future<void> main() async {
 
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
+  CustomCacheManager().clearCustomCache();
 
   PaintingBinding.instance.imageCache.maximumSize = 100;
   PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;

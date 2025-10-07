@@ -10,6 +10,7 @@ import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details
 import 'package:heidi/src/presentation/main/home/forum/list_groups/group_details/member_requests/cubit/member_request_state.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
 
@@ -68,7 +69,7 @@ class MemberRequestLoaded extends StatefulWidget {
 }
 
 class _MemberRequestLoadedState extends State<MemberRequestLoaded> {
-  final memoryCacheManager = DefaultCacheManager();
+  final memoryCacheManager = CustomCacheManager();
   int loggedUserId = 0;
   bool isMemberAdmin = false;
 

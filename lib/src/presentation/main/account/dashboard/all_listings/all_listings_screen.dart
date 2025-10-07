@@ -21,6 +21,7 @@ import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 // ignore: depend_on_referenced_packages
@@ -127,7 +128,7 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    final memoryCacheManager = DefaultCacheManager();
+    final memoryCacheManager = CustomCacheManager();
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(

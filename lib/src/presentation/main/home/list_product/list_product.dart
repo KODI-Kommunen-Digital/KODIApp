@@ -20,6 +20,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../utils/custom_cache_manager.dart';
 import 'cubit/cubit.dart';
 
 class ListProductScreen extends StatefulWidget {
@@ -319,6 +320,8 @@ class _ListLoadedState extends State<ListLoaded> {
       setState(() {
         isLoadingMore = true;
       });
+
+      await CustomCacheManager().clearIfExceedsLimit(limitInMB: 100);
 
       final newPage = await context
           .read<ListCubit>()

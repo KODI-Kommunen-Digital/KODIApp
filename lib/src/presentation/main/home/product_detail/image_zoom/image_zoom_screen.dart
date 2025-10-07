@@ -4,6 +4,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:photo_view/photo_view.dart';
 
 class ImageZoomScreen extends StatefulWidget {
@@ -23,7 +24,7 @@ class ImageZoomScreen extends StatefulWidget {
 
 class _ImageZoomScreenState extends State<ImageZoomScreen> {
   int currentImageIndex = 0;
-  final memoryCacheManager = DefaultCacheManager();
+  final memoryCacheManager = CustomCacheManager();
 
   @override
   Widget build(BuildContext context) {

@@ -27,6 +27,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../utils/custom_cache_manager.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -104,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         isLoading = true;
       });
-
+         CustomCacheManager().clearIfExceedsLimit(limitInMB: 100);
          await AppBloc.homeCubit.newListings(++pageNo).then((_) {
           setState(() {
             isLoading = false;
