@@ -266,9 +266,11 @@ class _ListLoadedState extends State<ListLoaded> {
       isLoading = true;
     });
     await context.read<ListCubit>().onLoad(widget.selectedId);
-    setState(() {
+    if(mounted) {
+      setState(() {
       isLoading = false;
     });
+    }
   }
 
   void _makeAction(String link) async {
