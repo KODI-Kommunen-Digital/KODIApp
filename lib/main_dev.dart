@@ -30,6 +30,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  // PaintingBinding.instance.imageCache.maximumSize = 50;
+  // PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [

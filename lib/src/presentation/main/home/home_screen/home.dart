@@ -281,10 +281,16 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Row(
                                 children: [
                                   Image.asset(
+                                      cacheWidth: 400,
+                                      cacheHeight: 200,
                                       'assets/images/home/energie_logo.png'),
                                   Image.asset(
+                                      cacheWidth: 400,
+                                      cacheHeight: 200,
                                       'assets/images/home/bayerisches_logo.jpg'),
                                   Image.asset(
+                                      cacheWidth: 400,
+                                      cacheHeight: 200,
                                       'assets/images/home/heimat_logo.png'),
                                 ],
                               ),
@@ -536,6 +542,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (company != null) {
       content = ListView.builder(
+        addAutomaticKeepAlives: true,
         shrinkWrap: true,
         controller: _scrollCompanyController,
         padding: const EdgeInsets.all(0),

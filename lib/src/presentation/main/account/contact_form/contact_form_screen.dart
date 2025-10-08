@@ -151,8 +151,10 @@ ${_textMessageController.text}
                         child: Image.asset(
                           "assets/images/Kontakt.jpg",
                           height: 250,
-                          fit: BoxFit.fill,
+                          fit: BoxFit.contain,
                           width: double.infinity,
+                          cacheWidth: 600,
+                          cacheHeight: 400,
                           frameBuilder:
                               (
                                 BuildContext context,

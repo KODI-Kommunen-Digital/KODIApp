@@ -61,6 +61,8 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
+                        width: 120,
+                        height: 140,
                         imageUrl: item?.sourceId == 2 &&
                                 item?.image != null &&
                                 item?.image != 'admin/News.jpeg'
@@ -74,6 +76,9 @@ class AppProductItem extends StatelessWidget {
                                     ? "${Application.picturesURL}${item!.image}"
                                     : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                         cacheManager: memoryCacheManager,
+                        memCacheWidth: 100,
+                        memCacheHeight: 120,
+                        fit: BoxFit.cover,
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(
@@ -238,6 +243,11 @@ class AppProductItem extends StatelessWidget {
                             ? "${Application.picturesURL}${item!.image}"
                             : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                 cacheManager: memoryCacheManager,
+                width: 120,
+                height: 140,
+                memCacheWidth: 100,
+                memCacheHeight: 120,
+                fit: BoxFit.cover,
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: 120,
@@ -379,6 +389,11 @@ class AppProductItem extends StatelessWidget {
                                         ? "${Application.picturesURL}${item!.image}"
                                         : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                             cacheManager: memoryCacheManager,
+                            width: 120,
+                            height: 140,
+                            memCacheWidth: 100,
+                            memCacheHeight: 120,
+                            fit: BoxFit.cover,
                             placeholder: (context, url) {
                               return AppPlaceholder(
                                 child: Container(
@@ -540,6 +555,9 @@ class AppProductItem extends StatelessWidget {
                                     ? "${Application.picturesURL}${item!.image}"
                                     : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                         cacheManager: memoryCacheManager,
+                        memCacheWidth: 100,
+                        memCacheHeight: 120,
+                        fit: BoxFit.cover,
                         placeholder: (context, url) {
                           return AppPlaceholder(
                             child: Container(

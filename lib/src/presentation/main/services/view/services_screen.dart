@@ -109,6 +109,8 @@ class _ServicesScreenState extends State<ServicesScreen> {
                   fit: StackFit.expand,
                   children: [
                     Image.asset(
+                      cacheWidth: 700,
+                      cacheHeight: 400,
                       service.bgImg,
                       fit: BoxFit.cover,
                     ),
