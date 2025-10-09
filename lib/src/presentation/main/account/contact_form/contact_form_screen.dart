@@ -150,9 +150,9 @@ ${_textMessageController.text}
                         borderRadius: BorderRadius.circular(12),
                         child: Image.asset(
                           "assets/images/Kontakt.jpg",
-                          height: 250,
-                          fit: BoxFit.contain,
+                          height: 230,
                           width: double.infinity,
+                          fit: BoxFit.cover,
                           cacheWidth: 600,
                           cacheHeight: 400,
                           frameBuilder:
@@ -169,7 +169,7 @@ ${_textMessageController.text}
                                 } else {
                                   return AppPlaceholder(
                                     child: Container(
-                                      height: 250,
+                                      height: 230,
                                       width: double.infinity,
                                       decoration: const BoxDecoration(
                                         color: Colors.white,

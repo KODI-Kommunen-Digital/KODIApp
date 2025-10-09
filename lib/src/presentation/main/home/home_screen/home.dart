@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int pageNo = 1;
   int companyPageNo = 1;
   late bool checkSavedCity;
-  final _scrollController = ScrollController();
+  // final _scrollController = ScrollController();
   final _scrollCompanyController = ScrollController();
   bool isLoading = false;
   bool categoryLoading = false;
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_scrollListener);
+    // _scrollController.addListener(_scrollListener);
     _scrollCompanyController.addListener(_scrollCompanyListener);
     checkSavedCity = true;
     AppBloc.homeCubit.onLoad(false).then((onValue) {
@@ -100,9 +100,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void dispose() {
     super.dispose();
-    _scrollController.removeListener(_scrollListener);
+    // _scrollController.removeListener(_scrollListener);
     _scrollCompanyController.removeListener(_scrollCompanyListener);
-    _scrollController.dispose();
+    // _scrollController.dispose();
   }
 
   Future<void> checkUserExist() async {
@@ -136,35 +136,35 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoading = true;
-        });
-        recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-          setState(() {
-            isLoading = false;
-          });
-        }).catchError(
-          (error, stackTrace) async {
-            setState(() {
-              isLoading = false;
-            });
-            logError('Error loading new listings: $error');
-            await Sentry.captureException(error, stackTrace: stackTrace);
-          },
-        );
-      }
-    }
-  }
+  // Future<void> _scrollListener() async {
+  //   if (_scrollController.position.atEdge) {
+  //     if (_scrollController.position.pixels != 0) {
+  //       setState(() {
+  //         isLoading = true;
+  //       });
+  //       recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
+  //         setState(() {
+  //           isLoading = false;
+  //         });
+  //       }).catchError(
+  //         (error, stackTrace) async {
+  //           setState(() {
+  //             isLoading = false;
+  //           });
+  //           logError('Error loading new listings: $error');
+  //           await Sentry.captureException(error, stackTrace: stackTrace);
+  //         },
+  //       );
+  //     }
+  //   }
+  // }
 
-  void scrollUp() {
-    _scrollController.animateTo(0,
-        duration: const Duration(milliseconds: 500), //duration of scroll
-        curve: Curves.fastOutSlowIn //scroll type
-        );
-  }
+  // void scrollUp() {
+  //   _scrollController.animateTo(0,
+  //       duration: const Duration(milliseconds: 500), //duration of scroll
+  //       curve: Curves.fastOutSlowIn //scroll type
+  //       );
+  // }
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             if (AppBloc.homeCubit.getDoesScroll()) {
               AppBloc.homeCubit.setDoesScroll(false);
-              scrollUp();
+              // scrollUp();
             }
           }
 
@@ -241,7 +241,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 physics: const BouncingScrollPhysics(
                   parent: AlwaysScrollableScrollPhysics(),
                 ),
-                controller: _scrollController,
+                // controller: _scrollController,
                 slivers: <Widget>[
                   SliverPersistentHeader(
                     delegate: AppBarHomeSliver(
@@ -261,49 +261,54 @@ class _HomeScreenState extends State<HomeScreen> {
                   CupertinoSliverRefreshControl(
                     onRefresh: _onRefresh,
                   ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          const BannerSlider(),
-                          const SizedBox(height: 16),
-
-                          _buildCompany(company),
-                          // _buildRecent(recent, selectedCityId, location),
-                          _buildNewsListing(),
-                          SizedBox(
-                            height: 100,
-                            child: FittedBox(
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                      cacheWidth: 400,
-                                      cacheHeight: 200,
-                                      'assets/images/home/energie_logo.png'),
-                                  Image.asset(
-                                      cacheWidth: 400,
-                                      cacheHeight: 200,
-                                      'assets/images/home/bayerisches_logo.jpg'),
-                                  Image.asset(
-                                      cacheWidth: 400,
-                                      cacheHeight: 200,
-                                      'assets/images/home/heimat_logo.png'),
-                                ],
-                              ),
-                            ),
+            SliverList(
+              delegate: SliverChildListDelegate(
+                [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (categoryLoading)
+                          const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          )
+                        else
+                          _buildCategory(
+                            AppBloc.homeCubit.getCategoriesWithoutHidden(category ?? []),
                           ),
-                          // if (isLoading)
-                          //   const CircularProgressIndicator.adaptive(),
-                          // const SizedBox(height: 50),
-                        ],
-                      )
-                    ]),
-                  )
+
+                        const BannerSlider(),
+                        const SizedBox(height: 16),
+
+                        _buildCompany(company),
+
+                        // Lazy-load or paginate news listing to avoid heavy UI
+                        _buildNewsListing(),
+
+                        const SizedBox(height: 16),
+
+                        SizedBox(
+                          height: 60,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: const [
+                              _FooterLogo(asset: 'assets/images/home/energie_logo.png'),
+                              _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
+                              _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
+                            ],
+                          ),
+                        ),
+                        //
+                        const SizedBox(height: 10),
+                      ],
+                    ),
+                  ),
                 ],
+              ),
+            )
+
+            ],
               ),
             ),
           );
@@ -311,6 +316,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 
   void _onPopUpCatError() {
     showDialog<String>(
@@ -327,6 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
 
   void _showCitySelectionPopup(BuildContext context) {
     showDialog(
@@ -843,5 +850,24 @@ class _HomeScreenState extends State<HomeScreen> {
           type: _listMode,
         );
     }
+  }
+}
+
+class _FooterLogo extends StatelessWidget {
+  final String asset;
+
+  const _FooterLogo({required this.asset});
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      asset,
+      width: 100, // fixed dimension (prevents large decode)
+      height: 50,
+      fit: BoxFit.contain,
+      cacheWidth: 200,  // Helps reduce decode size
+      cacheHeight: 100,
+      filterQuality: FilterQuality.low, // Less GPU memory usage
+    );
   }
 }
