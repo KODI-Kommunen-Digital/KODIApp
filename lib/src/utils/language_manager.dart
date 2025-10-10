@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class LanguageManager extends ChangeNotifier {
-  Locale _locale = const Locale('en', 'US');
+  Locale _locale = const Locale('de', 'DE');
 
   Locale get locale => _locale;
 

@@ -118,6 +118,7 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
+                    locale:LanguageManager().locale,
                     home: Scaffold(
                       body: BlocBuilder<ApplicationCubit, ApplicationState>(
                         builder: (context, state) {

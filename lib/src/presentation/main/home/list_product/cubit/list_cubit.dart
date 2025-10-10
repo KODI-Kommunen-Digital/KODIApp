@@ -56,6 +56,13 @@ class ListCubit extends Cubit<ListState> {
     }
   }
 
+  void resetList() {
+    list = [];
+    listLoaded = [];
+    emit(ListStateLoaded(list, newsLoaded));
+  }
+
+
   Future<List<ProductModel>> newListings(int pageNo, categoryId) async {
     final prefs = await Preferences.openBox();
     final type = prefs.getKeyValue(Preferences.type, '');

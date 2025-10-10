@@ -1083,14 +1083,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       controller: _scrollController,
       slivers: <Widget>[
         SliverAppBar(
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: Theme.of(context).iconTheme.color,
+          leading: Container(
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              borderRadius: BorderRadius.all(Radius.circular(30))
             ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            child: IconButton(
+              icon: Icon(
+                Icons.arrow_back,
+                color: Theme.of(context).iconTheme.color,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
           ),
           expandedHeight: MediaQuery.of(context).size.height * 0.27,
           pinned: true,

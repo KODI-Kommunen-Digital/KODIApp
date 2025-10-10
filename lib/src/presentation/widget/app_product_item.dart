@@ -12,6 +12,8 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
 
+import '../../utils/custom_cache_manager.dart';
+
 class AppProductItem extends StatelessWidget {
   const AppProductItem(
       {super.key,
@@ -32,7 +34,7 @@ class AppProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
-    final memoryCacheManager = DefaultCacheManager();
+    final memoryCacheManager = CustomCacheManager();
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -76,8 +78,9 @@ class AppProductItem extends StatelessWidget {
                                     ? "${Application.picturesURL}${item!.image}"
                                     : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                         cacheManager: memoryCacheManager,
-                        memCacheWidth: 100,
-                        memCacheHeight: 120,
+                        memCacheWidth: 80,
+                        memCacheHeight: 50,
+                        filterQuality: FilterQuality.low,
                         fit: BoxFit.cover,
                         placeholder: (context, url) {
                           return AppPlaceholder(
@@ -389,10 +392,11 @@ class AppProductItem extends StatelessWidget {
                                         ? "${Application.picturesURL}${item!.image}"
                                         : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
                             cacheManager: memoryCacheManager,
+                            filterQuality: FilterQuality.low,
                             width: 120,
                             height: 140,
-                            memCacheWidth: 100,
-                            memCacheHeight: 120,
+                            memCacheWidth: 80,
+                            memCacheHeight: 50,
                             fit: BoxFit.cover,
                             placeholder: (context, url) {
                               return AppPlaceholder(
@@ -413,6 +417,7 @@ class AppProductItem extends StatelessWidget {
                                   image: DecorationImage(
                                     image: imageProvider,
                                     fit: BoxFit.fitHeight,
+                                    filterQuality: FilterQuality.low
                                   ),
                                 ),
                               );

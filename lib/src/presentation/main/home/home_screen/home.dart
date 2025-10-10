@@ -549,7 +549,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (company != null) {
       content = ListView.builder(
-        addAutomaticKeepAlives: true,
         shrinkWrap: true,
         controller: _scrollCompanyController,
         padding: const EdgeInsets.all(0),
@@ -860,14 +859,16 @@ class _FooterLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Image.asset(
-      asset,
-      width: 100, // fixed dimension (prevents large decode)
-      height: 50,
-      fit: BoxFit.contain,
-      cacheWidth: 200,  // Helps reduce decode size
-      cacheHeight: 100,
-      filterQuality: FilterQuality.low, // Less GPU memory usage
+    return RepaintBoundary(
+      child: Image.asset(
+        asset,
+        width: 100, // fixed dimension (prevents large decode)
+        height: 50,
+        fit: BoxFit.contain,
+        cacheWidth: 200,  // Helps reduce decode size
+        cacheHeight: 100,
+        filterQuality: FilterQuality.low, // Less GPU memory usage
+      ),
     );
   }
 }

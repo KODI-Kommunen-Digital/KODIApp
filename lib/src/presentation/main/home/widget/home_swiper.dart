@@ -24,6 +24,8 @@ class HomeSwipe extends StatelessWidget {
             return CachedNetworkImage(
               imageUrl: "${Application.picturesURL}admin/Homepage.jpg",
               cacheManager: memoryCacheManager,
+              memCacheWidth: 200,
+              memCacheHeight: 100,
               placeholder: (context, url) {
                 return AppPlaceholder(
                   child: Container(
