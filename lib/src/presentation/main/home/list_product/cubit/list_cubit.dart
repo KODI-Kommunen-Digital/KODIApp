@@ -32,8 +32,18 @@ class ListCubit extends Cubit<ListState> {
   String? searchTerm;
   int _adIndex = 0;
 
+  _resetList(){
+    list=[];
+    pageNo=1;
+    listLoaded=[];
+    filteredList=[];
+    listCity=[];
+    isSearching = false;
+    _adIndex = 0;
+  }
+
   Future<void> onLoad(cityId, int? subCategoryId) async {
-    pageNo = 1;
+    _resetList();
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
     final type = await prefs.getKeyValue(Preferences.type, '');
@@ -281,9 +291,9 @@ class ListCubit extends Cubit<ListState> {
   }
 
   Future<void> cancelSearch(int cityId, int? subCategoryId) async {
-    isSearching = true;
+    isSearching = false;
     searchTerm = "";
-    pageNo = 0;
+    pageNo = 1;
     onLoad(cityId, subCategoryId);
   }
 
