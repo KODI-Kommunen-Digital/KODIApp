@@ -20,6 +20,8 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic categoryCount;
   bool calledExternally = false;
   bool doesScroll = false;
+  List<CategoryModel> formattedCategories=[];
+
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -71,8 +73,8 @@ class HomeCubit extends Cubit<HomeState> {
 
     const banner = Images.slider;
 
-    List<CategoryModel> formattedCategories =
-        await formatCategoriesList(category, categoryCount, savedCity?.id);
+   formattedCategories =
+        getCategoriesWithoutHidden(await formatCategoriesList(category, categoryCount, savedCity?.id));
 
     emit(HomeStateLoaded(
       banner,
@@ -122,7 +124,7 @@ class HomeCubit extends Cubit<HomeState> {
     const banner = Images.slider;
     emit(HomeStateLoaded(
       banner,
-      category,
+      formattedCategories,
       location,
       recent,
       company,

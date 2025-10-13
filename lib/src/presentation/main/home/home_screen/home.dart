@@ -1,38 +1,32 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages
-import 'package:custom_in_app_webview/custom_in_app_webview.dart';
-import 'package:loggy/loggy.dart';
+
 import 'dart:async';
-import 'dart:io';
-import 'package:heidi/src/data/remote/api/api.dart';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:custom_in_app_webview/custom_in_app_webview.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_cubit.dart';
+import 'package:heidi/src/presentation/main/home/home_screen/cubit/home_state.dart';
+import 'package:heidi/src/presentation/main/home/list_product/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/banner_slider.dart';
-import 'package:heidi/src/presentation/main/discovery/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_category_item.dart';
 import 'package:heidi/src/presentation/main/home/widget/home_sliver_app_bar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:heidi/src/utils/translate.dart';
-import 'package:upgrader/upgrader.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:webview_flutter/webview_flutter.dart';
-
-import '../../../../utils/configs/application.dart';
-import 'cubit/home_cubit.dart';
-import 'cubit/home_state.dart';
 import 'package:loggy/loggy.dart';
-import '../list_product/cubit/cubit.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:upgrader/upgrader.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import '../list_product/list_product.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,290 +37,171 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedCityTitle = '';
-  int selectedCityId = 0;
-  int pageNo = 1;
-  int companyPageNo = 1;
-  late bool checkSavedCity;
-  // final _scrollController = ScrollController();
   final _scrollCompanyController = ScrollController();
-  bool isLoading = false;
-  bool categoryLoading = false;
-  bool isRefreshLoader = false;
-  String? banner;
-  List<CategoryModel>? category = [];
-  List<CategoryModel>? location = [];
-  List<ProductModel>? recent = [];
-  List<ProductModel>? company = [];
-  String latestAppStoreVersion = '';
-  String ignoreAppStoreVersion = '';
-  final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
-    Factory(() => EagerGestureRecognizer())
-  };
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  int _companyPageNo = 1;
+  bool _isCompanyLoadingMore = false;
+  String _ignoreAppStoreVersion = '';
+  String _latestAppStoreVersion = '';
 
   @override
   void initState() {
     super.initState();
-    // _scrollController.addListener(_scrollListener);
-    _scrollCompanyController.addListener(_scrollCompanyListener);
-    checkSavedCity = true;
-    AppBloc.homeCubit.onLoad(false).then((onValue) {
-      loadNewsListing();
-    });
-    connectivityInternet();
-    checkUserExist();
-    getIgnoreAppVersion();
-  }
-
-  loadNewsListing() {
-    context.read<ListCubit>().onLoad(1); // 1 -> News category Id
-  }
-
-  Future<void> getIgnoreAppVersion() async {
-    String ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
-    setState(() {
-      ignoreAppStoreVersion = ignoreVersion;
-    });
-  }
-
-  void connectivityInternet() {
-    Connectivity()
-        .onConnectivityChanged
-        .listen((List<ConnectivityResult>? result) {
-      AppBloc.homeCubit.onLoad(false);
-    });
+    _scrollCompanyController.addListener(_onScrollCompany);
+    _loadInitialData();
+    _listenToConnectivity();
+    _checkUserExist();
+    _loadIgnoreAppVersion();
   }
 
   @override
   void dispose() {
+    _scrollCompanyController.removeListener(_onScrollCompany);
+    _scrollCompanyController.dispose();
+    _connectivitySubscription?.cancel();
     super.dispose();
-    // _scrollController.removeListener(_scrollListener);
-    _scrollCompanyController.removeListener(_scrollCompanyListener);
-    // _scrollController.dispose();
   }
 
-  Future<void> checkUserExist() async {
-    bool exists = await AppBloc.homeCubit.doesUserExist();
-    if (!exists) {
+  Future<void> _loadInitialData() async {
+    await AppBloc.homeCubit.onLoad(false);
+    if (mounted) {
+      context.read<ListCubit>().onLoad(1); // 1 -> News category Id
+    }
+  }
+
+  void _listenToConnectivity() {
+    _connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((_) => AppBloc.homeCubit.onLoad(false));
+  }
+
+  Future<void> _checkUserExist() async {
+    final exists = await AppBloc.homeCubit.doesUserExist();
+    if (!exists && mounted) {
       AppBloc.loginCubit.onLogout();
     }
   }
 
-  Future<void> _scrollCompanyListener() async {
-    if (_scrollCompanyController.position.atEdge) {
-      if (_scrollCompanyController.position.pixels != 0) {
-        setState(() {
-          isLoading = true;
-        });
-        company =
-            await AppBloc.homeCubit.newCompanies(++companyPageNo).then((_) {
+  Future<void> _loadIgnoreAppVersion() async {
+    final ignoreVersion = await AppBloc.homeCubit.getIgnoreAppVersion();
+    if (mounted) {
+      setState(() {
+        _ignoreAppStoreVersion = ignoreVersion;
+      });
+    }
+  }
+
+  Future<void> _onScrollCompany() async {
+    if (_scrollCompanyController.position.pixels >=
+            _scrollCompanyController.position.maxScrollExtent &&
+        !_isCompanyLoadingMore) {
+      setState(() {
+        _isCompanyLoadingMore = true;
+      });
+      try {
+        await AppBloc.homeCubit.newCompanies(++_companyPageNo);
+      } catch (error, stackTrace) {
+        logError('Error loading new companies: $error');
+        await Sentry.captureException(error, stackTrace: stackTrace);
+      } finally {
+        if (mounted) {
           setState(() {
-            isLoading = false;
+            _isCompanyLoadingMore = false;
           });
-        }).catchError(
-          (error, stackTrace) async {
-            setState(() {
-              isLoading = false;
-            });
-            logError('Error loading new companies: $error');
-            await Sentry.captureException(error, stackTrace: stackTrace);
-          },
-        );
+        }
       }
     }
   }
 
-  // Future<void> _scrollListener() async {
-  //   if (_scrollController.position.atEdge) {
-  //     if (_scrollController.position.pixels != 0) {
-  //       setState(() {
-  //         isLoading = true;
-  //       });
-  //       recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-  //         setState(() {
-  //           isLoading = false;
-  //         });
-  //       }).catchError(
-  //         (error, stackTrace) async {
-  //           setState(() {
-  //             isLoading = false;
-  //           });
-  //           logError('Error loading new listings: $error');
-  //           await Sentry.captureException(error, stackTrace: stackTrace);
-  //         },
-  //       );
-  //     }
-  //   }
-  // }
-
-  // void scrollUp() {
-  //   _scrollController.animateTo(0,
-  //       duration: const Duration(milliseconds: 500), //duration of scroll
-  //       curve: Curves.fastOutSlowIn //scroll type
-  //       );
-  // }
-
   Future<void> _onRefresh() async {
-    await AppBloc.homeCubit.onLoad(true);
-    loadNewsListing();
-    setState(() {
-      pageNo = 1;
-    });
+    _companyPageNo = 1;
+    await _loadInitialData();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocConsumer<HomeCubit, HomeState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            error: (msg) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text(Translate.of(context).translate('no_internet')))),
-            orElse: () {},
-          );
-        },
-        builder: (context, state) {
-          if (state is HomeStateLoaded) {
-            banner = state.banner;
-            category = state.category;
-            recent = state.recent;
-            company = state.company;
-            isRefreshLoader = true;
-            categoryLoading = false;
+  void _onProductDetail(ProductModel item) {
+    if (item.sourceId == 2 || item.showExternal == 1) {
+      _openUrl(item.website);
+    } else {
+      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+    }
+  }
 
-            if (location != null) {
-              if (checkSavedCity) {
-                checkSavedCity = false;
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                AppBloc.homeCubit.setCalledExternally(false);
-              }
-            }
-            if (AppBloc.homeCubit.getDoesScroll()) {
-              AppBloc.homeCubit.setDoesScroll(false);
-              // scrollUp();
-            }
-          }
+  Future<void> _onCategory(
+      CategoryModel item, List<CategoryModel> allCategories) async {
+    if (item.id == -1) {
+      _showAllCategories(allCategories);
+      return;
+    }
 
-          if (state is HomeStatecategoryLoading) {
-            categoryLoading = true;
-          }
+    if (item.id == 17) { // Groups
+      final prefs = await Preferences.openBox();
+      final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+      if (cityId != 0) {
+        if (mounted) {
+          Navigator.pushNamed(context, Routes.listGroups,
+              arguments: {'id': item.id, 'title': 'Gruppen'});
+        }
+      } else {
+        if (mounted) {
+          _showCitySelectionPopup();
+        }
+      }
+    } else if (item.hasChild) {
+      final prefs = await Preferences.openBox();
+      prefs.setKeyValue(Preferences.categoryId, item.id);
+      prefs.setKeyValue(Preferences.type, "category");
+      if (mounted) {
+        Navigator.pushNamed(context, Routes.listProduct,
+            arguments: {'id': item.id, 'title': ''});
+      }
+    } else {
+      _showCategoryComingSoon();
+    }
+  }
 
-          return UpgradeAlert(
-            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
-                ? null
-                : Upgrader(
-                    debugLogging: true,
-                    debugDisplayAlways: true,
-                    countryCode: 'DE',
-                    durationUntilAlertAgain: const Duration(seconds: 30),
-                    willDisplayUpgrade: ({
-                      required bool display,
-                      String? installedVersion,
-                      UpgraderVersionInfo? versionInfo,
-                    }) {
-                      if (display) {
-                        setState(() {
-                          latestAppStoreVersion =
-                              versionInfo?.appStoreVersion?.build ?? '';
-                        });
-                      }
-                    },
-                  ),
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent, // important to detect taps on empty space
-              onTap: () {
-                FocusScope.of(context).unfocus(); // dismiss keyboard
-              },
-              child: CustomScrollView(
-                physics: const BouncingScrollPhysics(
-                  parent: AlwaysScrollableScrollPhysics(),
-                ),
-                // controller: _scrollController,
-                slivers: <Widget>[
-                  SliverPersistentHeader(
-                    delegate: AppBarHomeSliver(
-                        cityTitlesList: [],
-                        hintText: Translate.of(context).translate('search_title'),
-                        expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                        banners: banner,
-                        setLocationCallback: (data) async {
-                          final prefs = await Preferences.openBox();
-                          prefs.setKeyValue(Preferences.type, 'search');
-                          // ignore: use_build_context_synchronously
-                          Navigator.pushNamed(context, Routes.listProduct,
-                              arguments: {'search': data, 'title': 'Suche'});
-                        }),
-                    pinned: true,
-                  ),
-                  CupertinoSliverRefreshControl(
-                    onRefresh: _onRefresh,
-                  ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        if (categoryLoading)
-                          const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          )
-                        else
-                          _buildCategory(
-                            AppBloc.homeCubit.getCategoriesWithoutHidden(category ?? []),
-                          ),
+  Future<void> _onService(CategoryModel item) async {
+    switch (item.id) {
+      case 4:
+        await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/"),
+            mode: LaunchMode.inAppWebView);
+        break;
+      case 5:
+        if (mounted) {
+          Navigator.pushNamed(context, Routes.contactForm);
+        }
+        break;
+      case 10:
+        _openUrl("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+        break;
+    }
+  }
 
-                        const BannerSlider(),
-                        const SizedBox(height: 16),
+  void _openUrl(String url) {
+    if (!url.startsWith(RegExp(r'https?:\/\/'))) {
+      url = "https://$url";
+    }
+    CustomInAppWebView.showAsBottomSheet(context: context, url: url);
+  }
 
-                        _buildCompany(company),
-
-                        // Lazy-load or paginate news listing to avoid heavy UI
-                        _buildNewsListing(),
-
-                        const SizedBox(height: 16),
-
-                        SizedBox(
-                          height: 60,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: const [
-                              _FooterLogo(asset: 'assets/images/home/energie_logo.png'),
-                              _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
-                              _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
-                            ],
-                          ),
-                        ),
-                        //
-                        const SizedBox(height: 10),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            )
-
-            ],
-              ),
-            ),
-          );
-        },
+  void _showAllCategories(List<CategoryModel> allCategories) {
+    showModalBottomSheet<void>(
+      context: context,
+      builder: (ctx) => _AllCategoriesSheet(
+        allCategories: allCategories,
+        onCategorySelected: (category) => _onCategory(category, allCategories),
       ),
     );
   }
 
-
-  void _onPopUpCatError() {
-    showDialog<String>(
+  void _showCategoryComingSoon() {
+    showDialog<void>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (ctx) => AlertDialog(
         title: Text(Translate.of(context).translate('categorization')),
         content: Text(Translate.of(context).translate("category_coming_soon")),
-        actions: <Widget>[
+        actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => Navigator.pop(ctx),
             child: const Text('OK'),
           ),
         ],
@@ -334,429 +209,403 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-  void _showCitySelectionPopup(BuildContext context) {
-    showDialog(
+  void _showCitySelectionPopup() {
+    showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(Translate.of(context).translate('input_city')),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(Translate.of(context).translate('please_select_city')),
-              const SizedBox(height: 16),
-            ],
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('OK'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Future<void> _onCategory(
-      CategoryModel item, List<CategoryModel> listBuild) async {
-    if (item.id == -1) {
-      showModalBottomSheet<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Text(
-                        Translate.of(context).translate('all_Categories'),
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  ),
-                ),
-                Wrap(
-                  runSpacing: 8,
-                  alignment: WrapAlignment.center,
-                  children: listBuild.map(
-                    (item) {
-                      return HomeCategoryItem(
-                        item: item,
-                        onPressed: (item) {
-                          _onCategory(item, listBuild);
-                          return false;
-                        },
-                        // _onCategory,
-                      );
-                    },
-                  ).toList(),
-                ),
-              ],
-            ),
-          );
-        },
-      );
-      return;
-    }
-
-    if (item.id != -1) {
-      if (item.id == 17) {
-        final prefs = await Preferences.openBox();
-        int cityId = await prefs.getKeyValue(Preferences.cityId, 0);
-        if (cityId != 0) {
-          if (!mounted) return;
-          Navigator.pushNamed(context, Routes.listGroups,
-              arguments: {'id': item.id, 'title': 'Gruppen'});
-        } else {
-          if (!mounted) return;
-          _showCitySelectionPopup(context);
-        }
-      } else {
-        final prefs = await Preferences.openBox();
-        prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.type, "category");
-        if (!mounted) return;
-        Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': item.id, 'title': ''});
-      }
-    } else if (item.id != -1 && !item.hasChild) {
-      _onPopUpCatError();
-    }
-  }
-
-  void _makeAction(String link) async {
-    if (!link.startsWith("https://") && !link.startsWith("http://")) {
-      link = "https://$link";
-    }
-    CustomInAppWebView.showAsBottomSheet(
-      context: context,
-      url: link,);
-  }
-
-  void _onProductDetail(ProductModel item) {
-    if (item.sourceId == 2 || item.showExternal == 1) {
-      _makeAction(item.website);
-    } else if (item.showExternal == 0) {
-      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
-    } else {
-      Navigator.pushNamed(context, Routes.productDetail, arguments: item);
-    }
-  }
-
-  Widget _buildCategory(List<CategoryModel>? category) {
-    Widget content = Wrap(
-      runSpacing: 8,
-      alignment: WrapAlignment.center,
-      children: List.generate(8, (index) => index).map(
-        (item) {
-          return const HomeCategoryItem();
-        },
-      ).toList(),
-    );
-
-    if (category != null) {
-      List<CategoryModel> listBuild = category;
-      final more = CategoryModel.fromJson({
-        "id": -1,
-        "name": Translate.of(context).translate("more"),
-        "icon": "fas fa-ellipsis",
-        "color": "#36454F",
-      });
-
-      if (category.length >= 7) {
-        listBuild = category.take(7).toList();
-        listBuild.add(more);
-      }
-
-      content = Wrap(
-        runSpacing: 8,
-        alignment: WrapAlignment.center,
-        children: listBuild.map(
-          (item) {
-            return HomeCategoryItem(
-              item: item,
-              onPressed: (item) {
-                if (item.id == 4 ||
-                    item.id == 5 ||
-                    item.id == 6 ||
-                    item.id == 7 ||
-                    item.id == 8 ||
-                    item.id == 10) {
-                  _onService(item);
-                } else {
-                  _onCategory(item, category);
-                }
-                return false;
-              },
-            );
-          },
-        ).toList(),
-      );
-    }
-
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: content,
-    );
-  }
-
-  Future<void> _onService(CategoryModel item) async {
-    if (item.id == 4) {
-      await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/"),
-          mode: LaunchMode.inAppWebView);
-    } else if (item.id == 5) {
-      /*
-      await launchUrl(
-          Uri.parse("https://freiraum-fichtelgebirge.de/ueber-uns/"),
-          mode: LaunchMode.inAppWebView);*/
-      Navigator.pushNamed(context, Routes.contactForm);
-    } else if (item.id == 10) {
-      CustomInAppWebView.showAsBottomSheet(
-          context: context,
-          url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/",);
-      // _makeAction(
-      //     "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
-      // await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/"),
-      //     mode: LaunchMode.inAppWebView);
-    }
-    return;
-  }
-
-  Widget _buildCompany(List<ProductModel>? company) {
-    Widget content = ListView.builder(
-      padding: const EdgeInsets.all(0),
-      shrinkWrap: true,
-      scrollDirection: Axis.horizontal,
-      physics: const NeverScrollableScrollPhysics(),
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
-        );
-      },
-      itemCount: 8,
-    );
-
-    if (company != null) {
-      content = ListView.builder(
-        shrinkWrap: true,
-        controller: _scrollCompanyController,
-        padding: const EdgeInsets.all(0),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) {
-          if (index < company.length) {
-            final item = company[index];
-            return Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: AppProductItem(
-                onPressed: () {
-                  _onProductDetail(item);
-                },
-                item: item,
-                type: ProductViewType.card,
-                isRefreshLoader: isRefreshLoader,
-              ),
-            );
-          }
-          if (isLoading) {
-            return const SizedBox(
-                height: 50,
-                width: 50,
-                child: Center(child: CircularProgressIndicator()));
-          }
-          return Container();
-        },
-        itemCount: company.length + 1,
-      );
-    }
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                Translate.of(context).translate(
-                  'do_you_know',
-                ),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                Translate.of(context).translate(
-                  'company_matching',
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-          Container(
-            height: 180,
-            padding: const EdgeInsets.only(top: 4),
-            child: content,
+      builder: (ctx) => AlertDialog(
+        title: Text(Translate.of(context).translate('input_city')),
+        content: Text(Translate.of(context).translate('please_select_city')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: const Text('OK'),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildRecent(List<ProductModel>? recent, int selectedCity,
-      List<CategoryModel>? cities) {
-    Widget content = ListView.builder(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: UpgradeAlert(
+        upgrader: _ignoreAppStoreVersion == _latestAppStoreVersion
+            ? null
+            : Upgrader(
+                debugLogging: true,
+                debugDisplayAlways: true,
+                countryCode: 'DE',
+                durationUntilAlertAgain: const Duration(seconds: 30),
+                willDisplayUpgrade: ({
+                  required bool display,
+                  String? installedVersion,
+                  UpgraderVersionInfo? versionInfo,
+                }) {
+                  if (display) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      if (mounted) {
+                        setState(() {
+                          _latestAppStoreVersion =
+                              versionInfo?.appStoreVersion?.toString() ?? '';
+                        });
+                      }
+                    });
+                  }
+                },
+              ),
+        child: BlocConsumer<HomeCubit, HomeState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              error: (msg) => ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(Translate.of(context).translate('no_internet')),
+                ),
+              ),
+              orElse: () {},
+            );
+          },
+          builder: (context, state) {
+            return state.when(
+              initial: () =>
+                  const Center(child: CircularProgressIndicator.adaptive()),
+              loading: () =>
+                  const Center(child: CircularProgressIndicator.adaptive()),
+              categoryLoading: (location) =>
+                  const Center(child: CircularProgressIndicator.adaptive()),
+              error: (error) => Center(child: Text(error)),
+              loaded: (banner, category, location, recent, company,
+                  isRefreshLoader) {
+                return _HomeContent(
+                  banner: banner,
+                  categories: category,
+                  companies: company,
+                  scrollCompanyController: _scrollCompanyController,
+                  isCompanyLoadingMore: _isCompanyLoadingMore,
+                  onRefresh: _onRefresh,
+                  onCategorySelected: _onCategory,
+                  onServiceSelected: _onService,
+                  onProductSelected: _onProductDetail,
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class _HomeContent extends StatelessWidget {
+  const _HomeContent({
+    required this.banner,
+    required this.categories,
+    required this.companies,
+    required this.scrollCompanyController,
+    required this.isCompanyLoadingMore,
+    required this.onRefresh,
+    required this.onCategorySelected,
+    required this.onServiceSelected,
+    required this.onProductSelected,
+  });
+
+  final String? banner;
+  final List<CategoryModel>? categories;
+  final List<ProductModel>? companies;
+  final ScrollController scrollCompanyController;
+  final bool isCompanyLoadingMore;
+  final Future<void> Function() onRefresh;
+  final Future<void> Function(CategoryModel, List<CategoryModel>) onCategorySelected;
+  final Future<void> Function(CategoryModel) onServiceSelected;
+  final void Function(ProductModel) onProductSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            delegate: AppBarHomeSliver(
+              cityTitlesList: [],
+              hintText: Translate.of(context).translate('search_title'),
+              expandedHeight: MediaQuery.of(context).size.height * 0.3,
+              banners: banner,
+              setLocationCallback: (data) async {
+                final prefs = await Preferences.openBox();
+                prefs.setKeyValue(Preferences.type, 'search');
+                if (context.mounted) {
+                  Navigator.pushNamed(context, Routes.listProduct,
+                      arguments: {'search': data, 'title': 'Suche'});
+                }
+              },
+            ),
+            pinned: true,
+          ),
+          CupertinoSliverRefreshControl(onRefresh: onRefresh),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                const SizedBox(height: 6),
+                _CategoryGrid(
+                  categories: categories,
+                  onCategorySelected: onCategorySelected,
+                  onServiceSelected: onServiceSelected,
+                ),
+                const BannerSlider(),
+                const SizedBox(height: 16),
+                _CompanyList(
+                  companies: companies,
+                  scrollController: scrollCompanyController,
+                  isLoadingMore: isCompanyLoadingMore,
+                  onProductSelected: onProductSelected,
+                ),
+                const _NewsSection(),
+                const SizedBox(height: 16),
+                const _FooterLogos(),
+                const SizedBox(height: 10),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _CategoryGrid extends StatelessWidget {
+  const _CategoryGrid({
+    required this.categories,
+    required this.onCategorySelected,
+    required this.onServiceSelected,
+  });
+
+  final List<CategoryModel>? categories;
+  final Future<void> Function(CategoryModel, List<CategoryModel>) onCategorySelected;
+  final Future<void> Function(CategoryModel) onServiceSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    if (categories == null || categories!.isEmpty) {
+      return Wrap(
+        runSpacing: 8,
+        alignment: WrapAlignment.center,
+        children: List.generate(8, (_) => const HomeCategoryItem()),
+      );
+    }
+
+    final allCategories = categories!;
+    List<CategoryModel> displayedCategories = allCategories;
+    if (allCategories.length >= 7) {
+      displayedCategories = allCategories.take(7).toList();
+      displayedCategories.add(
+        CategoryModel.fromJson({
+          "id": -1,
+          "name": Translate.of(context).translate("more"),
+          "icon": "fas fa-ellipsis",
+          "color": "#36454F",
+        }),
+      );
+    }
+
+    return Container(
+      padding: const EdgeInsets.all(8),
+      child: Wrap(
+        runSpacing: 8,
+        alignment: WrapAlignment.center,
+        children: displayedCategories.map((item) {
+          return HomeCategoryItem(
+            item: item,
+            onPressed: (item) {
+              final serviceIds = {4, 5, 6, 7, 8, 10};
+              if (serviceIds.contains(item.id)) {
+                onServiceSelected(item);
+              } else {
+                onCategorySelected(item, allCategories);
+              }
+              return false;
+            },
+          );
+        }).toList(),
+      ),
+    );
+  }
+}
+
+class _CompanyList extends StatelessWidget {
+  const _CompanyList({
+    required this.companies,
+    required this.scrollController,
+    required this.isLoadingMore,
+    required this.onProductSelected,
+  });
+
+  final List<ProductModel>? companies;
+  final ScrollController scrollController;
+  final bool isLoadingMore;
+  final void Function(ProductModel) onProductSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            Translate.of(context).translate('do_you_know'),
+            style: Theme.of(context)
+                .textTheme
+                .titleLarge!
+                .copyWith(fontWeight: FontWeight.bold),
+          ),
+          Text(
+            Translate.of(context).translate('company_matching'),
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          Container(
+            height: 180,
+            padding: const EdgeInsets.only(top: 4),
+            child: (companies == null || companies!.isEmpty)
+                ? _buildPlaceholder()
+                : _buildList(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildList() {
+    return ListView.builder(
+      controller: scrollController,
       padding: const EdgeInsets.all(0),
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      scrollDirection: Axis.horizontal,
+      itemCount: companies!.length + (isLoadingMore ? 1 : 0),
       itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 16),
-          child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
+        if (index < companies!.length) {
+          final item = companies![index];
+          return Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: AppProductItem(
+              onPressed: () => onProductSelected(item),
+              item: item,
+              type: ProductViewType.card, 
+              isRefreshLoader: false,
+            ),
+          );
+        }
+        return const Center(child: CircularProgressIndicator.adaptive());
+      },
+    );
+  }
+
+  Widget _buildPlaceholder() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(0),
+      scrollDirection: Axis.horizontal,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: 8,
+      itemBuilder: (context, index) {
+        return const Padding(
+          padding: EdgeInsets.only(left: 8),
+          child: AppProductItem(type: ProductViewType.small, isRefreshLoader: false,),
         );
       },
-      itemCount: 8,
     );
+  }
+}
 
-    if (recent != null) {
-      content = ListView.builder(
-        shrinkWrap: true,
-        padding: const EdgeInsets.all(0),
-        physics: const NeverScrollableScrollPhysics(),
-        itemBuilder: (context, index) {
-          final item = recent[index];
-          return selectedCityId != 0
-              ? Visibility(
-                  visible: recent[index].cityId == selectedCity,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: AppProductItem(
-                        onPressed: () {
-                          _onProductDetail(item);
-                        },
-                        item: item,
-                        type: ProductViewType.small,
-                        isRefreshLoader: isRefreshLoader),
-                  ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: AppProductItem(
-                      onPressed: () {
-                        _onProductDetail(item);
-                      },
-                      isRefreshLoader: isRefreshLoader,
-                      item: item,
-                      type: ProductViewType.small),
-                );
-        },
-        itemCount: recent.length,
+class _NewsSection extends StatelessWidget {
+  const _NewsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final ProductViewType listMode = Application.setting.listMode;
+
+    void onProductDetail(ProductModel item) {
+      if (item.sourceId == 2 || item.showExternal == 1) {
+        String url = item.website;
+        if (!url.startsWith(RegExp(r'https?:\/\/'))) {
+          url = "https://$url";
+        }
+        CustomInAppWebView.showAsBottomSheet(context: context, url: url);
+      } else {
+        Navigator.pushNamed(context, Routes.productDetail, arguments: item);
+      }
+    }
+
+    Widget buildItem({ProductModel? item, required ProductViewType type}) {
+      final padding = const EdgeInsets.symmetric(horizontal: 16);
+      if (type == ProductViewType.list) {
+        return Container(
+          padding: padding,
+          child: AppProductItem(
+            onPressed: item != null ? () => onProductDetail(item) : null,
+            item: item,
+            type: listMode, 
+            isRefreshLoader: false,
+          ),
+        );
+      }
+      return AppProductItem(
+        onPressed: item != null ? () => onProductDetail(item) : null,
+        item: item,
+        type: listMode,
+        isRefreshLoader: false,
       );
     }
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                Translate.of(context).translate('recent_listings'),
-                style: Theme.of(context)
-                    .textTheme
-                    .titleLarge!
-                    .copyWith(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                Translate.of(context).translate(
-                  'what_happen',
-                ),
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: content,
-        ),
-      ],
-    );
-  }
-
-  _buildNewsListing() {
-    return Column(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Align(
-          alignment: Alignment.topLeft,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-            child: Text(
-              Translate.of(context).translate('news_listing'),
-              style: Theme.of(context)
-                  .textTheme
-                  .titleMedium!
-                  .copyWith(fontWeight: FontWeight.bold),
-            ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+          child: Text(
+            Translate.of(context).translate('news_listing'),
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium!
+                .copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        BlocConsumer<ListCubit, ListState>(
-          listener: (context, state) {
-            state.maybeWhen(
-              error: (msg) => ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text(msg))),
-              orElse: () {},
+        BlocBuilder<ListCubit, ListState>(
+          builder: (context, state) {
+            return state.when(
+              loading: () => const ListLoading(),
+              loaded: (_, newsList) => _buildNewsList(context,newsList, listMode, buildItem),
+              updated: (_, newsList) => _buildNewsList(context,newsList, listMode, buildItem),
+              error: (e) => Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Text(Translate.of(context).translate('list_is_empty')),
+              ),
+              initial: () => const SizedBox.shrink(),
             );
           },
-          builder: (context, state) => state.when(
-            loading: () => const ListLoading(),
-            loaded: (list, newsList) => _buildNewsList(newsList ?? []),
-            updated: (list,newsList) {
-              return _buildNewsList(newsList??[]);
-            },
-            error: (e) => ErrorWidget('Failed to load listings.'),
-            initial: () {
-              return Container();
-            },
-          ),
         ),
         Align(
           alignment: Alignment.topRight,
           child: TextButton(
             onPressed: () async {
               final prefs = await Preferences.openBox();
-              prefs.setKeyValue(Preferences.categoryId, 1); //1 for News
+              prefs.setKeyValue(Preferences.categoryId, 1); // 1 for News
               prefs.setKeyValue(Preferences.type, "category");
-              if (!mounted) return;
-              Navigator.pushNamed(context, Routes.listProduct, arguments: {
-                'id': 1,
-                'title': '',
-                'type': 'category',
-              });
+              if (context.mounted) {
+                Navigator.pushNamed(context, Routes.listProduct, arguments: {
+                  'id': 1,
+                  'title': '',
+                  'type': 'category',
+                });
+              }
             },
             child: Text(
               Translate.of(context).translate('more_news'),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor),
-              textAlign: TextAlign.end,
             ),
           ),
         ),
@@ -764,91 +613,106 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  final ProductViewType _listMode = Application.setting.listMode;
-
-  // lib/src/presentation/main/home/home_screen/home.dart
-
-  Widget _buildNewsList(List<ProductModel> list) {
-    // This check is redundant as it's inside a BlocBuilder, but kept for safety.
-    if (list.isEmpty) {
+  Widget _buildNewsList(
+      BuildContext context,
+    List<ProductModel>? list,
+    ProductViewType listMode,
+    Widget Function({ProductModel? item, required ProductViewType type}) buildItem,
+  ) {
+    if (list == null || list.isEmpty) {
       return Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.sentiment_satisfied),
-            Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Text(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(Icons.sentiment_satisfied),
+              const SizedBox(width: 4),
+              Text(
                 Translate.of(context).translate('list_is_empty'),
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       );
     }
 
-    // Replace SliverList with ListView.builder
     return ListView.builder(
       shrinkWrap: true,
-      // Important: Allows ListView inside a Column
       physics: const NeverScrollableScrollPhysics(),
-      // Important: Prevents nested scrolling
       padding: EdgeInsets.zero,
-      // Remove any default padding
       itemCount: (list.length < 3) ? list.length : 3,
       itemBuilder: (BuildContext context, int index) {
-        final item = list[index];
         return Padding(
           padding: const EdgeInsets.only(bottom: 16, top: 5),
-          child: _buildItem(item: item, type: _listMode),
+          child: buildItem(item: list[index], type: listMode),
         );
       },
     );
   }
+}
 
-  Widget _buildItem({
-    ProductModel? item,
-    required ProductViewType type,
-  }) {
-    switch (type) {
-      case ProductViewType.list:
-        if (item != null) {
-          return Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: AppProductItem(
-              isRefreshLoader: true,
-              onPressed: () {
-                _onProductDetail(item);
-              },
-              item: item,
-              type: _listMode,
+class _AllCategoriesSheet extends StatelessWidget {
+  const _AllCategoriesSheet({
+    required this.allCategories,
+    required this.onCategorySelected,
+  });
+
+  final List<CategoryModel> allCategories;
+  final void Function(CategoryModel) onCategorySelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              Translate.of(context).translate('all_Categories'),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-          );
-        }
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: AppProductItem(
-            isRefreshLoader: true,
-            type: _listMode,
           ),
-        );
-      default:
-        if (item != null) {
-          return AppProductItem(
-            isRefreshLoader: true,
-            onPressed: () {
-              _onProductDetail(item);
-            },
-            item: item,
-            type: _listMode,
-          );
-        }
-        return AppProductItem(
-          isRefreshLoader: true,
-          type: _listMode,
-        );
-    }
+          Wrap(
+            runSpacing: 8,
+            alignment: WrapAlignment.center,
+            children: allCategories.map((item) {
+              return HomeCategoryItem(
+                item: item,
+                onPressed: (item) {
+                  Navigator.pop(context);
+                  onCategorySelected(item);
+                  return false;
+                },
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _FooterLogos extends StatelessWidget {
+  const _FooterLogos();
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: const [
+          _FooterLogo(asset: 'assets/images/home/energie_logo.png'),
+          _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
+          _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
+        ],
+      ),
+    );
   }
 }
 
@@ -862,12 +726,12 @@ class _FooterLogo extends StatelessWidget {
     return RepaintBoundary(
       child: Image.asset(
         asset,
-        width: 100, // fixed dimension (prevents large decode)
+        width: 100,
         height: 50,
         fit: BoxFit.contain,
-        cacheWidth: 200,  // Helps reduce decode size
+        cacheWidth: 200,
         cacheHeight: 100,
-        filterQuality: FilterQuality.low, // Less GPU memory usage
+        filterQuality: FilterQuality.low,
       ),
     );
   }
