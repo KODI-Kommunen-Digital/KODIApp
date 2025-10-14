@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
@@ -22,6 +21,7 @@ import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:heidi/staging/firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +32,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/env/staging/.envRatingen");
+
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -46,7 +48,7 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: StagingFirebaseOptions.currentPlatform,
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
@@ -56,7 +58,6 @@ Future<void> main() async {
     options.tracesSampleRate = 0.01;
     options.debug = false;
   }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
-  await dotenv.load(fileName: "assets/env/.envRatingen");
   await CategoryManager.loadCategories();
 }
 
