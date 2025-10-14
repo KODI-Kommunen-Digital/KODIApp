@@ -43,13 +43,17 @@ Future<void> main() async {
       ])
     ],
   );
+
+  await Firebase.initializeApp(
+    options: StagingFirebaseOptions.currentPlatform,
+  );
+
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
-  await Firebase.initializeApp(
-    options: StagingFirebaseOptions.currentPlatform,
-  );
+
+  debugPrint("Firebase projectId = ${Firebase.app().options.projectId}");
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
