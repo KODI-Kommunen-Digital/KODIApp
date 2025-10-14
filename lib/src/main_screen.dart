@@ -31,27 +31,37 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     const submitPosition = FloatingActionButtonLocation.centerDocked;
-    return Scaffold(
-      body: BlocListener<AuthenticationCubit, AuthenticationState>(
-        listener: (context, authentication) async {
-          _listenAuthenticateChange(authentication);
-        },
-        child: IndexedStack(
-          index: _exportIndexed(_selectedPage),
-          children: const <Widget>[
-            HomeScreen(),
-            ServicesScreen(),
-            //Replaced old screen discovery as per new requirements.
-            // DiscoveryScreen(),
-            TempScreen(),
-            PortalScreen(),
-            AccountScreen()
-          ],
+    return PopScope(
+      canPop: _selectedPage == Routes.home,
+      onPopInvoked: (bool didPop) {
+        if (!didPop) {
+          setState(() {
+            _selectedPage = Routes.home;
+          });
+        }
+      },
+      child: Scaffold(
+        body: BlocListener<AuthenticationCubit, AuthenticationState>(
+          listener: (context, authentication) async {
+            _listenAuthenticateChange(authentication);
+          },
+          child: IndexedStack(
+            index: _exportIndexed(_selectedPage),
+            children: const <Widget>[
+              HomeScreen(),
+              ServicesScreen(),
+              //Replaced old screen discovery as per new requirements.
+              // DiscoveryScreen(),
+              TempScreen(),
+              PortalScreen(),
+              AccountScreen()
+            ],
+          ),
         ),
+        bottomNavigationBar: _buildBottomMenu(),
+        // floatingActionButton: _buildSubmit(),
+        // floatingActionButtonLocation: submitPosition,
       ),
-      bottomNavigationBar: _buildBottomMenu(),
-      // floatingActionButton: _buildSubmit(),
-      // floatingActionButtonLocation: submitPosition,
     );
   }
 
