@@ -34,6 +34,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/env/production/.envRatingen");
 
+  await Firebase.initializeApp(
+    options: ProductionFirebaseOptions.currentPlatform,
+  );
+
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -47,9 +51,8 @@ Future<void> main() async {
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
-  await Firebase.initializeApp(
-    options: ProductionFirebaseOptions.currentPlatform,
-  );
+
+  debugPrint("Firebase projectId = ${Firebase.app().options.projectId}");
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
