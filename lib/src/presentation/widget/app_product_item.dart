@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -65,18 +66,7 @@ class AppProductItem extends StatelessWidget {
                       child: CachedNetworkImage(
                         width: 120,
                         height: 140,
-                        imageUrl: item?.sourceId == 2 &&
-                                item?.image != null &&
-                                item?.image != 'admin/News.jpeg'
-                            ? item!.image
-                            : item?.sourceId == 3 && item?.image != null
-                                ? (item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : item!.image)
-                                : item?.image != null &&
-                                        item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                        imageUrl: item!.displayImageUrl,
                         cacheManager: memoryCacheManager,
                         memCacheWidth: 80,
                         memCacheHeight: 50,
@@ -234,17 +224,7 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2 &&
-                        item?.image != null &&
-                        item?.image != 'admin/News.jpeg'
-                    ? item!.image
-                    : item?.sourceId == 3 && item?.image != null
-                        ? (item!.image.startsWith('admin')
-                            ? "${Application.picturesURL}${item!.image}"
-                            : item!.image)
-                        : item?.image != null && item!.image.startsWith('admin')
-                            ? "${Application.picturesURL}${item!.image}"
-                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                imageUrl: item!.displayImageUrl,
                 cacheManager: memoryCacheManager,
                 width: 120,
                 height: 140,
@@ -379,18 +359,7 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            imageUrl: item?.sourceId == 2 &&
-                                    item?.image != null &&
-                                    item?.image != 'admin/News.jpeg'
-                                ? item!.image
-                                : item?.sourceId == 3 && item?.image != null
-                                    ? (item!.image.startsWith('admin')
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : item!.image)
-                                    : item?.image != null &&
-                                            item!.image.startsWith('admin')
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            imageUrl: item!.displayImageUrl,
                             cacheManager: memoryCacheManager,
                             filterQuality: FilterQuality.low,
                             width: 120,
@@ -547,18 +516,7 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: item?.sourceId == 2 &&
-                                item?.image != null &&
-                                item?.image != 'admin/News.jpeg'
-                            ? item!.image
-                            : item?.sourceId == 3 && item?.image != null
-                                ? (item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : item!.image)
-                                : item?.image != null &&
-                                        item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                        imageUrl: item!.displayImageUrl,
                         cacheManager: memoryCacheManager,
                         memCacheWidth: 100,
                         memCacheHeight: 120,

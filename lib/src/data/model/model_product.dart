@@ -9,6 +9,7 @@ import 'package:heidi/src/data/model/model_open_time.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:intl/intl.dart';
 import 'package:location/location.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:html/parser.dart';
 
 class ProductModel {
@@ -461,5 +462,23 @@ class ImageListModel {
     data['listingId'] = listingId;
     data['logo'] = logo;
     return data;
+  }
+}
+
+extension DisplayImageUrl on ProductModel {
+  String get displayImageUrl {
+    if (sourceId == 2 && image.isNotEmpty && image != 'admin/News.jpeg') {
+      return image;
+    }
+    if (sourceId == 3 && image.isNotEmpty) {
+      if (image.startsWith('admin')) {
+        return "${Application.picturesURL}$image";
+      }
+      return image;
+    }
+    if (image.isNotEmpty && image.startsWith('admin')) {
+      return "${Application.picturesURL}$image";
+    }
+    return "${Application.picturesURL}${image.isNotEmpty ? image : 'admin/News.jpeg'}";
   }
 }
