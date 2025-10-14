@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
+import 'package:heidi/production/firebase_options.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
@@ -32,6 +32,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/env/production/.envRatingen");
+
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -46,7 +48,7 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: ProductionFirebaseOptions.currentPlatform,
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
@@ -56,7 +58,6 @@ Future<void> main() async {
         'https://667175baae08bf96e43d0b5b5444deeb@o4507264812908544.ingest.de.sentry.io/4508890460323920';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
-  await dotenv.load(fileName: "assets/env/.envRatingen");
   await CategoryManager.loadCategories();
 }
 
