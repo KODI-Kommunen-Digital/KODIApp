@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,429 +9,308 @@ part of 'account_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$AccountState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function(String errorMessage) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function(String errorMessage)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function(String errorMessage)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AccountLoading value) loading,
-    required TResult Function(AccountLoaded value) loaded,
-    required TResult Function(AccountError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(AccountLoading value)? loading,
-    TResult? Function(AccountLoaded value)? loaded,
-    TResult? Function(AccountError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AccountLoading value)? loading,
-    TResult Function(AccountLoaded value)? loaded,
-    TResult Function(AccountError value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $AccountStateCopyWith<$Res> {
-  factory $AccountStateCopyWith(
-          AccountState value, $Res Function(AccountState) then) =
-      _$AccountStateCopyWithImpl<$Res, AccountState>;
+class $AccountStateCopyWith<$Res>  {
+$AccountStateCopyWith(AccountState _, $Res Function(AccountState) __);
 }
 
-/// @nodoc
-class _$AccountStateCopyWithImpl<$Res, $Val extends AccountState>
-    implements $AccountStateCopyWith<$Res> {
-  _$AccountStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [AccountState].
+extension AccountStatePatterns on AccountState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( AccountLoading value)?  loading,TResult Function( AccountLoaded value)?  loaded,TResult Function( AccountError value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case AccountLoading() when loading != null:
+return loading(_that);case AccountLoaded() when loaded != null:
+return loaded(_that);case AccountError() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( AccountLoading value)  loading,required TResult Function( AccountLoaded value)  loaded,required TResult Function( AccountError value)  error,}){
+final _that = this;
+switch (_that) {
+case AccountLoading():
+return loading(_that);case AccountLoaded():
+return loaded(_that);case AccountError():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( AccountLoading value)?  loading,TResult? Function( AccountLoaded value)?  loaded,TResult? Function( AccountError value)?  error,}){
+final _that = this;
+switch (_that) {
+case AccountLoading() when loading != null:
+return loading(_that);case AccountLoaded() when loaded != null:
+return loaded(_that);case AccountError() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function()?  loaded,TResult Function( String errorMessage)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case AccountLoading() when loading != null:
+return loading();case AccountLoaded() when loaded != null:
+return loaded();case AccountError() when error != null:
+return error(_that.errorMessage);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function()  loaded,required TResult Function( String errorMessage)  error,}) {final _that = this;
+switch (_that) {
+case AccountLoading():
+return loading();case AccountLoaded():
+return loaded();case AccountError():
+return error(_that.errorMessage);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function()?  loaded,TResult? Function( String errorMessage)?  error,}) {final _that = this;
+switch (_that) {
+case AccountLoading() when loading != null:
+return loading();case AccountLoaded() when loaded != null:
+return loaded();case AccountError() when error != null:
+return error(_that.errorMessage);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$AccountLoadingImplCopyWith<$Res> {
-  factory _$$AccountLoadingImplCopyWith(_$AccountLoadingImpl value,
-          $Res Function(_$AccountLoadingImpl) then) =
-      __$$AccountLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$AccountLoadingImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoadingImpl>
-    implements _$$AccountLoadingImplCopyWith<$Res> {
-  __$$AccountLoadingImplCopyWithImpl(
-      _$AccountLoadingImpl _value, $Res Function(_$AccountLoadingImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$AccountLoadingImpl implements AccountLoading {
-  const _$AccountLoadingImpl();
-
-  @override
-  String toString() {
-    return 'AccountState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AccountLoadingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function(String errorMessage) error,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function(String errorMessage)? error,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function(String errorMessage)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AccountLoading value) loading,
-    required TResult Function(AccountLoaded value) loaded,
-    required TResult Function(AccountError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(AccountLoading value)? loading,
-    TResult? Function(AccountLoaded value)? loaded,
-    TResult? Function(AccountError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AccountLoading value)? loading,
-    TResult Function(AccountLoaded value)? loaded,
-    TResult Function(AccountError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class AccountLoading implements AccountState {
-  const factory AccountLoading() = _$AccountLoadingImpl;
-}
-
-/// @nodoc
-abstract class _$$AccountLoadedImplCopyWith<$Res> {
-  factory _$$AccountLoadedImplCopyWith(
-          _$AccountLoadedImpl value, $Res Function(_$AccountLoadedImpl) then) =
-      __$$AccountLoadedImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$AccountLoadedImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountLoadedImpl>
-    implements _$$AccountLoadedImplCopyWith<$Res> {
-  __$$AccountLoadedImplCopyWithImpl(
-      _$AccountLoadedImpl _value, $Res Function(_$AccountLoadedImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$AccountLoadedImpl implements AccountLoaded {
-  const _$AccountLoadedImpl();
 
-  @override
-  String toString() {
-    return 'AccountState.loaded()';
-  }
+class AccountLoading implements AccountState {
+  const AccountLoading();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _$AccountLoadedImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function(String errorMessage) error,
-  }) {
-    return loaded();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function(String errorMessage)? error,
-  }) {
-    return loaded?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function(String errorMessage)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AccountLoading value) loading,
-    required TResult Function(AccountLoaded value) loaded,
-    required TResult Function(AccountError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(AccountLoading value)? loading,
-    TResult? Function(AccountLoaded value)? loaded,
-    TResult? Function(AccountError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AccountLoading value)? loading,
-    TResult Function(AccountLoaded value)? loaded,
-    TResult Function(AccountError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountLoading);
 }
 
-abstract class AccountLoaded implements AccountState {
-  const factory AccountLoaded() = _$AccountLoadedImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState.loading()';
 }
 
-/// @nodoc
-abstract class _$$AccountErrorImplCopyWith<$Res> {
-  factory _$$AccountErrorImplCopyWith(
-          _$AccountErrorImpl value, $Res Function(_$AccountErrorImpl) then) =
-      __$$AccountErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String errorMessage});
+
 }
 
-/// @nodoc
-class __$$AccountErrorImplCopyWithImpl<$Res>
-    extends _$AccountStateCopyWithImpl<$Res, _$AccountErrorImpl>
-    implements _$$AccountErrorImplCopyWith<$Res> {
-  __$$AccountErrorImplCopyWithImpl(
-      _$AccountErrorImpl _value, $Res Function(_$AccountErrorImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? errorMessage = null,
-  }) {
-    return _then(_$AccountErrorImpl(
-      null == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
+
 
 /// @nodoc
 
-class _$AccountErrorImpl implements AccountError {
-  const _$AccountErrorImpl(this.errorMessage);
 
-  @override
-  final String errorMessage;
+class AccountLoaded implements AccountState {
+  const AccountLoaded();
+  
 
-  @override
-  String toString() {
-    return 'AccountState.error(errorMessage: $errorMessage)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$AccountErrorImpl &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
-      __$$AccountErrorImplCopyWithImpl<_$AccountErrorImpl>(this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function(String errorMessage) error,
-  }) {
-    return error(errorMessage);
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function(String errorMessage)? error,
-  }) {
-    return error?.call(errorMessage);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function(String errorMessage)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(errorMessage);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(AccountLoading value) loading,
-    required TResult Function(AccountLoaded value) loaded,
-    required TResult Function(AccountError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(AccountLoading value)? loading,
-    TResult? Function(AccountLoaded value)? loaded,
-    TResult? Function(AccountError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(AccountLoading value)? loading,
-    TResult Function(AccountLoaded value)? loaded,
-    TResult Function(AccountError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountLoaded);
 }
 
-abstract class AccountError implements AccountState {
-  const factory AccountError(final String errorMessage) = _$AccountErrorImpl;
 
-  String get errorMessage;
-  @JsonKey(ignore: true)
-  _$$AccountErrorImplCopyWith<_$AccountErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'AccountState.loaded()';
 }
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class AccountError implements AccountState {
+  const AccountError(this.errorMessage);
+  
+
+ final  String errorMessage;
+
+/// Create a copy of AccountState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$AccountErrorCopyWith<AccountError> get copyWith => _$AccountErrorCopyWithImpl<AccountError>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AccountError&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,errorMessage);
+
+@override
+String toString() {
+  return 'AccountState.error(errorMessage: $errorMessage)';
+}
+
+
+}
+
+/// @nodoc
+abstract mixin class $AccountErrorCopyWith<$Res> implements $AccountStateCopyWith<$Res> {
+  factory $AccountErrorCopyWith(AccountError value, $Res Function(AccountError) _then) = _$AccountErrorCopyWithImpl;
+@useResult
+$Res call({
+ String errorMessage
+});
+
+
+
+
+}
+/// @nodoc
+class _$AccountErrorCopyWithImpl<$Res>
+    implements $AccountErrorCopyWith<$Res> {
+  _$AccountErrorCopyWithImpl(this._self, this._then);
+
+  final AccountError _self;
+  final $Res Function(AccountError) _then;
+
+/// Create a copy of AccountState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? errorMessage = null,}) {
+  return _then(AccountError(
+null == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

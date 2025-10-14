@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,687 +9,392 @@ part of 'group_details_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$GroupDetailsState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<GroupPostsModel> list,
-            ForumGroupModel arguments, bool isAdmin, int userId)
-        loaded,
-    required TResult Function(String error) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GroupDetailsStateInitial value) initial,
-    required TResult Function(GroupDetailsStateLoading value) loading,
-    required TResult Function(GroupDetailsStateLoaded value) loaded,
-    required TResult Function(GroupDetailsStateError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GroupDetailsStateInitial value)? initial,
-    TResult? Function(GroupDetailsStateLoading value)? loading,
-    TResult? Function(GroupDetailsStateLoaded value)? loaded,
-    TResult? Function(GroupDetailsStateError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GroupDetailsStateInitial value)? initial,
-    TResult Function(GroupDetailsStateLoading value)? loading,
-    TResult Function(GroupDetailsStateLoaded value)? loaded,
-    TResult Function(GroupDetailsStateError value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupDetailsState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'GroupDetailsState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $GroupDetailsStateCopyWith<$Res> {
-  factory $GroupDetailsStateCopyWith(
-          GroupDetailsState value, $Res Function(GroupDetailsState) then) =
-      _$GroupDetailsStateCopyWithImpl<$Res, GroupDetailsState>;
+class $GroupDetailsStateCopyWith<$Res>  {
+$GroupDetailsStateCopyWith(GroupDetailsState _, $Res Function(GroupDetailsState) __);
 }
 
-/// @nodoc
-class _$GroupDetailsStateCopyWithImpl<$Res, $Val extends GroupDetailsState>
-    implements $GroupDetailsStateCopyWith<$Res> {
-  _$GroupDetailsStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [GroupDetailsState].
+extension GroupDetailsStatePatterns on GroupDetailsState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( GroupDetailsStateInitial value)?  initial,TResult Function( GroupDetailsStateLoading value)?  loading,TResult Function( GroupDetailsStateLoaded value)?  loaded,TResult Function( GroupDetailsStateError value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial() when initial != null:
+return initial(_that);case GroupDetailsStateLoading() when loading != null:
+return loading(_that);case GroupDetailsStateLoaded() when loaded != null:
+return loaded(_that);case GroupDetailsStateError() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( GroupDetailsStateInitial value)  initial,required TResult Function( GroupDetailsStateLoading value)  loading,required TResult Function( GroupDetailsStateLoaded value)  loaded,required TResult Function( GroupDetailsStateError value)  error,}){
+final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial():
+return initial(_that);case GroupDetailsStateLoading():
+return loading(_that);case GroupDetailsStateLoaded():
+return loaded(_that);case GroupDetailsStateError():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( GroupDetailsStateInitial value)?  initial,TResult? Function( GroupDetailsStateLoading value)?  loading,TResult? Function( GroupDetailsStateLoaded value)?  loaded,TResult? Function( GroupDetailsStateError value)?  error,}){
+final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial() when initial != null:
+return initial(_that);case GroupDetailsStateLoading() when loading != null:
+return loading(_that);case GroupDetailsStateLoaded() when loaded != null:
+return loaded(_that);case GroupDetailsStateError() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<GroupPostsModel> list,  ForumGroupModel arguments,  bool isAdmin,  int userId)?  loaded,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial() when initial != null:
+return initial();case GroupDetailsStateLoading() when loading != null:
+return loading();case GroupDetailsStateLoaded() when loaded != null:
+return loaded(_that.list,_that.arguments,_that.isAdmin,_that.userId);case GroupDetailsStateError() when error != null:
+return error(_that.error);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<GroupPostsModel> list,  ForumGroupModel arguments,  bool isAdmin,  int userId)  loaded,required TResult Function( String error)  error,}) {final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial():
+return initial();case GroupDetailsStateLoading():
+return loading();case GroupDetailsStateLoaded():
+return loaded(_that.list,_that.arguments,_that.isAdmin,_that.userId);case GroupDetailsStateError():
+return error(_that.error);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<GroupPostsModel> list,  ForumGroupModel arguments,  bool isAdmin,  int userId)?  loaded,TResult? Function( String error)?  error,}) {final _that = this;
+switch (_that) {
+case GroupDetailsStateInitial() when initial != null:
+return initial();case GroupDetailsStateLoading() when loading != null:
+return loading();case GroupDetailsStateLoaded() when loaded != null:
+return loaded(_that.list,_that.arguments,_that.isAdmin,_that.userId);case GroupDetailsStateError() when error != null:
+return error(_that.error);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$GroupDetailsStateInitialImplCopyWith<$Res> {
-  factory _$$GroupDetailsStateInitialImplCopyWith(
-          _$GroupDetailsStateInitialImpl value,
-          $Res Function(_$GroupDetailsStateInitialImpl) then) =
-      __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$GroupDetailsStateInitialImplCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res,
-        _$GroupDetailsStateInitialImpl>
-    implements _$$GroupDetailsStateInitialImplCopyWith<$Res> {
-  __$$GroupDetailsStateInitialImplCopyWithImpl(
-      _$GroupDetailsStateInitialImpl _value,
-      $Res Function(_$GroupDetailsStateInitialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$GroupDetailsStateInitialImpl implements GroupDetailsStateInitial {
-  const _$GroupDetailsStateInitialImpl();
-
-  @override
-  String toString() {
-    return 'GroupDetailsState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateInitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<GroupPostsModel> list,
-            ForumGroupModel arguments, bool isAdmin, int userId)
-        loaded,
-    required TResult Function(String error) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GroupDetailsStateInitial value) initial,
-    required TResult Function(GroupDetailsStateLoading value) loading,
-    required TResult Function(GroupDetailsStateLoaded value) loaded,
-    required TResult Function(GroupDetailsStateError value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GroupDetailsStateInitial value)? initial,
-    TResult? Function(GroupDetailsStateLoading value)? loading,
-    TResult? Function(GroupDetailsStateLoaded value)? loaded,
-    TResult? Function(GroupDetailsStateError value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GroupDetailsStateInitial value)? initial,
-    TResult Function(GroupDetailsStateLoading value)? loading,
-    TResult Function(GroupDetailsStateLoaded value)? loaded,
-    TResult Function(GroupDetailsStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class GroupDetailsStateInitial implements GroupDetailsState {
-  const factory GroupDetailsStateInitial() = _$GroupDetailsStateInitialImpl;
-}
-
-/// @nodoc
-abstract class _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadingImplCopyWith(
-          _$GroupDetailsStateLoadingImpl value,
-          $Res Function(_$GroupDetailsStateLoadingImpl) then) =
-      __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$GroupDetailsStateLoadingImplCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res,
-        _$GroupDetailsStateLoadingImpl>
-    implements _$$GroupDetailsStateLoadingImplCopyWith<$Res> {
-  __$$GroupDetailsStateLoadingImplCopyWithImpl(
-      _$GroupDetailsStateLoadingImpl _value,
-      $Res Function(_$GroupDetailsStateLoadingImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateLoadingImpl implements GroupDetailsStateLoading {
-  const _$GroupDetailsStateLoadingImpl();
 
-  @override
-  String toString() {
-    return 'GroupDetailsState.loading()';
-  }
+class GroupDetailsStateInitial implements GroupDetailsState {
+  const GroupDetailsStateInitial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<GroupPostsModel> list,
-            ForumGroupModel arguments, bool isAdmin, int userId)
-        loaded,
-    required TResult Function(String error) error,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GroupDetailsStateInitial value) initial,
-    required TResult Function(GroupDetailsStateLoading value) loading,
-    required TResult Function(GroupDetailsStateLoaded value) loaded,
-    required TResult Function(GroupDetailsStateError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GroupDetailsStateInitial value)? initial,
-    TResult? Function(GroupDetailsStateLoading value)? loading,
-    TResult? Function(GroupDetailsStateLoaded value)? loaded,
-    TResult? Function(GroupDetailsStateError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GroupDetailsStateInitial value)? initial,
-    TResult Function(GroupDetailsStateLoading value)? loading,
-    TResult Function(GroupDetailsStateLoaded value)? loaded,
-    TResult Function(GroupDetailsStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupDetailsStateInitial);
 }
 
-abstract class GroupDetailsStateLoading implements GroupDetailsState {
-  const factory GroupDetailsStateLoading() = _$GroupDetailsStateLoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'GroupDetailsState.initial()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class GroupDetailsStateLoading implements GroupDetailsState {
+  const GroupDetailsStateLoading();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupDetailsStateLoading);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'GroupDetailsState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class GroupDetailsStateLoaded implements GroupDetailsState {
+  const GroupDetailsStateLoaded(final  List<GroupPostsModel> list, this.arguments, this.isAdmin, this.userId): _list = list;
+  
+
+ final  List<GroupPostsModel> _list;
+ List<GroupPostsModel> get list {
+  if (_list is EqualUnmodifiableListView) return _list;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_list);
+}
+
+ final  ForumGroupModel arguments;
+ final  bool isAdmin;
+ final  int userId;
+
+/// Create a copy of GroupDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GroupDetailsStateLoadedCopyWith<GroupDetailsStateLoaded> get copyWith => _$GroupDetailsStateLoadedCopyWithImpl<GroupDetailsStateLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupDetailsStateLoaded&&const DeepCollectionEquality().equals(other._list, _list)&&(identical(other.arguments, arguments) || other.arguments == arguments)&&(identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin)&&(identical(other.userId, userId) || other.userId == userId));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_list),arguments,isAdmin,userId);
+
+@override
+String toString() {
+  return 'GroupDetailsState.loaded(list: $list, arguments: $arguments, isAdmin: $isAdmin, userId: $userId)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
-  factory _$$GroupDetailsStateLoadedImplCopyWith(
-          _$GroupDetailsStateLoadedImpl value,
-          $Res Function(_$GroupDetailsStateLoadedImpl) then) =
-      __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call(
-      {List<GroupPostsModel> list,
-      ForumGroupModel arguments,
-      bool isAdmin,
-      int userId});
+abstract mixin class $GroupDetailsStateLoadedCopyWith<$Res> implements $GroupDetailsStateCopyWith<$Res> {
+  factory $GroupDetailsStateLoadedCopyWith(GroupDetailsStateLoaded value, $Res Function(GroupDetailsStateLoaded) _then) = _$GroupDetailsStateLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<GroupPostsModel> list, ForumGroupModel arguments, bool isAdmin, int userId
+});
+
+
+
+
+}
+/// @nodoc
+class _$GroupDetailsStateLoadedCopyWithImpl<$Res>
+    implements $GroupDetailsStateLoadedCopyWith<$Res> {
+  _$GroupDetailsStateLoadedCopyWithImpl(this._self, this._then);
+
+  final GroupDetailsStateLoaded _self;
+  final $Res Function(GroupDetailsStateLoaded) _then;
+
+/// Create a copy of GroupDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? list = null,Object? arguments = null,Object? isAdmin = null,Object? userId = null,}) {
+  return _then(GroupDetailsStateLoaded(
+null == list ? _self._list : list // ignore: cast_nullable_to_non_nullable
+as List<GroupPostsModel>,null == arguments ? _self.arguments : arguments // ignore: cast_nullable_to_non_nullable
+as ForumGroupModel,null == isAdmin ? _self.isAdmin : isAdmin // ignore: cast_nullable_to_non_nullable
+as bool,null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
+as int,
+  ));
 }
 
-/// @nodoc
-class __$$GroupDetailsStateLoadedImplCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateLoadedImpl>
-    implements _$$GroupDetailsStateLoadedImplCopyWith<$Res> {
-  __$$GroupDetailsStateLoadedImplCopyWithImpl(
-      _$GroupDetailsStateLoadedImpl _value,
-      $Res Function(_$GroupDetailsStateLoadedImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? list = null,
-    Object? arguments = null,
-    Object? isAdmin = null,
-    Object? userId = null,
-  }) {
-    return _then(_$GroupDetailsStateLoadedImpl(
-      null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<GroupPostsModel>,
-      null == arguments
-          ? _value.arguments
-          : arguments // ignore: cast_nullable_to_non_nullable
-              as ForumGroupModel,
-      null == isAdmin
-          ? _value.isAdmin
-          : isAdmin // ignore: cast_nullable_to_non_nullable
-              as bool,
-      null == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as int,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$GroupDetailsStateLoadedImpl implements GroupDetailsStateLoaded {
-  const _$GroupDetailsStateLoadedImpl(final List<GroupPostsModel> list,
-      this.arguments, this.isAdmin, this.userId)
-      : _list = list;
 
-  final List<GroupPostsModel> _list;
-  @override
-  List<GroupPostsModel> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
-  }
+class GroupDetailsStateError implements GroupDetailsState {
+  const GroupDetailsStateError(this.error);
+  
 
-  @override
-  final ForumGroupModel arguments;
-  @override
-  final bool isAdmin;
-  @override
-  final int userId;
+ final  String error;
 
-  @override
-  String toString() {
-    return 'GroupDetailsState.loaded(list: $list, arguments: $arguments, isAdmin: $isAdmin, userId: $userId)';
-  }
+/// Create a copy of GroupDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$GroupDetailsStateErrorCopyWith<GroupDetailsStateError> get copyWith => _$GroupDetailsStateErrorCopyWithImpl<GroupDetailsStateError>(this, _$identity);
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateLoadedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list) &&
-            (identical(other.arguments, arguments) ||
-                other.arguments == arguments) &&
-            (identical(other.isAdmin, isAdmin) || other.isAdmin == isAdmin) &&
-            (identical(other.userId, userId) || other.userId == userId));
-  }
 
-  @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_list), arguments, isAdmin, userId);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
-      get copyWith => __$$GroupDetailsStateLoadedImplCopyWithImpl<
-          _$GroupDetailsStateLoadedImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<GroupPostsModel> list,
-            ForumGroupModel arguments, bool isAdmin, int userId)
-        loaded,
-    required TResult Function(String error) error,
-  }) {
-    return loaded(list, arguments, isAdmin, userId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return loaded?.call(list, arguments, isAdmin, userId);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(list, arguments, isAdmin, userId);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GroupDetailsStateInitial value) initial,
-    required TResult Function(GroupDetailsStateLoading value) loading,
-    required TResult Function(GroupDetailsStateLoaded value) loaded,
-    required TResult Function(GroupDetailsStateError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GroupDetailsStateInitial value)? initial,
-    TResult? Function(GroupDetailsStateLoading value)? loading,
-    TResult? Function(GroupDetailsStateLoaded value)? loaded,
-    TResult? Function(GroupDetailsStateError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GroupDetailsStateInitial value)? initial,
-    TResult Function(GroupDetailsStateLoading value)? loading,
-    TResult Function(GroupDetailsStateLoaded value)? loaded,
-    TResult Function(GroupDetailsStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is GroupDetailsStateError&&(identical(other.error, error) || other.error == error));
 }
 
-abstract class GroupDetailsStateLoaded implements GroupDetailsState {
-  const factory GroupDetailsStateLoaded(
-      final List<GroupPostsModel> list,
-      final ForumGroupModel arguments,
-      final bool isAdmin,
-      final int userId) = _$GroupDetailsStateLoadedImpl;
 
-  List<GroupPostsModel> get list;
-  ForumGroupModel get arguments;
-  bool get isAdmin;
-  int get userId;
-  @JsonKey(ignore: true)
-  _$$GroupDetailsStateLoadedImplCopyWith<_$GroupDetailsStateLoadedImpl>
-      get copyWith => throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,error);
+
+@override
+String toString() {
+  return 'GroupDetailsState.error(error: $error)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$GroupDetailsStateErrorImplCopyWith<$Res> {
-  factory _$$GroupDetailsStateErrorImplCopyWith(
-          _$GroupDetailsStateErrorImpl value,
-          $Res Function(_$GroupDetailsStateErrorImpl) then) =
-      __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String error});
-}
+abstract mixin class $GroupDetailsStateErrorCopyWith<$Res> implements $GroupDetailsStateCopyWith<$Res> {
+  factory $GroupDetailsStateErrorCopyWith(GroupDetailsStateError value, $Res Function(GroupDetailsStateError) _then) = _$GroupDetailsStateErrorCopyWithImpl;
+@useResult
+$Res call({
+ String error
+});
 
+
+
+
+}
 /// @nodoc
-class __$$GroupDetailsStateErrorImplCopyWithImpl<$Res>
-    extends _$GroupDetailsStateCopyWithImpl<$Res, _$GroupDetailsStateErrorImpl>
-    implements _$$GroupDetailsStateErrorImplCopyWith<$Res> {
-  __$$GroupDetailsStateErrorImplCopyWithImpl(
-      _$GroupDetailsStateErrorImpl _value,
-      $Res Function(_$GroupDetailsStateErrorImpl) _then)
-      : super(_value, _then);
+class _$GroupDetailsStateErrorCopyWithImpl<$Res>
+    implements $GroupDetailsStateErrorCopyWith<$Res> {
+  _$GroupDetailsStateErrorCopyWithImpl(this._self, this._then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? error = null,
-  }) {
-    return _then(_$GroupDetailsStateErrorImpl(
-      null == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
+  final GroupDetailsStateError _self;
+  final $Res Function(GroupDetailsStateError) _then;
+
+/// Create a copy of GroupDetailsState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+  return _then(GroupDetailsStateError(
+null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
 }
 
-/// @nodoc
 
-class _$GroupDetailsStateErrorImpl implements GroupDetailsStateError {
-  const _$GroupDetailsStateErrorImpl(this.error);
-
-  @override
-  final String error;
-
-  @override
-  String toString() {
-    return 'GroupDetailsState.error(error: $error)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$GroupDetailsStateErrorImpl &&
-            (identical(other.error, error) || other.error == error));
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, error);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
-      get copyWith => __$$GroupDetailsStateErrorImplCopyWithImpl<
-          _$GroupDetailsStateErrorImpl>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<GroupPostsModel> list,
-            ForumGroupModel arguments, bool isAdmin, int userId)
-        loaded,
-    required TResult Function(String error) error,
-  }) {
-    return error(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return error?.call(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<GroupPostsModel> list, ForumGroupModel arguments,
-            bool isAdmin, int userId)?
-        loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this.error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GroupDetailsStateInitial value) initial,
-    required TResult Function(GroupDetailsStateLoading value) loading,
-    required TResult Function(GroupDetailsStateLoaded value) loaded,
-    required TResult Function(GroupDetailsStateError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(GroupDetailsStateInitial value)? initial,
-    TResult? Function(GroupDetailsStateLoading value)? loading,
-    TResult? Function(GroupDetailsStateLoaded value)? loaded,
-    TResult? Function(GroupDetailsStateError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GroupDetailsStateInitial value)? initial,
-    TResult Function(GroupDetailsStateLoading value)? loading,
-    TResult Function(GroupDetailsStateLoaded value)? loaded,
-    TResult Function(GroupDetailsStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
 }
 
-abstract class GroupDetailsStateError implements GroupDetailsState {
-  const factory GroupDetailsStateError(final String error) =
-      _$GroupDetailsStateErrorImpl;
-
-  String get error;
-  @JsonKey(ignore: true)
-  _$$GroupDetailsStateErrorImplCopyWith<_$GroupDetailsStateErrorImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
+// dart format on

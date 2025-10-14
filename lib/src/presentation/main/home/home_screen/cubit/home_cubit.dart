@@ -38,9 +38,9 @@ class HomeCubit extends Cubit<HomeState> {
       await AppBloc.discoveryCubit.onLoad();
     }
 
-    if (!isRefreshLoader) {
-      emit(HomeState.categoryLoading(location));
-    }
+    // if (!isRefreshLoader) {
+    //   emit(HomeState.categoryLoading(location));
+    // }
 
     final categoryRequestResponse = await Api.requestHomeCategory();
     category = List.from(categoryRequestResponse.data ?? []).map((item) {
@@ -83,6 +83,7 @@ class HomeCubit extends Cubit<HomeState> {
       recent,
       company,
       isRefreshLoader,
+      false,
     ));
   }
 
@@ -128,6 +129,7 @@ class HomeCubit extends Cubit<HomeState> {
       location,
       recent,
       company,
+      false,
       false,
     ));
   }
@@ -245,16 +247,38 @@ class HomeCubit extends Cubit<HomeState> {
     return recent;
   }
 
-  Future<dynamic> newCompanies(int pageNo) async {
-    if (!await hasInternet()) {
-      emit(const HomeState.error("no_internet"));
+  Future<void> newCompanies(int pageNo) async {
+    final currentState = state;
+    if (currentState is! HomeStateLoaded || currentState.isPaginating) {
+      return;
     }
 
-    final listingsRequestResponse = await Api.requestCatList(10, null, pageNo,false);
-    final newCompanies = List.from(listingsRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
-    company.addAll(newCompanies);
-    return company;
+    emit(currentState.copyWith(isPaginating: true));
+
+    if (!await hasInternet()) {
+      emit(const HomeState.error("no_internet"));
+      emit(currentState.copyWith(isPaginating: false));
+      return;
+    }
+
+    try {
+      final listingsRequestResponse =
+          await Api.requestCatList(10, null, pageNo, false);
+      final newCompanies = List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+
+      final updatedCompanies = List<ProductModel>.from(currentState.company)
+        ..addAll(newCompanies);
+
+      company = updatedCompanies;
+
+      emit(currentState.copyWith(
+        company: updatedCompanies,
+        isPaginating: false,
+      ));
+    } catch (e) {
+      emit(currentState.copyWith(isPaginating: false));
+    }
   }
 }

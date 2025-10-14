@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,613 +9,386 @@ part of 'member_request_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$MemberRequestState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<MemberRequestModel> list) loaded,
-    required TResult Function(String error) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<MemberRequestModel> list)? loaded,
-    TResult? Function(String error)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<MemberRequestModel> list)? loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(MemberRequestStateInitial value) initial,
-    required TResult Function(MemberRequestLoading value) loading,
-    required TResult Function(MemberRequestLoaded value) loaded,
-    required TResult Function(MemberRequestError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(MemberRequestStateInitial value)? initial,
-    TResult? Function(MemberRequestLoading value)? loading,
-    TResult? Function(MemberRequestLoaded value)? loaded,
-    TResult? Function(MemberRequestError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(MemberRequestStateInitial value)? initial,
-    TResult Function(MemberRequestLoading value)? loading,
-    TResult Function(MemberRequestLoaded value)? loaded,
-    TResult Function(MemberRequestError value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberRequestState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'MemberRequestState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $MemberRequestStateCopyWith<$Res> {
-  factory $MemberRequestStateCopyWith(
-          MemberRequestState value, $Res Function(MemberRequestState) then) =
-      _$MemberRequestStateCopyWithImpl<$Res, MemberRequestState>;
+class $MemberRequestStateCopyWith<$Res>  {
+$MemberRequestStateCopyWith(MemberRequestState _, $Res Function(MemberRequestState) __);
 }
 
-/// @nodoc
-class _$MemberRequestStateCopyWithImpl<$Res, $Val extends MemberRequestState>
-    implements $MemberRequestStateCopyWith<$Res> {
-  _$MemberRequestStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [MemberRequestState].
+extension MemberRequestStatePatterns on MemberRequestState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( MemberRequestStateInitial value)?  initial,TResult Function( MemberRequestLoading value)?  loading,TResult Function( MemberRequestLoaded value)?  loaded,TResult Function( MemberRequestError value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case MemberRequestStateInitial() when initial != null:
+return initial(_that);case MemberRequestLoading() when loading != null:
+return loading(_that);case MemberRequestLoaded() when loaded != null:
+return loaded(_that);case MemberRequestError() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( MemberRequestStateInitial value)  initial,required TResult Function( MemberRequestLoading value)  loading,required TResult Function( MemberRequestLoaded value)  loaded,required TResult Function( MemberRequestError value)  error,}){
+final _that = this;
+switch (_that) {
+case MemberRequestStateInitial():
+return initial(_that);case MemberRequestLoading():
+return loading(_that);case MemberRequestLoaded():
+return loaded(_that);case MemberRequestError():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( MemberRequestStateInitial value)?  initial,TResult? Function( MemberRequestLoading value)?  loading,TResult? Function( MemberRequestLoaded value)?  loaded,TResult? Function( MemberRequestError value)?  error,}){
+final _that = this;
+switch (_that) {
+case MemberRequestStateInitial() when initial != null:
+return initial(_that);case MemberRequestLoading() when loading != null:
+return loading(_that);case MemberRequestLoaded() when loaded != null:
+return loaded(_that);case MemberRequestError() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  initial,TResult Function()?  loading,TResult Function( List<MemberRequestModel> list)?  loaded,TResult Function( String error)?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case MemberRequestStateInitial() when initial != null:
+return initial();case MemberRequestLoading() when loading != null:
+return loading();case MemberRequestLoaded() when loaded != null:
+return loaded(_that.list);case MemberRequestError() when error != null:
+return error(_that.error);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  initial,required TResult Function()  loading,required TResult Function( List<MemberRequestModel> list)  loaded,required TResult Function( String error)  error,}) {final _that = this;
+switch (_that) {
+case MemberRequestStateInitial():
+return initial();case MemberRequestLoading():
+return loading();case MemberRequestLoaded():
+return loaded(_that.list);case MemberRequestError():
+return error(_that.error);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  initial,TResult? Function()?  loading,TResult? Function( List<MemberRequestModel> list)?  loaded,TResult? Function( String error)?  error,}) {final _that = this;
+switch (_that) {
+case MemberRequestStateInitial() when initial != null:
+return initial();case MemberRequestLoading() when loading != null:
+return loading();case MemberRequestLoaded() when loaded != null:
+return loaded(_that.list);case MemberRequestError() when error != null:
+return error(_that.error);case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$MemberRequestStateInitialImplCopyWith<$Res> {
-  factory _$$MemberRequestStateInitialImplCopyWith(
-          _$MemberRequestStateInitialImpl value,
-          $Res Function(_$MemberRequestStateInitialImpl) then) =
-      __$$MemberRequestStateInitialImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$MemberRequestStateInitialImplCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res,
-        _$MemberRequestStateInitialImpl>
-    implements _$$MemberRequestStateInitialImplCopyWith<$Res> {
-  __$$MemberRequestStateInitialImplCopyWithImpl(
-      _$MemberRequestStateInitialImpl _value,
-      $Res Function(_$MemberRequestStateInitialImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$MemberRequestStateInitialImpl implements MemberRequestStateInitial {
-  const _$MemberRequestStateInitialImpl();
-
-  @override
-  String toString() {
-    return 'MemberRequestState.initial()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MemberRequestStateInitialImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<MemberRequestModel> list) loaded,
-    required TResult Function(String error) error,
-  }) {
-    return initial();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<MemberRequestModel> list)? loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return initial?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<MemberRequestModel> list)? loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(MemberRequestStateInitial value) initial,
-    required TResult Function(MemberRequestLoading value) loading,
-    required TResult Function(MemberRequestLoaded value) loaded,
-    required TResult Function(MemberRequestError value) error,
-  }) {
-    return initial(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(MemberRequestStateInitial value)? initial,
-    TResult? Function(MemberRequestLoading value)? loading,
-    TResult? Function(MemberRequestLoaded value)? loaded,
-    TResult? Function(MemberRequestError value)? error,
-  }) {
-    return initial?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(MemberRequestStateInitial value)? initial,
-    TResult Function(MemberRequestLoading value)? loading,
-    TResult Function(MemberRequestLoaded value)? loaded,
-    TResult Function(MemberRequestError value)? error,
-    required TResult orElse(),
-  }) {
-    if (initial != null) {
-      return initial(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class MemberRequestStateInitial implements MemberRequestState {
-  const factory MemberRequestStateInitial() = _$MemberRequestStateInitialImpl;
-}
-
-/// @nodoc
-abstract class _$$MemberRequestLoadingImplCopyWith<$Res> {
-  factory _$$MemberRequestLoadingImplCopyWith(_$MemberRequestLoadingImpl value,
-          $Res Function(_$MemberRequestLoadingImpl) then) =
-      __$$MemberRequestLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$MemberRequestLoadingImplCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoadingImpl>
-    implements _$$MemberRequestLoadingImplCopyWith<$Res> {
-  __$$MemberRequestLoadingImplCopyWithImpl(_$MemberRequestLoadingImpl _value,
-      $Res Function(_$MemberRequestLoadingImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$MemberRequestLoadingImpl implements MemberRequestLoading {
-  const _$MemberRequestLoadingImpl();
 
-  @override
-  String toString() {
-    return 'MemberRequestState.loading()';
-  }
+class MemberRequestStateInitial implements MemberRequestState {
+  const MemberRequestStateInitial();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MemberRequestLoadingImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<MemberRequestModel> list) loaded,
-    required TResult Function(String error) error,
-  }) {
-    return loading();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<MemberRequestModel> list)? loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return loading?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<MemberRequestModel> list)? loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(MemberRequestStateInitial value) initial,
-    required TResult Function(MemberRequestLoading value) loading,
-    required TResult Function(MemberRequestLoaded value) loaded,
-    required TResult Function(MemberRequestError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(MemberRequestStateInitial value)? initial,
-    TResult? Function(MemberRequestLoading value)? loading,
-    TResult? Function(MemberRequestLoaded value)? loaded,
-    TResult? Function(MemberRequestError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(MemberRequestStateInitial value)? initial,
-    TResult Function(MemberRequestLoading value)? loading,
-    TResult Function(MemberRequestLoaded value)? loaded,
-    TResult Function(MemberRequestError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberRequestStateInitial);
 }
 
-abstract class MemberRequestLoading implements MemberRequestState {
-  const factory MemberRequestLoading() = _$MemberRequestLoadingImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'MemberRequestState.initial()';
 }
 
-/// @nodoc
-abstract class _$$MemberRequestLoadedImplCopyWith<$Res> {
-  factory _$$MemberRequestLoadedImplCopyWith(_$MemberRequestLoadedImpl value,
-          $Res Function(_$MemberRequestLoadedImpl) then) =
-      __$$MemberRequestLoadedImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({List<MemberRequestModel> list});
+
 }
 
-/// @nodoc
-class __$$MemberRequestLoadedImplCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestLoadedImpl>
-    implements _$$MemberRequestLoadedImplCopyWith<$Res> {
-  __$$MemberRequestLoadedImplCopyWithImpl(_$MemberRequestLoadedImpl _value,
-      $Res Function(_$MemberRequestLoadedImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? list = null,
-  }) {
-    return _then(_$MemberRequestLoadedImpl(
-      null == list
-          ? _value._list
-          : list // ignore: cast_nullable_to_non_nullable
-              as List<MemberRequestModel>,
-    ));
-  }
-}
+
 
 /// @nodoc
 
-class _$MemberRequestLoadedImpl implements MemberRequestLoaded {
-  const _$MemberRequestLoadedImpl(final List<MemberRequestModel> list)
-      : _list = list;
 
-  final List<MemberRequestModel> _list;
-  @override
-  List<MemberRequestModel> get list {
-    if (_list is EqualUnmodifiableListView) return _list;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_list);
-  }
+class MemberRequestLoading implements MemberRequestState {
+  const MemberRequestLoading();
+  
 
-  @override
-  String toString() {
-    return 'MemberRequestState.loaded(list: $list)';
-  }
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MemberRequestLoadedImpl &&
-            const DeepCollectionEquality().equals(other._list, _list));
-  }
 
-  @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
-      __$$MemberRequestLoadedImplCopyWithImpl<_$MemberRequestLoadedImpl>(
-          this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<MemberRequestModel> list) loaded,
-    required TResult Function(String error) error,
-  }) {
-    return loaded(list);
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<MemberRequestModel> list)? loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return loaded?.call(list);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<MemberRequestModel> list)? loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(list);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(MemberRequestStateInitial value) initial,
-    required TResult Function(MemberRequestLoading value) loading,
-    required TResult Function(MemberRequestLoaded value) loaded,
-    required TResult Function(MemberRequestError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(MemberRequestStateInitial value)? initial,
-    TResult? Function(MemberRequestLoading value)? loading,
-    TResult? Function(MemberRequestLoaded value)? loaded,
-    TResult? Function(MemberRequestError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(MemberRequestStateInitial value)? initial,
-    TResult Function(MemberRequestLoading value)? loading,
-    TResult Function(MemberRequestLoaded value)? loaded,
-    TResult Function(MemberRequestError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberRequestLoading);
 }
 
-abstract class MemberRequestLoaded implements MemberRequestState {
-  const factory MemberRequestLoaded(final List<MemberRequestModel> list) =
-      _$MemberRequestLoadedImpl;
 
-  List<MemberRequestModel> get list;
-  @JsonKey(ignore: true)
-  _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'MemberRequestState.loading()';
+}
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class MemberRequestLoaded implements MemberRequestState {
+  const MemberRequestLoaded(final  List<MemberRequestModel> list): _list = list;
+  
+
+ final  List<MemberRequestModel> _list;
+ List<MemberRequestModel> get list {
+  if (_list is EqualUnmodifiableListView) return _list;
+  // ignore: implicit_dynamic_type
+  return EqualUnmodifiableListView(_list);
+}
+
+
+/// Create a copy of MemberRequestState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MemberRequestLoadedCopyWith<MemberRequestLoaded> get copyWith => _$MemberRequestLoadedCopyWithImpl<MemberRequestLoaded>(this, _$identity);
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberRequestLoaded&&const DeepCollectionEquality().equals(other._list, _list));
+}
+
+
+@override
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_list));
+
+@override
+String toString() {
+  return 'MemberRequestState.loaded(list: $list)';
+}
+
+
 }
 
 /// @nodoc
-abstract class _$$MemberRequestErrorImplCopyWith<$Res> {
-  factory _$$MemberRequestErrorImplCopyWith(_$MemberRequestErrorImpl value,
-          $Res Function(_$MemberRequestErrorImpl) then) =
-      __$$MemberRequestErrorImplCopyWithImpl<$Res>;
-  @useResult
-  $Res call({String error});
+abstract mixin class $MemberRequestLoadedCopyWith<$Res> implements $MemberRequestStateCopyWith<$Res> {
+  factory $MemberRequestLoadedCopyWith(MemberRequestLoaded value, $Res Function(MemberRequestLoaded) _then) = _$MemberRequestLoadedCopyWithImpl;
+@useResult
+$Res call({
+ List<MemberRequestModel> list
+});
+
+
+
+
+}
+/// @nodoc
+class _$MemberRequestLoadedCopyWithImpl<$Res>
+    implements $MemberRequestLoadedCopyWith<$Res> {
+  _$MemberRequestLoadedCopyWithImpl(this._self, this._then);
+
+  final MemberRequestLoaded _self;
+  final $Res Function(MemberRequestLoaded) _then;
+
+/// Create a copy of MemberRequestState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? list = null,}) {
+  return _then(MemberRequestLoaded(
+null == list ? _self._list : list // ignore: cast_nullable_to_non_nullable
+as List<MemberRequestModel>,
+  ));
 }
 
-/// @nodoc
-class __$$MemberRequestErrorImplCopyWithImpl<$Res>
-    extends _$MemberRequestStateCopyWithImpl<$Res, _$MemberRequestErrorImpl>
-    implements _$$MemberRequestErrorImplCopyWith<$Res> {
-  __$$MemberRequestErrorImplCopyWithImpl(_$MemberRequestErrorImpl _value,
-      $Res Function(_$MemberRequestErrorImpl) _then)
-      : super(_value, _then);
 
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? error = null,
-  }) {
-    return _then(_$MemberRequestErrorImpl(
-      null == error
-          ? _value.error
-          : error // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
 
-class _$MemberRequestErrorImpl implements MemberRequestError {
-  const _$MemberRequestErrorImpl(this.error);
 
-  @override
-  final String error;
+class MemberRequestError implements MemberRequestState {
+  const MemberRequestError(this.error);
+  
 
-  @override
-  String toString() {
-    return 'MemberRequestState.error(error: $error)';
-  }
+ final  String error;
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$MemberRequestErrorImpl &&
-            (identical(other.error, error) || other.error == error));
-  }
+/// Create a copy of MemberRequestState
+/// with the given fields replaced by the non-null parameter values.
+@JsonKey(includeFromJson: false, includeToJson: false)
+@pragma('vm:prefer-inline')
+$MemberRequestErrorCopyWith<MemberRequestError> get copyWith => _$MemberRequestErrorCopyWithImpl<MemberRequestError>(this, _$identity);
 
-  @override
-  int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
-      __$$MemberRequestErrorImplCopyWithImpl<_$MemberRequestErrorImpl>(
-          this, _$identity);
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(List<MemberRequestModel> list) loaded,
-    required TResult Function(String error) error,
-  }) {
-    return error(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? initial,
-    TResult? Function()? loading,
-    TResult? Function(List<MemberRequestModel> list)? loaded,
-    TResult? Function(String error)? error,
-  }) {
-    return error?.call(this.error);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(List<MemberRequestModel> list)? loaded,
-    TResult Function(String error)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this.error);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(MemberRequestStateInitial value) initial,
-    required TResult Function(MemberRequestLoading value) loading,
-    required TResult Function(MemberRequestLoaded value) loaded,
-    required TResult Function(MemberRequestError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(MemberRequestStateInitial value)? initial,
-    TResult? Function(MemberRequestLoading value)? loading,
-    TResult? Function(MemberRequestLoaded value)? loaded,
-    TResult? Function(MemberRequestError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(MemberRequestStateInitial value)? initial,
-    TResult Function(MemberRequestLoading value)? loading,
-    TResult Function(MemberRequestLoaded value)? loaded,
-    TResult Function(MemberRequestError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is MemberRequestError&&(identical(other.error, error) || other.error == error));
 }
 
-abstract class MemberRequestError implements MemberRequestState {
-  const factory MemberRequestError(final String error) =
-      _$MemberRequestErrorImpl;
 
-  String get error;
-  @JsonKey(ignore: true)
-  _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+@override
+int get hashCode => Object.hash(runtimeType,error);
+
+@override
+String toString() {
+  return 'MemberRequestState.error(error: $error)';
 }
+
+
+}
+
+/// @nodoc
+abstract mixin class $MemberRequestErrorCopyWith<$Res> implements $MemberRequestStateCopyWith<$Res> {
+  factory $MemberRequestErrorCopyWith(MemberRequestError value, $Res Function(MemberRequestError) _then) = _$MemberRequestErrorCopyWithImpl;
+@useResult
+$Res call({
+ String error
+});
+
+
+
+
+}
+/// @nodoc
+class _$MemberRequestErrorCopyWithImpl<$Res>
+    implements $MemberRequestErrorCopyWith<$Res> {
+  _$MemberRequestErrorCopyWithImpl(this._self, this._then);
+
+  final MemberRequestError _self;
+  final $Res Function(MemberRequestError) _then;
+
+/// Create a copy of MemberRequestState
+/// with the given fields replaced by the non-null parameter values.
+@pragma('vm:prefer-inline') $Res call({Object? error = null,}) {
+  return _then(MemberRequestError(
+null == error ? _self.error : error // ignore: cast_nullable_to_non_nullable
+as String,
+  ));
+}
+
+
+}
+
+// dart format on

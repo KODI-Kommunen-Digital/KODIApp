@@ -20,6 +20,7 @@ class HomeState with _$HomeState {
     List<ProductModel> recent,
     List<ProductModel> company,
     bool isRefreshLoader,
+    bool isPaginating,
   ) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;

@@ -1,5 +1,5 @@
-// coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
@@ -9,409 +9,274 @@ part of 'forgot_password_state.dart';
 // FreezedGenerator
 // **************************************************************************
 
+// dart format off
 T _$identity<T>(T value) => value;
-
-final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
-
 /// @nodoc
 mixin _$ForgotPasswordState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function() error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function()? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function()? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ForgotPasswordStateLoading value) loading,
-    required TResult Function(ForgotPasswordStateLoaded value) loaded,
-    required TResult Function(ForgotPasswordStateError value) error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ForgotPasswordStateLoading value)? loading,
-    TResult? Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult? Function(ForgotPasswordStateError value)? error,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ForgotPasswordStateLoading value)? loading,
-    TResult Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult Function(ForgotPasswordStateError value)? error,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ForgotPasswordState);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ForgotPasswordState()';
+}
+
+
 }
 
 /// @nodoc
-abstract class $ForgotPasswordStateCopyWith<$Res> {
-  factory $ForgotPasswordStateCopyWith(
-          ForgotPasswordState value, $Res Function(ForgotPasswordState) then) =
-      _$ForgotPasswordStateCopyWithImpl<$Res, ForgotPasswordState>;
+class $ForgotPasswordStateCopyWith<$Res>  {
+$ForgotPasswordStateCopyWith(ForgotPasswordState _, $Res Function(ForgotPasswordState) __);
 }
 
-/// @nodoc
-class _$ForgotPasswordStateCopyWithImpl<$Res, $Val extends ForgotPasswordState>
-    implements $ForgotPasswordStateCopyWith<$Res> {
-  _$ForgotPasswordStateCopyWithImpl(this._value, this._then);
 
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
+/// Adds pattern-matching-related methods to [ForgotPasswordState].
+extension ForgotPasswordStatePatterns on ForgotPasswordState {
+/// A variant of `map` that fallback to returning `orElse`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeMap<TResult extends Object?>({TResult Function( ForgotPasswordStateLoading value)?  loading,TResult Function( ForgotPasswordStateLoaded value)?  loaded,TResult Function( ForgotPasswordStateError value)?  error,required TResult orElse(),}){
+final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading() when loading != null:
+return loading(_that);case ForgotPasswordStateLoaded() when loaded != null:
+return loaded(_that);case ForgotPasswordStateError() when error != null:
+return error(_that);case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// Callbacks receives the raw object, upcasted.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case final Subclass2 value:
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult map<TResult extends Object?>({required TResult Function( ForgotPasswordStateLoading value)  loading,required TResult Function( ForgotPasswordStateLoaded value)  loaded,required TResult Function( ForgotPasswordStateError value)  error,}){
+final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading():
+return loading(_that);case ForgotPasswordStateLoaded():
+return loaded(_that);case ForgotPasswordStateError():
+return error(_that);case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `map` that fallback to returning `null`.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case final Subclass value:
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? mapOrNull<TResult extends Object?>({TResult? Function( ForgotPasswordStateLoading value)?  loading,TResult? Function( ForgotPasswordStateLoaded value)?  loaded,TResult? Function( ForgotPasswordStateError value)?  error,}){
+final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading() when loading != null:
+return loading(_that);case ForgotPasswordStateLoaded() when loaded != null:
+return loaded(_that);case ForgotPasswordStateError() when error != null:
+return error(_that);case _:
+  return null;
+
+}
+}
+/// A variant of `when` that fallback to an `orElse` callback.
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return orElse();
+/// }
+/// ```
+
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function()?  loaded,TResult Function()?  error,required TResult orElse(),}) {final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading() when loading != null:
+return loading();case ForgotPasswordStateLoaded() when loaded != null:
+return loaded();case ForgotPasswordStateError() when error != null:
+return error();case _:
+  return orElse();
+
+}
+}
+/// A `switch`-like method, using callbacks.
+///
+/// As opposed to `map`, this offers destructuring.
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case Subclass2(:final field2):
+///     return ...;
+/// }
+/// ```
+
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function()  loaded,required TResult Function()  error,}) {final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading():
+return loading();case ForgotPasswordStateLoaded():
+return loaded();case ForgotPasswordStateError():
+return error();case _:
+  throw StateError('Unexpected subclass');
+
+}
+}
+/// A variant of `when` that fallback to returning `null`
+///
+/// It is equivalent to doing:
+/// ```dart
+/// switch (sealedClass) {
+///   case Subclass(:final field):
+///     return ...;
+///   case _:
+///     return null;
+/// }
+/// ```
+
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function()?  loaded,TResult? Function()?  error,}) {final _that = this;
+switch (_that) {
+case ForgotPasswordStateLoading() when loading != null:
+return loading();case ForgotPasswordStateLoaded() when loaded != null:
+return loaded();case ForgotPasswordStateError() when error != null:
+return error();case _:
+  return null;
+
+}
 }
 
-/// @nodoc
-abstract class _$$ForgotPasswordStateLoadingImplCopyWith<$Res> {
-  factory _$$ForgotPasswordStateLoadingImplCopyWith(
-          _$ForgotPasswordStateLoadingImpl value,
-          $Res Function(_$ForgotPasswordStateLoadingImpl) then) =
-      __$$ForgotPasswordStateLoadingImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ForgotPasswordStateLoadingImplCopyWithImpl<$Res>
-    extends _$ForgotPasswordStateCopyWithImpl<$Res,
-        _$ForgotPasswordStateLoadingImpl>
-    implements _$$ForgotPasswordStateLoadingImplCopyWith<$Res> {
-  __$$ForgotPasswordStateLoadingImplCopyWithImpl(
-      _$ForgotPasswordStateLoadingImpl _value,
-      $Res Function(_$ForgotPasswordStateLoadingImpl) _then)
-      : super(_value, _then);
-}
-
-/// @nodoc
-
-class _$ForgotPasswordStateLoadingImpl implements ForgotPasswordStateLoading {
-  const _$ForgotPasswordStateLoadingImpl();
-
-  @override
-  String toString() {
-    return 'ForgotPasswordState.loading()';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateLoadingImpl);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function() error,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function()? error,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function()? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ForgotPasswordStateLoading value) loading,
-    required TResult Function(ForgotPasswordStateLoaded value) loaded,
-    required TResult Function(ForgotPasswordStateError value) error,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ForgotPasswordStateLoading value)? loading,
-    TResult? Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult? Function(ForgotPasswordStateError value)? error,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ForgotPasswordStateLoading value)? loading,
-    TResult Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult Function(ForgotPasswordStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class ForgotPasswordStateLoading implements ForgotPasswordState {
-  const factory ForgotPasswordStateLoading() = _$ForgotPasswordStateLoadingImpl;
-}
-
-/// @nodoc
-abstract class _$$ForgotPasswordStateLoadedImplCopyWith<$Res> {
-  factory _$$ForgotPasswordStateLoadedImplCopyWith(
-          _$ForgotPasswordStateLoadedImpl value,
-          $Res Function(_$ForgotPasswordStateLoadedImpl) then) =
-      __$$ForgotPasswordStateLoadedImplCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$$ForgotPasswordStateLoadedImplCopyWithImpl<$Res>
-    extends _$ForgotPasswordStateCopyWithImpl<$Res,
-        _$ForgotPasswordStateLoadedImpl>
-    implements _$$ForgotPasswordStateLoadedImplCopyWith<$Res> {
-  __$$ForgotPasswordStateLoadedImplCopyWithImpl(
-      _$ForgotPasswordStateLoadedImpl _value,
-      $Res Function(_$ForgotPasswordStateLoadedImpl) _then)
-      : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ForgotPasswordStateLoadedImpl implements ForgotPasswordStateLoaded {
-  const _$ForgotPasswordStateLoadedImpl();
 
-  @override
-  String toString() {
-    return 'ForgotPasswordState.loaded()';
-  }
+class ForgotPasswordStateLoading implements ForgotPasswordState {
+  const ForgotPasswordStateLoading();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateLoadedImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function() error,
-  }) {
-    return loaded();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function()? error,
-  }) {
-    return loaded?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function()? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ForgotPasswordStateLoading value) loading,
-    required TResult Function(ForgotPasswordStateLoaded value) loaded,
-    required TResult Function(ForgotPasswordStateError value) error,
-  }) {
-    return loaded(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ForgotPasswordStateLoading value)? loading,
-    TResult? Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult? Function(ForgotPasswordStateError value)? error,
-  }) {
-    return loaded?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ForgotPasswordStateLoading value)? loading,
-    TResult Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult Function(ForgotPasswordStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (loaded != null) {
-      return loaded(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ForgotPasswordStateLoading);
 }
 
-abstract class ForgotPasswordStateLoaded implements ForgotPasswordState {
-  const factory ForgotPasswordStateLoaded() = _$ForgotPasswordStateLoadedImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ForgotPasswordState.loading()';
 }
 
-/// @nodoc
-abstract class _$$ForgotPasswordStateErrorImplCopyWith<$Res> {
-  factory _$$ForgotPasswordStateErrorImplCopyWith(
-          _$ForgotPasswordStateErrorImpl value,
-          $Res Function(_$ForgotPasswordStateErrorImpl) then) =
-      __$$ForgotPasswordStateErrorImplCopyWithImpl<$Res>;
+
 }
 
-/// @nodoc
-class __$$ForgotPasswordStateErrorImplCopyWithImpl<$Res>
-    extends _$ForgotPasswordStateCopyWithImpl<$Res,
-        _$ForgotPasswordStateErrorImpl>
-    implements _$$ForgotPasswordStateErrorImplCopyWith<$Res> {
-  __$$ForgotPasswordStateErrorImplCopyWithImpl(
-      _$ForgotPasswordStateErrorImpl _value,
-      $Res Function(_$ForgotPasswordStateErrorImpl) _then)
-      : super(_value, _then);
-}
+
+
 
 /// @nodoc
 
-class _$ForgotPasswordStateErrorImpl implements ForgotPasswordStateError {
-  const _$ForgotPasswordStateErrorImpl();
 
-  @override
-  String toString() {
-    return 'ForgotPasswordState.error()';
-  }
+class ForgotPasswordStateLoaded implements ForgotPasswordState {
+  const ForgotPasswordStateLoaded();
+  
 
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ForgotPasswordStateErrorImpl);
-  }
 
-  @override
-  int get hashCode => runtimeType.hashCode;
 
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() loading,
-    required TResult Function() loaded,
-    required TResult Function() error,
-  }) {
-    return error();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function()? loading,
-    TResult? Function()? loaded,
-    TResult? Function()? error,
-  }) {
-    return error?.call();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? loading,
-    TResult Function()? loaded,
-    TResult Function()? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error();
-    }
-    return orElse();
-  }
 
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(ForgotPasswordStateLoading value) loading,
-    required TResult Function(ForgotPasswordStateLoaded value) loaded,
-    required TResult Function(ForgotPasswordStateError value) error,
-  }) {
-    return error(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(ForgotPasswordStateLoading value)? loading,
-    TResult? Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult? Function(ForgotPasswordStateError value)? error,
-  }) {
-    return error?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(ForgotPasswordStateLoading value)? loading,
-    TResult Function(ForgotPasswordStateLoaded value)? loaded,
-    TResult Function(ForgotPasswordStateError value)? error,
-    required TResult orElse(),
-  }) {
-    if (error != null) {
-      return error(this);
-    }
-    return orElse();
-  }
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ForgotPasswordStateLoaded);
 }
 
-abstract class ForgotPasswordStateError implements ForgotPasswordState {
-  const factory ForgotPasswordStateError() = _$ForgotPasswordStateErrorImpl;
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ForgotPasswordState.loaded()';
 }
+
+
+}
+
+
+
+
+/// @nodoc
+
+
+class ForgotPasswordStateError implements ForgotPasswordState {
+  const ForgotPasswordStateError();
+  
+
+
+
+
+
+
+@override
+bool operator ==(Object other) {
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ForgotPasswordStateError);
+}
+
+
+@override
+int get hashCode => runtimeType.hashCode;
+
+@override
+String toString() {
+  return 'ForgotPasswordState.error()';
+}
+
+
+}
+
+
+
+
+// dart format on

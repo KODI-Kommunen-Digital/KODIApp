@@ -40,7 +40,6 @@ class _HomeScreenState extends State<HomeScreen> {
   final _scrollCompanyController = ScrollController();
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   int _companyPageNo = 1;
-  bool _isCompanyLoadingMore = false;
   String _ignoreAppStoreVersion = '';
   String _latestAppStoreVersion = '';
 
@@ -93,23 +92,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onScrollCompany() async {
     if (_scrollCompanyController.position.pixels >=
-            _scrollCompanyController.position.maxScrollExtent &&
-        !_isCompanyLoadingMore) {
-      setState(() {
-        _isCompanyLoadingMore = true;
-      });
-      try {
-        await AppBloc.homeCubit.newCompanies(++_companyPageNo);
-      } catch (error, stackTrace) {
-        logError('Error loading new companies: $error');
-        await Sentry.captureException(error, stackTrace: stackTrace);
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isCompanyLoadingMore = false;
-          });
-        }
-      }
+        _scrollCompanyController.position.maxScrollExtent) {
+      AppBloc.homeCubit.newCompanies(++_companyPageNo);
     }
   }
 
@@ -274,13 +258,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Center(child: CircularProgressIndicator.adaptive()),
               error: (error) => Center(child: Text(error)),
               loaded: (banner, category, location, recent, company,
-                  isRefreshLoader) {
+                  isRefreshLoader, isPaginating) {
                 return _HomeContent(
                   banner: banner,
                   categories: category,
                   companies: company,
                   scrollCompanyController: _scrollCompanyController,
-                  isCompanyLoadingMore: _isCompanyLoadingMore,
+                  isCompanyLoadingMore: isPaginating,
                   onRefresh: _onRefresh,
                   onCategorySelected: _onCategory,
                   onServiceSelected: _onService,
