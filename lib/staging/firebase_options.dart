@@ -50,19 +50,19 @@ class StagingFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyBgSuwUmPzwLyh-pCRzDdeRspo73AlVwx4',
-    appId: '1:348792158622:android:ca8dfab68eef8dc3d6be8f',
-    messagingSenderId: '348792158622',
-    projectId: 'ratingen-21e20',
-    storageBucket: 'ratingen-21e20.firebasestorage.app',
+    apiKey: 'AIzaSyAN53WEDWgGf4xJtqpiNFkJCXZy3RPSvmY',
+    appId: '1:694370889041:android:039ba6c4ce8e9714c63770',
+    messagingSenderId: '694370889041',
+    projectId: 'ratingen-stage',
+    storageBucket: 'ratingen-stage.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAx4RI1suWzEoG76FS-mCDAsgo3e89Y3A8',
-    appId: '1:348792158622:ios:d1a8060833793a6cd6be8f',
-    messagingSenderId: '348792158622',
-    projectId: 'ratingen-21e20',
-    storageBucket: 'ratingen-21e20.firebasestorage.app',
+    apiKey: 'AIzaSyDoU-rr27FVh17llJNVI6H35mfUIjk8e8Q',
+    appId: '1:694370889041:ios:b515c78b314847b0c63770',
+    messagingSenderId: '694370889041',
+    projectId: 'ratingen-stage',
+    storageBucket: 'ratingen-stage.firebasestorage.app',
     iosBundleId: 'de.rmgratingen.ratingenapp',
   );
 }
