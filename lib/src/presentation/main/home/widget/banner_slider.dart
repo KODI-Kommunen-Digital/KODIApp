@@ -41,7 +41,7 @@ class _BannerSliderState extends State<BannerSlider> {
             alignment: Alignment.topLeft,
             child: Padding(
               padding:
-              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+              const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
               child: Text(
                 Translate.of(context).translate('apply_for_our_region'),
                 style: Theme.of(context)

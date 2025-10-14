@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadInitialData() async {
-    await AppBloc.homeCubit.onLoad(false);
+    await AppBloc.homeCubit.onLoad(true);
     if (mounted) {
       context.read<ListCubit>().onLoad(1); // 1 -> News category Id
     }

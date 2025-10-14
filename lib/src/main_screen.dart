@@ -122,8 +122,8 @@ class _MainScreenState extends State<MainScreen> {
 
     switch (route) {
       case Routes.home:
-        AppBloc.homeCubit.setDoesScroll(true);
-        AppBloc.homeCubit.scrollUp();
+        // AppBloc.homeCubit.setDoesScroll(true);
+        // AppBloc.homeCubit.scrollUp();
         break;
       case Routes.discovery:
         AppBloc.discoveryCubit.setDoesScroll(true);

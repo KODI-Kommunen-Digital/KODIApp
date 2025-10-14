@@ -12,239 +12,89 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  dynamic category;
-  dynamic location;
-  dynamic recent;
-  dynamic company;
-  dynamic sliders;
-  dynamic categoryCount;
+  // Flag to avoid reloading discovery cubit on hot reload
   bool calledExternally = false;
-  bool doesScroll = false;
-  List<CategoryModel> formattedCategories=[];
+  List<CategoryModel> location=[];
 
+  HomeCubit() : super(const HomeState.initial());
 
-  HomeCubit() : super(const HomeState.loading());
 
   Future<void> onLoad(bool isRefreshLoader) async {
-    if (!await hasInternet()) {
-      emit(const HomeState.error("no_internet"));
-    }
-    final cityRequestResponse = await Api.requestCities();
-    location = List.from(cityRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    if (!calledExternally && !isRefreshLoader) {
-      await AppBloc.discoveryCubit.onLoad();
+    // For pull-to-refresh, we don't show a full-screen loader
+    if (!isRefreshLoader) {
+      emit(const HomeState.loading());
     }
 
-    // if (!isRefreshLoader) {
-    //   emit(HomeState.categoryLoading(location));
-    // }
-
-    final categoryRequestResponse = await Api.requestHomeCategory();
-    category = List.from(categoryRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-    CategoryModel? savedCity = await checkSavedCity(location);
-    if (savedCity != null) {
-      final listingsRequestResponse = await Api.requestLocList(savedCity.id, 1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    } else {
-      final listingsRequestResponse = await Api.requestRecentListings(1);
-      recent = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
-    }
-
-    final companyRequestResponse = await Api.requestCatList(10, savedCity, 1,true);
-    company = List.from(companyRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
-
-    final categoryCountRequestResponse =
-        await Api.requestCategoryCount(savedCity?.id);
-    categoryCount =
-        List.from(categoryCountRequestResponse.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-
-    const banner = Images.slider;
-
-   formattedCategories =
-        getCategoriesWithoutHidden(await formatCategoriesList(category, categoryCount, savedCity?.id));
-
-    emit(HomeStateLoaded(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-      company,
-      isRefreshLoader,
-      false,
-    ));
-  }
-
-  Future<void> saveIgnoreAppVersion(String version) async {
-    final prefs = await Preferences.openBox();
-    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
-  }
-
-  Future<String> getIgnoreAppVersion() async {
-    final prefs = await Preferences.openBox();
-    String ignoreVersion =
-        await prefs.getKeyValue(Preferences.ignoredAppVersion, '');
-    return ignoreVersion;
-  }
-
-  Future<bool> doesUserExist() async {
-    final int userId = await UserRepository.getLoggedUserId();
-    if (userId == 0) return true;
-
-    bool doesExist = await UserRepository.doesUserExist(userId);
-    return doesExist;
-  }
-
-  Future<bool> categoryHasContent(int id, int? cityId) async {
-    final response =
-        await Api.requestCategoryCount(cityId == 0 ? null : cityId);
-    final list = List.from(response.data ?? []).map((item) {
-      return CategoryModel.fromJson(item);
-    }).toList();
-    if (list.any((element) => element.id == id) ||
-        (cityId == 0 && list.isNotEmpty)) {
-      return true;
-    }
-    return false;
-  }
-
-  void scrollUp() {
-    emit(const HomeStateLoading());
-    const banner = Images.slider;
-    emit(HomeStateLoaded(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-      company,
-      false,
-      false,
-    ));
-  }
-
-  bool getCalledExternally() {
-    return calledExternally;
-  }
-
-  void setCalledExternally(bool called) {
-    calledExternally = called;
-  }
-
-  bool getDoesScroll() {
-    return doesScroll;
-  }
-
-  void setDoesScroll(bool scroll) {
-    doesScroll = scroll;
-  }
-
-  Future<List<CategoryModel>> formatCategoriesList(
-    List<CategoryModel> categories,
-    List<CategoryModel> categoryCount,
-    int? cityId,
-  ) async {
-    // Sort List
-    Map<int, int?> idToCountMap = {};
-    for (var obj in categoryCount) {
-      idToCountMap[obj.id] = obj.count;
-    }
-    // categories.sort((a, b) {
-    //   if (a.id == 17) return 1; // Move category with id 14 to the last index
-    //   if (b.id == 17) return -1;
-    //
-    //   return (idToCountMap[b.id] ?? 0).compareTo(idToCountMap[a.id] ?? 0);
-    // });
-
-    //Forum always at index 6, before the more button
-    int forumIndex = categories.indexWhere((element) => element.id == 17);
-
-    if (forumIndex != -1) {
-      var forum = categories.removeAt(forumIndex);
-      categories.insert(6, forum);
-    }
-    // Hide tag on empty categories
-    // for (var element in categories) {
-    //   bool hasContent = await categoryHasContent(element.id, cityId);
-    //   if (!hasContent) {
-    //     element.hide = true;
-    //   }
-    //   if (element.id == 17) {
-    //     element.hide = false;
-    //   }
-    // }
-
-     for (var element in categories) {
-       if (element.id == 4 || element.id == 20) {
-         element.hide = true;
-       }
-     }
-
-
-    return categories;
-  }
-
-  Future<void> saveCityId(int cityId) async {
-    final prefs = await Preferences.openBox();
-    prefs.setKeyValue(Preferences.cityId, cityId);
-  }
-
-  Future<bool> hasInternet() async {
     try {
-      final result = await InternetAddress.lookup('dns.google');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        return true;
+      if (!await hasInternet()) {
+        emit(const HomeState.error("no_internet"));
+        return;
       }
-    } on SocketException catch (_) {
-      return false;
-    }
-    return false;
-  }
 
-  List<CategoryModel> getCategoriesWithoutHidden(
-      List<CategoryModel> categoryList) {
-    List<CategoryModel> noHiddenCategoryList = [];
-    for (var element in categoryList) {
-      if (!element.hide) {
-        noHiddenCategoryList.add(element);
+      // Parallelize independent API calls
+      final [
+        cityRequestResponse,
+        categoryRequestResponse,
+      ] = await Future.wait([
+        Api.requestCities(),
+        Api.requestHomeCategory(),
+      ]);
+
+       final locations = List.from(cityRequestResponse.data ?? [])
+          .map((item) => CategoryModel.fromJson(item))
+          .toList();
+       location=locations;
+
+      final categories = List.from(categoryRequestResponse.data ?? [])
+          .map((item) => CategoryModel.fromJson(item))
+          .toList();
+
+      if (!calledExternally && !isRefreshLoader) {
+        await AppBloc.discoveryCubit.onLoad();
       }
-    }
-    return noHiddenCategoryList;
-  }
 
-  Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
-    final prefs = await Preferences.openBox();
-    final cityId = await prefs.getKeyValue(Preferences.cityId, 0);
-    if (cityId != 0) {
-      final cityName =
-          cities[cities.indexWhere((category) => category.id == cityId)].title;
-      return CategoryModel(id: cityId, title: cityName, image: "");
-    }
-    return null;
-  }
+      final savedCity = await checkSavedCity(locations);
 
-  Future<dynamic> newListings(int pageNo) async {
-    if (!await hasInternet()) {
-      emit(const HomeState.error("no_internet"));
-    }
+      // Fetch data that depends on the saved city
+      final [
+        listingsResponse,
+        companyResponse,
+        categoryCountResponse,
+      ] = await Future.wait([
+        savedCity != null
+            ? Api.requestLocList(savedCity.id, 1)
+            : Api.requestRecentListings(1),
+        Api.requestCatList(10, savedCity, 1, true),
+        Api.requestCategoryCount(savedCity?.id),
+      ]);
 
-    final listingsRequestResponse = await Api.requestRecentListings(pageNo);
-    final newRecent = List.from(listingsRequestResponse.data ?? []).map((item) {
-      return ProductModel.fromJson(item);
-    }).toList();
-    recent.addAll(newRecent);
-    return recent;
+      final recent = List.from(listingsResponse.data ?? [])
+          .map((item) => ProductModel.fromJson(item))
+          .toList();
+
+      final company = List.from(companyResponse.data ?? [])
+          .map((item) => ProductModel.fromJson(item))
+          .toList();
+
+      final categoryCount = List.from(categoryCountResponse.data ?? [])
+          .map((item) => CategoryModel.fromJson(item))
+          .toList();
+
+      final formattedCategories =
+          getCategoriesWithoutHidden(await formatCategoriesList(categories, categoryCount));
+
+      emit(HomeStateLoaded(
+        Images.slider,
+        formattedCategories,
+        locations,
+        recent,
+        company,
+        isRefreshLoader,
+        false
+      ));
+    } catch (e) {
+      emit(HomeState.error(e.toString()));
+    }
   }
 
   Future<void> newCompanies(int pageNo) async {
@@ -255,23 +105,21 @@ class HomeCubit extends Cubit<HomeState> {
 
     emit(currentState.copyWith(isPaginating: true));
 
-    if (!await hasInternet()) {
-      emit(const HomeState.error("no_internet"));
-      emit(currentState.copyWith(isPaginating: false));
-      return;
-    }
-
     try {
+      if (!await hasInternet()) {
+        emit(const HomeState.error("no_internet"));
+        emit(currentState.copyWith(isPaginating: false));
+        return;
+      }
+
       final listingsRequestResponse =
           await Api.requestCatList(10, null, pageNo, false);
-      final newCompanies = List.from(listingsRequestResponse.data ?? []).map((item) {
-        return ProductModel.fromJson(item);
-      }).toList();
+      final newCompanies = List.from(listingsRequestResponse.data ?? [])
+          .map((item) => ProductModel.fromJson(item))
+          .toList();
 
       final updatedCompanies = List<ProductModel>.from(currentState.company)
         ..addAll(newCompanies);
-
-      company = updatedCompanies;
 
       emit(currentState.copyWith(
         company: updatedCompanies,
@@ -280,5 +128,91 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       emit(currentState.copyWith(isPaginating: false));
     }
+  }
+
+  Future<void> saveIgnoreAppVersion(String version) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
+  }
+
+  Future<String> getIgnoreAppVersion() async {
+    final prefs = await Preferences.openBox();
+    return prefs.getKeyValue(Preferences.ignoredAppVersion, '');
+  }
+
+  Future<bool> doesUserExist() async {
+    final userId = await UserRepository.getLoggedUserId();
+    if (userId == 0) return true; // Assuming 0 means not logged in
+    return await UserRepository.doesUserExist(userId);
+  }
+
+  bool getCalledExternally() {
+    return calledExternally;
+  }
+
+  void setCalledExternally(bool called) {
+    calledExternally = called;
+  }
+
+  Future<List<CategoryModel>> formatCategoriesList(
+    List<CategoryModel> categories,
+    List<CategoryModel> categoryCount,
+  ) async {
+    // Pure function: create a new list
+    final formattedList = List<CategoryModel>.from(categories);
+
+    // Forum always at index 6, before the more button
+    final forumIndex = formattedList.indexWhere((element) => element.id == 17);
+    if (forumIndex != -1) {
+      final forum = formattedList.removeAt(forumIndex);
+      if (formattedList.length >= 6) {
+        formattedList.insert(6, forum);
+      } else {
+        formattedList.add(forum);
+      }
+    }
+
+    // Hide specific categories
+    for (var element in formattedList) {
+      if (element.id == 4 || element.id == 20) {
+        element.hide = true;
+      }
+    }
+
+    return formattedList;
+  }
+
+  Future<void> saveCityId(int cityId) async {
+    final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(Preferences.cityId, cityId);
+  }
+
+  Future<bool> hasInternet() async {
+    try {
+      final result = await InternetAddress.lookup('dns.google');
+      return result.isNotEmpty && result[0].rawAddress.isNotEmpty;
+    } on SocketException {
+      return false;
+    }
+  }
+
+  List<CategoryModel> getCategoriesWithoutHidden(
+      List<CategoryModel> categoryList) {
+    return categoryList.where((element) => !element.hide).toList();
+  }
+
+  Future<CategoryModel?> checkSavedCity(List<CategoryModel> cities) async {
+    final prefs = await Preferences.openBox();
+    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    if (cityId != 0) {
+      try {
+        final city = cities.firstWhere((category) => category.id == cityId);
+        return CategoryModel(id: cityId, title: city.title, image: "");
+      } catch (e) {
+        // Saved city not found in the list from API
+        return null;
+      }
+    }
+    return null;
   }
 }
