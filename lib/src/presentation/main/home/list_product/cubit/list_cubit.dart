@@ -89,11 +89,8 @@ class ListCubit extends Cubit<ListState> {
     );
 
     final newPage = result?[0] ?? [];
-    if (newPage.isNotEmpty) {
-      list.addAll(newPage);
-    }
 
-    return newPage; // <– only return the newly fetched page
+    return newPage;
   }
 
 
