@@ -29,7 +29,8 @@ class AppMultiSelectTypeAhead extends StatefulWidget {
   });
 
   @override
-  State<AppMultiSelectTypeAhead> createState() => _AppMultiSelectTypeAheadState();
+  State<AppMultiSelectTypeAhead> createState() =>
+      _AppMultiSelectTypeAheadState();
 }
 
 class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
@@ -61,23 +62,25 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
     setState(() {
       _tempSelectedItems = selectedItems;
     });
-    widget.onSelectionChanged(selectedItems); // Notify parent of changes immediately
+    widget.onSelectionChanged(
+        selectedItems); // Notify parent of changes immediately
   }
-
-  
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final isDark = theme.brightness == Brightness.dark;
 
-    final dropdownItems = widget.items.map(
-      (wasteType) => DropdownItem<WasteType>(
-        label: wasteType.name,
-        value: wasteType,
-        selected: _tempSelectedItems.any((selected) => selected.id == wasteType.id),
-      ),
-    ).toList();
+    final dropdownItems = widget.items
+        .map(
+          (wasteType) => DropdownItem<WasteType>(
+            label: wasteType.name,
+            value: wasteType,
+            selected: _tempSelectedItems
+                .any((selected) => selected.id == wasteType.id),
+          ),
+        )
+        .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -114,7 +117,6 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           enabled: widget.enabled,
           // searchEnabled: true,
           chipDecoration: ChipDecoration(
-            
             backgroundColor: theme.primaryColor.withOpacity(0.1),
             wrap: true,
             runSpacing: 2,
@@ -123,13 +125,56 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             labelStyle: TextStyle(
               color: theme.primaryColor,
               fontWeight: FontWeight.w500,
+              overflow: TextOverflow.ellipsis,
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           ),
+          selectedItemBuilder: (item) {
+            return Container(
+              decoration: BoxDecoration(
+                color: theme.primaryColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Flexible(
+                    child: Text(
+                      maxLines: 2,
+                      item.label,
+                      style: TextStyle(
+                        color: theme.primaryColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 4),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        _controller.unselectWhere((selectedItem) =>
+                            selectedItem.value.id == item.value.id);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                        color: theme.primaryColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
           fieldDecoration: FieldDecoration(
             hintText: widget.hintText,
-            hintStyle: TextStyle(color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
-            prefixIcon: Icon(Icons.recycling, color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+            hintStyle: TextStyle(
+                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+            prefixIcon: Icon(Icons.recycling,
+                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
             showClearIcon: false,
             backgroundColor: isDark ? Colors.grey.shade900 : Colors.white,
             border: OutlineInputBorder(
@@ -143,7 +188,9 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide(
-                color: widget.errorText != null ? theme.colorScheme.error : theme.primaryColor,
+                color: widget.errorText != null
+                    ? theme.colorScheme.error
+                    : theme.primaryColor,
                 width: 2,
               ),
             ),
@@ -164,7 +211,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             ),
           ),
           dropdownItemDecoration: DropdownItemDecoration(
-            selectedBackgroundColor: theme.primaryColor.withOpacity(0.1),      
+            selectedBackgroundColor: theme.primaryColor.withOpacity(0.1),
             selectedIcon: Icon(Icons.check_circle, color: theme.primaryColor),
             disabledIcon: Icon(Icons.lock, color: Colors.grey.shade400),
           ),
@@ -175,12 +222,14 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             return null;
           },
           onSelectionChange: _onSelectionChanged,
-        ),          if (widget.errorText != null)
+        ),
+        if (widget.errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
               widget.errorText!,
-              style: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.error),
+              style: theme.textTheme.bodySmall
+                  ?.copyWith(color: theme.colorScheme.error),
             ),
           ),
       ],

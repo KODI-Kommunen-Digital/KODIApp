@@ -123,11 +123,12 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   void _showWasteTypeDialog()  {
- 
+
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
+        bool isLoading = false;
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
@@ -155,20 +156,30 @@ class _WasteCalendarState extends State<WasteCalendar> {
                           sectionTitle: 'Abfallarten auswählen',
                         ),
                         const SizedBox(height: 16),
+                        if (isLoading)
+                          const Padding(
+                            padding: EdgeInsets.only(bottom: 16.0),
+                            child: CircularProgressIndicator(),
+                          ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              onPressed: () => Navigator.pop(context),
+                              onPressed: isLoading ? null : () => Navigator.pop(context),
                               child: const Text('Abbrechen'),
                             ),
                             const SizedBox(width: 8),
                             ElevatedButton(
-                              onPressed: selectedWasteTypes.isEmpty
+                              onPressed: (selectedWasteTypes.isEmpty || isLoading)
                                   ? null
                                   : () async {
-                                     _updateWasteTypesSubscription();
-                                      Navigator.pop(context);
+                                      setState(() {
+                                        isLoading = true;
+                                      });
+                                      await _updateWasteTypesSubscription();
+                                      if (context.mounted) {
+                                        Navigator.pop(context);
+                                      }
                                     },
                               child: const Text('Bestätigen'),
                             ),
