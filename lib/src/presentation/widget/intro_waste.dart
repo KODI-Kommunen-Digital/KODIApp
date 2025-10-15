@@ -37,6 +37,12 @@ class IntroPageState extends State<IntroPage> {
     _initializeRepository();
   }
 
+  @override
+  void dispose() {
+    typeAheadController.dispose();
+    _wasteCalenderCubit.close();
+    super.dispose();
+  }
 
   Future<void> _initializeRepository() async {
     final prefs = await Preferences.openBox();
@@ -47,20 +53,24 @@ class IntroPageState extends State<IntroPage> {
 
   Future<void> _loadLocations() async {
     final fetchedLocations = await repository.loadWasteCalendarStreets(1);
-    setState(() {
-      if (fetchedLocations != null) {
-        locations = fetchedLocations;
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (fetchedLocations != null) {
+          locations = fetchedLocations;
+        }
+      });
+    }
   }
 
   Future<void> _loadWasteTypes() async {
     final fetchedWasteTypes = await repository.loadWasteTypes(1);
-    setState(() {
-      if (fetchedWasteTypes != null) {
-        wasteTypes = fetchedWasteTypes;
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (fetchedWasteTypes != null) {
+          wasteTypes = fetchedWasteTypes;
+        }
+      });
+    }
   }
 
   Future<void> _skipIntro() async {
@@ -71,19 +81,23 @@ class IntroPageState extends State<IntroPage> {
   }
 
   void _selectLocation(String locationId, String locationName, String hashedStreetName) {
-    setState(() {
-      _selectedLocationId = locationId;
-      _selectedLocationName = locationName;
-      _selectedHashedStreetName = hashedStreetName;
-      _showWasteTypeSelection = true;
-      typeAheadController.text = locationName;
-    });
+    if (mounted) {
+      setState(() {
+        _selectedLocationId = locationId;
+        _selectedLocationName = locationName;
+        _selectedHashedStreetName = hashedStreetName;
+        _showWasteTypeSelection = true;
+        typeAheadController.text = locationName;
+      });
+    }
   }
 
   void _selectWasteTypes(List<WasteType> wasteTypes) {
-    setState(() {
-      selectedWasteTypes = wasteTypes;
-    });
+    if (mounted) {
+      setState(() {
+        selectedWasteTypes = wasteTypes;
+      });
+    }
   }
 
   void _confirmSelection() async {
@@ -91,9 +105,11 @@ class IntroPageState extends State<IntroPage> {
       return;
     }
 
-    setState(() {
-      _isConfirming = true;
-    });
+    if (mounted) {
+      setState(() {
+        _isConfirming = true;
+      });
+    }
 
     try {
       // Use common subscription method
@@ -179,13 +195,15 @@ class IntroPageState extends State<IntroPage> {
                               icon: const Icon(Icons.clear),
                               onPressed: () {
                                 controller.clear();
-                                setState(() {
-                                  _selectedLocationId = null;
-                                  _selectedLocationName = null;
-                                  _selectedHashedStreetName = null;
-                                  _showWasteTypeSelection = false;
-                                  selectedWasteTypes.clear();
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _selectedLocationId = null;
+                                    _selectedLocationName = null;
+                                    _selectedHashedStreetName = null;
+                                    _showWasteTypeSelection = false;
+                                    selectedWasteTypes.clear();
+                                  });
+                                }
                               },
                             )
                           : const Icon(Icons.arrow_drop_down),
