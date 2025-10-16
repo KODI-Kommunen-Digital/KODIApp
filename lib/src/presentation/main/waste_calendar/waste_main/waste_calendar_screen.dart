@@ -11,6 +11,7 @@ import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
+import 'package:heidi/src/presentation/widget/loading_dialog.dart';
 
 class WasteCalendar extends StatefulWidget {
   const WasteCalendar({super.key});
@@ -134,95 +135,60 @@ class _WasteCalendarState extends State<WasteCalendar> {
   void _showWasteTypeDialog() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (context) {
-        bool isLoading = false;
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return PopScope(
-              canPop: !isLoading,
-              child: Dialog(
-                insetPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.8,
-                    maxWidth: 500,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IgnorePointer(
-                            ignoring: isLoading,
-                            child: Opacity(
-                              opacity: isLoading ? 0.5 : 1.0,
-                              child: AppMultiSelectTypeAhead(
-                                items: wasteTypes,
-                                selectedItems: selectedWasteTypes,
-                                onSelectionChanged: (selectedTypes) {
-                                  setState(() {
-                                    _selectWasteTypes(selectedTypes);
-                                  });
-                                },
-                                hintText: 'Abfallarten eingeben',
-                                sectionTitle: 'Abfallarten auswählen',
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          if (isLoading)
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 16.0),
-                              child: Column(
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(height: 12),
-                                  Text(
-                                    'Bitte warten, während wir abonnieren...',
-                                    style: TextStyle(fontSize: 14),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () => Navigator.pop(context),
-                                child: const Text('Abbrechen'),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed:
-                                    (selectedWasteTypes.isEmpty || isLoading)
-                                        ? null
-                                        : () async {
-                                            setState(() {
-                                              isLoading = true;
-                                            });
-                                            await _updateWasteTypesSubscription();
-                                            if (context.mounted) {
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                child: const Text('Bestätigen'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+        return Dialog(
+          insetPadding:
+              const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.8,
+              maxWidth: 500,
+            ),
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AppMultiSelectTypeAhead(
+                      items: wasteTypes,
+                      selectedItems: selectedWasteTypes,
+                      onSelectionChanged: (selectedTypes) {
+                        _selectWasteTypes(selectedTypes);
+                      },
+                      hintText: 'Abfallarten eingeben',
+                      sectionTitle: 'Abfallarten auswählen',
                     ),
-                  ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(context),
+                          child: const Text('Abbrechen'),
+                        ),
+                        const SizedBox(width: 8),
+                        ElevatedButton(
+                          onPressed: selectedWasteTypes.isEmpty
+                              ? null
+                              : () async {
+                                  Navigator.pop(context);
+                                  final loadingDialog = LoadingDialog();
+                                  loadingDialog.show(context,
+                                      'Bitte warten, während wir abonnieren...');
+                                  await _updateWasteTypesSubscription();
+                                  loadingDialog.hide();
+                                },
+                          child: const Text('Bestätigen'),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
+            ),
+          ),
         );
       },
     ).then((value) {
@@ -623,132 +589,47 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
   void _showLocationDialog(BuildContext context) {
     final TextEditingController typeAheadController = TextEditingController();
-    WasteLocation? selectedLocation;
 
     showDialog(
       context: context,
-      barrierDismissible: false,
       builder: (context) {
-        bool isLoading = false;
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return PopScope(
-              canPop: !isLoading,
-              child: Dialog(
-                insetPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxHeight: MediaQuery.of(context).size.height * 0.8,
-                    maxWidth: 500,
-                  ),
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text(
-                            'Wähle deinen Ort',
-                            style: TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 16),
-                          IgnorePointer(
-                            ignoring: isLoading,
-                            child: Opacity(
-                              opacity: isLoading ? 0.5 : 1.0,
-                              child: TypeAheadField(
-                                builder: (context, controller, focusNode) {
-                                  return TextField(
-                                    controller: controller,
-                                    focusNode: focusNode,
-                                    decoration: const InputDecoration(
-                                      hintText: 'Straßennamen eingeben',
-                                      suffixIcon: Icon(Icons.arrow_drop_down),
-                                    ),
-                                  );
-                                },
-                                itemBuilder:
-                                    (context, WasteLocation suggestion) {
-                                  return ListTile(
-                                    title: Text(suggestion.name),
-                                  );
-                                },
-                                suggestionsCallback: (pattern) {
-                                  if (pattern.isEmpty) {
-                                    return locations;
-                                  }
-                                  return locations
-                                      .where((item) => item.name
-                                          .toLowerCase()
-                                          .contains(pattern.toLowerCase()))
-                                      .toList();
-                                },
-                                onSelected: (WasteLocation suggestion) {
-                                  setState(() {
-                                    typeAheadController.text = suggestion.name;
-                                    selectedLocation = suggestion;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          if (isLoading)
-                            const Padding(
-                              padding: EdgeInsets.only(bottom: 16.0),
-                              child: Column(
-                                children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(height: 12),
-                                  Text(
-                                    'Bitte warten, während wir abonnieren...',
-                                    style: TextStyle(fontSize: 14),
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                onPressed: isLoading
-                                    ? null
-                                    : () => Navigator.pop(context),
-                                child: const Text('Abbrechen'),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed: (selectedLocation == null ||
-                                        isLoading)
-                                    ? null
-                                    : () async {
-                                        setState(() {
-                                          isLoading = true;
-                                        });
-                                        await _selectLocation(
-                                          selectedLocation!.id.toString(),
-                                          selectedLocation!.name,
-                                          selectedLocation!.hashedStreetName,
-                                        );
-                                        if (context.mounted) {
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                child: const Text('Bestätigen'),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+        return AlertDialog(
+          title: const Text('Wähle deinen Ort'),
+          content: TypeAheadField(
+            builder: (context, typeAheadController, focusNode) {
+              return TextField(
+                controller: typeAheadController,
+                focusNode: focusNode,
+                decoration: const InputDecoration(
+                  hintText: 'Straßennamen eingeben',
+                  suffixIcon: Icon(Icons.arrow_drop_down),
                 ),
-              ),
-            );
-          },
+              );
+            },
+            itemBuilder: (context, WasteLocation suggestion) {
+              return ListTile(
+                title: Text(suggestion.name),
+              );
+            },
+            suggestionsCallback: (pattern) {
+              if (pattern.isEmpty) {
+                return locations;
+              }
+              return locations
+                  .where((item) =>
+                      item.name.toLowerCase().contains(pattern.toLowerCase()))
+                  .toList();
+            },
+            onSelected: (WasteLocation suggestion) async {
+              Navigator.pop(context);
+              final loadingDialog = LoadingDialog();
+              loadingDialog.show(
+                  context, 'Bitte warten, während wir abonnieren...');
+              await _selectLocation(suggestion.id.toString(), suggestion.name,
+                  suggestion.hashedStreetName);
+              loadingDialog.hide();
+            },
+          ),
         );
       },
     );
