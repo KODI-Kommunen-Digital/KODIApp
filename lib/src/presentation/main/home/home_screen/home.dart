@@ -596,6 +596,7 @@ class _NewsSection extends StatelessWidget {
             child: Text(
               Translate.of(context).translate('more_news'),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor),
             ),
           ),
@@ -731,8 +732,10 @@ class _FooterLogo extends StatelessWidget {
         child: Image.asset(
           asset,
           fit: BoxFit.contain,
-          cacheWidth: 200,
-          cacheHeight: 100,
+          cacheWidth: 400,
+          cacheHeight: 200,
+          width: 200,
+          height: 100,
 
         ),
       ),
