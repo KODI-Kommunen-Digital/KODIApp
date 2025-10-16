@@ -236,6 +236,25 @@ class _SettingsScreenState extends State<SettingsScreen>
                   ],
                 ),
               ),
+            if (widget.user != null)
+              AppListTitle(
+                title: Translate.of(context).translate('waste_calendar'),
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.wasteCalendar);
+
+                },
+                trailing: Row(
+                  children: <Widget>[
+                    RotatedBox(
+                      quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                      child: const Icon(
+                        Icons.keyboard_arrow_right,
+                        textDirection: TextDirection.ltr,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             AppListTitle(
               title: Translate.of(context).translate('version'),
               trailing: Row(
