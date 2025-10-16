@@ -440,15 +440,23 @@ class _CompanyList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Translate.of(context).translate('do_you_know'),
+            Translate.of(context).translate('strong_companies_in_a_strong_region'),
             style: Theme.of(context)
                 .textTheme
                 .titleLarge!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
-          Text(
-            Translate.of(context).translate('company_matching'),
-            style: Theme.of(context).textTheme.bodyLarge,
+          InkWell(
+            onTap: () {
+              CustomInAppWebView.showAsBottomSheet(context: context, url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
+            },
+            child: Text(
+              Translate.of(context)
+                  .translate('companies_in_the_fichtel_mountains'),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).primaryColor,
+                  ),
+            ),
           ),
           Container(
             height: 180,
@@ -549,10 +557,10 @@ class _NewsSection extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Text(
-            Translate.of(context).translate('news_listing'),
+            Translate.of(context).translate('category_news'),
             style: Theme.of(context)
                 .textTheme
-                .titleMedium!
+                .titleLarge!
                 .copyWith(fontWeight: FontWeight.bold),
           ),
         ),
@@ -571,7 +579,7 @@ class _NewsSection extends StatelessWidget {
           },
         ),
         Align(
-          alignment: Alignment.topRight,
+          alignment: Alignment.topLeft,
           child: TextButton(
             onPressed: () async {
               final prefs = await Preferences.openBox();
@@ -588,7 +596,6 @@ class _NewsSection extends StatelessWidget {
             child: Text(
               Translate.of(context).translate('more_news'),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
                   color: Theme.of(context).primaryColor),
             ),
           ),
@@ -686,36 +693,48 @@ class _FooterLogos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 60,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: const [
-          _FooterLogo(asset: 'assets/images/home/energie_logo.png'),
-          _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
-          _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
-        ],
-      ),
+    return Column(
+      children: [
+        _FooterLogo(
+            asset: 'assets/images/home/energie_logo.png',
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: const [
+            _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
+            _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
+
+          ],
+        ),
+
+      ],
     );
   }
 }
 
 class _FooterLogo extends StatelessWidget {
   final String asset;
+  final String? url;
 
-  const _FooterLogo({required this.asset});
+  const _FooterLogo({required this.asset,this.url});
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
-      child: Image.asset(
-        asset,
-        width: 100,
-        height: 50,
-        fit: BoxFit.contain,
-        cacheWidth: 200,
-        cacheHeight: 100,
-        filterQuality: FilterQuality.low,
+      child: InkWell(
+        onTap: (){
+            if (url != null) {
+              launchUrl(Uri.parse(url!),
+                  mode: LaunchMode.externalApplication);
+            }
+          },
+        child: Image.asset(
+          asset,
+          fit: BoxFit.contain,
+          cacheWidth: 200,
+          cacheHeight: 100,
+
+        ),
       ),
     );
   }

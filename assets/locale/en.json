@@ -546,7 +546,7 @@
   "applicant": "Applicant",
   "open_whatsapp": "How do you want to open this number?",
   "call": "Call",
-  "business_forum": "Business\nCommunity / Forum",
+  "business_forum": "Business\nCommunity",
   "this_feature_will_be_available_soon": "This feature will be available soon",
   "start": "Start",
   "news_listing": "News Listings",
@@ -562,5 +562,7 @@
   "input_email_hint": "Enter your email address",
   "input_phone_hint": "Enter your phone number",
   "input_message_hint_contact_form": "Enter your message (e.g., preferred contact: callback, meeting)",
-  "contact_form_title": "Contact Form"
+  "contact_form_title": "Contact Form",
+  "strong_companies_in_strong_region": "Strong companies in a strong region",
+  "companies_in_fichtel_mountains": "Companies in the Fichtel Mountains"
  }

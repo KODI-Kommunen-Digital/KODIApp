@@ -180,7 +180,7 @@
   "profile": "Profil",
   "sign_in": "Einloggen",
   "sign_out": "Abmelden",
-  "setting": "Einstellung",
+  "setting": "Einstellungen",
   "profile_settings": "Profileinstellungen",
   "review": "Bewertungen",
   "write": "Schreiben",
@@ -549,7 +549,7 @@
   "call": "Anruf",
   "funding_guide": "Fördermittelwegweiser",
   "funding_guide_message": "Diese Funktion wird in Kürze verfügbar sein",
-  "business_forum": "Business\nCommunity / Forum",
+  "business_forum": "Business\nCommunity",
   "this_feature_will_be_available_soon": "Diese Funktion wird in Kürze verfügbar sein",
   "start": "Start",
   "job_matching": "Job-Matching",
@@ -566,5 +566,8 @@
   "input_email_hint": "Gib deine E-Mail-Adresse ein",
   "input_phone_hint": "Gib deine Telefonnummer ein",
   "input_message_hint_contact_form": "Gib deine Nachricht ein (z.B. bevorzugter Kontakt: Rückruf, Treffen)",
-  "contact_form_title": "Kontaktformular"
+  "contact_form_title": "Kontaktformular",
+  "strong_companies_in_a_strong_region": "Starke Unternehmen in einer starken Region",
+  "companies_in_the_fichtel_mountains": "Unternehmen im Fichtelgebirge"
+
 }

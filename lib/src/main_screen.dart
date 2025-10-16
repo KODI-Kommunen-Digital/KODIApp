@@ -189,6 +189,7 @@ class _MainScreenState extends State<MainScreen> {
     }
     return IconButton(
       onPressed: () {
+        FocusManager.instance.primaryFocus?.unfocus();
         if(route==Routes.tempScreen || route==Routes.portal){
           Utils().showAlertMessage('this_feature_will_be_available_soon', context);
         }else {
@@ -197,7 +198,7 @@ class _MainScreenState extends State<MainScreen> {
       },
       padding: EdgeInsets.zero,
       icon: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(
             iconData,
@@ -246,18 +247,17 @@ class _MainScreenState extends State<MainScreen> {
 
   Widget _buildBottomMenu() {
     return BottomAppBar(
+
       color: Theme.of(context).textTheme.bodySmall!.color!.withAlpha(30),
-      child: SizedBox(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            _buildMenuItem(Routes.home),
-            _buildMenuItem(Routes.discovery),
-            _buildMenuItem(Routes.tempScreen),
-            _buildMenuItem(Routes.portal),
-            _buildMenuItem(Routes.account),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _buildMenuItem(Routes.home),
+          _buildMenuItem(Routes.discovery),
+          _buildMenuItem(Routes.tempScreen),
+          _buildMenuItem(Routes.portal),
+          _buildMenuItem(Routes.account),
+        ],
       ),
     );
   }

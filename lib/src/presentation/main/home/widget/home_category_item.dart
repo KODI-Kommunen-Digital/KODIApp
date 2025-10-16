@@ -69,7 +69,8 @@ class HomeCategoryItem extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               item!.title,
-              maxLines: 1,
+              maxLines: 2,
+              textAlign: TextAlign.center,
               overflow: TextOverflow.ellipsis,
               style: Theme.of(context)
                   .textTheme
