@@ -71,7 +71,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
     if (savedWasteTypeIds.isNotEmpty) {
       await _loadWasteTypes();
       setState(() {
-        selectedWasteTypes = wasteTypes.where((type) => savedWasteTypeIds.contains(type.id)).toList();
+        selectedWasteTypes = wasteTypes
+            .where((type) => savedWasteTypeIds.contains(type.id))
+            .toList();
       });
     }
   }
@@ -79,17 +81,22 @@ class _WasteCalendarState extends State<WasteCalendar> {
   Future<void> _loadLocation() async {
     final prefs = await Preferences.openBox();
     setState(() {
-      _selectedLocationId = prefs.getKeyValue(Preferences.selectedLocationId, null);
-      _selectedLocationName = prefs.getKeyValue(Preferences.selectedLocationName, null);
+      _selectedLocationId =
+          prefs.getKeyValue(Preferences.selectedLocationId, null);
+      _selectedLocationName =
+          prefs.getKeyValue(Preferences.selectedLocationName, null);
       if (_selectedLocationId == null) {
         _showLocationDialog(context);
       } else {
-        _wasteCalenderCubit.loadWasteCollections(1, _selectedLocationId, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());
+        _wasteCalenderCubit.loadWasteCollections(1, _selectedLocationId,
+            selectedWasteTypeIds:
+                selectedWasteTypes.map((type) => type.id).toList());
       }
     });
   }
 
-  void _selectLocation(String locationId, String locationName, String hashedStreetName) async {
+  Future<void> _selectLocation(
+      String locationId, String locationName, String hashedStreetName) async {
     setState(() {
       _selectedLocationId = locationId;
       _selectedLocationName = locationName;
@@ -103,7 +110,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
       hashedStreetName: hashedStreetName,
     );
 
-    _wasteCalenderCubit.updateStreetId(locationId, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());
+    _wasteCalenderCubit.updateStreetId(locationId,
+        selectedWasteTypeIds:
+            selectedWasteTypes.map((type) => type.id).toList());
   }
 
   void _selectWasteTypes(List<WasteType> wasteTypes) {
@@ -122,70 +131,92 @@ class _WasteCalendarState extends State<WasteCalendar> {
     }
   }
 
-  void _showWasteTypeDialog()  {
-
+  void _showWasteTypeDialog() {
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) {
         bool isLoading = false;
         return StatefulBuilder(
           builder: (context, setState) {
-            return Dialog(
-              insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: MediaQuery.of(context).size.height * 0.8,
-                  maxWidth: 500,
-                ),
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        AppMultiSelectTypeAhead(
-                          items: wasteTypes,
-                          selectedItems: selectedWasteTypes,
-                          onSelectionChanged: (selectedTypes) {
-                            setState(() {
-                              _selectWasteTypes(selectedTypes);
-                            });
-                          },
-                          hintText: 'Abfallarten eingeben',
-                          sectionTitle: 'Abfallarten auswählen',
-                        ),
-                        const SizedBox(height: 16),
-                        if (isLoading)
-                          const Padding(
-                            padding: EdgeInsets.only(bottom: 16.0),
-                            child: CircularProgressIndicator(),
+            return PopScope(
+              canPop: !isLoading,
+              child: Dialog(
+                insetPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    maxWidth: 500,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IgnorePointer(
+                            ignoring: isLoading,
+                            child: Opacity(
+                              opacity: isLoading ? 0.5 : 1.0,
+                              child: AppMultiSelectTypeAhead(
+                                items: wasteTypes,
+                                selectedItems: selectedWasteTypes,
+                                onSelectionChanged: (selectedTypes) {
+                                  setState(() {
+                                    _selectWasteTypes(selectedTypes);
+                                  });
+                                },
+                                hintText: 'Abfallarten eingeben',
+                                sectionTitle: 'Abfallarten auswählen',
+                              ),
+                            ),
                           ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: isLoading ? null : () => Navigator.pop(context),
-                              child: const Text('Abbrechen'),
+                          const SizedBox(height: 16),
+                          if (isLoading)
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 12),
+                                  Text(
+                                    'Bitte warten, während wir abonnieren...',
+                                    style: TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
                             ),
-                            const SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: (selectedWasteTypes.isEmpty || isLoading)
-                                  ? null
-                                  : () async {
-                                      setState(() {
-                                        isLoading = true;
-                                      });
-                                      await _updateWasteTypesSubscription();
-                                      if (context.mounted) {
-                                        Navigator.pop(context);
-                                      }
-                                    },
-                              child: const Text('Bestätigen'),
-                            ),
-                          ],
-                        ),
-                      ],
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => Navigator.pop(context),
+                                child: const Text('Abbrechen'),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed:
+                                    (selectedWasteTypes.isEmpty || isLoading)
+                                        ? null
+                                        : () async {
+                                            setState(() {
+                                              isLoading = true;
+                                            });
+                                            await _updateWasteTypesSubscription();
+                                            if (context.mounted) {
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                child: const Text('Bestätigen'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -220,7 +251,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
             children: [
               Text(
                 _selectedLocationName ?? 'Straße auswählen',
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -232,7 +264,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.edit,),
+              icon: const Icon(
+                Icons.edit,
+              ),
               onPressed: () {
                 _showLocationDialog(context);
               },
@@ -274,11 +308,13 @@ class _WasteCalendarState extends State<WasteCalendar> {
                           children: [
                             Text(
                               "${_selectedDay.day} ${_selectedDay.monthName()}",
-                              style: const TextStyle(fontSize: 22, color: Colors.red),
+                              style: const TextStyle(
+                                  fontSize: 22, color: Colors.red),
                             ),
                             Text(
                               _selectedDay.weekdayName(),
-                              style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontSize: 32, fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -287,7 +323,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                const Text("Nächste Abholungen", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const Text("Nächste Abholungen",
+                    style:
+                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
                   builder: (context, state) {
@@ -300,7 +338,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                           scrollDirection: Axis.horizontal,
                           itemCount: state.carouselCollections.length,
                           itemBuilder: (context, index) {
-                            return _buildWasteCard(state.carouselCollections[index]);
+                            return _buildWasteCard(
+                                state.carouselCollections[index]);
                           },
                         ),
                       );
@@ -315,21 +354,32 @@ class _WasteCalendarState extends State<WasteCalendar> {
                 const SizedBox(height: 20),
                 Text(
                   "Abholungen für ${_selectedDay.day}.${_selectedDay.month}.${_selectedDay.year}",
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
                   builder: (context, state) {
                     if (state is WasteCalendarLoaded) {
-                      final collectionsForSelectedDay = state.collections.where((collection) => isSameDay(collection.date, _selectedDay)).toList();
+                      final collectionsForSelectedDay = state.collections
+                          .where((collection) =>
+                              isSameDay(collection.date, _selectedDay))
+                          .toList();
                       if (collectionsForSelectedDay.isEmpty) {
-                        return const Text("Keine Abholungen für den ausgewählten Tag verfügbar");
+                        return const Text(
+                            "Keine Abholungen für den ausgewählten Tag verfügbar");
                       }
                       return Column(
                         children: removeMultiples(collectionsForSelectedDay)
                             .map((collection) => ListTile(
-                                  leading: Icon(Icons.delete, color: _wasteCalenderCubit.getColorForType(collection.type)),
+                                  leading: Icon(Icons.delete,
+                                      color: _wasteCalenderCubit
+                                          .getColorForType(collection.type)),
                                   title: Text(
-                                    (collection.type.toLowerCase().contains('restmüll')) ? 'Restmüll' : collection.type,
+                                    (collection.type
+                                            .toLowerCase()
+                                            .contains('restmüll'))
+                                        ? 'Restmüll'
+                                        : collection.type,
                                   ),
                                 ))
                             .toList(),
@@ -347,7 +397,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
     );
   }
 
-  List<WasteCollection> removeMultiples(List<WasteCollection> collectionsForSelectedDay) {
+  List<WasteCollection> removeMultiples(
+      List<WasteCollection> collectionsForSelectedDay) {
     final List<WasteCollection> filteredCollections = [];
     bool restmuellSeen = false;
 
@@ -383,7 +434,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
             ),
             const SizedBox(height: 8),
             Text(
-              (collection.type.toLowerCase().contains('restmüll')) ? 'Restmüll' : collection.type,
+              (collection.type.toLowerCase().contains('restmüll'))
+                  ? 'Restmüll'
+                  : collection.type,
               style: const TextStyle(color: Colors.black, fontSize: 14),
               textAlign: TextAlign.center,
             ),
@@ -404,7 +457,10 @@ class _WasteCalendarState extends State<WasteCalendar> {
         if (state is WasteCalendarLoaded) {
           final events = {
             for (var item in state.collections)
-              DateTime(item.date.year, item.date.month, item.date.day): state.collections.where((e) => isSameDay(e.date, item.date)).toList()
+              DateTime(item.date.year, item.date.month, item.date.day): state
+                  .collections
+                  .where((e) => isSameDay(e.date, item.date))
+                  .toList()
           };
 
           return TableCalendar(
@@ -420,7 +476,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                 _selectedDay = selectedDay;
                 _focusedDay = focusedDay;
               });
-              if (events[selectedDay] != null && events[selectedDay]!.isNotEmpty) {
+              if (events[selectedDay] != null &&
+                  events[selectedDay]!.isNotEmpty) {
                 _scrollToValues();
               }
             },
@@ -428,10 +485,14 @@ class _WasteCalendarState extends State<WasteCalendar> {
             startingDayOfWeek: StartingDayOfWeek.monday,
             calendarStyle: CalendarStyle(
               defaultTextStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               weekendTextStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.red : Colors.red,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.red
+                    : Colors.red,
               ),
               todayDecoration: const BoxDecoration(
                 color: Colors.blue,
@@ -442,32 +503,44 @@ class _WasteCalendarState extends State<WasteCalendar> {
                 shape: BoxShape.circle,
               ),
               markerDecoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
                 shape: BoxShape.circle,
               ),
               markersMaxCount: 3,
             ),
             headerStyle: HeaderStyle(
               titleTextStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
                 fontSize: 16,
               ),
               formatButtonVisible: false,
               leftChevronIcon: Icon(
                 Icons.chevron_left,
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               rightChevronIcon: Icon(
                 Icons.chevron_right,
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
             ),
             daysOfWeekStyle: DaysOfWeekStyle(
               weekdayStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               weekendStyle: TextStyle(
-                color: Theme.of(context).brightness == Brightness.dark ? Colors.red : Colors.red,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.red
+                    : Colors.red,
               ),
             ),
             eventLoader: (day) {
@@ -488,7 +561,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                           margin: const EdgeInsets.symmetric(horizontal: 1.5),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: _wasteCalenderCubit.getColorForType(event.type),
+                            color:
+                                _wasteCalenderCubit.getColorForType(event.type),
                           ),
                         );
                       }
@@ -549,40 +623,132 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
   void _showLocationDialog(BuildContext context) {
     final TextEditingController typeAheadController = TextEditingController();
+    WasteLocation? selectedLocation;
 
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          title: const Text('Wähle deinen Ort'),
-          content: TypeAheadField(
-            builder: (context, typeAheadController, focusNode) {
-              return TextField(
-                controller: typeAheadController,
-                focusNode: focusNode,
-                decoration: const InputDecoration(
-                  hintText: 'Straßennamen eingeben',
-                  suffixIcon: Icon(Icons.arrow_drop_down),
+        bool isLoading = false;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return PopScope(
+              canPop: !isLoading,
+              child: Dialog(
+                insetPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height * 0.8,
+                    maxWidth: 500,
+                  ),
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text(
+                            'Wähle deinen Ort',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                          const SizedBox(height: 16),
+                          IgnorePointer(
+                            ignoring: isLoading,
+                            child: Opacity(
+                              opacity: isLoading ? 0.5 : 1.0,
+                              child: TypeAheadField(
+                                builder: (context, controller, focusNode) {
+                                  return TextField(
+                                    controller: controller,
+                                    focusNode: focusNode,
+                                    decoration: const InputDecoration(
+                                      hintText: 'Straßennamen eingeben',
+                                      suffixIcon: Icon(Icons.arrow_drop_down),
+                                    ),
+                                  );
+                                },
+                                itemBuilder:
+                                    (context, WasteLocation suggestion) {
+                                  return ListTile(
+                                    title: Text(suggestion.name),
+                                  );
+                                },
+                                suggestionsCallback: (pattern) {
+                                  if (pattern.isEmpty) {
+                                    return locations;
+                                  }
+                                  return locations
+                                      .where((item) => item.name
+                                          .toLowerCase()
+                                          .contains(pattern.toLowerCase()))
+                                      .toList();
+                                },
+                                onSelected: (WasteLocation suggestion) {
+                                  setState(() {
+                                    typeAheadController.text = suggestion.name;
+                                    selectedLocation = suggestion;
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          if (isLoading)
+                            const Padding(
+                              padding: EdgeInsets.only(bottom: 16.0),
+                              child: Column(
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 12),
+                                  Text(
+                                    'Bitte warten, während wir abonnieren...',
+                                    style: TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: isLoading
+                                    ? null
+                                    : () => Navigator.pop(context),
+                                child: const Text('Abbrechen'),
+                              ),
+                              const SizedBox(width: 8),
+                              ElevatedButton(
+                                onPressed: (selectedLocation == null ||
+                                        isLoading)
+                                    ? null
+                                    : () async {
+                                        setState(() {
+                                          isLoading = true;
+                                        });
+                                        await _selectLocation(
+                                          selectedLocation!.id.toString(),
+                                          selectedLocation!.name,
+                                          selectedLocation!.hashedStreetName,
+                                        );
+                                        if (context.mounted) {
+                                          Navigator.pop(context);
+                                        }
+                                      },
+                                child: const Text('Bestätigen'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              );
-            },
-            itemBuilder: (context, WasteLocation suggestion) {
-              return ListTile(
-                title: Text(suggestion.name),
-              );
-            },
-            suggestionsCallback: (pattern) {
-              if (pattern.isEmpty) {
-                return locations;
-              }
-              return locations.where((item) => item.name.toLowerCase().contains(pattern.toLowerCase())).toList();
-            },
-            onSelected: (WasteLocation suggestion) async {
-              typeAheadController.text = suggestion.name;
-              _selectLocation(suggestion.id.toString(), suggestion.name, suggestion.hashedStreetName);
-              Navigator.pop(context);
-            },
-          ),
+              ),
+            );
+          },
         );
       },
     );
