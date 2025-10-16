@@ -69,12 +69,21 @@ class _WasteCalendarState extends State<WasteCalendar> {
   Future<void> _loadSelectedWasteTypes() async {
     final prefs = await Preferences.openBox();
     final savedWasteTypeIds = prefs.getSelectedWasteTypes();
+
     if (savedWasteTypeIds.isNotEmpty) {
-      await _loadWasteTypes();
+      // Only load waste types initially if not already loaded
+      if (wasteTypes.isEmpty) {
+        await _loadWasteTypes();
+      }
+
       setState(() {
         selectedWasteTypes = wasteTypes
             .where((type) => savedWasteTypeIds.contains(type.id))
             .toList();
+      });
+    } else {
+      setState(() {
+        selectedWasteTypes = [];
       });
     }
   }
@@ -173,11 +182,11 @@ class _WasteCalendarState extends State<WasteCalendar> {
                           onPressed: selectedWasteTypes.isEmpty
                               ? null
                               : () async {
-                                  Navigator.pop(context);
                                   final loadingDialog = LoadingDialog();
                                   loadingDialog.show(context,
                                       'Bitte warten, während wir abonnieren...');
                                   await _updateWasteTypesSubscription();
+                                  Navigator.pop(context);
                                   loadingDialog.hide();
                                 },
                           child: const Text('Bestätigen'),
@@ -588,8 +597,6 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   void _showLocationDialog(BuildContext context) {
-    final TextEditingController typeAheadController = TextEditingController();
-
     showDialog(
       context: context,
       builder: (context) {
