@@ -142,62 +142,74 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   void _showWasteTypeDialog() {
+    // Create local copy of selected waste types for the dialog
+    List<WasteType> localSelectedWasteTypes = List.from(selectedWasteTypes);
+
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) {
-        return Dialog(
-          insetPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height * 0.8,
-              maxWidth: 500,
-            ),
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AppMultiSelectTypeAhead(
-                      items: wasteTypes,
-                      selectedItems: selectedWasteTypes,
-                      onSelectionChanged: (selectedTypes) {
-                        _selectWasteTypes(selectedTypes);
-                      },
-                      hintText: 'Abfallarten eingeben',
-                      sectionTitle: 'Abfallarten auswählen',
-                    ),
-                    const SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  maxWidth: 500,
+                ),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: const Text('Abbrechen'),
+                        AppMultiSelectTypeAhead(
+                          items: wasteTypes,
+                          selectedItems: localSelectedWasteTypes,
+                          onSelectionChanged: (selectedTypes) {
+                            setDialogState(() {
+                              localSelectedWasteTypes = selectedTypes;
+                            });
+                          },
+                          hintText: 'Abfallarten eingeben',
+                          sectionTitle: 'Abfallarten auswählen',
                         ),
-                        const SizedBox(width: 8),
-                        ElevatedButton(
-                          onPressed: selectedWasteTypes.isEmpty
-                              ? null
-                              : () async {
-                                  final loadingDialog = LoadingDialog();
-                                  loadingDialog.show(context,
-                                      'Bitte warten, während wir abonnieren...');
-                                  await _updateWasteTypesSubscription();
-                                  Navigator.pop(context);
-                                  loadingDialog.hide();
-                                },
-                          child: const Text('Bestätigen'),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Abbrechen'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: localSelectedWasteTypes.isEmpty
+                                  ? null
+                                  : () async {
+                                      _selectWasteTypes(
+                                          localSelectedWasteTypes);
+
+                                      final loadingDialog = LoadingDialog();
+                                      loadingDialog.show(context,
+                                          'Bitte warten, während wir abonnieren...');
+                                      await _updateWasteTypesSubscription();
+                                      Navigator.pop(context);
+                                      loadingDialog.hide();
+                                    },
+                              child: const Text('Bestätigen'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     ).then((value) {

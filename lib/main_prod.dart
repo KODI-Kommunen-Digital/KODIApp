@@ -161,6 +161,6 @@ class _HeidiAppState extends State<HeidiApp> {
     final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
     final wasteTypes = prefs.getSelectedWasteTypes();
     final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
-    return (location != null && wasteTypes.isNotEmpty) || introSkipped;
+    return (location != null && wasteTypes.isNotEmpty);
   }
 }

@@ -256,10 +256,6 @@ class IntroPageState extends State<IntroPage> {
                 ),
                 const SizedBox(height: 10),
               ],
-              TextButton(
-                onPressed: _skipIntro,
-                child: const Text('Überspringen'),
-              ),
               const SizedBox(height: 20),
               const Text(
                 'Wenn du deinen Standort und deine Abfallarten wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du beides später auf der Seite des Abfallkalenders ändern.',
