@@ -58,7 +58,8 @@ Future<void> main() async {
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 
   await SentryFlutter.init((options) {
-    options.dsn = 'https://667175baae08bf96e43d0b5b5444deeb@o4507264812908544.ingest.de.sentry.io/4508890460323920';
+    options.dsn =
+        'https://667175baae08bf96e43d0b5b5444deeb@o4507264812908544.ingest.de.sentry.io/4508890460323920';
     options.tracesSampleRate = 0.01;
     options.debug = false;
   }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
@@ -124,7 +125,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     home: FutureBuilder<bool?>(
                       future: _shouldShowMainScreen(),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else {
                           final location = snapshot.data;
@@ -138,7 +140,8 @@ class _HeidiAppState extends State<HeidiApp> {
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.linear(theme.textScaleFactor ?? 1),
+                        textScaler:
+                            TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -160,6 +163,6 @@ class _HeidiAppState extends State<HeidiApp> {
     final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
     final wasteTypes = prefs.getSelectedWasteTypes();
     final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
-    return (location != null && wasteTypes.isNotEmpty) || introSkipped;
+    return (location != null && wasteTypes.isNotEmpty);
   }
 }
