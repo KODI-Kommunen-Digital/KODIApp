@@ -56,8 +56,8 @@ class _BannerSliderState extends State<BannerSlider> {
                       child: Image.asset(
                         imageUrl,
                         fit: BoxFit.cover,
-                        cacheWidth: 400,
-                        cacheHeight: 200,
+                        cacheWidth: 600,
+                        cacheHeight: 300,
                         width: double.infinity,
                       ),
                     ),
@@ -83,6 +83,11 @@ class _BannerSliderState extends State<BannerSlider> {
                   child: Center(
                     child: Text(
                       title,
+                      style: Theme.of(
+                        context,
+                      ).textTheme.bodyMedium!.copyWith(
+                            color: Colors.white
+                          ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
                     ),
