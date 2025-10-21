@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -69,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _listenToConnectivity() {
-    _connectivitySubscription = Connectivity()
-        .onConnectivityChanged
-        .listen((_) => AppBloc.homeCubit.onLoad(false));
+    _connectivitySubscription = Connectivity().onConnectivityChanged.listen(
+      (_) => AppBloc.homeCubit.onLoad(false),
+    );
   }
 
   Future<void> _checkUserExist() async {
@@ -111,19 +110,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onCategory(
-      CategoryModel item, List<CategoryModel> allCategories) async {
+    CategoryModel item,
+    List<CategoryModel> allCategories,
+  ) async {
     if (item.id == -1) {
       _showAllCategories(allCategories);
       return;
     }
 
-    if (item.id == 17) { // Groups
+    if (item.id == 17) {
+      // Groups
       final prefs = await Preferences.openBox();
       final cityId = prefs.getKeyValue(Preferences.cityId, 0);
       if (cityId != 0) {
         if (mounted) {
-          Navigator.pushNamed(context, Routes.listGroups,
-              arguments: {'id': item.id, 'title': 'Gruppen'});
+          Navigator.pushNamed(
+            context,
+            Routes.listGroups,
+            arguments: {'id': item.id, 'title': 'Gruppen'},
+          );
         }
       } else {
         if (mounted) {
@@ -135,8 +140,11 @@ class _HomeScreenState extends State<HomeScreen> {
       prefs.setKeyValue(Preferences.categoryId, item.id);
       prefs.setKeyValue(Preferences.type, "category");
       if (mounted) {
-        Navigator.pushNamed(context, Routes.listProduct,
-            arguments: {'id': item.id, 'title': ''});
+        Navigator.pushNamed(
+          context,
+          Routes.listProduct,
+          arguments: {'id': item.id, 'title': ''},
+        );
       }
     } else {
       _showCategoryComingSoon();
@@ -146,8 +154,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _onService(CategoryModel item) async {
     switch (item.id) {
       case 4:
-        await launchUrl(Uri.parse("https://freiraum-fichtelgebirge.de/"),
-            mode: LaunchMode.inAppWebView);
+        await launchUrl(
+          Uri.parse("https://freiraum-fichtelgebirge.de/"),
+          mode: LaunchMode.inAppWebView,
+        );
         break;
       case 5:
         if (mounted) {
@@ -220,22 +230,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 debugDisplayAlways: true,
                 countryCode: 'DE',
                 durationUntilAlertAgain: const Duration(seconds: 30),
-                willDisplayUpgrade: ({
-                  required bool display,
-                  String? installedVersion,
-                  UpgraderVersionInfo? versionInfo,
-                }) {
-                  if (display) {
-                    WidgetsBinding.instance.addPostFrameCallback((_) {
-                      if (mounted) {
-                        setState(() {
-                          _latestAppStoreVersion =
-                              versionInfo?.appStoreVersion?.toString() ?? '';
+                willDisplayUpgrade:
+                    ({
+                      required bool display,
+                      String? installedVersion,
+                      UpgraderVersionInfo? versionInfo,
+                    }) {
+                      if (display) {
+                        WidgetsBinding.instance.addPostFrameCallback((_) {
+                          if (mounted) {
+                            setState(() {
+                              _latestAppStoreVersion =
+                                  versionInfo?.appStoreVersion?.toString() ??
+                                  '';
+                            });
+                          }
                         });
                       }
-                    });
-                  }
-                },
+                    },
               ),
         child: BlocConsumer<HomeCubit, HomeState>(
           listener: (context, state) {
@@ -257,20 +269,28 @@ class _HomeScreenState extends State<HomeScreen> {
               categoryLoading: (location) =>
                   const Center(child: CircularProgressIndicator.adaptive()),
               error: (error) => Center(child: Text(error)),
-              loaded: (banner, category, location, recent, company,
-                  isRefreshLoader, isPaginating) {
-                return _HomeContent(
-                  banner: banner,
-                  categories: category,
-                  companies: company,
-                  scrollCompanyController: _scrollCompanyController,
-                  isCompanyLoadingMore: isPaginating,
-                  onRefresh: _onRefresh,
-                  onCategorySelected: _onCategory,
-                  onServiceSelected: _onService,
-                  onProductSelected: _onProductDetail,
-                );
-              },
+              loaded:
+                  (
+                    banner,
+                    category,
+                    location,
+                    recent,
+                    company,
+                    isRefreshLoader,
+                    isPaginating,
+                  ) {
+                    return _HomeContent(
+                      banner: banner,
+                      categories: category,
+                      companies: company,
+                      scrollCompanyController: _scrollCompanyController,
+                      isCompanyLoadingMore: isPaginating,
+                      onRefresh: _onRefresh,
+                      onCategorySelected: _onCategory,
+                      onServiceSelected: _onService,
+                      onProductSelected: _onProductDetail,
+                    );
+                  },
             );
           },
         ),
@@ -298,7 +318,8 @@ class _HomeContent extends StatelessWidget {
   final ScrollController scrollCompanyController;
   final bool isCompanyLoadingMore;
   final Future<void> Function() onRefresh;
-  final Future<void> Function(CategoryModel, List<CategoryModel>) onCategorySelected;
+  final Future<void> Function(CategoryModel, List<CategoryModel>)
+  onCategorySelected;
   final Future<void> Function(CategoryModel) onServiceSelected;
   final void Function(ProductModel) onProductSelected;
 
@@ -322,8 +343,11 @@ class _HomeContent extends StatelessWidget {
                 final prefs = await Preferences.openBox();
                 prefs.setKeyValue(Preferences.type, 'search');
                 if (context.mounted) {
-                  Navigator.pushNamed(context, Routes.listProduct,
-                      arguments: {'search': data, 'title': 'Suche'});
+                  Navigator.pushNamed(
+                    context,
+                    Routes.listProduct,
+                    arguments: {'search': data, 'title': 'Suche'},
+                  );
                 }
               },
             ),
@@ -331,28 +355,26 @@ class _HomeContent extends StatelessWidget {
           ),
           CupertinoSliverRefreshControl(onRefresh: onRefresh),
           SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                const SizedBox(height: 6),
-                _CategoryGrid(
-                  categories: categories,
-                  onCategorySelected: onCategorySelected,
-                  onServiceSelected: onServiceSelected,
-                ),
-                const BannerSlider(),
-                const SizedBox(height: 16),
-                _CompanyList(
-                  companies: companies,
-                  scrollController: scrollCompanyController,
-                  isLoadingMore: isCompanyLoadingMore,
-                  onProductSelected: onProductSelected,
-                ),
-                const _NewsSection(),
-                const SizedBox(height: 16),
-                const _FooterLogos(),
-                const SizedBox(height: 10),
-              ],
-            ),
+            delegate: SliverChildListDelegate([
+              const SizedBox(height: 6),
+              _CategoryGrid(
+                categories: categories,
+                onCategorySelected: onCategorySelected,
+                onServiceSelected: onServiceSelected,
+              ),
+              const BannerSlider(),
+              const SizedBox(height: 16),
+              _CompanyList(
+                companies: companies,
+                scrollController: scrollCompanyController,
+                isLoadingMore: isCompanyLoadingMore,
+                onProductSelected: onProductSelected,
+              ),
+              const _NewsSection(),
+              const SizedBox(height: 16),
+              const _FooterLogos(),
+              const SizedBox(height: 10),
+            ]),
           ),
         ],
       ),
@@ -368,7 +390,8 @@ class _CategoryGrid extends StatelessWidget {
   });
 
   final List<CategoryModel>? categories;
-  final Future<void> Function(CategoryModel, List<CategoryModel>) onCategorySelected;
+  final Future<void> Function(CategoryModel, List<CategoryModel>)
+  onCategorySelected;
   final Future<void> Function(CategoryModel) onServiceSelected;
 
   @override
@@ -440,23 +463,20 @@ class _CompanyList extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Translate.of(context).translate('strong_companies_in_a_strong_region'),
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
+            Translate.of(
+              context,
+            ).translate('do_you_know'),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
-          InkWell(
-            onTap: () {
-              CustomInAppWebView.showAsBottomSheet(context: context, url: "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/");
-            },
-            child: Text(
-              Translate.of(context)
-                  .translate('companies_in_the_fichtel_mountains'),
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).primaryColor,
-                  ),
-            ),
+          Text(
+            Translate.of(
+              context,
+            ).translate('strong_companies_in_a_strong_region'),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
           ),
           Container(
             height: 180,
@@ -464,6 +484,23 @@ class _CompanyList extends StatelessWidget {
             child: (companies == null || companies!.isEmpty)
                 ? _buildPlaceholder()
                 : _buildList(),
+          ),
+          InkWell(
+            onTap: () {
+              CustomInAppWebView.showAsBottomSheet(
+                context: context,
+                url:
+                "https://freiraum-fichtelgebirge.de/unternehmensverzeichnis/",
+              );
+            },
+            child: Text(
+              Translate.of(
+                context,
+              ).translate('companies_in_the_fichtel_mountains'),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: Theme.of(context).primaryColor,
+              ),
+            ),
           ),
         ],
       ),
@@ -484,7 +521,7 @@ class _CompanyList extends StatelessWidget {
             child: AppProductItem(
               onPressed: () => onProductSelected(item),
               item: item,
-              type: ProductViewType.card, 
+              type: ProductViewType.card,
               isRefreshLoader: false,
             ),
           );
@@ -503,7 +540,10 @@ class _CompanyList extends StatelessWidget {
       itemBuilder: (context, index) {
         return const Padding(
           padding: EdgeInsets.only(left: 8),
-          child: AppProductItem(type: ProductViewType.small, isRefreshLoader: false,),
+          child: AppProductItem(
+            type: ProductViewType.small,
+            isRefreshLoader: false,
+          ),
         );
       },
     );
@@ -537,7 +577,7 @@ class _NewsSection extends StatelessWidget {
           child: AppProductItem(
             onPressed: item != null ? () => onProductDetail(item) : null,
             item: item,
-            type: listMode, 
+            type: listMode,
             isRefreshLoader: false,
           ),
         );
@@ -558,18 +598,19 @@ class _NewsSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
           child: Text(
             Translate.of(context).translate('category_news'),
-            style: Theme.of(context)
-                .textTheme
-                .titleLarge!
-                .copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(
+              context,
+            ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         BlocBuilder<ListCubit, ListState>(
           builder: (context, state) {
             return state.when(
               loading: () => const ListLoading(),
-              loaded: (_, newsList) => _buildNewsList(context,newsList, listMode, buildItem),
-              updated: (_, newsList) => _buildNewsList(context,newsList, listMode, buildItem),
+              loaded: (_, newsList) =>
+                  _buildNewsList(context, newsList, listMode, buildItem),
+              updated: (_, newsList) =>
+                  _buildNewsList(context, newsList, listMode, buildItem),
               error: (e) => Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Text(Translate.of(context).translate('list_is_empty')),
@@ -586,18 +627,19 @@ class _NewsSection extends StatelessWidget {
               prefs.setKeyValue(Preferences.categoryId, 1); // 1 for News
               prefs.setKeyValue(Preferences.type, "category");
               if (context.mounted) {
-                Navigator.pushNamed(context, Routes.listProduct, arguments: {
-                  'id': 1,
-                  'title': '',
-                  'type': 'category',
-                });
+                Navigator.pushNamed(
+                  context,
+                  Routes.listProduct,
+                  arguments: {'id': 1, 'title': '', 'type': 'category'},
+                );
               }
             },
             child: Text(
               Translate.of(context).translate('more_news'),
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).primaryColor),
+                fontWeight: FontWeight.bold,
+                color: Theme.of(context).primaryColor,
+              ),
             ),
           ),
         ),
@@ -606,10 +648,11 @@ class _NewsSection extends StatelessWidget {
   }
 
   Widget _buildNewsList(
-      BuildContext context,
+    BuildContext context,
     List<ProductModel>? list,
     ProductViewType listMode,
-    Widget Function({ProductModel? item, required ProductViewType type}) buildItem,
+    Widget Function({ProductModel? item, required ProductViewType type})
+    buildItem,
   ) {
     if (list == null || list.isEmpty) {
       return Center(
@@ -696,18 +739,20 @@ class _FooterLogos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        _FooterLogo(
-            asset: 'assets/images/home/energie_logo.png',
-        ),
+        _FooterLogo(asset: 'assets/images/home/energie_logo.png'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: const [
-            _FooterLogo(asset: 'assets/images/home/heimat_logo.png'),
-            _FooterLogo(asset: 'assets/images/home/bayerisches_logo.jpg'),
-
+            _FooterLogo(
+              asset: 'assets/images/home/heimat_logo.png',
+              url: "https://www.stmfh.bayern.de/heimat/regionale_identitaet/",
+            ),
+            _FooterLogo(
+              asset: 'assets/images/home/bayerisches_logo.jpg',
+              url: "https://www.stmfh.bayern.de/",
+            ),
           ],
         ),
-
       ],
     );
   }
@@ -717,18 +762,17 @@ class _FooterLogo extends StatelessWidget {
   final String asset;
   final String? url;
 
-  const _FooterLogo({required this.asset,this.url});
+  const _FooterLogo({required this.asset, this.url});
 
   @override
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: InkWell(
-        onTap: (){
-            if (url != null) {
-              launchUrl(Uri.parse(url!),
-                  mode: LaunchMode.externalApplication);
-            }
-          },
+        onTap: () {
+          if (url != null) {
+            launchUrl(Uri.parse(url!), mode: LaunchMode.externalApplication);
+          }
+        },
         child: Image.asset(
           asset,
           fit: BoxFit.contain,
@@ -736,7 +780,6 @@ class _FooterLogo extends StatelessWidget {
           cacheHeight: 200,
           width: 200,
           height: 100,
-
         ),
       ),
     );
