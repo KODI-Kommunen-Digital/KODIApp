@@ -242,6 +242,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         service.imageLink == "20" ||
         service.imageLink == "21" ||
         service.imageLink == "22" ||
+        service.imageLink == "23" ||
         service.imageLink == "30") {
       await launchUrl(
           Uri.parse(

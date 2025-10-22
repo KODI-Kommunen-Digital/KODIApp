@@ -589,6 +589,7 @@
   "description_too_long": "Beschreibung darf nicht länger als 255 Zeichen sein",
   "unsupported_social_media": "Nicht unterstützte Social Media Plattform",
   "invalid_social_media_input": "Ungültige Eingabe für Social Media Plattform",
-  "invalid_social_media_input_general": "Ungültige Eingabe für Social Media"
+  "invalid_social_media_input_general": "Ungültige Eingabe für Social Media",
+  "mobility": "Mobilität"
 }
 

@@ -55,7 +55,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text(Translate.of(context).translate('cust_services')),
+          title: Text(Translate.of(context).translate('mobility')),
         ),
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
           listener: (context, state) {
@@ -163,11 +163,31 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.arguments == 61) {
+    if (service.arguments == 61 ||service.arguments == 20 || service.arguments == 21 || service.arguments == 22 || service.arguments == 23) {
+
+      String url = "";
+
+      switch (service.arguments) {
+        case 61:
+          url = "https://www.rheinbahn.de/fahren/verbindungen/fahrplanbuch";
+          break;
+        case 21:
+          url = "https://www.stadtwerke-ratingen.de/mobilitaet/oeffentliche-ladestationen";
+          break;
+        case 22:
+          url = "https://www.stadt-ratingen.de/notfall";
+          break;
+        case 23:
+          url = "https://ich-tanke.de/tankstellen/super-e5/umkreis/40883-ratingen/";
+          break;
+        case 20:
+          url = "https://www.stadt-ratingen.de/verkehr/verkehrsinfo";
+          break;
+      }
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse(
-            "https://www.rheinbahn.de/fahren/verbindungen/fahrplanbuch"));
+            url));
 
       await showModalBottomSheet(
         context: context,

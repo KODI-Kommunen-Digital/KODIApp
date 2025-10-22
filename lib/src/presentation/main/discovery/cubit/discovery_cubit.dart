@@ -182,6 +182,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "20": "https://www.stadt-ratingen.de/verkehr/verkehrsinfo",
       "21": "https://www.stadtwerke-ratingen.de/mobilitaet/oeffentliche-ladestationen",
       "22": "https://www.stadt-ratingen.de/notfall",
+      "23": "https://ich-tanke.de/tankstellen/super-e5/umkreis/40883-ratingen/",
       "30": "https://www.ratingen.de"
     };
     return serviceLinks[imageLink];

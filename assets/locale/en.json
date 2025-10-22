@@ -558,5 +558,6 @@
   "error_poll_option_title": "Poll option title required",
   "error_poll_option_same_title": "Poll option titles can't be the same",
   "contact_us_account": "Contact",
-  "waste_calendar": "Waste Calendar"
+  "waste_calendar": "Waste Calendar",
+  "mobility": "Mobility"
 }
