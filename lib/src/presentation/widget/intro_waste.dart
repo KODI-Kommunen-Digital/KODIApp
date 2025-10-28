@@ -47,9 +47,11 @@ class IntroPageState extends State<IntroPage> {
         }
       });
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      if(!context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text(
               "Standorte konnten nicht geladen werden. Bitte versuchen Sie es später noch einmal.")));
+      }
     }
   }
 
