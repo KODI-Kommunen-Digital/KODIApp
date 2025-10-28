@@ -200,6 +200,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "17": "https://www.rundblick-troisdorf.de/",
       "18": "https://www.trowow.de/",
       "19": "https://www.stadtwerke-troisdorf.de/",
+      "20": "https://www.troisdorf.city/",
     };
     return serviceLinks[imageLink];
   }
