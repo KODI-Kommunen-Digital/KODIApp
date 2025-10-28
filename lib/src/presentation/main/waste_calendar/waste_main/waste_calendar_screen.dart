@@ -83,7 +83,6 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
 
-
     if (previousLocationId != null) {
       final previousTopic =
           repository.getTopicFromHash(getStreetNameHash(previousLocationName));
