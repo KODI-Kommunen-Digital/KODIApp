@@ -39,6 +39,8 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/envStage/.envTroisdorfStage");
+
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -69,7 +71,6 @@ Future<void> main() async {
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
   }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/envStage/.envTroisdorfStage");
   await CategoryManager.loadCategories();
 }
 
@@ -97,13 +98,8 @@ class _HeidiAppState extends State<HeidiApp> {
     AppBloc.applicationCubit.onSetup();
     _locationFuture = clearLocationId();
 
-    // LOGIC TO UNSUBSCRIBE THE PREVIOUS TOPICS IF NEW UPDATED APP IS INSTALLED
-    // IMPLEMENTED FIRE AND FORGET APPROACH
-    // WILL NOT BLOCK MAIN THREAD i,e; RUN IN BACKGROUND
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.microtask(() {
-        unsubscribeToThePreviousTopics();
-      });
+    Future.microtask(() {
+      unsubscribeToThePreviousTopics();
     });
   }
 
@@ -220,15 +216,27 @@ class _HeidiAppState extends State<HeidiApp> {
 
       if (location != null &&
           prefs.getKeyValue(Preferences.isOldTopicUnsubscribed, null) == null) {
+
+
+        int? index = prefs.getKeyValue(Preferences.oldTopicUnsubscribedIndex, null);
+
+        if( index == null)
+        {
+          await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex, 0);
+          index = 0;
+        }
+
         WasteCalendarRepository repository = WasteCalendarRepository(prefs);
-
         final list = await _loadLocations(repository);
-
-        for (WasteLocation wasteLocation in list) {
+        final updatedList = list.sublist(index);
+        for (WasteLocation wasteLocation in updatedList) {
           if (wasteLocation.name != location) {
-            debugPrint('unsubscribed to Name = ${wasteLocation.name}');
+            debugPrint('unsubscribed to Name = ${wasteLocation.name} \n hashed = ${wasteLocation.hashStreetName}');
             await firebaseApi.unsubscribeFromTopic(repository
-                .getTopicFromHash(getStreetNameHash(wasteLocation.name)));
+                .getTopicFromHash(wasteLocation.hashStreetName));
+            debugPrint('index = $index');
+            index = index!+1;
+            await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
           }
         }
       }
