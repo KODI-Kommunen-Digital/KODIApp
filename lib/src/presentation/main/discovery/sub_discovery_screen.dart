@@ -98,6 +98,9 @@ class SubDiscoveryScreen extends StatelessWidget {
       case "19":
         url = "https://www.stadtwerke-troisdorf.de/";
         break;
+      case "20":
+        url = "https://www.troisdorf.city/";
+        break;
     }
 
     if (url != null) {
