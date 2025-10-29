@@ -768,11 +768,13 @@ class _FooterLogo extends StatelessWidget {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       child: InkWell(
-        onTap: () {
-          if (url != null) {
-            launchUrl(Uri.parse(url!), mode: LaunchMode.externalApplication);
-          }
-        },
+        onTap: (url != null)? () {
+            CustomInAppWebView.showAsBottomSheet(
+              context: context,
+              url: url!,
+              title: url!,
+            );
+        }:null,
         child: Image.asset(
           asset,
           fit: BoxFit.contain,

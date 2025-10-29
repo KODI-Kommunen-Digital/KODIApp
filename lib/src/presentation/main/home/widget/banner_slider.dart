@@ -39,19 +39,22 @@ class _BannerSliderState extends State<BannerSlider> {
             ).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 10),
-          Stack(
-            children: [
-              SizedBox(
-                height: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: GestureDetector(
-                    onTap: () {
-                      Utils().showAlertMessage(
-                        'this_feature_will_be_available_soon',
-                        context,
-                      );
-                    },
+          GestureDetector(
+            onTap: () {
+              Utils().showAlertMessage(
+                'this_feature_will_be_available_soon',
+                context,
+              );
+            },
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(12),
+                      topLeft: Radius.circular(12),
+                    ),
                     child: RepaintBoundary(
                       child: Image.asset(
                         imageUrl,
@@ -63,14 +66,9 @@ class _BannerSliderState extends State<BannerSlider> {
                     ),
                   ),
                 ),
-              ),
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: Container(
+                Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 4,
+                    horizontal: 8,
                     vertical: 4,
                   ),
                   decoration: BoxDecoration(
@@ -85,16 +83,16 @@ class _BannerSliderState extends State<BannerSlider> {
                       title,
                       style: Theme.of(
                         context,
-                      ).textTheme.bodyMedium!.copyWith(
-                            color: Colors.white
-                          ),
+                      ).textTheme.bodySmall!.copyWith(
+                          color: Colors.white
+                      ),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 4,
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           // SizedBox(height: 10),
           // const SizedBox(height: 8),

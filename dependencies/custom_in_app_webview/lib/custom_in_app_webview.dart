@@ -104,17 +104,18 @@ class _CustomInAppWebViewState extends State<CustomInAppWebView> {
                       Icons.arrow_back,
                       color: Colors.white,
                     )),
-                Expanded(
-                  child: Text(
-                    widget.url,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
+                // Expanded(
+                //   child: Text(
+                //     widget.url,
+                //     overflow: TextOverflow.ellipsis,
+                //     maxLines: 1,
+                //     style: const TextStyle(
+                //       color: Colors.white,
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
+                Spacer(),
                 IconButton(
                   icon: const Icon(
                     Icons.close,
