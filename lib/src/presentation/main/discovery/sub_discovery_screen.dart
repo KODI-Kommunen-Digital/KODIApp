@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
 
+import '../../../utils/translate.dart';
+
 class SubDiscoveryScreen extends StatelessWidget {
   final CitizenServiceModel service;
 
@@ -12,7 +14,7 @@ class SubDiscoveryScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Stadtwerke Troisdrof"),
+        title: Text(Translate.of(context).translate('municipal_utilities')),
       ),
       body :Padding(
         padding:  const EdgeInsets.symmetric(horizontal: 8,vertical: 8),

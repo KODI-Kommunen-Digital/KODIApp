@@ -565,9 +565,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (item.id == 4 ||
                     item.id == 5 ||
                     item.id == 6 ||
-                    item.id == 7 ||
                     item.id == 8) {
                   _onService(item);
+                } else if (item.id == 7) {
+                  if(services!=null && services!.isNotEmpty){
+                    CitizenServiceModel service = services!.where((service) => service.imageLink == "13").first;
+                    Routes.trackMatomoEvent(true, null, int.parse(service.imageLink), null);
+                    Navigator.pushNamed(context, Routes.subDiscoveryScreen,
+                        arguments: service);
+                  }
                 } else {
                   _onCategory(item, category);
                 }
