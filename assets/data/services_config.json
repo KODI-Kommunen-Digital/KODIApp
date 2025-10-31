@@ -58,12 +58,6 @@
         "imageLink": "19",
         "arguments": null,
         "categoryId": null
-      },
-      {
-        "imageUrl": "assets/images/services-20.png",
-        "imageLink": "20",
-        "arguments": null,
-        "categoryId": null
       }
     ]
   },
@@ -118,6 +112,12 @@
   {
     "imageUrl": "assets/images/services-17.png",
     "imageLink": "17",
+    "arguments": null,
+    "categoryId": null
+  },
+  {
+    "imageUrl": "assets/images/services-20.png",
+    "imageLink": "20",
     "arguments": null,
     "categoryId": null
   }
