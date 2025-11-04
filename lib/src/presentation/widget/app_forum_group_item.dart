@@ -67,6 +67,8 @@ class _ForumGroupItemState extends State<ForumGroupItem> {
           Row(
             children: <Widget>[
               CachedNetworkImage(
+                memCacheHeight: 100,
+                memCacheWidth: 80,
                 imageUrl: widget.item?.image == 'admin/DefaultForum.jpeg'
                     ? "${Application.picturesURL}${widget.item?.image}"
                     : "${Application.picturesURL}${widget.item!.image}?cacheKey=$uniqueKey",

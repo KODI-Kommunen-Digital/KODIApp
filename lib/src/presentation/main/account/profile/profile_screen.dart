@@ -241,6 +241,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                             )),
                                                       )
                                                     : CachedNetworkImage(
+                                                        memCacheHeight: 100,
+                                                        memCacheWidth: 80,
                                                         imageUrl: item
                                                                     .sourceId ==
                                                                 2

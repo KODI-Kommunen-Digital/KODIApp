@@ -10,6 +10,8 @@ import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
+import 'package:loggy/loggy.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'home_state.dart';
 
@@ -21,6 +23,135 @@ class HomeCubit extends Cubit<HomeState> {
   dynamic categoryCount;
   bool calledExternally = false;
   bool doesScroll = false;
+  String searchTerm = "";
+  bool isSearching = false;
+
+  Future<void> loadMoreListings() async {
+    final currentState = state;
+    if (currentState is HomeStateLoaded && !currentState.isLoadingMore) {
+      try {
+        // Emit loading more state
+        emit(currentState.copyWith(isLoadingMore: true));
+
+        if (!await hasInternet()) {
+          emit(const HomeState.error("no_internet"));
+          return;
+        }
+
+        final nextPage = currentState.currentPage + 1;
+        List<ProductModel> newListings;
+
+        if (isSearching) {
+          newListings = await _searchListingsInternal(searchTerm, nextPage);
+        } else {
+          newListings = await _fetchRecentListings(nextPage);
+        }
+
+        // Combine existing and new listings
+        final updatedRecent = List<ProductModel>.from(currentState.recent)..addAll(newListings);
+
+        emit(currentState.copyWith(
+          recent: updatedRecent,
+          isLoadingMore: false,
+          currentPage: nextPage,
+        ));
+      } catch (error, stackTrace) {
+        logError('Error loading more listings: $error');
+        await Sentry.captureException(error, stackTrace: stackTrace);
+        // Revert to previous state without loading more indicator
+        if (currentState is HomeStateLoaded) {
+          emit(currentState.copyWith(isLoadingMore: false));
+        }
+      }
+    }
+  }
+
+  Future<void> performSearch(String query) async {
+    final currentState = state;
+    if (currentState is HomeStateLoaded) {
+      try {
+        emit(currentState.copyWith(isLoadingMore: true));
+
+        if (!await hasInternet()) {
+          emit(const HomeState.error("no_internet"));
+          return;
+        }
+
+        searchTerm = query;
+        isSearching = query.isNotEmpty;
+
+        final searchResults = await _searchListingsInternal(query, 1);
+
+        emit(currentState.copyWith(
+          recent: searchResults,
+          isLoadingMore: false,
+          currentPage: 1,
+        ));
+      } catch (error, stackTrace) {
+        logError('Error searching listings: $error');
+        await Sentry.captureException(error, stackTrace: stackTrace);
+        if (currentState is HomeStateLoaded) {
+          emit(currentState.copyWith(isLoadingMore: false));
+        }
+      }
+    }
+  }
+
+  Future<void> clearSearch() async {
+    final currentState = state;
+    if (currentState is HomeStateLoaded) {
+      try {
+        emit(currentState.copyWith(isLoadingMore: true));
+
+        searchTerm = "";
+        isSearching = false;
+
+        // Reload initial listings
+        await onLoad(false);
+
+      } catch (error, stackTrace) {
+        logError('Error clearing search: $error');
+        await Sentry.captureException(error, stackTrace: stackTrace);
+        if (currentState is HomeStateLoaded) {
+          emit(currentState.copyWith(isLoadingMore: false));
+        }
+      }
+    }
+  }
+
+// Helper methods
+  Future<List<ProductModel>> _fetchRecentListings(int pageNo) async {
+    CategoryModel? savedCity = await checkSavedCity(location);
+
+    if (savedCity != null) {
+      final listingsRequestResponse = await Api.requestLocList(savedCity.id, pageNo);
+      return List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+    } else {
+      final listingsRequestResponse = await Api.requestRecentListings(pageNo);
+      return List.from(listingsRequestResponse.data ?? []).map((item) {
+        return ProductModel.fromJson(item);
+      }).toList();
+    }
+  }
+
+  Future<List<ProductModel>> _searchListingsInternal(String content, int pageNo) async {
+    int currentCityFilter = await getCurrentCityFilter();
+    MultiFilter multiFilter = MultiFilter(
+      hasLocationFilter: false,
+      currentLocation: currentCityFilter,
+    );
+
+    final result = await ListRepository.searchListing(
+      content: content,
+      multiFilter: multiFilter,
+      pageNo: pageNo,
+    );
+
+    final List<ProductModel>? listUpdated = result?[0];
+    return listUpdated ?? [];
+  }
 
   HomeCubit() : super(const HomeState.loading());
 
@@ -89,11 +220,12 @@ class HomeCubit extends Cubit<HomeState> {
         await formatCategoriesList(category, categoryCount, savedCity?.id);
 
     emit(HomeStateLoaded(
-      banner,
-      formattedCategories,
-      location,
-      recent,
-      isRefreshLoader,
+      banner: banner,
+      category: formattedCategories,
+      location: location,
+      recent: recent,
+      isRefreshLoader: isRefreshLoader,
+      isLoadingMore: false,
     ));
   }
 
@@ -101,6 +233,17 @@ class HomeCubit extends Cubit<HomeState> {
     final prefs = await Preferences.openBox();
     await prefs.setKeyValue(Preferences.ignoredAppVersion, version);
   }
+
+  // Future<void> fetchNewListings(int page) async {
+  //   emit(HomeLoading());
+  //   try {
+  //     final listings = await repository.getListings(page);
+  //     emit(HomeLoaded(listings: listings, page: page));
+  //   } catch (e, s) {
+  //     await Sentry.captureException(e, stackTrace: s);
+  //     emit(HomeError(e.toString()));
+  //   }
+  // }
 
   Future<String> getIgnoreAppVersion() async {
     final prefs = await Preferences.openBox();
@@ -143,11 +286,12 @@ class HomeCubit extends Cubit<HomeState> {
     emit(const HomeStateLoading());
     const banner = Images.slider;
     emit(HomeStateLoaded(
-      banner,
-      category,
-      location,
-      recent,
-      false,
+      banner: banner,
+      category: category,
+      location: location,
+      recent: recent,
+      isRefreshLoader: false,
+      isLoadingMore: false,
     ));
   }
 

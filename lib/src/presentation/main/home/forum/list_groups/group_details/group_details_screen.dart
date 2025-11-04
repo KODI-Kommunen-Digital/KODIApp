@@ -290,6 +290,8 @@ class _GroupDetailsLoadedState extends State<GroupDetailsLoaded> {
                         child: Row(
                           children: <Widget>[
                             CachedNetworkImage(
+                              memCacheHeight: 100,
+                              memCacheWidth: 80,
                               imageUrl: widget.posts[index].image == null
                                   ? '${Application.picturesURL}admin/DefaultForum.jpeg'
                                   : "${Application.picturesURL}${widget.posts[index].image}?cacheKey=$uniqueKey",

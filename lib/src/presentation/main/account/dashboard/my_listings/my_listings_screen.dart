@@ -160,6 +160,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                 Row(
                                                   children: <Widget>[
                                                     CachedNetworkImage(
+                                                      memCacheHeight: 100,
+                                                      memCacheWidth: 80,
                                                       imageUrl: item.sourceId ==
                                                               2
                                                           ? item.image

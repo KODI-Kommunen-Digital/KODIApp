@@ -126,6 +126,8 @@ class _WishListLoadedState extends State<WishListLoaded> {
                               children: <Widget>[
                                 widget.favoritesList[index].pdf == ''
                                     ? CachedNetworkImage(
+                                        memCacheHeight: 100,
+                                        memCacheWidth: 80,
                                         imageUrl: widget.favoritesList[index].logo ?? '',
                                         cacheManager: memoryCacheManager,
                                         imageBuilder: (context, imageProvider) {

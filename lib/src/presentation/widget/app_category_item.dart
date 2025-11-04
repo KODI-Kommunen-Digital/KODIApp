@@ -46,6 +46,8 @@ class AppCategory extends StatelessWidget {
           child: SizedBox(
             height: 120,
             child: CachedNetworkImage(
+              memCacheHeight: 100,
+              memCacheWidth: 80,
               imageUrl: "${Application.picturesURL}${item!.image}",
               cacheManager: memoryCacheManager,
               imageBuilder: (context, imageProvider) {
@@ -260,6 +262,8 @@ class AppCategory extends StatelessWidget {
                   width: double.infinity,
                   color: Colors.white,
                   child: CachedNetworkImage(
+                    memCacheHeight: 100,
+                    memCacheWidth: 80,
                     imageUrl: "$profilePicUrl${item!.image}",
                     cacheManager: memoryCacheManager,
                     imageBuilder: (context, imageProvider) {

@@ -122,6 +122,8 @@ class _ForumGroupImageUploadState extends State<ForumGroupImageUpload> {
         return SizedBox(
           width: double.infinity,
           child: CachedNetworkImage(
+            memCacheHeight: 100,
+            memCacheWidth: 80,
             imageUrl:
                 "${Application.picturesURL}${widget.image!}?cacheKey=$uniqueKey",
             fit: BoxFit.cover,

@@ -9,12 +9,13 @@ list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
   flutter_secure_storage_windows
   permission_handler_windows
+  sentry_flutter
   sqlite3_flutter_libs
   url_launcher_windows
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST
-  sentry_flutter
+  jni
 )
 
 set(PLUGIN_BUNDLED_LIBRARIES)

@@ -48,6 +48,8 @@ Future<void> main() async {
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  PaintingBinding.instance.imageCache.maximumSize = 100;
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 50 << 20;
 
   await SentryFlutter.init((options) {
     options.dsn =

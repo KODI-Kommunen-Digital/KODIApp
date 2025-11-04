@@ -26,7 +26,9 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) =>
@@ -41,7 +43,9 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) =>
@@ -56,7 +60,9 @@ mixin _$HomeState {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -107,6 +113,9 @@ class _$HomeStateCopyWithImpl<$Res, $Val extends HomeState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -123,6 +132,9 @@ class __$$HomeStateInitialImplCopyWithImpl<$Res>
   __$$HomeStateInitialImplCopyWithImpl(_$HomeStateInitialImpl _value,
       $Res Function(_$HomeStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -155,7 +167,9 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -173,7 +187,9 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -191,7 +207,9 @@ class _$HomeStateInitialImpl implements HomeStateInitial {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -261,6 +279,9 @@ class __$$HomeStateLoadingImplCopyWithImpl<$Res>
   __$$HomeStateLoadingImplCopyWithImpl(_$HomeStateLoadingImpl _value,
       $Res Function(_$HomeStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -293,7 +314,9 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -311,7 +334,9 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -329,7 +354,9 @@ class _$HomeStateLoadingImpl implements HomeStateLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -404,6 +431,8 @@ class __$$HomeStatecategoryLoadingImplCopyWithImpl<$Res>
       $Res Function(_$HomeStatecategoryLoadingImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -451,7 +480,9 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_location));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStatecategoryLoadingImplCopyWith<_$HomeStatecategoryLoadingImpl>
@@ -469,7 +500,9 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -487,7 +520,9 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -505,7 +540,9 @@ class _$HomeStatecategoryLoadingImpl implements HomeStatecategoryLoading {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -562,7 +599,10 @@ abstract class HomeStatecategoryLoading implements HomeState {
       _$HomeStatecategoryLoadingImpl;
 
   List<CategoryModel>? get location;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeStatecategoryLoadingImplCopyWith<_$HomeStatecategoryLoadingImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -578,7 +618,9 @@ abstract class _$$HomeStateLoadedImplCopyWith<$Res> {
       List<CategoryModel> category,
       List<CategoryModel> location,
       List<ProductModel> recent,
-      bool isRefreshLoader});
+      bool isRefreshLoader,
+      bool isLoadingMore,
+      int currentPage});
 }
 
 /// @nodoc
@@ -589,6 +631,8 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
       _$HomeStateLoadedImpl _value, $Res Function(_$HomeStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -597,28 +641,38 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
     Object? location = null,
     Object? recent = null,
     Object? isRefreshLoader = null,
+    Object? isLoadingMore = null,
+    Object? currentPage = null,
   }) {
     return _then(_$HomeStateLoadedImpl(
-      null == banner
+      banner: null == banner
           ? _value.banner
           : banner // ignore: cast_nullable_to_non_nullable
               as String,
-      null == category
+      category: null == category
           ? _value._category
           : category // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
-      null == location
+      location: null == location
           ? _value._location
           : location // ignore: cast_nullable_to_non_nullable
               as List<CategoryModel>,
-      null == recent
+      recent: null == recent
           ? _value._recent
           : recent // ignore: cast_nullable_to_non_nullable
               as List<ProductModel>,
-      null == isRefreshLoader
+      isRefreshLoader: null == isRefreshLoader
           ? _value.isRefreshLoader
           : isRefreshLoader // ignore: cast_nullable_to_non_nullable
               as bool,
+      isLoadingMore: null == isLoadingMore
+          ? _value.isLoadingMore
+          : isLoadingMore // ignore: cast_nullable_to_non_nullable
+              as bool,
+      currentPage: null == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -627,11 +681,13 @@ class __$$HomeStateLoadedImplCopyWithImpl<$Res>
 
 class _$HomeStateLoadedImpl implements HomeStateLoaded {
   const _$HomeStateLoadedImpl(
-      this.banner,
-      final List<CategoryModel> category,
-      final List<CategoryModel> location,
-      final List<ProductModel> recent,
-      this.isRefreshLoader)
+      {required this.banner,
+      required final List<CategoryModel> category,
+      required final List<CategoryModel> location,
+      required final List<ProductModel> recent,
+      required this.isRefreshLoader,
+      this.isLoadingMore = false,
+      this.currentPage = 1})
       : _category = category,
         _location = location,
         _recent = recent;
@@ -664,10 +720,17 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
 
   @override
   final bool isRefreshLoader;
+  @override
+  @JsonKey()
+  final bool isLoadingMore;
+// Add loading more state
+  @override
+  @JsonKey()
+  final int currentPage;
 
   @override
   String toString() {
-    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, recent: $recent, isRefreshLoader: $isRefreshLoader)';
+    return 'HomeState.loaded(banner: $banner, category: $category, location: $location, recent: $recent, isRefreshLoader: $isRefreshLoader, isLoadingMore: $isLoadingMore, currentPage: $currentPage)';
   }
 
   @override
@@ -680,7 +743,11 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             const DeepCollectionEquality().equals(other._location, _location) &&
             const DeepCollectionEquality().equals(other._recent, _recent) &&
             (identical(other.isRefreshLoader, isRefreshLoader) ||
-                other.isRefreshLoader == isRefreshLoader));
+                other.isRefreshLoader == isRefreshLoader) &&
+            (identical(other.isLoadingMore, isLoadingMore) ||
+                other.isLoadingMore == isLoadingMore) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage));
   }
 
   @override
@@ -690,9 +757,13 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
       const DeepCollectionEquality().hash(_category),
       const DeepCollectionEquality().hash(_location),
       const DeepCollectionEquality().hash(_recent),
-      isRefreshLoader);
+      isRefreshLoader,
+      isLoadingMore,
+      currentPage);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStateLoadedImplCopyWith<_$HomeStateLoadedImpl> get copyWith =>
@@ -710,11 +781,14 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) {
-    return loaded(banner, category, location, recent, isRefreshLoader);
+    return loaded(banner, category, location, recent, isRefreshLoader,
+        isLoadingMore, currentPage);
   }
 
   @override
@@ -728,11 +802,14 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) {
-    return loaded?.call(banner, category, location, recent, isRefreshLoader);
+    return loaded?.call(banner, category, location, recent, isRefreshLoader,
+        isLoadingMore, currentPage);
   }
 
   @override
@@ -746,13 +823,16 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(banner, category, location, recent, isRefreshLoader);
+      return loaded(banner, category, location, recent, isRefreshLoader,
+          isLoadingMore, currentPage);
     }
     return orElse();
   }
@@ -800,18 +880,25 @@ class _$HomeStateLoadedImpl implements HomeStateLoaded {
 
 abstract class HomeStateLoaded implements HomeState {
   const factory HomeStateLoaded(
-      final String banner,
-      final List<CategoryModel> category,
-      final List<CategoryModel> location,
-      final List<ProductModel> recent,
-      final bool isRefreshLoader) = _$HomeStateLoadedImpl;
+      {required final String banner,
+      required final List<CategoryModel> category,
+      required final List<CategoryModel> location,
+      required final List<ProductModel> recent,
+      required final bool isRefreshLoader,
+      final bool isLoadingMore,
+      final int currentPage}) = _$HomeStateLoadedImpl;
 
   String get banner;
   List<CategoryModel> get category;
   List<CategoryModel> get location;
   List<ProductModel> get recent;
   bool get isRefreshLoader;
-  @JsonKey(ignore: true)
+  bool get isLoadingMore; // Add loading more state
+  int get currentPage;
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeStateLoadedImplCopyWith<_$HomeStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -833,6 +920,8 @@ class __$$HomeStateErrorImplCopyWithImpl<$Res>
       _$HomeStateErrorImpl _value, $Res Function(_$HomeStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -871,7 +960,9 @@ class _$HomeStateErrorImpl implements HomeStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$HomeStateErrorImplCopyWith<_$HomeStateErrorImpl> get copyWith =>
@@ -889,7 +980,9 @@ class _$HomeStateErrorImpl implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)
         loaded,
     required TResult Function(String error) error,
   }) {
@@ -907,7 +1000,9 @@ class _$HomeStateErrorImpl implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult? Function(String error)? error,
   }) {
@@ -925,7 +1020,9 @@ class _$HomeStateErrorImpl implements HomeStateError {
             List<CategoryModel> category,
             List<CategoryModel> location,
             List<ProductModel> recent,
-            bool isRefreshLoader)?
+            bool isRefreshLoader,
+            bool isLoadingMore,
+            int currentPage)?
         loaded,
     TResult Function(String error)? error,
     required TResult orElse(),
@@ -981,7 +1078,10 @@ abstract class HomeStateError implements HomeState {
   const factory HomeStateError(final String error) = _$HomeStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of HomeState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$HomeStateErrorImplCopyWith<_$HomeStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

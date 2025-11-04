@@ -457,6 +457,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(200),
                 child: CachedNetworkImage(
+                  memCacheHeight: 100,
+                  memCacheWidth: 80,
                   imageUrl:
                       "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
                   fit: BoxFit.fill,
@@ -478,6 +480,8 @@ class _AppUploadImageState extends State<AppUploadImage> {
               )
             },
             child: CachedNetworkImage(
+              memCacheHeight: 100,
+              memCacheWidth: 80,
               imageUrl:
                   "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
               fit: BoxFit.fill,

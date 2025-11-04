@@ -84,6 +84,9 @@ class _$WishListStateCopyWithImpl<$Res, $Val extends WishListState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -100,6 +103,9 @@ class __$$WishListInitialImplCopyWithImpl<$Res>
   __$$WishListInitialImplCopyWithImpl(
       _$WishListInitialImpl _value, $Res Function(_$WishListInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -214,6 +220,9 @@ class __$$WishListLoadingImplCopyWithImpl<$Res>
   __$$WishListLoadingImplCopyWithImpl(
       _$WishListLoadingImpl _value, $Res Function(_$WishListLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -331,6 +340,8 @@ class __$$WishListLoadedImplCopyWithImpl<$Res>
       _$WishListLoadedImpl _value, $Res Function(_$WishListLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -377,7 +388,9 @@ class _$WishListLoadedImpl implements WishListLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_favorites));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WishListLoadedImplCopyWith<_$WishListLoadedImpl> get copyWith =>
@@ -464,7 +477,10 @@ abstract class WishListLoaded implements WishListState {
       _$WishListLoadedImpl;
 
   List<FavoriteDetailsModel> get favorites;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WishListLoadedImplCopyWith<_$WishListLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -486,6 +502,8 @@ class __$$WishListErrorImplCopyWithImpl<$Res>
       _$WishListErrorImpl _value, $Res Function(_$WishListErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -525,7 +543,9 @@ class _$WishListErrorImpl implements WishListError {
   @override
   int get hashCode => Object.hash(runtimeType, errorMessage);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$WishListErrorImplCopyWith<_$WishListErrorImpl> get copyWith =>
@@ -610,7 +630,10 @@ abstract class WishListError implements WishListState {
   const factory WishListError(final String errorMessage) = _$WishListErrorImpl;
 
   String get errorMessage;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of WishListState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$WishListErrorImplCopyWith<_$WishListErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -191,6 +191,8 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                   borderRadius:
                                                       BorderRadius.circular(12),
                                                   child: CachedNetworkImage(
+                                                    memCacheHeight: 100,
+                                                    memCacheWidth: 80,
                                                     imageUrl: item.sourceId ==
                                                                 2 ||
                                                             item.sourceId == 3

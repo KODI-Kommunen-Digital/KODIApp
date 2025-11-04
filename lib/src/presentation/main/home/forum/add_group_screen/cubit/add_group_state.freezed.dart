@@ -78,6 +78,9 @@ class _$AddGroupStateCopyWithImpl<$Res, $Val extends AddGroupState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -94,6 +97,9 @@ class __$$AddGroupLoadingImplCopyWithImpl<$Res>
   __$$AddGroupLoadingImplCopyWithImpl(
       _$AddGroupLoadingImpl _value, $Res Function(_$AddGroupLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -202,6 +208,9 @@ class __$$AddGroupLoadedImplCopyWithImpl<$Res>
   __$$AddGroupLoadedImplCopyWithImpl(
       _$AddGroupLoadedImpl _value, $Res Function(_$AddGroupLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -313,6 +322,8 @@ class __$$AddGroupErrorImplCopyWithImpl<$Res>
       _$AddGroupErrorImpl _value, $Res Function(_$AddGroupErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -351,7 +362,9 @@ class _$AddGroupErrorImpl implements AddGroupError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AddGroupErrorImplCopyWith<_$AddGroupErrorImpl> get copyWith =>
@@ -430,7 +443,10 @@ abstract class AddGroupError implements AddGroupState {
   const factory AddGroupError(final String error) = _$AddGroupErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AddGroupState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AddGroupErrorImplCopyWith<_$AddGroupErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

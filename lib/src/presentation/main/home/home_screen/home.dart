@@ -1,5 +1,3 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, depend_on_referenced_packages, use_build_context_synchronously
-
 import 'dart:async';
 import 'dart:io';
 
@@ -28,6 +26,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import '../../../../utils/custom_cache_manager.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -41,19 +40,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String selectedCityTitle = '';
   int selectedCityId = 0;
-  int pageNo = 1;
-  bool isSearching = false;
-  String searchTerm = "";
   late bool checkSavedCity;
   final _scrollController = ScrollController();
   final _searchController = TextEditingController();
-  bool isLoading = false;
-  bool categoryLoading = false;
-  bool isRefreshLoader = false;
-  String? banner;
-  List<CategoryModel>? category = [];
-  List<CategoryModel>? location = [];
-  List<ProductModel>? recent = [];
+
   String latestAppStoreVersion = '';
   String ignoreAppStoreVersion = '';
   String mitwizAppleLink = "";
@@ -109,34 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _scrollListener() async {
-    if (_scrollController.position.atEdge) {
-      if (_scrollController.position.pixels != 0) {
-        setState(() {
-          isLoading = true;
-        });
-        if (!isSearching) {
-          recent = await AppBloc.homeCubit.newListings(++pageNo).then((_) {
-            setState(() {
-              isLoading = false;
-            });
-          }).catchError(
-            (error, stackTrace) async {
-              setState(() {
-                isLoading = false;
-              });
-              logError('Error loading new listings: $error');
-              await Sentry.captureException(error, stackTrace: stackTrace);
-            },
-          );
-        } else {
-          recent = await context
-              .read<HomeCubit>()
-              .searchListing(searchTerm, ++pageNo);
-          setState(() {
-            isLoading = false;
-          });
-        }
-      }
+    if (_scrollController.position.atEdge &&
+        _scrollController.position.pixels != 0) {
+      CustomCacheManager().clearIfExceedsLimit(limitMB: 50);
+      await AppBloc.homeCubit.loadMoreListings();
     }
   }
 
@@ -153,9 +119,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _onRefresh() async {
     await AppBloc.homeCubit.onLoad(true);
-    setState(() {
-      pageNo = 1;
-    });
   }
 
   Future<void> _setSavedCity(List<CategoryModel> location) async {
@@ -171,7 +134,6 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedCityId = 0;
       });
     }
-    //AppBloc.homeCubit.onLoad(true);
   }
 
   void _checkStoreLinks() async {
@@ -234,185 +196,282 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         builder: (context, state) {
-          List<String> cityTitles = [
-            Translate.of(context).translate('select_location')
-          ];
-
-          if (state is HomeStateLoaded) {
-            banner = state.banner;
-            category = state.category;
-            location = state.location;
-            if (!isSearching) recent = state.recent;
-            isRefreshLoader = true;
-            categoryLoading = false;
-
-            if (location != null) {
-              for (final ids in location!) {
-                cityTitles.add(ids.title.toString());
-              }
-              if (checkSavedCity) {
-                checkSavedCity = false;
-                _setSavedCity(location!);
-              } else if (AppBloc.homeCubit.getCalledExternally()) {
-                _setSavedCity(location!);
-                AppBloc.homeCubit.setCalledExternally(false);
-              }
-            }
-            if (AppBloc.homeCubit.getDoesScroll()) {
-              AppBloc.homeCubit.setDoesScroll(false);
-              scrollUp();
-            }
-          }
-
-          if (state is HomeStatecategoryLoading) {
-            categoryLoading = true;
-            location = state.location;
-            if (location!.isNotEmpty) {
-              for (final ids in location!) {
-                cityTitles.add(ids.title.toString());
-              }
-              if (checkSavedCity) {
-                checkSavedCity = false;
-                _setSavedCity(location!);
-              }
-            }
-          }
-
-          return UpgradeAlert(
-            showLater: false,
-            shouldPopScope: () => true,
-            barrierDismissible: true,
-            dialogStyle: Platform.isIOS
-                ? UpgradeDialogStyle.cupertino
-                : UpgradeDialogStyle.material,
-
-              onUpdate: () {
-                return true;
-              },
-              onIgnore: () {
-                AppBloc.homeCubit
-                    .saveIgnoreAppVersion(latestAppStoreVersion);
-                return true;
-              },
-            upgrader: ignoreAppStoreVersion == latestAppStoreVersion
-                ? null
-                : Upgrader(
-                    debugLogging: true,
-                    debugDisplayAlways: true,
-                    countryCode: 'DE',
-                    minAppVersion: '1.0.3',
-
-
-                    durationUntilAlertAgain: const Duration(seconds: 30),
-                    // willDisplayUpgrade: (
-                    //     {String? appStoreVersion,
-                    //     bool? display,
-                    //     String? installedVersion,
-                    //     String? minAppVersion}) {
-                    //   if (display != null) {
-                    //     setState(() {
-                    //       latestAppStoreVersion = appStoreVersion ?? '1.0.3';
-                    //     });
-                    //   }
-                    // },
-            ),
-            child: CustomScrollView(
-              physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics(),
-              ),
-              controller: _scrollController,
-              slivers: <Widget>[
-                SliverPersistentHeader(
-                  delegate: AppBarHomeSliver(
-                      cityTitlesList: cityTitles,
-                      hintText:
-                          Translate.of(context).translate('hselect_location'),
-                      selectedOption: (selectedCityId > 0)
-                          ? selectedCityTitle
-                          : Translate.of(context).translate('select_location'),
-                      expandedHeight: MediaQuery.of(context).size.height * 0.3,
-                      banners: banner,
-                      setLocationCallback: (data) async {
-                        for (final list in location!) {
-                          if (list.title == data) {
-                            _onUpdateCategory();
-                            setState(() {
-                              selectedCityTitle = data;
-                              selectedCityId = list.id;
-                            });
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
-                          } else if (data ==
-                              Translate.of(context)
-                                  .translate('select_location')) {
-                            setState(() {
-                              selectedCityId = 0;
-                            });
-                            _onUpdateCategory();
-                            AppBloc.homeCubit.saveCityId(selectedCityId);
-                            await AppBloc.discoveryCubit
-                                .onLocationFilter(selectedCityId, false);
-                            break;
-                          }
-                        }
-                      }),
-                  pinned: false,
-                ),
-                const SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 25,
-                  ),
-                ),
-                CupertinoSliverRefreshControl(
-                  onRefresh: _onRefresh,
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate([
-                    SafeArea(
-                      top: false,
-                      bottom: false,
-                      child: Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
-                        ],
-                      ),
-                    )
-                  ]),
-                )
-              ],
-            ),
+          return state.when(
+            initial: () => _buildLoading(),
+            loading: () => _buildLoading(),
+            categoryLoading: (location) => _buildCategoryLoading(location),
+            loaded: (banner, category, location, recent, isRefreshLoader, isLoadingMore, currentPage) {
+              return _buildLoadedState(
+                banner,
+                category,
+                location,
+                recent,
+                isRefreshLoader,
+                isLoadingMore,
+              );
+            },
+            error: (error) => _buildError(error),
           );
         },
       ),
     );
   }
 
+  Widget _buildLoading() {
+    return const Center(child: CircularProgressIndicator.adaptive());
+  }
+
+  Widget _buildCategoryLoading(List<CategoryModel>? location) {
+    List<String> cityTitles = [
+      Translate.of(context).translate('select_location')
+    ];
+
+    if (location != null) {
+      for (final ids in location) {
+        cityTitles.add(ids.title.toString());
+      }
+      if (checkSavedCity) {
+        checkSavedCity = false;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          _setSavedCity(location);
+        });
+      }
+    }
+
+    return UpgradeAlert(
+      showLater: false,
+      shouldPopScope: () => true,
+      barrierDismissible: true,
+      dialogStyle: Platform.isIOS
+          ? UpgradeDialogStyle.cupertino
+          : UpgradeDialogStyle.material,
+      onUpdate: () => true,
+      onIgnore: () {
+        AppBloc.homeCubit.saveIgnoreAppVersion(latestAppStoreVersion);
+        return true;
+      },
+      upgrader: ignoreAppStoreVersion == latestAppStoreVersion
+          ? null
+          : Upgrader(
+        debugLogging: true,
+        debugDisplayAlways: true,
+        countryCode: 'DE',
+        minAppVersion: '1.0.3',
+        durationUntilAlertAgain: const Duration(seconds: 30),
+      ),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            delegate: AppBarHomeSliver(
+                cityTitlesList: cityTitles,
+                hintText: Translate.of(context).translate('hselect_location'),
+                selectedOption: (selectedCityId > 0)
+                    ? selectedCityTitle
+                    : Translate.of(context).translate('select_location'),
+                expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                banners: null,
+                setLocationCallback: (data) async {
+                  if (location != null) {
+                    for (final list in location) {
+                      if (list.title == data) {
+                        _onUpdateCategory();
+                        setState(() {
+                          selectedCityTitle = data;
+                          selectedCityId = list.id;
+                        });
+                        await AppBloc.discoveryCubit
+                            .onLocationFilter(selectedCityId, false);
+                      } else if (data ==
+                          Translate.of(context).translate('select_location')) {
+                        setState(() {
+                          selectedCityId = 0;
+                        });
+                        _onUpdateCategory();
+                        AppBloc.homeCubit.saveCityId(selectedCityId);
+                        await AppBloc.discoveryCubit
+                            .onLocationFilter(selectedCityId, false);
+                        break;
+                      }
+                    }
+                  }
+                }),
+            pinned: false,
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 25)),
+          CupertinoSliverRefreshControl(onRefresh: _onRefresh),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SafeArea(
+                top: false,
+                bottom: false,
+                child: Column(
+                  children: <Widget>[
+                    const CircularProgressIndicator.adaptive(),
+                    _buildLocation(location),
+                    _buildRecent([], selectedCityId, location),
+                    const SizedBox(height: 50),
+                  ],
+                ),
+              )
+            ]),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoadedState(
+      String banner,
+      List<CategoryModel> category,
+      List<CategoryModel> location,
+      List<ProductModel> recent,
+      bool isRefreshLoader,
+      bool isLoadingMore,
+      ) {
+    List<String> cityTitles = [
+      Translate.of(context).translate('select_location')
+    ];
+
+    for (final city in location) {
+      cityTitles.add(city.title);
+    }
+
+    if (checkSavedCity) {
+      checkSavedCity = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _setSavedCity(location);
+      });
+    } else if (AppBloc.homeCubit.getCalledExternally()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _setSavedCity(location);
+        AppBloc.homeCubit.setCalledExternally(false);
+      });
+    }
+
+    if (AppBloc.homeCubit.getDoesScroll()) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        AppBloc.homeCubit.setDoesScroll(false);
+        scrollUp();
+      });
+    }
+
+    return UpgradeAlert(
+      showLater: false,
+      shouldPopScope: () => true,
+      barrierDismissible: true,
+      dialogStyle: Platform.isIOS
+          ? UpgradeDialogStyle.cupertino
+          : UpgradeDialogStyle.material,
+      onUpdate: () => true,
+      onIgnore: () {
+        AppBloc.homeCubit.saveIgnoreAppVersion(latestAppStoreVersion);
+        return true;
+      },
+      upgrader: ignoreAppStoreVersion == latestAppStoreVersion
+          ? null
+          : Upgrader(
+        debugLogging: true,
+        debugDisplayAlways: true,
+        countryCode: 'DE',
+        minAppVersion: '1.0.3',
+        durationUntilAlertAgain: const Duration(seconds: 30),
+      ),
+      child: CustomScrollView(
+        physics: const BouncingScrollPhysics(
+          parent: AlwaysScrollableScrollPhysics(),
+        ),
+        controller: _scrollController,
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            delegate: AppBarHomeSliver(
+                cityTitlesList: cityTitles,
+                hintText: Translate.of(context).translate('hselect_location'),
+                selectedOption: (selectedCityId > 0)
+                    ? selectedCityTitle
+                    : Translate.of(context).translate('select_location'),
+                expandedHeight: MediaQuery.of(context).size.height * 0.3,
+                banners: banner,
+                setLocationCallback: (data) async {
+                  for (final list in location) {
+                    if (list.title == data) {
+                      _onUpdateCategory();
+                      setState(() {
+                        selectedCityTitle = data;
+                        selectedCityId = list.id;
+                      });
+                      await AppBloc.discoveryCubit
+                          .onLocationFilter(selectedCityId, false);
+                    } else if (data ==
+                        Translate.of(context).translate('select_location')) {
+                      setState(() {
+                        selectedCityId = 0;
+                      });
+                      _onUpdateCategory();
+                      AppBloc.homeCubit.saveCityId(selectedCityId);
+                      await AppBloc.discoveryCubit
+                          .onLocationFilter(selectedCityId, false);
+                      break;
+                    }
+                  }
+                }),
+            pinned: false,
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 25)),
+          CupertinoSliverRefreshControl(onRefresh: _onRefresh),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              SafeArea(
+                top: false,
+                bottom: false,
+                child: Column(
+                  children: <Widget>[
+                    _buildCategory(AppBloc.homeCubit
+                        .getCategoriesWithoutHidden(category)),
+                    _buildLocation(location),
+                    _buildRecent(recent, selectedCityId, location),
+                    if (isLoadingMore)
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    const SizedBox(height: 50),
+                  ],
+                ),
+              )
+            ]),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildError(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(Translate.of(context).translate(error)),
+          ElevatedButton(
+            onPressed: () => AppBloc.homeCubit.onLoad(false),
+            child: Text(Translate.of(context).translate('retry')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // Your existing methods below - they remain the same but now use parameters passed from state
+
   Future _searchListings() async {
     String? searchResult = await openSearchDialog();
     if (searchResult is String && searchResult.trim() != "") {
-      pageNo = 1;
-      isSearching = true;
-      searchTerm = searchResult.trim();
-      setState(() {
-        recent = [];
-      });
-      recent =
-          await context.read<HomeCubit>().searchListing(searchTerm, pageNo);
-      setState(() {});
-    } else if ((searchResult == null || searchResult.trim() == "") &&
-        isSearching) {
-      pageNo = 1;
-      isSearching = false;
-      searchTerm = "";
-      await context.read<HomeCubit>().onLoad(false);
+      await AppBloc.homeCubit.performSearch(searchResult.trim());
+    } else if ((searchResult == null || searchResult.trim() == "")) {
+      await AppBloc.homeCubit.clearSearch();
     }
   }
 
@@ -423,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return PopScope(
           onPopInvokedWithResult: (bool didPop, dynamic result) async {
             if (didPop) return;
-            Navigator.pop(context, searchTerm);
+            Navigator.pop(context, _searchController.text); // Use _searchController.text instead
           },
           child: SimpleDialog(
               title: Center(
@@ -434,7 +493,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   hintText: Translate.of(context).translate('search_title'),
                   keyboardType: TextInputType.text,
                   controller: _searchController,
-                  //focusNode: _focusPass,
                 ),
                 const SizedBox(height: 8.0),
                 Row(
@@ -465,6 +523,55 @@ class _HomeScreenState extends State<HomeScreen> {
     );
     return searchRequest;
   }
+
+  // Future<String?> openSearchDialog() async {
+  //   String? searchRequest = await showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return PopScope(
+  //         onPopInvokedWithResult: (bool didPop, dynamic result) async {
+  //           if (didPop) return;
+  //           Navigator.pop(context, searchTerm);
+  //         },
+  //         child: SimpleDialog(
+  //             title: Center(
+  //                 child: Text(Translate.of(context).translate('search_title'))),
+  //             contentPadding: const EdgeInsets.all(24.0),
+  //             children: [
+  //               AppTextInput(
+  //                 hintText: Translate.of(context).translate('search_title'),
+  //                 keyboardType: TextInputType.text,
+  //                 controller: _searchController,
+  //               ),
+  //               const SizedBox(height: 8.0),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   TextButton(
+  //                     onPressed: () {
+  //                       _searchController.clear();
+  //                       Navigator.pop(context, null);
+  //                     },
+  //                     child: Text(Translate.of(context).translate('cancel')),
+  //                   ),
+  //                   const SizedBox(width: 8.0),
+  //                   TextButton(
+  //                     child: Text(
+  //                       Translate.of(context).translate('search_title'),
+  //                     ),
+  //                     onPressed: () {
+  //                       String content = _searchController.text;
+  //                       Navigator.pop(context, content);
+  //                     },
+  //                   ),
+  //                 ],
+  //               ),
+  //             ]),
+  //       );
+  //     },
+  //   );
+  //   return searchRequest;
+  // }
 
   void _onPopUpCatError() {
     showDialog<String>(
@@ -534,14 +641,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   runSpacing: 8,
                   alignment: WrapAlignment.center,
                   children: listBuild.map(
-                    (item) {
+                        (item) {
                       return HomeCategoryItem(
                         item: item,
                         onPressed: (item) {
                           _onCategory(item, listBuild);
                           return false;
                         },
-                        // _onCategory,
                       );
                     },
                   ).toList(),
@@ -670,7 +776,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               SizedBox(
                 height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                MediaQuery.of(context).size.height - kToolbarHeight - 30,
                 child: WebViewWidget(
                   controller: webViewController,
                   gestureRecognizers: gestureRecognizers,
@@ -698,7 +804,7 @@ class _HomeScreenState extends State<HomeScreen> {
       runSpacing: 8,
       alignment: WrapAlignment.center,
       children: List.generate(8, (index) => index).map(
-        (item) {
+            (item) {
           return const HomeCategoryItem();
         },
       ).toList(),
@@ -706,23 +812,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (category != null) {
       List<CategoryModel> listBuild = category;
-      //   final more = CategoryModel.fromJson({
-      //     "id": -1,
-      //     "name": Translate.of(context).translate("more"),
-      //     "icon": "fas fa-ellipsis",
-      //     "color": "#36454F",
-      //   });
-
-      // if (category.length >= 8) {
-      //   listBuild = category.take(7).toList();
-      //   listBuild.add(more);
-      // }
 
       content = Wrap(
         runSpacing: 8,
         alignment: WrapAlignment.center,
         children: listBuild.map(
-          (item) {
+              (item) {
             return HomeCategoryItem(
               item: item,
               onPressed: (item) {
@@ -772,28 +867,28 @@ class _HomeScreenState extends State<HomeScreen> {
           final item = location[index];
           return selectedCityId != 0
               ? Visibility(
-                  visible: item.title != selectedCityTitle,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: AppCategory(
-                      item: item,
-                      type: CategoryView.cardLarge,
-                      onPressed: () {
-                        _onLocation(item);
-                      },
-                    ),
-                  ),
-                )
+            visible: item.title != selectedCityTitle,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: AppCategory(
+                item: item,
+                type: CategoryView.cardLarge,
+                onPressed: () {
+                  _onLocation(item);
+                },
+              ),
+            ),
+          )
               : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: AppCategory(
-                    item: item,
-                    type: CategoryView.cardLarge,
-                    onPressed: () {
-                      _onLocation(item);
-                    },
-                  ),
-                );
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: AppCategory(
+              item: item,
+              type: CategoryView.cardLarge,
+              onPressed: () {
+                _onLocation(item);
+              },
+            ),
+          );
         },
         itemCount: location.length,
       );
@@ -845,7 +940,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: AppProductItem(
-              type: ProductViewType.small, isRefreshLoader: isRefreshLoader),
+              type: ProductViewType.small, isRefreshLoader: false),
         );
       },
       itemCount: 8,
@@ -860,32 +955,32 @@ class _HomeScreenState extends State<HomeScreen> {
           final item = recent[index];
           return selectedCityId != 0
               ? Visibility(
-                  visible: recent[index].cityId == selectedCity,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: AppProductItem(
-                        onPressed: () {
-                          _onProductDetail(item);
-                        },
-                        item: item,
-                        type: ProductViewType.small,
-                        isRefreshLoader: isRefreshLoader,
-                        cityName: AppBloc.homeCubit
-                            .getCityName(cities, item.cityId ?? 0)),
-                  ),
-                )
+            visible: recent[index].cityId == selectedCity,
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: AppProductItem(
+                  onPressed: () {
+                    _onProductDetail(item);
+                  },
+                  item: item,
+                  type: ProductViewType.small,
+                  isRefreshLoader: false,
+                  cityName: AppBloc.homeCubit
+                      .getCityName(cities, item.cityId ?? 0)),
+            ),
+          )
               : Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
-                  child: AppProductItem(
-                      onPressed: () {
-                        _onProductDetail(item);
-                      },
-                      isRefreshLoader: isRefreshLoader,
-                      item: item,
-                      type: ProductViewType.small,
-                      cityName: AppBloc.homeCubit
-                          .getCityName(cities, item.cityId ?? 0)),
-                );
+            padding: const EdgeInsets.only(bottom: 16),
+            child: AppProductItem(
+                onPressed: () {
+                  _onProductDetail(item);
+                },
+                isRefreshLoader: false,
+                item: item,
+                type: ProductViewType.small,
+                cityName: AppBloc.homeCubit
+                    .getCityName(cities, item.cityId ?? 0)),
+          );
         },
         itemCount: recent.length,
       );

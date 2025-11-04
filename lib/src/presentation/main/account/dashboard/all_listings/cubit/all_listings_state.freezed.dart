@@ -84,6 +84,9 @@ class _$AllListingsStateCopyWithImpl<$Res, $Val extends AllListingsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -102,6 +105,9 @@ class __$$AllListingsStateInitialImplCopyWithImpl<$Res>
       _$AllListingsStateInitialImpl _value,
       $Res Function(_$AllListingsStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -219,6 +225,9 @@ class __$$AllListingsStateLoadingImplCopyWithImpl<$Res>
       _$AllListingsStateLoadingImpl _value,
       $Res Function(_$AllListingsStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -340,6 +349,8 @@ class __$$AllListingsStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$AllListingsStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -408,7 +419,9 @@ class _$AllListingsStateLoadedImpl implements AllListingsStateLoaded {
       currentFilter,
       currentCityFilter);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$AllListingsStateLoadedImplCopyWith<_$AllListingsStateLoadedImpl>
@@ -499,7 +512,10 @@ abstract class AllListingsStateLoaded implements AllListingsState {
   List<ProductModel> get recent;
   int get currentFilter;
   int get currentCityFilter;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of AllListingsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AllListingsStateLoadedImplCopyWith<_$AllListingsStateLoadedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

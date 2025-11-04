@@ -11,15 +11,17 @@ class HomeState with _$HomeState {
   const factory HomeState.loading() = HomeStateLoading;
 
   const factory HomeState.categoryLoading(List<CategoryModel>? location) =
-      HomeStatecategoryLoading;
+  HomeStatecategoryLoading;
 
-  const factory HomeState.loaded(
-    String banner,
-    List<CategoryModel> category,
-    List<CategoryModel> location,
-    List<ProductModel> recent,
-    bool isRefreshLoader,
-  ) = HomeStateLoaded;
+  const factory HomeState.loaded({
+    required String banner,
+    required List<CategoryModel> category,
+    required List<CategoryModel> location,
+    required List<ProductModel> recent,
+    required bool isRefreshLoader,
+    @Default(false) bool isLoadingMore, // Add loading more state
+    @Default(1) int currentPage, // Add current page tracking
+  }) = HomeStateLoaded;
 
   const factory HomeState.error(String error) = HomeStateError;
 }

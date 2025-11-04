@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -333,6 +334,7 @@ class _ListLoadedState extends State<ListLoaded> {
           isLoadingMore = true;
           // previousScrollPosition = _scrollController.position.pixels;
         });
+        await CustomCacheManager().clearIfExceedsLimit(limitMB: 100);
         if (context.read<ListCubit>().isSearching) {
           context
               .read<ListCubit>()

@@ -236,6 +236,8 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                             child: CachedNetworkImage(
+                                              memCacheHeight: 100,
+                                              memCacheWidth: 80,
                                               imageUrl: item.sourceId == 2 &&
                                                       item.image != null &&
                                                       item.image !=

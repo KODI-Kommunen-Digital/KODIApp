@@ -116,6 +116,8 @@ class _GroupMembersLoadedState extends State<GroupMembersLoaded> {
                       height: 80,
                       child: ClipOval(
                         child: CachedNetworkImage(
+                          memCacheHeight: 100,
+                          memCacheWidth: 80,
                           imageUrl: widget.membersList?[index].image != null
                               ? '${Application.picturesURL}${widget.membersList?[index].image}'
                               : '${Application.picturesURL}admin/DefaultForum.jpeg',

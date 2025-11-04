@@ -8,6 +8,7 @@ import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/custom_cache_manager.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
@@ -29,10 +30,58 @@ class AppProductItem extends StatelessWidget {
   final bool isRefreshLoader;
   final String? cityName;
 
+
+   // String? _validateImageUrl(String? url) {
+  //   if (url == null || url.isEmpty) return null;
+  //
+  //   // Check for common image formats
+  //   final validExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
+  //   final hasValidExtension = validExtensions.any((ext) => url.toLowerCase().contains(ext));
+  //
+  //   if (!hasValidExtension) {
+  //     debugPrint('Invalid image URL format: $url');
+  //     return null;
+  //   }
+  //
+  //   return url;
+  // }
+
   @override
   Widget build(BuildContext context) {
     String uniqueKey = UniqueKey().toString();
     final memoryCacheManager = DefaultCacheManager();
+
+    String imageUrl = item?.sourceId == 2 &&
+        item?.image != null &&
+        item?.image != 'admin/News.jpeg'
+        ? item!.image
+        : item?.sourceId == 3 && item?.image != null
+        ? (item!.image.startsWith('admin')
+        ? "${Application.picturesURL}${item!.image}"
+        : item!.image)
+        : item?.image != null &&
+        item!.image.startsWith('admin')
+        ? "${Application.picturesURL}${item!.image}"
+        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}";
+
+
+    imageUrl = imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_13/city_1_listing_307_1" ||
+        imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_14/city_1_listing_320_1" ||
+        imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_14/city_1_listing_219_1" ||
+        imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_13/city_1_listing_193_1" ||
+    //     imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_200/city_1_listing_711_1_1747913235095" ||
+    //     imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_72/city_1_listing_339_1_1738234861117" ||
+    //     imageUrl == "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_124/city_1_listing_363_1_1738868236754" ||
+    //     imageUrl ==  "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_24/city_1_listing_214_1_1751624003864" ||
+    // imageUrl ==  "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_6/city_1_listing_98_1_1730799345585" ||
+    // imageUrl ==  "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_6/city_1_listing_96_1_1730799104736" ||
+
+        imageUrl == "https://www.stockheim-online.de" ? "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/user_24/city_1_listing_310_1_1737989508482" : imageUrl;
+
+    // imageUrl = _validateImageUrl(imageUrl) ?? "https://stockheim1heidi.obs.eu-de.otc.t-systems.com/admin/Events/Defaultimage6.png";
+
+    // debugPrint("Network image links - $imageUrl");
+
     switch (type) {
       case ProductViewType.small:
         if (item == null) {
@@ -61,18 +110,10 @@ class AppProductItem extends StatelessWidget {
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
-                        imageUrl: item?.sourceId == 2 &&
-                                item?.image != null &&
-                                item?.image != 'admin/News.jpeg'
-                            ? item!.image
-                            : item?.sourceId == 3 && item?.image != null
-                                ? (item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : item!.image)
-                                : item?.image != null &&
-                                        item!.image.startsWith('admin')
-                                    ? "${Application.picturesURL}${item!.image}"
-                                    : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                        // memCacheWidth: 300,
+                        // memCacheHeight: 300,
+                        useOldImageOnUrlChange: true,
+                        imageUrl: imageUrl,
                         cacheManager: memoryCacheManager,
                         placeholder: (context, url) {
                           return AppPlaceholder(
@@ -80,7 +121,10 @@ class AppProductItem extends StatelessWidget {
                               width: 120,
                               height: 140,
                               decoration: const BoxDecoration(
-                                color: Colors.white,
+                                image: DecorationImage(
+                                  image: AssetImage('assets/images/listing_default_image.png'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           );
@@ -98,18 +142,19 @@ class AppProductItem extends StatelessWidget {
                           );
                         },
                         errorWidget: (context, url, error) {
-                          return AppPlaceholder(
-                            child: Container(
-                              width: 120,
-                              height: 140,
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(8),
-                                  bottomLeft: Radius.circular(8),
-                                ),
+                          debugPrint('Invalid image URL format: $url $error');
+                          return Container(
+                            width: 120,
+                            height: 140,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('assets/images/listing_default_image.png'),
+                                fit: BoxFit.cover,
                               ),
-                              child: const Icon(Icons.error),
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8),
+                                bottomLeft: Radius.circular(8),
+                              ),
                             ),
                           );
                         },
@@ -206,6 +251,7 @@ class AppProductItem extends StatelessWidget {
                             .textTheme
                             .bodySmall!
                             .copyWith(fontWeight: FontWeight.w600),
+                        maxLines: 1,
                       ),
                     const SizedBox(height: 2),
                   ],
@@ -228,18 +274,10 @@ class AppProductItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               CachedNetworkImage(
-                imageUrl: item?.sourceId == 2 &&
-                        item?.image != null &&
-                        item?.image != 'admin/News.jpeg'
-                    ? item!.image
-                    : item?.sourceId == 3 && item?.image != null
-                        ? (item!.image.startsWith('admin')
-                            ? "${Application.picturesURL}${item!.image}"
-                            : item!.image)
-                        : item?.image != null && item!.image.startsWith('admin')
-                            ? "${Application.picturesURL}${item!.image}"
-                            : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                imageUrl: imageUrl,
                 cacheManager: memoryCacheManager,
+                // memCacheWidth: 300,
+                // memCacheHeight: 300,
                 imageBuilder: (context, imageProvider) {
                   return Container(
                     height: 120,
@@ -274,29 +312,25 @@ class AppProductItem extends StatelessWidget {
                   );
                 },
                 placeholder: (context, url) {
-                  return AppPlaceholder(
-                    child: Container(
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
-                        color: Colors.white,
+                  return Container(
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/listing_default_image.png'),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   );
                 },
                 errorWidget: (context, url, error) {
-                  return AppPlaceholder(
-                    child: Container(
-                      height: 120,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(8),
-                        ),
+                  debugPrint('Invalid image URL format: $url');
+                  return Container(
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/listing_default_image.png'),
+                        fit: BoxFit.cover,
                       ),
-                      child: const Icon(Icons.error),
                     ),
                   );
                 },
@@ -368,26 +402,19 @@ class AppProductItem extends StatelessWidget {
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
-                            imageUrl: item?.sourceId == 2 &&
-                                    item?.image != null &&
-                                    item?.image != 'admin/News.jpeg'
-                                ? item!.image
-                                : item?.sourceId == 3 && item?.image != null
-                                    ? (item!.image.startsWith('admin')
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : item!.image)
-                                    : item?.image != null &&
-                                            item!.image.startsWith('admin')
-                                        ? "${Application.picturesURL}${item!.image}"
-                                        : "${Application.picturesURL}${item?.image ?? 'admin/News.jpeg'}",
+                            // memCacheWidth: 300,
+                            // memCacheHeight: 300,
+                            useOldImageOnUrlChange: true,
+                            imageUrl: imageUrl,
                             cacheManager: memoryCacheManager,
                             placeholder: (context, url) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  width: 120,
-                                  height: 140,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/listing_default_image.png'),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
                               );
@@ -405,18 +432,15 @@ class AppProductItem extends StatelessWidget {
                               );
                             },
                             errorWidget: (context, url, error) {
-                              return AppPlaceholder(
-                                child: Container(
-                                  width: 120,
-                                  height: 140,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(8),
-                                      bottomLeft: Radius.circular(8),
-                                    ),
+                              debugPrint('Invalid image URL format: $url');
+                              return Container(
+                                width: 120,
+                                height: 140,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/listing_default_image.png'),
+                                    fit: BoxFit.cover,
                                   ),
-                                  child: const Icon(Icons.error),
                                 ),
                               );
                             },

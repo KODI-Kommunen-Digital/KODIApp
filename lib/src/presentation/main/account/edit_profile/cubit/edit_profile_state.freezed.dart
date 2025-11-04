@@ -78,6 +78,9 @@ class _$EditProfileStateCopyWithImpl<$Res, $Val extends EditProfileState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -96,6 +99,9 @@ class __$$EditProfileStateLoadingImplCopyWithImpl<$Res>
       _$EditProfileStateLoadingImpl _value,
       $Res Function(_$EditProfileStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -207,6 +213,9 @@ class __$$EditProfileStateLoadedImplCopyWithImpl<$Res>
       _$EditProfileStateLoadedImpl _value,
       $Res Function(_$EditProfileStateLoadedImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -317,6 +326,9 @@ class __$$EditProfileStateErrorImplCopyWithImpl<$Res>
   __$$EditProfileStateErrorImplCopyWithImpl(_$EditProfileStateErrorImpl _value,
       $Res Function(_$EditProfileStateErrorImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of EditProfileState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc

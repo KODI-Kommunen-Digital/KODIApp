@@ -84,6 +84,9 @@ class _$MemberRequestStateCopyWithImpl<$Res, $Val extends MemberRequestState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -103,6 +106,9 @@ class __$$MemberRequestStateInitialImplCopyWithImpl<$Res>
       _$MemberRequestStateInitialImpl _value,
       $Res Function(_$MemberRequestStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -218,6 +224,9 @@ class __$$MemberRequestLoadingImplCopyWithImpl<$Res>
   __$$MemberRequestLoadingImplCopyWithImpl(_$MemberRequestLoadingImpl _value,
       $Res Function(_$MemberRequestLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -336,6 +345,8 @@ class __$$MemberRequestLoadedImplCopyWithImpl<$Res>
       $Res Function(_$MemberRequestLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -381,7 +392,9 @@ class _$MemberRequestLoadedImpl implements MemberRequestLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_list));
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
@@ -468,7 +481,10 @@ abstract class MemberRequestLoaded implements MemberRequestState {
       _$MemberRequestLoadedImpl;
 
   List<MemberRequestModel> get list;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MemberRequestLoadedImplCopyWith<_$MemberRequestLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -490,6 +506,8 @@ class __$$MemberRequestErrorImplCopyWithImpl<$Res>
       $Res Function(_$MemberRequestErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -528,7 +546,9 @@ class _$MemberRequestErrorImpl implements MemberRequestError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
@@ -615,7 +635,10 @@ abstract class MemberRequestError implements MemberRequestState {
       _$MemberRequestErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MemberRequestState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MemberRequestErrorImplCopyWith<_$MemberRequestErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

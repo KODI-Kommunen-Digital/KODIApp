@@ -90,6 +90,9 @@ class _$MyGroupsStateCopyWithImpl<$Res, $Val extends MyGroupsState>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -106,6 +109,9 @@ class __$$MyGroupsStateInitialImplCopyWithImpl<$Res>
   __$$MyGroupsStateInitialImplCopyWithImpl(_$MyGroupsStateInitialImpl _value,
       $Res Function(_$MyGroupsStateInitialImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -227,6 +233,9 @@ class __$$MyGroupsStateLoadingImplCopyWithImpl<$Res>
   __$$MyGroupsStateLoadingImplCopyWithImpl(_$MyGroupsStateLoadingImpl _value,
       $Res Function(_$MyGroupsStateLoadingImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -351,6 +360,8 @@ class __$$MyGroupsStateLoadedImplCopyWithImpl<$Res>
       $Res Function(_$MyGroupsStateLoadedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -405,7 +416,9 @@ class _$MyGroupsStateLoadedImpl implements MyGroupsStateLoaded {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_list), userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MyGroupsStateLoadedImplCopyWith<_$MyGroupsStateLoadedImpl> get copyWith =>
@@ -500,7 +513,10 @@ abstract class MyGroupsStateLoaded implements MyGroupsState {
 
   List<ForumGroupModel> get list;
   int get userId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MyGroupsStateLoadedImplCopyWith<_$MyGroupsStateLoadedImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -522,6 +538,8 @@ class __$$MyGroupsStateUpdatedImplCopyWithImpl<$Res>
       $Res Function(_$MyGroupsStateUpdatedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -577,7 +595,9 @@ class _$MyGroupsStateUpdatedImpl implements MyGroupsStateUpdated {
   int get hashCode => Object.hash(
       runtimeType, const DeepCollectionEquality().hash(_list), userId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MyGroupsStateUpdatedImplCopyWith<_$MyGroupsStateUpdatedImpl>
@@ -673,7 +693,10 @@ abstract class MyGroupsStateUpdated implements MyGroupsState {
 
   List<ForumGroupModel> get list;
   int get userId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MyGroupsStateUpdatedImplCopyWith<_$MyGroupsStateUpdatedImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -695,6 +718,8 @@ class __$$MyGroupsStateErrorImplCopyWithImpl<$Res>
       $Res Function(_$MyGroupsStateErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -733,7 +758,9 @@ class _$MyGroupsStateErrorImpl implements MyGroupsStateError {
   @override
   int get hashCode => Object.hash(runtimeType, error);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MyGroupsStateErrorImplCopyWith<_$MyGroupsStateErrorImpl> get copyWith =>
@@ -826,7 +853,10 @@ abstract class MyGroupsStateError implements MyGroupsState {
       _$MyGroupsStateErrorImpl;
 
   String get error;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MyGroupsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MyGroupsStateErrorImplCopyWith<_$MyGroupsStateErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
