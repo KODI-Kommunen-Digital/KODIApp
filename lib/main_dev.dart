@@ -81,6 +81,8 @@ class _HeidiAppState extends State<HeidiApp> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('-----------------Main dev------------');
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(

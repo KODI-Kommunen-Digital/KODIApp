@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.3
+version: 1.0.4
 
 environment:
   sdk: '>=3.0.0 <=4.0.0'
@@ -73,8 +73,8 @@ dependencies:
   flutter_widget_from_html: ^0.17.1
 
   ### Firebase
-  firebase_core: ^4.2.0
-  firebase_messaging: ^16.0.3
+  firebase_core: ^4.2.1
+  firebase_messaging: ^16.0.4
 
   ### File Reading
   open_filex: ^4.7.0
@@ -90,9 +90,9 @@ dependencies:
   # multiple_images_picker: ^1.0.1
   html: ^0.15.4
   calendar_date_picker2: ^1.1.5
-  package_info_plus: ^8.0.0
+  package_info_plus: ^9.0.0
   flutter_dotenv: ^5.1.0
-  firebase_remote_config: ^6.1.0
+  firebase_remote_config: ^6.1.1
   table_calendar: ^3.0.9
   flutter_typeahead: ^4.0.0
   shared_preferences: ^2.2.3
@@ -114,6 +114,7 @@ dev_dependencies:
   json_serializable: ^6.6.0
   flutter_lints: ^4.0.0
   flutter_launcher_icons: "^0.13.1"
+
 
 flutter_icons:
   android: true
@@ -219,6 +220,7 @@ flutter:
   uses-material-design: true
 
 dependency_overrides:
+  wakelock_plus: ^1.4.0
   flutter_svprogresshud:
     git:
       url: https://github.com/leanflutter/flutter_svprogresshud.git
