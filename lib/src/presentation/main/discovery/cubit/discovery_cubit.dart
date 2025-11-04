@@ -185,7 +185,7 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "4": "https://onlinedienste.troisdorf.de/",
       "5":
           "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
-      "6": "https://troisdorf.dksr.city/map/",
+      "6": "https://map.troisdorf.civora.org/",
       "7": "https://web.troisdorf.de/chatbot/",
       "8":
           "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show",

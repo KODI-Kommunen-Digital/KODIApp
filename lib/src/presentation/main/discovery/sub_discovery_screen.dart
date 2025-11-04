@@ -65,7 +65,7 @@ class SubDiscoveryScreen extends StatelessWidget {
         url = "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE";
         break;
       case "6":
-        url = "https://troisdorf.dksr.city/map/";
+        url = "https://map.troisdorf.civora.org/";
         break;
       case "7":
         url = "https://web.troisdorf.de/chatbot/";
