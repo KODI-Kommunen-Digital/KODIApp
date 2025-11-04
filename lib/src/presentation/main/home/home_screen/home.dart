@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //         Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
   //         mode: LaunchMode.inAppWebView);
   //   } else if (item.id == 5) {
-  //     await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
+  //     await launchUrl(Uri.parse("https://map.troisdorf.civora.org/"),
   //         mode: LaunchMode.inAppWebView);
   //   } else if (item.id == 6) {
   //     await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
@@ -465,11 +465,14 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _onService(CategoryModel item) async {
     Routes.trackMatomoEvent(true, null, item.id, null);
     if (item.id == 5) {
-      CustomWebViewScreen.showAsBottomSheet(
-          context: context,
-          url: 'https://troisdorf.dksr.city/map/',
-          title: 'Mobilitätskarte',
-          needGeoLocation: true);
+      // CustomWebViewScreen.showAsBottomSheet(
+      //     context: context,
+      //     url: 'https://map.troisdorf.civora.org/',
+      //     title: 'Mobilitätskarte',
+      //     needGeoLocation: true);
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': 6,
+      });
     } else if (item.id == 8) {
       CustomWebViewScreen.showAsBottomSheet(
           context: context,
