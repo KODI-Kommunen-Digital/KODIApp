@@ -619,5 +619,6 @@
   "add_new_card": "Add New Card",
   "current_password_incorrect": "Current password is incorrect",
   "retry": "Retry",
-  "municipal_utilities": "Municipal Utilities"
+  "municipal_utilities": "Municipal Utilities",
+  "mobility": "Mobility"
 }

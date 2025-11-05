@@ -56,9 +56,13 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text((widget.arguments['id'] == 16)
-              ? "TroCARD"
-              : Translate.of(context).translate('cust_services')),
+          title: Text(
+            (widget.arguments['id'] == 16)
+                ? "TroCARD"
+                : (widget.arguments['id'] == 6
+                ? Translate.of(context).translate('mobility')
+                : Translate.of(context).translate('cust_services')),
+          ),
         ),
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
           listener: (context, state) {
