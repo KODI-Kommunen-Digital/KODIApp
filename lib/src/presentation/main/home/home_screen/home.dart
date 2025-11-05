@@ -476,7 +476,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (item.id == 8) {
       CustomWebViewScreen.showAsBottomSheet(
           context: context,
-          url: 'https://troisdorf.dksr.city/poimap/',
+          url: 'https://poi.troisdorf.civora.org/',
           title: 'Freizeitkarte',
           needGeoLocation: true);
     } else {
@@ -498,7 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 7:
         return "https://www.stadtwerke-troisdorf.de/";
       case 8:
-        return "https://troisdorf.dksr.city/poimap/";
+        return "https://poi.troisdorf.civora.org/";
       default:
         return "";
     }
