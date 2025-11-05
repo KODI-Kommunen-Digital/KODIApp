@@ -74,7 +74,7 @@ class SubDiscoveryScreen extends StatelessWidget {
         url = "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show";
         break;
       case "9":
-        url = "https://troisdorf.dksr.city/poimap/";
+        url = "https://poi.troisdorf.civora.org/";
         break;
       case "11":
         url = "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/";
