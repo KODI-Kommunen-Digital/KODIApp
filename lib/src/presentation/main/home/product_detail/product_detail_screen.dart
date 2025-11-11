@@ -163,48 +163,95 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       await showModalBottomSheet(
         context: context,
         isScrollControlled: true,
+        enableDrag: false,
+        backgroundColor: Colors.black,
         builder: (BuildContext context) {
           return SafeArea(
-            top: false,
-            bottom: false,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Container(
-                  color: Colors.black,
-                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          link,
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            link,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.white,
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          onPressed: () => Navigator.of(context).pop(),
                         ),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                  child: WebViewWidget(controller: webViewController),
-                ),
-              ],
+                  Expanded(
+                    child: WebViewWidget(controller: webViewController),
+                  ),
+                ],
+              ),
             ),
           );
         },
       );
+
+      // await showModalBottomSheet(
+      //   context: context,
+      //   isScrollControlled: true,
+      //   builder: (BuildContext context) {
+      //     return SafeArea(
+      //       top: false,
+      //       bottom: false,
+      //       child: Column(
+      //         crossAxisAlignment: CrossAxisAlignment.stretch,
+      //         children: [
+      //           Container(
+      //             color: Colors.black,
+      //             padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+      //             child: Row(
+      //               children: [
+      //                 Expanded(
+      //                   child: Text(
+      //                     link,
+      //                     overflow: TextOverflow.ellipsis,
+      //                     maxLines: 1,
+      //                     style: const TextStyle(
+      //                       color: Colors.white,
+      //                       fontWeight: FontWeight.bold,
+      //                     ),
+      //                   ),
+      //                 ),
+      //                 IconButton(
+      //                   icon: const Icon(
+      //                     Icons.close,
+      //                     color: Colors.white,
+      //                   ),
+      //                   onPressed: () => Navigator.of(context).pop(),
+      //                 ),
+      //               ],
+      //             ),
+      //           ),
+      //           SizedBox(
+      //             height: MediaQuery.of(context).size.height - kToolbarHeight - 30,
+      //             child: WebViewWidget(controller: webViewController),
+      //           ),
+      //         ],
+      //       ),
+      //     );
+      //   },
+      // );
     }
   }
 
@@ -1064,63 +1111,63 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             website,
             openHours,
             attachments,
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).cardColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).dividerColor.withOpacity(
-                          .05,
-                        ),
-                    spreadRadius: 4,
-                    blurRadius: 4,
-                    offset: const Offset(
-                      0,
-                      2,
-                    ), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: AppUserInfo(
-                user: userDetail,
-                onPressed: () async {
-                  final loggedInUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getLoggedInUserId();
-                  if (!mounted) return;
-                  final productUserId = await context
-                      .read<ProductDetailCubit>()
-                      .getUserDetails(widget.item.userId, widget.item.cityId);
-
-                  if (product.sourceId != 2 && product.sourceId != 3) {
-                    if (productUserId?.id == loggedInUserId) {
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.profile,
-                              arguments: {'user': userDetail, 'editable': true})
-                          .then((value) {
-                        setState(() {});
-                      });
-                    } else {
-                      if (!mounted) return;
-                      Navigator.pushNamed(context, Routes.profile, arguments: {
-                        'user': userDetail,
-                        'editable': false
-                      }).then((value) {
-                        setState(() {});
-                      });
-                    }
-                  }
-                },
-                type: UserViewType.information,
-                showDirectionIcon:
-                    product.sourceId != 2 && product.sourceId != 3,
-              ),
-            ),
-            const SizedBox(height: 16),
+            // const SizedBox(height: 16),
+            // Container(
+            //   padding: const EdgeInsets.all(8),
+            //   margin: const EdgeInsets.symmetric(horizontal: 8),
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(8),
+            //     color: Theme.of(context).cardColor,
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Theme.of(context).dividerColor.withOpacity(
+            //               .05,
+            //             ),
+            //         spreadRadius: 4,
+            //         blurRadius: 4,
+            //         offset: const Offset(
+            //           0,
+            //           2,
+            //         ), // changes position of shadow
+            //       ),
+            //     ],
+            //   ),
+            //   child: AppUserInfo(
+            //     user: userDetail,
+            //     onPressed: () async {
+            //       final loggedInUserId = await context
+            //           .read<ProductDetailCubit>()
+            //           .getLoggedInUserId();
+            //       if (!mounted) return;
+            //       final productUserId = await context
+            //           .read<ProductDetailCubit>()
+            //           .getUserDetails(widget.item.userId, widget.item.cityId);
+            //
+            //       if (product.sourceId != 2 && product.sourceId != 3) {
+            //         if (productUserId?.id == loggedInUserId) {
+            //           if (!mounted) return;
+            //           Navigator.pushNamed(context, Routes.profile,
+            //                   arguments: {'user': userDetail, 'editable': true})
+            //               .then((value) {
+            //             setState(() {});
+            //           });
+            //         } else {
+            //           if (!mounted) return;
+            //           Navigator.pushNamed(context, Routes.profile, arguments: {
+            //             'user': userDetail,
+            //             'editable': false
+            //           }).then((value) {
+            //             setState(() {});
+            //           });
+            //         }
+            //       }
+            //     },
+            //     type: UserViewType.information,
+            //     showDirectionIcon:
+            //         product.sourceId != 2 && product.sourceId != 3,
+            //   ),
+            // ),
+            const SizedBox(height: 30),
           ],
         ),
       );
