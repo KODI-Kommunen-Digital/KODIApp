@@ -86,6 +86,11 @@ class IntroPageState extends State<IntroPage> {
     Navigator.pushReplacementNamed(context, '/home');
   }
 
+  void _wasteCalendarSkipped() async {
+    final prefs = await Preferences.openBox();
+    await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,6 +178,7 @@ class IntroPageState extends State<IntroPage> {
               const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
+                  _wasteCalendarSkipped();
                   Navigator.pushReplacementNamed(context, '/home');
                 },
                 child: const Text('Überspringen'),

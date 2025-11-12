@@ -51,6 +51,7 @@ class Preferences {
   static const String isAppInstalled = "isAppInstalled";
   static const String isOldTopicUnsubscribed = "isOldTopicUnsubscribed";
   static const String oldTopicUnsubscribedIndex = "oldTopicUnsubscribedIndex";
+  static const String isWasteCalendarSkipped = "isWasteCalendarSkipped";
 
   Preferences._(this._box);
 
