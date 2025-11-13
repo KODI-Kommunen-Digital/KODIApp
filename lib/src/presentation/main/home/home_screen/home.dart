@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:heidi/src/data/model/model_category.dart';
@@ -429,7 +430,7 @@ class _HomeScreenState extends State<HomeScreen> {
         final webViewController = WebViewController()
           ..setJavaScriptMode(JavaScriptMode.unrestricted)
           ..loadRequest(
-              Uri.parse("https://ratingen-marketing.de/carparksListing/"));
+              Uri.parse(dotenv.env['PARKING_SERVICE_URL']!));
 
         await showModalBottomSheet(
           context: context,

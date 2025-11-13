@@ -37,6 +37,7 @@
         android:label="Ratingen - die offizielle App"
         android:hardwareAccelerated="true"
         android:allowBackup="false"
+        android:usesCleartextTraffic="true"
         android:theme="@style/LaunchTheme">
 
         <activity
