@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -250,7 +251,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       final webViewController = WebViewController()
         ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(
-            Uri.parse("https://ratingen-marketing.de/carparksListing/"));
+            Uri.parse(dotenv.env['PARKING_SERVICE_URL']!));
 
       await showModalBottomSheet(
         context: context,
