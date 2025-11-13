@@ -301,10 +301,16 @@ class Api {
 
   ///Get Recent Listings
   static Future<ResultApiModel> requestRecentListings(params) async {
-    final listings = "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
-    final result = await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
+    final listings =
+        "/listings?statusId=1&pageNo=$params&pageSize=19&showExternalListings=$showExternalListings";
+    final result =
+    await HTTPManager(apiType: APIType.defaultAPI).get(url: listings);
+    if (result == null) {
+      return ResultApiModel(success: false, message: "Empty response", data: []);
+    }
     return ResultApiModel.fromJson(result);
   }
+
 
   ///Get All Listings
   static Future<ResultApiModel> requestAllListings(params) async {

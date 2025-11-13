@@ -49,6 +49,7 @@ class Preferences {
   static const String selectedStreetHashedName = 'selectedStreetHashedName';
   static const String selectedWasteTypes = 'selectedWasteTypes';
   static const String introSkipped = 'introSkipped';
+  static const String isWasteCalendarSkipped = "isWasteCalendarSkipped";
 
   Preferences._(this._box);
 
