@@ -87,6 +87,9 @@ class _HeidiAppState extends State<HeidiApp> {
 
   @override
   Widget build(BuildContext context) {
+    bool isWasteCalendarSkipped = widget.prefBox.getBool(
+        Preferences.isWasteCalendarSkipped);
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -128,7 +131,9 @@ class _HeidiAppState extends State<HeidiApp> {
                           return const CircularProgressIndicator();
                         } else {
                           final location = snapshot.data;
-                          if (location == true) {
+                          if (location == true ||
+                              (isWasteCalendarSkipped != null &&
+                                  isWasteCalendarSkipped)) {
                             return const MainScreen();
                           } else {
                             return const IntroPage();

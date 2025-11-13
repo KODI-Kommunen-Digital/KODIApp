@@ -39,14 +39,19 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
             carouselCollections.add(collection);
           }
         }
-        emit(WasteCalendarLoaded(wasteCollections, carouselCollections));
+        if (!isClosed) {
+          emit(WasteCalendarLoaded(wasteCollections, carouselCollections));
+        }
       } else {
-        emit(WasteCalendarError(
-            "Failed to load waste collections: ${result.message}"));
+        if (!isClosed) {
+          emit(WasteCalendarError(
+              "Failed to load waste collections: ${result.message}"));        }
       }
     } catch (e) {
-      emit(WasteCalendarError(
-          "Failed to load waste collections: ${e.toString()}"));
+      if (!isClosed) {
+        emit(WasteCalendarError(
+            "Failed to load waste collections: ${e.toString()}"));
+      }
     }
   }
 
