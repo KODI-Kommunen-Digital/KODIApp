@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.10+36
+version: 1.0.10+38
 publish_to: none
 
 environment:
@@ -92,7 +92,7 @@ dependencies:
   image_picker: ^1.2.1
   flutter_slidable: ^3.0.0
   file_picker: ^10.3.6
-  flutter_pdfview: ^1.0.1
+  flutter_pdfview: ^1.4.3
   flutter_cached_pdfview: ^0.4.2
   flutter_cache_manager: ^3.3.1
   comment_box: ^0.0.18
@@ -100,11 +100,11 @@ dependencies:
   path_provider: ^2.0.9
   # multiple_images_picker: ^1.0.1
   html: ^0.15.4
-  calendar_date_picker2: ^1.1.5
+  calendar_date_picker2: ^2.0.1
   package_info_plus: ^4.2.0
   flutter_dotenv: ^5.1.0
   add_2_calendar: ^3.0.1
-  table_calendar: ^3.0.9
+  table_calendar: ^3.2.0
   flutter_typeahead: ^5.2.0
   shared_preferences: ^2.2.3
   # bar code generator
