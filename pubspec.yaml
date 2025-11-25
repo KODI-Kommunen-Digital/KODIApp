@@ -8,6 +8,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  flutter_dotenv: ^5.1.0
+
   flutter_localizations:
     sdk: flutter
 
@@ -130,6 +133,8 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
+    - assets/env/production/.envCoburgProd
+    - assets/env/staging/.envCoburgStage
 
   fonts:
     - family: Poppins

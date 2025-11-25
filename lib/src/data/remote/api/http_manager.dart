@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_svprogresshud/flutter_svprogresshud.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -16,10 +17,7 @@ class HTTPManager {
   late String _baseUrl;
 
   HTTPManager({bool forum = false}) {
-    _baseUrl =
-    // !forum ? 'https://rodachtal.info/api/' : 'https://rodachtal.info/api/';
-    //Staging url
-     !forum ? 'http://88.99.173.141:3001/' : 'http://88.99.173.141:3001/';
+    _baseUrl = dotenv.env['DEFAULT_API_URL']!;
 
     _dio = Dio(
       BaseOptions(
