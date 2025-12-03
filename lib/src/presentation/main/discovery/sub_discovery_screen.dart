@@ -101,7 +101,7 @@ class SubDiscoveryScreen extends StatelessWidget {
         url = "https://www.stadtwerke-troisdorf.de/";
         break;
       case "20":
-        url = "https://www.troisdorf.city/";
+        url = "https://www.troisdorf.city/smart-app";
         break;
     }
 
