@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 5.0.0+40005
+version: 5.0.0+40006
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -81,10 +81,10 @@ dependencies:
 
   ### File Reading
   open_filex: ^4.7.0
-  image_picker: ^1.2.0
+  image_picker: ^1.2.1
   flutter_slidable: ^3.0.0
-  file_picker: ^10.3.3
-  flutter_pdfview: ^1.0.1
+  file_picker: ^10.3.6
+  flutter_pdfview: ^1.4.3
   flutter_cached_pdfview: ^0.4.2
   flutter_cache_manager: ^3.3.1
   comment_box: ^0.0.18
@@ -92,7 +92,7 @@ dependencies:
   path_provider: ^2.0.9
   # multiple_images_picker: ^1.0.1
   html: ^0.15.4
-  calendar_date_picker2: ^1.1.5
+  calendar_date_picker2: ^2.0.1
   package_info_plus: ^4.2.0
   flutter_dotenv: ^5.1.0
   firebase_remote_config: ^5.0.1
