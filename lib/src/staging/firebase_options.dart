@@ -51,7 +51,7 @@ class StagingDefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCSEewJEw3KHiXmsf3qP6s66rgOrEJzoCQ',
-    appId: '1:248378738903:android:8f898ddf9d3c1668a2c892',
+    appId: '1:248378738903:android:fc176d77b0e75fcba2c892',
     messagingSenderId: '248378738903',
     projectId: 'gera-stage',
     storageBucket: 'gera-stage.firebasestorage.app',
