@@ -1,4 +1,5 @@
-package de.gera.app;
+package de.gera.mobileapp
+;
 
 import com.tekartik.sqflite.SqflitePlugin;
 import io.flutter.embedding.engine.FlutterEngine;

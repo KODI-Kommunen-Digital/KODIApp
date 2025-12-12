@@ -51,7 +51,7 @@ class ProductionDefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCVYYuPwoeB41nVsZ97GimO7laBBdqPEFc',
-    appId: '1:977790605614:android:cbdf45cacbde5234dc82bf',
+    appId: '1:977790605614:android:966ca2d81d4f2406dc82bf',
     messagingSenderId: '977790605614',
     projectId: 'gera-172d7',
     storageBucket: 'gera-172d7.firebasestorage.app',
