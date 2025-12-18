@@ -1,6 +1,6 @@
 name: heidi
 description: A new Flutter project.
-version: 1.0.3+4
+version: 1.0.4+5
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
@@ -56,7 +56,7 @@ dependencies:
   #device_info: 2.0.3
   device_info_plus: ^11.5.0
   permission_handler: ^11.3.1
-  url_launcher: ^6.3.2
+  url_launcher: ^6.3.0
   #connectivity: ^3.0.6
   connectivity_plus: ^6.1.5
 
@@ -165,13 +165,11 @@ flutter:
         - asset: assets/fonts/OpenSans-Regular.ttf
         - asset: assets/fonts/OpenSans-SemiBold.ttf
         - asset: assets/fonts/OpenSans-SemiBoldItalic.ttf
-    - family: ProximaNova
+    - family: Montserrat
       fonts:
-        - asset: assets/fonts/ProximaNova-Black.otf
-        - asset: assets/fonts/ProximaNova-Bold.otf
-        - asset: assets/fonts/ProximaNova-Extrabld.otf
-        - asset: assets/fonts/ProximaNova-Regular.otf
-        - asset: assets/fonts/ProximaNovaT-Thin.otf
+        - asset: assets/fonts/Montserrat-Bold.ttf
+        - asset: assets/fonts/Montserrat-Regular.ttf
+        - asset: assets/fonts/Montserrat-SemiBold.ttf
     - family: Raleway
       fonts:
         - asset: assets/fonts/Raleway-Black.ttf
