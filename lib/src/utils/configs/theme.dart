@@ -10,7 +10,7 @@ class AppTheme {
   ///List Font support
   static final List<String> fontSupport = [
     "OpenSans",
-    "ProximaNova",
+    "Montserrat",
     "Raleway",
     "Roboto",
     "Merriweather",

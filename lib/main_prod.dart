@@ -1,8 +1,12 @@
 import 'dart:io';
 
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -13,12 +17,15 @@ import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
+import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
+import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -36,9 +43,19 @@ Future<void> main() async {
   );
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
-
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
+  await Upgrader.clearSavedSettings();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  HttpOverrides.global = CustomHttpOverrides();
+  await SentryFlutter.init((options) {
+    options.dsn =
+    'https://a4fb5224118623425d802bf0acaf087b@o4506393481510912.ingest.sentry.io/4506393482493952';
+    options.tracesSampleRate = 0.01;
+  }, appRunner: () => runApp(HeidiApp(prefBox)));
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -47,9 +64,9 @@ class HeidiApp extends StatefulWidget {
   final Preferences prefBox;
 
   const HeidiApp(
-    this.prefBox, {
-    super.key,
-  });
+      this.prefBox, {
+        super.key,
+      });
 
   @override
   State<HeidiApp> createState() => _HeidiAppState();
@@ -72,6 +89,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -79,21 +99,14 @@ class _HeidiAppState extends State<HeidiApp> {
           builder: (context, lang) {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
-                return UpgradeAlert(
-                  shouldPopScope: () => true,
-                  barrierDismissible: true,
-                    dialogStyle: Platform.isIOS
-                        ? UpgradeDialogStyle.cupertino
-                        : UpgradeDialogStyle.material,
-                  upgrader: Upgrader(
-                      durationUntilAlertAgain: const Duration(days: 1),
-                      ),
+                return ChangeNotifierProvider(
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
+                    navigatorKey: globalNavKey,
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,
-                    locale: lang,
                     localizationsDelegates: const [
                       Translate.delegate,
                       GlobalMaterialLocalizations.delegate,
@@ -117,7 +130,7 @@ class _HeidiAppState extends State<HeidiApp> {
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
                         textScaler:
-                            TextScaler.linear(theme.textScaleFactor ?? 1),
+                        TextScaler.linear(theme.textScaleFactor ?? 1),
                       );
                       return MediaQuery(
                         data: data,
@@ -132,5 +145,20 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+}
+
+class CustomHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) {
+        // Bypass certificate validation ONLY for www.pressig.de
+        if (host == 'www.pressig.de') {
+          logInfo('⚠️ Bypassing SSL verification for $host');
+          return true;
+        }
+        return false; // Keep SSL validation for all other hosts
+      };
   }
 }
