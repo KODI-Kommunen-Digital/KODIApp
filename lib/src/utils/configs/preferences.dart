@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:hive/hive.dart';
 
@@ -38,6 +39,8 @@ class Preferences {
   static const String allListingCityFilter = "allListingCityFilter";
   static const String pushNotificationsPermission =
       "pushNotificationsPermission";
+  static const String receiveWasteCalendarNotification =
+      "receiveWasteCalendarNotification";
   static const String receiveNotification = "receiveNotification";
   static const bool hasOpenedForumsBefore = false;
   static const String listingTitle = "allListingCityFilter";
@@ -47,7 +50,9 @@ class Preferences {
   static const String selectedLocationName = 'selectedLocationName';
   static const String trolleyMakerApiToken = 'trolleyMakerApiToken';
   static const String trolleyMakerCardName = 'trolleyMakerCardName';
-
+  static const String selectedStreetHashedName = 'selectedStreetHashedName';
+  static const String selectedWasteTypes = 'selectedWasteTypes';
+  static const String introSkipped = 'introSkipped';
   static const String isAppInstalled = "isAppInstalled";
   static const String isOldTopicUnsubscribed = "isOldTopicUnsubscribed";
   static const String oldTopicUnsubscribedIndex = "oldTopicUnsubscribedIndex";
@@ -93,4 +98,20 @@ class Preferences {
       _getValue<bool>(key, defaultValue);
 
   Future<void> setBool(String key, bool value) => _setValue<bool>(key, value);
+
+  List<int> getSelectedWasteTypes() {
+    final jsonString = _getValue<String?>(selectedWasteTypes, null);
+    try {
+      if (jsonString == null) return [];
+      final List<dynamic> decoded = json.decode(jsonString);
+      return decoded.cast<int>();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  Future<void> setSelectedWasteTypes(List<int> wasteTypeIds) async {
+    final jsonString = json.encode(wasteTypeIds);
+    await _setValue(selectedWasteTypes, jsonString);
+  }
 }

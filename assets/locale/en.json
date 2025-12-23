@@ -3,6 +3,7 @@
   "wish_list": "Wishlist",
   "message": "Messages",
   "notification": "Notification",
+  "waste_calendar_notification": "Waste calendar notification",
   "maccount": "Account",
   "to": "to",
   "Choose_File_Type": "Choose File Type",
@@ -620,5 +621,8 @@
   "current_password_incorrect": "Current password is incorrect",
   "retry": "Retry",
   "municipal_utilities": "Municipal Utilities",
-  "mobility": "Mobility"
+  "mobility": "Mobility",
+  "enable_waste_calendar_notification_title": "Enable Waste Calendar Notifications",
+  "enable_waste_calendar_notification_desc": "Turn on Waste Calendar notifications in Settings to access this feature",
+  "saving_changes": "Saving changes..."
 }

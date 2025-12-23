@@ -70,7 +70,8 @@ Future<void> main() async {
     options.dsn =
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
-  }, appRunner: () => runApp(HeidiApp(prefBox)));
+    options.debug = false;
+  }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
   await CategoryManager.loadCategories();
 }
 
@@ -192,6 +193,8 @@ class _HeidiAppState extends State<HeidiApp> {
 
     String? location = _getStoredLocation(prefs);
 
+    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
+
     if (location != null &&
         prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
       await prefs.setKeyValue(Preferences.selectedLocationName, null);
@@ -201,9 +204,18 @@ class _HeidiAppState extends State<HeidiApp> {
       final previousLocationId =
           prefs.getKeyValue(Preferences.selectedLocationId, null);
       if (previousLocationId != null) {
-        final previousTopic = WasteCalendarRepository(prefs)
-            .getTopicString(int.parse(previousLocationId));
-        await firebaseApi.unsubscribeFromTopic(previousTopic);
+        final previousWasteTypes = prefs.getSelectedWasteTypes();
+        final previousHashedStreetName = prefs.getKeyValue(Preferences.selectedStreetHashedName, null);
+
+        if (previousHashedStreetName != null && previousWasteTypes.isNotEmpty) {
+          for (int previousType in previousWasteTypes) {
+            final previousTopic = WasteCalendarRepository(prefs)
+                .getTopicString(int.parse(previousLocationId), previousHashedStreetName, previousType);
+            await firebaseApi.unsubscribeFromTopic(previousTopic);
+            logInfo('Unsubscribed from topic : $previousTopic');
+          }
+        }
+
       }
     }
 
@@ -235,13 +247,21 @@ class _HeidiAppState extends State<HeidiApp> {
         final list = await _loadLocations(repository);
         final updatedList = list.sublist(index);
         for (WasteLocation wasteLocation in updatedList) {
+
           if (wasteLocation.name != location) {
-            debugPrint('unsubscribed to Name = ${wasteLocation.name} \n hashed = ${wasteLocation.hashStreetName}');
-            await firebaseApi.unsubscribeFromTopic(repository
-                .getTopicFromHash(wasteLocation.hashStreetName));
-            debugPrint('index = $index');
-            index = index!+1;
-            await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
+            debugPrint('unsubscribed to Name = ${wasteLocation.name} \n hashed = ${wasteLocation.hashedStreetName}');
+
+            final previousWasteTypes = prefs.getSelectedWasteTypes();
+            if (previousWasteTypes.isNotEmpty) {
+              for (int previousType in previousWasteTypes) {
+                final previousTopic = WasteCalendarRepository(prefs)
+                    .getTopicString(1, wasteLocation.hashedStreetName, previousType);
+                await firebaseApi.unsubscribeFromTopic(previousTopic);
+                debugPrint('index = $index');
+                index = index!+1;
+                await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
+              }
+            }
           }
         }
       }

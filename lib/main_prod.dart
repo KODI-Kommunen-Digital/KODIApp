@@ -69,7 +69,7 @@ Future<void> main() async {
     options.dsn =
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
-  }, appRunner: () => runApp(HeidiApp(prefBox)));
+  }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
   await CategoryManager.loadCategories();
 }
 
@@ -147,15 +147,15 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<String?>(
-                      future: clearLocationId(),
+                    home: FutureBuilder<bool?>(
+                      future: _shouldShowMainScreen(),
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else {
                           final location = snapshot.data;
-                          if (location != null ||
+                          if (location == true ||
                               (isWasteCalendarSkipped != null &&
                                   isWasteCalendarSkipped)) {
                             return const MainScreen();
@@ -200,9 +200,18 @@ class _HeidiAppState extends State<HeidiApp> {
           prefs.getKeyValue(Preferences.selectedLocationId, null);
       final firebaseApi = FirebaseApi(navigatorKey, prefs);
       if (previousLocationId != null) {
-        final previousTopic = WasteCalendarRepository(prefs)
-            .getTopicString(int.parse(previousLocationId));
-        await firebaseApi.unsubscribeFromTopic(previousTopic);
+        final previousWasteTypes = prefs.getSelectedWasteTypes();
+        final previousHashedStreetName = prefs.getKeyValue(Preferences.selectedStreetHashedName, null);
+
+        if (previousHashedStreetName != null && previousWasteTypes.isNotEmpty) {
+          for (int previousType in previousWasteTypes) {
+            final previousTopic = WasteCalendarRepository(prefs)
+                .getTopicString(int.parse(previousLocationId), previousHashedStreetName, previousType);
+            await firebaseApi.unsubscribeFromTopic(previousTopic);
+            logInfo('Unsubscribed from topic : $previousTopic');
+          }
+        }
+
       }
     }
 
@@ -234,11 +243,18 @@ class _HeidiAppState extends State<HeidiApp> {
         final updatedList = list.sublist(index);
         for (WasteLocation wasteLocation in updatedList) {
           if (wasteLocation.name != location) {
-            debugPrint('unsubscribed to Name = ${wasteLocation.name}');
-            await firebaseApi.unsubscribeFromTopic(repository
-                .getTopicFromHash(wasteLocation.hashStreetName));
-            index = index!+1;
-            await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
+            debugPrint('unsubscribed to Name = ${wasteLocation.name} \n hashed = ${wasteLocation.hashedStreetName}');
+            final previousWasteTypes = prefs.getSelectedWasteTypes();
+            if (previousWasteTypes.isNotEmpty) {
+              for (int previousType in previousWasteTypes) {
+                final previousTopic = WasteCalendarRepository(prefs)
+                    .getTopicString(1, wasteLocation.hashedStreetName, previousType);
+                await firebaseApi.unsubscribeFromTopic(previousTopic);
+                debugPrint('index = $index');
+                index = index!+1;
+                await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
+              }
+            }
           }
         }
       }
@@ -274,5 +290,13 @@ class _HeidiAppState extends State<HeidiApp> {
       });
       globalNavKey.currentState?.pushNamed(Routes.trolleyMakerSignIn);
     };
+  }
+
+  Future<bool> _shouldShowMainScreen() async {
+    final prefs = await Preferences.openBox();
+    final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final wasteTypes = prefs.getSelectedWasteTypes();
+    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
+    return (location != null && wasteTypes.isNotEmpty);
   }
 }

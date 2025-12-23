@@ -3,14 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
-import 'package:heidi/src/data/remote/api/firebase_api.dart';
-import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../../../../utils/translate.dart';
 import 'cubit/waste_calendar_cubit.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/data/model/model_waste_location.dart';
+import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
+import 'package:heidi/src/presentation/widget/loading_dialog.dart';
 
 class WasteCalendar extends StatefulWidget {
   const WasteCalendar({super.key});
@@ -27,73 +29,240 @@ class _WasteCalendarState extends State<WasteCalendar> {
   String? _selectedLocationId;
   String? _selectedLocationName;
   List<WasteLocation> locations = [];
+  List<WasteType> wasteTypes = [];
+  List<WasteType> selectedWasteTypes = [];
   late WasteCalendarRepository repository;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  late final String receiveWasteCalendarNotification;
 
   @override
   void initState() {
     super.initState();
     _initializeRepository();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final prefs = await Preferences.openBox();
+      receiveWasteCalendarNotification =
+      prefs.getKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        "true",
+      );
+    });
+  }
+
+  void _showNotificationEnableDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(Translate.of(context).translate('enable_waste_calendar_notification_title')),
+          content: Text(Translate.of(context).translate('enable_waste_calendar_notification_desc')),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _initializeRepository() async {
     final prefs = await Preferences.openBox();
     repository = WasteCalendarRepository(prefs);
     _loadLocations();
+    _loadWasteTypes();
     _loadLocation();
+    _loadSelectedWasteTypes();
   }
 
   Future<void> _loadLocations() async {
-    final fetchedLocations = await repository.loadWasteCalendarStreets(1);
-    setState(() {
-      if (fetchedLocations != null) {
+    final fetchedLocations =
+    await repository.loadWasteCalendarStreets(1);
+
+    if (!mounted) return;
+
+    if (fetchedLocations != null) {
+      setState(() {
         locations = fetchedLocations;
+      });
+    }
+  }
+
+  Future<void> _loadWasteTypes() async {
+    final fetchedWasteTypes = await repository.loadWasteTypes(1);
+    if (!mounted) return;
+
+    setState(() {
+      if (fetchedWasteTypes != null) {
+        wasteTypes = fetchedWasteTypes;
       }
     });
+  }
+
+  Future<void> _loadSelectedWasteTypes() async {
+    final prefs = await Preferences.openBox();
+    final savedWasteTypeIds = prefs.getSelectedWasteTypes();
+
+    if (savedWasteTypeIds.isNotEmpty) {
+      // Only load waste types initially if not already loaded
+      if (wasteTypes.isEmpty) {
+        await _loadWasteTypes();
+      }
+
+      setState(() {
+        selectedWasteTypes = wasteTypes
+            .where((type) => savedWasteTypeIds.contains(type.id))
+            .toList();
+      });
+    } else {
+      setState(() {
+        selectedWasteTypes = [];
+      });
+    }
   }
 
   Future<void> _loadLocation() async {
     final prefs = await Preferences.openBox();
-    setState(() {
-      _selectedLocationId =
-          prefs.getKeyValue(Preferences.selectedLocationId, null);
-      _selectedLocationName =
-          prefs.getKeyValue(Preferences.selectedLocationName, null);
-      if (_selectedLocationId == null) {
-        _showLocationDialog(context);
-      } else {
-        _wasteCalenderCubit.loadWasteCollections(1, _selectedLocationId);
-      }
-    });
-  }
 
-  void _selectLocation(String locationId, String locationName) async {
-    final prefs = await Preferences.openBox();
-    final previousLocationId =
-        prefs.getKeyValue(Preferences.selectedLocationId, null);
+    if (!mounted) return;
 
-    final previousLocationName =prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final locationId =
+    prefs.getKeyValue(Preferences.selectedLocationId, null);
+    final locationName =
+    prefs.getKeyValue(Preferences.selectedLocationName, null);
 
-    await prefs.setKeyValue(Preferences.selectedLocationId, locationId);
-    await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
+    if (locationId == null) {
+      _showLocationDialog(context);
+      return;
+    }
+
     setState(() {
       _selectedLocationId = locationId;
       _selectedLocationName = locationName;
     });
 
-    final firebaseApi = FirebaseApi(navigatorKey, prefs);
+    _wasteCalenderCubit.loadWasteCollections(
+      1,
+      locationId,
+      selectedWasteTypeIds:
+      selectedWasteTypes.map((type) => type.id).toList(),
+    );
+  }
 
-    if (previousLocationId != null) {
-      final previousTopic =
-          repository.getTopicFromHash(getStreetNameHash(previousLocationName));
-      await firebaseApi.unsubscribeFromTopic(previousTopic);
+  Future<void> _selectLocation(
+      String locationId, String locationName, String hashedStreetName) async {
+    setState(() {
+      _selectedLocationId = locationId;
+      _selectedLocationName = locationName;
+    });
+
+    await repository.updateSubscription(
+      navigatorKey: navigatorKey,
+      cityId: 1,
+      locationId: locationId,
+      locationName: locationName,
+      hashedStreetName: hashedStreetName,
+    );
+
+    _wasteCalenderCubit.updateStreetId(locationId,
+        selectedWasteTypeIds:
+            selectedWasteTypes.map((type) => type.id).toList());
+  }
+
+  void _selectWasteTypes(List<WasteType> wasteTypes) {
+    setState(() {
+      selectedWasteTypes = wasteTypes;
+    });
+  }
+
+  Future<void> _updateWasteTypesSubscription() async {
+    if (selectedWasteTypes.isNotEmpty) {
+      await repository.updateSubscription(
+        navigatorKey: navigatorKey,
+        cityId: 1,
+        wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+      );
     }
+  }
 
-    final newTopic = repository.getTopicFromHash(getStreetNameHash(locationName));
+  void _showWasteTypeDialog() {
+    // Create local copy of selected waste types for the dialog
+    List<WasteType> localSelectedWasteTypes = List.from(selectedWasteTypes);
 
-    await firebaseApi.subscribeToTopic(newTopic);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  maxWidth: 500,
+                ),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppMultiSelectTypeAhead(
+                          items: wasteTypes,
+                          selectedItems: localSelectedWasteTypes,
+                          onSelectionChanged: (selectedTypes) {
+                            setDialogState(() {
+                              localSelectedWasteTypes = selectedTypes;
+                            });
+                          },
+                          hintText: 'Abfallarten eingeben',
+                          sectionTitle: 'Abfallarten auswählen',
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Abbrechen'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: localSelectedWasteTypes.isEmpty
+                                  ? null
+                                  : () async {
+                                      _selectWasteTypes(
+                                          localSelectedWasteTypes);
 
-    _wasteCalenderCubit.updateStreetId(locationId);
+                                      final loadingDialog = LoadingDialog();
+                                      loadingDialog.show(context,
+                                          'Bitte warten, während wir abonnieren...');
+                                      await _updateWasteTypesSubscription();
+                                      Navigator.pop(context);
+                                      loadingDialog.hide();
+                                    },
+                              child: const Text('Bestätigen'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((value) {
+      _loadSelectedWasteTypes();
+    });
   }
 
   void _scrollToValues() {
@@ -112,7 +281,16 @@ class _WasteCalendarState extends State<WasteCalendar> {
       create: (_) => _wasteCalenderCubit,
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_selectedLocationName ?? 'Straße auswählen'),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _selectedLocationName ?? 'Straße auswählen',
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () {
@@ -121,9 +299,25 @@ class _WasteCalendarState extends State<WasteCalendar> {
           ),
           actions: [
             IconButton(
-              icon: const Icon(Icons.edit, color: Colors.white),
+              icon: const Icon(
+                Icons.edit,
+              ),
               onPressed: () {
-                _showLocationDialog(context);
+                if (receiveWasteCalendarNotification == 'false') {
+                  _showNotificationEnableDialog();
+                } else {
+                  _showLocationDialog(context);
+                }
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.recycling),
+              onPressed: () {
+                if (receiveWasteCalendarNotification == 'false') {
+                  _showNotificationEnableDialog();
+                } else {
+                  _showWasteTypeDialog();
+                }
               },
             ),
           ],
@@ -218,12 +412,18 @@ class _WasteCalendarState extends State<WasteCalendar> {
                             "Keine Abholungen für den ausgewählten Tag verfügbar");
                       }
                       return Column(
-                        children: collectionsForSelectedDay
+                        children: removeMultiples(collectionsForSelectedDay)
                             .map((collection) => ListTile(
                                   leading: Icon(Icons.delete,
                                       color: _wasteCalenderCubit
                                           .getColorForType(collection.type)),
-                                  title: Text(collection.type),
+                                  title: Text(
+                                    (collection.type
+                                            .toLowerCase()
+                                            .contains('restmüll'))
+                                        ? 'Restmüll'
+                                        : collection.type,
+                                  ),
                                 ))
                             .toList(),
                       );
@@ -238,6 +438,24 @@ class _WasteCalendarState extends State<WasteCalendar> {
         ),
       ),
     );
+  }
+
+  List<WasteCollection> removeMultiples(
+      List<WasteCollection> collectionsForSelectedDay) {
+    final List<WasteCollection> filteredCollections = [];
+    bool restmuellSeen = false;
+
+    for (var collection in collectionsForSelectedDay) {
+      final isRestmuell = collection.type.toLowerCase().contains('restmüll');
+
+      if (isRestmuell) {
+        if (restmuellSeen) continue;
+        restmuellSeen = true;
+      }
+
+      filteredCollections.add(collection);
+    }
+    return filteredCollections;
   }
 
   Widget _buildWasteCard(WasteCollection collection) {
@@ -259,7 +477,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
             ),
             const SizedBox(height: 8),
             Text(
-              collection.type,
+              (collection.type.toLowerCase().contains('restmüll'))
+                  ? 'Restmüll'
+                  : collection.type,
               style: const TextStyle(color: Colors.black, fontSize: 14),
               textAlign: TextAlign.center,
             ),
@@ -445,17 +665,16 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   void _showLocationDialog(BuildContext context) {
-    final TextEditingController typeAheadController = TextEditingController();
-
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           title: const Text('Wähle deinen Ort'),
-          content: TypeAheadField(
-            builder: (context, typeAheadController, focusNode) {
+          content: TypeAheadField<WasteLocation>(
+            builder: (context, controller, focusNode) {
               return TextField(
-                controller: typeAheadController,
+                controller: controller,
                 focusNode: focusNode,
                 decoration: const InputDecoration(
                   hintText: 'Straßennamen eingeben',
@@ -469,19 +688,40 @@ class _WasteCalendarState extends State<WasteCalendar> {
               );
             },
             suggestionsCallback: (pattern) {
+              if (pattern.isEmpty) return locations;
               return locations
                   .where((item) =>
-                      item.name.toLowerCase().startsWith(pattern.toLowerCase()))
+                  item.name.toLowerCase().contains(pattern.toLowerCase()))
                   .toList();
             },
-            onSelected: (WasteLocation suggestion) {
-              typeAheadController.text = suggestion.name;
-              _selectLocation(suggestion.id.toString(), suggestion.name);
-              Navigator.pop(context);
+            onSelected: (WasteLocation suggestion) async {
+              Navigator.pop(context); // close location dialog
+
+              final loadingDialog = LoadingDialog();
+              loadingDialog.show(
+                context,
+                'Bitte warten, während wir abonnieren...',
+              );
+
+              await _selectLocation(
+                suggestion.id.toString(),
+                suggestion.name,
+                suggestion.hashedStreetName,
+              );
+
+              loadingDialog.hide();
             },
           ),
         );
       },
     );
+    //     .then((_) async {
+    //   final prefs = await Preferences.openBox();
+    //   final previousWasteTypes = prefs.getSelectedWasteTypes();
+    //
+    //   if (previousWasteTypes.isEmpty && mounted) {
+    //     _showWasteTypeDialog();
+    //   }
+    // });
   }
 }

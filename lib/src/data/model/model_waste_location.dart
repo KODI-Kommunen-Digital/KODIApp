@@ -1,19 +1,19 @@
 class WasteLocation {
   final int id;
   final String name;
-  final String hashStreetName;
+  final String hashedStreetName;
 
   WasteLocation({
     required this.id,
     required this.name,
-    required this.hashStreetName
+    required this.hashedStreetName,
   });
 
   factory WasteLocation.fromJson(Map<String, dynamic> json) {
     return WasteLocation(
       id: json['id'],
       name: json['name'],
-      hashStreetName: json['hashedStreetName'],
+      hashedStreetName: json['hashedStreetName'],
     );
   }
 
@@ -21,7 +21,7 @@ class WasteLocation {
     return {
       'id': id,
       'name': name,
-      'hashStreetName':hashStreetName
+      'hashedStreetName': hashedStreetName,
     };
   }
 }

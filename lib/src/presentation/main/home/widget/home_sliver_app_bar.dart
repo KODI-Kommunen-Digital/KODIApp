@@ -7,25 +7,36 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   final String? banners;
   final ValueSetter<String>? setLocationCallback;
   final List<String>? cityTitlesList;
-  String? hintText;
-  String? selectedOption;
+  final String? hintText;
+  final String? selectedOption;
 
-  AppBarHomeSliver(
-      {required this.expandedHeight,
-      required this.setLocationCallback,
-      required this.cityTitlesList,
-      this.banners,
-      this.hintText,
-      this.selectedOption});
+  AppBarHomeSliver({
+    required this.expandedHeight,
+    required this.setLocationCallback,
+    required this.cityTitlesList,
+    this.banners,
+    this.hintText,
+    this.selectedOption,
+  });
+
+  static const double _minHeight = 120;
 
   @override
-  Widget build(context, shrinkOffset, overlapsContent) {
+  double get minExtent => _minHeight;
+
+  @override
+  double get maxExtent => expandedHeight < _minHeight
+      ? _minHeight
+      : expandedHeight;
+
+  @override
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         HomeSwipe(
           images: banners,
-          height: expandedHeight,
+          height: maxExtent,
         ),
         Container(
           height: 25,
@@ -42,11 +53,5 @@ class AppBarHomeSliver extends SliverPersistentHeaderDelegate {
   }
 
   @override
-  double get maxExtent => expandedHeight;
-
-  @override
-  double get minExtent => 120;
-
-  @override
-  bool shouldRebuild(SliverPersistentHeaderDelegate oldDelegate) => true;
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) => true;
 }
