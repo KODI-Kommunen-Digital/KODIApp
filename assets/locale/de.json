@@ -3,6 +3,7 @@
   "wish_list": "Favoriten",
   "message": "Mitteilungen",
   "notification": "Benachrichtigung",
+  "waste_calendar_notification": "Abfallkalender-Benachrichtigung",
   "account": "Nutzername",
   "accountOrEmail": "Benutzername oder E-mail",
   "maccount": "Konto",
@@ -629,6 +630,9 @@
   "current_password_incorrect": "Das aktuelle Passwort ist falsch",
   "retry": "Versuche erneut",
   "municipal_utilities": "Stadtwerke Troisdorf",
-  "mobility": "Mobilität"
+  "mobility": "Mobilität",
+  "enable_waste_calendar_notification_title": "Abfallkalender-Benachrichtigungen aktivieren",
+  "enable_waste_calendar_notification_desc": "Aktivieren Sie die Abfallkalender-Benachrichtigungen in den Einstellungen, um auf diese Funktion zugreifen zu können",
+  "saving_changes": "Änderungen werden gespeichert..."
 }
 

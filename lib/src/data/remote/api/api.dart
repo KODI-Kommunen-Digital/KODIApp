@@ -796,6 +796,13 @@ class Api {
     return ResultApiModel.fromJson(result);
   }
 
+  static Future<ResultApiModel> requestWasteTypes(int cityId) async {
+    var list = '/cities/1/wasteCalender/wasteTypes';
+    final result = await HTTPManager(apiType: APIType.waste).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+
   ///Singleton factory
   static final Api _instance = Api._internal();
 

@@ -7,6 +7,8 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 
+import '../../repository/waste_calendar_repository.dart';
+
 Future<void> handleBackgroundMessage(RemoteMessage? message) async {}
 
 class FirebaseApi {
@@ -91,16 +93,58 @@ class FirebaseApi {
 
   Future<void> refreshNotifications() async {
     final pushNotificationsPermission =
-        await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
+    await prefs.getKeyValue(
+        Preferences.pushNotificationsPermission, "0");
+
     final receiveNotification =
-        await prefs.getKeyValue(Preferences.receiveNotification, "true");
+    await prefs.getKeyValue(
+        Preferences.receiveNotification, "true");
+
+    final futures = <Future>[];
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      futures.add(_firebaseMessaging.subscribeToTopic("warnings"));
     } else {
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      futures.add(_firebaseMessaging.unsubscribeFromTopic("warnings"));
     }
+
+    // Run waste calendar refresh in parallel
+    futures.add(refreshWasteCalendarNotifications());
+
+    await Future.wait(futures);
+  }
+
+
+  Future<void> refreshWasteCalendarNotifications() async {
+    final receiveWasteCalendarNotification =
+    await prefs.getKeyValue(
+        Preferences.receiveWasteCalendarNotification, "true");
+
+    final previousWasteTypes = prefs.getSelectedWasteTypes();
+    final previousHashedStreetName =
+    prefs.getKeyValue(Preferences.selectedStreetHashedName, null);
+
+    if (previousHashedStreetName == null || previousWasteTypes.isEmpty) {
+      return;
+    }
+
+    final topics = previousWasteTypes.map((type) {
+      return WasteCalendarRepository(prefs)
+          .getTopicString(1, previousHashedStreetName, type);
+    }).toList();
+
+    final futures = topics.map((topic) {
+      if (receiveWasteCalendarNotification == "true") {
+        logInfo('Subscribe to topic : $topic');
+        return subscribeToTopic(topic);
+      } else {
+        logInfo('Unsubscribe from topic : $topic');
+        return unsubscribeFromTopic(topic);
+      }
+    }).toList();
+
+    await Future.wait(futures);
   }
 
   Future<void> uploadToken(int userId, String token) async {
