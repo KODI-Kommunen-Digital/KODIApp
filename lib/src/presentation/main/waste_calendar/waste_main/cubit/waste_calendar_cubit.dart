@@ -84,16 +84,16 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
         return Colors.red;
       case 'Restmülltonne 2-wö.':
       case 'Restmülltonne 4-wö.':
-        // case 'Restmüll-Container (wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (2-wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (4-wö.) für Wohnanlagen':
+      case 'Restmüll-Container (wö.) für Wohnanlagen':
+      case 'Restmüll-Container (2-wö.) für Wohnanlagen':
+      case 'Restmüll-Container (4-wö.) für Wohnanlagen':
         return Colors.grey;
-      // case 'Papier-Container (2-wö.) für Wohnanlagen':
-      // case 'Papier-Container (4-wö.) für Wohnanlagen':
-      //   return Colors.lightBlue;
-      // case 'Bio-Container Regelabfuhr für Wohnanlagen':
-      // case 'Bio-Container (2-wö.) für Wohnanlagen':
-      //   return Colors.lightGreen;
+      case 'Papier-Container (2-wö.) für Wohnanlagen':
+      case 'Papier-Container (4-wö.) für Wohnanlagen':
+        return Colors.lightBlue;
+      case 'Bio-Container Regelabfuhr für Wohnanlagen':
+      case 'Bio-Container (2-wö.) für Wohnanlagen':
+        return Colors.lightGreen;
       case 'Wertstoff-Container (2-wö.)':
       case 'Wertstoff-Container (4-wö.)':
         return Colors.orange;

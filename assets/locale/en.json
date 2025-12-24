@@ -624,5 +624,6 @@
   "mobility": "Mobility",
   "enable_waste_calendar_notification_title": "Enable Waste Calendar Notifications",
   "enable_waste_calendar_notification_desc": "Turn on Waste Calendar notifications in Settings to access this feature",
-  "saving_changes": "Saving changes..."
+  "saving_changes": "Saving changes...",
+  "no_pickups_scheduled": "No pickups scheduled"
 }

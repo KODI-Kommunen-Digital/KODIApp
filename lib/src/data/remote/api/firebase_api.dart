@@ -81,12 +81,12 @@ class FirebaseApi {
   }
 
   Future<void> subscribeToTopic(String topic) async {
-    await _firebaseMessaging.subscribeToTopic(topic);
+    _firebaseMessaging.subscribeToTopic(topic);
     debugPrint('Topic Subscribed : $topic');
   }
 
   Future<void> unsubscribeFromTopic(String topic) async {
-    await _firebaseMessaging.unsubscribeFromTopic(topic);
+    _firebaseMessaging.unsubscribeFromTopic(topic);
     debugPrint('Topic Unsubscribed : $topic');
 
   }

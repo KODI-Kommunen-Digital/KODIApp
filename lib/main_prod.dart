@@ -207,7 +207,7 @@ class _HeidiAppState extends State<HeidiApp> {
           for (int previousType in previousWasteTypes) {
             final previousTopic = WasteCalendarRepository(prefs)
                 .getTopicString(int.parse(previousLocationId), previousHashedStreetName, previousType);
-            await firebaseApi.unsubscribeFromTopic(previousTopic);
+            firebaseApi.unsubscribeFromTopic(previousTopic);
             logInfo('Unsubscribed from topic : $previousTopic');
           }
         }
@@ -249,7 +249,7 @@ class _HeidiAppState extends State<HeidiApp> {
               for (int previousType in previousWasteTypes) {
                 final previousTopic = WasteCalendarRepository(prefs)
                     .getTopicString(1, wasteLocation.hashedStreetName, previousType);
-                await firebaseApi.unsubscribeFromTopic(previousTopic);
+                firebaseApi.unsubscribeFromTopic(previousTopic);
                 debugPrint('index = $index');
                 index = index!+1;
                 await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);

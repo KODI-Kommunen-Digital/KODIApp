@@ -34,33 +34,42 @@ class _WasteCalendarState extends State<WasteCalendar> {
   late WasteCalendarRepository repository;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   late final String receiveWasteCalendarNotification;
+  bool isLoading = false;
+  bool isDataInitializing = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeRepository();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final prefs = await Preferences.openBox();
-      receiveWasteCalendarNotification =
-      prefs.getKeyValue(
+      final permission = await prefs.getKeyValue(
+          Preferences.pushNotificationsPermission, 'notAsked');
+      final isAuthorized = permission == 'authorized';
+      receiveWasteCalendarNotification = prefs.getKeyValue(
         Preferences.receiveWasteCalendarNotification,
-        "true",
+        isAuthorized ? 'true' : 'false',
       );
+      _initializeRepository();
     });
   }
 
-  void _showNotificationEnableDialog() {
+  void _showNotificationEnableDialog({required bool isWasteTypeEmpty}) {
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-          title: Text(Translate.of(context).translate('enable_waste_calendar_notification_title')),
-          content: Text(Translate.of(context).translate('enable_waste_calendar_notification_desc')),
+          title: Text(Translate.of(context)
+              .translate('enable_waste_calendar_notification_title')),
+          content: Text(Translate.of(context)
+              .translate('enable_waste_calendar_notification_desc')),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(dialogContext).pop();
+                if (isWasteTypeEmpty) {
+                  Navigator.of(context).pop();
+                }
               },
               child: const Text('OK'),
             ),
@@ -71,25 +80,45 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   Future<void> _initializeRepository() async {
-    final prefs = await Preferences.openBox();
-    repository = WasteCalendarRepository(prefs);
-    _loadLocations();
-    _loadWasteTypes();
-    _loadLocation();
-    _loadSelectedWasteTypes();
+    setState(() => isDataInitializing = true);
+
+    try {
+      final prefs = await Preferences.openBox();
+      final previousWasteTypes = prefs.getSelectedWasteTypes();
+
+      if (receiveWasteCalendarNotification == 'false' &&
+          previousWasteTypes.isEmpty) {
+        _showNotificationEnableDialog(isWasteTypeEmpty: true);
+        return;
+      }
+
+      repository = WasteCalendarRepository(prefs);
+
+      await Future.wait([
+        _loadLocations(),
+        _loadWasteTypes(),
+        _loadSelectedWasteTypes(),
+      ]);
+
+      await _loadLocation();
+    } catch (e, s) {
+      debugPrint('Init error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(
+          () => isDataInitializing = false);
+    }
   }
 
   Future<void> _loadLocations() async {
-    final fetchedLocations =
-    await repository.loadWasteCalendarStreets(1);
+    final fetchedLocations = await repository.loadWasteCalendarStreets(1);
 
     if (!mounted) return;
 
-    if (fetchedLocations != null) {
-      setState(() {
-        locations = fetchedLocations;
-      });
-    }
+    setState(() {
+      locations = fetchedLocations ?? [];
+    });
   }
 
   Future<void> _loadWasteTypes() async {
@@ -130,10 +159,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
     if (!mounted) return;
 
-    final locationId =
-    prefs.getKeyValue(Preferences.selectedLocationId, null);
+    final locationId = prefs.getKeyValue(Preferences.selectedLocationId, null);
     final locationName =
-    prefs.getKeyValue(Preferences.selectedLocationName, null);
+        prefs.getKeyValue(Preferences.selectedLocationName, null);
 
     if (locationId == null) {
       _showLocationDialog(context);
@@ -148,8 +176,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
     _wasteCalenderCubit.loadWasteCollections(
       1,
       locationId,
-      selectedWasteTypeIds:
-      selectedWasteTypes.map((type) => type.id).toList(),
+      selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
     );
   }
 
@@ -189,13 +216,13 @@ class _WasteCalendarState extends State<WasteCalendar> {
     }
   }
 
-  void _showWasteTypeDialog() {
+  void _showWasteTypeDialog(BuildContext parentContext) {
     // Create local copy of selected waste types for the dialog
     List<WasteType> localSelectedWasteTypes = List.from(selectedWasteTypes);
 
     showDialog(
       context: context,
-      barrierDismissible: true,
+      barrierDismissible: false,
       builder: (context) {
         return StatefulBuilder(
           builder: (context, setDialogState) {
@@ -239,13 +266,17 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                   : () async {
                                       _selectWasteTypes(
                                           localSelectedWasteTypes);
-
                                       final loadingDialog = LoadingDialog();
-                                      loadingDialog.show(context,
-                                          'Bitte warten, während wir abonnieren...');
-                                      await _updateWasteTypesSubscription();
-                                      Navigator.pop(context);
-                                      loadingDialog.hide();
+                                      loadingDialog.show(
+                                        parentContext,
+                                        'Bitte warten, während wir abonnieren...',
+                                      );
+                                      try {
+                                        await _updateWasteTypesSubscription();
+                                        Navigator.pop(context);
+                                      } finally {
+                                        loadingDialog.hide(parentContext);
+                                      }
                                     },
                               child: const Text('Bestätigen'),
                             ),
@@ -279,162 +310,265 @@ class _WasteCalendarState extends State<WasteCalendar> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => _wasteCalenderCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _selectedLocationName ?? 'Straße auswählen',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      child: WillPopScope(
+        onWillPop: () async {
+          // Prevent back button when loading
+          if (isLoading || isDataInitializing) {
+            return false;
+          }
+          return true;
+        },
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _selectedLocationName ?? 'Straße auswählen',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    if (!isLoading) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      if (!isLoading) {
+                        if (receiveWasteCalendarNotification == 'false') {
+                          _showNotificationEnableDialog(
+                              isWasteTypeEmpty: false);
+                        } else {
+                          _showLocationDialog(context);
+                        }
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.recycling),
+                    onPressed: () {
+                      if (!isLoading) {
+                        if (receiveWasteCalendarNotification == 'false') {
+                          _showNotificationEnableDialog(
+                              isWasteTypeEmpty: false);
+                        } else {
+                          _showWasteTypeDialog(context);
+                        }
+                      }
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(
-                Icons.edit,
-              ),
-              onPressed: () {
-                if (receiveWasteCalendarNotification == 'false') {
-                  _showNotificationEnableDialog();
-                } else {
-                  _showLocationDialog(context);
-                }
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.recycling),
-              onPressed: () {
-                if (receiveWasteCalendarNotification == 'false') {
-                  _showNotificationEnableDialog();
-                } else {
-                  _showWasteTypeDialog();
-                }
-              },
-            ),
-          ],
-        ),
-        body: SingleChildScrollView(
-          controller: _scrollController,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 200,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: Opacity(
-                          opacity: 0.3,
-                          child: Image.asset(
-                            "assets/images/garbage.jpg",
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
+              body: isDataInitializing
+                  ? const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    )
+                  : Stack(
+                      children: [
+                        // Main content
+                        SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // ... rest of your content remains the same
+                                SizedBox(
+                                  height: 200,
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: Opacity(
+                                          opacity: 0.3,
+                                          child: Image.asset(
+                                            "assets/images/garbage.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "${_selectedDay.day} ${_selectedDay.monthName()}",
+                                              style: const TextStyle(
+                                                  fontSize: 22,
+                                                  color: Colors.red),
+                                            ),
+                                            Text(
+                                              _selectedDay.weekdayName(),
+                                              style: const TextStyle(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                const Text("Nächste Abholungen",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 8),
+                                BlocBuilder<WasteCalendarCubit,
+                                    WasteCalendarState>(
+                                  builder: (context, state) {
+                                    if (state is WasteCalendarLoading) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (state is WasteCalendarLoaded) {
+                                      return state
+                                              .carouselCollections.isNotEmpty
+                                          ? SizedBox(
+                                              height: 180,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: state
+                                                    .carouselCollections.length,
+                                                itemBuilder: (context, index) {
+                                                  return _buildWasteCard(
+                                                      state.carouselCollections[
+                                                          index]);
+                                                },
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0),
+                                              child: Center(
+                                                child: Text(Translate.of(
+                                                        context)
+                                                    .translate(
+                                                        'no_pickups_scheduled')),
+                                              ),
+                                            );
+                                    } else if (state is WasteCalendarError) {
+                                      return Center(
+                                          child: Text('Error: ${state.error}'));
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                _buildCalendar(),
+                                const SizedBox(height: 20),
+                                Text(
+                                  "Abholungen für ${_selectedDay.day}.${_selectedDay.month}.${_selectedDay.year}",
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                BlocBuilder<WasteCalendarCubit,
+                                    WasteCalendarState>(
+                                  builder: (context, state) {
+                                    if (state is WasteCalendarLoaded) {
+                                      final collectionsForSelectedDay = state
+                                          .collections
+                                          .where((collection) => isSameDay(
+                                              collection.date, _selectedDay))
+                                          .toList();
+                                      if (collectionsForSelectedDay.isEmpty) {
+                                        return const Text(
+                                            "Keine Abholungen für den ausgewählten Tag verfügbar");
+                                      }
+                                      return Column(
+                                        children: removeMultiples(
+                                                collectionsForSelectedDay)
+                                            .map((collection) => ListTile(
+                                                  leading: Icon(Icons.delete,
+                                                      color: _wasteCalenderCubit
+                                                          .getColorForType(
+                                                              collection.type)),
+                                                  title: Text(
+                                                    (collection.type
+                                                            .toLowerCase()
+                                                            .contains(
+                                                                'restmüll'))
+                                                        ? 'Restmüll'
+                                                        : collection.type,
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                                const Padding(
+                                    padding: EdgeInsets.only(bottom: 100)),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${_selectedDay.day} ${_selectedDay.monthName()}",
-                              style: const TextStyle(
-                                  fontSize: 22, color: Colors.red),
+
+                        // Loading overlay - This should block ALL interactions
+                        if (isLoading) ...[
+                          // Full-screen barrier that blocks all touches
+                          GestureDetector(
+                            onTap: () {},
+                            onPanDown: (_) {},
+                            child: Container(
+                              color: Colors.black54,
+                              width: double.infinity,
+                              height: double.infinity,
                             ),
-                            Text(
-                              _selectedDay.weekdayName(),
-                              style: const TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text("Nächste Abholungen",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
-                  builder: (context, state) {
-                    if (state is WasteCalendarLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is WasteCalendarLoaded) {
-                      return SizedBox(
-                        height: 180,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.carouselCollections.length,
-                          itemBuilder: (context, index) {
-                            return _buildWasteCard(
-                                state.carouselCollections[index]);
-                          },
-                        ),
-                      );
-                    } else if (state is WasteCalendarError) {
-                      return Center(child: Text('Error: ${state.error}'));
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildCalendar(),
-                const SizedBox(height: 20),
-                Text(
-                  "Abholungen für ${_selectedDay.day}.${_selectedDay.month}.${_selectedDay.year}",
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
-                  builder: (context, state) {
-                    if (state is WasteCalendarLoaded) {
-                      final collectionsForSelectedDay = state.collections
-                          .where((collection) =>
-                              isSameDay(collection.date, _selectedDay))
-                          .toList();
-                      if (collectionsForSelectedDay.isEmpty) {
-                        return const Text(
-                            "Keine Abholungen für den ausgewählten Tag verfügbar");
-                      }
-                      return Column(
-                        children: removeMultiples(collectionsForSelectedDay)
-                            .map((collection) => ListTile(
-                                  leading: Icon(Icons.delete,
-                                      color: _wasteCalenderCubit
-                                          .getColorForType(collection.type)),
-                                  title: Text(
-                                    (collection.type
-                                            .toLowerCase()
-                                            .contains('restmüll'))
-                                        ? 'Restmüll'
-                                        : collection.type,
+                          ),
+
+                          // Loading indicator in center
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              constraints: const BoxConstraints(
+                                maxWidth: 300,
+                                minWidth: 200,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Bitte warten, während wir abonnieren...',
+                                      textAlign: TextAlign.center,
+                                    ),
                                   ),
-                                ))
-                            .toList(),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(bottom: 100)),
-              ],
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -664,64 +798,89 @@ class _WasteCalendarState extends State<WasteCalendar> {
     );
   }
 
-  void _showLocationDialog(BuildContext context) {
+  void _showLocationDialog(BuildContext parentContext) async {
+    final prefs = await Preferences.openBox();
+    final locationId = prefs.getKeyValue(Preferences.selectedLocationId, null);
+
     showDialog(
-      context: context,
+      context: parentContext,
       barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Wähle deinen Ort'),
-          content: TypeAheadField<WasteLocation>(
-            builder: (context, controller, focusNode) {
-              return TextField(
-                controller: controller,
-                focusNode: focusNode,
-                decoration: const InputDecoration(
-                  hintText: 'Straßennamen eingeben',
-                  suffixIcon: Icon(Icons.arrow_drop_down),
-                ),
-              );
-            },
-            itemBuilder: (context, WasteLocation suggestion) {
-              return ListTile(
-                title: Text(suggestion.name),
-              );
-            },
-            suggestionsCallback: (pattern) {
-              if (pattern.isEmpty) return locations;
-              return locations
-                  .where((item) =>
-                  item.name.toLowerCase().contains(pattern.toLowerCase()))
-                  .toList();
-            },
-            onSelected: (WasteLocation suggestion) async {
-              Navigator.pop(context); // close location dialog
+      builder: (dialogContext) {
+        return WillPopScope(
+          onWillPop: () async {
+            // If locationId is null, pop the entire screen
+            if (locationId == null) {
+              Navigator.of(dialogContext).pop(); // Close dialog
+              Navigator.of(parentContext).pop(); // Close screen
+              return false; // Don't let default behavior
+            }
+            return true; // Allow default back behavior
+          },
+          child: AlertDialog(
+            title: const Text('Wähle deinen Ort'),
+            content: TypeAheadField<WasteLocation>(
+              builder: (context, controller, focusNode) {
+                return TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    hintText: 'Straßennamen eingeben',
+                    suffixIcon: Icon(Icons.arrow_drop_down),
+                  ),
+                );
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(title: Text(suggestion.name));
+              },
+              suggestionsCallback: (pattern) {
+                if (pattern.isEmpty) return locations;
+                return locations
+                    .where((item) =>
+                        item.name.toLowerCase().contains(pattern.toLowerCase()))
+                    .toList();
+              },
+              onSelected: (WasteLocation suggestion) async {
+                Navigator.pop(dialogContext);
+                setState(() => isLoading = true);
 
-              final loadingDialog = LoadingDialog();
-              loadingDialog.show(
-                context,
-                'Bitte warten, während wir abonnieren...',
-              );
+                try {
+                  await _selectLocation(
+                    suggestion.id.toString(),
+                    suggestion.name,
+                    suggestion.hashedStreetName,
+                  );
 
-              await _selectLocation(
-                suggestion.id.toString(),
-                suggestion.name,
-                suggestion.hashedStreetName,
-              );
+                  final prefs = await Preferences.openBox();
+                  final previousWasteTypes = prefs.getSelectedWasteTypes();
 
-              loadingDialog.hide();
-            },
+                  if (previousWasteTypes.isEmpty && mounted) {
+                    _showWasteTypeDialog(parentContext);
+                  }
+                } finally {
+                  if (!mounted) return;
+                  setState(() => isLoading = false);
+                }
+              },
+            ),
+            actions: [
+              // Add a cancel button to make it clear
+              TextButton(
+                onPressed: () {
+                  if (locationId == null) {
+                    Navigator.of(dialogContext).pop();
+                    Navigator.of(parentContext).pop();
+                  } else {
+                    Navigator.of(dialogContext).pop();
+                  }
+                },
+                child: Text(locationId == null
+                    ? Translate.of(context).translate('cancel')
+                    : 'Abbrechen'),
+              ),
+            ],
           ),
         );
       },
     );
-    //     .then((_) async {
-    //   final prefs = await Preferences.openBox();
-    //   final previousWasteTypes = prefs.getSelectedWasteTypes();
-    //
-    //   if (previousWasteTypes.isEmpty && mounted) {
-    //     _showWasteTypeDialog();
-    //   }
-    // });
   }
 }

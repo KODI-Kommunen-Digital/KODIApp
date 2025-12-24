@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:heidi/main_prod.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,13 +40,13 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> initializePreferences() async {
     final permission = await _prefs.getKeyValue(
         Preferences.pushNotificationsPermission, 'notAsked');
+    final isAuthorized = permission == 'authorized';
     final receiveNotification =
-    await _prefs.getKeyValue(Preferences.receiveNotification, 'true');
+    await _prefs.getKeyValue(Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
     final receiveWasteCalendar =
-    await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, 'true');
+    await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, isAuthorized ? 'true' : 'false');
 
     setState(() {
-      final isAuthorized = permission == 'authorized';
 
       _receiveNotification = isAuthorized && receiveNotification == 'true';
       _receiveWasteCalendarNotification =
@@ -54,36 +55,49 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
   Future<void> updateNotificationPermissionPreference(bool enabled) async {
+    if (isNotificationsProgress) return;
+
     setState(() => isNotificationsProgress = true);
 
-    final permission = await _prefs.getKeyValue(
-        Preferences.pushNotificationsPermission, 'notAsked');
+    try {
+      final permission = await _prefs.getKeyValue(
+        Preferences.pushNotificationsPermission,
+        'notAsked',
+      );
 
-    if (permission == 'denied') {
-      _showPermissionDialog();
-      await checkNotificationPermissionStatus();
+      if (permission == 'denied') {
+        _showPermissionDialog();
+        await checkNotificationPermissionStatus();
+
+        if (!mounted) return;
+
+        setState(() {
+          _receiveNotification = false;
+          _receiveWasteCalendarNotification = false;
+        });
+        return;
+      }
+
+      await _prefs.setKeyValue(
+          Preferences.receiveNotification, enabled ? 'true' : 'false');
+      await _prefs.setKeyValue(
+          Preferences.receiveWasteCalendarNotification, enabled ? 'true' : 'false');
+
+      if (!mounted) return;
 
       setState(() {
-        _receiveNotification = false;
-        _receiveWasteCalendarNotification = false;
-        isNotificationsProgress = false;
+        _receiveNotification = enabled;
+        _receiveWasteCalendarNotification = enabled;
       });
-      return;
+
+      await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
+    } catch (e, s) {
+      debugPrint('Notification update error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false); // ✅ GUARANTEED
     }
-
-    await _prefs.setKeyValue(
-        Preferences.receiveNotification, enabled ? 'true' : 'false');
-    await _prefs.setKeyValue(
-        Preferences.receiveWasteCalendarNotification, enabled ? 'true' : 'false');
-
-    setState(() {
-      _receiveNotification = enabled;
-      _receiveWasteCalendarNotification = enabled;
-    });
-
-    await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
-
-    setState(() => isNotificationsProgress = false);
   }
 
   void _showPermissionDialog() {
@@ -101,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen>
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              openAppSettings();
+              openApplicationSettings();
             },
             child: Text(Translate.of(context).translate('openSettings')),
           ),
@@ -110,21 +124,32 @@ class _SettingsScreenState extends State<SettingsScreen>
     );
   }
 
-
   Future<void> updateWasteCalendarNotificationPermissionPreference(bool enabled) async {
     if (!_receiveNotification) return;
 
+    if (isNotificationsProgress) return; // ✅ prevent double calls
+
     setState(() => isNotificationsProgress = true);
 
-    await _prefs.setKeyValue(
-        Preferences.receiveWasteCalendarNotification, enabled ? 'true' : 'false');
+    try {
+      await _prefs.setKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        enabled ? 'true' : 'false',
+      );
 
-    setState(() => _receiveWasteCalendarNotification = enabled);
+      if (!mounted) return;
 
-    await FirebaseApi(globalNavKey, _prefs)
-        .refreshWasteCalendarNotifications();
+      setState(() => _receiveWasteCalendarNotification = enabled);
 
-    setState(() => isNotificationsProgress = false);
+      await FirebaseApi(globalNavKey, _prefs)
+          .refreshWasteCalendarNotifications();
+    } catch (e, s) {
+      debugPrint('Waste calendar notification error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false); // ✅ ALWAYS EXECUTES
+    }
   }
 
 
@@ -147,11 +172,12 @@ class _SettingsScreenState extends State<SettingsScreen>
   }
 
 
-  Future<void> openAppSettings() async {
-    if (!await launchUrl(Uri.parse('app-settings:'))) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Failed to open app settings.'),
-      ));
+  Future<void> openApplicationSettings() async {
+    final bool opened = await openAppSettings(); // plugin method
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open app settings')),
+      );
     }
   }
 
@@ -159,69 +185,6 @@ class _SettingsScreenState extends State<SettingsScreen>
     final PackageInfo info = await PackageInfo.fromPlatform();
     return info.version;
   }
-
-  // Future<void> checkNotificationPermissionStatus() async {
-  //   final settings =
-  //   await FirebaseMessaging.instance.getNotificationSettings();
-  //
-  //   if (!mounted) return;
-  //
-  //   final prefs = await Preferences.openBox();
-  //
-  //   if (!mounted) return;
-  //
-  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //     await prefs.setKeyValue(
-  //         Preferences.pushNotificationsPermission, 'authorized');
-  //
-  //     if (!mounted) return;
-  //
-  //     setState(() {
-  //       _receiveNotification = true;
-  //       _receiveWasteCalendarNotification =
-  //       _receiveWasteCalendarNotification ? true : false;
-  //     });
-  //   } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
-  //     await prefs.setKeyValue(
-  //         Preferences.pushNotificationsPermission, 'denied');
-  //
-  //     if (!mounted) return;
-  //
-  //     setState(() {
-  //       _receiveNotification = false;
-  //       _receiveWasteCalendarNotification = false;
-  //     });
-  //   }
-  // }
-
-  // Future<void> checkNotificationPermissionStatus() async {
-  //   final settings = await FirebaseMessaging.instance.getNotificationSettings();
-  //   final prefs = await Preferences.openBox();
-  //   if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-  //     await prefs.setKeyValue(
-  //         Preferences.pushNotificationsPermission, 'authorized');
-  //     if (_receiveNotification) {
-  //       setState(() {
-  //         _receiveNotification = true;
-  //         if (_receiveWasteCalendarNotification) {
-  //           _receiveWasteCalendarNotification = true;
-  //         }
-  //       });
-  //     } else {
-  //       setState(() {
-  //         _receiveNotification = false;
-  //         _receiveWasteCalendarNotification = false;
-  //       });
-  //     }
-  //   } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
-  //     await prefs.setKeyValue(
-  //         Preferences.pushNotificationsPermission, 'denied');
-  //     setState(() {
-  //       _receiveNotification = false;
-  //       _receiveWasteCalendarNotification = false;
-  //     });
-  //   }
-  // }
 
   Future<void> switchTheme() async {
     final prefBox = await Preferences.openBox();
@@ -241,14 +204,6 @@ class _SettingsScreenState extends State<SettingsScreen>
       darkModeEnabled = (darkMode == 'on');
     });
   }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addObserver(this);
-  //   isDarkMode();
-  //   initializePreferences();
-  // }
 
   @override
   void initState() {
