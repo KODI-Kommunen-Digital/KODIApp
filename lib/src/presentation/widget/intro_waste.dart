@@ -30,6 +30,7 @@ class IntroPageState extends State<IntroPage> {
   bool _showWasteTypeSelection = false;
   bool _isConfirming = false;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  bool _isLocationsLoading = true;
 
   @override
   void initState() {
@@ -55,9 +56,8 @@ class IntroPageState extends State<IntroPage> {
     final fetchedLocations = await repository.loadWasteCalendarStreets(1);
     if (mounted) {
       setState(() {
-        if (fetchedLocations != null) {
-          locations = fetchedLocations;
-        }
+        locations = fetchedLocations ?? [];
+        _isLocationsLoading = false;
       });
     }
   }
@@ -192,6 +192,7 @@ class IntroPageState extends State<IntroPage> {
                   return TextField(
                     controller: controller,
                     focusNode: focusNode,
+                    enabled: !_isLocationsLoading,
                     decoration: InputDecoration(
                       hintText: 'Straßennamen eingeben',
                       border: const OutlineInputBorder(),

@@ -33,9 +33,20 @@ class WasteCalendarRepository {
     final response = await Api.requestWastePickup(cityId, streetId);
     if (response.success) {
       List<Map<String, dynamic>> flattenedData = [];
+      // response.data.forEach((key, value) {
+      //   if (value is List) {
+      //     flattenedData.addAll(value.map((e) => Map<String, dynamic>.from(e)));
+      //   }
+      // });
+
       response.data.forEach((key, value) {
         if (value is List) {
-          flattenedData.addAll(value.map((e) => Map<String, dynamic>.from(e)));
+          for (final item in value) {
+            if (item == null) continue;
+            if (item is! Map) continue;
+
+            flattenedData.add(Map<String, dynamic>.from(item));
+          }
         }
       });
 
@@ -105,7 +116,7 @@ class WasteCalendarRepository {
     if (isLocationChanged && previousHashedStreetName != null && previousWasteTypes.isNotEmpty) {
       for (int previousType in previousWasteTypes) {
         final previousTopic = getTopicString(cityId, previousHashedStreetName, previousType);
-        await firebaseApi.unsubscribeFromTopic(previousTopic);
+        firebaseApi.unsubscribeFromTopic(previousTopic);
         logInfo('Unsubscribed from topic due to location change: $previousTopic');
       }
     } else if (!isLocationChanged && previousHashedStreetName != null) {
@@ -113,7 +124,7 @@ class WasteCalendarRepository {
       final typesToUnsubscribe = previousWasteTypes.where((type) => !newWasteTypes.contains(type));
       for (int type in typesToUnsubscribe) {
         final topic = getTopicString(cityId, previousHashedStreetName, type);
-        await firebaseApi.unsubscribeFromTopic(topic);
+        firebaseApi.unsubscribeFromTopic(topic);
         logInfo('Unsubscribed from removed waste type: $topic');
       }
     }
@@ -139,7 +150,7 @@ class WasteCalendarRepository {
         final newTopic = getTopicString(cityId, currentHashedStreetName, newType);
         // Only subscribe if this is a new type or location changed
         if (isLocationChanged || !previousWasteTypes.contains(newType)) {
-          await firebaseApi.subscribeToTopic(newTopic);
+          firebaseApi.subscribeToTopic(newTopic);
           logInfo('Subscribed to new topic: $newTopic');
         } else {
           logInfo('Keeping existing subscription for topic: $newTopic');
