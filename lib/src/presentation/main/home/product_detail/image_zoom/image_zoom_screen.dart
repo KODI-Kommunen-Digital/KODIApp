@@ -1,10 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:photo_view/photo_view.dart';
+
+import '../../../../../utils/common.dart';
 
 class ImageZoomScreen extends StatefulWidget {
   final List<ImageListModel>? imageList;
@@ -38,17 +39,8 @@ class _ImageZoomScreenState extends State<ImageZoomScreen> {
               child: SizedBox(
                 height: height * 0.8,
                 child: widget.pdf != ''
-                    ? const PDF().cachedFromUrl(
-                        widget.pdf,
-                        placeholder: (progress) =>
-                            Center(child: Text('$progress %')),
-                        errorWidget: (error) => Center(
-                          child: Text(
-                            error.toString(),
-                          ),
-                        ),
-                      )
-                    : Column(
+                    ? Utils.showCachedPdf(widget.pdf)
+                  : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
