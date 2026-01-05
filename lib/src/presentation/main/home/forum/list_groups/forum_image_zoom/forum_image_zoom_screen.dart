@@ -1,7 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:photo_view/photo_view.dart';
+
+import '../../../../../../utils/common.dart';
 
 class ForumImageZoomScreen extends StatelessWidget {
   final String imageUrl;
@@ -21,16 +22,18 @@ class ForumImageZoomScreen extends StatelessWidget {
               child: SizedBox(
                 height: height * 0.8,
                 child: imageUrl.contains('.pdf')
-                    ? const PDF().cachedFromUrl(
-                        imageUrl,
-                        placeholder: (progress) =>
-                            Center(child: Text('$progress %')),
-                        errorWidget: (error) => Center(
-                          child: Text(
-                            error.toString(),
-                          ),
-                        ),
-                      )
+                    ? Utils.showCachedPdf(imageUrl)
+
+            // const PDF().cachedFromUrl(
+            //             imageUrl,
+            //             placeholder: (progress) =>
+            //                 Center(child: Text('$progress %')),
+            //             errorWidget: (error) => Center(
+            //               child: Text(
+            //                 error.toString(),
+            //               ),
+            //             ),
+            //           )
                     : PhotoView(
                         imageProvider: CachedNetworkImageProvider(
                             imageUrl.contains('admin/News/Defaultimage6.png')

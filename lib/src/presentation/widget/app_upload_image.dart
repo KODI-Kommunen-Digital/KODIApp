@@ -9,8 +9,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
@@ -22,6 +20,7 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 enum UploadImageType { circle, square }
 
@@ -456,10 +455,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   },
                 )
               },
-              child: const PDF().cachedFromUrl(
+              child: SfPdfViewer.network(
                 "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
-                placeholder: (progress) => Center(child: Text('$progress %')),
-                errorWidget: (error) => Center(child: Text(error.toString())),
+                canShowPageLoadingIndicator: true,
+                // placeholder: (progress) => Center(child: Text('$progress %')),
+                // errorWidget: (error) => Center(child: Text(error.toString())),
               ),
             ));
       }
@@ -569,11 +569,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     },
                   )
                 },
-                child: PDFView(
+                child: SfPdfViewer.file(
+                  _file!,
+                  canShowPageLoadingIndicator: true,
                   key: UniqueKey(),
-                  filePath: _file?.path,
-                  fitPolicy: FitPolicy.WIDTH,
-                  onPageChanged: (page, total) {
+                  // filePath: _file?.path,
+                  // fitPolicy: FitPolicy.WIDTH,
+                  onPageChanged: (onState) {
                     // Do something when the page changes (optional)
                   },
                 ),
