@@ -8,7 +8,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_ad.dart';
@@ -25,6 +24,8 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../../../utils/common.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   const ProductDetailScreen({super.key, required this.item});
@@ -740,11 +741,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   },
                 )
               },
-              child: const PDF().cachedFromUrl(
-                "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
-                placeholder: (progress) => Center(child: Text('$progress %')),
-                errorWidget: (error) => Center(child: Text(error.toString())),
-              ),
+              child: Utils.showCachedPdf(
+                  "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey"),
+
+              // child: const PDF().cachedFromUrl(
+              //         "${Application.picturesURL}${product.pdf}?cacheKey=$uniqueKey",
+              //         placeholder: (progress) => Center(child: Text('$progress %')),
+              //         errorWidget: (error) => Center(child: Text(error.toString())),
+              //       ),
             );
 
       if (product.address.isNotEmpty) {
@@ -1255,7 +1259,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             openHours,
             attachments,
             const SizedBox(height: 16),
-           /* Container(
+            /* Container(
               padding: const EdgeInsets.all(8),
               margin: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(

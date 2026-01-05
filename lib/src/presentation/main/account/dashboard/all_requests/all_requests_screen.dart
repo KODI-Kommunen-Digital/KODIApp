@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
@@ -25,6 +24,8 @@ import 'package:heidi/src/utils/translate.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../../../../../utils/common.dart';
 
 // ignore: must_be_immutable
 class AllRequestsScreen extends StatelessWidget {
@@ -54,8 +55,8 @@ class AllRequestsLoading extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           iconTheme: Theme.of(context).iconTheme.copyWith(
-            color: Colors.orange,
-          ),
+                color: Colors.orange,
+              ),
           centerTitle: true,
           title: Text(
             Translate.of(context).translate('all_requests'),
@@ -65,9 +66,11 @@ class AllRequestsLoading extends StatelessWidget {
                 multiFilter: MultiFilter(
                     hasLocationFilter: true,
                     cities: AppBloc.homeCubit.location,
-                    currentLocation: context.read<AllRequestsCubit>().currentCityFilter),
+                    currentLocation:
+                        context.read<AllRequestsCubit>().currentCityFilter),
                 filterCallBack: (filter) async {
-                  context.read<AllRequestsCubit>().currentCityFilter = filter.currentLocation;
+                  context.read<AllRequestsCubit>().currentCityFilter =
+                      filter.currentLocation;
                   context.read<AllRequestsCubit>().onLoad(false);
                 }),
           ],
@@ -127,8 +130,8 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
         child: Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme.copyWith(
-          color: Colors.orange,
-        ),
+              color: Colors.orange,
+            ),
         centerTitle: true,
         title: Text(
           Translate.of(context).translate('all_requests'),
@@ -276,20 +279,24 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                   borderRadius:
                                                       BorderRadius.circular(11),
                                                   child: SizedBox(
-                                                      width: 120,
-                                                      height: 140,
-                                                      child: const PDF()
-                                                          .cachedFromUrl(
-                                                        "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                        placeholder:
-                                                            (progress) => Center(
-                                                                child: Text(
-                                                                    '$progress %')),
-                                                        errorWidget: (error) =>
-                                                            Center(
-                                                                child: Text(error
-                                                                    .toString())),
-                                                      )),
+                                                    width: 120,
+                                                    height: 140,
+                                                    child: Utils.showCachedPdf(
+                                                        "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey"),
+
+                                                    // child: const Pdf()
+                                                    //     .cachedFromUrl(
+                                                    //   "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                    //   placeholder:
+                                                    //       (progress) => Center(
+                                                    //           child: Text(
+                                                    //               '$progress %')),
+                                                    //   errorWidget: (error) =>
+                                                    //       Center(
+                                                    //           child: Text(error
+                                                    //               .toString())),
+                                                    // )
+                                                  ),
                                                 ),
                                           const SizedBox(width: 8),
                                           Expanded(
@@ -353,15 +360,15 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                           style: ElevatedButton
                                                               .styleFrom(
                                                             backgroundColor:
-                                                            Theme.of(
-                                                                context)
-                                                                .primaryColor,
+                                                                Theme.of(
+                                                                        context)
+                                                                    .primaryColor,
                                                             shape:
-                                                            RoundedRectangleBorder(
+                                                                RoundedRectangleBorder(
                                                               borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                  8),
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          8),
                                                             ),
                                                           ),
                                                           onPressed: () async {

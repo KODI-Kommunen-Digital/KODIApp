@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
 import 'package:heidi/src/presentation/main/home/widget/empty_product_item.dart';
@@ -11,6 +10,9 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+
+import '../../utils/common.dart';
 
 class AppProductItem extends StatelessWidget {
   const AppProductItem(
@@ -56,16 +58,21 @@ class AppProductItem extends StatelessWidget {
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: SizedBox(
-                          width: 120,
-                          height: 140,
-                          child: const PDF().cachedFromUrl(
-                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                            placeholder: (progress) =>
-                                Center(child: Text('$progress %')),
-                            errorWidget: (error) =>
-                                Center(child: Text(error.toString())),
-                          )),
-                    )
+                        width: 120,
+                        height: 140,
+                        child: Utils.showCachedPdf(
+                            "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey"),
+                        // child: SizedBox(
+                        //     width: 120,
+                        //     height: 140,
+                        //     child: SfPdfViewer.network(
+                        //       "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                        //       placeholder: (progress) =>
+                        //           Center(child: Text('$progress %')),
+                        //       errorWidget: (error) =>
+                        //           Center(child: Text(error.toString())),
+                        //     )),
+                      ))
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: CachedNetworkImage(
@@ -98,14 +105,15 @@ class AppProductItem extends StatelessWidget {
                             height: 140,
                             decoration: BoxDecoration(
                               image: DecorationImage(
-                                image: NetworkImage(getDefaultImagePath(item?.category)),
+                                image: NetworkImage(
+                                    getDefaultImagePath(item?.category)),
                                 fit: BoxFit.fitHeight,
                               ),
                             ),
                           );
                         },
                       ),
-              ),
+                    ),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -348,15 +356,21 @@ class AppProductItem extends StatelessWidget {
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: SizedBox(
-                              width: 120,
-                              height: 140,
-                              child: const PDF().cachedFromUrl(
-                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
-                                placeholder: (progress) =>
-                                    Center(child: Text('$progress %')),
-                                errorWidget: (error) =>
-                                    Center(child: Text(error.toString())),
-                              )),
+                            width: 120,
+                            height: 140,
+                            child: Utils.showCachedPdf(
+                                "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey"),
+                          ),
+                          // child: SizedBox(
+                          //     width: 120,
+                          //     height: 140,
+                          //     child: const PDF().cachedFromUrl(
+                          //       "${Application.picturesURL}${item?.pdf}?cacheKey=$uniqueKey",
+                          //       placeholder: (progress) =>
+                          //           Center(child: Text('$progress %')),
+                          //       errorWidget: (error) =>
+                          //           Center(child: Text(error.toString())),
+                          //     )),
                         )
                       : ClipRRect(
                           borderRadius: BorderRadius.circular(12),
@@ -507,8 +521,10 @@ class AppProductItem extends StatelessWidget {
         return Container(width: 160.0);
     }
   }
+
   String getImageUrl(dynamic item) {
-    const defaultImage = "${Application.picturesURL}admin/News/Defaultimage6.png";
+    const defaultImage =
+        "${Application.picturesURL}admin/News/Defaultimage6.png";
 
     if (item == null || item.image == null || item.image.isEmpty) {
       return defaultImage;
