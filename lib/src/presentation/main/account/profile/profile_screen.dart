@@ -4,7 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_user.dart';
@@ -16,6 +15,8 @@ import 'package:heidi/src/presentation/widget/app_user_info.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+
+import '../../../../utils/common.dart';
 
 class ProfileScreen extends StatelessWidget {
   final UserModel user;
@@ -95,8 +96,8 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme.copyWith(
-          color: Colors.orange,
-        ),
+              color: Colors.orange,
+            ),
         centerTitle: true,
         title: Text(
           Translate.of(context).translate('profile'),
@@ -228,20 +229,25 @@ class _ProfileLoadedState extends State<ProfileLoaded> {
                                                         child: SizedBox(
                                                             width: 120,
                                                             height: 140,
-                                                            child: const PDF()
-                                                                .cachedFromUrl(
-                                                              "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
-                                                              placeholder:
-                                                                  (progress) =>
-                                                                      Center(
-                                                                          child:
-                                                                              Text('$progress %')),
-                                                              errorWidget:
-                                                                  (error) => Center(
-                                                                      child: Text(
-                                                                          error
-                                                                              .toString())),
-                                                            )),
+                                                            child: Utils
+                                                                .showCachedPdf(
+                                                                    "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey")
+
+                                                            // child: const PDF()
+                                                            //     .cachedFromUrl(
+                                                            //   "${Application.picturesURL}${item.pdf}?cacheKey=$uniqueKey",
+                                                            //   placeholder:
+                                                            //       (progress) =>
+                                                            //           Center(
+                                                            //               child:
+                                                            //                   Text('$progress %')),
+                                                            //   errorWidget:
+                                                            //       (error) => Center(
+                                                            //           child: Text(
+                                                            //               error
+                                                            //                   .toString())),
+                                                            // )
+                                                            ),
                                                       )
                                                     : CachedNetworkImage(
                                                         imageUrl: item

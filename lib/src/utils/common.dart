@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:heidi/src/data/model/model_device.dart';
 import 'package:location/location.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class Utils {
   static fieldFocusChange(
@@ -13,6 +15,35 @@ class Utils {
   ) {
     current.unfocus();
     FocusScope.of(context).requestFocus(next);
+  }
+
+  Future<File> loadCachedPdf(String url) async {
+    return await DefaultCacheManager().getSingleFile(url);
+  }
+
+  static Widget showCachedPdf(String url) {
+    return FutureBuilder<File>(
+      future:  DefaultCacheManager().getSingleFile(url),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        }
+
+        return SfPdfViewer.file(
+          snapshot.data!,
+          canShowScrollHead: false,
+          canShowScrollStatus: false,
+          enableDoubleTapZooming: false,
+        );
+      },
+    );
+
   }
 
   static hiddenKeyboard(BuildContext context) {

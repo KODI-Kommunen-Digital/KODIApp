@@ -5,7 +5,6 @@ import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -14,6 +13,7 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import '../../../utils/common.dart';
 import 'cubit/cubit.dart';
 
 class WishListScreen extends StatefulWidget {
@@ -185,13 +185,16 @@ class _WishListLoadedState extends State<WishListLoaded> {
                                     : SizedBox(
                                         width: 120,
                                         height: 140,
-                                        child: const PDF().cachedFromUrl(
-                                          "${Application.picturesURL}${widget.favoritesList[index].pdf}?cacheKey=$uniqueKey",
-                                          placeholder: (progress) => Center(
-                                              child: Text('$progress %')),
-                                          errorWidget: (error) => Center(
-                                              child: Text(error.toString())),
-                                        )),
+                                  child: Utils.showCachedPdf("${Application.picturesURL}${widget.favoritesList[index].pdf}?cacheKey=$uniqueKey"),
+
+                                  // child: const PDF().cachedFromUrl(
+                                        //   "${Application.picturesURL}${widget.favoritesList[index].pdf}?cacheKey=$uniqueKey",
+                                        //   placeholder: (progress) => Center(
+                                        //       child: Text('$progress %')),
+                                        //   errorWidget: (error) => Center(
+                                        //       child: Text(error.toString())),
+                                        // ),
+                                ),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: Column(
