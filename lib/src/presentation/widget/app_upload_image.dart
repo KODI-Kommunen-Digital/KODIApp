@@ -273,57 +273,97 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Future<void> showChooseFileTypeDialog() async {
     PermissionStatus status;
+
     if (await Permission.storage.isGranted) {
       status = PermissionStatus.granted;
     } else {
       if (Platform.isAndroid) {
         final androidInfo = await DeviceInfoPlugin().androidInfo;
         if (androidInfo.version.sdkInt <= 32) {
-          status = await Permission.storage.status;
           status = await Permission.storage.request();
         } else {
-          status = await Permission.photos.status;
           status = await Permission.photos.request();
         }
       } else {
-        status = await Permission.photos.status;
         status = await Permission.photos.request();
       }
     }
 
     if (!mounted) return;
+
     if (status == PermissionStatus.granted) {
       showDialog(
         context: context,
-        builder: (BuildContext context) {
+        builder: (BuildContext dialogContext) {
           return SimpleDialog(
-            title: Text(Translate.of(context).translate('Choose_File_Type')),
+            title: Text(
+              Translate.of(dialogContext).translate('Choose_File_Type'),
+            ),
             children: [
+              // ==================== PDF OPTION ====================
               SimpleDialogOption(
                 onPressed: () async {
-                  Navigator.pop(context);
-                  FilePickerResult? result =
-                      await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['pdf'],
-                  );
-                  if (result != null) {
+                  final cubit = context.read<AddListingCubit>();
+                  Navigator.pop(dialogContext);
+
+                  try {
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles(
+                      type: FileType.custom,
+                      allowedExtensions: ['pdf'],
+                      allowCompression: false,
+                    );
+
+                    if (result == null || result.files.single.path == null) {
+                      return;
+                    }
+
+                    File pdfFile = File(result.files.single.path!);
+
+                    if (Platform.isIOS) {
+                      final appDocDir =
+                          await getApplicationDocumentsDirectory();
+                      final fileName = result.files.single.name;
+                      final safePath = '${appDocDir.path}/$fileName';
+
+                      final safeFile = File(safePath);
+                      if (await safeFile.exists()) {
+                        await safeFile.delete();
+                      }
+
+                      await pdfFile.copy(safePath);
+                      pdfFile = safeFile;
+                    }
+
+                    if (!await pdfFile.exists()) return;
+                    if (!mounted) return;
+
                     widget.onChange([]);
                     setState(() {
                       _file = null;
                       images.clear();
-                      widget.onChange(images);
-                      _file = File(result.files.single.path!);
+                      _file = pdfFile;
                       isImageUploaded = false;
                       selectedAssets.clear();
                     });
                     widget.onChange(images);
+
                     final profile = widget.profile;
                     if (!profile) {
                       await ListRepository.uploadPdf(_file!);
                     }
+
+                    cubit.clearAssets();
+                  } catch (e, stackTrace) {
+                    await Sentry.captureException(e, stackTrace: stackTrace);
+
                     if (!mounted) return;
-                    context.read<AddListingCubit>().clearAssets();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('PDF upload failed: ${e.toString()}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
                   }
                 },
                 child: const ListTile(
@@ -331,19 +371,24 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   title: Text('PDF'),
                 ),
               ),
+
+              // ==================== IMAGES OPTION ====================
               SimpleDialogOption(
                 onPressed: () async {
-                  Navigator.pop(context);
+                  final cubit = context.read<AddListingCubit>();
+                  Navigator.pop(dialogContext);
+
                   if (Platform.isIOS) {
                     if (await Permission.photos.isGranted ||
                         await Permission.photos.isLimited) {
-                      status = PermissionStatus.granted;
+                      if (!mounted) return;
 
                       setState(() {
-                        selectedAssets =
-                            context.read<AddListingCubit>().getSelectedAssets();
+                        selectedAssets = cubit.getSelectedAssets();
                       });
+
                       await selectImages();
+
                       final profile = widget.profile;
                       if (!profile) {
                         if (_file != null) {
@@ -353,6 +398,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
                         if (response!.data['status'] == 'success') {
+                          if (!mounted) return;
                           setState(() {
                             isImageUploaded = true;
                           });
@@ -361,7 +407,6 @@ class _AppUploadImageState extends State<AppUploadImage> {
                     } else if (await Permission.photos.isDenied) {
                       await Permission.photos.request();
                     } else if (await Permission.photos.isPermanentlyDenied) {
-                      status = PermissionStatus.permanentlyDenied;
                       await openAppSettings();
                     }
                   } else {
@@ -370,25 +415,30 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       type: FileType.image,
                       allowMultiple: true,
                     );
+
                     if (result != null) {
+                      if (!mounted) return;
+
                       _file = File('');
                       setState(() {
                         _file = File(result.files.first.path!);
                         isImageUploaded = false;
                       });
+
                       images.clear();
-                      for(final selectedImages in result.files){
+                      for (final selectedImages in result.files) {
                         images.add(File(selectedImages.path!));
                       }
                       widget.onChange(images);
+
                       final profile = widget.profile;
                       if (!profile) {
                         await ListRepository.uploadImage(_file!, profile);
-                        // widget.onChange([]);
                       } else {
                         final response =
                             await ListRepository.uploadImage(_file!, profile);
                         if (response!.data['status'] == 'success') {
+                          if (!mounted) return;
                           setState(() {
                             isImageUploaded = true;
                           });
@@ -401,7 +451,9 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 },
                 child: ListTile(
                   leading: const Icon(Icons.image),
-                  title: Text(Translate.of(context).translate('images')),
+                  title: Text(
+                    Translate.of(dialogContext).translate('images'),
+                  ),
                 ),
               ),
             ],
@@ -410,6 +462,31 @@ class _AppUploadImageState extends State<AppUploadImage> {
       );
     } else if (status.isPermanentlyDenied) {
       await openAppSettings();
+    } else {
+      if (!mounted) return;
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Permission Required'),
+          content: const Text(
+            'Storage permission is required to upload images and PDFs. '
+            'Please grant permission in settings.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                await openAppSettings();
+              },
+              child: const Text('Open Settings'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -445,10 +522,10 @@ class _AppUploadImageState extends State<AppUploadImage> {
           child: RawGestureDetector(
               gestures: {
                 AllowMultipleGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<
-                    AllowMultipleGestureRecognizer>(
-                      () => AllowMultipleGestureRecognizer(),
-                      (AllowMultipleGestureRecognizer instance) {
+                    GestureRecognizerFactoryWithHandlers<
+                        AllowMultipleGestureRecognizer>(
+                  () => AllowMultipleGestureRecognizer(),
+                  (AllowMultipleGestureRecognizer instance) {
                     instance.onTap = () => showChooseFileTypeDialog();
                   },
                 )
@@ -457,7 +534,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
                 borderRadius: BorderRadius.circular(200),
                 child: CachedNetworkImage(
                   imageUrl:
-                  "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
+                      "${Application.picturesURL}${image!}?cacheKey=$uniqueKey",
                   fit: BoxFit.fill,
                 ),
               )));
