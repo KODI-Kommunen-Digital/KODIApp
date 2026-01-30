@@ -257,13 +257,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
               .translate('title_and_description_required')),
         ),
       );
-    } else if (_selectedImage == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Bitte laden Sie ein Bild hoch.'),
-        ),
-      );
-    } else if (address.isEmpty) {
+    }  else if (address.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translate.of(context).translate('address_message')),
       ));
@@ -282,7 +276,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       context.read<DefectReportCubit>().submitReport(
             title: title,
             description: description,
-            image: _selectedImage!,
+            image: _selectedImage,
             address: address,
             email: email,
           );

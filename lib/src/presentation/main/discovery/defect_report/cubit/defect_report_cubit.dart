@@ -11,25 +11,30 @@ class DefectReportCubit extends Cubit<DefectReportState> {
   Future<void> submitReport(
       {required String title,
       required String description,
-      required File image,
+      required File? image,
       required String address,
       required String email}) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
-      List<String> parts = image.path.split('.');
-      String imageExtension = parts.last;
-      var formData = FormData.fromMap({
+      Map<String, dynamic> formDataMap = {
         'title': title,
         'description': description,
         'address': address,
         'email': email,
-        //'language': 'de', // You might want to make this configurable
-        'image': await MultipartFile.fromFile(
+      };
+
+      if (image != null) {
+        List<String> parts = image.path.split('.');
+        String imageExtension = parts.last;
+
+        formDataMap['image'] = await MultipartFile.fromFile(
           image.path,
           filename: image.path,
           contentType: MediaType('image', imageExtension),
-        ),
-      });
+        );
+      }
+
+      var formData = FormData.fromMap(formDataMap);
 
       final result = await Api.requestReportDefect(formData);
 
