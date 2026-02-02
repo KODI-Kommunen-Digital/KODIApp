@@ -17,6 +17,7 @@ import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
+import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
@@ -24,6 +25,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
+import 'package:provider/provider.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
@@ -102,21 +104,14 @@ class _HeidiAppState extends State<HeidiApp> {
           builder: (context, lang) {
             return BlocBuilder<ThemeCubit, ThemeState>(
               builder: (context, theme) {
-                return UpgradeAlert(
-                  upgrader: Upgrader(
-                      shouldPopScope: () => true,
-                      canDismissDialog: true,
-                      durationUntilAlertAgain: const Duration(days: 1),
-                      dialogStyle: Platform.isIOS
-                          ? UpgradeDialogStyle.cupertino
-                          : UpgradeDialogStyle.material),
+                return ChangeNotifierProvider(
+                  create: (_) => LanguageManager(),
                   child: MaterialApp(
-                    debugShowCheckedModeBanner: false,
                     navigatorKey: globalNavKey,
+                    debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,
-                    locale: lang,
                     localizationsDelegates: const [
                       Translate.delegate,
                       GlobalMaterialLocalizations.delegate,
