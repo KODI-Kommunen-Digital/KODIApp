@@ -3,9 +3,6 @@ allprojects {
         google()
         mavenCentral()
     }
-    tasks.withType(JavaCompile) {
-        options.compilerArgs.removeAll { it == '-Werror' }
-    }
 }
 
 rootProject.buildDir = "../build"
@@ -18,7 +15,21 @@ subprojects {
 
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
-    tasks.withType(JavaCompile) {
-        options.compilerArgs.removeAll { it == '-Werror' }
+}
+
+subprojects {
+    def setNamespace = { p ->
+        if (p.hasProperty('android')) {
+            if (p.android.namespace == null) {
+                p.android.namespace = p.group
+            }
+        }
+    }
+
+    project.plugins.withId('com.android.library') {
+        setNamespace(project)
+    }
+    project.plugins.withId('com.android.application') {
+        setNamespace(project)
     }
 }

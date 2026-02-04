@@ -16,7 +16,7 @@ import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 
 class CreateProductScreen extends StatefulWidget {
   final ContainerProductModel? product;
@@ -914,15 +914,29 @@ class _CreateProductLoadedState extends State<CreateProductLoaded> {
   }
 
   void scanBarcode() async {
-    var code = await Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => const SimpleBarcodeScannerPage()));
-    setState(() {
-      if (code is String && code != "" && code != "-1") {
-        _textBarcodeController.text = code;
-      }
-    });
+    await showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.5,
+          child: MobileScanner(
+            onDetect: (capture) {
+              final List<Barcode> barcodes = capture.barcodes;
+              for (final barcode in barcodes) {
+                if (barcode.rawValue != null) {
+                  setState(() {
+                    _textBarcodeController.text = barcode.rawValue!;
+                  });
+                  Navigator.pop(context);
+                  break;
+                }
+              }
+            },
+          ),
+        );
+      },
+    );
   }
 }
 
