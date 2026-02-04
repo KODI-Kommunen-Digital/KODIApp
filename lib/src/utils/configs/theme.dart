@@ -10,7 +10,7 @@ class AppTheme {
   ///List Font support
   static final List<String> fontSupport = [
     "OpenSans",
-    "ProximaNova",
+    "Montserrat",
     "Raleway",
     "Roboto",
     "Merriweather",
@@ -115,7 +115,7 @@ class AppTheme {
       dividerTheme: const DividerThemeData(
         thickness: 0.8,
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(
+      bottomAppBarTheme: const BottomAppBarThemeData(
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme
