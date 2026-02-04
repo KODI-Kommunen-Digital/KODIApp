@@ -10,7 +10,7 @@ class AppTheme {
   ///List Font support
   static final List<String> fontSupport = [
     "OpenSans",
-    "ProximaNova",
+    "Montserrat",
     "Raleway",
     "Roboto",
     "Merriweather",
@@ -98,7 +98,7 @@ class AppTheme {
 
       ///Custom
       fontFamily: font,
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         backgroundColor: colorScheme.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
