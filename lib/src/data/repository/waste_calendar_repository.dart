@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:heidi/src/data/model/model_result_api.dart';
 import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
+import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:loggy/loggy.dart';
 
+import '../model/model.dart';
 import '../model/model_waste_type.dart';
 import '../remote/api/firebase_api.dart';
 
@@ -98,8 +100,11 @@ class WasteCalendarRepository {
   }) async {
     // Get previous values from preferences
     final previousWasteTypes = prefs.getSelectedWasteTypes();
-    final previousHashedStreetName = prefs.getKeyValue(Preferences.selectedStreetHashedName, null);
+    final previousHashedStreetName = prefs.getKeyValue(
+        Preferences.selectedStreetHashedName, null);
     final firebaseApi = FirebaseApi(navigatorKey, prefs);
+    final deviceId = prefs.getKeyValue(
+        Preferences.deviceId, (await Utils.getDeviceInfo())?.uuid ?? '');
 
     // Determine new waste types
     List<int> newWasteTypes = [];
@@ -111,21 +116,19 @@ class WasteCalendarRepository {
       newWasteTypes = previousWasteTypes;
     }
 
-    // If location has changed, we need to unsubscribe from all previous topics
-    final isLocationChanged = hashedStreetName != null && hashedStreetName != previousHashedStreetName;
-    if (isLocationChanged && previousHashedStreetName != null && previousWasteTypes.isNotEmpty) {
-      for (int previousType in previousWasteTypes) {
-        final previousTopic = getTopicString(cityId, previousHashedStreetName, previousType);
-        firebaseApi.unsubscribeFromTopic(previousTopic);
-        logInfo('Unsubscribed from topic due to location change: $previousTopic');
-      }
-    } else if (!isLocationChanged && previousHashedStreetName != null) {
-      // Location hasn't changed, only unsubscribe from types that are no longer selected
-      final typesToUnsubscribe = previousWasteTypes.where((type) => !newWasteTypes.contains(type));
-      for (int type in typesToUnsubscribe) {
-        final topic = getTopicString(cityId, previousHashedStreetName, type);
-        firebaseApi.unsubscribeFromTopic(topic);
-        logInfo('Unsubscribed from removed waste type: $topic');
+    if(newWasteTypes.isNotEmpty) {
+      final params = {
+        "deviceId": deviceId,
+        "streetId": locationId ??
+            await prefs.getKeyValue(Preferences.selectedLocationId, 1),
+        "wasteTypeIds": newWasteTypes
+      };
+
+      final response = await Api.subscribeStreetAndWasteTypes(params);
+      if (response.success) {
+        logInfo('Updated waste types and street', response.message);
+      } else {
+        logError("Error Updating waste types and street", response.message);
       }
     }
 
@@ -137,25 +140,26 @@ class WasteCalendarRepository {
       await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
     }
     if (hashedStreetName != null) {
-      await prefs.setKeyValue(Preferences.selectedStreetHashedName, hashedStreetName);
+      await prefs.setKeyValue(
+          Preferences.selectedStreetHashedName, hashedStreetName);
     }
     if (newWasteTypes.isNotEmpty) {
       await prefs.setSelectedWasteTypes(newWasteTypes);
     }
 
-    // Subscribe to new topics
-    final currentHashedStreetName = hashedStreetName ?? previousHashedStreetName;
-    if (currentHashedStreetName != null && newWasteTypes.isNotEmpty) {
-      for (int newType in newWasteTypes) {
-        final newTopic = getTopicString(cityId, currentHashedStreetName, newType);
-        // Only subscribe if this is a new type or location changed
-        if (isLocationChanged || !previousWasteTypes.contains(newType)) {
-          firebaseApi.subscribeToTopic(newTopic);
-          logInfo('Subscribed to new topic: $newTopic');
-        } else {
-          logInfo('Keeping existing subscription for topic: $newTopic');
-        }
-      }
-    }
   }
+
+  Future<void> subscribeForWasteNotification(bool isActive) async {
+    DeviceModel? deviceModel = await Utils.getDeviceInfo();
+    String deviceId = await prefs.getKeyValue(
+        Preferences.deviceId, deviceModel != null ? deviceModel.uuid : "");
+    final params = {
+      "isActive": isActive
+    };
+    final response =
+    await Api.subscribeForWasteNotification(deviceId, params);
+    logInfo("Waste calendar notifications subscription updated: ${response.success}");
+  }
+
+
 }
