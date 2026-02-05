@@ -18,6 +18,8 @@ import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../../data/repository/waste_calendar_repository.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.user});
 
@@ -36,6 +38,8 @@ class _SettingsScreenState extends State<SettingsScreen>
   bool _receiveWasteCalendarNotification = true;
   bool isNotificationsProgress = false;
   bool darkModeEnabled = true;
+  late WasteCalendarRepository repository;
+
 
   Future<void> initializePreferences() async {
     final permission = await _prefs.getKeyValue(
@@ -52,6 +56,8 @@ class _SettingsScreenState extends State<SettingsScreen>
       _receiveWasteCalendarNotification =
           _receiveNotification && receiveWasteCalendar == 'true';
     });
+
+    repository = WasteCalendarRepository(_prefs);
   }
 
   Future<void> updateNotificationPermissionPreference(bool enabled) async {
@@ -91,6 +97,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       });
 
       await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
+      await repository.subscribeForWasteNotification(_receiveWasteCalendarNotification);
     } catch (e, s) {
       debugPrint('Notification update error: $e');
       debugPrintStack(stackTrace: s);
@@ -141,8 +148,8 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       setState(() => _receiveWasteCalendarNotification = enabled);
 
-      await FirebaseApi(globalNavKey, _prefs)
-          .refreshWasteCalendarNotifications();
+      await repository
+          .subscribeForWasteNotification(_receiveWasteCalendarNotification);
     } catch (e, s) {
       debugPrint('Waste calendar notification error: $e');
       debugPrintStack(stackTrace: s);

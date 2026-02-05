@@ -634,6 +634,13 @@
   "enable_waste_calendar_notification_title": "Abfallkalender-Benachrichtigungen aktivieren",
   "enable_waste_calendar_notification_desc": "Aktivieren Sie die Abfallkalender-Benachrichtigungen in den Einstellungen, um auf diese Funktion zugreifen zu können",
   "saving_changes": "Änderungen werden gespeichert...",
-  "no_pickups_scheduled": "Keine Abholungen geplant"
+  "no_pickups_scheduled": "Keine Abholungen geplant",
+  "garbage_cans": "Mülltonnen",
+  "garbage_cans_description": "Das sind die kleinen Behälter, die in der Regel direkt an Ein- oder Mehrfamilienhäusern stehen (z. B. Restmüll-, Bio-, Papier- oder Wertstofftonne). Sie werden hausweise geleert.",
+  "waste_container": "Müllcontainer",
+  "waste_container_description": "Das sind große Sammelbehälter, die meist an Sammelplätzen, Wohnanlagen oder für mehrere Haushalte gemeinsam stehen. Sie haben ein größeres Volumen und werden separat abgeholt.",
+  "waste_type_description": "Bitte wähle die Müllarten passend zu dem Behälter, den du nutzt (Tonne am Haus oder gemeinsamer Container), damit dir die Abholtermine korrekt angezeigt werden.",
+  "waste_calendar_push_notification_info": "Wenn du deinen Standort und deine Abfallarten wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du beides später auf der Seite des Abfallkalenders ändern."
+
 }
 

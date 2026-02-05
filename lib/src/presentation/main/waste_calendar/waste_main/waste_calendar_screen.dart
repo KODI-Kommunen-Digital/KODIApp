@@ -282,6 +282,48 @@ class _WasteCalendarState extends State<WasteCalendar> {
                             ),
                           ],
                         ),
+                        const SizedBox(height: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(height: 0.5,),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('garbage_cans'),
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              Translate.of(context).translate('garbage_cans_description'),
+                              style: const TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(height: 0.5,),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('waste_container'),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              Translate.of(context).translate('waste_container_description'),
+                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('waste_type_description'),
+                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(height: 0.5,)
+                          ],
+                        ),
+                        const SizedBox(height: 14),
                       ],
                     ),
                   ),
@@ -494,20 +536,14 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                             "Keine Abholungen für den ausgewählten Tag verfügbar");
                                       }
                                       return Column(
-                                        children: removeMultiples(
-                                                collectionsForSelectedDay)
-                                            .map((collection) => ListTile(
+                                        children:
+                                        collectionsForSelectedDay.map((collection) => ListTile(
                                                   leading: Icon(Icons.delete,
                                                       color: _wasteCalenderCubit
                                                           .getColorForType(
                                                               collection.type)),
                                                   title: Text(
-                                                    (collection.type
-                                                            .toLowerCase()
-                                                            .contains(
-                                                                'restmüll'))
-                                                        ? 'Restmüll'
-                                                        : collection.type,
+                                                    collection.type
                                                   ),
                                                 ))
                                             .toList(),
@@ -611,9 +647,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
             ),
             const SizedBox(height: 8),
             Text(
-              (collection.type.toLowerCase().contains('restmüll'))
-                  ? 'Restmüll'
-                  : collection.type,
+              collection.type,
               style: const TextStyle(color: Colors.black, fontSize: 14),
               textAlign: TextAlign.center,
             ),

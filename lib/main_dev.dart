@@ -98,10 +98,6 @@ class _HeidiAppState extends State<HeidiApp> {
     super.initState();
     AppBloc.applicationCubit.onSetup();
     _locationFuture = clearLocationId();
-
-    Future.microtask(() {
-      unsubscribeToThePreviousTopics();
-    });
   }
 
   @override
@@ -200,76 +196,11 @@ class _HeidiAppState extends State<HeidiApp> {
       await prefs.setKeyValue(Preferences.selectedLocationName, null);
       await prefs.setKeyValue(Preferences.selectedLocationId, null);
       location = null;
-
-      final previousLocationId =
-          prefs.getKeyValue(Preferences.selectedLocationId, null);
-      if (previousLocationId != null) {
-        final previousWasteTypes = prefs.getSelectedWasteTypes();
-        final previousHashedStreetName = prefs.getKeyValue(Preferences.selectedStreetHashedName, null);
-
-        if (previousHashedStreetName != null && previousWasteTypes.isNotEmpty) {
-          for (int previousType in previousWasteTypes) {
-            final previousTopic = WasteCalendarRepository(prefs)
-                .getTopicString(int.parse(previousLocationId), previousHashedStreetName, previousType);
-            firebaseApi.unsubscribeFromTopic(previousTopic);
-            logInfo('Unsubscribed from topic : $previousTopic');
-          }
-        }
-
-      }
     }
 
     await prefs.setKeyValue(Preferences.isAppInstalled, true);
 
     return location;
-  }
-
-  Future<void> unsubscribeToThePreviousTopics() async {
-    try {
-      final prefs = await Preferences.openBox();
-      final firebaseApi = FirebaseApi(navigatorKey, prefs);
-
-      String? location = _getStoredLocation(prefs);
-
-      if (location != null &&
-          prefs.getKeyValue(Preferences.isOldTopicUnsubscribed, null) == null) {
-
-
-        int? index = prefs.getKeyValue(Preferences.oldTopicUnsubscribedIndex, null);
-
-        if( index == null)
-        {
-          await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex, 0);
-          index = 0;
-        }
-
-        WasteCalendarRepository repository = WasteCalendarRepository(prefs);
-        final list = await _loadLocations(repository);
-        final updatedList = list.sublist(index);
-        for (WasteLocation wasteLocation in updatedList) {
-
-          if (wasteLocation.name != location) {
-            debugPrint('unsubscribed to Name = ${wasteLocation.name} \n hashed = ${wasteLocation.hashedStreetName}');
-
-            final previousWasteTypes = prefs.getSelectedWasteTypes();
-            if (previousWasteTypes.isNotEmpty) {
-              for (int previousType in previousWasteTypes) {
-                final previousTopic = WasteCalendarRepository(prefs)
-                    .getTopicString(1, wasteLocation.hashedStreetName, previousType);
-                firebaseApi.unsubscribeFromTopic(previousTopic);
-                debugPrint('index = $index');
-                index = index!+1;
-                await prefs.setKeyValue(Preferences.oldTopicUnsubscribedIndex,index);
-              }
-            }
-          }
-        }
-      }
-
-      await prefs.setKeyValue(Preferences.isOldTopicUnsubscribed, true);
-    } catch (e) {
-      debugPrint('Exception for unsubscribeToThePreviousTopics() : $e');
-    }
   }
 
   Future<List<WasteLocation>> _loadLocations(
