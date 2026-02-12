@@ -130,43 +130,79 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           ),
           selectedItemBuilder: (item) {
-            return Container(
-              decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      maxLines: 2,
-                      item.label,
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontWeight: FontWeight.w500,
+            final visibleItems = _tempSelectedItems.take(3).toList();
+            final remainingCount =
+            _tempSelectedItems.length > 3 ? _tempSelectedItems.length - 3 : 0;
+
+            final isVisible = visibleItems
+                .any((visible) => visible.id == item.value.id);
+
+            if (!isVisible) return const SizedBox.shrink();
+
+            final isLastVisible =
+                item.value.id == visibleItems.last.id && remainingCount > 0;
+
+            return Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        item.label,
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      overflow: TextOverflow.ellipsis,
+                      const SizedBox(width: 4),
+                      InkWell(
+                        onTap: () {
+                          _controller.unselectWhere((selectedItem) =>
+                          selectedItem.value.id == item.value.id);
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 18,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // +X more chip
+                if (isLastVisible)
+                  GestureDetector(
+                    onTap: () {
+                      _controller.openDropdown();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      child: Text(
+                        '+$remainingCount more',
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 4),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        _controller.unselectWhere((selectedItem) =>
-                            selectedItem.value.id == item.value.id);
-                      },
-                      child: Icon(
-                        Icons.close,
-                        size: 18,
-                        color: theme.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              ],
             );
           },
           fieldDecoration: FieldDecoration(
@@ -197,7 +233,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           ),
           dropdownDecoration: DropdownDecoration(
             marginTop: 2,
-            maxHeight: 400,
+            maxHeight: 300,
             backgroundColor: isDark ? Colors.grey.shade900 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             header: Padding(
