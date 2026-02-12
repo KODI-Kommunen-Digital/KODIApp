@@ -790,8 +790,9 @@ class Api {
   }
 
   static Future<ResultApiModel> requestWastePickup(
-      int cityId, String streetId) async {
-    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates';
+      int cityId, String streetId, selectedWasteTypeIds) async {
+    final wasteIds = selectedWasteTypeIds.join(',');
+    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates?wasteIds=$wasteIds';
     final result = await HTTPManager(apiType: APIType.waste).get(url: list);
     return ResultApiModel.fromJson(result);
   }

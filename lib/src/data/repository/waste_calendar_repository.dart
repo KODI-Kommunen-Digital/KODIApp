@@ -31,8 +31,8 @@ class WasteCalendarRepository {
   }
 
   static Future<ResultApiModel> loadWastePickup(
-      int cityId, String streetId) async {
-    final response = await Api.requestWastePickup(cityId, streetId);
+      int cityId, String streetId, List<int> selectedWasteTypeIds) async {
+    final response = await Api.requestWastePickup(cityId, streetId, selectedWasteTypeIds);
     if (response.success) {
       List<Map<String, dynamic>> flattenedData = [];
       // response.data.forEach((key, value) {
@@ -97,6 +97,7 @@ class WasteCalendarRepository {
     String? hashedStreetName,
     int? wasteTypeId,
     List<int>? wasteTypeIds,
+    required Function() onSuccess,
   }) async {
     // Get previous values from preferences
     final previousWasteTypes = prefs.getSelectedWasteTypes();
@@ -126,6 +127,7 @@ class WasteCalendarRepository {
 
       final response = await Api.subscribeStreetAndWasteTypes(params);
       if (response.success) {
+        onSuccess();
         logInfo('Updated waste types and street', response.message);
       } else {
         logError("Error Updating waste types and street", response.message);
