@@ -122,6 +122,7 @@ class IntroPageState extends State<IntroPage> {
         locationName: _selectedLocationName,
         hashedStreetName: _selectedHashedStreetName,
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+        onSuccess: (){}
       );
 
       _wasteCalenderCubit.updateStreetId(_selectedLocationId!, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());

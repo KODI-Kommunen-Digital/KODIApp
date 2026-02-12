@@ -193,6 +193,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
       locationId: locationId,
       locationName: locationName,
       hashedStreetName: hashedStreetName,
+        onSuccess: (){
+          _initializeRepository();
+        }
     );
 
     _wasteCalenderCubit.updateStreetId(locationId,
@@ -212,6 +215,9 @@ class _WasteCalendarState extends State<WasteCalendar> {
         navigatorKey: navigatorKey,
         cityId: 1,
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+          onSuccess: (){
+            _initializeRepository();
+          }
       );
     }
   }
@@ -666,13 +672,17 @@ class _WasteCalendarState extends State<WasteCalendar> {
     return BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
       builder: (context, state) {
         if (state is WasteCalendarLoaded) {
-          final events = {
-            for (var item in state.collections)
-              DateTime(item.date.year, item.date.month, item.date.day): state
-                  .collections
-                  .where((e) => isSameDay(e.date, item.date))
-                  .toList()
-          };
+          final Map<DateTime, List<WasteCollection>> events = {};
+
+          for (final item in state.collections) {
+            final day = DateTime(item.date.year, item.date.month, item.date.day);
+
+            if (events[day] == null) {
+              events[day] = [];
+            }
+
+            events[day]!.add(item);
+          }
 
           return TableCalendar(
             locale: 'de_DE',
@@ -755,29 +765,29 @@ class _WasteCalendarState extends State<WasteCalendar> {
               ),
             ),
             eventLoader: (day) {
-              return events[day] ?? [];
+              final key = DateTime(day.year, day.month, day.day);
+              return events[key] ?? [];
             },
             calendarBuilders: CalendarBuilders(
               markerBuilder: (context, date, events) {
                 if (events.isEmpty) return const SizedBox();
+
+                final wasteEvents = events.cast<WasteCollection>();
+
                 return Positioned(
                   bottom: 1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: events.map((event) {
-                      if (event is WasteCollection) {
-                        return Container(
-                          width: 7,
-                          height: 7,
-                          margin: const EdgeInsets.symmetric(horizontal: 1.5),
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                _wasteCalenderCubit.getColorForType(event.type),
-                          ),
-                        );
-                      }
-                      return const SizedBox();
+                    children: wasteEvents.take(3).map((event) {
+                      return Container(
+                        width: 7,
+                        height: 7,
+                        margin: const EdgeInsets.symmetric(horizontal: 1.5),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _wasteCalenderCubit.getColorForType(event.type),
+                        ),
+                      );
                     }).toList(),
                   ),
                 );

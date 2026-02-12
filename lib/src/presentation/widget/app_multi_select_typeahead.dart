@@ -147,22 +147,27 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
               runSpacing: 4,
               children: [
                 Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 160,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.primaryColor.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        item.label,
-                        style: TextStyle(
-                          color: theme.primaryColor,
-                          fontWeight: FontWeight.w500,
+                      Flexible(
+                        child: Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
-                        overflow: TextOverflow.ellipsis,
                       ),
                       const SizedBox(width: 4),
                       InkWell(

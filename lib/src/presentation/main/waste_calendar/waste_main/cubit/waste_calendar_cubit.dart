@@ -16,7 +16,7 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       }) async {
     try {
       final result =
-      await WasteCalendarRepository.loadWastePickup(cityId, streetId!);
+      await WasteCalendarRepository.loadWastePickup(cityId, streetId!, selectedWasteTypeIds!);
 
       if (isClosed) return;
 
