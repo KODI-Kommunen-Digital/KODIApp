@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>de.gera.app</string>
+	<string>de.gera.cityapp</string>
 	<key>PROJECT_ID</key>
 	<string>gera-stage</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:248378738903:ios:74054086ea7c43b9a2c892</string>
+	<string>1:248378738903:ios:5981261f6dd7b67ba2c892</string>
 </dict>
 </plist>
