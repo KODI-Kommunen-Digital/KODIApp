@@ -57,6 +57,8 @@ import 'package:heidi/src/presentation/main/login/signup/signup.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_screen.dart';
 import 'package:heidi/src/presentation/main/account/contact_us/contact_us_success/contact_us_success.dart';
 
+import '../../data/repository/forum_repository.dart';
+
 class RouteArguments<T> {
   final T? item;
   final VoidCallback? callback;
@@ -131,7 +133,8 @@ class Routes {
   static const String defectSubmitSuccess = "/defectSubmitSuccess";
   static const String localProfile = "/localProfile";
 
-  static Route<dynamic> generateRoute(RouteSettings settings) {
+  static Route<dynamic> generateRoute(
+      RouteSettings settings, ForumRepository forumRepository) {
     switch (settings.name) {
       case main:
         return MaterialPageRoute(
@@ -395,7 +398,7 @@ class Routes {
                 settings.arguments as Map<String, dynamic>;
             return BlocProvider(
               create: (context) => ListGroupsCubit(
-                context.read(),
+                forumRepository,
               ),
               child: ListGroupScreen(arguments: arguments),
             );
