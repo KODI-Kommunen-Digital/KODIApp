@@ -104,12 +104,12 @@ android {
     flavorDimensions "version"
     productFlavors {
         production {
-            applicationId "de.gera.mobileapp"
+            applicationId "de.gera.cityapp"
             dimension "version"
             signingConfig signingConfigs.release
         }
         staging {
-            applicationId "de.gera.mobileapp"
+            applicationId "de.gera.cityapp"
             dimension "version"
             signingConfig signingConfigs.staging
             versionNameSuffix "-staging"
