@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/translate.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
 
@@ -199,7 +200,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 6),
                       child: Text(
-                        '+$remainingCount more',
+                        '+$remainingCount ${Translate.of(context).translate('more')}',
                         style: TextStyle(
                           color: theme.primaryColor,
                           fontWeight: FontWeight.w600,

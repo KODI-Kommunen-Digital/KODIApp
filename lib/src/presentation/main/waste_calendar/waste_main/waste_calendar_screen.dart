@@ -86,11 +86,11 @@ class _WasteCalendarState extends State<WasteCalendar> {
       final prefs = await Preferences.openBox();
       final previousWasteTypes = prefs.getSelectedWasteTypes();
 
-      if (receiveWasteCalendarNotification == 'false' &&
-          previousWasteTypes.isEmpty) {
-        _showNotificationEnableDialog(isWasteTypeEmpty: true);
-        return;
-      }
+      // if (receiveWasteCalendarNotification == 'false' &&
+      //     previousWasteTypes.isEmpty) {
+      //   _showNotificationEnableDialog(isWasteTypeEmpty: true);
+      //   return;
+      // }
 
       repository = WasteCalendarRepository(prefs);
 
@@ -209,7 +209,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
     });
   }
 
-  Future<void> _updateWasteTypesSubscription() async {
+  Future<void> _updateWasteTypesSubscription({required Function() onSuccess}) async {
     if (selectedWasteTypes.isNotEmpty) {
       await repository.updateSubscription(
         navigatorKey: navigatorKey,
@@ -217,6 +217,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
           onSuccess: (){
             _initializeRepository();
+            onSuccess();
           }
       );
     }
@@ -278,7 +279,15 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                         'Bitte warten, während wir abonnieren...',
                                       );
                                       try {
-                                        await _updateWasteTypesSubscription();
+                                        await _updateWasteTypesSubscription(
+                                            onSuccess: () async {
+                                          final prefs =
+                                              await Preferences.openBox();
+                                          await prefs.setKeyValue(
+                                              Preferences
+                                                  .receiveWasteCalendarNotification,
+                                              'true');
+                                        });
                                         Navigator.pop(context);
                                       } finally {
                                         loadingDialog.hide(parentContext);
@@ -774,18 +783,29 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
                 final wasteEvents = events.cast<WasteCollection>();
 
+                // Extract unique colors
+                final uniqueColors = <Color>{};
+
+                for (final event in wasteEvents) {
+                  final color = _wasteCalenderCubit.getColorForType(event.type);
+                  uniqueColors.add(color);
+                }
+
+                // Take only first 3 unique colors
+                final colorsToShow = uniqueColors.take(3).toList();
+
                 return Positioned(
                   bottom: 1,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: wasteEvents.take(3).map((event) {
+                    children: colorsToShow.map((color) {
                       return Container(
                         width: 7,
                         height: 7,
                         margin: const EdgeInsets.symmetric(horizontal: 1.5),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: _wasteCalenderCubit.getColorForType(event.type),
+                          color: color,
                         ),
                       );
                     }).toList(),

@@ -138,6 +138,8 @@ class IntroPageState extends State<IntroPage> {
 
   void _wasteCalendarSkipped() async {
     final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(
+        Preferences.receiveWasteCalendarNotification, 'false');
     await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
   }
 
