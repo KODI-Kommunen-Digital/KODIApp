@@ -1,4 +1,4 @@
-package de.gera.mobileapp
+package de.gera.cityapp
 ;
 
 import com.tekartik.sqflite.SqflitePlugin;
