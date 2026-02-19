@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -78,6 +79,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -97,7 +101,15 @@ class _HeidiAppState extends State<HeidiApp> {
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
-                    onGenerateRoute: Routes.generateRoute,
+                    onGenerateRoute: (settings) {
+                      final forumRepo =
+                      context.read<ForumRepository>();
+
+                      return Routes.generateRoute(
+                        settings,
+                        forumRepo,
+                      );
+                    },
                     locale: lang,
                     localizationsDelegates: const [
                       Translate.delegate,

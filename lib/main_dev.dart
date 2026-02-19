@@ -107,7 +107,15 @@ class _HeidiAppState extends State<HeidiApp> {
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
-                    onGenerateRoute: Routes.generateRoute,
+                    onGenerateRoute: (settings) {
+                      final forumRepo =
+                      context.read<ForumRepository>();
+
+                      return Routes.generateRoute(
+                        settings,
+                        forumRepo,
+                      );
+                    },
                     localizationsDelegates: const [
                       Translate.delegate,
                       GlobalMaterialLocalizations.delegate,
