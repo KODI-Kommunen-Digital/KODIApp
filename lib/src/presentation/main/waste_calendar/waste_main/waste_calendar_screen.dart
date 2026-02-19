@@ -33,7 +33,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
   List<WasteType> selectedWasteTypes = [];
   late WasteCalendarRepository repository;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-  late final String receiveWasteCalendarNotification;
+  late String receiveWasteCalendarNotification;
   bool isLoading = false;
   bool isDataInitializing = false;
 
@@ -283,10 +283,22 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                             onSuccess: () async {
                                           final prefs =
                                               await Preferences.openBox();
+
+                                          final permission = await prefs.getKeyValue(
+                                              Preferences.pushNotificationsPermission, 'notAsked');
+                                          final isAuthorized = permission == 'authorized';
                                           await prefs.setKeyValue(
                                               Preferences
                                                   .receiveWasteCalendarNotification,
-                                              'true');
+                                              isAuthorized ? 'true' : 'false');
+
+                                          setState(() {
+                                            receiveWasteCalendarNotification = prefs.getKeyValue(
+                                              Preferences.receiveWasteCalendarNotification,
+                                              isAuthorized ? 'true' : 'false',
+                                            );
+                                          });
+
                                         });
                                         Navigator.pop(context);
                                       } finally {
