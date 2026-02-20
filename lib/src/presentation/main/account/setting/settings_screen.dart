@@ -51,13 +51,15 @@ class _SettingsScreenState extends State<SettingsScreen>
     await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, isAuthorized ? 'true' : 'false');
 
     setState(() {
-
       _receiveNotification = isAuthorized && receiveNotification == 'true';
       _receiveWasteCalendarNotification =
           _receiveNotification && receiveWasteCalendar == 'true';
     });
 
     repository = WasteCalendarRepository(_prefs);
+
+    await repository.subscribeForWasteNotification(
+        _receiveNotification && receiveWasteCalendar == 'true');
   }
 
   Future<void> updateNotificationPermissionPreference(bool enabled) async {
@@ -103,7 +105,7 @@ class _SettingsScreenState extends State<SettingsScreen>
       debugPrintStack(stackTrace: s);
     } finally {
       if (!mounted) return;
-      setState(() => isNotificationsProgress = false); // ✅ GUARANTEED
+      setState(() => isNotificationsProgress = false);
     }
   }
 
@@ -134,7 +136,7 @@ class _SettingsScreenState extends State<SettingsScreen>
   Future<void> updateWasteCalendarNotificationPermissionPreference(bool enabled) async {
     if (!_receiveNotification) return;
 
-    if (isNotificationsProgress) return; // ✅ prevent double calls
+    if (isNotificationsProgress) return;
 
     setState(() => isNotificationsProgress = true);
 

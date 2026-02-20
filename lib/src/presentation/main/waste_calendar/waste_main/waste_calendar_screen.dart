@@ -284,21 +284,30 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                           final prefs =
                                               await Preferences.openBox();
 
-                                          final permission = await prefs.getKeyValue(
-                                              Preferences.pushNotificationsPermission, 'notAsked');
-                                          final isAuthorized = permission == 'authorized';
+                                          final permission =
+                                              await prefs.getKeyValue(
+                                                  Preferences
+                                                      .pushNotificationsPermission,
+                                                  'notAsked');
+                                          final isAuthorized =
+                                              permission == 'authorized';
                                           await prefs.setKeyValue(
                                               Preferences
                                                   .receiveWasteCalendarNotification,
                                               isAuthorized ? 'true' : 'false');
 
                                           setState(() {
-                                            receiveWasteCalendarNotification = prefs.getKeyValue(
-                                              Preferences.receiveWasteCalendarNotification,
+                                            receiveWasteCalendarNotification =
+                                                prefs.getKeyValue(
+                                              Preferences
+                                                  .receiveWasteCalendarNotification,
                                               isAuthorized ? 'true' : 'false',
                                             );
                                           });
 
+                                          await repository
+                                              .subscribeForWasteNotification(
+                                                  true);
                                         });
                                         Navigator.pop(context);
                                       } finally {

@@ -68,7 +68,7 @@ android {
         }
         staging {
             dimension "app"
-            signingConfig signingConfigs.release
+            signingConfig signingConfigs.staging
         }
     }
 }

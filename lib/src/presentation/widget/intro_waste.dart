@@ -141,6 +141,7 @@ class IntroPageState extends State<IntroPage> {
     await prefs.setKeyValue(
         Preferences.receiveWasteCalendarNotification, 'false');
     await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
+    await repository.subscribeForWasteNotification(false);
   }
 
   @override
