@@ -46,12 +46,12 @@ class FirebaseApi {
       provisional: false,
     );
 
-    bool isFCMTokenRegistered = prefs.getBool(
-        Preferences.isFCMTokenRegistered);
+    bool isFCMTokenRegistered = prefs.getKeyValue(
+        Preferences.isFCMTokenRegistered, 'false') == 'true';
 
     if(!isFCMTokenRegistered) {
       String? token = await FirebaseMessaging.instance.getToken();
-      if (token != null) registerDevice(token);
+      if (token != null) await registerDevice(token);
     }
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
@@ -60,8 +60,9 @@ class FirebaseApi {
         await _firebaseMessaging
             .subscribeToTopic("warnings")
             .timeout(const Duration(seconds: 10));
-        if(isFCMTokenRegistered) {
-          subscribeForWasteNotification(true);
+        if(prefs.getKeyValue(
+            Preferences.isFCMTokenRegistered, 'false') == 'true') {
+          await subscribeForWasteNotification(true);
         }
       } catch (e) {
         logInfo("Warning subscription timedout");
@@ -72,8 +73,9 @@ class FirebaseApi {
         await _firebaseMessaging
             .unsubscribeFromTopic("warnings")
             .timeout(const Duration(seconds: 10));
-        if(isFCMTokenRegistered) {
-          subscribeForWasteNotification(false);
+        if(prefs.getKeyValue(
+            Preferences.isFCMTokenRegistered, 'false') == 'true') {
+          await subscribeForWasteNotification(false);
         }
       } catch (e) {
         logInfo("Warning unsubscription timedout");
@@ -85,7 +87,7 @@ class FirebaseApi {
       String? token = await FirebaseMessaging.instance.getToken();
       if (token != null){
         uploadToken(uId, token);
-        registerDevice(token);
+        await registerDevice(token);
       }
     }
 
@@ -151,7 +153,7 @@ class FirebaseApi {
         "appVersion": appVersion
       };
       final response = await Api.registerDeviceForWasteNotifications(params);
-      await prefs.setBool(Preferences.isFCMTokenRegistered, true);
+      await prefs.setKeyValue(Preferences.isFCMTokenRegistered, 'true');
       logInfo("FCM token register success: ${response.success}");
     }
   }
