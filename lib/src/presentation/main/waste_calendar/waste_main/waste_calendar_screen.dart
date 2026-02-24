@@ -36,19 +36,24 @@ class _WasteCalendarState extends State<WasteCalendar> {
   late String receiveWasteCalendarNotification;
   bool isLoading = false;
   bool isDataInitializing = false;
+  Preferences? prefs;
+
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final prefs = await Preferences.openBox();
-      final permission = await prefs.getKeyValue(
-          Preferences.pushNotificationsPermission, 'notAsked');
-      final isAuthorized = permission == 'authorized';
-      receiveWasteCalendarNotification = prefs.getKeyValue(
-        Preferences.receiveWasteCalendarNotification,
-        isAuthorized ? 'true' : 'false',
-      );
+      prefs = await Preferences.openBox();
+      if(prefs!=null) {
+        final permission = await prefs!.getKeyValue(
+            Preferences.pushNotificationsPermission, 'notAsked');
+        final isAuthorized = permission == 'authorized';
+        receiveWasteCalendarNotification = prefs!.getKeyValue(
+          Preferences.receiveWasteCalendarNotification,
+          isAuthorized ? 'true' : 'false',
+        );
+      }
+
       _initializeRepository();
     });
   }
@@ -136,8 +141,11 @@ class _WasteCalendarState extends State<WasteCalendar> {
     final prefs = await Preferences.openBox();
     final savedWasteTypeIds = prefs.getSelectedWasteTypes();
 
-    if (savedWasteTypeIds.isNotEmpty) {
-      // Only load waste types initially if not already loaded
+    if (savedWasteTypeIds.isEmpty) {
+      setState(() {
+        selectedWasteTypes = [];
+      });
+    } else {
       if (wasteTypes.isEmpty) {
         await _loadWasteTypes();
       }
@@ -147,15 +155,12 @@ class _WasteCalendarState extends State<WasteCalendar> {
             .where((type) => savedWasteTypeIds.contains(type.id))
             .toList();
       });
-    } else {
-      setState(() {
-        selectedWasteTypes = [];
-      });
     }
   }
 
   Future<void> _loadLocation() async {
     final prefs = await Preferences.openBox();
+
 
     if (!mounted) return;
 
@@ -182,6 +187,10 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
   Future<void> _selectLocation(
       String locationId, String locationName, String hashedStreetName) async {
+    final prefs = await Preferences.openBox();
+
+    List<int> selectedWasteTypesIds = prefs.getSelectedWasteTypes();
+
     setState(() {
       _selectedLocationId = locationId;
       _selectedLocationName = locationName;
@@ -192,12 +201,25 @@ class _WasteCalendarState extends State<WasteCalendar> {
       cityId: 1,
       locationId: locationId,
       locationName: locationName,
+      wasteTypeIds: selectedWasteTypesIds,
       hashedStreetName: hashedStreetName,
-        onSuccess: (){
-          _initializeRepository();
-        }
-    );
+        onSuccess: () async {
+          final prefs = await Preferences.openBox();
+          final permission = await prefs.getKeyValue(
+              Preferences.pushNotificationsPermission, 'notAsked');
+          final isAuthorized = permission == 'authorized';
+          await prefs.setKeyValue(Preferences.receiveWasteCalendarNotification,
+              isAuthorized ? 'true' : 'false');
 
+          setState(() {
+            receiveWasteCalendarNotification = prefs.getKeyValue(
+              Preferences.receiveWasteCalendarNotification,
+              isAuthorized ? 'true' : 'false',
+            );
+          });
+          await repository.subscribeForWasteNotification(true);
+          _initializeRepository();
+        });
     _wasteCalenderCubit.updateStreetId(locationId,
         selectedWasteTypeIds:
             selectedWasteTypes.map((type) => type.id).toList());
@@ -210,7 +232,6 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   Future<void> _updateWasteTypesSubscription({required Function() onSuccess}) async {
-    if (selectedWasteTypes.isNotEmpty) {
       await repository.updateSubscription(
         navigatorKey: navigatorKey,
         cityId: 1,
@@ -220,7 +241,6 @@ class _WasteCalendarState extends State<WasteCalendar> {
             onSuccess();
           }
       );
-    }
   }
 
   void _showWasteTypeDialog(BuildContext parentContext) {
@@ -268,9 +288,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                             ),
                             const SizedBox(width: 8),
                             ElevatedButton(
-                              onPressed: localSelectedWasteTypes.isEmpty
-                                  ? null
-                                  : () async {
+                              onPressed: () async {
                                       _selectWasteTypes(
                                           localSelectedWasteTypes);
                                       final loadingDialog = LoadingDialog();
@@ -308,7 +326,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                           await repository
                                               .subscribeForWasteNotification(
                                                   true);
-                                        });
+                                          _initializeRepository();
+                                            });
                                         Navigator.pop(context);
                                       } finally {
                                         loadingDialog.hide(parentContext);
@@ -386,6 +405,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    List<int> selectedWasteTypes =
+        (prefs != null) ? prefs!.getSelectedWasteTypes() : [];
     return BlocProvider(
       create: (_) => _wasteCalenderCubit,
       child: WillPopScope(
@@ -536,10 +557,17 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                                   const EdgeInsets.symmetric(
                                                       vertical: 8.0),
                                               child: Center(
-                                                child: Text(Translate.of(
+                                                child: Text(
+                                                    (selectedWasteTypes.isNotEmpty) ?
+                                                    Translate.of(
                                                         context)
                                                     .translate(
-                                                        'no_pickups_scheduled')),
+                                                        'no_pickups_scheduled') :
+                                                    Translate.of(
+                                                        context)
+                                                        .translate(
+                                                        'no_waste_type_selected')
+                                                ),
                                               ),
                                             );
                                     } else if (state is WasteCalendarError) {
@@ -719,6 +747,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
             firstDay: DateTime.utc(2020, 10, 16),
             lastDay: DateTime.utc(2030, 3, 14),
             focusedDay: _focusedDay,
+            availableGestures: AvailableGestures.horizontalSwipe,
             selectedDayPredicate: (day) {
               return isSameDay(_selectedDay, day);
             },
@@ -759,7 +788,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                     : Colors.black,
                 shape: BoxShape.circle,
               ),
-              markersMaxCount: 3,
+              markersMaxCount: 4,
             ),
             headerStyle: HeaderStyle(
               titleTextStyle: TextStyle(
@@ -812,8 +841,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                   uniqueColors.add(color);
                 }
 
-                // Take only first 3 unique colors
-                final colorsToShow = uniqueColors.take(3).toList();
+                // Take only first 4 unique colors
+                final colorsToShow = uniqueColors.take(4).toList();
 
                 return Positioned(
                   bottom: 1,
@@ -918,11 +947,34 @@ class _WasteCalendarState extends State<WasteCalendar> {
                 return ListTile(title: Text(suggestion.name));
               },
               suggestionsCallback: (pattern) {
-                if (pattern.isEmpty) return locations;
-                return locations
-                    .where((item) =>
-                        item.name.toLowerCase().contains(pattern.toLowerCase()))
+                if (pattern.isEmpty) {
+                  final sorted = [...locations];
+                  sorted.sort((a, b) => a.name.compareTo(b.name));
+                  return sorted;
+                }
+
+                final query = pattern.toLowerCase();
+
+                final filtered = locations
+                    .where((item) => item.name.toLowerCase().contains(query))
                     .toList();
+
+                filtered.sort((a, b) {
+                  final aName = a.name.toLowerCase();
+                  final bName = b.name.toLowerCase();
+
+                  final aStarts = aName.startsWith(query);
+                  final bStarts = bName.startsWith(query);
+
+                  // Priority 1: startsWith
+                  if (aStarts && !bStarts) return -1;
+                  if (!aStarts && bStarts) return 1;
+
+                  // Priority 2: alphabetical order
+                  return aName.compareTo(bName);
+                });
+
+                return filtered;
               },
               onSelected: (WasteLocation suggestion) async {
                 Navigator.pop(dialogContext);

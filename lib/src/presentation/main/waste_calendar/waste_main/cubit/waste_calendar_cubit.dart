@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 
+import '../../../../../utils/configs/preferences.dart';
+
 part 'waste_calendar_state.dart';
 
 class WasteCalendarCubit extends Cubit<WasteCalendarState> {
@@ -14,6 +16,14 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       String? streetId, {
         List<int>? selectedWasteTypeIds,
       }) async {
+    if (selectedWasteTypeIds != null && selectedWasteTypeIds.isEmpty) {
+      // emit(const WasteCalendarError("No waste types selected"));
+      emit(const WasteCalendarLoaded(
+        [],
+        [],
+      ));
+      return;
+    }
     try {
       final result =
       await WasteCalendarRepository.loadWastePickup(cityId, streetId!, selectedWasteTypeIds!);
