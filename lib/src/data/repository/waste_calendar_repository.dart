@@ -16,6 +16,7 @@ class WasteCalendarRepository {
   WasteCalendarRepository(this.prefs);
 
   Future<List<WasteLocation>?> loadWasteCalendarStreets(int cityId) async {
+
     final response = await Api.requestWasteStreets(cityId);
     if (response.success) {
       final responseData =
@@ -114,10 +115,10 @@ class WasteCalendarRepository {
     } else if (wasteTypeId != null) {
       newWasteTypes = [wasteTypeId];
     } else {
-      newWasteTypes = previousWasteTypes;
+      // newWasteTypes = previousWasteTypes;
+      newWasteTypes = [];
     }
 
-    if(newWasteTypes.isNotEmpty) {
       final params = {
         "deviceId": deviceId,
         "streetId": locationId ??
@@ -132,7 +133,7 @@ class WasteCalendarRepository {
       } else {
         logError("Error Updating waste types and street", response.message);
       }
-    }
+
 
     // Save new values to preferences
     if (locationId != null) {
@@ -145,10 +146,7 @@ class WasteCalendarRepository {
       await prefs.setKeyValue(
           Preferences.selectedStreetHashedName, hashedStreetName);
     }
-    if (newWasteTypes.isNotEmpty) {
       await prefs.setSelectedWasteTypes(newWasteTypes);
-    }
-
   }
 
   Future<void> subscribeForWasteNotification(bool isActive) async {

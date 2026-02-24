@@ -103,7 +103,7 @@ class IntroPageState extends State<IntroPage> {
   }
 
   void _confirmSelection() async {
-    if (_selectedLocationId == null || _selectedLocationName == null || _selectedHashedStreetName == null || selectedWasteTypes.isEmpty) {
+    if (_selectedLocationId == null || _selectedLocationName == null || _selectedHashedStreetName == null) {
       return;
     }
 
@@ -224,9 +224,33 @@ class IntroPageState extends State<IntroPage> {
                 },
                 suggestionsCallback: (pattern) {
                   if (pattern.isEmpty) {
-                    return locations;
+                    final sorted = [...locations];
+                    sorted.sort((a, b) => a.name.compareTo(b.name));
+                    return sorted;
                   }
-                  return locations.where((item) => item.name.toLowerCase().contains(pattern.toLowerCase())).toList();
+
+                  final query = pattern.toLowerCase();
+
+                  final filtered = locations
+                      .where((item) => item.name.toLowerCase().contains(query))
+                      .toList();
+
+                  filtered.sort((a, b) {
+                    final aName = a.name.toLowerCase();
+                    final bName = b.name.toLowerCase();
+
+                    final aStarts = aName.startsWith(query);
+                    final bStarts = bName.startsWith(query);
+
+                    // Priority 1: startsWith
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+
+                    // Priority 2: alphabetical order
+                    return aName.compareTo(bName);
+                  });
+
+                  return filtered;
                 },
                 itemBuilder: (context, WasteLocation suggestion) {
                   return ListTile(
@@ -264,7 +288,7 @@ class IntroPageState extends State<IntroPage> {
                     ),
                     const SizedBox(height: 10,),
                     ElevatedButton(
-                      onPressed: selectedWasteTypes.isNotEmpty && !_isConfirming
+                      onPressed: !_isConfirming
                           ? _confirmSelection
                           : null,
                       child: _isConfirming
