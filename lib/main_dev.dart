@@ -57,8 +57,11 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  try{
+    await FirebaseApi(globalNavKey, prefBox).initNotifications();
+  } catch(e){
+    print(e);
+  }
 
   debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
   await MatomoTracker.instance.initialize(
