@@ -157,7 +157,7 @@ class IntroPageState extends State<IntroPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 200,
+                height: 150,
                 child: Stack(
                   children: [
                     ClipRRect(
@@ -192,7 +192,7 @@ class IntroPageState extends State<IntroPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              TypeAheadField(
+              TypeAheadField<WasteLocation>(
                 controller: typeAheadController,
                 builder: (context, controller, focusNode) {
                   return TextField(
@@ -222,7 +222,7 @@ class IntroPageState extends State<IntroPage> {
                     ),
                   );
                 },
-                suggestionsCallback: (pattern) {
+                suggestionsCallback: (String pattern) async {
                   if (pattern.isEmpty) {
                     final sorted = [...locations];
                     sorted.sort((a, b) => a.name.compareTo(b.name));

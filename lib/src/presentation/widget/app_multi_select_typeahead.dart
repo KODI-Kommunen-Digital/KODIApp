@@ -119,7 +119,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           // searchEnabled: true,
           chipDecoration: ChipDecoration(
             backgroundColor: theme.primaryColor.withOpacity(0.1),
-            wrap: true,
+            wrap: false,
             runSpacing: 2,
             spacing: 8,
             deleteIcon: Icon(Icons.close, size: 18, color: theme.primaryColor),
@@ -131,9 +131,9 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           ),
           selectedItemBuilder: (item) {
-            final visibleItems = _tempSelectedItems.take(3).toList();
+            final visibleItems = _tempSelectedItems.take(2).toList();
             final remainingCount =
-            _tempSelectedItems.length > 3 ? _tempSelectedItems.length - 3 : 0;
+            _tempSelectedItems.length > 2 ? _tempSelectedItems.length - 2 : 0;
 
             final isVisible = visibleItems
                 .any((visible) => visible.id == item.value.id);
