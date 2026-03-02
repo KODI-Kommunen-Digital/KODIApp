@@ -179,7 +179,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
           url = "https://www.stadt-ratingen.de/notfall";
           break;
         case 23:
-          url = "https://ich-tanke.de/tankstellen/super-e5/umkreis/40883-ratingen/";
+          url = "https://ich-tanke.de/tankstellen/super-e5/umkreis/40878-ratingen/";
           break;
         case 20:
           url = "https://www.stadt-ratingen.de/verkehr/verkehrsinfo";
