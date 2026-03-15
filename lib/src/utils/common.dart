@@ -4,6 +4,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_device.dart';
 import 'package:location/location.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class Utils {
   static fieldFocusChange(
@@ -60,6 +61,15 @@ class Utils {
     }
 
     return await location.getLocation();
+  }
+
+  static Future<String> getAppVersion() async {
+    try {
+      final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      return packageInfo.version;
+    } catch (e) {
+      return '';
+    }
   }
 
   ///Singleton factory

@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/widget/intro_waste.dart';
@@ -81,10 +83,14 @@ class HeidiApp extends StatefulWidget {
 }
 
 class _HeidiAppState extends State<HeidiApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  late final Future<String?> _locationFuture;
+
   @override
   void initState() {
     super.initState();
     AppBloc.applicationCubit.onSetup();
+    _locationFuture = clearLocationId();
   }
 
   @override
@@ -125,15 +131,15 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<bool?>(
-                      future: _shouldShowMainScreen(),
+                    home: FutureBuilder<String?>(
+                      future: _locationFuture,
                       builder: (context, snapshot) {
                         if (snapshot.connectionState ==
                             ConnectionState.waiting) {
                           return const CircularProgressIndicator();
                         } else {
                           final location = snapshot.data;
-                          if (location == true ||
+                          if (location != null ||
                               (isWasteCalendarSkipped != null &&
                                   isWasteCalendarSkipped)) {
                             return const MainScreen();
@@ -163,11 +169,41 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
-  Future<bool> _shouldShowMainScreen() async {
+  Future<String?> clearLocationId() async {
     final prefs = await Preferences.openBox();
-    final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
-    final wasteTypes = prefs.getSelectedWasteTypes();
+    final firebaseApi = FirebaseApi(navigatorKey, prefs);
+
+    String? location = _getStoredLocation(prefs);
+
     final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
-    return (location != null && wasteTypes.isNotEmpty);
+
+    if (location != null &&
+        prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
+      await prefs.setKeyValue(Preferences.selectedLocationName, null);
+      await prefs.setKeyValue(Preferences.selectedLocationId, null);
+      location = null;
+    }
+
+    await prefs.setKeyValue(Preferences.isAppInstalled, true);
+
+    return location;
+  }
+
+  Future<List<WasteLocation>> _loadLocations(
+      WasteCalendarRepository repository) async {
+    try {
+      List<WasteLocation> locations = [];
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      if (fetchedLocations != null) {
+        locations = fetchedLocations;
+      }
+      return locations;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  String? _getStoredLocation(prefs) {
+    return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }
 }

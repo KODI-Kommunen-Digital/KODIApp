@@ -4,11 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:heidi/production/firebase_options.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
 import 'package:heidi/src/presentation/widget/intro_waste.dart';
@@ -79,10 +81,13 @@ class HeidiApp extends StatefulWidget {
 }
 
 class _HeidiAppState extends State<HeidiApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
     AppBloc.applicationCubit.onSetup();
+
   }
 
   @override
@@ -159,6 +164,42 @@ class _HeidiAppState extends State<HeidiApp> {
         ),
       ),
     );
+  }
+
+  Future<String?> clearLocationId() async {
+    final prefs = await Preferences.openBox();
+
+    String? location = _getStoredLocation(prefs);
+
+    if (location != null &&
+        prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
+      await prefs.setKeyValue(Preferences.selectedLocationName, null);
+      await prefs.setKeyValue(Preferences.selectedLocationId, null);
+      location = null;
+
+    }
+
+    await prefs.setKeyValue(Preferences.isAppInstalled, true);
+    return location;
+  }
+
+
+  Future<List<WasteLocation>> _loadLocations(
+      WasteCalendarRepository repository) async {
+    try {
+      List<WasteLocation> locations = [];
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      if (fetchedLocations != null) {
+        locations = fetchedLocations;
+      }
+      return locations;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  String? _getStoredLocation(prefs) {
+    return prefs.getKeyValue(Preferences.selectedLocationName, null);
   }
 
   Future<bool> _shouldShowMainScreen() async {
