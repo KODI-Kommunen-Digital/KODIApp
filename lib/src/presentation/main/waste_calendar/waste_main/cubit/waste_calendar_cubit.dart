@@ -4,19 +4,35 @@ import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 
+import '../../../../../utils/configs/preferences.dart';
+
 part 'waste_calendar_state.dart';
 
 class WasteCalendarCubit extends Cubit<WasteCalendarState> {
   WasteCalendarCubit() : super(WasteCalendarLoading());
 
-  void loadWasteCollections(int cityId, String? streetId, {List<int>? selectedWasteTypeIds}) async {
+  void loadWasteCollections(
+      int cityId,
+      String? streetId, {
+        List<int>? selectedWasteTypeIds,
+      }) async {
+    if (selectedWasteTypeIds != null && selectedWasteTypeIds.isEmpty) {
+      // emit(const WasteCalendarError("No waste types selected"));
+      emit(const WasteCalendarLoaded(
+        [],
+        [],
+      ));
+      return;
+    }
     try {
       final result =
-          await WasteCalendarRepository.loadWastePickup(cityId, streetId!);
+      await WasteCalendarRepository.loadWastePickup(cityId, streetId!, selectedWasteTypeIds!);
+
+      if (isClosed) return;
+
       if (result.success) {
         final data = result.data as List<dynamic>;
 
-        // Normalize 'now' and 'twoWeeksFromNow' to have the time set to 00:00:00
         final DateTime now = DateTime.now();
         final DateTime today = DateTime(now.year, now.month, now.day);
         final DateTime twoWeeksFromNow = today.add(const Duration(days: 14));
@@ -26,26 +42,32 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
 
         for (var item in data) {
           final collection = WasteCollection.fromJson(item);
-          if ((collection.type.contains("wöchentlich")) ||
-              collection.type.contains("14")) {
-            //continue;
-          }
           wasteCollections.add(collection);
+
           final DateTime collectionDate = DateTime(
-              collection.date.year, collection.date.month, collection.date.day);
+            collection.date.year,
+            collection.date.month,
+            collection.date.day,
+          );
+
           if (collectionDate.isAtSameMomentAs(today) ||
               (collectionDate.isAfter(today) &&
                   collectionDate.isBefore(twoWeeksFromNow))) {
             carouselCollections.add(collection);
           }
         }
+
         if (!isClosed) {
-          emit(WasteCalendarLoaded(wasteCollections, carouselCollections));
+          emit(WasteCalendarLoaded(
+            wasteCollections,
+            carouselCollections,
+          ));
         }
       } else {
         if (!isClosed) {
           emit(WasteCalendarError(
-              "Failed to load waste collections: ${result.message}"));        }
+              "Failed to load waste collections: ${result.message}"));
+        }
       }
     } catch (e) {
       if (!isClosed) {

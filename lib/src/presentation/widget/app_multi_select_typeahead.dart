@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/translate.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
 
@@ -118,7 +119,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           // searchEnabled: true,
           chipDecoration: ChipDecoration(
             backgroundColor: theme.primaryColor.withOpacity(0.1),
-            wrap: true,
+            wrap: false,
             runSpacing: 2,
             spacing: 8,
             deleteIcon: Icon(Icons.close, size: 18, color: theme.primaryColor),
@@ -130,43 +131,84 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           ),
           selectedItemBuilder: (item) {
-            return Container(
-              decoration: BoxDecoration(
-                color: theme.primaryColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Flexible(
-                    child: Text(
-                      maxLines: 2,
-                      item.label,
-                      style: TextStyle(
-                        color: theme.primaryColor,
-                        fontWeight: FontWeight.w500,
+            final visibleItems = _tempSelectedItems.take(2).toList();
+            final remainingCount =
+            _tempSelectedItems.length > 2 ? _tempSelectedItems.length - 2 : 0;
+
+            final isVisible = visibleItems
+                .any((visible) => visible.id == item.value.id);
+
+            if (!isVisible) return const SizedBox.shrink();
+
+            final isLastVisible =
+                item.value.id == visibleItems.last.id && remainingCount > 0;
+
+            return Wrap(
+              spacing: 6,
+              runSpacing: 4,
+              children: [
+                Container(
+                  constraints: const BoxConstraints(
+                    maxWidth: 160,
+                  ),
+                  decoration: BoxDecoration(
+                    color: theme.primaryColor.withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: theme.primaryColor,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
                       ),
-                      overflow: TextOverflow.ellipsis,
+                      const SizedBox(width: 4),
+                      InkWell(
+                        onTap: () {
+                          _controller.unselectWhere((selectedItem) =>
+                          selectedItem.value.id == item.value.id);
+                        },
+                        child: Icon(
+                          Icons.close,
+                          size: 18,
+                          color: theme.primaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                // +X more chip
+                if (isLastVisible)
+                  GestureDetector(
+                    onTap: () {
+                      _controller.openDropdown();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: theme.primaryColor.withOpacity(0.15),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 6),
+                      child: Text(
+                        '+$remainingCount ${Translate.of(context).translate('more')}',
+                        style: TextStyle(
+                          color: theme.primaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 4),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      onTap: () {
-                        _controller.unselectWhere((selectedItem) =>
-                            selectedItem.value.id == item.value.id);
-                      },
-                      child: Icon(
-                        Icons.close,
-                        size: 18,
-                        color: theme.primaryColor,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              ],
             );
           },
           fieldDecoration: FieldDecoration(
@@ -197,7 +239,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           ),
           dropdownDecoration: DropdownDecoration(
             marginTop: 2,
-            maxHeight: 400,
+            maxHeight: 300,
             backgroundColor: isDark ? Colors.grey.shade900 : Colors.white,
             borderRadius: BorderRadius.circular(12),
             header: Padding(

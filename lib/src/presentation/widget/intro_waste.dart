@@ -9,6 +9,8 @@ import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
 
+import '../../utils/translate.dart';
+
 class IntroPage extends StatefulWidget {
   const IntroPage({super.key});
 
@@ -30,6 +32,7 @@ class IntroPageState extends State<IntroPage> {
   bool _showWasteTypeSelection = false;
   bool _isConfirming = false;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  bool _isLocationsLoading = true;
 
   @override
   void initState() {
@@ -55,9 +58,8 @@ class IntroPageState extends State<IntroPage> {
     final fetchedLocations = await repository.loadWasteCalendarStreets(1);
     if (mounted) {
       setState(() {
-        if (fetchedLocations != null) {
-          locations = fetchedLocations;
-        }
+        locations = fetchedLocations ?? [];
+        _isLocationsLoading = false;
       });
     }
   }
@@ -101,7 +103,7 @@ class IntroPageState extends State<IntroPage> {
   }
 
   void _confirmSelection() async {
-    if (_selectedLocationId == null || _selectedLocationName == null || _selectedHashedStreetName == null || selectedWasteTypes.isEmpty) {
+    if (_selectedLocationId == null || _selectedLocationName == null || _selectedHashedStreetName == null) {
       return;
     }
 
@@ -120,6 +122,7 @@ class IntroPageState extends State<IntroPage> {
         locationName: _selectedLocationName,
         hashedStreetName: _selectedHashedStreetName,
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+        onSuccess: (){}
       );
 
       _wasteCalenderCubit.updateStreetId(_selectedLocationId!, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());
@@ -135,7 +138,10 @@ class IntroPageState extends State<IntroPage> {
 
   void _wasteCalendarSkipped() async {
     final prefs = await Preferences.openBox();
+    await prefs.setKeyValue(
+        Preferences.receiveWasteCalendarNotification, 'false');
     await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
+    await repository.subscribeForWasteNotification(false);
   }
 
   @override
@@ -151,7 +157,7 @@ class IntroPageState extends State<IntroPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                height: 200,
+                height: 150,
                 child: Stack(
                   children: [
                     ClipRRect(
@@ -186,12 +192,13 @@ class IntroPageState extends State<IntroPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              TypeAheadField(
+              TypeAheadField<WasteLocation>(
                 controller: typeAheadController,
                 builder: (context, controller, focusNode) {
                   return TextField(
                     controller: controller,
                     focusNode: focusNode,
+                    enabled: !_isLocationsLoading,
                     decoration: InputDecoration(
                       hintText: 'Straßennamen eingeben',
                       border: const OutlineInputBorder(),
@@ -215,11 +222,35 @@ class IntroPageState extends State<IntroPage> {
                     ),
                   );
                 },
-                suggestionsCallback: (pattern) {
+                suggestionsCallback: (String pattern) async {
                   if (pattern.isEmpty) {
-                    return locations;
+                    final sorted = [...locations];
+                    sorted.sort((a, b) => a.name.compareTo(b.name));
+                    return sorted;
                   }
-                  return locations.where((item) => item.name.toLowerCase().contains(pattern.toLowerCase())).toList();
+
+                  final query = pattern.toLowerCase();
+
+                  final filtered = locations
+                      .where((item) => item.name.toLowerCase().contains(query))
+                      .toList();
+
+                  filtered.sort((a, b) {
+                    final aName = a.name.toLowerCase();
+                    final bName = b.name.toLowerCase();
+
+                    final aStarts = aName.startsWith(query);
+                    final bStarts = bName.startsWith(query);
+
+                    // Priority 1: startsWith
+                    if (aStarts && !bStarts) return -1;
+                    if (!aStarts && bStarts) return 1;
+
+                    // Priority 2: alphabetical order
+                    return aName.compareTo(bName);
+                  });
+
+                  return filtered;
                 },
                 itemBuilder: (context, WasteLocation suggestion) {
                   return ListTile(
@@ -227,7 +258,7 @@ class IntroPageState extends State<IntroPage> {
                   );
                 },
                 onSelected: (WasteLocation suggestion) async {
-                  // unfocus through context 
+                  // unfocus through context
                   FocusScope.of(context).unfocus();
                   typeAheadController.text = suggestion.name;
                   _selectLocation(suggestion.id.toString(), suggestion.name, suggestion.hashedStreetName);
@@ -245,35 +276,90 @@ class IntroPageState extends State<IntroPage> {
                   enabled: !_isConfirming,
                 ),
                 const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: selectedWasteTypes.isNotEmpty && !_isConfirming
-                      ? _confirmSelection
-                      : null,
-                  child: _isConfirming
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : const Text('Bestätigen'),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        _wasteCalendarSkipped();
+                        Navigator.pushReplacementNamed(context, '/home');
+                      },
+                      child: const Text('Überspringen'),
+                    ),
+                    const SizedBox(height: 10,),
+                    ElevatedButton(
+                      onPressed: !_isConfirming
+                          ? _confirmSelection
+                          : null,
+                      child: _isConfirming
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text('Bestätigen'),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 18),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Divider(height: 0.5,),
+                    const SizedBox(height: 14),
+                    Text(
+                      Translate.of(context).translate('garbage_cans'),
+                      textAlign: TextAlign.start,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      Translate.of(context).translate('garbage_cans_description'),
+                      style: const TextStyle(fontSize: 13, color: Colors.grey),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 16),
+                    const Divider(height: 0.5,),
+                    const SizedBox(height: 14),
+                    Text(
+                      Translate.of(context).translate('waste_container'),
+                      textAlign: TextAlign.left,
+                      style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      Translate.of(context).translate('waste_container_description'),
+                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 14),
+                    Text(
+                      Translate.of(context).translate('waste_type_description'),
+                      style: TextStyle(fontSize: 13, color: Colors.grey),
+                      textAlign: TextAlign.left,
+                    ),
+                    const SizedBox(height: 10),
+                    const Divider(height: 0.5,)
+                  ],
+                )
               ],
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
+              Text(
+                Translate.of(context)
+                    .translate('waste_calendar_push_notification_info'),
+                textAlign: TextAlign.left,
+                style: const TextStyle(fontSize: 13, color: Colors.grey),
+              ),
+              const SizedBox(height: 10),
+              if(!_showWasteTypeSelection)
               TextButton(
                 onPressed: () {
                   _wasteCalendarSkipped();
                   Navigator.pushReplacementNamed(context, '/home');
                 },
                 child: const Text('Überspringen'),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Wenn du deinen Standort und deine Abfallarten wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du beides später auf der Seite des Abfallkalenders ändern.',
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
           ),

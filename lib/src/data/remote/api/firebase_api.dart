@@ -1,7 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:heidi/main_dev.dart';
+import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
+import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -41,18 +44,49 @@ class FirebaseApi {
       provisional: false,
     );
 
+    bool isFCMTokenRegistered = prefs.getKeyValue(
+        Preferences.isFCMTokenRegistered, 'false') == 'true';
+
+    if(!isFCMTokenRegistered) {
+      String? token = await FirebaseMessaging.instance.getToken();
+      if (token != null) await registerDevice(token);
+    }
+
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "authorized");
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      try {
+        await _firebaseMessaging
+            .subscribeToTopic("warnings")
+            .timeout(const Duration(seconds: 10));
+        if(prefs.getKeyValue(
+            Preferences.isFCMTokenRegistered, 'false') == 'true') {
+          await subscribeForWasteNotification(true);
+        }
+      } catch (e) {
+        logInfo("Warning subscription timedout");
+      }
     } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
       prefs.setKeyValue(Preferences.pushNotificationsPermission, "denied");
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      try {
+        await _firebaseMessaging
+            .unsubscribeFromTopic("warnings")
+            .timeout(const Duration(seconds: 10));
+        if(prefs.getKeyValue(
+            Preferences.isFCMTokenRegistered, 'false') == 'true') {
+          await subscribeForWasteNotification(false);
+        }
+      } catch (e) {
+        logInfo("Warning unsubscription timedout");
+      }
     }
 
     int uId = await getLoggedUserId();
     if (uId > 0) {
       String? token = await FirebaseMessaging.instance.getToken();
-      if (token != null) uploadToken(uId, token);
+      if (token != null){
+        uploadToken(uId, token);
+        await registerDevice(token);
+      }
     }
 
     await FirebaseMessaging.instance
@@ -66,30 +100,72 @@ class FirebaseApi {
   }
 
   Future<void> subscribeToTopic(String topic) async {
-    await _firebaseMessaging.subscribeToTopic(topic);
+    _firebaseMessaging.subscribeToTopic(topic);
+    debugPrint('Topic Subscribed : $topic');
   }
 
   Future<void> unsubscribeFromTopic(String topic) async {
-    await _firebaseMessaging.unsubscribeFromTopic(topic);
+    _firebaseMessaging.unsubscribeFromTopic(topic);
+    debugPrint('Topic Unsubscribed : $topic');
+
   }
 
   Future<void> refreshNotifications() async {
     final pushNotificationsPermission =
-        await prefs.getKeyValue(Preferences.pushNotificationsPermission, "0");
+    await prefs.getKeyValue(
+        Preferences.pushNotificationsPermission, "0");
+
     final receiveNotification =
-        await prefs.getKeyValue(Preferences.receiveNotification, "true");
+    await prefs.getKeyValue(
+        Preferences.receiveNotification, "true");
+
+    final futures = <Future>[];
 
     if (pushNotificationsPermission == "authorized" &&
         receiveNotification == "true") {
-      await _firebaseMessaging.subscribeToTopic("warnings");
+      futures.add(_firebaseMessaging.subscribeToTopic("warnings"));
     } else {
-      await _firebaseMessaging.unsubscribeFromTopic("warnings");
+      futures.add(_firebaseMessaging.unsubscribeFromTopic("warnings"));
     }
+
+    await Future.wait(futures);
   }
 
   Future<void> uploadToken(int userId, String token) async {
     final response = await Api.uploadToken(userId, {"firebaseToken": token});
     logInfo("FCM token upload success: ${response.success}");
+  }
+
+
+  Future<void> registerDevice(String token) async {
+    DeviceModel? deviceModel = await Utils.getDeviceInfo();
+    String? appVersion = await Utils.getAppVersion();
+    if(deviceModel!=null) {
+      String deviceId = deviceModel.uuid;
+      await prefs.setKeyValue(Preferences.deviceId, deviceId);
+      String deviceType = deviceModel.model == "Android" ? "android" : "ios";
+      final params = {
+        "deviceId": deviceId,
+        "fcmToken": token,
+        "deviceType": deviceType,
+        "appVersion": appVersion
+      };
+      final response = await Api.registerDeviceForWasteNotifications(params);
+      await prefs.setKeyValue(Preferences.isFCMTokenRegistered, 'true');
+      logInfo("FCM token register success: ${response.success}");
+    }
+  }
+
+  Future<void> subscribeForWasteNotification(bool isActive) async {
+    DeviceModel? deviceModel = await Utils.getDeviceInfo();
+    String deviceId = await prefs.getKeyValue(
+        Preferences.deviceId, deviceModel != null ? deviceModel.uuid : "");
+    final params = {
+        "isActive": isActive
+      };
+      final response =
+          await Api.subscribeForWasteNotification(deviceId, params);
+      logInfo("Waste calendar notifications subscription updated: ${response.success}");
   }
 
   Future<int> getLoggedUserId() async {

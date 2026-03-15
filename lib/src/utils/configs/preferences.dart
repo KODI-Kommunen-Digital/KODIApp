@@ -39,6 +39,8 @@ class Preferences {
   static const String allListingCityFilter = "allListingCityFilter";
   static const String pushNotificationsPermission =
       "pushNotificationsPermission";
+  static const String receiveWasteCalendarNotification =
+      "receiveWasteCalendarNotification";
   static const String receiveNotification = "receiveNotification";
   static const bool hasOpenedForumsBefore = false;
   static const String listingTitle = "allListingCityFilter";
@@ -49,7 +51,12 @@ class Preferences {
   static const String selectedStreetHashedName = 'selectedStreetHashedName';
   static const String selectedWasteTypes = 'selectedWasteTypes';
   static const String introSkipped = 'introSkipped';
+  static const String isAppInstalled = "isAppInstalled";
+  static const String isOldTopicUnsubscribed = "isOldTopicUnsubscribed";
+  static const String oldTopicUnsubscribedIndex = "oldTopicUnsubscribedIndex";
   static const String isWasteCalendarSkipped = "isWasteCalendarSkipped";
+  static const String isFCMTokenRegistered = "isFCMTokenRegistered";
+  static const String deviceId = "deviceId";
 
   Preferences._(this._box);
 
