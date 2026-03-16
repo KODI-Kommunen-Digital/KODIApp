@@ -15,7 +15,7 @@ class AppEnv {
 
   static const staging = AppEnv(
     name: "staging",
-    domain: "http://116.203.1.1:3001/v2/",
+    domain: "https://app.heidi-app.com/api/v2/",
     picturesURL: "https://gera1heidi.obs.eu-de.otc.t-systems.com/",
     defaultPictureURL: "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
     debug: true,
@@ -23,7 +23,7 @@ class AppEnv {
 
   static const production = AppEnv(
     name: "production",
-    domain: "http://116.203.1.1:3001/v2/",
+    domain: "https://app.heidi-app.com/api/v2/",
     picturesURL: "https://gera1heidi.obs.eu-de.otc.t-systems.com/",
     defaultPictureURL: "https://smrauf1heidi.obs.eu-de.otc.t-systems.com/admin/ProfilePicture.png",
     debug: false,
