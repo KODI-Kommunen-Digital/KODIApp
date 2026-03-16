@@ -39,7 +39,7 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace "de.gera.cityapp"
+    namespace "de.gera.mobileapp"
     compileSdkVersion 35
 //    ndkVersion flutter.ndkVersion
 
@@ -64,7 +64,7 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "de.gera.cityapp"
+        applicationId "de.gera.mobileapp"
         // You can update the following values to match your application needs.
         // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
         minSdkVersion flutter.minSdkVersion
@@ -104,12 +104,12 @@ android {
     flavorDimensions "version"
     productFlavors {
         production {
-            applicationId "de.gera.cityapp"
+            applicationId "de.gera.mobileapp"
             dimension "version"
             signingConfig signingConfigs.release
         }
         staging {
-            applicationId "de.gera.cityapp"
+            applicationId "de.gera.mobileapp"
             dimension "version"
             signingConfig signingConfigs.staging
             versionNameSuffix "-staging"

@@ -1,4 +1,4 @@
-package de.gera.cityapp
+package de.gera.mobileapp
 
 import io.flutter.embedding.android.FlutterActivity
 
