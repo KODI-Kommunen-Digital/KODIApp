@@ -200,7 +200,7 @@ class ListCubit extends Cubit<ListState> {
       11: "category_public_transport",
       12: "category_offers",
       13: "category_food",
-      43: "category_coupons",
+      21: "category_rmg_events",
       47: "category_about_us",
       15: "category_newsletter",
       16: "category_official_notification",

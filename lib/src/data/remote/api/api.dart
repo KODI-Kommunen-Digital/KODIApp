@@ -505,8 +505,10 @@ class Api {
     }
   }
 
-  static Future<ResultApiModel> requestSubCatList(params, pageNo) async {
-    var list = '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
+  static Future<ResultApiModel> requestSubCatList(params, pageNo, subCategoryId, categoryId) async {
+    var list = (subCategoryId != null && categoryId != null)
+        ? '/listings?subcategoryId=$subCategoryId&categoryId=$categoryId&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings'
+        : '/listings?subCategoryId=10&categoryId=1&statusId=1&pageNo=$pageNo&pageSize=19&showExternalListings=$showExternalListings';
     final result = await HTTPManager(apiType: APIType.defaultAPI).get(url: list);
     return ResultApiModel.fromJson(result);
   }

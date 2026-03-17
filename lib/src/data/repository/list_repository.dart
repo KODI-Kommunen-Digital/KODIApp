@@ -24,7 +24,9 @@ class ListRepository {
       required type,
       required pageNo,
       cityId,
-      eventFilter}) async {
+      eventFilter,
+      subCategoryId
+      }) async {
     final prefs = await Preferences.openBox();
     int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
 
@@ -65,7 +67,12 @@ class ListRepository {
         return [list, response.pagination];
       }
     } else if (type == "subCategoryService") {
-      final response = await Api.requestSubCatList(selectedCityId, pageNo);
+      int? subCategoryId;
+      if(categoryId == 21) {
+        subCategoryId = 21;
+        categoryId = 3;
+      }
+      final response = await Api.requestSubCatList(selectedCityId, pageNo, subCategoryId, categoryId);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -318,11 +325,13 @@ class ListRepository {
       List<File>? imagesList,
       bool isImageChanged,
       List<PollOptionModel>? pollOptions,
-      int? categoryId,
-      int? subCategoryId) async {
+      // int? categoryId,
+      // int? subCategoryId
+      ) async {
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     const cityId = 1;
     String? combinedStartDateTime;
     String? combinedEndDateTime;
@@ -469,6 +478,8 @@ class ListRepository {
       List<File>? imagesList,
       List<PollOptionModel>? pollOptions,
       int? subCategoryId) async {
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
+    int? subCategoryId = prefs.getKeyValue(Preferences.subCategoryId, null);
     final villageId = prefs.getKeyValue(Preferences.villageId, null);
     final userId = prefs.getKeyValue(Preferences.userId, '');
     final media = prefs.getKeyValue(Preferences.path, null);
@@ -517,7 +528,7 @@ class ListRepository {
       combinedEndDateTime += "T$formattedTime";
     }
 
-    if (categoryId == 1) {
+    if (categoryId == 1 || categoryId == 3) {
       subCategoryId = subCategoryId;
     } else {
       subCategoryId = null;
@@ -672,7 +683,10 @@ class ListRepository {
     return requestVillageResponse;
   }
 
-  void setCategoryId(value) async {
+  Future<void> setCategoryId(value) async {
+    if(value == null) {
+      return;
+    }
     final response = await Api.requestSubmitCategory();
     var jsonCategory = response.data;
     final item = jsonCategory.firstWhere(
@@ -699,18 +713,35 @@ class ListRepository {
     final categoryId = prefs.getKeyValue(Preferences.categoryId, '');
     final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
     var jsonCategory = response.data;
-    final item =
-        jsonCategory.firstWhere((item) => item['name'] == value.toLowerCase());
+    final item = jsonCategory.firstWhere(
+          (item) => item['name'] == value,
+      orElse: () => null,
+    );
+
+    if (item == null) {
+      debugPrint("Subcategory not found for value: $value");
+      return;
+    }
+
+    final itemId = item['id'];
+    prefs.setKeyValue(Preferences.subCategoryId, itemId);
+  }
+
+  Future<void> setSubCategoryId(value, categoryId) async {
+    final response = await Api.requestSubmitSubCategory(categoryId: categoryId);
+    var jsonSubCategory = response.data;
+    final item = jsonSubCategory.firstWhere(
+        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
   }
 
-  void setSubCategoryId(value) async {
-    final response = await Api.requestSubmitSubCategory(categoryId: 1);
+  void setEventsSubCategoryId(value) async {
+    final response = await Api.requestSubmitSubCategory(categoryId: 3);
     var jsonSubCategory = response.data;
     final item = jsonSubCategory.firstWhere(
-        (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
+            (item) => (item['name']?.toLowerCase() ?? '') == value.toLowerCase());
     final itemId = item['id'];
     final subCategoryId = itemId;
     prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);

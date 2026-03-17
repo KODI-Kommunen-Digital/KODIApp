@@ -183,6 +183,7 @@ class ProductModel {
       description = document.body!.text;
     }
 
+
     if (json['categoryId'] == 1) {
       category = "News";
       final parsedDateTime = DateTime.parse(json['createdAt']);
@@ -225,8 +226,8 @@ class ProductModel {
       category = "Abfall";
     } else if (json['categoryId'] == 26) {
       category = "Tanken";
-    } else if (json['categoryId'] == 43) {
-      category = "Coupons";
+    } else if (json['categoryId'] == 21) {
+      category = "RMG Events";
     } else if (json['categoryId'] == 8) {
       category = "RatingenCard";
     } else if (json['categoryId'] == 9) {
@@ -238,6 +239,7 @@ class ProductModel {
     } else if (json['categoryId'] == 13) {
       category = "Essen & Trinken";
     }
+
 
     if (json['sourceId'] == 3 && json['externalId'] != null) {
       Uri uri = Uri.parse(json['externalId']);

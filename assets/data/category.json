@@ -1,6 +1,6 @@
 {
     "status": "success",
-    "data": [ 
+    "data": [
         {
             "id": 1,
             "name": "News",
@@ -42,13 +42,13 @@
             "categoryType" : "category"
         },
         {
-            "id": 43,
-            "name": "Coupons",
+            "id": 21,
+            "name": "RMG Events",
             "noOfSubcategories": 0,
-            "icon": "fas fa-ticket",
+            "icon": "far fa-calendar-check",
             "color": "#a570f1",
             "categoryType" : "category"
-        }, 
+        },
         {
             "id": 25,
             "name": "Umfrage",

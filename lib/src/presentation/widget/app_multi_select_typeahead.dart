@@ -119,7 +119,7 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
           // searchEnabled: true,
           chipDecoration: ChipDecoration(
             backgroundColor: theme.primaryColor.withOpacity(0.1),
-            wrap: false,
+            wrap: true,
             runSpacing: 2,
             spacing: 8,
             deleteIcon: Icon(Icons.close, size: 18, color: theme.primaryColor),

@@ -64,6 +64,7 @@ class AddListingCubit extends Cubit<AddListingState> {
     List<File>? imagesList,
     isImageChanged,
     List<PollOptionModel>? pollOptions, // New parameter for poll options
+    int? subCategoryId,
   }) async {
     try {
       final response = await _repo.saveProduct(
@@ -90,9 +91,7 @@ class AddListingCubit extends Cubit<AddListingState> {
           endTime,
           imagesList,
           isImageChanged,
-          pollOptions,
-          categoryId,
-          subCategoryId);
+          pollOptions);
 
       if (response.success) {
         return true;
@@ -246,7 +245,7 @@ class AddListingCubit extends Cubit<AddListingState> {
 
   Future<void> setCategoryId(value) async {
     try {
-      _repo.setCategoryId(value);
+      await _repo.setCategoryId(value);
     } catch (e, stackTrace) {
       logError('request categoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
@@ -262,9 +261,9 @@ class AddListingCubit extends Cubit<AddListingState> {
     }
   }
 
-  void setSubCategoryId(value) async {
+  Future<void> setSubCategoryId(value, categoryId) async {
     try {
-      _repo.setSubCategoryId(value);
+      await _repo.setSubCategoryId(value, categoryId);
     } catch (e, stackTrace) {
       logError('set subCategoryID Error', e);
       await Sentry.captureException(e, stackTrace: stackTrace);
@@ -308,6 +307,16 @@ class AddListingCubit extends Cubit<AddListingState> {
 
       return null;
     }
+  }
+
+  Future<void> updateCategoryId(int categoryId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.categoryId, categoryId);
+  }
+
+  Future<void> updateSubCategoryId(int subCategoryId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.subCategoryId, subCategoryId);
   }
 
   void clearSubCategory() async {
