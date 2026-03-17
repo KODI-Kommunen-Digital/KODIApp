@@ -92,6 +92,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   List listVillage = [];
   List listCategory = [];
   List listSubCategory = [];
+  List listEventSubCategory = [];
 
   String? _featurePdf;
   String? _expiryDate;
@@ -105,6 +106,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   String? selectedVillage;
   String? selectedCategory;
   String? selectedSubCategory;
+  String? selectedEventsSubCategory;
   bool isImageChanged = false;
   bool isLoading = false;
   List<File>? selectedImages = [];
@@ -131,9 +133,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
           widget.item?.expiryDate == "") {
         _isExpiryDateEnabled = false;
       }
-      context
-          .read<AddListingCubit>()
-          .setCategoryId(selectedCategory?.toLowerCase());
     } else if (widget.item == null) {
       _setDefaultExpiryDate();
       _isExpiryDateEnabled = true;
@@ -256,6 +255,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
           .read<AddListingCubit>()
           .loadSubCategory(selectedCategory);
       listSubCategory = subCategoryResponse!.data;
+      final selectedEventCategory = jsonCategory[1]['name'];
+      final eventsSubCategoryResponse = await context
+          .read<AddListingCubit>()
+          .loadSubCategory(selectedEventCategory);
+      listEventSubCategory = eventsSubCategoryResponse!.data;
     }
     setState(() {
       listCategory = loadCategoryResponse?.data;
@@ -264,9 +268,21 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _processing = true;
     });
 
-    if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
-      await selectSubCategory(selectedCategory?.toLowerCase());
+    if (widget.item != null) {
+      if(widget.item!.categoryId!=null) {
+        int categoryId  = widget.item!.categoryId!;
+        await context.read<AddListingCubit>().updateCategoryId(categoryId);
+        if(widget.item!.subcategoryId!=null) {
+          int subCategoryId = widget.item!.subcategoryId!;
+          await context.read<AddListingCubit>().updateSubCategoryId(subCategoryId);
+        }
+      }
+    } {
+      if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+        await selectSubCategory(selectedCategory?.toLowerCase(), 1);
+      }
     }
+
 
     Map<String, dynamic> params = {};
     if (widget.item != null) {
@@ -288,11 +304,30 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _createdAt = widget.item?.createDate ?? '';
       selectedCategory = jsonCategory.firstWhere(
           (element) => element["id"] == widget.item!.categoryId)["name"];
-      dynamic subCat = listSubCategory.firstWhereOrNull(
-          (element) => element["id"] == widget.item!.subcategoryId);
-      if(subCat != null) {
-        selectedSubCategory = subCat['name'];
+
+      if (widget.item!.categoryId != null) {
+        int categoryId = widget.item!.categoryId!;
+        await context.read<AddListingCubit>().updateCategoryId(categoryId);
       }
+
+      if (selectedCategory?.toLowerCase() == "news") {
+        dynamic subCat = listSubCategory.firstWhereOrNull(
+            (element) => element["id"] == widget.item!.subcategoryId);
+        if (subCat != null) {
+          selectedSubCategory = subCat['name'];
+        }
+      } else if (selectedCategory?.toLowerCase() == "events") {
+        if(widget.item!.subcategoryId!=null) {
+          dynamic subCat = listEventSubCategory.firstWhereOrNull(
+                  (element) => element["id"] == widget.item!.subcategoryId);
+          if (subCat != null) {
+            selectedEventsSubCategory = subCat['name'];
+          }
+        } else {
+          selectedEventsSubCategory = null;
+        }
+      }
+
       if (selectedCategory?.toLowerCase() == "news" ||
           selectedCategory == null) {
         final subCategoryResponse = await context
@@ -300,6 +335,19 @@ class _AddListingScreenState extends State<AddListingScreen> {
             .loadSubCategory(selectedCategory?.toLowerCase());
         listSubCategory = subCategoryResponse!.data;
       }
+
+      if (selectedCategory?.toLowerCase() == "events"){
+        final subCategoryResponse = await context
+            .read<AddListingCubit>()
+            .loadSubCategory(selectedCategory?.toLowerCase());
+        listSubCategory = subCategoryResponse!.data;
+      }
+
+      if (widget.item!.subcategoryId != null) {
+        int subCategoryId = widget.item!.subcategoryId!;
+        await context.read<AddListingCubit>().updateSubCategoryId(subCategoryId);
+      }
+
       if (widget.item?.startDate != '') {
         List<String> startDateTime = widget.item!.startDate.split(' ');
         List<String> endDateTime = widget.item!.endDate.split(' ');
@@ -375,8 +423,16 @@ class _AddListingScreenState extends State<AddListingScreen> {
                   .translate(CategoryManager.getCategoryTranslation(
                       loadCategoryResponse!.data.first['id']))
                   .toLowerCase());
+          final subEventCategoryResponse = await context
+              .read<AddListingCubit>()
+              .loadSubCategory(
+            // "RMG Events"
+              loadCategoryResponse!.data[1]['name']
+              // Translate.of(context).translate(CategoryManager.getCategoryTranslation(loadCategoryResponse!.data.first['id'])).toLowerCase()
+          );
           setState(() {
             listSubCategory = subCategoryResponse!.data;
+            listEventSubCategory = subEventCategoryResponse!.data;
           });
         }
       }
@@ -684,6 +740,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           ))
                       .toList()
                   : null,
+          subCategoryId: subCategoryId
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
@@ -1110,9 +1167,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               );
                               if (selectedCategory?.toLowerCase() == "news" ||
                                   selectedCategory == null) {
-                                selectSubCategory(
-                                    selectedCategory?.toLowerCase());
+                                await selectSubCategory(
+                                    selectedCategory?.toLowerCase(), 1);
                                 _setDefaultExpiryDate();
+                              } else {
+                                context.read<AddListingCubit>().clearSubCategory();
                               }
                             },
                           ),
@@ -1263,6 +1322,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                             onChanged: (value) async {
                               setState(
                                 () {
+                                  isLoading = true;
                                   selectedCategory = value as String?;
                                   context.read<AddListingCubit>().setCategoryId(
                                       selectedCategory?.toLowerCase());
@@ -1270,38 +1330,46 @@ class _AddListingScreenState extends State<AddListingScreen> {
                               );
                               if (selectedCategory?.toLowerCase() == "news" ||
                                   selectedCategory == null) {
-                                selectSubCategory(
-                                    selectedCategory?.toLowerCase());
+                                await selectSubCategory(
+                                    selectedCategory?.toLowerCase(),1);
                                 _setDefaultExpiryDate();
+                              } else if(selectedCategory?.toLowerCase() == "events")  {
+                                context.read<AddListingCubit>().clearSubCategory();
                               }
+                              setState(() {
+                                isLoading = false;
+                              });
                             },
                           ),
                   )
                 ],
               ),
-              if (selectedCategory?.toLowerCase() == "news" ||
-                  selectedCategory == null)
-                const SizedBox(height: 8),
-              if (selectedCategory?.toLowerCase() == "news" ||
-                  selectedCategory == null)
-                Text.rich(
-                  TextSpan(
-                    text: Translate.of(context).translate('subCategory'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                    children: const <TextSpan>[
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
+              if ((selectedCategory?.toLowerCase() == "news" ||
+                  selectedCategory?.toLowerCase() == "events" ||
+                  selectedCategory == null))
+              Column(
+                children: [
+                  const SizedBox(height: 8),
+                  Text.rich(
+                    TextSpan(
+                      text: Translate.of(context).translate('subCategory'),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleMedium!
+                          .copyWith(fontWeight: FontWeight.bold),
+                      children: (selectedCategory?.toLowerCase() == "news") ? const <TextSpan>[
+                        TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ] : null,
+                    ),
                   ),
-                ),
+                ],
+              ),
               const SizedBox(height: 8),
               Row(
                 children: [
@@ -1310,32 +1378,104 @@ class _AddListingScreenState extends State<AddListingScreen> {
                       child: listSubCategory.isEmpty
                           ? const LinearProgressIndicator()
                           : DropdownButton(
-                              isExpanded: true,
-                              menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
-                              value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        CategoryManager
-                                            .getSubCategoryTranslation(
-                                                subcategory['id']))));
-                              }).toList(),
-                              onChanged: (value) {
-                                context
-                                    .read<AddListingCubit>()
-                                    .getSubCategoryId(value);
-                                setState(() {
-                                  selectedSubCategory = value as String?;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .setSubCategoryId(
-                                          selectedSubCategory?.toLowerCase());
-                                });
-                              },
+                        isExpanded: true,
+                        menuMaxHeight: 200,
+                        hint: Text(Translate.of(context)
+                            .translate('input_subcategory')),
+                        value: selectedSubCategory,
+                        items: listSubCategory.map((subcategory) {
+                          return DropdownMenuItem(
+                              value: subcategory['name'],
+                              child: Text(Translate.of(context).translate(
+                                  CategoryManager
+                                      .getSubCategoryTranslation(
+                                      subcategory['id']
+                                  ))));
+                        }).toList(),
+                        onChanged: (value) {
+                          context
+                              .read<AddListingCubit>()
+                              .getSubCategoryId(value);
+                          setState(() {
+                            selectedSubCategory = value as String?;
+                            context
+                                .read<AddListingCubit>()
+                                .setSubCategoryId(
+                                selectedSubCategory?.toLowerCase(), 1);
+                          });
+                        },
+                      ),
+                    ),
+
+                  if (selectedCategory?.toLowerCase() == "events")
+                    Expanded(
+                      child: listEventSubCategory.isEmpty
+                          ? const LinearProgressIndicator()
+                          : DropdownButton(
+                        isExpanded: true,
+                        menuMaxHeight: 200,
+                        hint: Text(Translate.of(context)
+                            .translate('input_subcategory')),
+                        value: selectedEventsSubCategory,
+                        // items: listEventSubCategory.map((subcategory) {
+                        //   return DropdownMenuItem(
+                        //       value: subcategory['name'],
+                        //       child: Text(
+                        //           Translate.of(context).translate(
+                        //           // CategoryManager
+                        //           //     .getSubCategoryTranslation(
+                        //           //     subcategory['id']
+                        //           // )
+                        //               subcategory['name']
+                        //           )));
+                        // }).toList(),
+                        items: [
+                          DropdownMenuItem<String?>(
+                            value: null,
+                            child: Text(
+                              Translate.of(context).translate('input_subcategory'),
+                              style: TextStyle(color: Theme.of(context).hintColor),
                             ),
+                          ),
+                          ...listEventSubCategory.map((subcategory) {
+                            return DropdownMenuItem<String?>(
+                              value: subcategory['name'],
+                              child: Text(
+                                Translate.of(context).translate(subcategory['name']),
+                              ),
+                            );
+                          }).toList(),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            selectedEventsSubCategory = value;
+                          });
+
+                          if (value != null) {
+                            context.read<AddListingCubit>().getSubCategoryId(value);
+                            context
+                                .read<AddListingCubit>()
+                                .setSubCategoryId(value.toLowerCase(), 3);
+                          } else {
+                            context.read<AddListingCubit>().clearSubCategory();
+                          }
+                        },
+                        // onChanged: (value) {
+                        //   if(value==null) {
+                        //     return;
+                        //   }
+                        //   context
+                        //       .read<AddListingCubit>()
+                        //       .getSubCategoryId(value);
+                        //   setState(() {
+                        //     selectedEventsSubCategory = value as String?;
+                        //     context
+                        //         .read<AddListingCubit>()
+                        //         .setSubCategoryId(
+                        //         selectedEventsSubCategory?.toLowerCase(),3);
+                        //   });
+                        // },
+                      ),
                     ),
                 ],
               ),
@@ -1853,7 +1993,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     );
   }
 
-  Future<void> selectSubCategory(String? selectedCategory) async {
+  Future<void> selectSubCategory(String? selectedCategory, int categoryId) async {
     context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
     // clearStartEndDate();
@@ -1861,12 +2001,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
         .read<AddListingCubit>()
         .loadSubCategory(selectedCategory!.toLowerCase());
     if (!mounted) return;
-    context
+    await context
         .read<AddListingCubit>()
         .setCategoryId(selectedCategory.toLowerCase());
-    context
+    await context
         .read<AddListingCubit>()
-        .setSubCategoryId(subCategoryResponse?.data.last['name']);
+        .setSubCategoryId(subCategoryResponse?.data.last['name'], categoryId);
     setState(() {
       listSubCategory = subCategoryResponse!.data;
 

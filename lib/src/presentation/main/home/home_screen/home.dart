@@ -497,7 +497,11 @@ class _HomeScreenState extends State<HomeScreen> {
       } else {
         final prefs = await Preferences.openBox();
         prefs.setKeyValue(Preferences.categoryId, item.id);
-        prefs.setKeyValue(Preferences.type, "category");
+        if(item.id == 21) {
+          prefs.setKeyValue(Preferences.type, "subCategoryService");
+        } else {
+          prefs.setKeyValue(Preferences.type, "category");
+        }
         if (!mounted) return;
         Navigator.pushNamed(context, Routes.listProduct,
             arguments: {'id': selectedCityId, 'title': ''});
