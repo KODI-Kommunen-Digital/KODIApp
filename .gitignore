@@ -44,3 +44,17 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+
+# Ignore environment files
+assets/env/**
+assets/envStage/**
+
+# FVM Version Cache
+.fvm/
+
+# Firebase config (sensitive)
+android/app/google-services.json
+ios/Runner/config/**
+ios/Runner/GoogleService-Info.plist
