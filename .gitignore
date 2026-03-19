@@ -57,3 +57,4 @@ assets/env/**
 # Firebase config (sensitive)
 android/app/production/google-services.json
 android/app/staging/google-services.json
+ios/Runner/config/**
