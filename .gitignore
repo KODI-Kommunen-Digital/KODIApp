@@ -57,3 +57,4 @@ assets/env/.envRatingen
 android/app/src/production/google-services.json
 android/app/src/staging/google-services.json
 ios/Runner/GoogleService-Info.plist
+ios/GoogleService-Info.plist
