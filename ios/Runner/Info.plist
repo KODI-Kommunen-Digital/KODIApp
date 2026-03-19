@@ -26,9 +26,9 @@
 	<key>CFBundleShortVersionString</key>
 	<string>5.0.1</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>????</string>git
 	<key>CFBundleVersion</key>
-	<string>22</string>
+	<string>23</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCalendarsFullAccessUsageDescription</key>
