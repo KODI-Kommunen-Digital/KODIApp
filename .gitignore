@@ -50,6 +50,7 @@ app.*.map.json
 
 # Ignore environment files
 assets/env/**
+assets/envStage/**
 
 # FVM Version Cache
 .fvm/
