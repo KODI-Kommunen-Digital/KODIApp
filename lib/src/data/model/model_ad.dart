@@ -1,6 +1,13 @@
 class AdDataModel {
-  final String link;
-  final String image;
+  final String? link;
+  final String? image;
 
-  AdDataModel({required this.link, required this.image});
+  AdDataModel({this.link, this.image});
+
+  factory AdDataModel.fromJson(Map<String, dynamic> json) {
+    return AdDataModel(
+      link: json['link'] as String?,
+      image: json['image'] as String?,
+    );
+  }
 }

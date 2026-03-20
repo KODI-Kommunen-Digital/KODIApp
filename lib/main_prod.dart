@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/main_screen.dart';
@@ -22,9 +23,12 @@ import 'package:loggy/loggy.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
-  await Hive.initFlutter();
-  Hive.registerAdapter(FormDataAdapter());
+
+
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  HttpClient.enableTimelineLogging = false;
+  Hive.registerAdapter(FormDataAdapter());
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -34,12 +38,13 @@ Future<void> main() async {
       ])
     ],
   );
-  await Hive.initFlutter();
+  //await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
-
-  runApp(HeidiApp(prefBox));
   Bloc.observer = HeidiBlocObserver();
+  runApp(HeidiApp(prefBox));
+
 }
+
 
 final globalNavKey = GlobalKey<NavigatorState>();
 
@@ -59,7 +64,9 @@ class _HeidiAppState extends State<HeidiApp> {
   @override
   void initState() {
     super.initState();
-    AppBloc.applicationCubit.onSetup();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      AppBloc.applicationCubit.onSetup();
+    });
   }
 
   @override
@@ -72,6 +79,9 @@ class _HeidiAppState extends State<HeidiApp> {
         RepositoryProvider(
           create: (context) => ListRepository(widget.prefBox),
         ),
+        RepositoryProvider(
+          create: (context) => ForumRepository(widget.prefBox),
+        )
       ],
       child: MultiBlocProvider(
         providers: AppBloc.providers,
@@ -91,7 +101,15 @@ class _HeidiAppState extends State<HeidiApp> {
                     debugShowCheckedModeBanner: false,
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
-                    onGenerateRoute: Routes.generateRoute,
+                    onGenerateRoute: (settings) {
+                      final forumRepo =
+                      context.read<ForumRepository>();
+
+                      return Routes.generateRoute(
+                        settings,
+                        forumRepo,
+                      );
+                    },
                     locale: lang,
                     localizationsDelegates: const [
                       Translate.delegate,
@@ -103,12 +121,13 @@ class _HeidiAppState extends State<HeidiApp> {
                     home: Scaffold(
                       body: BlocBuilder<ApplicationCubit, ApplicationState>(
                         builder: (context, state) {
-                          if (state == const ApplicationState.loaded()) {
-                            return const MainScreen();
-                          }
                           if (state == const ApplicationState.loading()) {
                             return const SplashScreen();
                           }
+                          if (state == const ApplicationState.loaded()) {
+                            return const MainScreen();
+                          }
+
                           return const MainScreen();
                         },
                       ),

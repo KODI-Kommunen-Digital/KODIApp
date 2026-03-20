@@ -2,7 +2,7 @@
 
 import 'dart:io';
 
-import 'package:device_info/device_info.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +31,7 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final int maxFiles;
 
   const AppUploadImage({
     super.key,
@@ -41,6 +42,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.maxFiles = 5,
   });
 
   @override
