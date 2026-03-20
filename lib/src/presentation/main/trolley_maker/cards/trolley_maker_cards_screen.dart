@@ -133,10 +133,10 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(
-                      height: 40,
-                    ),
-                    StyledCardName(cardName: cardName),
+                    // const SizedBox(
+                    //   height: 40,
+                    // ),
+                    // StyledCardName(cardName: cardName),
                     const SizedBox(
                       height: 40,
                     ),
