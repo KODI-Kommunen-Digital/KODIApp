@@ -84,20 +84,24 @@ class _TrolleyNewsLoadedState extends State<TrolleyNewsLoaded> {
 
   @override
   Widget build(BuildContext context) {
-    return (widget.news.isNotEmpty)
+
+    List<TrolleyNews> trolleyNews = List.from(widget.news);
+
+    trolleyNews.removeWhere((item) => item.id == 5786 || item.id == 5591);
+    return (trolleyNews.isNotEmpty)
         ? CustomScrollView(
             controller: _scrollController,
             slivers: <Widget>[
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (BuildContext context, int index) {
-                    final item = widget.news[index];
+                    final item = trolleyNews[index];
                     return Padding(
                       padding: const EdgeInsets.only(bottom: 16, top: 5),
                       child: _buildItem(item),
                     );
                   },
-                  childCount: widget.news.length,
+                  childCount: trolleyNews.length,
                 ),
               ),
             ],
