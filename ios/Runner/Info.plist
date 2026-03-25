@@ -26,9 +26,9 @@
 	<key>CFBundleShortVersionString</key>
 	<string>5.0.1</string>
 	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>????</string>git
 	<key>CFBundleVersion</key>
-	<string>22</string>
+	<string>23</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCalendarsFullAccessUsageDescription</key>
@@ -75,5 +75,11 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>This app requires to save your images user gallery</string>
 </dict>
 </plist>
