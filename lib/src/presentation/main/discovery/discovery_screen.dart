@@ -148,6 +148,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
     }
     return Scaffold(
       body: GridView.builder(
+        padding: const EdgeInsets.only(bottom: 30),
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2, // Adjust the number of columns as desired
             crossAxisSpacing: 10.0,
@@ -157,8 +158,8 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         controller: _scrollController,
         itemBuilder: (BuildContext context, int index) {
           return InkWell(
-            onTap: () {
-              navigateToLink(services[index]);
+            onTap: () async{
+              await navigateToLink(services[index]);
             },
             child: ClipRRect(
               borderRadius: BorderRadius.circular(15.0),
@@ -174,14 +175,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
-    if (service.imageLink == "2" ||
-        service.imageLink == "20" ||
-        service.imageLink == "7") {
-      await launchUrl(
-          Uri.parse(await AppBloc.discoveryCubit
-                  .getLink(int.parse(service.imageLink)) ??
-              ""),
-          mode: LaunchMode.inAppWebView);
+    if (service.imageLink == "20" ||
+        service.imageLink == "21") {
+      await launchWebUrl(url : await AppBloc.discoveryCubit
+          .getLink(int.parse(service.imageLink)) ?? "");
     } else if (service.imageLink == "7") {
       final cityId = await context.read<DiscoveryCubit>().getCitySelected();
       if (cityId != 0) {
@@ -211,6 +208,17 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       }
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': service.arguments, 'title': ''});
+    }
+  }
+
+  static Future<void> launchWebUrl({required String url}) async {
+    final Uri uri = Uri.parse(url);
+
+    debugPrint('launch url:- $url');
+    if (!await launchUrl(
+      uri,
+      mode: LaunchMode.inAppWebView,)) {
+      throw 'Could not launch URL: $url';
     }
   }
 
