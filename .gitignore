@@ -59,3 +59,4 @@ sentry.properties
 android/app/src/production/google-services.json
 android/app/src/staging/google-services.json
 ios/GoogleService-Info.plist
+ios/Runner/config/
