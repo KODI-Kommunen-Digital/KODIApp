@@ -2,6 +2,7 @@
 
 import 'dart:io';
 import 'dart:math' as math;
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -126,68 +127,85 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   void _makeAction(String link) async {
-    if (!link.startsWith("https://") && !link.startsWith("http://")) {
-      link = "https://$link";
-    }
+    final isPdf = link.toLowerCase().endsWith(".pdf");
 
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
+    if (isPdf) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: Text(
+              link.split('/').last,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            )),
+            body: const PDF(
+            ).cachedFromUrl(
+              link,
+              placeholder: (progress) => Center(child: Text("$progress %")),
+              errorWidget: (error) => Center(child: Text(error.toString())),
+            ),
+          ),
+        ),
+      );
+    } else {
+      // Open WebView
+      if (!link.startsWith("https://") && !link.startsWith("http://")) {
+        link = "https://$link";
+      }
 
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color:
-                              Theme.of(context).textTheme.bodyMedium?.color ??
-                                  Colors.white,
-                          fontWeight: FontWeight.bold,
+      final webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(link));
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          link,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).textTheme.bodyMedium?.color ??
-                            Colors.white,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                  child: WebViewWidget(controller: webViewController),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
 
   ///Build content UI
@@ -536,31 +554,42 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 decoration: const BoxDecoration(
                                   color: Colors.black,
                                 ),
-                                child: Image.network(
-                                  imageUrlString!,
+                                child: CachedNetworkImage(
+                                  imageUrl: imageUrlString ?? '',
                                   fit: BoxFit.fitHeight,
-                                  loadingBuilder: (BuildContext context,
-                                      Widget child,
-                                      ImageChunkEvent? loadingProgress) {
-                                    if (loadingProgress == null) {
-                                      return child;
-                                    } else {
-                                      return AppPlaceholder(
-                                        child: Container(
-                                          width: 120,
-                                          height: 140,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.black,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(8),
-                                              bottomLeft: Radius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Icon(Icons.error),
-                                        ),
-                                      );
-                                    }
-                                  },
+                                  placeholder: (context, url) => Container(
+                                    width: 120,
+                                    height: 140,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                      ),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/listing_default_image.png'),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      Container(
+                                    width: 120,
+                                    height: 140,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.black,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8),
+                                      ),
+                                      image: DecorationImage(
+                                        image: AssetImage(
+                                            'assets/images/listing_default_image.png'),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -841,7 +870,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       bool isAllDayEvent = product.isAllDayEvent ?? false;
 
-      if (product.startDate.isNotEmpty || product.endDate != "") {
+      if ((product.startDate!=null && product.startDate!.isNotEmpty) || product.endDate != "") {
         startDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -853,7 +882,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              isAllDayEvent ? "${product.startDate} - ${Translate.of(context).translate('all_day_event')}": product.startDate,
+              isAllDayEvent ? "${(product.startDate!=null) ? product.startDate ?? '' : ''} - ${Translate.of(context).translate('all_day_event')}": (product.startDate!=null) ? product.startDate ?? '' : '',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
@@ -863,7 +892,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         );
       }
 
-      if (product.endDate.isNotEmpty) {
+      if (product.endDate!=null && product.endDate!.isNotEmpty) {
         endDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -875,7 +904,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
             const SizedBox(width: 8),
             Text(
-              product.endDate,
+              product.endDate ?? '',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!
@@ -886,12 +915,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
 
       ///Create Date
-      if (product.createDate.isNotEmpty) {
+      if (product.createDate!=null && product.createDate!.isNotEmpty) {
         createdDate = Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              product.createDate,
+              product.createDate ?? '',
               style: Theme.of(context)
                   .textTheme
                   .titleSmall!

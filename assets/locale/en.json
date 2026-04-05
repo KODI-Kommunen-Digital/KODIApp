@@ -82,7 +82,7 @@
   "value_not_empty": "Input is empty",
   "value_not_valid_range": "Input not valid range",
   "value_not_valid_email": "Input not valid email",
-  "value_not_website": "Input not valid website",
+  "value_not_website": "Invalid website URL",
   "value_not_valid_phone": "Input not valid phone",
   "value_not_username": "value_not_username",
   "value_not_valid_password": "Input not valid password",
@@ -471,7 +471,8 @@
   "delete_account_success": "Account Deleted Successfully",
   "delete_account_fail": "Account Deletion failed. Please try later.",
   "choose_exptime":"Choose Expiry Time",
-  "enable_expiry_date":"Add an expiry date",  
+  "enable_expiry_date":"Add an expiry date",
+  "expiry_date": "Expiry date",
   "choose_stime":"Choose Start Time",
   "choose_etime":"Choose End Time",
   "message_sent":"Message Sent",
@@ -518,5 +519,5 @@
   "choose_listing_status": "Choose listing status",
   "choose_forum": "Choose forum",
   "all": "All",
-  "all_day_event": "All day event"
-}
+  "all_day_event": "All day event",
+  "category_must_see": "Sights"}

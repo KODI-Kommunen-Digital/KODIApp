@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
@@ -17,7 +18,6 @@ import 'package:heidi/src/presentation/main/account/dashboard/all_listings/cubit
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.dart';
 import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_state.dart';
 import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
-import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -327,10 +327,10 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
                                                 const SizedBox(height: 4),
                                                 Text(
                                                   item.categoryId == 3
-                                                      ? (item.endDate != ""
-                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                          : item.startDate)
-                                                      : item.createDate,
+                                                      ? ((item.endDate!=null) ? item.endDate ?? '' : '' != ""
+                                                          ? "${(item.startDate!=null) ? item.startDate ?? '' : ''} ${Translate.of(context).translate('to')} ${(item.endDate!=null) ? item.endDate ?? '' : ''}"
+                                                          : (item.startDate!=null) ? item.startDate ?? '' : '')
+                                                      : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!
@@ -794,63 +794,85 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
   }
 
   void _makeAction(String link) async {
-    if (!link.startsWith("https://") && !link.startsWith("http://")) {
-      link = "https://$link";
-    }
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
+    final isPdf = link.toLowerCase().endsWith(".pdf");
 
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+    if (isPdf) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: Text(
+              link.split('/').last,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            )),
+            body: const PDF(
+            ).cachedFromUrl(
+              link,
+              placeholder: (progress) => Center(child: Text("$progress %")),
+              errorWidget: (error) => Center(child: Text(error.toString())),
+            ),
+          ),
+        ),
+      );
+    } else {
+      // Open WebView
+      if (!link.startsWith("https://") && !link.startsWith("http://")) {
+        link = "https://$link";
+      }
+
+      final webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(link));
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          link,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                  child: WebViewWidget(controller: webViewController),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
+
 }

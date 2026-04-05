@@ -295,10 +295,10 @@ class _AllRequestsLoadedState extends State<AllRequestsLoaded> {
                                                 const SizedBox(height: 8),
                                                 Text(
                                                   item.categoryId == 3
-                                                      ? (item.endDate != ""
-                                                          ? "${item.startDate} ${Translate.of(context).translate('to')} ${item.endDate}"
-                                                          : item.startDate)
-                                                      : item.createDate,
+                                                      ? ((item.endDate!=null) ? item.endDate ?? '' : '' != ""
+                                                          ? "${(item.startDate!=null) ? item.startDate ?? '' : ''} ${Translate.of(context).translate('to')} ${(item.endDate!=null) ? item.endDate ?? '' : ''}"
+                                                          : (item.startDate!=null) ? item.startDate ?? '' : '')
+                                                      : (item.createDate!=null) ? item.createDate ?? '' : '',
                                                   style: Theme.of(context)
                                                       .textTheme
                                                       .bodySmall!

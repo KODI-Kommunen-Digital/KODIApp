@@ -13,6 +13,7 @@ import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/logger.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
 import 'package:http_parser/http_parser.dart';
+import '../../presentation/main/home/list_product/cubit/cubit.dart';
 
 class ListRepository {
   final Preferences prefs;
@@ -24,20 +25,45 @@ class ListRepository {
     required type,
     required pageNo,
     cityId,
+    currentEventFilter,
+    // DateTime? startAfterDate,
   }) async {
     final prefs = await Preferences.openBox();
-    int selectedCityId = prefs.getKeyValue(Preferences.cityId, 0);
+    int selectedCityId = prefs.getKeyValue(Preferences.serviceCityId, 0);
+
+    String eventFilter = "";
+    if (currentEventFilter != null) {
+      switch (currentEventFilter) {
+        // case ProductFilter.day:
+        //   eventFilter = 'dateFilter=today&';
+        //   break;
+        case ProductFilter.week:
+          eventFilter = 'dateFilter=week&';
+          break;
+        case ProductFilter.month:
+          eventFilter = 'dateFilter=month&';
+          break;
+      }
+    }
+    // if (startAfterDate != null) {
+    //   eventFilter +=
+    //   'startAfterDate=${DateFormat('yyyy-MM-dd').format(startAfterDate)}&endBeforeDate=${DateFormat('yyyy-MM-dd').format(startAfterDate)}&';
+    // }
 
     if (type == "category" || (type == "location" && categoryId != "")) {
       int params = categoryId;
-      final response = await Api.requestCatList(params, cityId, pageNo);
+      final response = await Api.requestCatList(params, cityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
-        if (cityId != 0) {
-          list.removeWhere((element) => element.cityId != cityId);
-        }
+        // if (cityId != 0) {
+        //   list.removeWhere((element) =>
+        //   element.cityId != cityId &&
+        //       (element.allCities == null ||
+        //           !element.allCities!.contains(cityId)));
+        // }
         return [list, response.pagination];
       }
     } else if (type == "location") {
@@ -52,7 +78,8 @@ class ListRepository {
       }
     } else if (type == "categoryService") {
       int params = categoryId;
-      final response = await Api.requestCatList(params, selectedCityId, pageNo);
+      final response = await Api.requestCatList(params, selectedCityId, pageNo,
+          eventFilter: eventFilter);
       if (response.success) {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
@@ -68,6 +95,58 @@ class ListRepository {
         final list = List.from(response.data ?? []).map((item) {
           return ProductModel.fromJson(item, setting: Application.setting);
         }).toList();
+        return [list, response.pagination];
+      }
+    }
+    return null;
+  }
+
+  static Future<List?> loadFilteredList({
+    required categoryId,
+    required String type,
+    required pageNo,
+    int? cityId,
+    List<int>? cityIds,
+    int? subCategoryId,
+    String? startDate,
+    String? endDate,
+    String? timeFilter,
+    String? dateFilter,
+    String? searchTerm
+  }) async {
+    final prefs = await Preferences.openBox();
+    int selectedCityId = cityId ?? prefs.getKeyValue(Preferences.cityId, 0);
+
+    if (type == "filterType") {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId,
+          cityId: cityId,
+          cityIds: cityIds,
+          subCategoryId: subCategoryId,
+          startDate: startDate,
+          endDate: endDate,
+          timeFilter: timeFilter,
+          dateFilter: dateFilter,
+          pageNo: pageNo);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        // if (cityId != 0) {
+        //   list.removeWhere((element) => element.cityId != cityId);
+        // }
+        return [list, response.pagination];
+      }
+    } else if (type == "searchListings" && searchTerm!=null) {
+      final response = await Api.requestFilteredList(
+          categoryId: categoryId, cityId: cityId, pageNo: pageNo, searchTerm: searchTerm);
+      if (response.success) {
+        final list = List.from(response.data ?? []).map((item) {
+          return ProductModel.fromJson(item, setting: Application.setting);
+        }).toList();
+        if (selectedCityId != 0) {
+          list.removeWhere((element) => element.cityId != selectedCityId);
+        }
         return [list, response.pagination];
       }
     }

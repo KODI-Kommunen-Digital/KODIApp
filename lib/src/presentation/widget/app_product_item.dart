@@ -142,8 +142,8 @@ class AppProductItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Visibility(
-                      visible: item!.startDate.isNotEmpty &&
-                          item!.endDate.isNotEmpty,
+                      visible: item!.startDate!=null && item!.startDate!.isNotEmpty &&
+                          item!.endDate!=null && item!.endDate!=null && item!.endDate!.isNotEmpty,
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -163,7 +163,7 @@ class AppProductItem extends StatelessWidget {
                     ),
                     Visibility(
                       visible:
-                          item!.startDate.isNotEmpty && item!.endDate == "",
+                      item!.startDate!=null && item!.startDate!.isNotEmpty && item!.endDate == "",
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -184,7 +184,7 @@ class AppProductItem extends StatelessWidget {
                       ),
                     ),
                     Visibility(
-                      visible: item?.categoryId == 1,
+                      visible: (item?.categoryId == 1 && (item?.createDate!=null)),
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white30,
@@ -193,7 +193,7 @@ class AppProductItem extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(3.5),
                           child: Text(
-                            "${item?.createDate}",
+                            (item?.createDate!=null) ? item?.createDate ?? '' : '',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodySmall!
@@ -487,7 +487,7 @@ class AppProductItem extends StatelessWidget {
                             ),
                           ),
                         Text(
-                          item?.categoryId == 1 ? "${item?.createDate}" : "",
+                          item?.categoryId == 1 ? "${(item?.createDate!=null)? item?.createDate : ""}" : "",
                           style:
                               Theme.of(context).textTheme.bodySmall!.copyWith(
                                     fontWeight: FontWeight.bold,

@@ -29,8 +29,11 @@ class ListCubit extends Cubit<ListState> {
   List listCity = [];
   bool isSearching = false;
   String? searchTerm;
+  MultiFilter? multiFilter;
 
-  Future<void> onLoad(cityId) async {
+  Future<void> onLoad(cityId, MultiFilter? filter, {isUpdate = false}) async {
+    emit(const ListState.loading());
+    multiFilter = multiFilter;
     pageNo = 1;
     final prefs = await Preferences.openBox();
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -41,13 +44,18 @@ class ListCubit extends Cubit<ListState> {
       type: type,
       pageNo: pageNo,
       cityId: cityId,
+      currentEventFilter: filter?.currentProductEventFilter,
+      // startAfterDate: filter?.startAfterDate,
     );
     if (result != null) {
       list = result[0];
       pagination = result[1];
       listLoaded = list;
-      emit(ListStateLoaded(list, listCity));
+      (isUpdate)
+          ? emit(ListStateUpdated(list, listCity))
+          : emit(ListStateLoaded(list, listCity));
     }
+    emit(ListStateUpdated(list, listCity));
   }
 
   Future<void> setCategoryFilter(int filter, int? cityId) async {
@@ -59,11 +67,11 @@ class ListCubit extends Cubit<ListState> {
       prefs.setKeyValue(Preferences.categoryId, filter);
     }
     if (cityId != null) {
-      onLoad(cityId);
+      onLoad(cityId, multiFilter);
     }
   }
 
-  Future<List<ProductModel>> newListings(int pageNo, city) async {
+  Future<List<ProductModel>> newListings(int pageNo, cityId, MultiFilter? filter) async {
     final prefs = await Preferences.openBox();
     // final cityId = prefs.getKeyValue(Preferences.cityId, 0);
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
@@ -73,8 +81,8 @@ class ListCubit extends Cubit<ListState> {
       categoryId: (categoryId == 0) ? "" : categoryId,
       type: type,
       pageNo: pageNo,
-      cityId: city,
-    );
+        cityId: cityId,
+        currentEventFilter: filter?.currentProductEventFilter);
 
     final listUpdated = result?[0] ?? [];
     if (listUpdated.isNotEmpty) {
@@ -95,7 +103,7 @@ class ListCubit extends Cubit<ListState> {
     final prefs = await Preferences.openBox();
 
     final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
-    final cityId = prefs.getKeyValue(Preferences.cityId, 0);
+    final cityId = prefs.getKeyValue(Preferences.serviceCityId, 0);
     List<ProductModel>? listDataList = [];
     MultiFilter multiFilter = MultiFilter(
         hasCategoryFilter: true,
@@ -149,53 +157,77 @@ class ListCubit extends Cubit<ListState> {
     isSearching = true;
     searchTerm = "";
     pageNo = 0;
-    onLoad(cityId);
+    onLoad(cityId, multiFilter);
   }
 
-  void onDateProductFilter(ProductFilter? type, List<ProductModel> loadedList,
-      bool filterLocation, int? currentCity) {
-    final currentDate = DateTime.now();
-    if (type == ProductFilter.month) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startMonth = startDate.month;
-          final currentMonth = currentDate.month;
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startMonth == currentMonth) &&
-                (product.cityId == currentCity);
-          } else {
-            return startMonth == currentMonth;
-          }
-        }
-        return false;
-      }).toList();
+  void onDateProductFilter(
+      ProductFilter? type,
+      List<ProductModel> loadedList,
+      bool filterLocation,
+      int? currentCity,
+      int categoryId
+      ) async {
+    String? dateFilter;
 
-      emit(ListStateUpdated(filteredList, listCity));
+    if (type == ProductFilter.month) {
+      dateFilter = "month";
     } else if (type == ProductFilter.week) {
-      filteredList = loadedList.where((product) {
-        final startDate = _parseDate(product.startDate);
-        if (startDate != null) {
-          final startWeek = _getWeekNumber(startDate);
-          final currentWeek = _getWeekNumber(currentDate);
-          if (filterLocation && (currentCity ?? 0) != 0) {
-            return (startWeek == currentWeek) &&
-                (product.cityId == currentCity);
-          } else {
-            return startWeek == currentWeek;
-          }
-        }
-        return false;
-      }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
+      dateFilter ="week";
+    }
+
+    if (dateFilter!=null) {
+      await _fetchAndEmit(
+        currentCity: currentCity,
+        dateFilter: dateFilter,
+        categoryId: categoryId
+      );
     } else if (type == null && filterLocation && (currentCity ?? 0) != 0) {
-      filteredList = loadedList.where((product) {
-        return product.cityId == currentCity;
-      }).toList();
-      emit(ListStateUpdated(filteredList, listCity));
+      await _fetchAndEmit(currentCity: currentCity, categoryId: categoryId);
     } else {
       emit(ListStateUpdated(loadedList, listCity));
     }
+  }
+
+  Future<void> _fetchAndEmit({
+    int? currentCity,
+    String? dateFilter,
+    required int categoryId
+  }) async {
+    final eventsResponse = await ListRepository.loadFilteredList(
+      categoryId: 3,
+      type: "filterType",
+      pageNo: pageNo,
+      dateFilter: dateFilter,
+      cityId: currentCity,
+    );
+
+    if (eventsResponse != null) {
+      final eventsList = eventsResponse[0] as List<ProductModel>;
+      filteredList = eventsList;
+      emit(ListStateUpdated(filteredList, listCity));
+    }
+  }
+
+  Future<void> setCity(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.serviceCityId, cityId);
+  }
+
+  Future<void> setServiceCity(int cityId) async {
+    final prefs = await Preferences.openBox();
+    prefs.setKeyValue(Preferences.serviceCityId, cityId);
+  }
+
+  Future<List<int>> getIds() async {
+    final prefs = await Preferences.openBox();
+    final categoryId = prefs.getKeyValue(Preferences.categoryId, 0);
+    final cityId = prefs.getKeyValue(Preferences.serviceCityId, 0);
+    return [categoryId, cityId];
+  }
+
+  Future<void> resetCityId( ) async {
+    final prefs = await Preferences.openBox();
+  prefs.setKeyValue(Preferences.serviceCityId, prefs.getKeyValue(Preferences.cityId, 0));
   }
 
   DateTime? _parseDate(String dateTimeString) {

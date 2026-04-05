@@ -31,6 +31,10 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
     loadLocationList();
   }
 
+  Future<void> resetCityId() async {
+    AppBloc.discoveryCubit.resetCityId();
+  }
+
   Future<void> loadLocationList() async {
     await context.read<DiscoveryCubit>().onLoad();
   }
@@ -44,6 +48,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() => resetCityId());
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,

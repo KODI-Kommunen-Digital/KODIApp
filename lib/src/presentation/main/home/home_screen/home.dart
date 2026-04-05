@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_cached_pdfview/flutter_cached_pdfview.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/data/model/model_setting.dart';
@@ -43,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late bool checkSavedCity;
   final _scrollController = ScrollController();
   bool isLoading = false;
-  bool categoryLoading = false;
+  bool categoryLoading = true;
   bool isRefreshLoader = false;
   String? banner;
   List<CategoryModel>? category = [];
@@ -120,7 +121,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _onUpdateCategory() async {
+    setState(() {
+      categoryLoading = true;
+    });
     await AppBloc.homeCubit.onLoad(false);
+    setState(() {
+      categoryLoading = false;
+    });
   }
 
   void scrollUp() {
@@ -260,6 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       banners: banner,
                       setLocationCallback: (data) async {
                         for (final list in location!) {
+                          setState(() {
+                            categoryLoading = true;
+                          });
                           if (list.title == data) {
                             _onUpdateCategory();
                             setState(() {
@@ -292,18 +302,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     SafeArea(
                       top: false,
                       bottom: false,
-                      child: Column(
-                        children: <Widget>[
-                          categoryLoading
-                              ? const CircularProgressIndicator.adaptive()
-                              : _buildCategory(AppBloc.homeCubit
-                                  .getCategoriesWithoutHidden(category ?? [])),
-                          _buildLocation(location),
-                          _buildRecent(recent, selectedCityId, location),
-                          if (isLoading)
-                            const CircularProgressIndicator.adaptive(),
-                          const SizedBox(height: 50),
-                        ],
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 6.0),
+                        child: Column(
+                          children: <Widget>[
+                            categoryLoading
+                                ? const CircularProgressIndicator.adaptive()
+                                : _buildCategory(AppBloc.homeCubit
+                                    .getCategoriesWithoutHidden(category ?? [])),
+                            _buildLocation(location),
+                            _buildRecent(recent, selectedCityId, location),
+                            if (isLoading)
+                              const CircularProgressIndicator.adaptive(),
+                            const SizedBox(height: 50),
+                          ],
+                        ),
                       ),
                     )
                   ]),
@@ -446,65 +459,87 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _makeAction(String link) async {
-    if (!link.startsWith("https://") && !link.startsWith("http://")) {
-      link = "https://$link";
-    }
-    final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
+    final isPdf = link.toLowerCase().endsWith(".pdf");
 
-    await showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+    if (isPdf) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => Scaffold(
+            appBar: AppBar(title: Text(
+              link.split('/').last,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.normal,
+              ),
+            )),
+            body: const PDF(
+            ).cachedFromUrl(
+              link,
+              placeholder: (progress) => Center(child: Text("$progress %")),
+              errorWidget: (error) => Center(child: Text(error.toString())),
+            ),
+          ),
+        ),
+      );
+    } else {
+      // Open WebView
+      if (!link.startsWith("https://") && !link.startsWith("http://")) {
+        link = "https://$link";
+      }
+
+      final webViewController = WebViewController()
+        ..setJavaScriptMode(JavaScriptMode.unrestricted)
+        ..loadRequest(Uri.parse(link));
+
+      await showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (BuildContext context) {
+          return SafeArea(
+            top: false,
+            bottom: false,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  color: Colors.black,
+                  padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          link,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
+                      IconButton(
+                        icon: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => Navigator.of(context).pop(),
                       ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height - kToolbarHeight - 30,
+                  child: WebViewWidget(controller: webViewController),
                 ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
+              ],
+            ),
+          );
+        },
+      );
+    }
   }
+
 
   void _onProductDetail(ProductModel item) {
     if (item.sourceId == 2 || item.showExternal == 1) {
