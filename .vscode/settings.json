@@ -1,4 +1,4 @@
 {
-  "dart.flutterSdkPath": "/home/yashwnat55/.puro/envs/kodi/flutter",
-    "dart.sdkPath": "/home/yashwnat55/.puro/envs/kodi/flutter/bin/cache/dart-sdk"
+  "dart.flutterSdkPath": ".fvm/versions/3.35.0",
+  "dart.sdkPath": "/home/yashwnat55/.puro/envs/kodi/flutter/bin/cache/dart-sdk"
 }
