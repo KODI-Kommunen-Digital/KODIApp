@@ -497,13 +497,13 @@ class Api {
     if (params == 3) {
       if (cityId != 0 && cityId != null) {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&cityId=$cityId&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=false&cityId=$cityId&showExternalListings=$showExternalListings';
         final result =
             await HTTPManager(forum: false).get(url: list, loading: true);
         return ResultApiModel.fromJson(result);
       } else {
         var list =
-            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=true&showExternalListings=$showExternalListings';
+            '/listings?categoryId=$params&statusId=1&pageNo=$pageNo&pageSize=19&sortByStartDate=false&showExternalListings=$showExternalListings';
         final result = await HTTPManager(forum: false).get(url: list);
         return ResultApiModel.fromJson(result);
       }
