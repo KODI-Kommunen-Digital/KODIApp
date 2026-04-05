@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:ui';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:heidi/main_prod.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,8 @@ import 'package:heidi/src/utils/configs/theme.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
+import '../../../../data/repository/waste_calendar_repository.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.user});
 
@@ -26,117 +31,166 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen>
     with WidgetsBindingObserver {
-  late final Preferences prefs;
-  late final String pushNotificationsPermission;
-  late bool _receiveNotification = true;
+
+  late Preferences _prefs;
+
+  bool _receiveNotification = true;
+  bool _receiveWasteCalendarNotification = true;
+  bool isNotificationsProgress = false;
   bool darkModeEnabled = true;
+  late WasteCalendarRepository repository;
+
 
   Future<void> initializePreferences() async {
-    final prefs = await Preferences.openBox();
-    final pushNotificationsPermission =
-        await prefs.getKeyValue(Preferences.pushNotificationsPermission, '0');
+    final permission = await _prefs.getKeyValue(
+        Preferences.pushNotificationsPermission, 'notAsked');
+    final isAuthorized = permission == 'authorized';
     final receiveNotification =
-        await prefs.getKeyValue(Preferences.receiveNotification, '0');
+    await _prefs.getKeyValue(Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
+    final receiveWasteCalendar =
+    await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, isAuthorized ? 'true' : 'false');
 
     setState(() {
-      if (pushNotificationsPermission == "authorized" &&
-          receiveNotification == "true") {
-        _receiveNotification = true;
-      } else if (pushNotificationsPermission == "authorized" &&
-          receiveNotification == "false") {
-        _receiveNotification = false;
-      } else if (pushNotificationsPermission == "denied") {
-        _receiveNotification = false;
-      }
+
+      _receiveNotification = isAuthorized && receiveNotification == 'true';
+      _receiveWasteCalendarNotification =
+          _receiveNotification && receiveWasteCalendar == 'true';
     });
+
+    repository = WasteCalendarRepository(_prefs);
   }
 
-  Future<void> updateNotificationPermissionPreference(bool newValue) async {
-    final prefs = await Preferences.openBox();
-    final pushNotificationsPermission = await prefs.getKeyValue(
-        Preferences.pushNotificationsPermission, 'notAsked');
+  Future<void> updateNotificationPermissionPreference(bool enabled) async {
+    if (isNotificationsProgress) return;
 
-    if (pushNotificationsPermission == 'denied') {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              Translate.of(context).translate('enableNotification'),
-            ),
-            content: Text(
-              Translate.of(context).translate('notificationPermission'),
-            ),
-            actions: <Widget>[
-              TextButton(
-                child: Text(
-                  Translate.of(context).translate('cancel'),
-                ),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              TextButton(
-                child: Text(
-                  Translate.of(context).translate('openSettings'),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  openAppSettings();
-                },
-              ),
-            ],
-          );
-        },
+    setState(() => isNotificationsProgress = true);
+
+    try {
+      final permission = await _prefs.getKeyValue(
+        Preferences.pushNotificationsPermission,
+        'notAsked',
       );
+
+      if (permission == 'denied') {
+        _showPermissionDialog();
+        await checkNotificationPermissionStatus();
+
+        if (!mounted) return;
+
+        setState(() {
+          _receiveNotification = false;
+          _receiveWasteCalendarNotification = false;
+        });
+        return;
+      }
+
+      await _prefs.setKeyValue(
+          Preferences.receiveNotification, enabled ? 'true' : 'false');
+      await _prefs.setKeyValue(
+          Preferences.receiveWasteCalendarNotification, enabled ? 'true' : 'false');
+
+      if (!mounted) return;
+
       setState(() {
-        _receiveNotification = false;
+        _receiveNotification = enabled;
+        _receiveWasteCalendarNotification = enabled;
       });
-      checkNotificationPermissionStatus();
-    } else {
-      setState(() {
-        _receiveNotification = newValue;
-      });
-      await prefs.setKeyValue(Preferences.receiveNotification,
-          _receiveNotification ? 'true' : 'false');
-      await FirebaseApi(globalNavKey, prefs).refreshNotifications();
+
+      await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
+      await repository.subscribeForWasteNotification(_receiveWasteCalendarNotification);
+    } catch (e, s) {
+      debugPrint('Notification update error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false); // ✅ GUARANTEED
     }
   }
 
-  Future<void> openAppSettings() async {
-    if (!await launchUrl(Uri.parse('app-settings:'))) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Failed to open app settings.'),
-      ));
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(Translate.of(context).translate('enableNotification')),
+        content: Text(
+            Translate.of(context).translate('notificationPermission')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(Translate.of(context).translate('cancel')),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              openApplicationSettings();
+            },
+            child: Text(Translate.of(context).translate('openSettings')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> updateWasteCalendarNotificationPermissionPreference(bool enabled) async {
+    if (!_receiveNotification) return;
+
+    if (isNotificationsProgress) return; // ✅ prevent double calls
+
+    setState(() => isNotificationsProgress = true);
+
+    try {
+      await _prefs.setKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        enabled ? 'true' : 'false',
+      );
+
+      if (!mounted) return;
+
+      setState(() => _receiveWasteCalendarNotification = enabled);
+
+      await repository
+          .subscribeForWasteNotification(_receiveWasteCalendarNotification);
+    } catch (e, s) {
+      debugPrint('Waste calendar notification error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false); // ✅ ALWAYS EXECUTES
+    }
+  }
+
+
+  Future<void> checkNotificationPermissionStatus() async {
+    final settings =
+    await FirebaseMessaging.instance.getNotificationSettings();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      await _prefs.setKeyValue(
+          Preferences.pushNotificationsPermission, 'authorized');
+    } else {
+      await _prefs.setKeyValue(
+          Preferences.pushNotificationsPermission, 'denied');
+
+      setState(() {
+        _receiveNotification = false;
+        _receiveWasteCalendarNotification = false;
+      });
+    }
+  }
+
+
+  Future<void> openApplicationSettings() async {
+    final bool opened = await openAppSettings(); // plugin method
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open app settings')),
+      );
     }
   }
 
   Future<String> getAppVersion() async {
     final PackageInfo info = await PackageInfo.fromPlatform();
     return info.version;
-  }
-
-  Future<void> checkNotificationPermissionStatus() async {
-    final settings = await FirebaseMessaging.instance.getNotificationSettings();
-    final prefs = await Preferences.openBox();
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      await prefs.setKeyValue(
-          Preferences.pushNotificationsPermission, 'authorized');
-      if (_receiveNotification) {
-        setState(() {
-          _receiveNotification = true;
-        });
-      } else {
-        setState(() {
-          _receiveNotification = false;
-        });
-      }
-    } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
-      await prefs.setKeyValue(
-          Preferences.pushNotificationsPermission, 'denied');
-      setState(() {
-        _receiveNotification = false;
-      });
-    }
   }
 
   Future<void> switchTheme() async {
@@ -162,9 +216,15 @@ class _SettingsScreenState extends State<SettingsScreen>
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    isDarkMode();
-    initializePreferences();
+    _init();
   }
+
+  Future<void> _init() async {
+    _prefs = await Preferences.openBox();
+    await isDarkMode();
+    await initializePreferences();
+  }
+
 
   @override
   void dispose() {
@@ -186,90 +246,119 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          Translate.of(context).translate('setting'),
+    return WillPopScope(
+      onWillPop: () async => !isNotificationsProgress,
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(
+            Translate.of(context).translate('setting'),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.symmetric(vertical: 8),
-          children: <Widget>[
-            AppListTitle(
-              title: Translate.of(context).translate('notification'),
-              trailing: CupertinoSwitch(
-                activeColor: Theme.of(context).primaryColor,
-                value: _receiveNotification,
-                onChanged: (value) async {
-                  setState(() {
-                    _receiveNotification = value;
-                  });
-                  await updateNotificationPermissionPreference(value);
-                  checkNotificationPermissionStatus();
-                },
-              ),
-            ),
-            AppListTitle(
-              title: "Dark Mode",
-              trailing: CupertinoSwitch(
-                activeColor: Theme.of(context).primaryColor,
-                value: darkModeEnabled,
-                onChanged: (value) {
-                  setState(() {
-                    darkModeEnabled = value;
-                    switchTheme();
-                  });
-                },
-              ),
-            ),
-            if (widget.user != null)
-              AppListTitle(
-                title: Translate.of(context).translate('profile_settings'),
-                onPressed: () {
-                  _onNavigate(Routes.profileSettings);
-                },
-                trailing: Row(
-                  children: <Widget>[
-                    RotatedBox(
-                      quarterTurns: AppLanguage.isRTL() ? 2 : 0,
-                      child: const Icon(
-                        Icons.keyboard_arrow_right,
-                        textDirection: TextDirection.ltr,
+        body: SafeArea(
+          child: Stack(
+            children: [
+              ListView(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                children: <Widget>[
+                  AppListTitle(
+                    title: Translate.of(context).translate('notification'),
+                    trailing: CupertinoSwitch(
+                      activeColor: Theme.of(context).primaryColor,
+                      value: _receiveNotification,
+                      onChanged: updateNotificationPermissionPreference,
+                    ),
+                  ),
+
+                  AppListTitle(
+                    title: Translate.of(context)
+                        .translate('waste_calendar_notification'),
+                    trailing: CupertinoSwitch(
+                      activeColor: Theme.of(context).primaryColor,
+                      value: _receiveWasteCalendarNotification,
+                      onChanged: _receiveNotification
+                          ? updateWasteCalendarNotificationPermissionPreference
+                          : null, // 🔒 disabled if master off
+                    ),
+                  ),
+                  AppListTitle(
+                    title: "Dark Mode",
+                    trailing: CupertinoSwitch(
+                      activeColor: Theme.of(context).primaryColor,
+                      value: darkModeEnabled,
+                      onChanged: (value) {
+                        setState(() {
+                          darkModeEnabled = value;
+                          switchTheme();
+                        });
+                      },
+                    ),
+                  ),
+                  if (widget.user != null)
+                    AppListTitle(
+                      title: Translate.of(context).translate('profile_settings'),
+                      onPressed: () {
+                        _onNavigate(Routes.profileSettings);
+                      },
+                      trailing: Row(
+                        children: <Widget>[
+                          RotatedBox(
+                            quarterTurns: AppLanguage.isRTL() ? 2 : 0,
+                            child: const Icon(
+                              Icons.keyboard_arrow_right,
+                              textDirection: TextDirection.ltr,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-            AppListTitle(
-              title: Translate.of(context).translate('version'),
-              trailing: Row(
-                mainAxisAlignment: MainAxisAlignment
-                    .spaceBetween, // Ensures space between items
-                children: <Widget>[
-                  FutureBuilder<String>(
-                    future:
-                        getAppVersion(), // This needs to be your method to get the app version
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(
-                          snapshot.data!, // Display the version number
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                        );
-                      } else {
-                        return const CircularProgressIndicator();
-                      }
-                    },
+                  AppListTitle(
+                    title: Translate.of(context).translate('version'),
+                    trailing: Row(
+                      mainAxisAlignment: MainAxisAlignment
+                          .spaceBetween, // Ensures space between items
+                      children: <Widget>[
+                        FutureBuilder<String>(
+                          future:
+                          getAppVersion(), // This needs to be your method to get the app version
+                          builder:
+                              (BuildContext context, AsyncSnapshot<String> snapshot) {
+                            if (snapshot.hasData) {
+                              return Text(
+                                snapshot.data!, // Display the version number
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              );
+                            } else {
+                              return const CircularProgressIndicator();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
+              if (isNotificationsProgress) ...[
+                const ModalBarrier(
+                  dismissible: false,
+                  color: Colors.black54,
+                ),
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator.adaptive(),
+                      const SizedBox(height: 20,),
+                      Text(Translate.of(context).translate('saving_changes'))
+                    ],
+                  ),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );

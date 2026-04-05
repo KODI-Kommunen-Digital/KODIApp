@@ -445,7 +445,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //         Uri.parse("https://www.smart-app-troisdorf.de/gewinnspiel"),
   //         mode: LaunchMode.inAppWebView);
   //   } else if (item.id == 5) {
-  //     await launchUrl(Uri.parse("https://troisdorf.dksr.city/map/"),
+  //     await launchUrl(Uri.parse("https://map.troisdorf.civora.org/"),
   //         mode: LaunchMode.inAppWebView);
   //   } else if (item.id == 6) {
   //     await launchUrl(Uri.parse("https://onlinedienste.troisdorf.de/"),
@@ -465,15 +465,18 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _onService(CategoryModel item) async {
     Routes.trackMatomoEvent(true, null, item.id, null);
     if (item.id == 5) {
-      CustomWebViewScreen.showAsBottomSheet(
-          context: context,
-          url: 'https://troisdorf.dksr.city/map/',
-          title: 'Mobilitätskarte',
-          needGeoLocation: true);
+      // CustomWebViewScreen.showAsBottomSheet(
+      //     context: context,
+      //     url: 'https://map.troisdorf.civora.org/',
+      //     title: 'Mobilitätskarte',
+      //     needGeoLocation: true);
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': 6,
+      });
     } else if (item.id == 8) {
       CustomWebViewScreen.showAsBottomSheet(
           context: context,
-          url: 'https://troisdorf.dksr.city/poimap/',
+          url: 'https://poi.troisdorf.civora.org/',
           title: 'Freizeitkarte',
           needGeoLocation: true);
     } else {
@@ -495,7 +498,7 @@ class _HomeScreenState extends State<HomeScreen> {
       case 7:
         return "https://www.stadtwerke-troisdorf.de/";
       case 8:
-        return "https://troisdorf.dksr.city/poimap/";
+        return "https://poi.troisdorf.civora.org/";
       default:
         return "";
     }
@@ -565,9 +568,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (item.id == 4 ||
                     item.id == 5 ||
                     item.id == 6 ||
-                    item.id == 7 ||
                     item.id == 8) {
                   _onService(item);
+                } else if (item.id == 7) {
+                  if(services!=null && services!.isNotEmpty){
+                    CitizenServiceModel service = services!.where((service) => service.imageLink == "13").first;
+                    Routes.trackMatomoEvent(true, null, int.parse(service.imageLink), null);
+                    Navigator.pushNamed(context, Routes.subDiscoveryScreen,
+                        arguments: service);
+                  }
                 } else {
                   _onCategory(item, category);
                 }

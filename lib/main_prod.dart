@@ -3,16 +3,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:heidi/firebase_options.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
+import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
 import 'package:heidi/src/data/repository/forum_repository.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
+import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+import 'package:heidi/src/firebase_option_production/firebase_options.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
+import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -23,9 +26,11 @@ import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
+import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
+import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
@@ -34,6 +39,7 @@ Future<void> main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/env/.envTroisdorf");
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -48,17 +54,23 @@ Future<void> main() async {
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-    // options: DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
+
+  debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
+  await MatomoTracker.instance.initialize(
+    siteId: "1",
+    url: 'https://troisdorf.matomo.cloud/matomo.php',
+  );
 
   await SentryFlutter.init((options) {
     options.dsn =
         'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
     options.tracesSampleRate = 0.01;
-  }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envTroisdorf");
+  }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
+  await CategoryManager.loadCategories();
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -76,14 +88,20 @@ class HeidiApp extends StatefulWidget {
 }
 
 class _HeidiAppState extends State<HeidiApp> {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     super.initState();
     AppBloc.applicationCubit.onSetup();
+
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isWasteCalendarSkipped = widget.prefBox.getBool(
+        Preferences.isWasteCalendarSkipped);
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -124,18 +142,23 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: Scaffold(
-                      body: BlocBuilder<ApplicationCubit, ApplicationState>(
-                        builder: (context, state) {
-                          if (state == const ApplicationState.loaded()) {
+                    home: FutureBuilder<bool?>(
+                      future: _shouldShowMainScreen(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const CircularProgressIndicator();
+                        } else {
+                          final location = snapshot.data;
+                          if (location == true ||
+                              (isWasteCalendarSkipped != null &&
+                                  isWasteCalendarSkipped)) {
                             return const MainScreen();
+                          } else {
+                            return const IntroPage();
                           }
-                          if (state == const ApplicationState.loading()) {
-                            return const SplashScreen();
-                          }
-                          return const MainScreen();
-                        },
-                      ),
+                        }
+                      },
                     ),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
@@ -157,6 +180,42 @@ class _HeidiAppState extends State<HeidiApp> {
     );
   }
 
+  Future<String?> clearLocationId() async {
+    final prefs = await Preferences.openBox();
+
+    String? location = _getStoredLocation(prefs);
+
+    if (location != null &&
+        prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
+      await prefs.setKeyValue(Preferences.selectedLocationName, null);
+      await prefs.setKeyValue(Preferences.selectedLocationId, null);
+      location = null;
+
+    }
+
+    await prefs.setKeyValue(Preferences.isAppInstalled, true);
+    return location;
+  }
+
+
+  Future<List<WasteLocation>> _loadLocations(
+      WasteCalendarRepository repository) async {
+    try {
+      List<WasteLocation> locations = [];
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      if (fetchedLocations != null) {
+        locations = fetchedLocations;
+      }
+      return locations;
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  String? _getStoredLocation(prefs) {
+    return prefs.getKeyValue(Preferences.selectedLocationName, null);
+  }
+
   VoidCallback _getTrolleyMakerTokenExpiryCallback() {
     return () {
       globalNavKey.currentState?.popUntil((route) {
@@ -164,5 +223,13 @@ class _HeidiAppState extends State<HeidiApp> {
       });
       globalNavKey.currentState?.pushNamed(Routes.trolleyMakerSignIn);
     };
+  }
+
+  Future<bool> _shouldShowMainScreen() async {
+    final prefs = await Preferences.openBox();
+    final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
+    final wasteTypes = prefs.getSelectedWasteTypes();
+    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
+    return (location != null && wasteTypes.isNotEmpty);
   }
 }

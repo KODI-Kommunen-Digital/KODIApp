@@ -3,14 +3,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
-import 'package:heidi/src/data/remote/api/firebase_api.dart';
-import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:table_calendar/table_calendar.dart';
+import '../../../../utils/translate.dart';
 import 'cubit/waste_calendar_cubit.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/data/model/model_waste_location.dart';
+import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
+import 'package:heidi/src/presentation/widget/loading_dialog.dart';
 
 class WasteCalendar extends StatefulWidget {
   const WasteCalendar({super.key});
@@ -27,75 +29,313 @@ class _WasteCalendarState extends State<WasteCalendar> {
   String? _selectedLocationId;
   String? _selectedLocationName;
   List<WasteLocation> locations = [];
+  List<WasteType> wasteTypes = [];
+  List<WasteType> selectedWasteTypes = [];
   late WasteCalendarRepository repository;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  late final String receiveWasteCalendarNotification;
+  bool isLoading = false;
+  bool isDataInitializing = false;
 
   @override
   void initState() {
     super.initState();
-    _initializeRepository();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final prefs = await Preferences.openBox();
+      final permission = await prefs.getKeyValue(
+          Preferences.pushNotificationsPermission, 'notAsked');
+      final isAuthorized = permission == 'authorized';
+      receiveWasteCalendarNotification = prefs.getKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        isAuthorized ? 'true' : 'false',
+      );
+      _initializeRepository();
+    });
+  }
+
+  void _showNotificationEnableDialog({required bool isWasteTypeEmpty}) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          title: Text(Translate.of(context)
+              .translate('enable_waste_calendar_notification_title')),
+          content: Text(Translate.of(context)
+              .translate('enable_waste_calendar_notification_desc')),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(dialogContext).pop();
+                if (isWasteTypeEmpty) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Future<void> _initializeRepository() async {
-    final prefs = await Preferences.openBox();
-    repository = WasteCalendarRepository(prefs);
-    _loadLocations();
-    _loadLocation();
+    setState(() => isDataInitializing = true);
+
+    try {
+      final prefs = await Preferences.openBox();
+      final previousWasteTypes = prefs.getSelectedWasteTypes();
+
+      if (receiveWasteCalendarNotification == 'false' &&
+          previousWasteTypes.isEmpty) {
+        _showNotificationEnableDialog(isWasteTypeEmpty: true);
+        return;
+      }
+
+      repository = WasteCalendarRepository(prefs);
+
+      await Future.wait([
+        _loadLocations(),
+        _loadWasteTypes(),
+        _loadSelectedWasteTypes(),
+      ]);
+
+      await _loadLocation();
+    } catch (e, s) {
+      debugPrint('Init error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(
+          () => isDataInitializing = false);
+    }
   }
 
   Future<void> _loadLocations() async {
     final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+
+    if (!mounted) return;
+
     setState(() {
-      if (fetchedLocations != null) {
-        locations = fetchedLocations;
+      locations = fetchedLocations ?? [];
+    });
+  }
+
+  Future<void> _loadWasteTypes() async {
+    final fetchedWasteTypes = await repository.loadWasteTypes(1);
+    if (!mounted) return;
+
+    setState(() {
+      if (fetchedWasteTypes != null) {
+        wasteTypes = fetchedWasteTypes;
       }
     });
+  }
+
+  Future<void> _loadSelectedWasteTypes() async {
+    final prefs = await Preferences.openBox();
+    final savedWasteTypeIds = prefs.getSelectedWasteTypes();
+
+    if (savedWasteTypeIds.isNotEmpty) {
+      // Only load waste types initially if not already loaded
+      if (wasteTypes.isEmpty) {
+        await _loadWasteTypes();
+      }
+
+      setState(() {
+        selectedWasteTypes = wasteTypes
+            .where((type) => savedWasteTypeIds.contains(type.id))
+            .toList();
+      });
+    } else {
+      setState(() {
+        selectedWasteTypes = [];
+      });
+    }
   }
 
   Future<void> _loadLocation() async {
     final prefs = await Preferences.openBox();
-    setState(() {
-      _selectedLocationId =
-          prefs.getKeyValue(Preferences.selectedLocationId, null);
-      _selectedLocationName =
-          prefs.getKeyValue(Preferences.selectedLocationName, null);
-      if (_selectedLocationId == null) {
-        _showLocationDialog(context);
-      } else {
-        _wasteCalenderCubit.loadWasteCollections(1, _selectedLocationId);
-      }
-    });
-  }
 
-  void _selectLocation(String locationId, String locationName) async {
-    final prefs = await Preferences.openBox();
-    final previousLocationId =
-        prefs.getKeyValue(Preferences.selectedLocationId, null);
-    await prefs.setKeyValue(Preferences.selectedLocationId, locationId);
-    await prefs.setKeyValue(Preferences.selectedLocationName, locationName);
+    if (!mounted) return;
+
+    final locationId = prefs.getKeyValue(Preferences.selectedLocationId, null);
+    final locationName =
+        prefs.getKeyValue(Preferences.selectedLocationName, null);
+
+    if (locationId == null) {
+      _showLocationDialog(context);
+      return;
+    }
+
     setState(() {
       _selectedLocationId = locationId;
       _selectedLocationName = locationName;
     });
 
-    final firebaseApi = FirebaseApi(navigatorKey, prefs);
+    _wasteCalenderCubit.loadWasteCollections(
+      1,
+      locationId,
+      selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+    );
+  }
 
-    // As now we do not need to unsubscribe because we are using hash for sub
+  Future<void> _selectLocation(
+      String locationId, String locationName, String hashedStreetName) async {
+    setState(() {
+      _selectedLocationId = locationId;
+      _selectedLocationName = locationName;
+    });
 
-    // if (previousLocationId != null) {
-    //   final previousTopic =
-    //       repository.getTopicString(int.parse(previousLocationId));
-    //   await firebaseApi.unsubscribeFromTopic(previousTopic);
-    // }
+    await repository.updateSubscription(
+      navigatorKey: navigatorKey,
+      cityId: 1,
+      locationId: locationId,
+      locationName: locationName,
+      hashedStreetName: hashedStreetName,
+    );
 
-    //final newTopic = repository.getTopicString(int.parse(locationId));
+    _wasteCalenderCubit.updateStreetId(locationId,
+        selectedWasteTypeIds:
+            selectedWasteTypes.map((type) => type.id).toList());
+  }
 
-    final newTopic = repository.getTopicFromHash(getStreetNameHash(locationName));
+  void _selectWasteTypes(List<WasteType> wasteTypes) {
+    setState(() {
+      selectedWasteTypes = wasteTypes;
+    });
+  }
 
-    await firebaseApi.subscribeToTopic(newTopic);
+  Future<void> _updateWasteTypesSubscription() async {
+    if (selectedWasteTypes.isNotEmpty) {
+      await repository.updateSubscription(
+        navigatorKey: navigatorKey,
+        cityId: 1,
+        wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
+      );
+    }
+  }
 
-    // final streetId = int.parse(locationId);
-    _wasteCalenderCubit.updateStreetId(locationId);
+  void _showWasteTypeDialog(BuildContext parentContext) {
+    // Create local copy of selected waste types for the dialog
+    List<WasteType> localSelectedWasteTypes = List.from(selectedWasteTypes);
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return Dialog(
+              insetPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.8,
+                  maxWidth: 500,
+                ),
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AppMultiSelectTypeAhead(
+                          items: wasteTypes,
+                          selectedItems: localSelectedWasteTypes,
+                          onSelectionChanged: (selectedTypes) {
+                            setDialogState(() {
+                              localSelectedWasteTypes = selectedTypes;
+                            });
+                          },
+                          hintText: 'Abfallarten eingeben',
+                          sectionTitle: 'Abfallarten auswählen',
+                        ),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text('Abbrechen'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: localSelectedWasteTypes.isEmpty
+                                  ? null
+                                  : () async {
+                                      _selectWasteTypes(
+                                          localSelectedWasteTypes);
+                                      final loadingDialog = LoadingDialog();
+                                      loadingDialog.show(
+                                        parentContext,
+                                        'Bitte warten, während wir abonnieren...',
+                                      );
+                                      try {
+                                        await _updateWasteTypesSubscription();
+                                        Navigator.pop(context);
+                                      } finally {
+                                        loadingDialog.hide(parentContext);
+                                      }
+                                    },
+                              child: const Text('Bestätigen'),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Divider(height: 0.5,),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('garbage_cans'),
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              Translate.of(context).translate('garbage_cans_description'),
+                              style: const TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 16),
+                            const Divider(height: 0.5,),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('waste_container'),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              Translate.of(context).translate('waste_container_description'),
+                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 14),
+                            Text(
+                              Translate.of(context).translate('waste_type_description'),
+                              style: TextStyle(fontSize: 13, color: Colors.grey),
+                              textAlign: TextAlign.left,
+                            ),
+                            const SizedBox(height: 10),
+                            const Divider(height: 0.5,)
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    ).then((value) {
+      _loadSelectedWasteTypes();
+    });
   }
 
   void _scrollToValues() {
@@ -112,134 +352,280 @@ class _WasteCalendarState extends State<WasteCalendar> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => _wasteCalenderCubit,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(_selectedLocationName ?? 'Straße auswählen'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.edit, color: Colors.white),
-              onPressed: () {
-                _showLocationDialog(context);
-              },
+      child: WillPopScope(
+        onWillPop: () async {
+          // Prevent back button when loading
+          if (isLoading || isDataInitializing) {
+            return false;
+          }
+          return true;
+        },
+        child: Stack(
+          children: [
+            Scaffold(
+              appBar: AppBar(
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _selectedLocationName ?? 'Straße auswählen',
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    if (!isLoading) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      if (!isLoading) {
+                        if (receiveWasteCalendarNotification == 'false') {
+                          _showNotificationEnableDialog(
+                              isWasteTypeEmpty: false);
+                        } else {
+                          _showLocationDialog(context);
+                        }
+                      }
+                    },
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.recycling),
+                    onPressed: () {
+                      if (!isLoading) {
+                        if (receiveWasteCalendarNotification == 'false') {
+                          _showNotificationEnableDialog(
+                              isWasteTypeEmpty: false);
+                        } else {
+                          _showWasteTypeDialog(context);
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
+              body: isDataInitializing
+                  ? const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    )
+                  : Stack(
+                      children: [
+                        // Main content
+                        SingleChildScrollView(
+                          controller: _scrollController,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // ... rest of your content remains the same
+                                SizedBox(
+                                  height: 200,
+                                  child: Stack(
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        child: Opacity(
+                                          opacity: 0.3,
+                                          child: Image.asset(
+                                            "assets/images/garbage.jpg",
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
+                                          ),
+                                        ),
+                                      ),
+                                      Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "${_selectedDay.day} ${_selectedDay.monthName()}",
+                                              style: const TextStyle(
+                                                  fontSize: 22,
+                                                  color: Colors.red),
+                                            ),
+                                            Text(
+                                              _selectedDay.weekdayName(),
+                                              style: const TextStyle(
+                                                  fontSize: 32,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                const Text("Nächste Abholungen",
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                                const SizedBox(height: 8),
+                                BlocBuilder<WasteCalendarCubit,
+                                    WasteCalendarState>(
+                                  builder: (context, state) {
+                                    if (state is WasteCalendarLoading) {
+                                      return const Center(
+                                          child: CircularProgressIndicator());
+                                    } else if (state is WasteCalendarLoaded) {
+                                      return state
+                                              .carouselCollections.isNotEmpty
+                                          ? SizedBox(
+                                              height: 180,
+                                              child: ListView.builder(
+                                                scrollDirection:
+                                                    Axis.horizontal,
+                                                itemCount: state
+                                                    .carouselCollections.length,
+                                                itemBuilder: (context, index) {
+                                                  return _buildWasteCard(
+                                                      state.carouselCollections[
+                                                          index]);
+                                                },
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 8.0),
+                                              child: Center(
+                                                child: Text(Translate.of(
+                                                        context)
+                                                    .translate(
+                                                        'no_pickups_scheduled')),
+                                              ),
+                                            );
+                                    } else if (state is WasteCalendarError) {
+                                      return Center(
+                                          child: Text('Error: ${state.error}'));
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                                const SizedBox(height: 20),
+                                _buildCalendar(),
+                                const SizedBox(height: 20),
+                                Text(
+                                  "Abholungen für ${_selectedDay.day}.${_selectedDay.month}.${_selectedDay.year}",
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                BlocBuilder<WasteCalendarCubit,
+                                    WasteCalendarState>(
+                                  builder: (context, state) {
+                                    if (state is WasteCalendarLoaded) {
+                                      final collectionsForSelectedDay = state
+                                          .collections
+                                          .where((collection) => isSameDay(
+                                              collection.date, _selectedDay))
+                                          .toList();
+                                      if (collectionsForSelectedDay.isEmpty) {
+                                        return const Text(
+                                            "Keine Abholungen für den ausgewählten Tag verfügbar");
+                                      }
+                                      return Column(
+                                        children:
+                                        collectionsForSelectedDay.map((collection) => ListTile(
+                                                  leading: Icon(Icons.delete,
+                                                      color: _wasteCalenderCubit
+                                                          .getColorForType(
+                                                              collection.type)),
+                                                  title: Text(
+                                                    collection.type
+                                                  ),
+                                                ))
+                                            .toList(),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                                const Padding(
+                                    padding: EdgeInsets.only(bottom: 100)),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        // Loading overlay - This should block ALL interactions
+                        if (isLoading) ...[
+                          // Full-screen barrier that blocks all touches
+                          GestureDetector(
+                            onTap: () {},
+                            onPanDown: (_) {},
+                            child: Container(
+                              color: Colors.black54,
+                              width: double.infinity,
+                              height: double.infinity,
+                            ),
+                          ),
+
+                          // Loading indicator in center
+                          Center(
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).canvasColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              constraints: const BoxConstraints(
+                                maxWidth: 300,
+                                minWidth: 200,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  const CircularProgressIndicator(),
+                                  const SizedBox(height: 20),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Bitte warten, während wir abonnieren...',
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
+                    ),
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          controller: _scrollController,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 200,
-                  child: Stack(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(15.0),
-                        child: Opacity(
-                          opacity: 0.3,
-                          child: Image.asset(
-                            "assets/images/garbage.jpg",
-                            fit: BoxFit.cover,
-                            width: double.infinity,
-                            height: double.infinity,
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "${_selectedDay.day} ${_selectedDay.monthName()}",
-                              style: const TextStyle(
-                                  fontSize: 22, color: Colors.red),
-                            ),
-                            Text(
-                              _selectedDay.weekdayName(),
-                              style: const TextStyle(
-                                  fontSize: 32, fontWeight: FontWeight.bold),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Text("Nächste Abholungen",
-                    style:
-                        TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
-                  builder: (context, state) {
-                    if (state is WasteCalendarLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (state is WasteCalendarLoaded) {
-                      return SizedBox(
-                        height: 180,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: state.carouselCollections.length,
-                          itemBuilder: (context, index) {
-                            return _buildWasteCard(
-                                state.carouselCollections[index]);
-                          },
-                        ),
-                      );
-                    } else if (state is WasteCalendarError) {
-                      return Center(child: Text('Error: ${state.error}'));
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                const SizedBox(height: 20),
-                _buildCalendar(),
-                const SizedBox(height: 20),
-                Text(
-                  "Abholungen für ${_selectedDay.day}.${_selectedDay.month}.${_selectedDay.year}",
-                  style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
-                  builder: (context, state) {
-                    if (state is WasteCalendarLoaded) {
-                      final collectionsForSelectedDay = state.collections
-                          .where((collection) =>
-                              isSameDay(collection.date, _selectedDay))
-                          .toList();
-                      if (collectionsForSelectedDay.isEmpty) {
-                        return const Text(
-                            "Keine Abholungen für den ausgewählten Tag verfügbar");
-                      }
-                      return Column(
-                        children: collectionsForSelectedDay
-                            .map((collection) => ListTile(
-                                  leading: Icon(Icons.delete,
-                                      color: _wasteCalenderCubit
-                                          .getColorForType(collection.type)),
-                                  title: Text(collection.type),
-                                ))
-                            .toList(),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(bottom: 100)),
-              ],
-            ),
-          ),
-        ),
       ),
     );
+  }
+
+  List<WasteCollection> removeMultiples(
+      List<WasteCollection> collectionsForSelectedDay) {
+    final List<WasteCollection> filteredCollections = [];
+    bool restmuellSeen = false;
+
+    for (var collection in collectionsForSelectedDay) {
+      final isRestmuell = collection.type.toLowerCase().contains('restmüll');
+
+      if (isRestmuell) {
+        if (restmuellSeen) continue;
+        restmuellSeen = true;
+      }
+
+      filteredCollections.add(collection);
+    }
+    return filteredCollections;
   }
 
   Widget _buildWasteCard(WasteCollection collection) {
@@ -446,41 +832,86 @@ class _WasteCalendarState extends State<WasteCalendar> {
     );
   }
 
-  void _showLocationDialog(BuildContext context) {
-    final TextEditingController typeAheadController = TextEditingController();
+  void _showLocationDialog(BuildContext parentContext) async {
+    final prefs = await Preferences.openBox();
+    final locationId = prefs.getKeyValue(Preferences.selectedLocationId, null);
 
     showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('Wähle deinen Ort'),
-          content: TypeAheadField(
-            builder: (context, typeAheadController, focusNode) {
-              return TextField(
-                controller: typeAheadController,
-                focusNode: focusNode,
-                decoration: const InputDecoration(
-                  hintText: 'Straßennamen eingeben',
-                  suffixIcon: Icon(Icons.arrow_drop_down),
-                ),
-              );
-            },
-            itemBuilder: (context, WasteLocation suggestion) {
-              return ListTile(
-                title: Text(suggestion.name),
-              );
-            },
-            suggestionsCallback: (pattern) {
-              return locations
-                  .where((item) =>
-                      item.name.toLowerCase().startsWith(pattern.toLowerCase()))
-                  .toList();
-            },
-            onSelected: (WasteLocation suggestion) {
-              typeAheadController.text = suggestion.name;
-              _selectLocation(suggestion.id.toString(), suggestion.name);
-              Navigator.pop(context);
-            },
+      context: parentContext,
+      barrierDismissible: false,
+      builder: (dialogContext) {
+        return WillPopScope(
+          onWillPop: () async {
+            // If locationId is null, pop the entire screen
+            if (locationId == null) {
+              Navigator.of(dialogContext).pop(); // Close dialog
+              Navigator.of(parentContext).pop(); // Close screen
+              return false; // Don't let default behavior
+            }
+            return true; // Allow default back behavior
+          },
+          child: AlertDialog(
+            title: const Text('Wähle deinen Ort'),
+            content: TypeAheadField<WasteLocation>(
+              builder: (context, controller, focusNode) {
+                return TextField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  decoration: const InputDecoration(
+                    hintText: 'Straßennamen eingeben',
+                    suffixIcon: Icon(Icons.arrow_drop_down),
+                  ),
+                );
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(title: Text(suggestion.name));
+              },
+              suggestionsCallback: (pattern) {
+                if (pattern.isEmpty) return locations;
+                return locations
+                    .where((item) =>
+                        item.name.toLowerCase().contains(pattern.toLowerCase()))
+                    .toList();
+              },
+              onSelected: (WasteLocation suggestion) async {
+                Navigator.pop(dialogContext);
+                setState(() => isLoading = true);
+
+                try {
+                  await _selectLocation(
+                    suggestion.id.toString(),
+                    suggestion.name,
+                    suggestion.hashedStreetName,
+                  );
+
+                  final prefs = await Preferences.openBox();
+                  final previousWasteTypes = prefs.getSelectedWasteTypes();
+
+                  if (previousWasteTypes.isEmpty && mounted) {
+                    _showWasteTypeDialog(parentContext);
+                  }
+                } finally {
+                  if (!mounted) return;
+                  setState(() => isLoading = false);
+                }
+              },
+            ),
+            actions: [
+              // Add a cancel button to make it clear
+              TextButton(
+                onPressed: () {
+                  if (locationId == null) {
+                    Navigator.of(dialogContext).pop();
+                    Navigator.of(parentContext).pop();
+                  } else {
+                    Navigator.of(dialogContext).pop();
+                  }
+                },
+                child: Text(locationId == null
+                    ? Translate.of(context).translate('cancel')
+                    : 'Abbrechen'),
+              ),
+            ],
           ),
         );
       },

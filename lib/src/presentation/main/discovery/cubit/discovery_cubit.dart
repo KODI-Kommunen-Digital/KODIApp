@@ -185,11 +185,11 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "4": "https://onlinedienste.troisdorf.de/",
       "5":
           "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
-      "6": "https://troisdorf.dksr.city/map/",
+      "6": "https://map.troisdorf.civora.org/",
       "7": "https://web.troisdorf.de/chatbot/",
       "8":
           "https://onlinedienste.troisdorf.de/detail/-/vr-bis-detail/dienstleistung/524/show",
-      "9": "https://troisdorf.dksr.city/poimap/",
+      "9": "https://poi.troisdorf.civora.org/",
       "11":
           "https://www.troisdorf.de/de/rathaus-service/buergerservice/neubuergerpaket/",
       "12": "https://www.aggua.de/",
@@ -198,7 +198,9 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       "15":
           "https://www.troisdorf.de/de/rathaus-service/buergerservice/virtuelles-beratungsbuero/",
       "17": "https://www.rundblick-troisdorf.de/",
-      "18": "https://www.trowow.de/"
+      "18": "https://www.trowow.de/",
+      "19": "https://www.stadtwerke-troisdorf.de/",
+      "20": "https://www.troisdorf.city/smart-app",
     };
     return serviceLinks[imageLink];
   }
