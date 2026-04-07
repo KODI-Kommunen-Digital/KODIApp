@@ -1029,7 +1029,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 errorText: _errorContent,
                 controller: _textContentController,
                 focusNode: _focusContent,
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.newline,
                 onChanged: (text) {
                   _errorContent = UtilValidator.validate(
                     _textContentController.text,
@@ -1183,7 +1183,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 errorText: _errorContent,
                 controller: _textContentController,
                 focusNode: _focusContent,
-                textInputAction: TextInputAction.done,
+                textInputAction: TextInputAction.newline,
                 onChanged: (text) {
                   _errorContent = UtilValidator.validate(
                     _textContentController.text,
