@@ -22,7 +22,10 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:heidi/src/utils/validate.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill_delta_from_html/parser/html_to_delta.dart';
+import 'package:vsc_quill_delta_to_html/vsc_quill_delta_to_html.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'cubit/add_listing_cubit.dart';
 
 class AddListingScreen extends StatefulWidget {
@@ -42,7 +45,6 @@ class AddListingScreen extends StatefulWidget {
 class _AddListingScreenState extends State<AddListingScreen> {
   final regInt = RegExp('[^0-9]');
   final _textTitleController = TextEditingController();
-  final _textContentController = TextEditingController();
   final _textTagsController = TextEditingController();
   final _textAddressController = TextEditingController();
   final _textZipCodeController = TextEditingController();
@@ -55,6 +57,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _textPriceMinController = TextEditingController();
   final _textPriceMaxController = TextEditingController();
   final _textPlaceController = TextEditingController();
+  QuillController _quillController = QuillController.basic();
 
   final _focusTitle = FocusNode();
   final _focusContent = FocusNode();
@@ -67,12 +70,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
   final _focusPrice = FocusNode();
 
   bool _processing = false;
+  bool _isInitialized = false;
   String? _errorTitle;
   String? _errorContent;
   String? _errorZipCode;
   String? _errorPhone;
-
-  // String? _errorEmail;
   String? _errorWebsite;
   String? _errorStatus;
   String? _errorSDate;
@@ -108,24 +110,20 @@ class _AddListingScreenState extends State<AddListingScreen> {
   late int? currentCity;
   late List<dynamic> jsonCategory;
 
-  // Poll options state
   List<PollOptionModel> pollOptions = [];
   final List<TextEditingController> _pollOptionControllers = [];
 
   @override
   void initState() {
     super.initState();
-    _onProcess();
+   
     if (widget.item != null) {
       if (widget.item?.expiryDate != null && widget.item?.expiryDate != "") {
         _isExpiryDateEnabled = true;
-      } else if (widget.item?.expiryDate == null &&
-          widget.item?.expiryDate == "") {
+      } else if (widget.item?.expiryDate == null && widget.item?.expiryDate == "") {
         _isExpiryDateEnabled = false;
       }
-      context
-          .read<AddListingCubit>()
-          .setCategoryId(selectedCategory?.toLowerCase());
+      context.read<AddListingCubit>().setCategoryId(selectedCategory?.toLowerCase());
     } else if (widget.item == null) {
       _setDefaultExpiryDate();
       _isExpiryDateEnabled = true;
@@ -146,7 +144,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
   @override
   void didChangeDependencies() async {
     super.didChangeDependencies();
-    currentCity = await context.read<AddListingCubit>().getCurrentCityId();
+    if (_isInitialized) return;
+      _isInitialized = true;
     _onProcess();
   }
 
@@ -155,10 +154,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return document.body!.text;
   }
 
+  void _loadHtmlToQuill() {
+    final htmlString = widget.item?.description ?? "";
+    if (htmlString.isNotEmpty) {
+      final deltaOps = HtmlToDelta().convert(htmlString).toList();
+      final delta = Delta.fromOperations(deltaOps);
+      setState(() {
+        _quillController = QuillController(
+          document: Document.fromDelta(delta),
+          selection: const TextSelection.collapsed(offset: 0),
+        );
+      });
+    }
+  }
+
   @override
   void dispose() {
     _textTitleController.dispose();
-    _textContentController.dispose();
     _textTagsController.dispose();
     _textAddressController.dispose();
     _textZipCodeController.dispose();
@@ -170,6 +182,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _textPriceController.dispose();
     _textPriceMinController.dispose();
     _textPriceMaxController.dispose();
+    _quillController.dispose();
     _focusTitle.dispose();
     _focusContent.dispose();
     _focusAddress.dispose();
@@ -179,7 +192,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
     _focusEmail.dispose();
     _focusWebsite.dispose();
     _focusPrice.dispose();
-    // Dispose poll option controllers
     for (var controller in _pollOptionControllers) {
       controller.dispose();
     }
@@ -223,10 +235,8 @@ class _AddListingScreenState extends State<AddListingScreen> {
               Visibility(
                 visible: isLoading,
                 child: Container(
-                  color: Colors.black.withOpacity(0.5), // Overlay background
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  color: Colors.black.withOpacity(0.5),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
               ),
             ],
@@ -237,18 +247,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   }
 
   void _onProcess() async {
-    final loadCitiesResponse =
-        await context.read<AddListingCubit>().loadCities();
+    currentCity = await context.read<AddListingCubit>().getCurrentCityId();
+    final loadCitiesResponse = await context.read<AddListingCubit>().loadCities();
     if (!mounted) return;
-    final loadCategoryResponse =
-        await context.read<AddListingCubit>().loadCategory();
+    final loadCategoryResponse = await context.read<AddListingCubit>().loadCategory();
     if (!loadCategoryResponse?.data.isEmpty) {
       jsonCategory = loadCategoryResponse!.data;
       final selectedCategory = jsonCategory.first['name'];
       if (!mounted) return;
-      final subCategoryResponse = await context
-          .read<AddListingCubit>()
-          .loadSubCategory(selectedCategory);
+      final subCategoryResponse = await context.read<AddListingCubit>().loadSubCategory(selectedCategory);
       listSubCategory = subCategoryResponse!.data;
     }
     setState(() {
@@ -257,7 +264,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         for (var cityData in loadCitiesResponse!.data) {
           if (cityData['id'] == currentCity) {
             selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
+            break;
           }
         }
       } else {
@@ -283,7 +290,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
       _featurePdf = widget.item?.pdf;
       statusId = widget.item?.statusId;
       _textTitleController.text = widget.item!.title;
-      _textContentController.text = clearedText(widget.item!.description);
+      _loadHtmlToQuill();
       _textAddressController.text = widget.item!.address;
       _textZipCodeController.text = widget.item?.zipCode ?? '';
       _textPhoneController.text = widget.item?.phone ?? '';
@@ -295,45 +302,31 @@ class _AddListingScreenState extends State<AddListingScreen> {
       selectedSubCategory = listSubCategory.firstWhere(
           (element) => element["id"] == widget.item!.subcategoryId)["name"];
 
-      final city = listCity
-          .firstWhere((element) => element['id'] == widget.item?.cityId);
+      final city = listCity.firstWhere((element) => element['id'] == widget.item?.cityId);
       selectedCity = city['name'];
-      if (selectedCategory?.toLowerCase() == "news" ||
-          selectedCategory == null) {
-        final subCategoryResponse = await context
-            .read<AddListingCubit>()
-            .loadSubCategory(selectedCategory?.toLowerCase());
+      if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+        final subCategoryResponse = await context.read<AddListingCubit>().loadSubCategory(selectedCategory?.toLowerCase());
         listSubCategory = subCategoryResponse!.data;
       }
       if (widget.item?.startDate != '') {
         List<String> startDateTime = widget.item!.startDate.split(' ');
         List<String> endDateTime = widget.item!.endDate.split(' ');
-
         if (startDateTime.length == 2) {
           String dateString = startDateTime[0];
           DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
           _startDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
           List<String> startTimeParts = startDateTime[1].split(':');
-          int startHour = int.parse(startTimeParts[0]);
-          int startMinute = int.parse(startTimeParts[1]);
-          _startTime = TimeOfDay(hour: startHour, minute: startMinute);
+          _startTime = TimeOfDay(hour: int.parse(startTimeParts[0]), minute: int.parse(startTimeParts[1]));
           if (endDateTime.length == 2) {
             String dateString = endDateTime[0];
-            DateTime parsedDateTime =
-                DateFormat('dd.MM.yyyy').parse(dateString);
+            DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
             List<String> endTimeParts = endDateTime[1].split(':');
-            int endHour = int.parse(endTimeParts[0]);
-            int endMinute = int.parse(endTimeParts[1]);
-            _endTime = TimeOfDay(hour: endHour, minute: endMinute);
+            _endTime = TimeOfDay(hour: int.parse(endTimeParts[0]), minute: int.parse(endTimeParts[1]));
           } else {
             String dateString = startDateTime[0];
-            DateTime parsedDateTime =
-                DateFormat('dd.MM.yyyy').parse(dateString);
+            DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
             _endDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
-            // List<String> endTimeParts = endDateTime[0].split(':');
-            // int endHour = int.parse(endTimeParts[0]);
-            // int endMinute = int.parse(endTimeParts[1]);
             _endTime = null;
           }
         }
@@ -344,30 +337,23 @@ class _AddListingScreenState extends State<AddListingScreen> {
         DateTime parsedDateTime = DateFormat('dd.MM.yyyy').parse(dateString);
         _expiryDate = DateFormat('yyyy-MM-dd').format(parsedDateTime);
         List<String> startTimeParts = expiryDateTime[1].split(':');
-        int startHour = int.parse(startTimeParts[0]);
-        int startMinute = int.parse(startTimeParts[1]);
-        _expiryTime = TimeOfDay(hour: startHour, minute: startMinute);
+        _expiryTime = TimeOfDay(hour: int.parse(startTimeParts[0]), minute: int.parse(startTimeParts[1]));
       }
       if (widget.item?.pdf == '') {
         List<File> images = await downloadImages(widget.item!.imageLists!);
         setState(() {
           selectedImages?.clear();
           downloadedImages.clear();
-          if (images.isNotEmpty) {
-            if (!images[0].path.contains('Defaultimage')) {
-              selectedImages?.addAll(images);
-            }
+          if (images.isNotEmpty && !images[0].path.contains('Defaultimage')) {
+            selectedImages?.addAll(images);
           }
           downloadedImages.addAll(images);
         });
       }
-
-      // Load existing poll options if the category is poll
       if (widget.item!.categoryId == 25) {
         pollOptions = widget.item!.pollOptions ?? [];
         for (var pollOption in pollOptions) {
-          var controller = TextEditingController(text: pollOption.title);
-          _pollOptionControllers.add(controller);
+          _pollOptionControllers.add(TextEditingController(text: pollOption.title));
         }
       }
     } else {
@@ -375,7 +361,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
         for (var cityData in loadCitiesResponse?.data) {
           if (cityData['id'] == currentCity) {
             selectedCity = cityData['name'];
-            break; // Exit the loop once the desired city is found
+            break;
           }
         }
       } else {
@@ -383,14 +369,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
       if (!loadCategoryResponse?.data.isEmpty) {
         if (!mounted) return;
-        if (selectedCategory?.toLowerCase() == "news" ||
-            selectedCategory == null) {
-          final subCategoryResponse = await context
-              .read<AddListingCubit>()
-              .loadSubCategory(Translate.of(context)
-                  .translate(_getCategoryTranslation(
-                      loadCategoryResponse!.data.first['id']))
-                  .toLowerCase());
+        if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+          final subCategoryResponse = await context.read<AddListingCubit>().loadSubCategory(
+              Translate.of(context).translate(_getCategoryTranslation(loadCategoryResponse!.data.first['id'])).toLowerCase());
           setState(() {
             listSubCategory = subCategoryResponse!.data;
           });
@@ -407,14 +388,11 @@ class _AddListingScreenState extends State<AddListingScreen> {
     final DateTime initialDate = _expiryDate != null
         ? DateFormat('yyyy-MM-dd').parse(_expiryDate!)
         : now.add(const Duration(days: 14));
-    final DateTime firstDate = DateTime(now.year - 5);
-    final DateTime lastDate = DateTime(now.year + 5);
-
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: firstDate,
-      lastDate: lastDate,
+      firstDate: DateTime(now.year - 5),
+      lastDate: DateTime(now.year + 5),
     );
     if (picked != null && mounted) {
       setState(() {
@@ -426,20 +404,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   Future<List<File>> downloadImages(List<ImageListModel> imageUrls) async {
     List<File> downloadedImages = [];
     Directory appDocumentsDirectory = await getApplicationDocumentsDirectory();
-
     imageUrls.sort((a, b) => a.imageOrder!.compareTo(b.imageOrder as num));
     for (final imageUrl in imageUrls) {
       try {
-        var response = await http
-            .get(Uri.parse("${Application.picturesURL}${imageUrl.logo}"));
+        var response = await http.get(Uri.parse("${Application.picturesURL}${imageUrl.logo}"));
         if (response.statusCode == 200) {
-          String savePath =
-              '${appDocumentsDirectory.path}/${imageUrl.logo?.replaceAll(RegExp(r'[^\w\s\.]'), '_')}';
-
+          String savePath = '${appDocumentsDirectory.path}/${imageUrl.logo?.replaceAll(RegExp(r'[^\w\s\.]'), '_')}';
           File file = File(savePath);
           await file.writeAsBytes(response.bodyBytes);
           downloadedImages.add(file);
-          // return file;
         } else {
           throw Exception('Failed to download image');
         }
@@ -453,163 +426,78 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onShowStartDatePicker(String? startDate) async {
     final now = DateTime.now();
     final dateFormat = DateFormat('yyyy-MM-dd');
-    if (startDate != null) {
-      final parsedDate = dateFormat.parse(startDate);
-      final picked = await showDatePicker(
-        initialDate: parsedDate,
-        firstDate: DateTime(now.year),
-        context: context,
-        lastDate: DateTime(now.year + 2, now.month, now.day),
-      );
-      if (picked != null) {
-        setState(() {
-          _startDate = picked.dateView;
-        });
-      }
-    } else {
-      final picked = await showDatePicker(
-        initialDate: now,
-        firstDate: DateTime(now.year),
-        context: context,
-        lastDate: DateTime(now.year + 2, now.month, now.day),
-      );
-
-      if (picked != null) {
-        setState(() {
-          _startDate = picked.dateView;
-        });
-      }
-    }
+    final initialDate = startDate != null ? dateFormat.parse(startDate) : now;
+    final picked = await showDatePicker(
+      initialDate: initialDate,
+      firstDate: DateTime(now.year),
+      context: context,
+      lastDate: DateTime(now.year + 2, now.month, now.day),
+    );
+    if (picked != null) setState(() => _startDate = picked.dateView);
   }
 
   void _onShowEndDatePicker(String? endDate) async {
     final now = DateTime.now();
     final dateFormat = DateFormat('yyyy-MM-dd');
-    if (endDate != null) {
-      final parsedDate = dateFormat.parse(endDate);
-      final picked = await showDatePicker(
-        initialDate: parsedDate,
-        firstDate: DateTime(now.year),
-        context: context,
-        lastDate: DateTime(now.year + 2, now.month, now.day),
-      );
-      if (picked != null) {
-        setState(() {
-          _endDate = picked.dateView;
-        });
-      }
-    } else {
-      final picked = await showDatePicker(
-        initialDate: now,
-        firstDate: DateTime(now.year),
-        context: context,
-        lastDate: DateTime(now.year + 2, now.month, now.day),
-      );
-
-      if (picked != null) {
-        setState(() {
-          _endDate = picked.dateView;
-        });
-      }
-    }
+    final initialDate = endDate != null ? dateFormat.parse(endDate) : now;
+    final picked = await showDatePicker(
+      initialDate: initialDate,
+      firstDate: DateTime(now.year),
+      context: context,
+      lastDate: DateTime(now.year + 2, now.month, now.day),
+    );
+    if (picked != null) setState(() => _endDate = picked.dateView);
   }
 
   Future<void> _onShowExpiryTimePicker() async {
-    final TimeOfDay initialTime =
-        _expiryTime ?? const TimeOfDay(hour: 0, minute: 0);
-
-    final TimeOfDay? pickedTime = await showTimePicker(
+    final pickedTime = await showTimePicker(
       context: context,
-      initialTime: initialTime,
+      initialTime: _expiryTime ?? const TimeOfDay(hour: 0, minute: 0),
     );
-
-    if (pickedTime != null && mounted) {
-      setState(() {
-        _expiryTime = pickedTime;
-      });
-    }
+    if (pickedTime != null && mounted) setState(() => _expiryTime = pickedTime);
   }
 
   Future<void> _onShowStartTimePicker(TimeOfDay? startTime) async {
-    if (startTime != null) {
-      final pickedTime = await showTimePicker(
-        context: context,
-        initialTime: startTime,
-      );
-
-      if (pickedTime != null) {
-        setState(() {
-          _startTime = pickedTime;
-        });
-      }
-    } else {
-      final pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      if (pickedTime != null) {
-        setState(() {
-          _startTime = pickedTime;
-        });
-      }
-    }
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: startTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null) setState(() => _startTime = pickedTime);
   }
 
   Future<void> _onShowEndTimePicker(TimeOfDay? endTime) async {
-    if (endTime != null) {
-      final pickedTime = await showTimePicker(
-        context: context,
-        initialTime: endTime,
-      );
-
-      if (pickedTime != null) {
-        setState(() {
-          _endTime = pickedTime;
-        });
-      }
-    } else {
-      final pickedTime = await showTimePicker(
-        context: context,
-        initialTime: TimeOfDay.now(),
-      );
-
-      if (pickedTime != null) {
-        setState(() {
-          _endTime = pickedTime;
-        });
-      }
-    }
+    final pickedTime = await showTimePicker(
+      context: context,
+      initialTime: endTime ?? TimeOfDay.now(),
+    );
+    if (pickedTime != null) setState(() => _endTime = pickedTime);
   }
 
   void _onSubmit() async {
     final success = _validData();
     if (success) {
+      final htmlContent = QuillDeltaToHtmlConverter(
+        _quillController.document.toDelta().toJson(),
+        ConverterOptions(),
+      ).convert();
+
       if (widget.item != null) {
-        await context
-            .read<AddListingCubit>()
-            .setCategoryId(selectedCategory?.toLowerCase());
+        await context.read<AddListingCubit>().setCategoryId(selectedCategory?.toLowerCase());
         if (isImageChanged) {
-          await context
-              .read<AddListingCubit>()
-              .deleteImage(widget.item?.cityId, widget.item?.id);
-          await context
-              .read<AddListingCubit>()
-              .deletePdf(widget.item?.cityId, widget.item?.id);
+          await context.read<AddListingCubit>().deleteImage(widget.item?.cityId, widget.item?.id);
+          await context.read<AddListingCubit>().deletePdf(widget.item?.cityId, widget.item?.id);
         }
         String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
         TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+        setState(() => isLoading = true);
 
-        setState(() {
-          isLoading = true;
-        });
         final result = await context.read<AddListingCubit>().onEdit(
               cityId: widget.item?.cityId,
               categoryId: widget.item!.categoryId,
               listingId: widget.item?.id,
               title: _textTitleController.text,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: htmlContent,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -627,23 +515,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
               statusId: statusId,
               imagesList: selectedImages,
               pollOptions: selectedCategory?.toLowerCase() == 'polls'
-                  ? pollOptions
-                      .map((option) => PollOptionModel(
-                            id: option.id,
-                            title: _pollOptionControllers[
-                                    pollOptions.indexOf(option)]
-                                .text,
-                            listingsId: option.listingsId,
-                            votes: option.votes,
-                          ))
-                      .toList()
+                  ? pollOptions.map((option) => PollOptionModel(
+                        id: option.id,
+                        title: _pollOptionControllers[pollOptions.indexOf(option)].text,
+                        listingsId: option.listingsId,
+                        votes: option.votes,
+                      )).toList()
                   : null,
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
-          setState(() {
-            isLoading = false;
-          });
+          setState(() => isLoading = false);
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearAssets();
@@ -651,16 +533,14 @@ class _AddListingScreenState extends State<AddListingScreen> {
       } else {
         String? submitExpiryDate = _isExpiryDateEnabled ? _expiryDate : null;
         TimeOfDay? submitExpiryTime = _isExpiryDateEnabled ? _expiryTime : null;
+        setState(() => isLoading = true);
 
-        setState(() {
-          isLoading = true;
-        });
         final result = await context.read<AddListingCubit>().onSubmit(
               cityId: cityId ?? 1,
               title: _textTitleController.text,
               city: selectedCity,
               place: _textPlaceController.text,
-              description: _textContentController.text,
+              description: htmlContent,
               address: _textAddressController.text,
               email: _textEmailController.text,
               phone: _textPhoneController.text,
@@ -675,23 +555,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
               imagesList: selectedImages,
               isImageChanged: isImageChanged,
               pollOptions: selectedCategory?.toLowerCase() == 'polls'
-                  ? pollOptions
-                      .map((option) => PollOptionModel(
-                            id: option.id,
-                            title: _pollOptionControllers[
-                                    pollOptions.indexOf(option)]
-                                .text,
-                            listingsId: option.listingsId,
-                            votes: option.votes,
-                          ))
-                      .toList()
+                  ? pollOptions.map((option) => PollOptionModel(
+                        id: option.id,
+                        title: _pollOptionControllers[pollOptions.indexOf(option)].text,
+                        listingsId: option.listingsId,
+                        votes: option.votes,
+                      )).toList()
                   : null,
             );
         if (result) {
           await AppBloc.homeCubit.onLoad(false);
-          setState(() {
-            isLoading = false;
-          });
+          setState(() => isLoading = false);
           _onSuccess();
           if (!mounted) return;
           context.read<AddListingCubit>().clearImagePath();
@@ -700,15 +574,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
         } else {
           ScaffoldMessenger.of(context).removeCurrentSnackBar();
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                Translate.of(context).translate("error_message"),
-              ),
-            ),
+            SnackBar(content: Text(Translate.of(context).translate("error_message"))),
           );
-          setState(() {
-            isLoading = false;
-          });
+          setState(() => isLoading = false);
         }
       }
     }
@@ -716,7 +584,6 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   void _onSuccess() {
     Navigator.pop(context);
-    // context.read<HomeCubit>().onLoad(false);
     if (widget.isNewList) {
       Navigator.pushNamed(context, Routes.submitSuccess);
     }
@@ -728,40 +595,24 @@ class _AddListingScreenState extends State<AddListingScreen> {
       type: ValidateType.number,
       allowEmpty: true,
     );
-
     _errorPhone = UtilValidator.validate(
       _textPhoneController.text,
       type: ValidateType.phone,
       allowEmpty: true,
     );
-
-    // _errorEmail = UtilValidator.validate(
-    //   _textEmailController.text,
-    //   type: ValidateType.email,
-    //   allowEmpty: true,
-    // );
-
     _errorWebsite = UtilValidator.validate(
       _textWebsiteController.text,
       allowEmpty: true,
+      type: ValidateType.website,
     );
+    _errorStatus = UtilValidator.validate(_textStatusController.text, allowEmpty: true);
+    _errorTitle = UtilValidator.validate(_textTitleController.text, allowEmpty: false);
 
-    _errorStatus = UtilValidator.validate(
-      _textStatusController.text,
-      allowEmpty: true,
-    );
-
-    _errorWebsite = UtilValidator.validate(_textWebsiteController.text,
-        allowEmpty: true, type: ValidateType.website);
-
-    _errorTitle =
-        UtilValidator.validate(_textTitleController.text, allowEmpty: false);
-
-    if (_textContentController.text.length >= 65535) {
+    final plainText = _quillController.document.toPlainText().trim();
+    if (plainText.length >= 65535) {
       _errorContent = "value_desc_limit_exceeded";
     } else {
-      _errorContent = UtilValidator.validate(_textContentController.text,
-          allowEmpty: false);
+      _errorContent = UtilValidator.validate(plainText, allowEmpty: false);
     }
 
     if (selectedCategory?.toLowerCase() == "events") {
@@ -772,37 +623,17 @@ class _AddListingScreenState extends State<AddListingScreen> {
       }
     }
 
-    List<String?> errors = [
-      _errorTitle,
-      _errorContent,
-      _errorCategory,
-      _errorPhone,
-      // _errorEmail,
-      _errorWebsite,
-      _errorStatus,
-      _errorSDate,
-    ];
+    List<String?> errors = [_errorTitle, _errorContent, _errorCategory, _errorPhone, _errorWebsite, _errorStatus, _errorSDate];
 
-    if (_errorTitle != null ||
-        _errorContent != null ||
-        _errorCategory != null ||
-        _errorPhone != null ||
-        // _errorEmail != null ||
-        _errorWebsite != null ||
-        _errorStatus != null ||
-        _errorSDate != null) {
+    if (errors.any((e) => e != null)) {
       String errorMessage = "";
       for (var element in errors) {
-        if (element != null &&
-            !errorMessage.contains(Translate.of(context).translate(element))) {
-          errorMessage =
-              "$errorMessage${Translate.of(context).translate(element)}, ";
+        if (element != null && !errorMessage.contains(Translate.of(context).translate(element))) {
+          errorMessage = "$errorMessage${Translate.of(context).translate(element)}, ";
         }
       }
       errorMessage = errorMessage.substring(0, errorMessage.length - 2);
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(errorMessage)));
-
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(errorMessage)));
       setState(() {});
       return false;
     }
@@ -811,47 +642,96 @@ class _AddListingScreenState extends State<AddListingScreen> {
 
   String? _getCategoryTranslation(int id) {
     Map<int, String> categories = {
-      1: "category_news",
-      3: "category_events",
-      4: "category_clubs",
-      5: "category_products",
-      6: "category_offer_search",
-      7: "category_citizen_info",
-      9: "category_lost_found",
-      10: "category_companies",
-      11: "category_public_transport",
-      12: "category_offers",
-      13: "category_food",
-      14: "category_rathaus",
-      15: "category_newsletter",
-      16: "category_official_notification",
-      25: "category_polls",
+      1: "category_news", 3: "category_events", 4: "category_clubs",
+      5: "category_products", 6: "category_offer_search", 7: "category_citizen_info",
+      9: "category_lost_found", 10: "category_companies", 11: "category_public_transport",
+      12: "category_offers", 13: "category_food", 14: "category_rathaus",
+      15: "category_newsletter", 16: "category_official_notification", 25: "category_polls",
     };
     return categories[id];
   }
 
   String? _getSubCategoryTranslation(int id) {
     Map<int, String> subCategories = {
-      1: "subcategory_newsflash",
-      3: "subcategory_politics",
-      4: "subcategory_economy",
-      5: "subcategory_sports",
-      7: "subcategory_local",
-      8: "subcategory_club_news",
-      9: "subcategory_road",
-      10: "subcategory_official_notification",
-      11: "subcategory_timeless_news"
+      1: "subcategory_newsflash", 3: "subcategory_politics", 4: "subcategory_economy",
+      5: "subcategory_sports", 7: "subcategory_local", 8: "subcategory_club_news",
+      9: "subcategory_road", 10: "subcategory_official_notification", 11: "subcategory_timeless_news"
     };
     return subCategories[id];
   }
 
+  Widget _buildQuillEditor() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Theme.of(context).dividerColor),
+        borderRadius: BorderRadius.circular(8),
+        color: Theme.of(context).cardColor,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          QuillSimpleToolbar(
+            controller: _quillController,
+            config: QuillSimpleToolbarConfig(
+              showBoldButton: true,
+              showItalicButton: true,
+              showUnderLineButton: true,
+              showListNumbers: true,
+              showListBullets: true,
+              showStrikeThrough: true,
+              showLink: false,
+              showHeaderStyle: false,
+              showAlignmentButtons: false,
+              showFontSize: false,
+              showInlineCode: false,
+              showQuote: false,
+              showCodeBlock: false,
+              showBackgroundColorButton: false,
+              showColorButton: false,
+              showSubscript: false,
+              showSuperscript: false,
+              showSearchButton: false,
+              showClipboardCut: false,
+              showClipboardCopy: false,
+              showFontFamily: false,
+              showDirection: false,
+              showRedo: false,
+              showUndo: false,
+              showIndent: false,
+              showListCheck: false,
+              showClipboardPaste: false,
+              showClearFormat: false,
+            ),
+          ),
+          Divider(height: 2, color: Theme.of(context).dividerColor),
+          SizedBox(
+            height: 200,
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: QuillEditor.basic(
+                controller: _quillController,
+                config: const QuillEditorConfig(
+                  placeholder: 'Enter content here...',
+                ),
+              ),
+            ),
+          ),
+          if (_errorContent != null)
+            Padding(
+              padding: const EdgeInsets.only(left: 12, bottom: 4),
+              child: Text(
+                Translate.of(context).translate(_errorContent),
+                style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.error),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildContent() {
     if (_processing) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(
-          strokeWidth: 2,
-        ),
-      );
+      return const Center(child: CircularProgressIndicator.adaptive(strokeWidth: 2));
     }
 
     return SingleChildScrollView(
@@ -860,129 +740,51 @@ class _AddListingScreenState extends State<AddListingScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // ── Image picker (same for polls and non-polls) ──
+            SizedBox(
+              height: 180,
+              child: AppUploadImage(
+                title: Translate.of(context).translate('upload_feature_image_pdf'),
+                image: _featurePdf == ''
+                    ? selectedImages!.isNotEmpty ? selectedImages![0].path : null
+                    : _featurePdf,
+                profile: false,
+                forumGroup: false,
+                onDelete: () {
+                  if (selectedImages!.isNotEmpty) {
+                    setState(() {
+                      selectedImages?.removeAt(0);
+                      isImageChanged = true;
+                    });
+                  }
+                },
+                onChange: (result) {
+                  if (result.isNotEmpty) {
+                    setState(() {
+                      selectedImages?.clear();
+                      if (downloadedImages.isNotEmpty && !downloadedImages[0].path.contains('Defaultimage')) {
+                        selectedImages?.addAll(downloadedImages);
+                      }
+                      selectedImages?.addAll(result);
+                    });
+                  } else {
+                    setState(() => selectedImages?.clear());
+                  }
+                  isImageChanged = true;
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+            Visibility(visible: selectedImages!.length > 1, child: _buildImageList()),
+            const SizedBox(height: 16),
+
+            // ── POLLS category ──
             if (selectedCategory?.toLowerCase() == "polls") ...[
-              SizedBox(
-                height: 180,
-                child: AppUploadImage(
-                  title: Translate.of(context)
-                      .translate('upload_feature_image_pdf'),
-                  image: _featurePdf == ''
-                      ? selectedImages!.isNotEmpty
-                          ? selectedImages![0].path
-                          : null
-                      // downloadedImages[0].path
-                      : _featurePdf,
-                  profile: false,
-                  forumGroup: false,
-                  onDelete: () {
-                    if (selectedImages!.isNotEmpty) {
-                      setState(() {
-                        // downloadedImages.removeAt(0);
-                        selectedImages?.removeAt(0);
-                        isImageChanged = true;
-                      });
-                    }
-                  },
-                  onChange: (result) {
-                    if (result.isNotEmpty) {
-                      setState(() {
-                        selectedImages?.clear();
-                        if (downloadedImages.isNotEmpty &&
-                            !downloadedImages[0]
-                                .path
-                                .contains('Defaultimage')) {
-                          selectedImages?.addAll(downloadedImages);
-                        }
-                        selectedImages?.addAll(result);
-                      });
-                    } else {
-                      setState(() {
-                        selectedImages?.clear();
-                      });
-                    }
-                    isImageChanged = true;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Visibility(
-                visible: selectedImages!.length > 1,
-                child: _buildImageList(),
-              ),
-              const SizedBox(height: 16),
-            ],
-            if (selectedCategory?.toLowerCase() != "polls") ...[
-              SizedBox(
-                height: 180,
-                child: AppUploadImage(
-                  title: Translate.of(context)
-                      .translate('upload_feature_image_pdf'),
-                  image: _featurePdf == ''
-                      ? selectedImages!.isNotEmpty
-                          ? selectedImages![0].path
-                          : null
-                      // downloadedImages[0].path
-                      : _featurePdf,
-                  profile: false,
-                  forumGroup: false,
-                  onDelete: () {
-                    if (selectedImages!.isNotEmpty) {
-                      setState(() {
-                        // downloadedImages.removeAt(0);
-                        selectedImages?.removeAt(0);
-                        isImageChanged = true;
-                      });
-                    }
-                  },
-                  onChange: (result) {
-                    if (result.isNotEmpty) {
-                      setState(() {
-                        selectedImages?.clear();
-                        if (downloadedImages.isNotEmpty &&
-                            !downloadedImages[0]
-                                .path
-                                .contains('Defaultimage')) {
-                          selectedImages?.addAll(downloadedImages);
-                        }
-                        selectedImages?.addAll(result);
-                      });
-                    } else {
-                      setState(() {
-                        selectedImages?.clear();
-                      });
-                    }
-                    isImageChanged = true;
-                  },
-                ),
-              ),
-              const SizedBox(height: 16),
-              Visibility(
-                visible: selectedImages!.length > 1,
-                child: _buildImageList(),
-              ),
-              const SizedBox(height: 16),
-            ],
-            if (selectedCategory?.toLowerCase() == "polls") ...[
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text.rich(
-                  TextSpan(
-                    text: Translate.of(context).translate('question'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                    children: const <TextSpan>[
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('question'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_question'),
@@ -990,153 +792,63 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 controller: _textTitleController,
                 focusNode: _focusTitle,
                 textInputAction: TextInputAction.next,
-                onChanged: (text) {
-                  _errorTitle = UtilValidator.validate(
-                    _textTitleController.text,
-                  );
-                },
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusTitle,
-                    _focusContent,
-                  );
-                },
+                onChanged: (text) => _errorTitle = UtilValidator.validate(_textTitleController.text),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusTitle, _focusContent),
               ),
               const SizedBox(height: 16),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('input_content'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('input_content'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
-              AppTextInput(
-                maxLines: 3,
-                hintText: Translate.of(context).translate('input_content'),
-                errorText: _errorContent,
-                controller: _textContentController,
-                focusNode: _focusContent,
-                textInputAction: TextInputAction.newline,
-                onChanged: (text) {
-                  _errorContent = UtilValidator.validate(
-                    _textContentController.text,
-                  );
-                },
-              ),
+              _buildQuillEditor(),
               const SizedBox(height: 16),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('category'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('category'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
-                                  value: category['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
-                            }).toList(),
-                            onChanged: (value) async {
-                              setState(
-                                () {
-                                  selectedCategory = value as String?;
-                                  context.read<AddListingCubit>().setCategoryId(
-                                      selectedCategory?.toLowerCase());
-                                },
-                              );
-                            },
-                          ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 8),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('poll_options'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+              Row(children: [
+                Expanded(
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context).translate('input_category')),
+                          value: selectedCategory,
+                          items: listCategory.map((category) => DropdownMenuItem(
+                            value: category['name'],
+                            child: Text(Translate.of(context).translate(_getCategoryTranslation(category['id']))),
+                          )).toList(),
+                          onChanged: (value) => setState(() {
+                            selectedCategory = value as String?;
+                            context.read<AddListingCubit>().setCategoryId(selectedCategory?.toLowerCase());
+                          }),
+                        ),
                 ),
-              ),
+              ]),
+              const SizedBox(height: 8),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('poll_options'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
               ..._buildPollOptionFields(),
               const SizedBox(height: 16),
-              Center(
-                child: ElevatedButton(
-                  onPressed: _addPollOption,
-                  child: Text(Translate.of(context).translate('add_option')),
-                ),
-              ),
+              Center(child: ElevatedButton(onPressed: _addPollOption, child: Text(Translate.of(context).translate('add_option')))),
             ],
+
+            // ── NON-POLLS categories ──
             if (selectedCategory?.toLowerCase() != "polls") ...[
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text.rich(
-                  TextSpan(
-                    text: Translate.of(context).translate('title'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                    children: const <TextSpan>[
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ]),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('title'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_title'),
@@ -1144,135 +856,59 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 controller: _textTitleController,
                 focusNode: _focusTitle,
                 textInputAction: TextInputAction.next,
-                onChanged: (text) {
-                  _errorTitle = UtilValidator.validate(
-                    _textTitleController.text,
-                  );
-                },
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusTitle,
-                    _focusContent,
-                  );
-                },
+                onChanged: (text) => _errorTitle = UtilValidator.validate(_textTitleController.text),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusTitle, _focusContent),
               ),
               const SizedBox(height: 16),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('input_content'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('input_content'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
-              AppTextInput(
-                maxLines: 3,
-                hintText: Translate.of(context).translate('input_content'),
-                errorText: _errorContent,
-                controller: _textContentController,
-                focusNode: _focusContent,
-                textInputAction: TextInputAction.newline,
-                onChanged: (text) {
-                  _errorContent = UtilValidator.validate(
-                    _textContentController.text,
-                  );
-                },
-              ),
+              _buildQuillEditor(),
               const SizedBox(height: 16),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('category'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('category'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: listCategory.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(Translate.of(context)
-                                .translate('input_category')),
-                            value: selectedCategory,
-                            items: listCategory.map((category) {
-                              return DropdownMenuItem(
-                                  value: category['name'],
-                                  child: Text(Translate.of(context).translate(
-                                      _getCategoryTranslation(
-                                          category['id']))));
-                            }).toList(),
-                            onChanged: (value) async {
-                              setState(
-                                () {
-                                  selectedCategory = value as String?;
-                                  context.read<AddListingCubit>().setCategoryId(
-                                      selectedCategory?.toLowerCase());
-                                },
-                              );
-                              if (selectedCategory?.toLowerCase() == "news" ||
-                                  selectedCategory == null) {
-                                selectSubCategory(
-                                    selectedCategory?.toLowerCase());
-                                _setDefaultExpiryDate();
-                              }
-                            },
-                          ),
-                  )
-                ],
-              ),
-              if (selectedCategory?.toLowerCase() == "news" ||
-                  selectedCategory == null)
-                const SizedBox(height: 8),
-              if (selectedCategory?.toLowerCase() == "news" ||
-                  selectedCategory == null)
-                Text.rich(
-                  TextSpan(
-                    text: Translate.of(context).translate('subCategory'),
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                    children: const <TextSpan>[
-                      TextSpan(
-                        text: ' *',
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
+              Row(children: [
+                Expanded(
+                  child: listCategory.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context).translate('input_category')),
+                          value: selectedCategory,
+                          items: listCategory.map((category) => DropdownMenuItem(
+                            value: category['name'],
+                            child: Text(Translate.of(context).translate(_getCategoryTranslation(category['id']))),
+                          )).toList(),
+                          onChanged: (value) async {
+                            setState(() {
+                              selectedCategory = value as String?;
+                              context.read<AddListingCubit>().setCategoryId(selectedCategory?.toLowerCase());
+                            });
+                            if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) {
+                              selectSubCategory(selectedCategory?.toLowerCase());
+                              _setDefaultExpiryDate();
+                            }
+                          },
                         ),
-                      ),
-                    ],
-                  ),
                 ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
+              ]),
+              if (selectedCategory?.toLowerCase() == "news" || selectedCategory == null) ...[
+                const SizedBox(height: 8),
+                Text.rich(TextSpan(
+                  text: Translate.of(context).translate('subCategory'),
+                  style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                  children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                )),
+                const SizedBox(height: 8),
+                Row(children: [
                   if (selectedCategory?.toLowerCase() == "news")
                     Expanded(
                       child: listSubCategory.isEmpty
@@ -1280,221 +916,125 @@ class _AddListingScreenState extends State<AddListingScreen> {
                           : DropdownButton(
                               isExpanded: true,
                               menuMaxHeight: 200,
-                              hint: Text(Translate.of(context)
-                                  .translate('input_subcategory')),
+                              hint: Text(Translate.of(context).translate('input_subcategory')),
                               value: selectedSubCategory,
-                              items: listSubCategory.map((subcategory) {
-                                return DropdownMenuItem(
-                                    value: subcategory['name'],
-                                    child: Text(Translate.of(context).translate(
-                                        _getSubCategoryTranslation(
-                                            subcategory['id']))));
-                              }).toList(),
+                              items: listSubCategory.map((subcategory) => DropdownMenuItem(
+                                value: subcategory['name'],
+                                child: Text(Translate.of(context).translate(_getSubCategoryTranslation(subcategory['id']))),
+                              )).toList(),
                               onChanged: (value) {
-                                context
-                                    .read<AddListingCubit>()
-                                    .getSubCategoryId(value);
+                                context.read<AddListingCubit>().getSubCategoryId(value);
                                 setState(() {
                                   selectedSubCategory = value as String?;
-                                  context
-                                      .read<AddListingCubit>()
-                                      .setSubCategoryId(
-                                          selectedSubCategory?.toLowerCase());
+                                  context.read<AddListingCubit>().setSubCategoryId(selectedSubCategory?.toLowerCase());
                                 });
                               },
                             ),
                     ),
-                ],
-              ),
-              if (selectedCategory?.toLowerCase() == "news" ||
-                  selectedCategory == null)
-                const SizedBox(height: 8),
+                ]),
+              ],
               const SizedBox(height: 8),
-              Text.rich(
-                TextSpan(
-                  text: Translate.of(context).translate('city'),
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.bold),
-                  children: const <TextSpan>[
-                    TextSpan(
-                      text: ' *',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              Text.rich(TextSpan(
+                text: Translate.of(context).translate('city'),
+                style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+              )),
               const SizedBox(height: 8),
-              Row(
-                children: [
-                  Expanded(
-                    child: listCity.isEmpty
-                        ? const LinearProgressIndicator()
-                        : DropdownButton(
-                            isExpanded: true,
-                            menuMaxHeight: 200,
-                            hint: Text(
-                                Translate.of(context).translate('input_city')),
-                            value: selectedCity ?? listCity.first['name'],
-                            items: listCity.map((city) {
-                              return DropdownMenuItem(
-                                  value: city['name'],
-                                  child: Text(city['name']));
-                            }).toList(),
-                            onChanged: widget.item == null
-                                ? (value) async {
-                                    setState(() {
-                                      selectedCity = value as String?;
-                                      for (var element in listCity) {
-                                        if (element["name"] == value) {
-                                          cityId = element["id"];
-                                        }
-                                      }
-                                    });
-                                    selectedVillage = null;
-                                    context
-                                        .read<AddListingCubit>()
-                                        .clearVillage();
-                                    if (value != null) {
-                                      final loadVillageResponse = await context
-                                          .read<AddListingCubit>()
-                                          .loadVillages(value);
-                                      selectedVillage = loadVillageResponse
-                                          .data.first['name'];
-                                      villageId =
-                                          loadVillageResponse.data.first['id'];
-                                      setState(() {
-                                        listVillage = loadVillageResponse.data;
-                                      });
+              Row(children: [
+                Expanded(
+                  child: listCity.isEmpty
+                      ? const LinearProgressIndicator()
+                      : DropdownButton(
+                          isExpanded: true,
+                          menuMaxHeight: 200,
+                          hint: Text(Translate.of(context).translate('input_city')),
+                          value: selectedCity ?? listCity.first['name'],
+                          items: listCity.map((city) => DropdownMenuItem(value: city['name'], child: Text(city['name']))).toList(),
+                          onChanged: widget.item == null
+                              ? (value) async {
+                                  setState(() {
+                                    selectedCity = value as String?;
+                                    for (var element in listCity) {
+                                      if (element["name"] == value) cityId = element["id"];
                                     }
+                                  });
+                                  selectedVillage = null;
+                                  context.read<AddListingCubit>().clearVillage();
+                                  if (value != null) {
+                                    final loadVillageResponse = await context.read<AddListingCubit>().loadVillages(value);
+                                    selectedVillage = loadVillageResponse.data.first['name'];
+                                    villageId = loadVillageResponse.data.first['id'];
+                                    setState(() => listVillage = loadVillageResponse.data);
                                   }
-                                : null),
-                  ),
-                ],
-              ),
+                                }
+                              : null,
+                        ),
+                ),
+              ]),
               const SizedBox(height: 6),
               if (selectedCategory?.toLowerCase() == "news")
-                Padding(
-                  padding: const EdgeInsets.only(left: 0),
-                  child: Row(
-                    children: [
-                      Checkbox(
-                        value: _isExpiryDateEnabled,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            _isExpiryDateEnabled = value!;
-                            if (_isExpiryDateEnabled &&
-                                (_expiryDate == null || _expiryTime == null)) {
-                              DateTime now = DateTime.now();
-                              DateTime twoWeeksFromNow =
-                                  now.add(const Duration(days: 14));
-                              _expiryDate ??= DateFormat('yyyy-MM-dd')
-                                  .format(twoWeeksFromNow);
-                              _expiryTime ??=
-                                  const TimeOfDay(hour: 0, minute: 0);
-                            }
-                          });
-                        },
-                        activeColor: Theme.of(context).primaryColor,
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isExpiryDateEnabled = !_isExpiryDateEnabled;
-                            });
-                          },
-                          child: Text(
-                            Translate.of(context)
-                                .translate('enable_expiry_date'),
-                            style: Theme.of(context).textTheme.bodyMedium,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ),
-                    ],
+                Row(children: [
+                  Checkbox(
+                    value: _isExpiryDateEnabled,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        _isExpiryDateEnabled = value!;
+                        if (_isExpiryDateEnabled && (_expiryDate == null || _expiryTime == null)) {
+                          DateTime now = DateTime.now();
+                          _expiryDate ??= DateFormat('yyyy-MM-dd').format(now.add(const Duration(days: 14)));
+                          _expiryTime ??= const TimeOfDay(hour: 0, minute: 0);
+                        }
+                      });
+                    },
+                    activeColor: Theme.of(context).primaryColor,
                   ),
-                ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _isExpiryDateEnabled = !_isExpiryDateEnabled),
+                      child: Text(
+                        Translate.of(context).translate('enable_expiry_date'),
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ),
+                ]),
               const SizedBox(height: 6),
               Visibility(
-                visible: (selectedCategory?.toLowerCase() == "news") &&
-                    (_isExpiryDateEnabled || widget.item?.timeless == 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 10),
-                    Text.rich(
-                      TextSpan(
-                        text: Translate.of(context).translate('expiry_date'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                        children: const <TextSpan>[
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                      leading: Icon(
-                        Icons.calendar_today_outlined,
-                        color: Theme.of(context).hintColor,
-                      ),
-                      value: _expiryDate,
-                      title: Translate.of(context).translate(
-                        'choose_date',
-                      ),
-                      onPressed: () async {
-                        _onShowExpiryDatePicker();
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                        leading: Icon(
-                          Icons.access_time,
-                          color: Theme.of(context).hintColor,
-                        ),
-                        value: _expiryTime?.format(context),
-                        title: Translate.of(context).translate(
-                          'choose_exptime',
-                        ),
-                        onPressed: () async {
-                          _onShowExpiryTimePicker();
-                        }),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                visible: (selectedCategory?.toLowerCase() == "news") && (_isExpiryDateEnabled || widget.item?.timeless == 0),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const SizedBox(height: 10),
+                  Text.rich(TextSpan(
+                    text: Translate.of(context).translate('expiry_date'),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                    children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                  )),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.calendar_today_outlined, color: Theme.of(context).hintColor),
+                    value: _expiryDate,
+                    title: Translate.of(context).translate('choose_date'),
+                    onPressed: () async => _onShowExpiryDatePicker(),
+                  ),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.access_time, color: Theme.of(context).hintColor),
+                    value: _expiryTime?.format(context),
+                    title: Translate.of(context).translate('choose_exptime'),
+                    onPressed: () async => _onShowExpiryTimePicker(),
+                  ),
+                  const SizedBox(height: 16),
+                ]),
               ),
               const SizedBox(height: 10),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_address'),
-                // errorText: _errorAddress,
                 controller: _textAddressController,
                 focusNode: _focusAddress,
                 textInputAction: TextInputAction.next,
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusAddress,
-                    _focusZipCode,
-                  );
-                },
-                leading: Icon(
-                  Icons.home_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusAddress, _focusZipCode),
+                leading: Icon(Icons.home_outlined, color: Theme.of(context).hintColor),
               ),
               const SizedBox(height: 8),
               AppTextInput(
@@ -1505,26 +1045,9 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 maxLength: 5,
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.number,
-                onChanged: (text) {
-                  setState(() {
-                    _errorZipCode = UtilValidator.validate(
-                      _textZipCodeController.text,
-                      type: ValidateType.number,
-                      allowEmpty: true,
-                    );
-                  });
-                },
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusZipCode,
-                    _focusPhone,
-                  );
-                },
-                leading: Icon(
-                  Icons.wallet_travel_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
+                onChanged: (text) => setState(() => _errorZipCode = UtilValidator.validate(_textZipCodeController.text, type: ValidateType.number, allowEmpty: true)),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusZipCode, _focusPhone),
+                leading: Icon(Icons.wallet_travel_outlined, color: Theme.of(context).hintColor),
               ),
               const SizedBox(height: 8),
               AppTextInput(
@@ -1535,54 +1058,18 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 maxLength: 15,
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.next,
-                onChanged: (text) {
-                  setState(() {
-                    _errorPhone = UtilValidator.validate(
-                      _textPhoneController.text,
-                      type: ValidateType.phone,
-                      allowEmpty: true,
-                    );
-                  });
-                },
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusPhone,
-                    _focusEmail,
-                  );
-                },
-                leading: Icon(
-                  Icons.phone_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
+                onChanged: (text) => setState(() => _errorPhone = UtilValidator.validate(_textPhoneController.text, type: ValidateType.phone, allowEmpty: true)),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusPhone, _focusEmail),
+                leading: Icon(Icons.phone_outlined, color: Theme.of(context).hintColor),
               ),
               const SizedBox(height: 8),
               AppTextInput(
                 hintText: Translate.of(context).translate('input_email'),
-                // errorText: _errorEmail,
                 controller: _textEmailController,
                 focusNode: _focusEmail,
                 textInputAction: TextInputAction.next,
-                // onChanged: (text) {
-                //   setState(() {
-                //     _errorEmail = UtilValidator.validate(
-                //       _textEmailController.text,
-                //       type: ValidateType.email,
-                //       allowEmpty: true,
-                //     );
-                //   });
-                // },
-                onSubmitted: (text) {
-                  Utils.fieldFocusChange(
-                    context,
-                    _focusEmail,
-                    _focusWebsite,
-                  );
-                },
-                leading: Icon(
-                  Icons.email_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
+                onSubmitted: (text) => Utils.fieldFocusChange(context, _focusEmail, _focusWebsite),
+                leading: Icon(Icons.email_outlined, color: Theme.of(context).hintColor),
               ),
               const SizedBox(height: 8),
               AppTextInput(
@@ -1591,139 +1078,63 @@ class _AddListingScreenState extends State<AddListingScreen> {
                 controller: _textWebsiteController,
                 focusNode: _focusWebsite,
                 textInputAction: TextInputAction.done,
-                onChanged: (text) {
-                  setState(() {
-                    _errorWebsite = UtilValidator.validate(
-                        _textWebsiteController.text,
-                        allowEmpty: true,
-                        type: ValidateType.website);
-                  });
-                },
-                leading: Icon(
-                  Icons.language_outlined,
-                  color: Theme.of(context).hintColor,
-                ),
+                onChanged: (text) => setState(() => _errorWebsite = UtilValidator.validate(_textWebsiteController.text, allowEmpty: true, type: ValidateType.website)),
+                leading: Icon(Icons.language_outlined, color: Theme.of(context).hintColor),
               ),
               Visibility(
                 visible: selectedCategory?.toLowerCase() == "events",
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 16),
-                    Text.rich(
-                      TextSpan(
-                        text: Translate.of(context).translate('start_date'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                        children: const <TextSpan>[
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                      leading: Icon(
-                        Icons.calendar_today_outlined,
-                        color: Theme.of(context).hintColor,
-                      ),
-                      value: _startDate,
-                      title: Translate.of(context).translate(
-                        'choose_date',
-                      ),
-                      onPressed: () async {
-                        _onShowStartDatePicker(_startDate);
-                      },
-                    ),
-                    const SizedBox(height: 8),
-                    Text.rich(
-                      TextSpan(
-                        text: Translate.of(context).translate('start_time'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                        children: const <TextSpan>[
-                          TextSpan(
-                            text: ' *',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                        leading: Icon(
-                          Icons.access_time,
-                          color: Theme.of(context).hintColor,
-                        ),
-                        value: _startTime?.format(context),
-                        title: Translate.of(context).translate(
-                          'choose_stime',
-                        ),
-                        onPressed: () async {
-                          _onShowStartTimePicker(_startTime);
-                        }),
-                    const SizedBox(height: 16),
-                    Text.rich(
-                      TextSpan(
-                        text: Translate.of(context).translate('end_date'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                      leading: Icon(
-                        Icons.calendar_today_outlined,
-                        color: Theme.of(context).hintColor,
-                      ),
-                      value: _endDate,
-                      title: Translate.of(context).translate(
-                        'choose_date',
-                      ),
-                      onPressed: () async {
-                        _onShowEndDatePicker(_endDate);
-                      },
-                    ),
-                    const SizedBox(height: 16),
-                    Text.rich(
-                      TextSpan(
-                        text: Translate.of(context).translate('end_time'),
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    AppPickerItem(
-                      leading: Icon(
-                        Icons.access_time,
-                        color: Theme.of(context).hintColor,
-                      ),
-                      value: _endTime?.format(context),
-                      title: Translate.of(context).translate(
-                        'choose_etime',
-                      ),
-                      onPressed: () async {
-                        _onShowEndTimePicker(_endTime);
-                      },
-                    ),
-                  ],
-                ),
+                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  const SizedBox(height: 16),
+                  Text.rich(TextSpan(
+                    text: Translate.of(context).translate('start_date'),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                    children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                  )),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.calendar_today_outlined, color: Theme.of(context).hintColor),
+                    value: _startDate,
+                    title: Translate.of(context).translate('choose_date'),
+                    onPressed: () async => _onShowStartDatePicker(_startDate),
+                  ),
+                  const SizedBox(height: 8),
+                  Text.rich(TextSpan(
+                    text: Translate.of(context).translate('start_time'),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                    children: const [TextSpan(text: ' *', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold))],
+                  )),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.access_time, color: Theme.of(context).hintColor),
+                    value: _startTime?.format(context),
+                    title: Translate.of(context).translate('choose_stime'),
+                    onPressed: () async => _onShowStartTimePicker(_startTime),
+                  ),
+                  const SizedBox(height: 16),
+                  Text.rich(TextSpan(
+                    text: Translate.of(context).translate('end_date'),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                  )),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.calendar_today_outlined, color: Theme.of(context).hintColor),
+                    value: _endDate,
+                    title: Translate.of(context).translate('choose_date'),
+                    onPressed: () async => _onShowEndDatePicker(_endDate),
+                  ),
+                  const SizedBox(height: 16),
+                  Text.rich(TextSpan(
+                    text: Translate.of(context).translate('end_time'),
+                    style: Theme.of(context).textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold),
+                  )),
+                  const SizedBox(height: 8),
+                  AppPickerItem(
+                    leading: Icon(Icons.access_time, color: Theme.of(context).hintColor),
+                    value: _endTime?.format(context),
+                    title: Translate.of(context).translate('choose_etime'),
+                    onPressed: () async => _onShowEndTimePicker(_endTime),
+                  ),
+                ]),
               ),
             ],
           ],
@@ -1736,30 +1147,22 @@ class _AddListingScreenState extends State<AddListingScreen> {
     return List<Widget>.generate(pollOptions.length, (index) {
       return Padding(
         padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          children: [
-            Expanded(
-              child: AppTextInput(
-                hintText: Translate.of(context).translate('option_title'),
-                controller: _pollOptionControllers[index],
-                onChanged: (text) {
-                  setState(() {
-                    pollOptions[index].title = text;
-                  });
-                },
-              ),
+        child: Row(children: [
+          Expanded(
+            child: AppTextInput(
+              hintText: Translate.of(context).translate('option_title'),
+              controller: _pollOptionControllers[index],
+              onChanged: (text) => setState(() => pollOptions[index].title = text),
             ),
-            IconButton(
-              icon: Icon(Icons.delete, color: Colors.red[900]),
-              onPressed: () {
-                setState(() {
-                  pollOptions.removeAt(index);
-                  _pollOptionControllers.removeAt(index);
-                });
-              },
-            ),
-          ],
-        ),
+          ),
+          IconButton(
+            icon: Icon(Icons.delete, color: Colors.red[900]),
+            onPressed: () => setState(() {
+              pollOptions.removeAt(index);
+              _pollOptionControllers.removeAt(index);
+            }),
+          ),
+        ]),
       );
     });
   }
@@ -1767,8 +1170,7 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _addPollOption() {
     if (pollOptions.length < 10) {
       setState(() {
-        pollOptions
-            .add(PollOptionModel(id: 0, title: '', listingsId: 0, votes: 0));
+        pollOptions.add(PollOptionModel(id: 0, title: '', listingsId: 0, votes: 0));
         _pollOptionControllers.add(TextEditingController());
       });
     } else {
@@ -1785,63 +1187,42 @@ class _AddListingScreenState extends State<AddListingScreen> {
         height: 150,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: selectedImages!.length > 1
-              ? selectedImages!.length - 1
-              : 0, // Ensure itemCount is non-negative
+          itemCount: selectedImages!.length > 1 ? selectedImages!.length - 1 : 0,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Stack(
-                children: [
-                  DottedBorder(
-                    borderType: BorderType.RRect,
-                    radius: const Radius.circular(8),
-                    color: Theme.of(context).primaryColor,
-                    child: Container(
-                      width: 100,
-                      height: 100,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.rectangle,
-                      ),
-                      // alignment: Alignment.center,
-                      child: Image.file(selectedImages![index + 1],
-                          fit: BoxFit.cover),
-                    ),
+              child: Stack(children: [
+                DottedBorder(
+                  borderType: BorderType.RRect,
+                  radius: const Radius.circular(8),
+                  color: Theme.of(context).primaryColor,
+                  child: Container(
+                    width: 100,
+                    height: 100,
+                    decoration: const BoxDecoration(shape: BoxShape.rectangle),
+                    child: Image.file(selectedImages![index + 1], fit: BoxFit.cover),
                   ),
-                  Positioned(
-                    top: -10,
-                    right: -10,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: Colors.red[900],
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          isImageChanged = true;
-                          if (selectedImages!.isNotEmpty &&
-                              selectedImages!.length > 2) {
-                            // if (selectedImages?[index + 1] is Asset) {
-                            //
-                            // }
-                            context
-                                .read<AddListingCubit>()
-                                .removeAssetsByIndex(index);
-                          }
-                          if (downloadedImages.isNotEmpty) {
-                            if (downloadedImages.length > index + 1) {
-                              downloadedImages
-                                  .remove(downloadedImages[index + 1]);
-                              // selectedImages?.remove(selectedImages?[index + 1]);
-                            }
-                          }
-                          selectedImages?.remove(selectedImages?[index + 1]);
-                        });
-                      },
-                    ),
+                ),
+                Positioned(
+                  top: -10,
+                  right: -10,
+                  child: IconButton(
+                    icon: Icon(Icons.delete, color: Colors.red[900]),
+                    onPressed: () {
+                      setState(() {
+                        isImageChanged = true;
+                        if (selectedImages!.isNotEmpty && selectedImages!.length > 2) {
+                          context.read<AddListingCubit>().removeAssetsByIndex(index);
+                        }
+                        if (downloadedImages.isNotEmpty && downloadedImages.length > index + 1) {
+                          downloadedImages.remove(downloadedImages[index + 1]);
+                        }
+                        selectedImages?.remove(selectedImages?[index + 1]);
+                      });
+                    },
                   ),
-                ],
-              ),
+                ),
+              ]),
             );
           },
         ),
@@ -1852,20 +1233,12 @@ class _AddListingScreenState extends State<AddListingScreen> {
   Future<void> selectSubCategory(String? selectedCategory) async {
     context.read<AddListingCubit>().clearSubCategory();
     selectedSubCategory = null;
-    // clearStartEndDate();
-    final subCategoryResponse = await context
-        .read<AddListingCubit>()
-        .loadSubCategory(selectedCategory!.toLowerCase());
+    final subCategoryResponse = await context.read<AddListingCubit>().loadSubCategory(selectedCategory!.toLowerCase());
     if (!mounted) return;
-    context
-        .read<AddListingCubit>()
-        .setCategoryId(selectedCategory.toLowerCase());
-    context
-        .read<AddListingCubit>()
-        .setSubCategoryId(subCategoryResponse?.data.last['name']);
+    context.read<AddListingCubit>().setCategoryId(selectedCategory.toLowerCase());
+    context.read<AddListingCubit>().setSubCategoryId(subCategoryResponse?.data.last['name']);
     setState(() {
       listSubCategory = subCategoryResponse!.data;
-
       selectedSubCategory = subCategoryResponse.data.last['name'];
     });
   }

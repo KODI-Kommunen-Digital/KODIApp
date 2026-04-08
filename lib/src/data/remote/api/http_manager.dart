@@ -71,6 +71,8 @@ class HTTPManager {
             try {
               var response = await _dio.request(
                 error.requestOptions.path,
+                data: error.requestOptions.data,
+                queryParameters: error.requestOptions.queryParameters,
                 options: Options(
                   method: error.requestOptions.method,
                   headers: error.requestOptions.headers,

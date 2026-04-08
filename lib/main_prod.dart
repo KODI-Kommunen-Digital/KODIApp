@@ -26,6 +26,8 @@ import 'package:loggy/loggy.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:flutter_quill/flutter_quill.dart';
+
 
 Future<void> main() async {
   await Hive.initFlutter();
@@ -116,6 +118,7 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalMaterialLocalizations.delegate,
                       GlobalWidgetsLocalizations.delegate,
                       GlobalCupertinoLocalizations.delegate,
+                      FlutterQuillLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
                     home: Scaffold(
