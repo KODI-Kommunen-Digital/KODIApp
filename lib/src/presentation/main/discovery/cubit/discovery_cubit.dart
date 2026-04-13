@@ -1,11 +1,13 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 
 // ignore: depend_on_referenced_packages
 import 'package:collection/collection.dart';
 import 'package:heidi/src/data/model/model_category.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
-import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
@@ -84,7 +86,13 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     } else {
       cityName = 'Alle-Orte';
     }
-    ListRepository.saveEventToMatomo(type: MatomoType.city, name: cityName);
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'city',
+        action: 'city_select',
+        name: cityName,
+      ),
+    );
   }
 
   Future<void> setServiceValue(String preference, String? type, int? id) async {

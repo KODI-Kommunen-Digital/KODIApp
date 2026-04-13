@@ -1,9 +1,11 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:async';
 import 'dart:io';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/main/add_listing/multiple_selection_city.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:http/http.dart' as http;
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -604,6 +606,15 @@ class _AddListingScreenState extends State<AddListingScreen> {
   void _onSubmit() async {
     final success = _validData();
     if (success) {
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'listing',
+          action: widget.item != null
+              ? 'edit_listing_click'
+              : 'create_listing_click',
+          name: 'add_listing_screen',
+        ),
+      );
       String description = _textContentController.text.replaceAll('\n', '<br>');
       List<String> allCities = [];
       for (var cityName in _selectedCities) {

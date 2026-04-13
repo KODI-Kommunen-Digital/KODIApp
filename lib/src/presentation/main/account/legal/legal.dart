@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -25,6 +28,13 @@ class _LegalScreenState extends State<LegalScreen> {
   }
 
   Future<void> _makeAction(String link, String title) async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'legal',
+        action: 'legal_doc_open_click',
+        name: title,
+      ),
+    );
     CustomWebViewScreen.showAsBottomSheet(
         context: context,
         title: Translate.of(context)

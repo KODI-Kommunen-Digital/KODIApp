@@ -12,8 +12,8 @@ import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:loggy/loggy.dart';
-import 'package:matomo_tracker/matomo_tracker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
@@ -35,6 +35,11 @@ Future<void> mainApp({required FirebaseOptions firebaseOptions}) async {
 
   Bloc.observer = HeidiBlocObserver();
   await Upgrader.clearSavedSettings();
+
+  await MatomoService.instance.initialize(
+    siteId: '1',
+    url: 'https://app.heidi-app.com/analytics/matomo.php',
+  );
 
   await SentryFlutter.init(
         (options) {
@@ -60,11 +65,6 @@ Future<void> mainApp({required FirebaseOptions firebaseOptions}) async {
       debugPrint("Firebase already initialized: $e");
     }
   }
-
-  await MatomoTracker.instance.initialize(
-    siteId: '1',
-    url: 'https://63inside-app.matomo.cloud/matomo.php',
-  );
 
   await FirebaseApi(globalNavKey, prefBox).initNotifications();
 }

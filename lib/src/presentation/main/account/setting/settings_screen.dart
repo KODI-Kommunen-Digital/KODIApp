@@ -1,10 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/data/model/model_user.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -198,6 +201,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                 activeColor: Theme.of(context).primaryColor,
                 value: _receiveNotification,
                 onChanged: (value) async {
+                  unawaited(
+                    MatomoService.instance.trackEvent(
+                      category: 'settings',
+                      action: 'notification_toggle',
+                      name: value ? 'on' : 'off',
+                    ),
+                  );
                   setState(() {
                     _receiveNotification = value;
                   });
@@ -212,6 +222,13 @@ class _SettingsScreenState extends State<SettingsScreen>
                 activeColor: Theme.of(context).primaryColor,
                 value: darkModeEnabled,
                 onChanged: (value) {
+                  unawaited(
+                    MatomoService.instance.trackEvent(
+                      category: 'settings',
+                      action: 'dark_mode_toggle',
+                      name: value ? 'on' : 'off',
+                    ),
+                  );
                   setState(() {
                     darkModeEnabled = value;
                     switchTheme();
@@ -223,6 +240,13 @@ class _SettingsScreenState extends State<SettingsScreen>
               AppListTitle(
                 title: Translate.of(context).translate('profile_settings'),
                 onPressed: () {
+                  unawaited(
+                    MatomoService.instance.trackEvent(
+                      category: 'settings',
+                      action: 'profile_settings_open_click',
+                      name: 'settings_screen',
+                    ),
+                  );
                   _onNavigate(Routes.profileSettings);
                 },
                 trailing: Row(
@@ -240,6 +264,13 @@ class _SettingsScreenState extends State<SettingsScreen>
             AppListTitle(
               title: Translate.of(context).translate('legal'),
               onPressed: () {
+                unawaited(
+                  MatomoService.instance.trackEvent(
+                    category: 'settings',
+                    action: 'legal_open_click',
+                    name: 'settings_screen',
+                  ),
+                );
                 _onNavigate(Routes.legal);
               },
               trailing: Row(

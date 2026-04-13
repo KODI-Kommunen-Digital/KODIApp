@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
@@ -97,6 +100,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         _errorPass == null &&
         _errorEmail == null &&
         _errorCPass == null) {
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'auth',
+          action: 'email_sign_up_click',
+          name: 'signup_screen',
+        ),
+      );
       final result = await AppBloc.signupCubit.onRegister(
         username: username.toLowerCase(),
         firstname: firstname,
@@ -107,6 +117,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
         role: "3",
       );
       if (result.success) {
+        unawaited(
+          MatomoService.instance.trackEvent(
+            category: 'auth',
+            action: 'sign_up_success',
+            name: 'signup_screen',
+          ),
+        );
         if (!mounted) return;
         AppBloc.loginCubit.onLogin(
           username: username,

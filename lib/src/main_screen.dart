@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/presentation/cubit/authentication/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/account_screen.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen.dart';
@@ -101,7 +104,31 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
+  String _tabAnalyticsName(String route) {
+    switch (route) {
+      case Routes.home:
+        return 'home';
+      case Routes.explore:
+        return 'discover';
+      case Routes.listProduct:
+        return 'events_page';
+      case Routes.discovery:
+        return 'customer_services';
+      case Routes.account:
+        return 'my_account';
+      default:
+        return route.replaceFirst('/', '');
+    }
+  }
+
   void _onItemTapped(String route) async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'navigation',
+        action: 'bottom_tab_click',
+        name: _tabAnalyticsName(route),
+      ),
+    );
     if (AppBloc.userCubit.state == null && _requireAuth(route)) {
       final result = await Navigator.pushNamed(
         context,

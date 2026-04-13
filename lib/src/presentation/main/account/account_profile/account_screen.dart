@@ -1,9 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/presentation/cubit/user/cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_state.dart';
@@ -128,6 +131,13 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       user: user,
                       type: UserViewType.information,
                       onPressed: () {
+                        unawaited(
+                          MatomoService.instance.trackEvent(
+                            category: 'account',
+                            action: 'profile_settings_open_click',
+                            name: 'my_account_screen',
+                          ),
+                        );
                         Navigator.pushNamed(context, Routes.profile,
                             arguments: {'user': user, 'editable': true});
                       },
@@ -140,6 +150,13 @@ class _AccountLoadedState extends State<AccountLoaded> {
                     AppListTitle(
                       title: Translate.of(context).translate('setting'),
                       onPressed: () {
+                        unawaited(
+                          MatomoService.instance.trackEvent(
+                            category: 'account',
+                            action: 'settings_open_click',
+                            name: 'my_account_screen',
+                          ),
+                        );
                         Navigator.pushNamed(context, Routes.setting,
                             arguments: {'user': user}).then((value) {
                           setState(() {});
@@ -172,6 +189,13 @@ class _AccountLoadedState extends State<AccountLoaded> {
                       AppListTitle(
                         title: Translate.of(context).translate('wish_list'),
                         onPressed: () {
+                          unawaited(
+                            MatomoService.instance.trackEvent(
+                              category: 'account',
+                              action: 'wishlist_open_click',
+                              name: 'my_account_screen',
+                            ),
+                          );
                           Navigator.pushNamed(context, Routes.wishList);
                         },
                         trailing: RotatedBox(
@@ -243,6 +267,13 @@ class _AccountLoadedState extends State<AccountLoaded> {
   }
 
   void _onLogout() async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'auth',
+        action: 'signout_click',
+        name: 'my_account_screen',
+      ),
+    );
     AppBloc.loginCubit.onLogout();
   }
 

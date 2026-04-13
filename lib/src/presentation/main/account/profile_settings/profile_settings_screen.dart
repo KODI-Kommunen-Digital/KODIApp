@@ -1,10 +1,13 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/account/account_profile/cubit/account_cubit.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -56,6 +59,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
               ),
               onPressed: () {
+                unawaited(
+                  MatomoService.instance.trackEvent(
+                    category: 'account',
+                    action: 'edit_profile_open_click',
+                    name: 'profile_settings_screen',
+                  ),
+                );
                 Navigator.pushNamed(context, Routes.editProfile).then((value) {
                   setState(() {});
                 });
@@ -73,12 +83,26 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 ),
               ),
               onPressed: () {
+                unawaited(
+                  MatomoService.instance.trackEvent(
+                    category: 'account',
+                    action: 'change_password_open_click',
+                    name: 'profile_settings_screen',
+                  ),
+                );
                 _onNavigate(Routes.changePassword);
               },
             ),
             AppListTitle(
               title: Translate.of(context).translate('delete_Account'),
               onPressed: () {
+                unawaited(
+                  MatomoService.instance.trackEvent(
+                    category: 'account',
+                    action: 'delete_account_open_click',
+                    name: 'profile_settings_screen',
+                  ),
+                );
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -96,6 +120,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                             Translate.of(context).translate('yes'),
                           ),
                           onPressed: () async {
+                            unawaited(
+                              MatomoService.instance.trackEvent(
+                                category: 'account',
+                                action: 'delete_account_confirm_click',
+                                name: 'profile_settings_screen',
+                              ),
+                            );
                             Navigator.of(context).pop();
                             final isDeleted = await context
                                 .read<AccountCubit>()

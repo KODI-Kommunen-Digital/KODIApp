@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 
 class SubDiscoveryScreen extends StatelessWidget {
   final CitizenServiceModel service;
@@ -51,6 +54,13 @@ class SubDiscoveryScreen extends StatelessWidget {
   }
 
   Future<void> navigateToLink(BuildContext context, CitizenServiceModel service) async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'service',
+        action: 'sub_service_open_click',
+        name: '${this.service.title}/${service.title}',
+      ),
+    );
     String? url;
     switch (service.imageLink) {
       case "17":

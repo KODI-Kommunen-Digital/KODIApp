@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
@@ -318,6 +319,13 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
   }
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'service',
+        action: 'service_open_click',
+        name: service.title,
+      ),
+    );
     switch (service.imageLink) {
       case "17":
         CustomWebViewScreen.showAsBottomSheet(

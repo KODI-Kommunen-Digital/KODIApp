@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_cubit.dart';
 import 'package:heidi/src/presentation/main/login/signin/cubit/login_state.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
@@ -36,6 +39,13 @@ class _SignInScreenState extends State<SignInScreen> {
         body: BlocConsumer<LoginCubit, LoginState>(
           listener: (context, state) {
             if (state == const LoginState.loaded()) {
+              unawaited(
+                MatomoService.instance.trackEvent(
+                  category: 'auth',
+                  action: 'sign_in_success',
+                  name: 'login_screen',
+                ),
+              );
               Navigator.pop(context, SignInScreen.loginSuccessResult);
             }
             state.maybeWhen(
@@ -359,6 +369,13 @@ class _SignInLoadedState extends State<SignInLoaded> {
       _errorPass = UtilValidator.validate(password);
     });
     if (_errorID == null && _errorPass == null) {
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'auth',
+          action: 'email_sign_in_click',
+          name: 'login_screen',
+        ),
+      );
       AppBloc.loginCubit.onLogin(
         username: username.trim(),
         password: password.trim(),

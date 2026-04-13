@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -35,11 +38,25 @@ class _ContactUsScreenState extends State<ContactUsScreen> {
   }
 
   void _sendFeedback() async {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'contact',
+        action: 'send_feedback_click',
+        name: 'contact_us_screen',
+      ),
+    );
     final user = AppBloc.contactUsCubit.getUserDetails();
     Utils.hiddenKeyboard(context);
     final result = await AppBloc.contactUsCubit
         .onSendFeedback(email: _textInfoController.text, token: user.token);
     if (result=="success") {
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'contact',
+          action: 'send_feedback_success',
+          name: 'contact_us_screen',
+        ),
+      );
       _onSuccess();
       if (!mounted) return;
     } else {

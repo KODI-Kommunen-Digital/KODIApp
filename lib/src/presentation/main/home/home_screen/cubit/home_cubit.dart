@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
@@ -9,6 +10,7 @@ import 'package:heidi/src/data/remote/api/api.dart';
 import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 
@@ -224,8 +226,14 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   void sendToMatomo(int id, String website) {
-    ListRepository.saveEventToMatomo(
-        type: MatomoType.ad, name: website, adId: id);
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'ad',
+        action: 'ad_click',
+        name: website,
+        value: id,
+      ),
+    );
   }
 
   Future<void> saveCityId(int cityId) async {

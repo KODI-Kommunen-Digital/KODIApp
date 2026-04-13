@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/common.dart';
@@ -49,6 +52,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
       );
     });
     if (_errorUsername == null) {
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'auth',
+          action: 'forgot_password_submit_click',
+          name: 'forgot_password_screen',
+        ),
+      );
       final result = await AppBloc.forgotPasswordCubit.onForgotPassword(
         textUserNameController.text,
       );

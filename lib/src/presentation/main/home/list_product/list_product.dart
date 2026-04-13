@@ -13,6 +13,7 @@ import 'package:heidi/src/presentation/main/home/widget/app_filter_button.dart';
 import 'package:heidi/src/presentation/widget/app_navbar.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
@@ -152,6 +153,13 @@ class _ListProductScreenState extends State<ListProductScreen> {
                       if (!isCity)
                         AppFilterButton(
                           voidCallback: () {
+                            unawaited(
+                              MatomoService.instance.trackEvent(
+                                category: 'filter',
+                                action: 'filter_open_click',
+                                name: 'events_page',
+                              ),
+                            );
                             MultiFilter multiFilter = whatCanFilter(isEvent);
                             Navigator.pushNamed(context, Routes.filterScreen,
                                     arguments: {"multifilter": multiFilter})
@@ -481,6 +489,14 @@ class _ListLoadedState extends State<ListLoaded> {
   }
 
   void _onProductDetail(ProductModel item) {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'listing',
+        action: 'event_detail_open_click',
+        name: item.title,
+        value: item.id,
+      ),
+    );
     if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website);
     } else if (item.showExternal == 0) {

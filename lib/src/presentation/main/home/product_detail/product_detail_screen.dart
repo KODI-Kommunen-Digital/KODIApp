@@ -1,5 +1,6 @@
 // ignore_for_file: depend_on_referenced_packages, use_build_context_synchronously, unnecessary_null_comparison
 
+import 'dart:async';
 import 'dart:io';
 import 'dart:math' as math;
 import 'package:carousel_slider/carousel_slider.dart';
@@ -20,6 +21,7 @@ import 'package:heidi/src/presentation/main/home/product_detail/cubit/cubit.dart
 import 'package:heidi/src/presentation/widget/app_button.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
 import 'package:heidi/src/presentation/widget/app_user_info.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
@@ -1250,7 +1252,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         product.favorite =
                             _productDetailCubit.getFavoriteIconValue();
                       });
-                      if (_productDetailCubit.getFavoriteIconValue()) {
+                      final isFav = _productDetailCubit.getFavoriteIconValue();
+                      unawaited(
+                        MatomoService.instance.trackEvent(
+                          category: 'favorites',
+                          action: isFav
+                              ? 'add_favorite_click'
+                              : 'remove_favorite_click',
+                          name: product.title,
+                          value: product.id,
+                        ),
+                      );
+                      if (isFav) {
                         await _productDetailCubit.onAddFavorite(widget.item);
                       } else {
                         await _productDetailCubit.onDeleteFavorite(widget.item);

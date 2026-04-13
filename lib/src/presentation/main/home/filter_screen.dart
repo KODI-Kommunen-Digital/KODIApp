@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_multifilter.dart';
 import 'package:heidi/src/presentation/main/home/forum/list_groups/cubit/cubit.dart';
 import 'package:heidi/src/presentation/main/home/list_product/cubit/list_cubit.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:intl/intl.dart';
 
@@ -51,6 +54,61 @@ class _FilterScreenState extends State<FilterScreen> {
     endAfterDate = widget.multiFilter.endAfterDate;
     currentSubCategory = widget.multiFilter.currentSubCategory;
     currentCities = widget.multiFilter.selectedCities ?? [0];
+  }
+
+  void _trackFilterChipSelect(String filterType, String value) {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'filter',
+        action: 'filter_chip_select',
+        name: '$filterType:$value',
+      ),
+    );
+  }
+
+  void _trackFilterApply() {
+    final List<String> applied = [];
+    if (widget.multiFilter.hasMultipleCityFilter) {
+      applied.add('cities=${currentCities.join(",")}');
+    } else if (widget.multiFilter.hasLocationFilter) {
+      applied.add('city=${currentCity ?? 0}');
+    }
+    if (widget.multiFilter.hasCategoryFilter && currentCategory != null) {
+      applied.add('category=$currentCategory');
+    }
+    if (widget.multiFilter.hasSubCategoryFilter && currentSubCategory != null) {
+      applied.add('subCategory=$currentSubCategory');
+    }
+    if (widget.multiFilter.hasListingStatusFilter &&
+        currentListingStatus != null) {
+      applied.add('status=$currentListingStatus');
+    }
+    if (widget.multiFilter.hasProductEventFilter &&
+        currentProductEventFilter != null) {
+      applied.add('period=${currentProductEventFilter!.name}');
+    }
+    if (widget.multiFilter.hasDateRangeFilter) {
+      if (startAfterDate != null) {
+        applied.add('from=${DateFormat('yyyy-MM-dd').format(startAfterDate!)}');
+      }
+      if (endAfterDate != null) {
+        applied.add('to=${DateFormat('yyyy-MM-dd').format(endAfterDate!)}');
+      }
+    }
+    if (widget.multiFilter.hasDayTimeFilter && currentDayTimeFilter != null) {
+      applied.add('dayTime=${currentDayTimeFilter!.name}');
+    }
+    if (widget.multiFilter.hasForumGroupFilter &&
+        currentForumGroupFilter != null) {
+      applied.add('group=${currentForumGroupFilter!.name}');
+    }
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'filter',
+        action: 'filter_apply',
+        name: applied.isEmpty ? 'no_filters' : applied.join('|'),
+      ),
+    );
   }
 
   bool _isFilterApplied() {
@@ -149,6 +207,7 @@ class _FilterScreenState extends State<FilterScreen> {
               );
               return;
             } else {
+              _trackFilterApply();
               Navigator.pop(
                   context,
                   MultiFilter(
@@ -254,6 +313,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           label: Text(city.title),
                           selected: currentCities.contains(city.id),
                           onSelected: (selected) {
+                            _trackFilterChipSelect('city', city.title);
                             setState(() {
 
                               if (currentCities.contains(city.id)) {
@@ -269,6 +329,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           label: Text(city.title),
                           selected: city.id == currentCity,
                           onSelected: (selected) {
+                            _trackFilterChipSelect('city', city.title);
                             setState(() {
                               currentCity = city.id;
                             });
@@ -310,6 +371,7 @@ class _FilterScreenState extends State<FilterScreen> {
             label: Text(Translate.of(context).translate('active')),
             selected: currentListingStatus == 1,
             onSelected: (selected) {
+              _trackFilterChipSelect('status', 'active');
               setState(() {
                 currentListingStatus = 1;
               });
@@ -319,6 +381,7 @@ class _FilterScreenState extends State<FilterScreen> {
             label: Text(Translate.of(context).translate('inactive')),
             selected: currentListingStatus == 2,
             onSelected: (selected) {
+              _trackFilterChipSelect('status', 'inactive');
               setState(() {
                 currentListingStatus = 2;
               });
@@ -328,6 +391,7 @@ class _FilterScreenState extends State<FilterScreen> {
             label: Text(Translate.of(context).translate('under_review')),
             selected: currentListingStatus == 3,
             onSelected: (selected) {
+              _trackFilterChipSelect('status', 'under_review');
               setState(() {
                 currentListingStatus = 3;
               });
@@ -440,6 +504,7 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             selected: currentProductEventFilter == ProductFilter.month,
             onSelected: (selected) {
+              _trackFilterChipSelect('period', 'this_month');
               setState(() {
                 currentProductEventFilter = ProductFilter.month;
                 startAfterDate = null;
@@ -461,6 +526,7 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             selected: currentProductEventFilter == ProductFilter.week,
             onSelected: (selected) {
+              _trackFilterChipSelect('period', 'this_week');
               setState(() {
                 currentProductEventFilter = ProductFilter.week;
                 startAfterDate = null;
@@ -538,6 +604,7 @@ class _FilterScreenState extends State<FilterScreen> {
                 label: Text(category.title),
                 selected: category.id == currentCategory,
                 onSelected: (selected) {
+                  _trackFilterChipSelect('category', category.title);
                   setState(() {
                     currentCategory = category.id;
                   });

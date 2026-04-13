@@ -10,6 +10,7 @@ import 'package:heidi/src/data/model/model_favorites_detail_list.dart';
 import 'package:heidi/src/data/model/model_product.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_placeholder.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -269,6 +270,14 @@ class _WishListLoadedState extends State<WishListLoaded> {
 
   void openWishlistDetails(
       BuildContext context, FavoriteDetailsModel favoritesList) {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'wishlist',
+        action: 'wishlist_item_open_click',
+        name: favoritesList.title,
+        value: favoritesList.id,
+      ),
+    );
     ProductModel product = ProductModel(
         id: favoritesList.id,
         title: favoritesList.title,

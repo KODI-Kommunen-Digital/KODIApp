@@ -23,6 +23,7 @@ import 'package:heidi/src/presentation/widget/app_category_item.dart';
 import 'package:heidi/src/presentation/widget/app_product_item.dart';
 import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/utils/configs/application.dart';
+import 'package:heidi/src/utils/analytics/matomo_service.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/logging/loggy_exp.dart';
@@ -117,6 +118,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _loadMoreRecent() async {
     if (isLoading || _hasReachedRecentEnd) return;
+
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'listing',
+        action: 'more_posts_click',
+        name: 'home_screen',
+        value: pageNo + 1,
+      ),
+    );
 
     setState(() {
       isLoading = true;
@@ -408,6 +418,13 @@ class _HomeScreenState extends State<HomeScreen> {
       isSearching = true;
       searchTerm = searchResult.trim();
       _hasReachedRecentEnd = false;
+      unawaited(
+        MatomoService.instance.trackEvent(
+          category: 'search',
+          action: 'listing_search',
+          name: searchTerm,
+        ),
+      );
       setState(() {
         recent = [];
       });
@@ -670,6 +687,14 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onProductDetail(ProductModel item) {
+    unawaited(
+      MatomoService.instance.trackEvent(
+        category: 'listing',
+        action: 'listing_detail_open_click',
+        name: item.title,
+        value: item.id,
+      ),
+    );
     if (item.sourceId == 2 || item.showExternal == 1) {
       _makeAction(item.website, item.id);
     } else if (item.showExternal == 0) {
