@@ -632,5 +632,13 @@
   "waste_container_description": "These are large collection containers that are usually located at collection points, residential complexes, or shared by several households. They have a larger volume and are collected separately.",
   "waste_type_description": "Please select the types of waste that correspond to the container you use (bin at your house or shared container) so that the collection dates are displayed correctly.",
   "waste_calendar_push_notification_info": "If you select your location and waste types and activate push notifications, you will receive notifications when the trash needs to be taken out. Otherwise, you can change both later on the waste calendar page.",
-  "no_waste_type_selected" : "No waste type selected."
+  "no_waste_type_selected" : "No waste type selected.",
+  "welcome_title" : "Welcome to HEIDI",
+  "welcome_subtitle" : "Discover everything Troisdorf has to offer.",
+  "feature_news_title" : "News & Events",
+  "feature_news_description" : "Stay up to date with the latest news and events from Troisdorf.",
+  "feature_waste_title" : "Waste Calendar with Notifications",
+  "feature_waste_description" : "Select your waste types and receive push notifications when waste collection trucks are scheduled in your area.",
+  "button_setup_waste_calendar" : "Set Up Waste Collection Calendar",
+  "button_test_app" : "Test the App Now"
 }

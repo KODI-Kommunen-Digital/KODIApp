@@ -15,7 +15,7 @@ import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/firebase_option_production/firebase_options.dart';
 import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/widget/intro_waste.dart';
+import 'package:heidi/src/presentation/main/intro/intro_screen.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -155,7 +155,7 @@ class _HeidiAppState extends State<HeidiApp> {
                                   isWasteCalendarSkipped)) {
                             return const MainScreen();
                           } else {
-                            return const IntroPage();
+                            return const AppIntroScreen();
                           }
                         }
                       },

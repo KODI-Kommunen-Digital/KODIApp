@@ -641,6 +641,14 @@
   "waste_container_description": "Das sind große Sammelbehälter, die meist an Sammelplätzen, Wohnanlagen oder für mehrere Haushalte gemeinsam stehen. Sie haben ein größeres Volumen und werden separat abgeholt.",
   "waste_type_description": "Bitte wähle die Müllarten passend zu dem Behälter, den du nutzt (Tonne am Haus oder gemeinsamer Container), damit dir die Abholtermine korrekt angezeigt werden.",
   "waste_calendar_push_notification_info": "Wenn du deinen Standort und deine Abfallarten wählst und Push-Benachrichtigungen aktivierst, erhältst du Benachrichtigungen, wann der Müll rausgebracht werden muss. Andernfalls kannst du beides später auf der Seite des Abfallkalenders ändern.",
-  "no_waste_type_selected" : "Kein Abfalltyp ausgewählt."
+  "no_waste_type_selected" : "Kein Abfalltyp ausgewählt.",
+  "welcome_title": "Willkommen bei HEIDI",
+  "welcome_subtitle": "Entdecke alles, was Troisdorf zu bieten hat.",
+  "feature_news_title": "Aktuelles & Veranstaltungen",
+  "feature_news_description": "Bleibe mit den neuesten Nachrichten und Veranstaltungen aus Troisdorf immer auf dem Laufenden.",
+  "feature_waste_title": "Abfallkalender mit Benachrichtigungen",
+  "feature_waste_description": "Wähle deine Abfallarten aus und erhalte Push-Benachrichtigungen, wenn die Müllabfuhr in deiner Umgebung fährt.",
+  "button_setup_waste_calendar": "Abfallkalender einrichten",
+  "button_test_app": "App jetzt testen"
 }
 

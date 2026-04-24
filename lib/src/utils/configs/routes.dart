@@ -64,6 +64,7 @@ import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker
 import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/trolley_news/trolley_news_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
+import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
 
 class RouteArguments<T> {
@@ -153,6 +154,7 @@ class Routes {
   static const String trolleyMakerPartnerDetails =
       "/trolleyMakerPartnerDetails";
   static const String subDiscoveryScreen="/subDiscoveryScreen";
+  static const String introWaste = "/introWaste";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -632,6 +634,11 @@ class Routes {
             settings.arguments as CitizenServiceModel;
             return SubDiscoveryScreen(service: settings.arguments as CitizenServiceModel);
           },
+        );
+
+      case introWaste:
+        return MaterialPageRoute(
+          builder: (context) => const IntroPage(),
         );
 
       default:
