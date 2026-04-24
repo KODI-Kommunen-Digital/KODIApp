@@ -483,46 +483,46 @@ class _WasteCalendarState extends State<WasteCalendar> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // ... rest of your content remains the same
-                                SizedBox(
-                                  height: 200,
-                                  child: Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(15.0),
-                                        child: Opacity(
-                                          opacity: 0.3,
-                                          child: Image.asset(
-                                            "assets/images/garbage.jpg",
-                                            fit: BoxFit.cover,
-                                            width: double.infinity,
-                                            height: double.infinity,
-                                          ),
-                                        ),
-                                      ),
-                                      Center(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              "${_selectedDay.day} ${_selectedDay.monthName()}",
-                                              style: const TextStyle(
-                                                  fontSize: 22,
-                                                  color: Colors.red),
-                                            ),
-                                            Text(
-                                              _selectedDay.weekdayName(),
-                                              style: const TextStyle(
-                                                  fontSize: 32,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   height: 200,
+                                //   child: Stack(
+                                //     children: [
+                                //       ClipRRect(
+                                //         borderRadius:
+                                //             BorderRadius.circular(15.0),
+                                //         child: Opacity(
+                                //           opacity: 0.3,
+                                //           child: Image.asset(
+                                //             "assets/images/garbage.jpg",
+                                //             fit: BoxFit.cover,
+                                //             width: double.infinity,
+                                //             height: double.infinity,
+                                //           ),
+                                //         ),
+                                //       ),
+                                //       Center(
+                                //         child: Column(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.center,
+                                //           children: [
+                                //             Text(
+                                //               "${_selectedDay.day} ${_selectedDay.monthName()}",
+                                //               style: const TextStyle(
+                                //                   fontSize: 22,
+                                //                   color: Colors.red),
+                                //             ),
+                                //             Text(
+                                //               _selectedDay.weekdayName(),
+                                //               style: const TextStyle(
+                                //                   fontSize: 32,
+                                //                   fontWeight: FontWeight.bold),
+                                //             ),
+                                //           ],
+                                //         ),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                                 const SizedBox(height: 16),
                                 const Text("Nächste Abholungen",
                                     style: TextStyle(
@@ -693,34 +693,37 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   Widget _buildWasteCard(WasteCollection collection) {
-    return Card(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15.0),
-      ),
-      child: Container(
-        width: 180,
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.delete,
-              color: _wasteCalenderCubit.getColorForType(collection.type),
-              size: 30,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              collection.type,
-              style: const TextStyle(color: Colors.black, fontSize: 14),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '${collection.date.day}.${collection.date.month}.${collection.date.year}',
-              style: const TextStyle(color: Colors.black, fontSize: 12),
-            ),
-          ],
+    return SizedBox(
+      width: MediaQuery.of(context).size.width*0.915,
+      child: Card(
+        color: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15.0),
+        ),
+        child: Container(
+          width: 180,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.delete,
+                color: _wasteCalenderCubit.getColorForType(collection.type),
+                size: 30,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                collection.type,
+                style: const TextStyle(color: Colors.black, fontSize: 14),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${collection.date.day}.${collection.date.month}.${collection.date.year}',
+                style: const TextStyle(color: Colors.black, fontSize: 12),
+              ),
+            ],
+          ),
         ),
       ),
     );
