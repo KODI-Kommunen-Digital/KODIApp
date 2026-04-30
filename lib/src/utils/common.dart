@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_device.dart';
+import 'package:heidi/src/utils/datetime.dart';
+import 'package:heidi/src/utils/translate.dart';
 import 'package:location/location.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -70,6 +72,38 @@ class Utils {
     } catch (e) {
       return '';
     }
+  }
+
+  /// Shows a SnackBar informing the user when waste collection push
+  /// notifications will be dispatched, expressed in their local timezone.
+  static void showWasteNotificationSnackBar(BuildContext context) {
+    final timeStr = wasteNotificationLocalTime();
+    final message = Translate.of(context)
+        .translate('waste_notification_snackbar')
+        .replaceAll('{time}', timeStr);
+
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.notifications_active_outlined,
+                  color: Colors.white, size: 18),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(message, style: const TextStyle(fontSize: 13)),
+              ),
+            ],
+          ),
+          backgroundColor: Colors.green.shade700,
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 5),
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10)),
+          margin: const EdgeInsets.all(12),
+        ),
+      );
   }
 
   ///Singleton factory

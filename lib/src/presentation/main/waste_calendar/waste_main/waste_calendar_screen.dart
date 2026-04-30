@@ -1,8 +1,11 @@
 // ignore_for_file: library_private_types_in_public_api
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../../utils/translate.dart';
 import 'cubit/waste_calendar_cubit.dart';
@@ -12,7 +15,50 @@ import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
+import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/presentation/widget/loading_dialog.dart';
+import 'package:heidi/src/utils/common.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+Color _colorFromHex(String hex) {
+  try {
+    final hexCode = hex.replaceFirst('#', '');
+    if (hexCode.length == 6) return Color(int.parse('FF$hexCode', radix: 16));
+    if (hexCode.length == 8) return Color(int.parse(hexCode, radix: 16));
+  } catch (_) {}
+  return Colors.grey;
+}
+
+Widget _buildWasteIcon(String imageUrl, String colourHex, double size) {
+  final color = _colorFromHex(colourHex);
+  return Container(
+    width: size,
+    height: size,
+    decoration: BoxDecoration(
+      color: color.withOpacity(0.12),
+      shape: BoxShape.circle,
+    ),
+    padding: EdgeInsets.all(size * 0.18),
+    // child: CachedNetworkImage(
+    //   imageUrl: '${Application.picturesURL}$imageUrl',
+    //   color: color,
+    //   colorBlendMode: BlendMode.srcIn,
+    //   placeholder: (_, __) => Icon(Icons.delete, color: color, size: size * 0.5),
+    //   errorWidget: (_, __, ___) => Icon(Icons.delete, color: color, size: size * 0.5),
+    // ),
+      child: SvgPicture.network(
+        '${Application.picturesURL}$imageUrl',
+        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+        placeholderBuilder: (context) => Icon(
+          Icons.delete_outline,
+          color: color,
+          size: 18,
+        ),
+      )
+  );
+}
 
 class WasteCalendar extends StatefulWidget {
   const WasteCalendar({super.key});
@@ -21,7 +67,8 @@ class WasteCalendar extends StatefulWidget {
   _WasteCalendarState createState() => _WasteCalendarState();
 }
 
-class _WasteCalendarState extends State<WasteCalendar> {
+class _WasteCalendarState extends State<WasteCalendar>
+    with WidgetsBindingObserver {
   final _wasteCalenderCubit = WasteCalendarCubit();
   DateTime _selectedDay = DateTime.now();
   DateTime _focusedDay = DateTime.now();
@@ -37,14 +84,18 @@ class _WasteCalendarState extends State<WasteCalendar> {
   bool isLoading = false;
   bool isDataInitializing = false;
   Preferences? prefs;
+  bool _receiveNotification = false;
+  bool _receiveWasteCalendarNotification = false;
+  bool isNotificationsProgress = false;
 
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       prefs = await Preferences.openBox();
-      if(prefs!=null) {
+      if (prefs != null) {
         final permission = await prefs!.getKeyValue(
             Preferences.pushNotificationsPermission, 'notAsked');
         final isAuthorized = permission == 'authorized';
@@ -53,9 +104,24 @@ class _WasteCalendarState extends State<WasteCalendar> {
           isAuthorized ? 'true' : 'false',
         );
       }
-
+      await _initNotificationState();
       _initializeRepository();
     });
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _checkNotificationPermissionStatus();
+    }
   }
 
   void _showNotificationEnableDialog({required bool isWasteTypeEmpty}) {
@@ -403,6 +469,236 @@ class _WasteCalendarState extends State<WasteCalendar> {
     });
   }
 
+  Future<void> _initNotificationState() async {
+    if (prefs == null) return;
+    final permission = await prefs!.getKeyValue(
+        Preferences.pushNotificationsPermission, 'notAsked');
+    final isAuthorized = permission == 'authorized';
+    final receiveNotification = prefs!.getKeyValue(
+        Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
+    final receiveWasteCalendar = prefs!.getKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        isAuthorized ? 'true' : 'false');
+
+    if (!mounted) return;
+    setState(() {
+      _receiveNotification = isAuthorized && receiveNotification == 'true';
+      _receiveWasteCalendarNotification =
+          _receiveNotification && receiveWasteCalendar == 'true';
+    });
+  }
+
+  Future<void> _updateWasteCalendarNotification(bool enabled) async {
+    if (!_receiveNotification || isNotificationsProgress || prefs == null) return;
+
+    setState(() => isNotificationsProgress = true);
+
+    try {
+      final permission = await prefs!.getKeyValue(
+          Preferences.pushNotificationsPermission, 'notAsked');
+
+      if (permission == 'denied') {
+        _showPermissionDialog();
+        await _checkNotificationPermissionStatus();
+        if (!mounted) return;
+        setState(() => _receiveWasteCalendarNotification = false);
+        return;
+      }
+
+      await prefs!.setKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        enabled ? 'true' : 'false',
+      );
+
+      if (!mounted) return;
+      setState(() {
+        _receiveWasteCalendarNotification = enabled;
+        receiveWasteCalendarNotification = enabled ? 'true' : 'false';
+      });
+
+      await repository.subscribeForWasteNotification(enabled);
+
+      if (enabled && mounted) {
+        Utils.showWasteNotificationSnackBar(context);
+      }
+    } catch (e, s) {
+      debugPrint('Waste calendar notification toggle error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false);
+    }
+  }
+
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(Translate.of(context).translate('enableNotification')),
+        content:
+            Text(Translate.of(context).translate('notificationPermission')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(Translate.of(context).translate('cancel')),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _openApplicationSettings();
+            },
+            child: Text(Translate.of(context).translate('openSettings')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWasteNotificationPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        title: Row(
+          children: [
+            const Icon(Icons.notifications_off_outlined, color: Colors.orange),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                Translate.of(context).translate('waste_notification_permission_title'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          Translate.of(context).translate('waste_notification_permission_content'),
+          style: const TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(Translate.of(context).translate('cancel')),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _openApplicationSettings();
+            },
+            child: Text(Translate.of(context).translate('openSettings')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _checkNotificationPermissionStatus() async {
+    if (prefs == null) return;
+    final settings =
+        await FirebaseMessaging.instance.getNotificationSettings();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      await prefs!
+          .setKeyValue(Preferences.pushNotificationsPermission, 'authorized');
+    } else {
+      await prefs!
+          .setKeyValue(Preferences.pushNotificationsPermission, 'denied');
+      if (!mounted) return;
+      setState(() {
+        _receiveNotification = false;
+        _receiveWasteCalendarNotification = false;
+      });
+    }
+    await _initNotificationState();
+  }
+
+  Future<void> _openApplicationSettings() async {
+    final bool opened = await openAppSettings();
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open app settings')),
+      );
+    }
+  }
+
+  Widget _buildNotificationToggle() {
+    return Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(12),
+      shadowColor: Colors.black.withOpacity(0.6),
+      child: Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            Translate.of(context)
+                .translate('waste_calendar_push_toggle_title'),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Colors.black87,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    Translate.of(context).translate('toggle_disable'),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: !_receiveWasteCalendarNotification
+                          ? Colors.black87
+                          : Colors.grey,
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  CupertinoSwitch(
+                    activeColor: Theme.of(context).primaryColor,
+                    value: _receiveWasteCalendarNotification,
+                    onChanged: _receiveNotification
+                        ? _updateWasteCalendarNotification
+                        : null,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    Translate.of(context).translate('toggle_enable'),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: _receiveWasteCalendarNotification
+                          ? Theme.of(context).primaryColor
+                          : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              if (!_receiveNotification)
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _showWasteNotificationPermissionDialog,
+                  ),
+                ),
+            ],
+          ),
+        ],
+      ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     List<int> selectedWasteTypes =
@@ -444,12 +740,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                     icon: const Icon(Icons.edit),
                     onPressed: () {
                       if (!isLoading) {
-                        if (receiveWasteCalendarNotification == 'false') {
-                          _showNotificationEnableDialog(
-                              isWasteTypeEmpty: false);
-                        } else {
-                          _showLocationDialog(context);
-                        }
+                        _showLocationDialog(context);
                       }
                     },
                   ),
@@ -457,12 +748,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                     icon: const Icon(Icons.recycling),
                     onPressed: () {
                       if (!isLoading) {
-                        if (receiveWasteCalendarNotification == 'false') {
-                          _showNotificationEnableDialog(
-                              isWasteTypeEmpty: false);
-                        } else {
-                          _showWasteTypeDialog(context);
-                        }
+                        _showWasteTypeDialog(context);
                       }
                     },
                   ),
@@ -578,6 +864,8 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                   },
                                 ),
                                 const SizedBox(height: 20),
+                                _buildNotificationToggle(),
+                                const SizedBox(height: 20),
                                 _buildCalendar(),
                                 const SizedBox(height: 20),
                                 Text(
@@ -602,10 +890,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                       return Column(
                                         children:
                                         collectionsForSelectedDay.map((collection) => ListTile(
-                                                  leading: Icon(Icons.delete,
-                                                      color: _wasteCalenderCubit
-                                                          .getColorForType(
-                                                              collection.type)),
+                                                  leading: _buildWasteIcon(collection.image, collection.colour, 40),
                                                   title: Text(
                                                     collection.type
                                                   ),
@@ -615,6 +900,78 @@ class _WasteCalendarState extends State<WasteCalendar> {
                                     }
                                     return const SizedBox.shrink();
                                   },
+                                ),
+                                const SizedBox(height: 24),
+                                Material(
+                                  elevation: 4,
+                                  borderRadius: BorderRadius.circular(14),
+                                  shadowColor: Colors.black.withOpacity(0.6),
+                                  child: InkWell(
+                                  onTap: () {
+                                    CustomWebViewScreen.showAsBottomSheet(
+                                      context: context,
+                                      url: 'https://www.rsag.de/',
+                                      title: 'RSAG',
+                                    );
+                                  },
+                                  borderRadius: BorderRadius.circular(14),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 14, horizontal: 16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(14),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          width: 72,
+                                          height: 56,
+                                          padding: const EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFFF5F5F5),
+                                            borderRadius: BorderRadius.circular(10),
+                                          ),
+                                          child: SvgPicture.asset(
+                                            'assets/images/rsag-logo.svg',
+                                            fit: BoxFit.contain,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 14),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
+                                            children: [
+                                              Text(
+                                                Translate.of(context).translate('rsag_card_title'),
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w700,
+                                                  color: Colors.black87,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 3),
+                                              Text(
+                                                Translate.of(context).translate('rsag_card_subtitle'),
+                                                style: const TextStyle(
+                                                  fontSize: 12,
+                                                  color: Colors.grey,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_forward_ios_rounded,
+                                          size: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  ),
                                 ),
                                 const Padding(
                                     padding: EdgeInsets.only(bottom: 100)),
@@ -693,37 +1050,30 @@ class _WasteCalendarState extends State<WasteCalendar> {
   }
 
   Widget _buildWasteCard(WasteCollection collection) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width*0.915,
-      child: Card(
-        color: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        child: Container(
-          width: 180,
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.delete,
-                color: _wasteCalenderCubit.getColorForType(collection.type),
-                size: 30,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                collection.type,
-                style: const TextStyle(color: Colors.black, fontSize: 14),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 4),
-              Text(
-                '${collection.date.day}.${collection.date.month}.${collection.date.year}',
-                style: const TextStyle(color: Colors.black, fontSize: 12),
-              ),
-            ],
-          ),
+    return Card(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15.0),
+      ),
+      child: Container(
+        width: 180,
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildWasteIcon(collection.image, collection.colour, 48),
+            const SizedBox(height: 8),
+            Text(
+              collection.type,
+              style: const TextStyle(color: Colors.black, fontSize: 14),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 4),
+            Text(
+              '${collection.date.day}.${collection.date.month}.${collection.date.year}',
+              style: const TextStyle(color: Colors.black, fontSize: 12),
+            ),
+          ],
         ),
       ),
     );
@@ -840,8 +1190,7 @@ class _WasteCalendarState extends State<WasteCalendar> {
                 final uniqueColors = <Color>{};
 
                 for (final event in wasteEvents) {
-                  final color = _wasteCalenderCubit.getColorForType(event.type);
-                  uniqueColors.add(color);
+                  uniqueColors.add(_colorFromHex(event.colour));
                 }
 
                 // Take only first 4 unique colors

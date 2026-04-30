@@ -19,6 +19,7 @@ import 'package:heidi/src/utils/translate.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../../../data/repository/waste_calendar_repository.dart';
+import '../../../../utils/common.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key, this.user});
@@ -100,6 +101,10 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
       await repository.subscribeForWasteNotification(_receiveWasteCalendarNotification);
+
+      if (enabled && mounted) {
+        Utils.showWasteNotificationSnackBar(context);
+      }
     } catch (e, s) {
       debugPrint('Notification update error: $e');
       debugPrintStack(stackTrace: s);
@@ -152,12 +157,16 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       await repository
           .subscribeForWasteNotification(_receiveWasteCalendarNotification);
+
+      if (enabled && mounted) {
+        Utils.showWasteNotificationSnackBar(context);
+      }
     } catch (e, s) {
       debugPrint('Waste calendar notification error: $e');
       debugPrintStack(stackTrace: s);
     } finally {
       if (!mounted) return;
-      setState(() => isNotificationsProgress = false); // ✅ ALWAYS EXECUTES
+      setState(() => isNotificationsProgress = false);
     }
   }
 

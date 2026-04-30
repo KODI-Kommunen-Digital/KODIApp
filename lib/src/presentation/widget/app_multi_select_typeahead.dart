@@ -1,7 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
+
+Color _wasteTypeColorFromHex(String hex) {
+  try {
+    final hexCode = hex.replaceFirst('#', '');
+    if (hexCode.length == 6) return Color(int.parse('FF$hexCode', radix: 16));
+    if (hexCode.length == 8) return Color(int.parse(hexCode, radix: 16));
+  } catch (_) {}
+  return Colors.grey;
+}
 
 class AppMultiSelectTypeAhead extends StatefulWidget {
   final List<WasteType> items;
@@ -242,19 +254,53 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             maxHeight: 300,
             backgroundColor: isDark ? Colors.grey.shade900 : Colors.white,
             borderRadius: BorderRadius.circular(12),
-            header: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Text(
-                'Wähle Abfallarten aus',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+          ),
+          itemBuilder: (item, index, onTap) {
+            final wasteType = item.value;
+            final color = _wasteTypeColorFromHex(wasteType.colour);
+            return InkWell(
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 36,
+                      height: 36,
+                      decoration: BoxDecoration(
+                        color: color.withOpacity(0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      padding: const EdgeInsets.all(6),
+                      child: SvgPicture.network(
+                        '${Application.picturesURL}${wasteType.image}',
+                        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
+                        placeholderBuilder: (context) => Icon(
+                          Icons.delete_outline,
+                          color: color,
+                          size: 18,
+                        ),
+                      )
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        item.label,
+                        style: TextStyle(
+                          color: item.selected ? theme.primaryColor : (isDark ? Colors.white : Colors.black87),
+                          fontWeight: item.selected ? FontWeight.w500 : FontWeight.normal,
+                        ),
+                      ),
+                    ),
+                    if (item.selected)
+                      Icon(Icons.check_circle, color: theme.primaryColor, size: 20),
+                  ],
                 ),
               ),
-            ),
-          ),
+            );
+          },
           dropdownItemDecoration: DropdownItemDecoration(
             selectedBackgroundColor: theme.primaryColor.withOpacity(0.1),
-            selectedIcon: Icon(Icons.check_circle, color: theme.primaryColor),
             disabledIcon: Icon(Icons.lock, color: Colors.grey.shade400),
           ),
           validator: (value) {

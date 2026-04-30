@@ -1,8 +1,12 @@
 // ignore_for_file: use_build_context_synchronously, unused_field
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/cubit/waste_calendar_cubit.dart';
+import 'package:heidi/src/utils/common.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
@@ -18,7 +22,8 @@ class IntroPage extends StatefulWidget {
   IntroPageState createState() => IntroPageState();
 }
 
-class IntroPageState extends State<IntroPage> {
+class IntroPageState extends State<IntroPage>
+    with WidgetsBindingObserver {
   final TextEditingController typeAheadController = TextEditingController();
 
   List<WasteLocation> locations = [];
@@ -33,25 +38,266 @@ class IntroPageState extends State<IntroPage> {
   bool _isConfirming = false;
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   bool _isLocationsLoading = true;
+  Preferences? _prefs;
+  bool _receiveNotification = false;
+  bool _receiveWasteCalendarNotification = false;
+  bool isNotificationsProgress = false;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _initializeRepository();
   }
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     typeAheadController.dispose();
     _wasteCalenderCubit.close();
     super.dispose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      _checkNotificationPermissionStatus();
+    }
+  }
+
   Future<void> _initializeRepository() async {
-    final prefs = await Preferences.openBox();
-    repository = WasteCalendarRepository(prefs);
+    _prefs = await Preferences.openBox();
+    repository = WasteCalendarRepository(_prefs!);
     await _loadLocations();
-    await _loadWasteTypes(); // Load waste types immediately
+    await _loadWasteTypes();
+    await _initNotificationState();
+  }
+
+  Future<void> _initNotificationState() async {
+    if (_prefs == null) return;
+    final permission = await _prefs!.getKeyValue(
+        Preferences.pushNotificationsPermission, 'notAsked');
+    final isAuthorized = permission == 'authorized';
+    final receiveNotification = _prefs!.getKeyValue(
+        Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
+    final receiveWasteCalendar = _prefs!.getKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        isAuthorized ? 'true' : 'false');
+
+    if (!mounted) return;
+    setState(() {
+      _receiveNotification = isAuthorized && receiveNotification == 'true';
+      _receiveWasteCalendarNotification =
+          _receiveNotification && receiveWasteCalendar == 'true';
+    });
+  }
+
+  Future<void> _updateWasteCalendarNotification(bool enabled) async {
+    if (!_receiveNotification || isNotificationsProgress || _prefs == null) return;
+
+    setState(() => isNotificationsProgress = true);
+
+    try {
+      final permission = await _prefs!.getKeyValue(
+          Preferences.pushNotificationsPermission, 'notAsked');
+
+      if (permission == 'denied') {
+        _showPermissionDialog();
+        await _checkNotificationPermissionStatus();
+        if (!mounted) return;
+        setState(() => _receiveWasteCalendarNotification = false);
+        return;
+      }
+
+      await _prefs!.setKeyValue(
+        Preferences.receiveWasteCalendarNotification,
+        enabled ? 'true' : 'false',
+      );
+
+      if (!mounted) return;
+      setState(() => _receiveWasteCalendarNotification = enabled);
+
+      await repository.subscribeForWasteNotification(enabled);
+
+      if (enabled && mounted) {
+        Utils.showWasteNotificationSnackBar(context);
+      }
+    } catch (e, s) {
+      debugPrint('Waste calendar notification toggle error: $e');
+      debugPrintStack(stackTrace: s);
+    } finally {
+      if (!mounted) return;
+      setState(() => isNotificationsProgress = false);
+    }
+  }
+
+  void _showPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(Translate.of(context).translate('enableNotification')),
+        content:
+            Text(Translate.of(context).translate('notificationPermission')),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(Translate.of(context).translate('cancel')),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _openApplicationSettings();
+            },
+            child: Text(Translate.of(context).translate('openSettings')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showWasteNotificationPermissionDialog() {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        title: Row(
+          children: [
+            const Icon(Icons.notifications_off_outlined, color: Colors.orange),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                Translate.of(context).translate('waste_notification_permission_title'),
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          Translate.of(context).translate('waste_notification_permission_content'),
+          style: const TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(Translate.of(context).translate('cancel')),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _openApplicationSettings();
+            },
+            child: Text(Translate.of(context).translate('openSettings')),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _checkNotificationPermissionStatus() async {
+    if (_prefs == null) return;
+    final settings =
+        await FirebaseMessaging.instance.getNotificationSettings();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      await _prefs!
+          .setKeyValue(Preferences.pushNotificationsPermission, 'authorized');
+    } else {
+      await _prefs!
+          .setKeyValue(Preferences.pushNotificationsPermission, 'denied');
+      if (!mounted) return;
+      setState(() {
+        _receiveNotification = false;
+        _receiveWasteCalendarNotification = false;
+      });
+    }
+    await _initNotificationState();
+  }
+
+  Future<void> _openApplicationSettings() async {
+    final bool opened = await openAppSettings();
+    if (!opened && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unable to open app settings')),
+      );
+    }
+  }
+
+  Widget _buildNotificationToggle() {
+    return Material(
+      elevation: 4,
+      borderRadius: BorderRadius.circular(12),
+      shadowColor: Colors.black.withOpacity(0.6),
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              Translate.of(context).translate('waste_calendar_push_toggle_title'),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      Translate.of(context).translate('toggle_disable'),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: !_receiveWasteCalendarNotification
+                            ? Colors.black87
+                            : Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    CupertinoSwitch(
+                      activeColor: Theme.of(context).primaryColor,
+                      value: _receiveWasteCalendarNotification,
+                      onChanged: _receiveNotification
+                          ? _updateWasteCalendarNotification
+                          : null,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      Translate.of(context).translate('toggle_enable'),
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        color: _receiveWasteCalendarNotification
+                            ? Theme.of(context).primaryColor
+                            : Colors.grey,
+                      ),
+                    ),
+                  ],
+                ),
+                if (!_receiveNotification)
+                  Positioned.fill(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _showWasteNotificationPermissionDialog,
+                    ),
+                  ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Future<void> _loadLocations() async {
@@ -275,7 +521,9 @@ class IntroPageState extends State<IntroPage> {
                   hintText: 'Abfallarten eingeben',
                   enabled: !_isConfirming,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 20),
+                _buildNotificationToggle(),
+                const SizedBox(height: 18),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
