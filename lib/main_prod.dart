@@ -13,9 +13,8 @@ import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/firebase_option_production/firebase_options.dart';
-import 'package:heidi/src/main_screen.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/main/intro/intro_screen.dart';
+import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -99,9 +98,6 @@ class _HeidiAppState extends State<HeidiApp> {
 
   @override
   Widget build(BuildContext context) {
-    bool isWasteCalendarSkipped = widget.prefBox.getBool(
-        Preferences.isWasteCalendarSkipped);
-
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -142,24 +138,7 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<bool?>(
-                      future: _shouldShowMainScreen(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          final location = snapshot.data;
-                          if (location == true ||
-                              (isWasteCalendarSkipped != null &&
-                                  isWasteCalendarSkipped)) {
-                            return const MainScreen();
-                          } else {
-                            return const AppIntroScreen();
-                          }
-                        }
-                      },
-                    ),
+                    home: const SplashScreen(),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
                         textScaler:
@@ -225,11 +204,4 @@ class _HeidiAppState extends State<HeidiApp> {
     };
   }
 
-  Future<bool> _shouldShowMainScreen() async {
-    final prefs = await Preferences.openBox();
-    final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
-    final wasteTypes = prefs.getSelectedWasteTypes();
-    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
-    return (location != null && wasteTypes.isNotEmpty);
-  }
 }

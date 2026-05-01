@@ -48,8 +48,9 @@ class _SettingsScreenState extends State<SettingsScreen>
     final isAuthorized = permission == 'authorized';
     final receiveNotification =
     await _prefs.getKeyValue(Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
+    // Always default to 'false' — user must explicitly opt-in to waste calendar notifications
     final receiveWasteCalendar =
-    await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, isAuthorized ? 'true' : 'false');
+    await _prefs.getKeyValue(Preferences.receiveWasteCalendarNotification, 'false');
 
     setState(() {
       _receiveNotification = isAuthorized && receiveNotification == 'true';
@@ -89,20 +90,27 @@ class _SettingsScreenState extends State<SettingsScreen>
 
       await _prefs.setKeyValue(
           Preferences.receiveNotification, enabled ? 'true' : 'false');
-      await _prefs.setKeyValue(
-          Preferences.receiveWasteCalendarNotification, enabled ? 'true' : 'false');
+
+      // When disabling general notifications, also turn off waste calendar.
+      // When enabling, preserve the user's explicit waste calendar preference.
+      if (!enabled) {
+        await _prefs.setKeyValue(
+            Preferences.receiveWasteCalendarNotification, 'false');
+      }
 
       if (!mounted) return;
 
       setState(() {
         _receiveNotification = enabled;
-        _receiveWasteCalendarNotification = enabled;
+        if (!enabled) {
+          _receiveWasteCalendarNotification = false;
+        }
       });
 
       await FirebaseApi(globalNavKey, _prefs).refreshNotifications();
       await repository.subscribeForWasteNotification(_receiveWasteCalendarNotification);
 
-      if (enabled && mounted) {
+      if (enabled && _receiveWasteCalendarNotification && mounted) {
         Utils.showWasteNotificationSnackBar(context);
       }
     } catch (e, s) {

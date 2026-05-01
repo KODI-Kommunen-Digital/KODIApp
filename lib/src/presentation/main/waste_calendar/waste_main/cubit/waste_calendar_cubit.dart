@@ -30,7 +30,9 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
       if (isClosed) return;
 
       if (result.success) {
-        final data = result.data as List<dynamic>;
+        final data = (result.data as List<dynamic>)
+            .whereType<Map<String, dynamic>>()
+            .toList();
 
         final DateTime now = DateTime.now();
         final DateTime today = DateTime(now.year, now.month, now.day);

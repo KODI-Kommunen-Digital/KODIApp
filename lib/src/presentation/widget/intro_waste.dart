@@ -82,8 +82,7 @@ class IntroPageState extends State<IntroPage>
     final receiveNotification = _prefs!.getKeyValue(
         Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
     final receiveWasteCalendar = _prefs!.getKeyValue(
-        Preferences.receiveWasteCalendarNotification,
-        isAuthorized ? 'true' : 'false');
+        Preferences.receiveWasteCalendarNotification, 'false');
 
     if (!mounted) return;
     setState(() {
@@ -224,78 +223,77 @@ class IntroPageState extends State<IntroPage>
   }
 
   Widget _buildNotificationToggle() {
-    return Material(
-      elevation: 4,
-      borderRadius: BorderRadius.circular(12),
-      shadowColor: Colors.black.withOpacity(0.6),
-      child: Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
+    final theme = Theme.of(context);
+    final t = Translate.of(context);
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: theme.primaryColor.withOpacity(0.35),
+          width: 1.5,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              Translate.of(context).translate('waste_calendar_push_toggle_title'),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
-              ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            t.translate('waste_calendar_push_toggle_title'),
+            textAlign: TextAlign.center,
+            style: theme.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
-            const SizedBox(height: 12),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      Translate.of(context).translate('toggle_disable'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: !_receiveWasteCalendarNotification
-                            ? Colors.black87
-                            : Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    CupertinoSwitch(
-                      activeColor: Theme.of(context).primaryColor,
-                      value: _receiveWasteCalendarNotification,
-                      onChanged: _receiveNotification
-                          ? _updateWasteCalendarNotification
-                          : null,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      Translate.of(context).translate('toggle_enable'),
-                      style: TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
-                        color: _receiveWasteCalendarNotification
-                            ? Theme.of(context).primaryColor
-                            : Colors.grey,
-                      ),
-                    ),
-                  ],
-                ),
-                if (!_receiveNotification)
-                  Positioned.fill(
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: _showWasteNotificationPermissionDialog,
+          ),
+          const SizedBox(height: 12),
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    t.translate('toggle_disable'),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: !_receiveWasteCalendarNotification
+                          ? theme.colorScheme.onSurface
+                          : Colors.grey,
                     ),
                   ),
-              ],
-            ),
-          ],
-        ),
+                  const SizedBox(width: 10),
+                  CupertinoSwitch(
+                    activeColor: theme.primaryColor,
+                    value: _receiveWasteCalendarNotification,
+                    onChanged: _receiveNotification
+                        ? _updateWasteCalendarNotification
+                        : null,
+                  ),
+                  const SizedBox(width: 10),
+                  Text(
+                    t.translate('toggle_enable'),
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
+                      color: _receiveWasteCalendarNotification
+                          ? theme.primaryColor
+                          : Colors.grey,
+                    ),
+                  ),
+                ],
+              ),
+              if (!_receiveNotification)
+                Positioned.fill(
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _showWasteNotificationPermissionDialog,
+                  ),
+                ),
+            ],
+          ),
+        ],
       ),
     );
   }

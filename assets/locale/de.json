@@ -668,6 +668,18 @@
   "feature_chatbot_description" : "Erhalten Sie jederzeit schnelle Antworten auf Ihre Fragen.",
   "waste_calendar_push_toggle_title" : "Push-Benachrichtigungen für Abfallkalender aktivieren",
   "toggle_enable" : "Aktivieren",
-  "toggle_disable" : "Deaktivieren"
+  "toggle_disable" : "Deaktivieren",
+  "splash_powered_by" : "Betrieben von RSAG",
+  "intro_tagline": "MIT RSAG ERMÖGLICHEN WIR",
+  "intro_page1_t2": "Intelligentes Abfallmanagement",
+  "intro_page1_t3": "Verwalte deinen Abfall ganz einfach mit zuverlässigen und organisierten Services.",
+  "intro_page2_t2": "Faire & transparente Preise",
+  "intro_page2_t3": "Bezahle nach dem, was du verursachst – einfach und fair.",
+  "intro_page3_t2": "Kostenlose & bequeme Services",
+  "intro_page3_t3": "Nutze Sperrmüll, Grünschnittabfuhr und vieles mehr.",
+  "intro_page4_t2": "Umweltfreundlicher Ansatz",
+  "intro_page4_t3": "Unterstütze Recycling und Nachhaltigkeit bei jeder Entsorgung.",
+  "intro_page5_t2": "Und viele weitere Features",
+  "intro_page5_t3": "Stadtwerke, Mobilität, StadtGUTSCHEIN, Chat Bot usw."
 }
 

@@ -99,9 +99,10 @@ class _WasteCalendarState extends State<WasteCalendar>
         final permission = await prefs!.getKeyValue(
             Preferences.pushNotificationsPermission, 'notAsked');
         final isAuthorized = permission == 'authorized';
+        // Always default to 'false' — user must explicitly opt-in
         receiveWasteCalendarNotification = prefs!.getKeyValue(
           Preferences.receiveWasteCalendarNotification,
-          isAuthorized ? 'true' : 'false',
+          'false',
         );
       }
       await _initNotificationState();
@@ -271,19 +272,15 @@ class _WasteCalendarState extends State<WasteCalendar>
       hashedStreetName: hashedStreetName,
         onSuccess: () async {
           final prefs = await Preferences.openBox();
-          final permission = await prefs.getKeyValue(
-              Preferences.pushNotificationsPermission, 'notAsked');
-          final isAuthorized = permission == 'authorized';
-          await prefs.setKeyValue(Preferences.receiveWasteCalendarNotification,
-              isAuthorized ? 'true' : 'false');
+          // Preserve the user's existing waste calendar preference — never auto-enable
+          final currentWasteCalPref = prefs.getKeyValue(
+            Preferences.receiveWasteCalendarNotification, 'false');
 
           setState(() {
-            receiveWasteCalendarNotification = prefs.getKeyValue(
-              Preferences.receiveWasteCalendarNotification,
-              isAuthorized ? 'true' : 'false',
-            );
+            receiveWasteCalendarNotification = currentWasteCalPref;
           });
-          await repository.subscribeForWasteNotification(true);
+          await repository.subscribeForWasteNotification(
+            _receiveNotification && currentWasteCalPref == 'true');
           _initializeRepository();
         });
     _wasteCalenderCubit.updateStreetId(locationId,
@@ -368,30 +365,23 @@ class _WasteCalendarState extends State<WasteCalendar>
                                           final prefs =
                                               await Preferences.openBox();
 
-                                          final permission =
-                                              await prefs.getKeyValue(
+                                          // Preserve the user's existing preference — never auto-enable
+                                          final currentWasteCalPref =
+                                              prefs.getKeyValue(
                                                   Preferences
-                                                      .pushNotificationsPermission,
-                                                  'notAsked');
-                                          final isAuthorized =
-                                              permission == 'authorized';
-                                          await prefs.setKeyValue(
-                                              Preferences
-                                                  .receiveWasteCalendarNotification,
-                                              isAuthorized ? 'true' : 'false');
+                                                      .receiveWasteCalendarNotification,
+                                                  'false');
 
                                           setState(() {
                                             receiveWasteCalendarNotification =
-                                                prefs.getKeyValue(
-                                              Preferences
-                                                  .receiveWasteCalendarNotification,
-                                              isAuthorized ? 'true' : 'false',
-                                            );
+                                                currentWasteCalPref;
                                           });
 
                                           await repository
                                               .subscribeForWasteNotification(
-                                                  true);
+                                                  _receiveNotification &&
+                                                      currentWasteCalPref ==
+                                                          'true');
                                           _initializeRepository();
                                             });
                                         Navigator.pop(context);
@@ -476,9 +466,9 @@ class _WasteCalendarState extends State<WasteCalendar>
     final isAuthorized = permission == 'authorized';
     final receiveNotification = prefs!.getKeyValue(
         Preferences.receiveNotification, isAuthorized ? 'true' : 'false');
+    // Always default to 'false' — user must explicitly opt-in
     final receiveWasteCalendar = prefs!.getKeyValue(
-        Preferences.receiveWasteCalendarNotification,
-        isAuthorized ? 'true' : 'false');
+        Preferences.receiveWasteCalendarNotification, 'false');
 
     if (!mounted) return;
     setState(() {
@@ -1082,6 +1072,13 @@ class _WasteCalendarState extends State<WasteCalendar>
   Widget _buildCalendar() {
     return BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
       builder: (context, state) {
+        if (state is WasteCalendarLoading) {
+          return const SizedBox(
+            height: 300,
+            child: Center(child: CircularProgressIndicator.adaptive()),
+          );
+        }
+
         if (state is WasteCalendarLoaded) {
           final Map<DateTime, List<WasteCollection>> events = {};
 
@@ -1217,49 +1214,7 @@ class _WasteCalendarState extends State<WasteCalendar>
             ),
           );
         }
-        return TableCalendar(
-          firstDay: DateTime.utc(2020, 10, 16),
-          lastDay: DateTime.utc(2030, 3, 14),
-          focusedDay: _focusedDay,
-          selectedDayPredicate: (day) {
-            return isSameDay(_selectedDay, day);
-          },
-          onDaySelected: (selectedDay, focusedDay) {
-            setState(() {
-              _selectedDay = selectedDay;
-              _focusedDay = focusedDay;
-            });
-          },
-          calendarFormat: CalendarFormat.month,
-          startingDayOfWeek: StartingDayOfWeek.monday,
-          calendarStyle: const CalendarStyle(
-            defaultTextStyle: TextStyle(color: Colors.white),
-            weekendTextStyle: TextStyle(color: Colors.red),
-            todayDecoration: BoxDecoration(
-              color: Colors.blue,
-              shape: BoxShape.circle,
-            ),
-            selectedDecoration: BoxDecoration(
-              color: Colors.orange,
-              shape: BoxShape.circle,
-            ),
-            markerDecoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            markersMaxCount: 3,
-          ),
-          headerStyle: const HeaderStyle(
-            titleTextStyle: TextStyle(color: Colors.white, fontSize: 16),
-            formatButtonVisible: false,
-            leftChevronIcon: Icon(Icons.chevron_left, color: Colors.white),
-            rightChevronIcon: Icon(Icons.chevron_right, color: Colors.white),
-          ),
-          daysOfWeekStyle: const DaysOfWeekStyle(
-            weekdayStyle: TextStyle(color: Colors.white),
-            weekendStyle: TextStyle(color: Colors.red),
-          ),
-        );
+        return const SizedBox.shrink();
       },
     );
   }

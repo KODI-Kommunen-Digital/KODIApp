@@ -1,17 +1,32 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:heidi/src/presentation/widget/app_button.dart';
-import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
 import '../../../utils/translate.dart';
 
-class AppIntroScreen extends StatelessWidget {
+class AppIntroScreen extends StatefulWidget {
   const AppIntroScreen({super.key});
 
-  Future<void> _testAppNow(BuildContext context) async {
+  @override
+  State<AppIntroScreen> createState() => _AppIntroScreenState();
+}
+
+class _AppIntroScreenState extends State<AppIntroScreen> {
+  final PageController _pageController = PageController();
+  int _currentPage = 0;
+
+  static const int _totalPages = 5;
+  static const int _dotsPageCount = 4;
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _skipToHome() async {
     final prefs = await Preferences.openBox();
     await prefs.setKeyValue(
         Preferences.receiveWasteCalendarNotification, 'false');
@@ -19,56 +34,103 @@ class AppIntroScreen extends StatelessWidget {
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 
+  void _nextPage() {
+    _pageController.nextPage(
+      duration: const Duration(milliseconds: 380),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _goToWasteSetup() {
+    Navigator.pushReplacementNamed(context, Routes.introWaste);
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = Translate.of(context);
     final theme = Theme.of(context);
+    final isLastPage = _currentPage == _totalPages - 1;
+
+    final List<_PageData> pages = [
+      _PageData(
+        t1: t.translate('intro_tagline'),
+        t2: t.translate('intro_page1_t2'),
+        t3: t.translate('intro_page1_t3'),
+        imagePath: 'assets/images/intro_image_1.png',
+      ),
+      _PageData(
+        t1: t.translate('intro_tagline'),
+        t2: t.translate('intro_page2_t2'),
+        t3: t.translate('intro_page2_t3'),
+        imagePath: 'assets/images/intro_image_2.png',
+      ),
+      _PageData(
+        t1: t.translate('intro_tagline'),
+        t2: t.translate('intro_page3_t2'),
+        t3: t.translate('intro_page3_t3'),
+        imagePath: 'assets/images/intro_image_3.png',
+      ),
+      _PageData(
+        t1: t.translate('intro_tagline'),
+        t2: t.translate('intro_page4_t2'),
+        t3: t.translate('intro_page4_t3'),
+        imagePath: 'assets/images/intro_image_4.png',
+      ),
+      _PageData(
+        t1: null,
+        t2: t.translate('intro_page5_t2'),
+        t3: t.translate('intro_page5_t3'),
+        imagePath: 'assets/images/intro_image_5.png',
+      ),
+    ];
 
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _IntroHeader(t: t, theme: theme),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          const SizedBox(height: 24),
-                          _FeatureCard(
-                            icon: Icons.newspaper_outlined,
-                            title: t.translate('feature_news_title'),
-                            description:
-                                t.translate('feature_news_description'),
-                          ),
-                          const SizedBox(height: 12),
-                          _FeatureCard(
-                            icon: Icons.delete_outline,
-                            title: t.translate('feature_waste_title'),
-                            description:
-                                t.translate('feature_waste_description'),
-                          ),
-                          const SizedBox(height: 24),
-                          _MoreFeaturesSection(t: t, theme: theme),
-                          const SizedBox(height: 24),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              child: PageView.builder(
+                controller: _pageController,
+                itemCount: _totalPages,
+                onPageChanged: (index) =>
+                    setState(() => _currentPage = index),
+                itemBuilder: (context, index) =>
+                    _IntroPageContent(data: pages[index]),
               ),
             ),
-            _IntroBottomActions(
+            // Dots sit just below the page content
+            SizedBox(
+              height: 28,
+              child: isLastPage
+                  ? null
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(_dotsPageCount, (index) {
+                        final isActive = index == _currentPage;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 280),
+                          curve: Curves.easeInOut,
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: isActive ? 22 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: isActive
+                                ? theme.primaryColor
+                                : theme.primaryColor.withOpacity(0.18),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        );
+                      }),
+                    ),
+            ),
+            _BottomSection(
+              isLastPage: isLastPage,
               t: t,
-              onSetup: () =>
-                  Navigator.pushReplacementNamed(context, Routes.introWaste),
-              onSkip: () => _testAppNow(context),
+              theme: theme,
+              onNext: _nextPage,
+              onSetupWaste: _goToWasteSetup,
+              onSkip: _skipToHome,
             ),
           ],
         ),
@@ -77,57 +139,76 @@ class AppIntroScreen extends StatelessWidget {
   }
 }
 
-class _IntroHeader extends StatelessWidget {
-  final dynamic t;
-  final ThemeData theme;
+class _PageData {
+  final String? t1;
+  final String t2;
+  final String t3;
+  final String imagePath;
 
-  const _IntroHeader({required this.t, required this.theme});
+  const _PageData({
+    this.t1,
+    required this.t2,
+    required this.t3,
+    required this.imagePath,
+  });
+}
+
+class _IntroPageContent extends StatelessWidget {
+  final _PageData data;
+
+  const _IntroPageContent({required this.data});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            theme.primaryColor,
-            theme.primaryColor.withOpacity(0.72),
-          ],
-        ),
-      ),
-      padding: const EdgeInsets.fromLTRB(24, 40, 24, 36),
+    final theme = Theme.of(context);
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.12),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ],
-            ),
-            child: Image.asset(Images.logo, height: 64),
+          // t1 slot — always occupies same height for layout consistency
+          SizedBox(
+            height: 18,
+            child: data.t1 != null
+                ? Text(
+                    data.t1!,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      letterSpacing: 2.0,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 10,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 1,
+                  )
+                : null,
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 220,
+            child: Image.asset(
+              data.imagePath,
+              fit: BoxFit.contain,
+            ),
+          ),
+          const SizedBox(height: 28),
           Text(
-            t.translate('welcome_title'),
+            data.t2,
             style: theme.textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: theme.colorScheme.onSurface,
+              height: 1.25,
+              fontSize: 22,
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
           Text(
-            t.translate('welcome_subtitle'),
+            data.t3,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: Colors.white.withOpacity(0.85),
+              height: 1.55,
+              fontWeight: FontWeight.w200,
             ),
             textAlign: TextAlign.center,
           ),
@@ -137,205 +218,83 @@ class _IntroHeader extends StatelessWidget {
   }
 }
 
-class _MoreFeaturesSection extends StatelessWidget {
+class _BottomSection extends StatelessWidget {
+  final bool isLastPage;
   final dynamic t;
   final ThemeData theme;
-
-  const _MoreFeaturesSection({required this.t, required this.theme});
-
-  @override
-  Widget build(BuildContext context) {
-    final chips = [
-      _ChipData(Icons.water_drop_outlined, t.translate('feature_municipal_title')),
-      _ChipData(Icons.directions_bus_outlined, t.translate('feature_mobility_title')),
-      _ChipData(Icons.card_giftcard_outlined, t.translate('feature_voucher_title')),
-      _ChipData(Icons.smart_toy_outlined, t.translate('feature_chatbot_title')),
-      _ChipData(Icons.more_horiz, t.translate('intro_more_services'), isAccent: true),
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          t.translate('intro_more_features_title'),
-          style: theme.textTheme.titleMedium
-              ?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 4),
-        Text(
-          t.translate('intro_more_features_subtitle'),
-          style:
-              theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
-        ),
-        const SizedBox(height: 14),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: chips
-              .map((c) => _FeatureChip(
-                    icon: c.icon,
-                    label: c.label,
-                    isAccent: c.isAccent,
-                  ))
-              .toList(),
-        ),
-      ],
-    );
-  }
-}
-
-class _ChipData {
-  final IconData icon;
-  final String label;
-  final bool isAccent;
-
-  const _ChipData(this.icon, this.label, {this.isAccent = false});
-}
-
-class _IntroBottomActions extends StatelessWidget {
-  final dynamic t;
-  final VoidCallback onSetup;
+  final VoidCallback onNext;
+  final VoidCallback onSetupWaste;
   final VoidCallback onSkip;
 
-  const _IntroBottomActions({
+  const _BottomSection({
+    required this.isLastPage,
     required this.t,
-    required this.onSetup,
+    required this.theme,
+    required this.onNext,
+    required this.onSetupWaste,
     required this.onSkip,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
       decoration: BoxDecoration(
-        color: Theme.of(context).scaffoldBackgroundColor,
+        color: theme.scaffoldBackgroundColor,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 12,
-            offset: const Offset(0, -3),
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, -2),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
-          AppButton(
-            t.translate('button_setup_waste_calendar'),
-            mainAxisSize: MainAxisSize.max,
-            onPressed: onSetup,
+          // Primary action button
+          SizedBox(
+            width: double.infinity,
+            height: 50,
+            child: ElevatedButton(
+              onPressed: isLastPage ? onSetupWaste : onNext,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.primaryColor,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 0.2,
+                ),
+              ),
+              child: Text(
+                isLastPage
+                    ? t.translate('button_setup_waste_calendar')
+                    : t.translate('next'),
+              ),
+            ),
           ),
-          const SizedBox(height: 12),
-          AppButton(
-            t.translate('button_test_app'),
-            type: ButtonType.outline,
-            mainAxisSize: MainAxisSize.max,
+          const SizedBox(height: 4),
+          // Secondary skip button
+          TextButton(
             onPressed: onSkip,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
-
-  const _FeatureCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.dividerColor),
-        boxShadow: [
-          BoxShadow(
-            color: theme.shadowColor.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: theme.primaryColor.withOpacity(0.10),
-              borderRadius: BorderRadius.circular(10),
+            style: TextButton.styleFrom(
+              foregroundColor: theme.primaryColor,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
-            child: Icon(icon, size: 24, color: theme.primaryColor),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: theme.textTheme.bodySmall
-                      ?.copyWith(color: Colors.grey),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _FeatureChip extends StatelessWidget {
-  final IconData icon;
-  final String label;
-  final bool isAccent;
-
-  const _FeatureChip({
-    required this.icon,
-    required this.label,
-    this.isAccent = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = isAccent ? theme.colorScheme.secondary : theme.primaryColor;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
-        borderRadius: BorderRadius.circular(30),
-        border: Border.all(color: color.withOpacity(0.28)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 16, color: color),
-          const SizedBox(width: 6),
-          Text(
-            label,
-            style: theme.textTheme.labelMedium?.copyWith(
-              color: color,
-              fontWeight: FontWeight.w600,
+            child: Text(
+              t.translate('button_test_app'),
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: theme.primaryColor,
+                decoration: TextDecoration.underline,
+                decorationColor: theme.primaryColor,
+              ),
             ),
           ),
         ],
