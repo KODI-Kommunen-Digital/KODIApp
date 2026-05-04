@@ -744,12 +744,12 @@ class _WasteCalendarState extends State<WasteCalendar>
                   ),
                 ],
               ),
-              body: isDataInitializing
-                  ? const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    )
-                  : Stack(
-                      children: [
+              body: BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
+                builder: (context, state) {
+                  final isPageLoading =
+                      isDataInitializing || state is WasteCalendarLoading;
+                  return Stack(
+                    children: [
                         // Main content
                         SingleChildScrollView(
                           controller: _scrollController,
@@ -808,10 +808,7 @@ class _WasteCalendarState extends State<WasteCalendar>
                                 BlocBuilder<WasteCalendarCubit,
                                     WasteCalendarState>(
                                   builder: (context, state) {
-                                    if (state is WasteCalendarLoading) {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    } else if (state is WasteCalendarLoaded) {
+                                    if (state is WasteCalendarLoaded) {
                                       return state
                                               .carouselCollections.isNotEmpty
                                           ? SizedBox(
@@ -970,9 +967,15 @@ class _WasteCalendarState extends State<WasteCalendar>
                           ),
                         ),
 
-                        // Loading overlay - This should block ALL interactions
+                        if (isPageLoading) ...[
+                          Container(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            width: double.infinity,
+                            height: double.infinity,
+                          ),
+                          const Center(child: CircularProgressIndicator.adaptive()),
+                        ],
                         if (isLoading) ...[
-                          // Full-screen barrier that blocks all touches
                           GestureDetector(
                             onTap: () {},
                             onPanDown: (_) {},
@@ -982,8 +985,6 @@ class _WasteCalendarState extends State<WasteCalendar>
                               height: double.infinity,
                             ),
                           ),
-
-                          // Loading indicator in center
                           Center(
                             child: Container(
                               padding: const EdgeInsets.all(20),
@@ -1013,7 +1014,9 @@ class _WasteCalendarState extends State<WasteCalendar>
                           ),
                         ],
                       ],
-                    ),
+                    );
+                  },
+                ),
             ),
           ],
         ),
@@ -1072,13 +1075,6 @@ class _WasteCalendarState extends State<WasteCalendar>
   Widget _buildCalendar() {
     return BlocBuilder<WasteCalendarCubit, WasteCalendarState>(
       builder: (context, state) {
-        if (state is WasteCalendarLoading) {
-          return const SizedBox(
-            height: 300,
-            child: Center(child: CircularProgressIndicator.adaptive()),
-          );
-        }
-
         if (state is WasteCalendarLoaded) {
           final Map<DateTime, List<WasteCollection>> events = {};
 

@@ -18,7 +18,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
   int _currentPage = 0;
 
   static const int _totalPages = 5;
-  static const int _dotsPageCount = 4;
+  static const int _dotsPageCount = 5;
 
   @override
   void dispose() {
@@ -102,27 +102,25 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
             // Dots sit just below the page content
             SizedBox(
               height: 28,
-              child: isLastPage
-                  ? null
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: List.generate(_dotsPageCount, (index) {
-                        final isActive = index == _currentPage;
-                        return AnimatedContainer(
-                          duration: const Duration(milliseconds: 280),
-                          curve: Curves.easeInOut,
-                          margin: const EdgeInsets.symmetric(horizontal: 4),
-                          width: isActive ? 22 : 8,
-                          height: 8,
-                          decoration: BoxDecoration(
-                            color: isActive
-                                ? theme.primaryColor
-                                : theme.primaryColor.withOpacity(0.18),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                        );
-                      }),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(_dotsPageCount, (index) {
+                  final isActive = index == _currentPage;
+                  return AnimatedContainer(
+                    duration: const Duration(milliseconds: 280),
+                    curve: Curves.easeInOut,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    width: isActive ? 22 : 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                      color: isActive
+                          ? theme.primaryColor
+                          : theme.primaryColor.withOpacity(0.18),
+                      borderRadius: BorderRadius.circular(4),
                     ),
+                  );
+                }),
+              ),
             ),
             _BottomSection(
               isLastPage: isLastPage,
