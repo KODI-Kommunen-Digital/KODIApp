@@ -35,11 +35,10 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
-  WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: "assets/envStage/.envTroisdorfStage");
-
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -52,29 +51,34 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
-  await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  try{
-    await FirebaseApi(globalNavKey, prefBox).initNotifications();
-  } catch(e){
-    print(e);
-  }
-
   debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
-  await MatomoTracker.instance.initialize(
-    siteId: "1",
-    url: 'https://troisdorf.matomo.cloud/matomo.php',
-  );
 
-  await SentryFlutter.init((options) {
-    options.dsn =
-        'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
-    options.tracesSampleRate = 0.01;
-    options.debug = false;
-  }, appRunner: () => runApp(SentryWidget(child: HeidiApp(prefBox))));
-  await CategoryManager.loadCategories();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
+      options.tracesSampleRate = 0.01;
+      options.debug = false;
+    },
+    appRunner: () async {
+      runApp(SentryWidget(child: HeidiApp(prefBox)));
+      // Run heavy initializations after the splash screen is already visible
+      await Upgrader.clearSavedSettings();
+      try {
+        await FirebaseApi(globalNavKey, prefBox).initNotifications();
+      } catch (e) {
+        print(e);
+      }
+      await MatomoTracker.instance.initialize(
+        siteId: "1",
+        url: 'https://troisdorf.matomo.cloud/matomo.php',
+      );
+      await CategoryManager.loadCategories();
+    },
+  );
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();

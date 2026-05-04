@@ -79,7 +79,6 @@ class _WasteCalendarState extends State<WasteCalendar>
   List<WasteType> wasteTypes = [];
   List<WasteType> selectedWasteTypes = [];
   late WasteCalendarRepository repository;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   late String receiveWasteCalendarNotification;
   bool isLoading = false;
   bool isDataInitializing = false;
@@ -264,7 +263,6 @@ class _WasteCalendarState extends State<WasteCalendar>
     });
 
     await repository.updateSubscription(
-      navigatorKey: navigatorKey,
       cityId: 1,
       locationId: locationId,
       locationName: locationName,
@@ -296,7 +294,6 @@ class _WasteCalendarState extends State<WasteCalendar>
 
   Future<void> _updateWasteTypesSubscription({required Function() onSuccess}) async {
       await repository.updateSubscription(
-        navigatorKey: navigatorKey,
         cityId: 1,
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
           onSuccess: (){

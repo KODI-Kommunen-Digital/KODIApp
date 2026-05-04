@@ -62,7 +62,9 @@ class FirebaseApi {
             .timeout(const Duration(seconds: 10));
         if(prefs.getKeyValue(
             Preferences.isFCMTokenRegistered, 'false') == 'true') {
-          await subscribeForWasteNotification(true);
+          final wasteCalPref = prefs.getKeyValue(
+              Preferences.receiveWasteCalendarNotification, 'false');
+          await subscribeForWasteNotification(wasteCalPref == 'true');
         }
       } catch (e) {
         logInfo("Warning subscription timedout");

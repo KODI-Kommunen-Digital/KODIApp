@@ -36,7 +36,6 @@ class IntroPageState extends State<IntroPage>
   String? _selectedHashedStreetName;
   bool _showWasteTypeSelection = false;
   bool _isConfirming = false;
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   bool _isLocationsLoading = true;
   Preferences? _prefs;
   bool _receiveNotification = false;
@@ -360,7 +359,6 @@ class IntroPageState extends State<IntroPage>
     try {
       // Use common subscription method
       await repository.updateSubscription(
-        navigatorKey: navigatorKey,
         cityId: 1,
         locationId: _selectedLocationId,
         locationName: _selectedLocationName,

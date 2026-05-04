@@ -8,7 +8,6 @@ import 'package:loggy/loggy.dart';
 
 import '../model/model.dart';
 import '../model/model_waste_type.dart';
-import '../remote/api/firebase_api.dart';
 
 class WasteCalendarRepository {
   final Preferences prefs;
@@ -91,7 +90,6 @@ class WasteCalendarRepository {
   }
 
   Future<void> updateSubscription({
-    required GlobalKey<NavigatorState> navigatorKey,
     required int cityId,
     String? locationId,
     String? locationName,
@@ -104,7 +102,6 @@ class WasteCalendarRepository {
     final previousWasteTypes = prefs.getSelectedWasteTypes();
     final previousHashedStreetName = prefs.getKeyValue(
         Preferences.selectedStreetHashedName, null);
-    final firebaseApi = FirebaseApi(navigatorKey, prefs);
     final deviceId = prefs.getKeyValue(
         Preferences.deviceId, (await Utils.getDeviceInfo())?.uuid ?? '');
 

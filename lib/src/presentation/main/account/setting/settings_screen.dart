@@ -35,8 +35,8 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   late Preferences _prefs;
 
-  bool _receiveNotification = true;
-  bool _receiveWasteCalendarNotification = true;
+  bool _receiveNotification = false;
+  bool _receiveWasteCalendarNotification = false;
   bool isNotificationsProgress = false;
   bool darkModeEnabled = true;
   late WasteCalendarRepository repository;
