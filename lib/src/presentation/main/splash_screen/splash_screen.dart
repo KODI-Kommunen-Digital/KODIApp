@@ -88,15 +88,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              Text(
-                t.translate('splash_powered_by').toUpperCase(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  letterSpacing: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
             ],
           ),
         ),
