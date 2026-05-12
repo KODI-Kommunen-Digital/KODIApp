@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-/// Converts the fixed server dispatch time (15:11 UTC) to the device's local
-/// timezone and returns it formatted as "hh:mm AM/PM".
-String wasteNotificationLocalTime() {
+/// Converts the fixed server dispatch time (15:00 UTC) to the device's local
+/// timezone. Returns "HH:mm Uhr" for German, "hh:mm AM/PM" for all others.
+String wasteNotificationLocalTime({String languageCode = 'en'}) {
   final now = DateTime.now();
-  final utc = DateTime.utc(now.year, now.month, now.day, 15, 11);
-  return DateFormat('hh:mm a').format(utc.toLocal());
+  final utc = DateTime.utc(now.year, now.month, now.day, 15, 00);
+  final local = utc.toLocal();
+  if (languageCode == 'de') {
+    return '${DateFormat('HH:mm').format(local)} Uhr';
+  }
+  return DateFormat('hh:mm a').format(local);
 }
 
 extension TimeParsing on TimeOfDay {

@@ -41,17 +41,17 @@ Widget _buildWasteIcon(String imageUrl, String colourHex, double size) {
       shape: BoxShape.circle,
     ),
     padding: EdgeInsets.all(size * 0.18),
-    // child: CachedNetworkImage(
-    //   imageUrl: '${Application.picturesURL}$imageUrl',
-    //   color: color,
-    //   colorBlendMode: BlendMode.srcIn,
-    //   placeholder: (_, __) => Icon(Icons.delete, color: color, size: size * 0.5),
-    //   errorWidget: (_, __, ___) => Icon(Icons.delete, color: color, size: size * 0.5),
-    // ),
-      child: SvgPicture.network(
-        '${Application.picturesURL}$imageUrl',
-        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-        placeholderBuilder: (context) => Icon(
+      child: CachedNetworkImage(
+        imageUrl: '${Application.picturesURL}$imageUrl',
+        width: 24,
+        height: 24,
+        fit: BoxFit.contain,
+        placeholder: (context, url) => Icon(
+          Icons.delete_outline,
+          color: color,
+          size: 18,
+        ),
+        errorWidget: (context, url, error) => Icon(
           Icons.delete_outline,
           color: color,
           size: 18,

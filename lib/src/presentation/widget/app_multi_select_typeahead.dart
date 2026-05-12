@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:multi_dropdown/multi_dropdown.dart';
@@ -227,8 +227,21 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
             hintText: widget.hintText,
             hintStyle: TextStyle(
                 color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
-            prefixIcon: Icon(Icons.recycling,
-                color: isDark ? Colors.grey.shade400 : Colors.grey.shade600),
+            prefixIcon: Padding(
+              padding: EdgeInsets.all(8),
+              child: SizedBox(
+                width: 20,
+                height: 20,
+                child: SvgPicture.asset(
+                  'assets/images/rsag-logo.svg',
+                  fit: BoxFit.contain,
+                  colorFilter: ColorFilter.mode(
+                    isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+                    BlendMode.srcIn,
+                  ),
+                ),
+              ),
+            ),
             showClearIcon: false,
             backgroundColor: isDark ? Colors.grey.shade900 : Colors.white,
             border: OutlineInputBorder(
@@ -272,10 +285,17 @@ class _AppMultiSelectTypeAheadState extends State<AppMultiSelectTypeAhead> {
                         shape: BoxShape.circle,
                       ),
                       padding: const EdgeInsets.all(6),
-                      child: SvgPicture.network(
-                        '${Application.picturesURL}${wasteType.image}',
-                        colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
-                        placeholderBuilder: (context) => Icon(
+                      child: CachedNetworkImage(
+                        imageUrl: '${Application.picturesURL}${wasteType.image}',
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.contain,
+                        placeholder: (context, url) => Icon(
+                          Icons.delete_outline,
+                          color: color,
+                          size: 18,
+                        ),
+                        errorWidget: (context, url, error) => Icon(
                           Icons.delete_outline,
                           color: color,
                           size: 18,

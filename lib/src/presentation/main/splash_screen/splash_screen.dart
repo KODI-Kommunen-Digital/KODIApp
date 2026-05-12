@@ -70,7 +70,7 @@ class _SplashScreenState extends State<SplashScreen> {
               ),
               const SizedBox(height: 32),
               Text(
-                t.translate('welcome_title'),
+                t.translate('intro_tagline'),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 22,

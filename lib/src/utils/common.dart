@@ -77,7 +77,9 @@ class Utils {
   /// Shows a SnackBar informing the user when waste collection push
   /// notifications will be dispatched, expressed in their local timezone.
   static void showWasteNotificationSnackBar(BuildContext context) {
-    final timeStr = wasteNotificationLocalTime();
+    final timeStr = wasteNotificationLocalTime(
+      languageCode: Translate.of(context).locale.languageCode,
+    );
     final message = Translate.of(context)
         .translate('waste_notification_snackbar')
         .replaceAll('{time}', timeStr);

@@ -17,8 +17,8 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  static const int _totalPages = 5;
-  static const int _dotsPageCount = 5;
+  static const int _totalPages = 2;
+  static const int _dotsPageCount = 2;
 
   @override
   void dispose() {
@@ -56,19 +56,20 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
         t1: t.translate('intro_tagline'),
         t2: t.translate('intro_page1_t2'),
         t3: t.translate('intro_page1_t3'),
-        imagePath: 'assets/images/intro_image_1.png',
+        imagePath: 'assets/images/intro_image_5.png',
       ),
       _PageData(
-        t1: t.translate('intro_tagline'),
+        t1: t.translate('intro_page2_t1'),
+        poweredBy: t.translate('splash_powered_by'),
         t2: t.translate('intro_page2_t2'),
         t3: t.translate('intro_page2_t3'),
-        imagePath: 'assets/images/intro_image_2.png',
+        imagePath: 'assets/images/intro_image_1.png',
       ),
       _PageData(
         t1: t.translate('intro_tagline'),
         t2: t.translate('intro_page3_t2'),
         t3: t.translate('intro_page3_t3'),
-        imagePath: 'assets/images/intro_image_3.png',
+        imagePath: 'assets/images/intro_image_2.png',
       ),
       _PageData(
         t1: t.translate('intro_tagline'),
@@ -139,12 +140,14 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
 
 class _PageData {
   final String? t1;
+  final String? poweredBy;
   final String t2;
   final String t3;
   final String imagePath;
 
   const _PageData({
     this.t1,
+    this.poweredBy,
     required this.t2,
     required this.t3,
     required this.imagePath,
@@ -168,20 +171,32 @@ class _IntroPageContent extends StatelessWidget {
         children: [
           // t1 slot — always occupies same height for layout consistency
           SizedBox(
-            height: 18,
+            height: 24,
             child: data.t1 != null
                 ? Text(
                     data.t1!,
                     style: theme.textTheme.labelSmall?.copyWith(
                       letterSpacing: 2.0,
                       fontWeight: FontWeight.w700,
-                      fontSize: 10,
+                      fontSize: 16,
                     ),
                     textAlign: TextAlign.center,
                     maxLines: 1,
                   )
                 : null,
           ),
+          if (data.poweredBy != null) ...[
+            const SizedBox(height: 10),
+            Text(
+              data.poweredBy!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withOpacity(0.55),
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
           const SizedBox(height: 24),
           SizedBox(
             height: 220,
