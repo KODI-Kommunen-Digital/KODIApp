@@ -21,7 +21,6 @@ import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
 enum UploadImageType { circle, square }
 
 class AppUploadImage extends StatefulWidget {
@@ -32,6 +31,7 @@ class AppUploadImage extends StatefulWidget {
   final UploadImageType type;
   final bool profile;
   final bool forumGroup;
+  final bool defect;
 
   const AppUploadImage({
     super.key,
@@ -42,6 +42,7 @@ class AppUploadImage extends StatefulWidget {
     required this.profile,
     required this.forumGroup,
     this.onDelete,
+    this.defect = false,
   });
 
   @override
@@ -55,6 +56,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
   bool showAction = false;
   String title = '';
   bool isPermanentlyDenied = false;
+  bool _isLoading = false;
   List<File> images = [];
   List<XFile> resultList = <XFile>[];
   List<File> selectedFiles = [];
@@ -116,9 +118,11 @@ class _AppUploadImageState extends State<AppUploadImage> {
     return InkWell(
       onTap: widget.profile
           ? _uploadImage
-          : selectedAssets.length > 1
+          : widget.defect
               ? selectImages
-              : showChooseFileTypeDialog,
+              : selectedAssets.length > 1
+                  ? selectImages
+                  : showChooseFileTypeDialog,
       child: Stack(
         children: [
           DottedBorder(
@@ -132,9 +136,7 @@ class _AppUploadImageState extends State<AppUploadImage> {
             ),
           ),
           Visibility(
-            visible: _file != null &&
-                !_file!.path.contains('pdf') &&
-                selectedAssets.length != 1,
+            visible: _file != null && !_file!.path.contains('pdf'),
             child: Positioned(
               top: -10,
               right: -10,
@@ -144,23 +146,40 @@ class _AppUploadImageState extends State<AppUploadImage> {
                   color: Colors.red[900],
                 ),
                 onPressed: () {
-                  widget.onDelete!();
+                  widget.onDelete?.call();
                   setState(() {
                     image = null;
                     if (selectedAssets.length > 1) {
                       images.removeAt(0);
                       context.read<AddListingCubit>().removeAssetsByIndex(0);
+                    } else {
+                      images.clear();
+                      selectedAssets.clear();
+                      resultList.clear();
                     }
                     _file = null;
                     if (images.isNotEmpty) {
                       _file ??= File(images[0].path);
                     }
                   });
+                  if (images.isEmpty) widget.onChange([]);
                 },
               ),
             ),
           ),
           Positioned.fill(child: circle),
+          if (_isLoading)
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.3),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ),
+            ),
         ],
       ),
     );
@@ -592,6 +611,73 @@ class _AppUploadImageState extends State<AppUploadImage> {
   }
 
   Future<void> selectImages() async {
+    if (widget.defect) {
+      await _selectSingleImage();
+    } else {
+      await _selectMultipleImages();
+    }
+  }
+
+  Future<void> _selectSingleImage() async {
+    try {
+      // imageQuality forces JPEG re-encoding, fixing HEIC/undecodable format errors
+      final XFile? picked = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 85,
+      );
+      if (picked == null) return;
+
+      if (!mounted) return;
+      setState(() => _isLoading = true);
+
+      final List<int> imageData = await picked.readAsBytes();
+      final int imageSizeInBytes = imageData.length;
+      final double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
+      logError('ImageSize', imageSizeInMB);
+
+      if (imageSizeInBytes == 0) {
+        logError('ImageSize', 'Skipping empty file: ${picked.name}');
+        return;
+      }
+
+      if (imageSizeInMB > 20) {
+        if (!mounted) return;
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(Translate.of(context).translate('image_size_exceed')),
+            content: Text(Translate.of(context).translate('select_small_images')),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+        return;
+      }
+
+      final tempDir = await getTemporaryDirectory();
+      final File imageFile = File('${tempDir.path}/${picked.name}');
+      await imageFile.writeAsBytes(imageData);
+
+      if (!mounted) return;
+      setState(() {
+        _file = imageFile;
+        images = [imageFile];
+        selectedAssets = [picked];
+        resultList = [picked];
+        widget.onChange(images);
+      });
+    } on Exception catch (e) {
+      logError('Error Selecting Image', e);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _selectMultipleImages() async {
     try {
       if (!mounted) return;
       setState(() {
@@ -599,88 +685,88 @@ class _AppUploadImageState extends State<AppUploadImage> {
       });
       if (!mounted) return;
 
+      // imageQuality forces JPEG re-encoding, fixing HEIC/undecodable format errors
       resultList = await _picker.pickMultiImage(
         limit: 8,
+        imageQuality: 85,
       );
       selectedAssets = resultList;
-      if (resultList.isNotEmpty) {
-        if (!mounted) return;
-        context.read<AddListingCubit>().clearAssets();
-        images.clear();
-        context.read<AddListingCubit>().saveAssets(resultList);
-        setState(() {
-          selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
-        });
-        List<XFile> resultListCopy = List.from(resultList);
+      if (resultList.isEmpty) return;
 
-        for (XFile asset in resultListCopy) {
-          //final ByteData byteData = await asset.getByteData();
-          //final List<int> imageData = byteData.buffer.asUint8List();
-          final List<int> imageData = await asset.readAsBytes();
-          final tempDir = await getTemporaryDirectory();
-          final filePath = '${tempDir.path}/${asset.name}';
+      if (!mounted) return;
+      setState(() => _isLoading = true);
 
-          final imageFile = File(filePath);
-          await imageFile.writeAsBytes(imageData);
+      context.read<AddListingCubit>().clearAssets();
+      images.clear();
+      context.read<AddListingCubit>().saveAssets(resultList);
+      if (!mounted) return;
+      setState(() {
+        selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+      });
 
-          int imageSizeInBytes = imageData.length;
-          double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
-          logError('ImageSize', imageSizeInMB);
+      final List<XFile> resultListCopy = List.from(resultList);
+      final tempDir = await getTemporaryDirectory();
 
-          if (imageSizeInMB > 20) {
-            setState(() {
-              images.remove(imageFile);
-              resultList.remove(asset);
-            });
-            if (!mounted) return;
-            context.read<AddListingCubit>().removeAssets(asset);
+      for (final XFile asset in resultListCopy) {
+        final List<int> imageData = await asset.readAsBytes();
+        final int imageSizeInBytes = imageData.length;
+        final double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
+        logError('ImageSize', imageSizeInMB);
 
-            if (!mounted) return;
-            showDialog(
-              context: context,
-              builder: (context) => AlertDialog(
-                title: Text(
-                  Translate.of(context).translate(
-                    'image_size_exceed',
-                  ),
+        if (imageSizeInBytes == 0) {
+          logError('ImageSize', 'Skipping empty file: ${asset.name}');
+          resultList.remove(asset);
+          if (!mounted) return;
+          context.read<AddListingCubit>().removeAssets(asset);
+          continue;
+        }
+
+        final String filePath = '${tempDir.path}/${asset.name}';
+        final File imageFile = File(filePath);
+        await imageFile.writeAsBytes(imageData);
+
+        if (imageSizeInMB > 20) {
+          resultList.remove(asset);
+          if (!mounted) return;
+          context.read<AddListingCubit>().removeAssets(asset);
+          if (!mounted) return;
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: Text(Translate.of(context).translate('image_size_exceed')),
+              content: Text(Translate.of(context).translate('select_small_images')),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('OK'),
                 ),
-                content: Text(
-                  Translate.of(context).translate(
-                    'select_small_images',
-                  ),
-                ),
-                actions: <Widget>[
-                  TextButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('OK'),
-                  ),
-                ],
-              ),
-            );
-          } else {
-            setState(() {
-              _file = null;
-              images.add(imageFile);
-              if (image == null) {
-                _file ??= File(images[0].path);
+              ],
+            ),
+          );
+        } else {
+          if (!mounted) return;
+          setState(() {
+            _file = null;
+            images.add(imageFile);
+            if (image == null) {
+              _file ??= File(images[0].path);
+            } else {
+              if (!image!.contains('Defaultimage') && !image!.contains('pdf')) {
+                _file = File(image!);
               } else {
-                if (!image!.contains('Defaultimage') &&
-                    !image!.contains('pdf')) {
-                  _file = File(image!);
-                } else {
-                  _file ??= File(images[0].path);
-                }
+                _file ??= File(images[0].path);
               }
-              widget.onChange(images);
-              context.read<AddListingCubit>().saveAssets(resultList);
-              selectedAssets =
-                  context.read<AddListingCubit>().getSelectedAssets();
-            });
-          }
+            }
+            widget.onChange(images);
+            context.read<AddListingCubit>().saveAssets(resultList);
+            selectedAssets = context.read<AddListingCubit>().getSelectedAssets();
+          });
         }
       }
     } on Exception catch (e) {
       logError('Error Selecting Multiple Images', e);
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
   }
 }

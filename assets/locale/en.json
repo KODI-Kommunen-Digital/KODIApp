@@ -427,6 +427,7 @@
   "input_city": "Select City",
   "input_village": "Select Village",
   "input_category": "Select Category",
+  "input_type": "Select Type",
   "input_subcategory": "Select Sub Category (if any)",
   "select_city": "Select City",
   "categorization": "Categorization",
@@ -565,5 +566,8 @@
   "no_further_data": "No further data",
   "more_posts": "More posts",
   "clear_date": "Clear Date",
-  "current_password": "Current Password"
+  "current_password": "Current Password",
+  "title_and_description_required": "Please enter a title and description",
+  "submit_defect_success_message": "You have successfully submitted the data. Your data will be displayed in the defect report directory."
+
 }

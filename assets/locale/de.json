@@ -426,6 +426,7 @@
   "input_city": "Ort auswählen",
   "input_village": "Dorf auswählen",
   "input_category": "Kategorie",
+  "input_type": "Art auswählen",
   "input_subcategory": "Unterkategorie auswählen (falls vorhanden)",
   "subCategory": "Unterkategorie",
   "select_city": "Ort wählen",
@@ -572,6 +573,8 @@
   "time_period": "Zeitraum",
   "more_posts": "Weitere Beiträge",
   "clear_date": "Datum löschen",
-  "current_password": "Aktuelles Passwort"
+  "current_password": "Aktuelles Passwort",
+  "submit_defect_success_message": "Sie haben die Daten erfolgreich übermittelt. Ihre Daten werden im Mängelmelder-Verzeichnis angezeigt.",
+  "title_and_description_required": "Bitte gebe Titel und Beschreibung an"
 }
 

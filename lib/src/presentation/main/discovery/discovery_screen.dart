@@ -319,6 +319,10 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
   Future<void> navigateToLink(CitizenServiceModel service) async {
     switch (service.imageLink) {
+      case "15":
+        if (!mounted) return;
+        Navigator.pushNamed(context, Routes.defectReport,
+            arguments: {'id': service.arguments, 'title': 'defect_report'});
       case "17":
         CustomWebViewScreen.showAsBottomSheet(
             context: context,
