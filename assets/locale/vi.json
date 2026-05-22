@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Nhà",
   "wish_list": "Danh sách yêu thích",
   "message": "Tin nhắn",
@@ -273,6 +273,7 @@
   "phone_message": "Vui lòng nhập số điện thoại",
   "email_message": "Vui lòng nhập email",
   "address_message": "Vui lòng nhập địa chỉ",
+  "submit_failed_message": "Gửi thất bại. Vui lòng thử lại.",
   "i_agree": "Tôi đồng ý với",
   "term_condition": "Điều khoản & Điều kiện",
   "booking_success_title": "Đặt chỗ thành công",

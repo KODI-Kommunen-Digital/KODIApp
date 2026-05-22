@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "الصفحة الرئيسية",
   "wish_list": "قائمة الرغبات",
   "message": "رسائل",
@@ -273,6 +273,7 @@
   "phone_message": "الرجاء إدخال الهاتف",
   "email_message": "الرجاء إدخال البريد الإلكتروني",
   "address_message": "الرجاء إدخال العنوان",
+  "submit_failed_message": "فشل الإرسال. حاول مرة أخرى.",
   "i_agree": "أنا أتفق مع",
   "term_condition": "الشروط و Conditons",
   "booking_success_title": "تم الحجز بنجاح",

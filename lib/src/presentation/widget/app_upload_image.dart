@@ -1,6 +1,7 @@
 // ignore_for_file: unused_local_variable, use_build_context_synchronously
 
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -16,6 +17,7 @@ import 'package:heidi/src/presentation/main/add_listing/cubit/add_listing_cubit.
 import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:loggy/loggy.dart';
 import 'package:path_provider/path_provider.dart';
@@ -620,19 +622,22 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Future<void> _selectSingleImage() async {
     try {
-      // imageQuality forces JPEG re-encoding, fixing HEIC/undecodable format errors
+      // Pick with dimension cap + quality reduction as first compression layer.
+      // imageQuality also forces JPEG re-encoding, fixing HEIC/undecodable format errors.
       final XFile? picked = await _picker.pickImage(
         source: ImageSource.gallery,
-        imageQuality: 85,
+        imageQuality: 80,
+        maxWidth: 1920,
+        maxHeight: 1920,
       );
       if (picked == null) return;
 
       if (!mounted) return;
       setState(() => _isLoading = true);
 
-      final List<int> imageData = await picked.readAsBytes();
+      List<int> imageData = await picked.readAsBytes();
       final int imageSizeInBytes = imageData.length;
-      final double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
+      double imageSizeInMB = imageSizeInBytes / (1024 * 1024);
       logError('ImageSize', imageSizeInMB);
 
       if (imageSizeInBytes == 0) {
@@ -658,8 +663,26 @@ class _AppUploadImageState extends State<AppUploadImage> {
         return;
       }
 
+      // Second compression layer: if still over 1 MB after picker resize,
+      // re-compress with flutter_image_compress to guarantee server acceptance.
+      if (imageSizeInMB > 1.0) {
+        final Uint8List compressed = await FlutterImageCompress.compressWithList(
+          Uint8List.fromList(imageData),
+          minWidth: 1920,
+          minHeight: 1920,
+          quality: 70,
+        );
+        if (compressed.isNotEmpty) {
+          imageData = compressed;
+          imageSizeInMB = compressed.length / (1024 * 1024);
+          logError('CompressedImageSize', imageSizeInMB);
+        }
+      }
+
       final tempDir = await getTemporaryDirectory();
-      final File imageFile = File('${tempDir.path}/${picked.name}');
+      final String outputName =
+          '${picked.name.replaceAll(RegExp(r'\.[^.]+$'), '')}.jpg';
+      final File imageFile = File('${tempDir.path}/$outputName');
       await imageFile.writeAsBytes(imageData);
 
       if (!mounted) return;

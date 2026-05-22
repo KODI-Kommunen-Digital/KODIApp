@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Hjem",
   "wish_list": "Ønskeliste",
   "message": "Beskeder",
@@ -273,6 +273,7 @@
   "phone_message": "Indtast venligst telefon",
   "email_message": "Indtast venligst e-mail",
   "address_message": "Indtast venligst adresse",
+  "submit_failed_message": "Indsendelse mislykkedes. Prøv venligst igen.",
   "i_agree": "jeg er enig med",
   "term_condition": "Vilkår og betingelser",
   "booking_success_title": "Booking med succes",

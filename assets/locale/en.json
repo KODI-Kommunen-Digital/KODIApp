@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Home",
   "wish_list": "Wishlist",
   "message": "Messages",
@@ -361,6 +361,7 @@
   "phone_message": "Please enter phone",
   "email_message": "Please enter email",
   "address_message": "Please enter address",
+  "submit_failed_message": "Submission failed. Please try again.",
   "i_agree": "I am agree with",
   "term_condition": "Terms & Conditions",
   "booking_success_title": "Booking successfully",

@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Start",
   "wish_list": "Meine Favoriten",
   "message": "Mitteilungen",
@@ -357,6 +357,7 @@
   "phone_message": "Bitte Telefon eingeben",
   "email_message": "Bitte E-Mail eingeben",
   "address_message": "Bitte Adresse eingeben",
+  "submit_failed_message": "Übermittlung fehlgeschlagen. Bitte versuche es erneut.",
   "i_agree": "Ich stimme zu",
   "term_condition": "Allgemeine Geschäftsbedingungen",
   "booking_success_title": "Buchung erfolgreich",

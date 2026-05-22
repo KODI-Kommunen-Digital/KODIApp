@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "家",
   "wish_list": "愿望清单",
   "message": "留言",
@@ -273,6 +273,7 @@
   "phone_message": "请输入电话",
   "email_message": "请输入邮箱",
   "address_message": "请输入地址",
+  "submit_failed_message": "提交失败，请重试。",
   "i_agree": "我同意",
   "term_condition": "条款和条件",
   "booking_success_title": "预订成功",

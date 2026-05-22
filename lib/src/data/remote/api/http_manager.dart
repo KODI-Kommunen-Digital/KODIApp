@@ -56,8 +56,10 @@ class HTTPManager {
       }, onError: (error, handler) async {
         _logApiErrorInSentry(error);
         logError('Errors', error.response?.data);
-        if (error.response?.data['message'].toString() ==
-            'Unauthorized! Token was expired!') {
+        final responseData = error.response?.data;
+        final responseMessage =
+            (responseData is Map) ? responseData['message']?.toString() : null;
+        if (responseMessage == 'Unauthorized! Token was expired!') {
           final prefs = await Preferences.openBox();
           var rToken = prefs.getKeyValue(Preferences.refreshToken, '');
           final userId = prefs.getKeyValue(Preferences.userId, '');
@@ -95,9 +97,12 @@ class HTTPManager {
             handler.next(error);
           }
         } else {
+          final resolvedData = (responseData is Map)
+              ? responseData
+              : {'success': false, 'message': 'server_error'};
           final response = Response(
             requestOptions: error.requestOptions,
-            data: error.response?.data,
+            data: resolvedData,
           );
           return handler.resolve(response);
         }
@@ -298,8 +303,9 @@ class HTTPManager {
         break;
 
       default:
-        if (error.response?.data['message'] ==
-            'Unauthorized! Refresh Token was expired!') {
+        if (error.response?.data is Map &&
+            error.response?.data['message'] ==
+                'Unauthorized! Refresh Token was expired!') {
           AppBloc.loginCubit.onLogout();
           message = "Your session has expired. Please log in again.";
         } else {

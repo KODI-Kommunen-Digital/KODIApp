@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Ev",
   "wish_list": "istek listesi",
   "message": "Mesajlar",
@@ -273,6 +273,7 @@
   "phone_message": "Lütfen telefon girin",
   "email_message": "Lütfen e-posta giriniz",
   "address_message": "Lütfen adresi girin",
+  "submit_failed_message": "Gönderme başarısız oldu. Lütfen tekrar deneyin.",
   "i_agree": "katılıyorum",
   "term_condition": "Şartlar ve Koşullar",
   "booking_success_title": "Başarılı bir şekilde rezervasyon",

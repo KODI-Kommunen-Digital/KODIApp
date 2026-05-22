@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "家",
   "wish_list": "ウィッシュリスト",
   "message": "メッセージ",
@@ -273,6 +273,7 @@
   "phone_message": "電話を入力してください",
   "email_message": "メールアドレスを入力してください",
   "address_message": "住所を入力してください",
+  "submit_failed_message": "送信に失敗しました。もう一度お試しください。",
   "i_agree": "私は同意します",
   "term_condition": "利用規約",
   "booking_success_title": "予約に成功しました",

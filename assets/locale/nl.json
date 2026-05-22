@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Huis",
   "wish_list": "verlanglijst",
   "message": "Berichten",
@@ -273,6 +273,7 @@
   "phone_message": "Voer a.u.b. telefoon in",
   "email_message": "Voer e-mail in",
   "address_message": "Voer a.u.b. adres in",
+  "submit_failed_message": "Indienen mislukt. Probeer het opnieuw.",
   "i_agree": "ik ben het eens met",
   "term_condition": "Algemene voorwaarden",
   "booking_success_title": "Succesvol boeken",

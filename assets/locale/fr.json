@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Accueil",
   "wish_list": "Liste de souhaits",
   "message": "messages",
@@ -273,6 +273,7 @@
   "phone_message": "Veuillez entrer le téléphone",
   "email_message": "Veuillez saisir l'e-mail",
   "address_message": "Veuillez saisir l'adresse",
+  "submit_failed_message": "L'envoi a échoué. Veuillez réessayer.",
   "i_agree": "je suis d'accord avec",
   "term_condition": "Termes et conditions",
   "booking_success_title": "Réservation réussie",

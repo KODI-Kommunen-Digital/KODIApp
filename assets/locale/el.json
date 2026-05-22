@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Σπίτι",
   "wish_list": "Λίστα επιθυμιών",
   "message": "Μηνύματα",
@@ -273,6 +273,7 @@
   "phone_message": "Εισαγάγετε τηλέφωνο",
   "email_message": "Παρακαλώ εισάγετε email",
   "address_message": "Παρακαλώ εισάγετε τη διεύθυνση",
+  "submit_failed_message": "Η υποβολή απέτυχε. Παρακαλώ δοκιμάστε ξανά.",
   "i_agree": "συμφωνώ με",
   "term_condition": "Όροι & Προϋποθέσεις",
   "booking_success_title": "Επιτυχής κράτηση",

@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Casa",
   "wish_list": "Lista de Desejos",
   "message": "Mensagens",
@@ -273,6 +273,7 @@
   "phone_message": "Por favor insira o telefone",
   "email_message": "Por favor insira o email",
   "address_message": "Por favor insira o endereço",
+  "submit_failed_message": "Envio falhou. Por favor, tente novamente.",
   "i_agree": "Eu concordo com",
   "term_condition": "Termos e Condições",
   "booking_success_title": "Reserva com sucesso",

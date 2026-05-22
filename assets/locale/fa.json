@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "صفحه اصلی",
   "wish_list": "لیست علاقه مندیها",
   "message": "پیام ها",
@@ -273,6 +273,7 @@
   "phone_message": "لطفا تلفن را وارد کنید",
   "email_message": "لطفا ایمیل را وارد کنید",
   "address_message": "لطفا آدرس را وارد کنید",
+  "submit_failed_message": "ارسال ناموفق بود. لطفاً دوباره امتحان کنید.",
   "i_agree": "من موافقم",
   "term_condition": "شرایط و ضوابط",
   "booking_success_title": "رزرو با موفقیت",

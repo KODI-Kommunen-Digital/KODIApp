@@ -41,6 +41,13 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
         listener: (context, state) {
           if (state.isSubmitSuccessful) {
             Navigator.pushReplacementNamed(context, Routes.defectSubmitSuccess);
+          } else if (state.error != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(
+                    Translate.of(context).translate('submit_failed_message')),
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -119,7 +126,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                         children: [
                           TextSpan(
                             text: Translate.of(context)
-                                .translate('input_content'),
+                                .translate('title'),
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium!
@@ -135,7 +142,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                     const SizedBox(height: 8),
                     AppTextInput(
                       hintText:
-                          Translate.of(context).translate('input_content'),
+                          Translate.of(context).translate('title'),
                       controller: _titleController,
                     ),
                     const SizedBox(height: 16),

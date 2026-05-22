@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "Rumah",
   "wish_list": "Daftar Keinginan",
   "message": "Pesan",
@@ -273,6 +273,7 @@
   "phone_message": "Silakan masukkan telepon",
   "email_message": "Silakan masukkan email",
   "address_message": "Silakan masukkan alamat",
+  "submit_failed_message": "Pengiriman gagal. Silakan coba lagi.",
   "i_agree": "Saya setuju dengan",
   "term_condition": "Syarat & Ketentuan",
   "booking_success_title": "Pemesanan berhasil",

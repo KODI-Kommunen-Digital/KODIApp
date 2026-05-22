@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "ផ្ទះ",
   "wish_list": "បញ្ជីប្រាថ្នា",
   "message": "សារ",
@@ -273,6 +273,7 @@
   "phone_message": "សូមបញ្ចូលទូរស័ព្ទ",
   "email_message": "សូមបញ្ចូលអ៊ីមែល",
   "address_message": "សូមបញ្ចូលអាសយដ្ឋាន",
+  "submit_failed_message": "ការដាក់ស្នើបានបរាជ័យ។ សូមព្យាយាមម្ដងទៀត។",
   "i_agree": "ខ្ញុំយល់ស្របជាមួយ",
   "term_condition": "លក្ខខណ្ឌ",
   "booking_success_title": "ការកក់ដោយជោគជ័យ",

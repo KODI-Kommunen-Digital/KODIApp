@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "ບ້ານ",
   "wish_list": "ລາຍການທີ່ຢາກໄດ້",
   "message": "ຂໍ້ຄວາມ",
@@ -273,6 +273,7 @@
   "phone_message": "ກະລຸນາໃສ່ໂທລະສັບ",
   "email_message": "ກະລຸນາໃສ່ອີເມວ",
   "address_message": "ກະລຸນາໃສ່ທີ່ຢູ່",
+  "submit_failed_message": "ການສົ່ງລ້ົມເຫລວ. ກະລຸນາລອງໃໝ່.",
   "i_agree": "ຂ້ອຍເຫັນດີນຳ",
   "term_condition": "ຂໍ້ກຳນົດ ແລະເງື່ອນໄຂ",
   "booking_success_title": "ການຈອງສຳເລັດແລ້ວ",

@@ -1,4 +1,4 @@
-{
+﻿{
   "home": "घर",
   "wish_list": "इच्छा-सूची",
   "message": "संदेशों",
@@ -273,6 +273,7 @@
   "phone_message": "कृपया फ़ोन दर्ज करें",
   "email_message": "कृपया ईमेल दर्ज करें",
   "address_message": "कृपया पता दर्ज करें",
+  "submit_failed_message": "सबमिट करना विफल रहा। कृपया पुनः प्रयास करें।",
   "i_agree": "मैं सहमत हूँ",
   "term_condition": "नियम और शर्तें",
   "booking_success_title": "बुकिंग सफलतापूर्वक",
