@@ -254,6 +254,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     final description = _descriptionController.text.trim();
     final address = _addressController.text.trim();
     final email = _emailController.text.trim();
+    final type = currentMaengelTyp;
 
     final emailRegex = RegExp(r'^(([^<>()[\.,;:\s@"]+(\.[^<>()[\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
 
@@ -286,6 +287,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
             image: _selectedImage,
             address: address,
             email: email,
+            category: type,
           );
     }
   }

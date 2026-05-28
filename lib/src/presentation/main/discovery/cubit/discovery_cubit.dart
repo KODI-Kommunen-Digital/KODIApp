@@ -119,6 +119,12 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
         imageLink: "24",
         arguments: 24,
       ),
+      CitizenServiceModel(
+        title: "Mängelmelder",
+        imageUrl: Images.service15,
+        imageLink: "15",
+        arguments: 15,
+      ),
       // CitizenServiceModel(
       //   imageUrl: Images.service25,
       //   imageLink: "25",
@@ -169,12 +175,6 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
       //   imageLink: "22",
       //   arguments: 22,
       // ),
-      CitizenServiceModel(
-        title: "Mängelmelder",
-        imageUrl: Images.service15,
-        imageLink: "15",
-        arguments: 15,
-      ),
     ];
 
     return [services, explore];

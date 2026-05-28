@@ -13,7 +13,8 @@ class DefectReportCubit extends Cubit<DefectReportState> {
       required String description,
       required File? image,
       required String address,
-      required String email}) async {
+      required String email,
+      required String? category}) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
       Map<String, dynamic> formDataMap = {
@@ -21,6 +22,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
         'description': description,
         'address': address,
         'email': email,
+        'category': category,
       };
 
       if (image != null) {
@@ -59,13 +61,14 @@ class DefectReportCubit extends Cubit<DefectReportState> {
 
   List<String> getMaengelTypen() {
     return [
-      "Straßenschäden",
-      "Straßenbeleuchtung",
-      "Wilden Müll melden",
-      "Abfallentsorgung",
-      "Spielplätze",
-      "Radverkehr - Mängel und Anregungen",
-      "Sonstiges"
+      "Abfall – Schrottfahrzeuge",
+      "Bäume",
+      "Baumschutz",
+      "Friedhöfe",
+      "Grün- und Parkanlagen, Spielplätze",
+      "Schutzgebiete",
+      "Straßenbeleuchtung / Ampeln",
+      "Straßenschäden / Gehwegschäden",
     ];
   }
 }
