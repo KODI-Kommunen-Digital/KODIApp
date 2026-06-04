@@ -51,7 +51,8 @@ class DiscoveryCubit extends Cubit<DiscoveryState> {
     }
 
     //Remove to see all services
-    services.removeWhere((element) => hiddenServices.contains(element));
+    services.removeWhere(
+        (element) => element.hidden || hiddenServices.contains(element));
 
     await getCitySelected();
 

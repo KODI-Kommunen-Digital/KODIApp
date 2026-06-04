@@ -8,6 +8,7 @@ class CitizenServiceModel {
   final int? arguments;
   final int? subCategoryId;
   final List<CitizenServiceModel>? subServices;
+  final bool hidden;
 
   CitizenServiceModel({
     required this.imageUrl,
@@ -17,6 +18,7 @@ class CitizenServiceModel {
     this.arguments,
     this.subCategoryId,
     this.subServices,
+    this.hidden = false,
   });
 
   Future<bool> hasContent() async {

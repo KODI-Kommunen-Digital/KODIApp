@@ -57,6 +57,7 @@ class ServiceManager {
               imageLink: item['imageLink'],
               arguments: item['arguments'],
               categoryId: item['categoryId'],
+              hidden: item['hidden'] ?? false,
             ))
         .toList();
   }
