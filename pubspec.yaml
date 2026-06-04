@@ -61,6 +61,8 @@ dependencies:
 
   ### Location
   location: ^8.0.1
+  flutter_map: ^6.2.1
+  latlong2: ^0.9.1
 
   ### ui
   flutter_svg: ^2.2.0

@@ -259,17 +259,27 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
 
     return Scaffold(
       body: Padding(
-        padding:  const EdgeInsets.symmetric(horizontal: 8,vertical: 8),
-        child:GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-          mainAxisExtent: 300.0,
-          ),
-        itemCount: currentList.length,
-          controller: _scrollController,
-          itemBuilder: (BuildContext context, int index) {
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            const crossAxisCount = 2;
+            const spacing = 10.0;
+            final totalRows = (currentList.length / crossAxisCount).ceil();
+            final visibleRows = totalRows.clamp(1, 2);
+            final itemHeight =
+                (constraints.maxHeight - spacing * (visibleRows - 1)) /
+                    visibleRows;
+
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: spacing,
+                mainAxisSpacing: spacing,
+                mainAxisExtent: itemHeight.clamp(120.0, double.infinity),
+              ),
+              itemCount: currentList.length,
+              controller: _scrollController,
+              itemBuilder: (BuildContext context, int index) {
           final item = currentList[index];
             return InkWell(
               onTap: () {
@@ -310,10 +320,16 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
                 ),
               ),
             );
+              },
+            );
           },
         ),
       ),
-      bottomNavigationBar: Image.asset(Theme.of(context).brightness == Brightness.dark ? Images.logoDark:Images.logo,),
+      bottomNavigationBar: Image.asset(
+        Theme.of(context).brightness == Brightness.dark
+            ? Images.logoDark
+            : Images.logo,
+      ),
     );
   }
 

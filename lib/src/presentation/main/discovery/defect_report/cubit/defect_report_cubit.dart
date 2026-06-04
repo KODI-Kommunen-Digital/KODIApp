@@ -14,6 +14,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
       required File? image,
       required String address,
       required String email,
+      required String phoneNumber,
       required String? category}) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
@@ -22,6 +23,7 @@ class DefectReportCubit extends Cubit<DefectReportState> {
         'description': description,
         'address': address,
         'email': email,
+        'phoneNumber': phoneNumber,
         'category': category,
       };
 

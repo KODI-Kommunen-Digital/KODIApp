@@ -8,6 +8,7 @@ import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'cubit/defect_report_cubit.dart';
 import 'cubit/defect_report_state.dart';
+import 'widget/location_picker_bottom_sheet.dart';
 
 class DefectReportScreen extends StatefulWidget {
   const DefectReportScreen({super.key});
@@ -21,6 +22,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   final _descriptionController = TextEditingController();
   final _addressController = TextEditingController();
   final _emailController = TextEditingController();
+  final _phoneController = TextEditingController();
+  final _phoneFocusNode = FocusNode();
   File? _selectedImage;
   String? currentMaengelTyp;
 
@@ -30,6 +33,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     _descriptionController.dispose();
     _addressController.dispose();
     _emailController.dispose();
+    _phoneController.dispose();
+    _phoneFocusNode.dispose();
     super.dispose();
   }
 
@@ -231,11 +236,81 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: () => _openLocationPicker(context),
+                      child: Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 14,
+                        ),
+                        decoration: BoxDecoration(
+                          color: Theme.of(context)
+                              .dividerColor
+                              .withOpacity(.07),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.location_on_outlined,
+                              color: _addressController.text.isEmpty
+                                  ? Colors.grey
+                                  : Theme.of(context).colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                _addressController.text.isEmpty
+                                    ? Translate.of(context)
+                                        .translate('input_address')
+                                    : _addressController.text,
+                                style: _addressController.text.isEmpty
+                                    ? Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.copyWith(color: Colors.grey)
+                                    : Theme.of(context).textTheme.bodyMedium,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            Icon(
+                              Icons.chevron_right,
+                              color: Colors.grey[400],
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context)
+                                .translate('input_phone'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
                     AppTextInput(
                       hintText:
-                          Translate.of(context).translate('input_address'),
-                      controller: _addressController,
-                      maxLines: 3,
+                          Translate.of(context).translate('input_phone'),
+                      controller: _phoneController,
+                      focusNode: _phoneFocusNode,
+                      keyboardType: TextInputType.phone,
                     ),
                     const SizedBox(height: 16),
                   ],
@@ -248,15 +323,48 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
     );
   }
 
+  Future<void> _openLocationPicker(BuildContext context) async {
+    _phoneFocusNode.unfocus();
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => SizedBox(
+        height: MediaQuery.of(context).size.height * 0.4 +
+            MediaQuery.of(ctx).viewInsets.bottom,
+        child: const LocationPickerBottomSheet(),
+      ),
+    );
+    _phoneFocusNode.unfocus();
+    if (result != null && result.isNotEmpty) {
+      setState(() => _addressController.text = result);
+    }
+  }
+
   void _onSubmit(BuildContext context) {
     final title =
         "${_titleController.text.trim()} | ${currentMaengelTyp ?? ""}";
     final description = _descriptionController.text.trim();
     final address = _addressController.text.trim();
     final email = _emailController.text.trim();
+    final phone = _phoneController.text.trim();
     final type = currentMaengelTyp;
 
     final emailRegex = RegExp(r'^(([^<>()[\.,;:\s@"]+(\.[^<>()[\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
+
+    if (_selectedImage == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              Translate.of(context).translate('image_required')),
+        ),
+      );
+      return;
+    }
 
     if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -280,6 +388,10 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translate.of(context).translate('value_not_valid_email')),
       ));
+    } else if (phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('phone_message')),
+      ));
     } else {
       context.read<DefectReportCubit>().submitReport(
             title: title,
@@ -287,6 +399,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
             image: _selectedImage,
             address: address,
             email: email,
+            phoneNumber: phone,
             category: type,
           );
     }
