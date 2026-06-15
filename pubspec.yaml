@@ -138,6 +138,8 @@ flutter:
     - assets/images/
     - assets/locale/
     - assets/data/
+    - assets/env/staging/.envGera
+    - assets/env/production/.envGera
     - shorebird.yaml
 
   fonts:
