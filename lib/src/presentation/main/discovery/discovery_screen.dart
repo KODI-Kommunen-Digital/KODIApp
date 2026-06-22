@@ -384,7 +384,12 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
             title: service.title,
             url: 'https://www.awv-ot.de/tourenauskunft/stadt_gera_app.php');
         break;
-      case "25":
+      case "27":
+        CustomWebViewScreen.showAsBottomSheet(
+            context: context,
+            title: service.title,
+            url: 'https://umfrage.gera.de/index.php/947518?lang=de');
+        break;
 
       case "26":
         Navigator.pushNamed(context, Routes.subDiscoveryScreen,

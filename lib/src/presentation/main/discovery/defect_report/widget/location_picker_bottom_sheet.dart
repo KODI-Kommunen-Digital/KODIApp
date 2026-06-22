@@ -29,10 +29,16 @@ class _LocationPickerBottomSheetState
     if (query.trim().length < 2) return [];
     setState(() => _isLoading = true);
     try {
+      // Gera, Germany bounding box: left(minLon), top(maxLat), right(maxLon), bottom(minLat)
+      const viewbox = '12.02,50.96,12.22,50.83';
       final uri = Uri.parse(
         'https://nominatim.openstreetmap.org/search'
-        '?q=${Uri.encodeComponent(query)}'
-        '&format=json',
+        '?q=${Uri.encodeComponent('${query.trim()}, Gera')}'
+        '&format=json'
+        '&countrycodes=de'
+        '&viewbox=$viewbox'
+        '&bounded=1'
+        '&limit=10',
       );
       final response = await http.get(
         uri,
@@ -40,7 +46,13 @@ class _LocationPickerBottomSheetState
       );
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return data.cast<Map<String, dynamic>>();
+        return data
+            .cast<Map<String, dynamic>>()
+            .where((item) =>
+                (item['display_name'] as String? ?? '')
+                    .toLowerCase()
+                    .contains('gera'))
+            .toList();
       }
     } catch (_) {
     } finally {

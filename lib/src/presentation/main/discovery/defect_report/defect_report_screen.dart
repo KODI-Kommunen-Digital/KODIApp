@@ -6,6 +6,7 @@ import 'package:heidi/src/presentation/widget/app_text_input.dart';
 import 'package:heidi/src/presentation/widget/app_upload_image.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'cubit/defect_report_cubit.dart';
 import 'cubit/defect_report_state.dart';
 import 'widget/location_picker_bottom_sheet.dart';
@@ -26,6 +27,17 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   final _phoneFocusNode = FocusNode();
   File? _selectedImage;
   String? currentMaengelTyp;
+  bool _isEmailPrefilled = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final user = AppBloc.userCubit.state;
+    if (user != null && user.email.isNotEmpty) {
+      _emailController.text = user.email;
+      _isEmailPrefilled = true;
+    }
+  }
 
   @override
   void dispose() {
@@ -124,6 +136,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                       hintText: Translate.of(context).translate('email'),
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
+                      readOnly: _isEmailPrefilled,
+                      hasDelete: !_isEmailPrefilled,
                     ),
                     const SizedBox(height: 16),
                     Text.rich(
