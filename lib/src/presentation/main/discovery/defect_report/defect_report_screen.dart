@@ -19,6 +19,7 @@ class DefectReportScreen extends StatefulWidget {
 }
 
 class _DefectReportScreenState extends State<DefectReportScreen> {
+  final _nameController = TextEditingController();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   final _addressController = TextEditingController();
@@ -28,6 +29,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
   File? _selectedImage;
   String? currentMaengelTyp;
   bool _isEmailPrefilled = false;
+  double? _selectedLat;
+  double? _selectedLng;
 
   @override
   void initState() {
@@ -41,6 +44,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
 
   @override
   void dispose() {
+    _nameController.dispose();
     _titleController.dispose();
     _descriptionController.dispose();
     _addressController.dispose();
@@ -112,6 +116,29 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
                           });
                         },
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: Translate.of(context).translate('name'),
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          const TextSpan(
+                            text: ' *',
+                            style: TextStyle(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    AppTextInput(
+                      hintText: Translate.of(context).translate('name'),
+                      controller: _nameController,
                     ),
                     const SizedBox(height: 16),
                     Text.rich(
@@ -339,7 +366,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
 
   Future<void> _openLocationPicker(BuildContext context) async {
     _phoneFocusNode.unfocus();
-    final result = await showModalBottomSheet<String>(
+    final result = await showModalBottomSheet<Map<String, dynamic>>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
@@ -354,12 +381,17 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       ),
     );
     _phoneFocusNode.unfocus();
-    if (result != null && result.isNotEmpty) {
-      setState(() => _addressController.text = result);
+    if (result != null) {
+      setState(() {
+        _addressController.text = result['address'] as String? ?? '';
+        _selectedLat = result['lat'] as double?;
+        _selectedLng = result['lng'] as double?;
+      });
     }
   }
 
   void _onSubmit(BuildContext context) {
+    final name = _nameController.text.trim();
     final title =
         "${_titleController.text.trim()} | ${currentMaengelTyp ?? ""}";
     final description = _descriptionController.text.trim();
@@ -380,14 +412,18 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       return;
     }
 
-    if (title.isEmpty || description.isEmpty) {
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context).translate('name_required')),
+      ));
+    } else if (title.isEmpty || description.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(Translate.of(context)
               .translate('title_and_description_required')),
         ),
       );
-    }  else if (address.isEmpty) {
+    } else if (address.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(Translate.of(context).translate('address_message')),
       ));
@@ -408,6 +444,7 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
       ));
     } else {
       context.read<DefectReportCubit>().submitReport(
+            name: name,
             title: title,
             description: description,
             image: _selectedImage,
@@ -415,6 +452,8 @@ class _DefectReportScreenState extends State<DefectReportScreen> {
             email: email,
             phoneNumber: phone,
             category: type,
+            lat: _selectedLat,
+            lng: _selectedLng,
           );
     }
   }

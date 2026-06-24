@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:heidi/src/utils/translate.dart';
 
 class LocationPickerBottomSheet extends StatefulWidget {
@@ -17,7 +19,10 @@ class _LocationPickerBottomSheetState
     extends State<LocationPickerBottomSheet> {
   final TextEditingController _searchController = TextEditingController();
   String _selectedAddress = '';
+  double? _selectedLat;
+  double? _selectedLng;
   bool _isLoading = false;
+  bool _isFetchingGps = false;
 
   @override
   void dispose() {
@@ -61,6 +66,93 @@ class _LocationPickerBottomSheetState
     return [];
   }
 
+  Future<void> _useCurrentLocation(BuildContext context) async {
+    final loc = Location();
+
+    bool serviceEnabled = await loc.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await loc.requestService();
+      if (!serviceEnabled) {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                Translate.of(context).translate('location_service_disabled')),
+          ));
+        }
+        return;
+      }
+    }
+
+    PermissionStatus permission = await loc.hasPermission();
+    if (permission == PermissionStatus.denied) {
+      permission = await loc.requestPermission();
+    }
+
+    if (permission == PermissionStatus.deniedForever) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            content: Text(Translate.of(context)
+                .translate('location_permission_denied_permanently')),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(ctx),
+                child: const Text('Cancel'),
+              ),
+              TextButton(
+                onPressed: () async {
+                  Navigator.pop(ctx);
+                  await launchUrl(Uri.parse('app-settings:'));
+                },
+                child: Text(
+                    Translate.of(context).translate('open_settings')),
+              ),
+            ],
+          ),
+        );
+      }
+      return;
+    }
+
+    if (permission != PermissionStatus.granted) return;
+
+    if (!mounted) return;
+    setState(() => _isFetchingGps = true);
+
+    try {
+      final locationData = await loc.getLocation();
+      final lat = locationData.latitude;
+      final lng = locationData.longitude;
+      if (lat == null || lng == null) return;
+
+      final uri = Uri.parse(
+        'https://nominatim.openstreetmap.org/reverse'
+        '?lat=$lat&lon=$lng&format=json',
+      );
+      final response = await http.get(
+        uri,
+        headers: {'User-Agent': 'de.gera.mobileapp/1.0'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body) as Map<String, dynamic>;
+        final address = data['display_name'] as String? ?? '';
+        if (address.isNotEmpty && mounted) {
+          setState(() {
+            _selectedAddress = address;
+            _selectedLat = lat;
+            _selectedLng = lng;
+            _searchController.text = address;
+          });
+        }
+      }
+    } catch (_) {
+    } finally {
+      if (mounted) setState(() => _isFetchingGps = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -94,6 +186,40 @@ class _LocationPickerBottomSheetState
               Translate.of(context).translate('choose_location_now'),
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Use current location button
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed:
+                    _isFetchingGps ? null : () => _useCurrentLocation(context),
+                icon: _isFetchingGps
+                    ? SizedBox(
+                        width: 16,
+                        height: 16,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: theme.colorScheme.primary,
+                        ),
+                      )
+                    : Icon(Icons.my_location,
+                        size: 18, color: theme.colorScheme.primary),
+                label: Text(
+                  _isFetchingGps
+                      ? Translate.of(context).translate('fetching_location')
+                      : Translate.of(context).translate('use_current_location'),
+                  style: TextStyle(color: theme.colorScheme.primary),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(
+                      color: theme.colorScheme.primary.withValues(alpha: 0.5)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                ),
               ),
             ),
             const SizedBox(height: 16),
@@ -194,8 +320,12 @@ class _LocationPickerBottomSheetState
               ),
               onSelected: (suggestion) {
                 final address = suggestion['display_name'] as String? ?? '';
+                final lat = double.tryParse(suggestion['lat'] as String? ?? '');
+                final lng = double.tryParse(suggestion['lon'] as String? ?? '');
                 setState(() {
                   _selectedAddress = address;
+                  _selectedLat = lat;
+                  _selectedLng = lng;
                   _searchController.text = address;
                 });
               },
@@ -249,7 +379,11 @@ class _LocationPickerBottomSheetState
               height: 52,
               child: ElevatedButton(
                 onPressed: _selectedAddress.isNotEmpty
-                    ? () => Navigator.pop(context, _selectedAddress)
+                    ? () => Navigator.pop(context, {
+                          'address': _selectedAddress,
+                          'lat': _selectedLat,
+                          'lng': _selectedLng,
+                        })
                     : null,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: theme.colorScheme.primary,

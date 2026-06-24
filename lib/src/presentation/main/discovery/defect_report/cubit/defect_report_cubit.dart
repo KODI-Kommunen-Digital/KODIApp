@@ -9,22 +9,28 @@ class DefectReportCubit extends Cubit<DefectReportState> {
   DefectReportCubit() : super(const DefectReportState());
 
   Future<void> submitReport(
-      {required String title,
+      {required String name,
+      required String title,
       required String description,
       required File? image,
       required String address,
       required String email,
       required String phoneNumber,
-      required String? category}) async {
+      required String? category,
+      required double? lat,
+      required double? lng}) async {
     emit(state.copyWith(isSubmitting: true, error: null));
     try {
       Map<String, dynamic> formDataMap = {
+        'name': name,
         'title': title,
         'description': description,
         'address': address,
         'email': email,
         'phoneNumber': phoneNumber,
         'category': category,
+        if (lat != null) 'lat': lat.toString(),
+        if (lng != null) 'long': lng.toString(),
       };
 
       if (image != null) {
