@@ -116,12 +116,9 @@ class IntroPageState extends State<IntroPage>
 
       if (!mounted) return;
       setState(() => _receiveWasteCalendarNotification = enabled);
-
-      await repository.subscribeForWasteNotification(enabled);
-
-      if (enabled && mounted) {
-        Utils.showWasteNotificationSnackBar(context);
-      }
+      // API call is intentionally deferred to _confirmSelection.
+      // subscribeForWasteNotification requires location/waste-type data to
+      // already exist on the backend, which only happens after updateSubscription.
     } catch (e, s) {
       debugPrint('Waste calendar notification toggle error: $e');
       debugPrintStack(stackTrace: s);
@@ -367,6 +364,10 @@ class IntroPageState extends State<IntroPage>
         wasteTypeIds: selectedWasteTypes.map((type) => type.id).toList(),
         onSuccess: (){}
       );
+
+      // Now that location/waste-type data exists on the backend, send the
+      // notification preference the user configured via the toggle.
+      await repository.subscribeForWasteNotification(_receiveWasteCalendarNotification);
 
       if (_prefs != null) {
         await _prefs!.setBool(Preferences.isWasteCalendarIntroCompleted, true);
