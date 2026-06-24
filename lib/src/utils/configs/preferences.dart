@@ -59,6 +59,7 @@ class Preferences {
   static const String isWasteCalendarSkipped = "isWasteCalendarSkipped";
   static const String isFCMTokenRegistered = "isFCMTokenRegistered";
   static const String deviceId = "deviceId";
+  static const String isWasteCalendarIntroCompleted = "isWasteCalendarIntroCompleted";
 
   Preferences._(this._box);
 

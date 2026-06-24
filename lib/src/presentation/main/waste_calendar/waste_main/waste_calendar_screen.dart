@@ -15,6 +15,7 @@ import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
+import 'package:heidi/src/presentation/main/waste_calendar/waste_calendar_intro_screen.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/presentation/widget/loading_dialog.dart';
 import 'package:heidi/src/utils/common.dart';
@@ -81,7 +82,7 @@ class _WasteCalendarState extends State<WasteCalendar>
   late WasteCalendarRepository repository;
   late String receiveWasteCalendarNotification;
   bool isLoading = false;
-  bool isDataInitializing = false;
+  bool isDataInitializing = true;
   Preferences? prefs;
   bool _receiveNotification = false;
   bool _receiveWasteCalendarNotification = false;
@@ -94,10 +95,21 @@ class _WasteCalendarState extends State<WasteCalendar>
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       prefs = await Preferences.openBox();
+
+      // Show waste calendar intro flow until user completes setup
+      final isIntroCompleted =
+          prefs!.getBool(Preferences.isWasteCalendarIntroCompleted);
+      if (!isIntroCompleted) {
+        if (!mounted) return;
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const WasteCalendarIntroScreen(),
+          ),
+        );
+        return;
+      }
+
       if (prefs != null) {
-        final permission = await prefs!.getKeyValue(
-            Preferences.pushNotificationsPermission, 'notAsked');
-        final isAuthorized = permission == 'authorized';
         // Always default to 'false' — user must explicitly opt-in
         receiveWasteCalendarNotification = prefs!.getKeyValue(
           Preferences.receiveWasteCalendarNotification,

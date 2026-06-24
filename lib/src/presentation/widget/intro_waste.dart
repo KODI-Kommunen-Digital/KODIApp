@@ -13,6 +13,7 @@ import 'package:heidi/src/data/model/model_waste_type.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
 import 'package:heidi/src/presentation/widget/app_multi_select_typeahead.dart';
 
+import '../../utils/configs/routes.dart';
 import '../../utils/translate.dart';
 
 class IntroPage extends StatefulWidget {
@@ -320,9 +321,10 @@ class IntroPageState extends State<IntroPage>
 
   Future<void> _skipIntro() async {
     final prefs = await Preferences.openBox();
-    // Set a flag to indicate the intro was skipped
     await prefs.setKeyValue(Preferences.introSkipped, true);
-    Navigator.pushReplacementNamed(context, '/home');
+    await prefs.setBool(Preferences.isWasteCalendarIntroCompleted, true);
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, Routes.wasteCalendar);
   }
 
   void _selectLocation(String locationId, String locationName, String hashedStreetName) {
@@ -357,7 +359,6 @@ class IntroPageState extends State<IntroPage>
     }
 
     try {
-      // Use common subscription method
       await repository.updateSubscription(
         cityId: 1,
         locationId: _selectedLocationId,
@@ -367,8 +368,13 @@ class IntroPageState extends State<IntroPage>
         onSuccess: (){}
       );
 
+      if (_prefs != null) {
+        await _prefs!.setBool(Preferences.isWasteCalendarIntroCompleted, true);
+      }
+
       _wasteCalenderCubit.updateStreetId(_selectedLocationId!, selectedWasteTypeIds: selectedWasteTypes.map((type) => type.id).toList());
-      Navigator.pushReplacementNamed(context, '/home');
+      if (!mounted) return;
+      Navigator.pushReplacementNamed(context, Routes.wasteCalendar);
     } finally {
       if (mounted) {
         setState(() {
@@ -378,11 +384,12 @@ class IntroPageState extends State<IntroPage>
     }
   }
 
-  void _wasteCalendarSkipped() async {
+  Future<void> _wasteCalendarSkipped() async {
     final prefs = await Preferences.openBox();
     await prefs.setKeyValue(
         Preferences.receiveWasteCalendarNotification, 'false');
     await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
+    await prefs.setBool(Preferences.isWasteCalendarIntroCompleted, true);
     await repository.subscribeForWasteNotification(false);
   }
 
@@ -524,9 +531,10 @@ class IntroPageState extends State<IntroPage>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                      onPressed: () {
-                        _wasteCalendarSkipped();
-                        Navigator.pushReplacementNamed(context, '/home');
+                      onPressed: () async {
+                        await _wasteCalendarSkipped();
+                        if (!mounted) return;
+                        Navigator.pushReplacementNamed(context, Routes.wasteCalendar);
                       },
                       child: const Text('Überspringen'),
                     ),
@@ -599,9 +607,10 @@ class IntroPageState extends State<IntroPage>
               const SizedBox(height: 10),
               if(!_showWasteTypeSelection)
               TextButton(
-                onPressed: () {
-                  _wasteCalendarSkipped();
-                  Navigator.pushReplacementNamed(context, '/home');
+                onPressed: () async {
+                  await _wasteCalendarSkipped();
+                  if (!mounted) return;
+                  Navigator.pushReplacementNamed(context, Routes.wasteCalendar);
                 },
                 child: const Text('Überspringen'),
               ),

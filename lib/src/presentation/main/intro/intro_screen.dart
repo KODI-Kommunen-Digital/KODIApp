@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
-import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
 import '../../../utils/translate.dart';
@@ -17,8 +16,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  static const int _totalPages = 2;
-  static const int _dotsPageCount = 2;
+  static const int _totalPages = 4;
 
   @override
   void dispose() {
@@ -26,70 +24,98 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     super.dispose();
   }
 
-  Future<void> _skipToHome() async {
-    final prefs = await Preferences.openBox();
-    await prefs.setKeyValue(
-        Preferences.receiveWasteCalendarNotification, 'false');
-    await prefs.setBool(Preferences.isWasteCalendarSkipped, true);
+  void _skipToWasteSetup() {
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 
   void _nextPage() {
     _pageController.nextPage(
-      duration: const Duration(milliseconds: 380),
+      duration: const Duration(milliseconds: 350),
+      curve: Curves.easeInOut,
+    );
+  }
+
+  void _prevPage() {
+    _pageController.previousPage(
+      duration: const Duration(milliseconds: 350),
       curve: Curves.easeInOut,
     );
   }
 
   void _goToWasteSetup() {
-    Navigator.pushReplacementNamed(context, Routes.introWaste);
+    Navigator.pushReplacementNamed(context, Routes.home);
   }
 
   @override
   Widget build(BuildContext context) {
     final t = Translate.of(context);
     final theme = Theme.of(context);
+    final isGerman = Localizations.localeOf(context).languageCode == 'de';
     final isLastPage = _currentPage == _totalPages - 1;
+    final isFirstPage = _currentPage == 0;
 
-    final List<_PageData> pages = [
+    String img(int n) => isGerman
+        ? 'assets/images/intro_screen_${n}_de.png'
+        : 'assets/images/intro_screen_${n}_en.png';
+
+    final pages = [
       _PageData(
-        t1: t.translate('intro_tagline'),
-        t2: t.translate('intro_page1_t2'),
-        t3: t.translate('intro_page1_t3'),
-        imagePath: 'assets/images/intro_image_5.png',
+        heading: t.translate('intro_p1_heading'),
+        body: t.translate('intro_p1_subtitle'),
+        imagePath: img(1),
       ),
       _PageData(
-        t1: t.translate('intro_page2_t1'),
-        poweredBy: t.translate('splash_powered_by'),
-        t2: t.translate('intro_page2_t2'),
-        t3: t.translate('intro_page2_t3'),
-        imagePath: 'assets/images/intro_image_1.png',
+        heading: t.translate('intro_p2_heading'),
+        body: t.translate('intro_p2_body'),
+        imagePath: img(2),
       ),
       _PageData(
-        t1: t.translate('intro_tagline'),
-        t2: t.translate('intro_page3_t2'),
-        t3: t.translate('intro_page3_t3'),
-        imagePath: 'assets/images/intro_image_2.png',
+        heading: t.translate('intro_p3_heading'),
+        body: t.translate('intro_p3_body'),
+        imagePath: img(3),
       ),
       _PageData(
-        t1: t.translate('intro_tagline'),
-        t2: t.translate('intro_page4_t2'),
-        t3: t.translate('intro_page4_t3'),
-        imagePath: 'assets/images/intro_image_4.png',
-      ),
-      _PageData(
-        t1: null,
-        t2: t.translate('intro_page5_t2'),
-        t3: t.translate('intro_page5_t3'),
-        imagePath: 'assets/images/intro_image_5.png',
+        heading: t.translate('intro_p5_heading'),
+        body: t.translate('intro_p5_body'),
+        imagePath: img(5),
       ),
     ];
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
+      backgroundColor: const Color(0xFFF6F9FC),
       body: SafeArea(
         child: Column(
           children: [
+            // Skip button row at top right
+            SizedBox(
+              height: 48,
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: !isLastPage
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 16),
+                        child: TextButton(
+                          onPressed: _skipToWasteSetup,
+                          style: TextButton.styleFrom(
+                            foregroundColor: theme.primaryColor,
+                            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 6),
+                          ),
+                          child: Text(
+                            t.translate('skip'),
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                              color: theme.primaryColor,
+                              decorationColor: theme.primaryColor,
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ),
             Expanded(
               child: PageView.builder(
                 controller: _pageController,
@@ -100,36 +126,20 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
                     _IntroPageContent(data: pages[index]),
               ),
             ),
-            // Dots sit just below the page content
-            SizedBox(
-              height: 28,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(_dotsPageCount, (index) {
-                  final isActive = index == _currentPage;
-                  return AnimatedContainer(
-                    duration: const Duration(milliseconds: 280),
-                    curve: Curves.easeInOut,
-                    margin: const EdgeInsets.symmetric(horizontal: 4),
-                    width: isActive ? 22 : 8,
-                    height: 8,
-                    decoration: BoxDecoration(
-                      color: isActive
-                          ? theme.primaryColor
-                          : theme.primaryColor.withOpacity(0.18),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                  );
-                }),
-              ),
+            _DotIndicators(
+              currentPage: _currentPage,
+              totalPages: _totalPages,
+              activeColor: theme.primaryColor,
             ),
+            const SizedBox(height: 16),
             _BottomSection(
               isLastPage: isLastPage,
+              isFirstPage: isFirstPage,
               t: t,
               theme: theme,
               onNext: _nextPage,
-              onSetupWaste: _goToWasteSetup,
-              onSkip: _skipToHome,
+              onBack: _prevPage,
+              onLetsGo: _goToWasteSetup,
             ),
           ],
         ),
@@ -139,17 +149,13 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
 }
 
 class _PageData {
-  final String? t1;
-  final String? poweredBy;
-  final String t2;
-  final String t3;
+  final String heading;
+  final String body;
   final String imagePath;
 
   const _PageData({
-    this.t1,
-    this.poweredBy,
-    required this.t2,
-    required this.t3,
+    required this.heading,
+    required this.body,
     required this.imagePath,
   });
 }
@@ -164,53 +170,16 @@ class _IntroPageContent extends StatelessWidget {
     final theme = Theme.of(context);
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // t1 slot — always occupies same height for layout consistency
-          SizedBox(
-            height: 24,
-            child: data.t1 != null
-                ? Text(
-                    data.t1!,
-                    style: theme.textTheme.labelSmall?.copyWith(
-                      letterSpacing: 2.0,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16,
-                    ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                  )
-                : null,
-          ),
-          if (data.poweredBy != null) ...[
-            const SizedBox(height: 10),
-            Text(
-              data.poweredBy!,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.55),
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
-          const SizedBox(height: 24),
-          SizedBox(
-            height: 220,
-            child: Image.asset(
-              data.imagePath,
-              fit: BoxFit.contain,
-            ),
-          ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 16),
           Text(
-            data.t2,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onSurface,
+            data.heading,
+            style: theme.textTheme.titleLarge?.copyWith(
+              fontWeight: FontWeight.w700,
+              color: Colors.black54,
               height: 1.25,
               fontSize: 22,
             ),
@@ -218,14 +187,65 @@ class _IntroPageContent extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            data.t3,
+            data.body,
             style: theme.textTheme.bodyMedium?.copyWith(
-              height: 1.55,
-              fontWeight: FontWeight.w200,
+              color: const Color(0xFF4A4A4A),
+              height: 1.6,
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
             ),
             textAlign: TextAlign.center,
           ),
+          const SizedBox(height: 20),
+          Expanded(
+            flex: 5,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                data.imagePath,
+                fit: BoxFit.fill,
+                width: double.infinity,
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
         ],
+      ),
+    );
+  }
+}
+
+class _DotIndicators extends StatelessWidget {
+  final int currentPage;
+  final int totalPages;
+  final Color activeColor;
+
+  const _DotIndicators({
+    required this.currentPage,
+    required this.totalPages,
+    required this.activeColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 12,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: List.generate(totalPages, (index) {
+          final isActive = index == currentPage;
+          return AnimatedContainer(
+            duration: const Duration(milliseconds: 280),
+            curve: Curves.easeInOut,
+            margin: const EdgeInsets.symmetric(horizontal: 4),
+            width: 8,
+            height: 8,
+            decoration: BoxDecoration(
+              color: isActive ? activeColor : activeColor.withOpacity(0.18),
+              shape: BoxShape.circle,
+            ),
+          );
+        }),
       ),
     );
   }
@@ -233,80 +253,75 @@ class _IntroPageContent extends StatelessWidget {
 
 class _BottomSection extends StatelessWidget {
   final bool isLastPage;
+  final bool isFirstPage;
   final dynamic t;
   final ThemeData theme;
   final VoidCallback onNext;
-  final VoidCallback onSetupWaste;
-  final VoidCallback onSkip;
+  final VoidCallback onBack;
+  final VoidCallback onLetsGo;
 
   const _BottomSection({
     required this.isLastPage,
+    required this.isFirstPage,
     required this.t,
     required this.theme,
     required this.onNext,
-    required this.onSetupWaste,
-    required this.onSkip,
+    required this.onBack,
+    required this.onLetsGo,
   });
 
   @override
   Widget build(BuildContext context) {
+    final buttonShape = RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(14),
+    );
+    const buttonHeight = 52.0;
+    const buttonTextStyle = TextStyle(
+      fontSize: 15,
+      fontWeight: FontWeight.w700,
+      letterSpacing: 0.3,
+    );
+
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 8,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
+      color: const Color(0xFFF6F9FC),
+      child: Row(
         children: [
-          // Primary action button
-          SizedBox(
-            width: double.infinity,
-            height: 50,
-            child: ElevatedButton(
-              onPressed: isLastPage ? onSetupWaste : onNext,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: theme.primaryColor,
-                foregroundColor: Colors.white,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                textStyle: const TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: 0.2,
+          if (!isFirstPage) ...[
+            Expanded(
+              child: SizedBox(
+                height: buttonHeight,
+                child: OutlinedButton(
+                  onPressed: onBack,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: theme.primaryColor,
+                    side: BorderSide(color: theme.primaryColor, width: 1.5),
+                    shape: buttonShape,
+                    textStyle: buttonTextStyle,
+                  ),
+                  child: Text(t.translate('back')),
                 ),
               ),
-              child: Text(
-                isLastPage
-                    ? t.translate('button_setup_waste_calendar')
-                    : t.translate('next'),
-              ),
             ),
-          ),
-          const SizedBox(height: 4),
-          // Secondary skip button
-          TextButton(
-            onPressed: onSkip,
-            style: TextButton.styleFrom(
-              foregroundColor: theme.primaryColor,
-              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-            ),
-            child: Text(
-              t.translate('button_test_app'),
-              style: TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-                color: theme.primaryColor,
-                decoration: TextDecoration.underline,
-                decorationColor: theme.primaryColor,
+            const SizedBox(width: 12),
+          ],
+          Expanded(
+            child: SizedBox(
+              height: buttonHeight,
+              child: ElevatedButton(
+                onPressed: isLastPage ? onLetsGo : onNext,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: theme.primaryColor,
+                  foregroundColor: Colors.white,
+                  elevation: 0,
+                  shape: buttonShape,
+                  textStyle: buttonTextStyle,
+                ),
+                child: Text(
+                  isLastPage
+                      ? t.translate('button_lets_go')
+                      : t.translate('intro_btn_next'),
+                ),
               ),
             ),
           ),
