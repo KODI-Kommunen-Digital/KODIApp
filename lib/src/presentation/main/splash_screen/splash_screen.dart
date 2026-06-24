@@ -27,10 +27,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final location = prefs.getKeyValue(Preferences.selectedLocationName, null);
     final wasteTypes = prefs.getSelectedWasteTypes();
     final isSkipped = prefs.getBool(Preferences.isWasteCalendarSkipped);
+    final introCompleted = prefs.getBool(Preferences.introSkipped);
 
     if (!mounted) return;
 
-    if ((location != null && wasteTypes.isNotEmpty) || isSkipped) {
+    if ((location != null && wasteTypes.isNotEmpty) || isSkipped || introCompleted) {
       Navigator.pushReplacementNamed(context, Routes.home);
     } else {
       Navigator.pushReplacement(

@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
 import '../../../utils/translate.dart';
@@ -24,7 +25,10 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     super.dispose();
   }
 
-  void _skipToWasteSetup() {
+  Future<void> _skipToWasteSetup() async {
+    final prefs = await Preferences.openBox();
+    await prefs.setBool(Preferences.introSkipped, true);
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 
@@ -42,7 +46,10 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     );
   }
 
-  void _goToWasteSetup() {
+  Future<void> _goToWasteSetup() async {
+    final prefs = await Preferences.openBox();
+    await prefs.setBool(Preferences.introSkipped, true);
+    if (!mounted) return;
     Navigator.pushReplacementNamed(context, Routes.home);
   }
 
@@ -51,12 +58,15 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     final t = Translate.of(context);
     final theme = Theme.of(context);
     final isGerman = Localizations.localeOf(context).languageCode == 'de';
+    final isDark = theme.brightness == Brightness.dark;
     final isLastPage = _currentPage == _totalPages - 1;
     final isFirstPage = _currentPage == 0;
 
-    String img(int n) => isGerman
-        ? 'assets/images/intro_screen_${n}_de.png'
-        : 'assets/images/intro_screen_${n}_en.png';
+    String img(int n) {
+      final lang = isGerman ? 'de' : 'en';
+      final suffix = isDark ? '_black' : '';
+      return 'assets/images/intro_screen_${n}_$lang$suffix.png';
+    }
 
     final pages = [
       _PageData(
@@ -82,7 +92,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     ];
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF6F9FC),
+      backgroundColor: isDark ? const Color(0xFF07111E) : const Color(0xFFF6F9FC),
       body: SafeArea(
         child: Column(
           children: [
@@ -135,6 +145,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
             _BottomSection(
               isLastPage: isLastPage,
               isFirstPage: isFirstPage,
+              isDark: isDark,
               t: t,
               theme: theme,
               onNext: _nextPage,
@@ -169,6 +180,7 @@ class _IntroPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
+    final isDark = theme.brightness == Brightness.dark;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -179,7 +191,7 @@ class _IntroPageContent extends StatelessWidget {
             data.heading,
             style: theme.textTheme.titleLarge?.copyWith(
               fontWeight: FontWeight.w700,
-              color: Colors.black54,
+              color: isDark ? Colors.white.withOpacity(0.7) : Colors.black54,
               height: 1.25,
               fontSize: 22,
             ),
@@ -189,7 +201,7 @@ class _IntroPageContent extends StatelessWidget {
           Text(
             data.body,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: const Color(0xFF4A4A4A),
+              color: isDark ? Colors.white.withOpacity(0.7) : const Color(0xFF4A4A4A),
               height: 1.6,
               fontSize: 14,
               fontWeight: FontWeight.w500,
@@ -254,6 +266,7 @@ class _DotIndicators extends StatelessWidget {
 class _BottomSection extends StatelessWidget {
   final bool isLastPage;
   final bool isFirstPage;
+  final bool isDark;
   final dynamic t;
   final ThemeData theme;
   final VoidCallback onNext;
@@ -263,6 +276,7 @@ class _BottomSection extends StatelessWidget {
   const _BottomSection({
     required this.isLastPage,
     required this.isFirstPage,
+    required this.isDark,
     required this.t,
     required this.theme,
     required this.onNext,
@@ -284,7 +298,7 @@ class _BottomSection extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
-      color: const Color(0xFFF6F9FC),
+      color: isDark ? const Color(0xFF07111E) : const Color(0xFFF6F9FC),
       child: Row(
         children: [
           if (!isFirstPage) ...[

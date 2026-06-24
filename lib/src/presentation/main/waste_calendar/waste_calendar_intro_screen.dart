@@ -43,13 +43,17 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
   @override
   Widget build(BuildContext context) {
     final t = Translate.of(context);
+    final theme = Theme.of(context);
     final isGerman = Localizations.localeOf(context).languageCode == 'de';
+    final isDark = theme.brightness == Brightness.dark;
     final isLastPage = _currentPage == _totalPages - 1;
     final isFirstPage = _currentPage == 0;
 
-    String img(int n) => isGerman
-        ? 'assets/images/wc_intro_screen_${n}_de.png'
-        : 'assets/images/wc_intro_screen_${n}_en.png';
+    String img(int n) {
+      final lang = isGerman ? 'de' : 'en';
+      final suffix = isDark ? '_black' : '';
+      return 'assets/images/wc_intro_screen_${n}_$lang$suffix.png';
+    }
 
     final pages = [
       _PageData(
@@ -77,7 +81,7 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
     final currentData = pages[_currentPage];
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDark ? const Color(0xFF07111E) : const Color(0xFFF6F9FC),
       body: SafeArea(
         child: Column(
           children: [
@@ -162,10 +166,10 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
                   currentData.heading,
                   key: ValueKey('h$_currentPage'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
-                    color: Colors.black87,
+                    color: isDark ? Colors.white.withOpacity(0.7) : Colors.black54,
                     height: 1.3,
                   ),
                 ),
@@ -181,9 +185,9 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
                   currentData.body,
                   key: ValueKey('b$_currentPage'),
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF4A4A4A),
+                    color: isDark ? Colors.white.withOpacity(0.7) : const Color(0xFF4A4A4A),
                     height: 1.6,
                   ),
                 ),
