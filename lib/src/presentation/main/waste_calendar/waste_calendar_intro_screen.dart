@@ -52,7 +52,7 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
     String img(int n) {
       final lang = isGerman ? 'de' : 'en';
       final suffix = isDark ? '_black' : '';
-      return 'assets/images/wc_intro_screen_${n}_$lang$suffix.png';
+      return 'assets/images/wc_intro_screen_${n}_$lang$suffix.webp';
     }
 
     final pages = [

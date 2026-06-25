@@ -65,7 +65,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     String img(int n) {
       final lang = isGerman ? 'de' : 'en';
       final suffix = isDark ? '_black' : '';
-      return 'assets/images/intro_screen_${n}_$lang$suffix.png';
+      return 'assets/images/intro_screen_${n}_$lang$suffix.webp';
     }
 
     final pages = [
