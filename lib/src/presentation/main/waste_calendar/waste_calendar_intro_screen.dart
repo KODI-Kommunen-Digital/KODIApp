@@ -123,12 +123,11 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
                 onPageChanged: (index) => setState(() => _currentPage = index),
                 itemBuilder: (_, index) => Padding(
                   padding: const EdgeInsets.fromLTRB(0, 16, 0, 20),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(36),
-                    child: Image.asset(
-                      pages[index].imagePath,
-                      fit: BoxFit.fill,
-                      width: double.infinity,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(36),
+                      child: Image.asset(pages[index].imagePath),
                     ),
                   ),
                 ),
