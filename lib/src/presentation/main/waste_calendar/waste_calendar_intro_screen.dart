@@ -156,38 +156,48 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            // Heading
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Text(
-                  currentData.heading,
-                  key: ValueKey('h$_currentPage'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                    color: isDark ? Colors.white.withOpacity(0.7) : Colors.black54,
-                    height: 1.3,
+            // Heading — fixed height keeps dots anchored regardless of text length
+            SizedBox(
+              height: 58,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: Text(
+                    currentData.heading,
+                    key: ValueKey('h$_currentPage'),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: isDark ? Colors.white.withOpacity(0.7) : Colors.black54,
+                      height: 1.3,
+                    ),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
-            // Description
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 200),
-                child: Text(
-                  currentData.body,
-                  key: ValueKey('b$_currentPage'),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: isDark ? Colors.white.withOpacity(0.7) : const Color(0xFF4A4A4A),
-                    height: 1.6,
+            // Description — fixed height keeps dots anchored regardless of text length
+            SizedBox(
+              height: 72,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24),
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 200),
+                  child: Text(
+                    currentData.body,
+                    key: ValueKey('b$_currentPage'),
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: isDark ? Colors.white.withOpacity(0.7) : const Color(0xFF4A4A4A),
+                      height: 1.6,
+                    ),
                   ),
                 ),
               ),
