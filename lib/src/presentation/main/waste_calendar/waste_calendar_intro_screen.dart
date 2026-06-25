@@ -192,7 +192,18 @@ class _WasteCalendarIntroScreenState extends State<WasteCalendarIntroScreen> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
+            Text(
+              Translate.of(context).translate('rsag_card_subtitle'),
+              style: TextStyle(
+                fontSize: 12,
+                color: isDark
+                    ? Colors.white.withOpacity(0.35)
+                    : Colors.black.withOpacity(0.35),
+                letterSpacing: 0.4,
+              ),
+            ),
+            const SizedBox(height: 15),
             // Buttons
             Padding(
               padding: const EdgeInsets.fromLTRB(24, 0, 24, 28),
