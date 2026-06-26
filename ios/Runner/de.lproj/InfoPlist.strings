@@ -1,0 +1,7 @@
+"NSCameraUsageDescription" = "Kamerazugriff wird zum Hochladen von Bildern benötigt.";
+"NSPhotoLibraryUsageDescription" = "Wir benötigen Zugriff auf deine Fotomediathek, damit du Fotos hochladen kannst. Du kannst zum Beispiel ein Foto aus deiner Mediathek als Profilbild auswählen.";
+"NSMicrophoneUsageDescription" = "Mikrofonzugriff wird zum Hochladen von Audio benötigt.";
+"NSLocationWhenInUseUsageDescription" = "Diese App verwendet deinen Standort, um Inhalte in deiner Nähe anzuzeigen.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Wir benötigen deinen Standort, um standortbasierte Dienste bereitzustellen und dein Erlebnis zu verbessern.";
+"NSLocationUsageDescription" = "Standortzugriff wird benötigt, um Freunde in der Nähe zu aktualisieren.";
+"NSDownloadsFolderUsageDescription" = "Wir benötigen Zugriff auf den Download-Ordner für den Dateizugriff.";

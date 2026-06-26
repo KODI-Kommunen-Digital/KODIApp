@@ -1,0 +1,7 @@
+"NSCameraUsageDescription" = "Need camera access for uploading images";
+"NSPhotoLibraryUsageDescription" = "We need access to your photo gallery to enable you to upload photos. For example, you can choose a photo from your gallery to use as your profile picture.";
+"NSMicrophoneUsageDescription" = "Need microphone access for uploading audio";
+"NSLocationWhenInUseUsageDescription" = "This app will use your location to show features near you.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "We need your location to provide location-based services and enhance your experience.";
+"NSLocationUsageDescription" = "Need location access for updating nearby friends";
+"NSDownloadsFolderUsageDescription" = "We need access to the Downloads folder for file access.";
