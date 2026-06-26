@@ -340,5 +340,8 @@
   "share_qr_listing": "全員のリストを共有する",
   "user_link_copied": "ユーザーリンクはすでにクリップボードにコピーされています",
   "listing_link_copied": "リスティング リンクは既にクリップボードにコピーされています",
-  "file": "ファイル"
+  "file": "ファイル",
+  "choose_image_source": "写真を追加",
+  "take_photo": "写真を撮る",
+  "choose_from_gallery": "ギャラリーから選択"
 }

@@ -340,5 +340,8 @@
   "share_qr_listing": "Bagikan daftar untuk semua orang",
   "user_link_copied": "Tautan pengguna sudah disalin ke papan klip",
   "listing_link_copied": "Tautan cantuman sudah disalin ke clipboard",
-  "file": "Mengajukan"
+  "file": "Mengajukan",
+  "choose_image_source": "Tambah Foto",
+  "take_photo": "Ambil Foto",
+  "choose_from_gallery": "Pilih dari Galeri"
 }

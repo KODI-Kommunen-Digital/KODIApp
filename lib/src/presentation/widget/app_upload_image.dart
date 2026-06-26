@@ -614,18 +614,97 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Future<void> selectImages() async {
     if (widget.defect) {
-      await _selectSingleImage();
+      await _showDefectImageSourcePicker();
     } else {
       await _selectMultipleImages();
     }
   }
 
-  Future<void> _selectSingleImage() async {
+  Future<void> _showDefectImageSourcePicker() async {
+    if (!mounted) return;
+    await showModalBottomSheet<void>(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (ctx) {
+        return SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  Translate.of(context).translate('choose_image_source'),
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
+                      ?.copyWith(fontWeight: FontWeight.bold),
+                ),
+                const Divider(height: 16),
+                ListTile(
+                  leading: const Icon(Icons.camera_alt_outlined),
+                  title: Text(Translate.of(context).translate('take_photo')),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _pickImageFromSource(ImageSource.camera);
+                  },
+                ),
+                ListTile(
+                  leading: const Icon(Icons.photo_library_outlined),
+                  title: Text(
+                      Translate.of(context).translate('choose_from_gallery')),
+                  onTap: () {
+                    Navigator.pop(ctx);
+                    _pickImageFromSource(ImageSource.gallery);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImageFromSource(ImageSource source) async {
+    if (source == ImageSource.camera) {
+      final status = await Permission.camera.request();
+      if (status.isPermanentlyDenied) {
+        await openAppSettings();
+        return;
+      }
+      if (!status.isGranted) return;
+    } else {
+      PermissionStatus galleryStatus;
+      if (Platform.isAndroid) {
+        final androidInfo = await DeviceInfoPlugin().androidInfo;
+        if (androidInfo.version.sdkInt <= 32) {
+          galleryStatus = await Permission.storage.request();
+        } else {
+          galleryStatus = await Permission.photos.request();
+        }
+      } else {
+        galleryStatus = await Permission.photos.request();
+        if (!galleryStatus.isGranted && !galleryStatus.isLimited) {
+          if (galleryStatus.isPermanentlyDenied) await openAppSettings();
+          return;
+        }
+      }
+      if (galleryStatus.isPermanentlyDenied) {
+        await openAppSettings();
+        return;
+      }
+    }
+    await _selectSingleImage(source: source);
+  }
+
+  Future<void> _selectSingleImage({ImageSource source = ImageSource.gallery}) async {
     try {
       // Pick with dimension cap + quality reduction as first compression layer.
       // imageQuality also forces JPEG re-encoding, fixing HEIC/undecodable format errors.
       final XFile? picked = await _picker.pickImage(
-        source: ImageSource.gallery,
+        source: source,
         imageQuality: 80,
         maxWidth: 1920,
         maxHeight: 1920,

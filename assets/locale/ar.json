@@ -340,5 +340,8 @@
   "share_qr_listing": "قائمة الأسهم للجميع",
   "user_link_copied": "تم نسخ ارتباط المستخدم بالفعل إلى الحافظة",
   "listing_link_copied": "رابط القائمة نسخ بالفعل إلى الحافظة",
-  "file": "ملف"
+  "file": "ملف",
+  "choose_image_source": "إضافة صورة",
+  "take_photo": "التقاط صورة",
+  "choose_from_gallery": "اختيار من المعرض"
 }

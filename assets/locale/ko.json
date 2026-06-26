@@ -340,5 +340,8 @@
   "share_qr_listing": "모두를 위한 목록 공유",
   "user_link_copied": "사용자 링크가 이미 클립보드에 복사됨",
   "listing_link_copied": "목록 링크가 이미 클립보드에 복사됨",
-  "file": "파일"
+  "file": "파일",
+  "choose_image_source": "사진 추가",
+  "take_photo": "사진 찍기",
+  "choose_from_gallery": "갤러리에서 선택"
 }

@@ -340,5 +340,8 @@
   "share_qr_listing": "Partager la liste pour tout le monde",
   "user_link_copied": "Le lien utilisateur est déjà copié dans le presse-papiers",
   "listing_link_copied": "Le lien de l'annonce est déjà copié dans le presse-papiers",
-  "file": "Dossier"
+  "file": "Dossier",
+  "choose_image_source": "Ajouter une photo",
+  "take_photo": "Prendre une photo",
+  "choose_from_gallery": "Choisir dans la galerie"
 }

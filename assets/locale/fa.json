@@ -340,5 +340,8 @@
   "share_qr_listing": "فهرست را برای همه به اشتراک بگذارید",
   "user_link_copied": "پیوند کاربر قبلاً در کلیپ بورد کپی شده است",
   "listing_link_copied": "پیوند فهرست قبلاً در کلیپ بورد کپی شده است",
-  "file": "فایل"
+  "file": "فایل",
+  "choose_image_source": "افزودن عکس",
+  "take_photo": "گرفتن عکس",
+  "choose_from_gallery": "انتخاب از گالری"
 }

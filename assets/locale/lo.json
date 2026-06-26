@@ -340,5 +340,8 @@
   "share_qr_listing": "ແບ່ງປັນລາຍຊື່ສໍາລັບທຸກຄົນ",
   "user_link_copied": "ລິ້ງຜູ້ໃຊ້ສຳເນົາໄປໃສ່ຄລິບບອດແລ້ວ",
   "listing_link_copied": "ລິ້ງລາຍຊື່ສຳເນົາໄປໃສ່ຄລິບບອດແລ້ວ",
-  "file": "ໄຟລ໌"
+  "file": "ໄຟລ໌",
+  "choose_image_source": "ເພີ່ມຮູບ",
+  "take_photo": "ຖ່າຍຮູບ",
+  "choose_from_gallery": "ເລືອກຈາກຄັງຮູບ"
 }

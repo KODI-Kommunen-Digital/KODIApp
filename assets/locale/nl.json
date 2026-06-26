@@ -340,5 +340,8 @@
   "share_qr_listing": "Deel lijst voor iedereen",
   "user_link_copied": "Gebruikerslink is al naar het klembord gekopieerd",
   "listing_link_copied": "Lijstlink is al naar klembord gekopieerd",
-  "file": "Bestand"
+  "file": "Bestand",
+  "choose_image_source": "Foto toevoegen",
+  "take_photo": "Foto nemen",
+  "choose_from_gallery": "Kiezen uit galerij"
 }

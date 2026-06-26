@@ -340,5 +340,8 @@
   "share_qr_listing": "Chia sẻ danh sách cho mọi người",
   "user_link_copied": "Liên kết người dùng đã được sao chép vào khay nhớ tạm",
   "listing_link_copied": "Liên kết liệt kê đã được sao chép vào khay nhớ tạm",
-  "file": "Tập tin"
+  "file": "Tập tin",
+  "choose_image_source": "Thêm ảnh",
+  "take_photo": "Chụp ảnh",
+  "choose_from_gallery": "Chọn từ thư viện"
 }

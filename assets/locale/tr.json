@@ -340,5 +340,8 @@
   "share_qr_listing": "Girişi herkes için paylaşın",
   "user_link_copied": "Kullanıcı bağlantısı zaten panoya kopyalanıyor",
   "listing_link_copied": "Listeleme bağlantısı zaten panoya kopyalanıyor",
-  "file": "Dosya"
+  "file": "Dosya",
+  "choose_image_source": "Fotoğraf ekle",
+  "take_photo": "Fotoğraf çek",
+  "choose_from_gallery": "Galeriden seç"
 }

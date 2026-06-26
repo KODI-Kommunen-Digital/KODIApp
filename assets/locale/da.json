@@ -340,5 +340,8 @@
   "share_qr_listing": "Del notering for alle",
   "user_link_copied": "Brugerlink er allerede kopieret til udklipsholder",
   "listing_link_copied": "Listelinket er allerede kopieret til udklipsholderen",
-  "file": "Fil"
+  "file": "Fil",
+  "choose_image_source": "Tilføj billede",
+  "take_photo": "Tag billede",
+  "choose_from_gallery": "Vælg fra galleri"
 }

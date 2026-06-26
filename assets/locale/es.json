@@ -340,5 +340,8 @@
   "share_qr_listing": "Compartir listado para todos",
   "user_link_copied": "El enlace de usuario ya se ha copiado en el portapapeles",
   "listing_link_copied": "El enlace de la lista ya se ha copiado en el portapapeles",
-  "file": "Archivo"
+  "file": "Archivo",
+  "choose_image_source": "Añadir foto",
+  "take_photo": "Tomar foto",
+  "choose_from_gallery": "Elegir de la galería"
 }

@@ -340,5 +340,8 @@
   "share_qr_listing": "为大家分享清单",
   "user_link_copied": "用户链接已复制到剪贴板",
   "listing_link_copied": "列表链接已复制到剪贴板",
-  "file": "文件"
+  "file": "文件",
+  "choose_image_source": "添加照片",
+  "take_photo": "拍照",
+  "choose_from_gallery": "从相册选择"
 }

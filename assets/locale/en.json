@@ -584,6 +584,8 @@
   "clear_date": "Clear Date",
   "current_password": "Current Password",
   "title_and_description_required": "Please enter a title and description",
-  "submit_defect_success_message": "You have successfully submitted the data. Your data will be displayed in the defect report directory."
-
+  "submit_defect_success_message": "You have successfully submitted the data. Your data will be displayed in the defect report directory.",
+  "choose_image_source": "Add Photo",
+  "take_photo": "Take Photo",
+  "choose_from_gallery": "Choose from Gallery"
 }
