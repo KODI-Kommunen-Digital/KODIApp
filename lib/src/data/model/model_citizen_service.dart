@@ -6,19 +6,27 @@ class CitizenServiceModel {
   final String type;
   final int? categoryId;
   final int? arguments;
+  final int? subCategoryId;
+  final List<CitizenServiceModel>? subServices;
+  final bool hidden;
 
-  CitizenServiceModel(
-      {required this.imageUrl,
-      required this.imageLink,
-      this.type = "categoryService",
-      this.categoryId,
-      this.arguments});
+  CitizenServiceModel({
+    required this.imageUrl,
+    required this.imageLink,
+    this.type = "categoryService",
+    this.categoryId,
+    this.arguments,
+    this.subCategoryId,
+    this.subServices,
+    this.hidden = false,
+  });
 
   Future<bool> hasContent() async {
     final result = await ListRepository.loadList(
       categoryId: categoryId,
       type: type,
       pageNo: 1,
+      subCategoryId: subCategoryId,
     );
     return !result?[0].isEmpty;
   }

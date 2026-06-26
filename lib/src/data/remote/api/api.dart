@@ -790,11 +790,47 @@ class Api {
   }
 
   static Future<ResultApiModel> requestWastePickup(
-      int cityId, String streetId) async {
-    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates';
+      int cityId, String streetId, selectedWasteTypeIds) async {
+    final wasteIds = selectedWasteTypeIds.join(',');
+    var list = 'cities/1/wasteCalender/streets/$streetId/pickupDates?wasteIds=$wasteIds';
     final result = await HTTPManager(apiType: APIType.waste).get(url: list);
     return ResultApiModel.fromJson(result);
   }
+
+  static Future<ResultApiModel> requestWasteTypes(int cityId) async {
+    var list = '/cities/1/wasteCalender/wasteTypes';
+    final result = await HTTPManager(apiType: APIType.waste).get(url: list);
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> registerDeviceForWasteNotifications(params) async {
+    const filePath = 'wasteCalender/pushNotification/register';
+    final result = await HTTPManager(apiType: APIType.waste).post(
+      url: filePath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> subscribeForWasteNotification(
+      deviceId, params) async {
+    final filepath = "wasteCalender/pushNotification/status/$deviceId";
+    final result = await HTTPManager(apiType: APIType.waste).patch(
+      data: params,
+      url: filepath,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
+  static Future<ResultApiModel> subscribeStreetAndWasteTypes(params) async {
+    const filePath = 'cities/1/wasteCalender/pushNotification/subscribe';
+    final result = await HTTPManager(apiType: APIType.waste).post(
+      url: filePath,
+      data: params,
+    );
+    return ResultApiModel.fromJson(result);
+  }
+
 
   ///Singleton factory
   static final Api _instance = Api._internal();

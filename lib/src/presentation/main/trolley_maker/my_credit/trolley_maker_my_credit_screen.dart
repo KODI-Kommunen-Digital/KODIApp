@@ -322,7 +322,10 @@ class ListItemWidget extends StatelessWidget {
     try {
       DateFormat inputFormat = DateFormat('dd.MM.yyyy HH:mm:ss');
       DateTime dateTime = inputFormat.parse(dateString);
-      DateFormat dateFormat = DateFormat('MMM dd, yyyy hh:mm a');
+
+      // Set locale to German (de)
+      DateFormat dateFormat = DateFormat('dd. MMM yyyy HH:mm', 'de');
+
       return dateFormat.format(dateTime);
     } catch (e) {
       return "";

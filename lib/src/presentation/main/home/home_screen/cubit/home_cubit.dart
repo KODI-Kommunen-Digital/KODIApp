@@ -272,7 +272,7 @@ class HomeCubit extends Cubit<HomeState> {
       "4": "https://onlinedienste.troisdorf.de/",
       "5":
           "https://beteiligung.nrw.de/portal/troisdorf/beteiligung/themen?status=AKTUELLE&status=BEENDETE",
-      "6": "https://troisdorf.dksr.city/map/",
+      "6": "https://map.troisdorf.civora.org/",
       "7": "https://web.troisdorf.de/chatbot/",
       "9":
           "https://geoportal.troisdorf.de/app.php/application/start#75000@7.05291/50.80266r0@EPSG:25832",

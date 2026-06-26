@@ -1,22 +1,39 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:heidi/src/data/model/model_waste.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
+
+import '../../../../../utils/configs/preferences.dart';
 
 part 'waste_calendar_state.dart';
 
 class WasteCalendarCubit extends Cubit<WasteCalendarState> {
   WasteCalendarCubit() : super(WasteCalendarLoading());
 
-  void loadWasteCollections(int cityId, String? streetId) async {
+  void loadWasteCollections(
+      int cityId,
+      String? streetId, {
+        List<int>? selectedWasteTypeIds,
+      }) async {
+    if (selectedWasteTypeIds != null && selectedWasteTypeIds.isEmpty) {
+      // emit(const WasteCalendarError("No waste types selected"));
+      emit(const WasteCalendarLoaded(
+        [],
+        [],
+      ));
+      return;
+    }
     try {
       final result =
-          await WasteCalendarRepository.loadWastePickup(cityId, streetId!);
-      if (result.success) {
-        final data = result.data as List<dynamic>;
+      await WasteCalendarRepository.loadWastePickup(cityId, streetId!, selectedWasteTypeIds!);
 
-        // Normalize 'now' and 'twoWeeksFromNow' to have the time set to 00:00:00
+      if (isClosed) return;
+
+      if (result.success) {
+        final data = (result.data as List<dynamic>)
+            .whereType<Map<String, dynamic>>()
+            .toList();
+
         final DateTime now = DateTime.now();
         final DateTime today = DateTime(now.year, now.month, now.day);
         final DateTime twoWeeksFromNow = today.add(const Duration(days: 14));
@@ -26,63 +43,45 @@ class WasteCalendarCubit extends Cubit<WasteCalendarState> {
 
         for (var item in data) {
           final collection = WasteCollection.fromJson(item);
-          if (collection.type.contains("für Wohnanlagen")) {
-            continue;
-          }
           wasteCollections.add(collection);
+
           final DateTime collectionDate = DateTime(
-              collection.date.year, collection.date.month, collection.date.day);
+            collection.date.year,
+            collection.date.month,
+            collection.date.day,
+          );
+
           if (collectionDate.isAtSameMomentAs(today) ||
               (collectionDate.isAfter(today) &&
                   collectionDate.isBefore(twoWeeksFromNow))) {
             carouselCollections.add(collection);
           }
         }
-        emit(WasteCalendarLoaded(wasteCollections, carouselCollections));
+
+        if (!isClosed) {
+          emit(WasteCalendarLoaded(
+            wasteCollections,
+            carouselCollections,
+          ));
+        }
       } else {
-        emit(WasteCalendarError(
-            "Failed to load waste collections: ${result.message}"));
+        if (!isClosed) {
+          emit(WasteCalendarError(
+              "Failed to load waste collections: ${result.message}"));
+        }
       }
     } catch (e) {
-      emit(WasteCalendarError(
-          "Failed to load waste collections: ${e.toString()}"));
+      if (!isClosed) {
+        emit(WasteCalendarError(
+            "Failed to load waste collections: ${e.toString()}"));
+      }
     }
   }
 
-  void updateStreetId(String newStreetId) {
-    loadWasteCollections(1, newStreetId);
+  void updateStreetId(String newStreetId, {List<int>? selectedWasteTypeIds}) {
+    loadWasteCollections(1, newStreetId, selectedWasteTypeIds: selectedWasteTypeIds);
   }
 
-  Color getColorForType(String type) {
-    switch (type) {
-      case 'Biotonne Regelabfuhr':
-      case 'Biotonne 2-wö.':
-        return Colors.brown;
-      case 'Papiertonne 4-wö.':
-        return Colors.green;
-      case 'Wertstofftonne oder -sack 4-wö.':
-        return Colors.orange;
-      case 'Weihnachtsbaumabfuhr':
-        return Colors.red;
-      case 'Restmülltonne 2-wö.':
-      case 'Restmülltonne 4-wö.':
-        // case 'Restmüll-Container (wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (2-wö.) für Wohnanlagen':
-        // case 'Restmüll-Container (4-wö.) für Wohnanlagen':
-        return Colors.grey;
-      // case 'Papier-Container (2-wö.) für Wohnanlagen':
-      // case 'Papier-Container (4-wö.) für Wohnanlagen':
-      //   return Colors.lightBlue;
-      // case 'Bio-Container Regelabfuhr für Wohnanlagen':
-      // case 'Bio-Container (2-wö.) für Wohnanlagen':
-      //   return Colors.lightGreen;
-      case 'Wertstoff-Container (2-wö.)':
-      case 'Wertstoff-Container (4-wö.)':
-        return Colors.orange;
-      default:
-        return Colors.white;
-    }
-  }
 }
 
 extension DateTimeExtension on DateTime {

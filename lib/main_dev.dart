@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:heidi/src/data/model/model_waste_location.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/data/remote/local/category_manager.dart';
 import 'package:heidi/src/data/remote/trolley_maker_api/trolley_maker_client_initializer.dart';
@@ -11,9 +12,9 @@ import 'package:heidi/src/data/repository/list_repository.dart';
 import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/data/repository/user_repository.dart';
 import 'package:heidi/src/data/repository/waste_calendar_repository.dart';
-import 'package:heidi/src/main_screen.dart';
+import 'package:heidi/src/firebase_option_staging/firebase_options.dart';
 import 'package:heidi/src/presentation/cubit/bloc.dart';
-import 'package:heidi/src/presentation/widget/intro_waste.dart';
+import 'package:heidi/src/presentation/main/splash_screen/splash_screen.dart';
 import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
@@ -24,6 +25,7 @@ import 'package:heidi/src/utils/language_manager.dart';
 import 'package:heidi/src/utils/logging/bloc_logger.dart';
 import 'package:heidi/src/utils/logging/crashlytics_log_printer.dart';
 import 'package:heidi/src/utils/logging/drift_logger.dart';
+import 'package:heidi/src/utils/street_name_hash.dart';
 import 'package:heidi/src/utils/translate.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:loggy/loggy.dart';
@@ -33,9 +35,10 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:upgrader/upgrader.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(FormDataAdapter());
-  WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/envStage/.envTroisdorfStage");
   Loggy.initLoggy(
     logPrinter: FirebaseCrashlyticsLogPrinter(),
     filters: [
@@ -48,25 +51,34 @@ Future<void> main() async {
   await Hive.initFlutter();
   final prefBox = await Preferences.openBox();
   Bloc.observer = HeidiBlocObserver();
-  await Upgrader.clearSavedSettings();
   await Firebase.initializeApp(
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
-
-  await FirebaseApi(globalNavKey, prefBox).initNotifications();
-
-  await MatomoTracker.instance.initialize(
-    siteId: "1",
-    url: 'https://troisdorf.matomo.cloud/matomo.php',
+    options: DefaultFirebaseOptions.currentPlatform,
   );
+  debugPrint('Firebase project ID:- ${Firebase.app().options.projectId}');
 
-  await SentryFlutter.init((options) {
-    options.dsn =
-        'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
-    options.tracesSampleRate = 0.01;
-  }, appRunner: () => runApp(HeidiApp(prefBox)));
-  await dotenv.load(fileName: "assets/env/.envTroisdorf");
-  await CategoryManager.loadCategories();
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://a6a88ea3f5f3d8e45c7743bfc9af1cad@o4507264812908544.ingest.de.sentry.io/4507968022184016';
+      options.tracesSampleRate = 0.01;
+      options.debug = false;
+    },
+    appRunner: () async {
+      runApp(SentryWidget(child: HeidiApp(prefBox)));
+      // Run heavy initializations after the splash screen is already visible
+      await Upgrader.clearSavedSettings();
+      try {
+        await FirebaseApi(globalNavKey, prefBox).initNotifications();
+      } catch (e) {
+        print(e);
+      }
+      await MatomoTracker.instance.initialize(
+        siteId: "1",
+        url: 'https://troisdorf.matomo.cloud/matomo.php',
+      );
+      await CategoryManager.loadCategories();
+    },
+  );
 }
 
 final globalNavKey = GlobalKey<NavigatorState>();
@@ -85,15 +97,16 @@ class HeidiApp extends StatefulWidget {
 
 class _HeidiAppState extends State<HeidiApp> {
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
-
   @override
   void initState() {
     super.initState();
     AppBloc.applicationCubit.onSetup();
+    clearLocationId(); // clears stale location on fresh install
   }
 
   @override
   Widget build(BuildContext context) {
+
     return MultiRepositoryProvider(
       providers: [
         RepositoryProvider(
@@ -134,22 +147,7 @@ class _HeidiAppState extends State<HeidiApp> {
                       GlobalCupertinoLocalizations.delegate,
                     ],
                     supportedLocales: AppLanguage.supportLanguage,
-                    home: FutureBuilder<String?>(
-                      future: clearLocationId(),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const CircularProgressIndicator();
-                        } else {
-                          final location = snapshot.data;
-                          if (location != null) {
-                            return const MainScreen();
-                          } else {
-                            return const IntroPage();
-                          }
-                        }
-                      },
-                    ),
+                    home: const SplashScreen(),
                     builder: (context, child) {
                       final data = MediaQuery.of(context).copyWith(
                         textScaler:
@@ -172,27 +170,36 @@ class _HeidiAppState extends State<HeidiApp> {
 
   Future<String?> clearLocationId() async {
     final prefs = await Preferences.openBox();
+    final firebaseApi = FirebaseApi(navigatorKey, prefs);
 
     String? location = _getStoredLocation(prefs);
+
+    final introSkipped = prefs.getKeyValue(Preferences.introSkipped, false);
 
     if (location != null &&
         prefs.getKeyValue(Preferences.isAppInstalled, null) == null) {
       await prefs.setKeyValue(Preferences.selectedLocationName, null);
       await prefs.setKeyValue(Preferences.selectedLocationId, null);
       location = null;
-
-      final previousLocationId =
-          prefs.getKeyValue(Preferences.selectedLocationId, null);
-      final firebaseApi = FirebaseApi(navigatorKey, prefs);
-      if (previousLocationId != null) {
-        final previousTopic = WasteCalendarRepository(prefs)
-            .getTopicString(int.parse(previousLocationId));
-        await firebaseApi.unsubscribeFromTopic(previousTopic);
-      }
     }
 
     await prefs.setKeyValue(Preferences.isAppInstalled, true);
+
     return location;
+  }
+
+  Future<List<WasteLocation>> _loadLocations(
+      WasteCalendarRepository repository) async {
+    try {
+      List<WasteLocation> locations = [];
+      final fetchedLocations = await repository.loadWasteCalendarStreets(1);
+      if (fetchedLocations != null) {
+        locations = fetchedLocations;
+      }
+      return locations;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   String? _getStoredLocation(prefs) {

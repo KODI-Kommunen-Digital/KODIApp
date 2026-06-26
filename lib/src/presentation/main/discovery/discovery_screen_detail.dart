@@ -56,9 +56,13 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: Text((widget.arguments['id'] == 16)
-              ? "TroCARD"
-              : Translate.of(context).translate('cust_services')),
+          title: Text(
+            (widget.arguments['id'] == 16)
+                ? "StadtGUTSCHEIN"
+                : (widget.arguments['id'] == 6
+                ? Translate.of(context).translate('mobility')
+                : Translate.of(context).translate('cust_services')),
+          ),
         ),
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
           listener: (context, state) {
@@ -171,7 +175,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Routes.trackMatomoEvent(true, null, 5, null);
       CustomWebViewScreen.showAsBottomSheet(
           context: context,
-          url: "https://troisdorf.dksr.city/map/",
+          url: "https://map.troisdorf.civora.org/",
           title: 'Mobilitätskarte',
           needGeoLocation: true);
     } else if (service.arguments == 62) {
@@ -180,7 +184,7 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       CustomWebViewScreen.showAsBottomSheet(
         context: context,
         url:
-            "https://troisdorf.dksr.city/public-dashboards/f4dd7e02258d4a13a610ea463946f510?orgId=1",
+            "https://superset.troisdorf.civora.org/superset/dashboard/p/M2op2NDpleg/?standalone=3",
         title: 'Parken',
       );
     } else if (service.arguments == 161) {

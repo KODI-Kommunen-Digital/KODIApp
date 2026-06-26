@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model.dart';
+import 'package:heidi/src/data/model/model_citizen_service.dart';
 import 'package:heidi/src/data/model/model_forum_group.dart';
 import 'package:heidi/src/data/model/model_group_posts.dart';
 import 'package:heidi/src/data/model/model_product.dart';
@@ -28,6 +29,7 @@ import 'package:heidi/src/presentation/main/account/setting/settings_screen.dart
 import 'package:heidi/src/presentation/main/add_listing/add_listing_screen.dart';
 import 'package:heidi/src/presentation/main/add_listing/add_listing_success/add_listing_success.dart';
 import 'package:heidi/src/presentation/main/discovery/discovery_screen_detail.dart';
+import 'package:heidi/src/presentation/main/discovery/sub_discovery_screen.dart';
 import 'package:heidi/src/presentation/main/home/filter_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/add_group_screen.dart';
 import 'package:heidi/src/presentation/main/home/forum/add_group_screen/cubit/add_group_cubit.dart';
@@ -62,6 +64,7 @@ import 'package:heidi/src/presentation/main/trolley_maker/register/trolley_maker
 import 'package:heidi/src/presentation/main/trolley_maker/sign_in/trolley_maker_sign_in_screen.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/trolley_news/trolley_news_screen.dart';
 import 'package:heidi/src/presentation/main/waste_calendar/waste_main/waste_calendar_screen.dart';
+import 'package:heidi/src/presentation/widget/intro_waste.dart';
 import 'package:matomo_tracker/matomo_tracker.dart';
 
 class RouteArguments<T> {
@@ -150,6 +153,8 @@ class Routes {
   static const String trolleyNewsScreen = '/trolleyNewsScreen';
   static const String trolleyMakerPartnerDetails =
       "/trolleyMakerPartnerDetails";
+  static const String subDiscoveryScreen="/subDiscoveryScreen";
+  static const String introWaste = "/introWaste";
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -620,6 +625,20 @@ class Routes {
           builder: (context) {
             return TrolleyNewsScreen();
           },
+        );
+
+      case subDiscoveryScreen:
+        return MaterialPageRoute(
+          builder: (context) {
+            final CitizenServiceModel arguments =
+            settings.arguments as CitizenServiceModel;
+            return SubDiscoveryScreen(service: settings.arguments as CitizenServiceModel);
+          },
+        );
+
+      case introWaste:
+        return MaterialPageRoute(
+          builder: (context) => const IntroPage(),
         );
 
       default:
