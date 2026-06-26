@@ -215,7 +215,7 @@ class _IntroPageContent extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(
                 data.imagePath,
-                fit: BoxFit.fill,
+                fit: BoxFit.contain,
                 width: double.infinity,
               ),
             ),
