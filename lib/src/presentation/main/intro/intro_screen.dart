@@ -75,13 +75,13 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
         imagePath: img(1),
       ),
       _PageData(
-        heading: t.translate('intro_p2_heading'),
-        body: t.translate('intro_p2_body'),
+        heading: t.translate('intro_p3_heading'),
+        body: t.translate('intro_p3_body'),
         imagePath: img(2),
       ),
       _PageData(
-        heading: t.translate('intro_p3_heading'),
-        body: t.translate('intro_p3_body'),
+        heading: t.translate('intro_p2_heading'),
+        body: t.translate('intro_p2_body'),
         imagePath: img(3),
       ),
       _PageData(
