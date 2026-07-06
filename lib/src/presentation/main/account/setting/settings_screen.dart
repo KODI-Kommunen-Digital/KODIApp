@@ -225,9 +225,20 @@ class _SettingsScreenState extends State<SettingsScreen>
 
   Future<void> isDarkMode() async {
     final prefBox = await Preferences.openBox();
-    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, 'on');
+    String darkMode = await prefBox.getKeyValue(Preferences.darkOption, '');
+    final bool resolvedDark;
+    if (darkMode == 'on') {
+      resolvedDark = true;
+    } else if (darkMode == 'off') {
+      resolvedDark = false;
+    } else {
+      // No explicit preference saved yet (dynamic/system) - reflect the
+      // device's current theme instead of assuming dark.
+      resolvedDark =
+          PlatformDispatcher.instance.platformBrightness == Brightness.dark;
+    }
     setState(() {
-      darkModeEnabled = (darkMode == 'on');
+      darkModeEnabled = resolvedDark;
     });
   }
 

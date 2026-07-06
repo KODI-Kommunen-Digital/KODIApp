@@ -9,7 +9,8 @@ class Application {
   static SettingModel setting = SettingModel.fromDefault();
 
   static String picturesURL = dotenv.env['IMAGE_URL'] ??
-      'https://test1heidi.obs.eu-de.otc.t-systems.com/';
+      // 'https://test1heidi.obs.eu-de.otc.t-systems.com/';
+  'https://enervi1development.obs.eu-de.otc.t-systems.com/';
   // 'https://smrauf1heidi.obs.eu-de.otc.t-systems.com/';
   // 'https://developement1heidi.obs.eu-de.otc.t-systems.com/';
 //       'https://gesekeheidi.obs.eu-de.otc.t-systems.com/';

@@ -413,6 +413,12 @@ class _WasteCalendarState extends State<WasteCalendar>
                               textAlign: TextAlign.start,
                               style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
                             ),
+                            const SizedBox(height: 4),
+                            Text(
+                              Translate.of(context).translate('garbage_cans_volume'),
+                              textAlign: TextAlign.start,
+                              style: const TextStyle(fontSize: 13, color: Colors.grey),
+                            ),
                             const SizedBox(height: 10),
                             Text(
                               Translate.of(context).translate('garbage_cans_description'),
@@ -426,6 +432,12 @@ class _WasteCalendarState extends State<WasteCalendar>
                               Translate.of(context).translate('waste_container'),
                               textAlign: TextAlign.left,
                               style: const TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              Translate.of(context).translate('waste_container_volume'),
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontSize: 13, color: Colors.grey),
                             ),
                             const SizedBox(height: 10),
                             Text(

@@ -44,7 +44,7 @@ class AppTheme {
   ].map((item) => ThemeModel.fromJson(item)).toList();
 
   ///Dark Theme option
-  static DarkOption darkThemeOption = DarkOption.alwaysOn;
+  static DarkOption darkThemeOption = DarkOption.dynamic;
 
   ///Get theme data
   static ThemeData getTheme({
@@ -115,7 +115,7 @@ class AppTheme {
       dividerTheme: const DividerThemeData(
         thickness: 0.8,
       ),
-      bottomAppBarTheme: const BottomAppBarTheme(
+      bottomAppBarTheme: const BottomAppBarThemeData(
         shape: CircularNotchedRectangle(),
       ),
       colorScheme: colorScheme
