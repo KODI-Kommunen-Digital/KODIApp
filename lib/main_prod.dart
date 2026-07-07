@@ -132,6 +132,7 @@ class _HeidiAppState extends State<HeidiApp> {
                   child: MaterialApp(
                     navigatorKey: globalNavKey,
                     debugShowCheckedModeBanner: false,
+                    // locale: const Locale('de'), // TESTING: force German. Remove before release.
                     theme: theme.lightTheme,
                     darkTheme: theme.darkTheme,
                     onGenerateRoute: Routes.generateRoute,

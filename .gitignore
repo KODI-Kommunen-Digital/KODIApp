@@ -49,7 +49,7 @@ app.*.map.json
 /android/app/build
 
 # Ignore environment files
-assets/env/**
+assets/env/.envTroisdorf
 assets/envStage/**
 
 # FVM Version Cache
@@ -59,3 +59,6 @@ assets/envStage/**
 android/app/src/production/google-services.json
 android/app/src/staging/google-services.json
 ios/Runner/config/**
+ios/Runner/GoogleService-Info.plist
+lib/src/firebase_option_production/firebase_options.dart
+lib/src/firebase_option_staging/firebase_options.dart
