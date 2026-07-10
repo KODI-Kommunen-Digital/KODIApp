@@ -1,7 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:heidi/src/data/remote/api/firebase_api.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/app_list_title.dart';
@@ -101,8 +104,25 @@ class _SettingsScreenState extends State<SettingsScreen>
     }
   }
 
+  static const MethodChannel _notificationSettingsChannel =
+      MethodChannel('de.gera.mobileapp/notification_settings');
+
   Future<void> openAppSettings() async {
-    if (!await launchUrl(Uri.parse('app-settings:'))) {
+    bool opened = false;
+
+    if (Platform.isAndroid) {
+      try {
+        opened = await _notificationSettingsChannel
+                .invokeMethod<bool>('openNotificationSettings') ??
+            false;
+      } on PlatformException catch (_) {
+        opened = false;
+      }
+    } else {
+      opened = await launchUrl(Uri.parse('app-settings:'));
+    }
+
+    if (!opened && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Failed to open app settings.'),
       ));
