@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:heidi/src/utils/configs/image.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 
@@ -17,7 +18,7 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
   final PageController _pageController = PageController();
   int _currentPage = 0;
 
-  static const int _totalPages = 4;
+  static const int _totalPages = 5;
 
   @override
   void dispose() {
@@ -69,6 +70,11 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
     }
 
     final pages = [
+      _PageData(
+        heading: t.translate('intro_tagline'),
+        body: t.translate('welcome_subtitle'),
+        isWelcome: true,
+      ),
       _PageData(
         heading: t.translate('intro_p1_heading'),
         body: t.translate('intro_p1_subtitle'),
@@ -162,12 +168,14 @@ class _AppIntroScreenState extends State<AppIntroScreen> {
 class _PageData {
   final String heading;
   final String body;
-  final String imagePath;
+  final String? imagePath;
+  final bool isWelcome;
 
   const _PageData({
     required this.heading,
     required this.body,
-    required this.imagePath,
+    this.imagePath,
+    this.isWelcome = false,
   });
 }
 
@@ -181,6 +189,54 @@ class _IntroPageContent extends StatelessWidget {
     final theme = Theme.of(context);
 
     final isDark = theme.brightness == Brightness.dark;
+
+    if (data.isWelcome) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Material(
+              color: Colors.white,
+              elevation: 12,
+              borderRadius: BorderRadius.circular(24),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Image.asset(
+                    Images.logo,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 32),
+            Text(
+              data.heading,
+              style: TextStyle(
+                color: theme.primaryColor,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              data.body,
+              style: TextStyle(
+                color: isDark ? Colors.white.withOpacity(0.7) : const Color(0xFF4A4A4A),
+                fontSize: 15,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -214,7 +270,7 @@ class _IntroPageContent extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(20),
               child: Image.asset(
-                data.imagePath,
+                data.imagePath!,
                 fit: BoxFit.contain,
                 width: double.infinity,
               ),
