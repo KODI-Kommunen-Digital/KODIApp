@@ -165,65 +165,108 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     }
   }
 
+  ///Returns true when [url] points at a PDF document.
+  bool _isPdfLink(String url) {
+    final path = Uri.parse(url).path.toLowerCase();
+    return path.endsWith('.pdf');
+  }
+
   void _makeAction(String link) async {
     if (!link.startsWith("https://") && !link.startsWith("http://")) {
       link = "https://$link";
     }
 
+    String? pdfUrl = _isPdfLink(link) ? link : null;
+    bool webViewInitialized = false;
+
     final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted);
 
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: false,
       builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        link,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        style: TextStyle(
-                          color: Theme.of(context).textTheme.bodyLarge?.color ??
-                              Colors.white,
-                          fontWeight: FontWeight.bold,
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            if (!webViewInitialized && pdfUrl == null) {
+              webViewInitialized = true;
+              webViewController.setNavigationDelegate(
+                NavigationDelegate(
+                  onNavigationRequest: (NavigationRequest request) {
+                    if (_isPdfLink(request.url)) {
+                      if (pdfUrl != request.url) {
+                        setModalState(() {
+                          pdfUrl = request.url;
+                        });
+                      }
+                      return NavigationDecision.prevent;
+                    }
+                    return NavigationDecision.navigate;
+                  },
+                ),
+              );
+              webViewController.loadRequest(Uri.parse(link));
+            }
+
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                    child: Row(
+                      children: [
+                        if (pdfUrl != null)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                            onPressed: () {
+                              setModalState(() {
+                                pdfUrl = null;
+                              });
+                            },
+                          ),
+                        Expanded(
+                          child: Text(
+                            pdfUrl ?? link,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
-                      ),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: pdfUrl != null
+                        ? Utils.showCachedPdf(pdfUrl!)
+                        : WebViewWidget(
+                            controller: webViewController,
+                            gestureRecognizers: gestureRecognizers,
+                          ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
@@ -234,66 +277,89 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       link = "https://$link";
     }
 
+    String? pdfUrl = _isPdfLink(link) ? link : null;
+    bool webViewInitialized = false;
+
     final webViewController = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..loadRequest(Uri.parse(link));
+      ..setJavaScriptMode(JavaScriptMode.unrestricted);
 
     await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: false,
       builder: (BuildContext context) {
-        return SafeArea(
-          top: false,
-          bottom: false,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                color: Colors.black,
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
-                child: Row(
-                  children: [
-                    // Expanded(
-                    //   child: Text(
-                    //     link,
-                    //     overflow: TextOverflow.ellipsis,
-                    //     maxLines: 1,
-                    //     style: TextStyle(
-                    //       color: Theme.of(context).textTheme.bodyLarge?.color ??
-                    //           Colors.white,
-                    //       fontWeight: FontWeight.bold,
-                    //     ),
-                    //   ),
-                    // ),
-                    IconButton(
-                        onPressed: () {
-                          webViewController.goBack();
-                        },
-                        icon: const Icon(Icons.arrow_back)),
-                    const Spacer(),
-                    IconButton(
-                      icon: Icon(
-                        Icons.close,
-                        color: Theme.of(context).textTheme.bodyLarge?.color ??
-                            Colors.white,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            if (!webViewInitialized && pdfUrl == null) {
+              webViewInitialized = true;
+              webViewController.setNavigationDelegate(
+                NavigationDelegate(
+                  onNavigationRequest: (NavigationRequest request) {
+                    if (_isPdfLink(request.url)) {
+                      if (pdfUrl != request.url) {
+                        setModalState(() {
+                          pdfUrl = request.url;
+                        });
+                      }
+                      return NavigationDecision.prevent;
+                    }
+                    return NavigationDecision.navigate;
+                  },
+                ),
+              );
+              webViewController.loadRequest(Uri.parse(link));
+            }
+
+            return SafeArea(
+              top: false,
+              bottom: false,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Container(
+                    color: Colors.black,
+                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                            onPressed: () {
+                              if (pdfUrl != null) {
+                                setModalState(() {
+                                  pdfUrl = null;
+                                });
+                              } else {
+                                webViewController.goBack();
+                              }
+                            },
+                            icon: const Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            )),
+                        const Spacer(),
+                        IconButton(
+                          icon: const Icon(
+                            Icons.close,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                  Expanded(
+                    child: pdfUrl != null
+                        ? Utils.showCachedPdf(pdfUrl!)
+                        : WebViewWidget(
+                            controller: webViewController,
+                            gestureRecognizers: gestureRecognizers,
+                          ),
+                  ),
+                ],
               ),
-              SizedBox(
-                height:
-                    MediaQuery.of(context).size.height - kToolbarHeight - 30,
-                child: WebViewWidget(
-                  controller: webViewController,
-                  gestureRecognizers: gestureRecognizers,
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         );
       },
     );

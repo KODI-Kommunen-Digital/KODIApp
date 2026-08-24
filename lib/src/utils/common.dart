@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:heidi/src/data/model/model_device.dart';
 import 'package:location/location.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class Utils {
   static fieldFocusChange(
@@ -22,28 +22,7 @@ class Utils {
   }
 
   static Widget showCachedPdf(String url) {
-    return FutureBuilder<File>(
-      future:  DefaultCacheManager().getSingleFile(url),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (snapshot.hasError) {
-          return Center(
-            child: Text(snapshot.error.toString()),
-          );
-        }
-
-        return SfPdfViewer.file(
-          snapshot.data!,
-          canShowScrollHead: false,
-          canShowScrollStatus: false,
-          enableDoubleTapZooming: false,
-        );
-      },
-    );
-
+    return _CachedPdfViewer(key: ValueKey(url), url: url);
   }
 
   static hiddenKeyboard(BuildContext context) {
@@ -101,4 +80,81 @@ class Utils {
   }
 
   Utils._internal();
+}
+
+///Fetches and caches the PDF file once per [url] so ancestor rebuilds don't
+///restart the download/render or reset the viewer's zoom and scroll state.
+class _CachedPdfViewer extends StatefulWidget {
+  const _CachedPdfViewer({super.key, required this.url});
+
+  final String url;
+
+  @override
+  State<_CachedPdfViewer> createState() => _CachedPdfViewerState();
+}
+
+class _CachedPdfViewerState extends State<_CachedPdfViewer> {
+  late Future<File> _fileFuture;
+  String? _renderError;
+
+  @override
+  void initState() {
+    super.initState();
+    _fileFuture = DefaultCacheManager().getSingleFile(widget.url);
+  }
+
+  @override
+  void didUpdateWidget(covariant _CachedPdfViewer oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.url != widget.url) {
+      _renderError = null;
+      _fileFuture = DefaultCacheManager().getSingleFile(widget.url);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<File>(
+      future: _fileFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (snapshot.hasError) {
+          return Center(
+            child: Text(snapshot.error.toString()),
+          );
+        }
+
+        if (_renderError != null) {
+          return Center(child: Text(_renderError!));
+        }
+
+        ///[PDFView] embeds the platform's native PDF renderer (PDFKit on iOS,
+        ///AndroidPdfViewer on Android) so pinch-zoom/pan is handled entirely
+        ///by the OS instead of Flutter re-rasterizing page tiles, which is
+        ///what caused the flicker/jump with the previous canvas-based viewer.
+        return PDFView(
+          filePath: snapshot.data!.path,
+          enableSwipe: true,
+          swipeHorizontal: false,
+          autoSpacing: true,
+          pageFling: false,
+          pageSnap: false,
+          fitPolicy: FitPolicy.BOTH,
+          onError: (error) {
+            setState(() {
+              _renderError = error.toString();
+            });
+          },
+          onPageError: (page, error) {
+            setState(() {
+              _renderError = error.toString();
+            });
+          },
+        );
+      },
+    );
+  }
 }

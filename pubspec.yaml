@@ -103,6 +103,7 @@ dependencies:
   calendar_date_picker2: ^1.1.5
   # Mutiple drop down selector
   multi_dropdown: ^3.0.1
+  flutter_pdfview: ^1.4.5
 
 dev_dependencies:
   flutter_test:
