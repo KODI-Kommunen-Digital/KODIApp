@@ -27,6 +27,8 @@ import 'package:heidi/src/utils/translate.dart';
 // ignore: depend_on_referenced_packages
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../../utils/common.dart';
+
 // ignore: must_be_immutable
 class AllListingsScreen extends StatefulWidget {
   final UserModel user;
@@ -848,6 +850,17 @@ class _AllListingsLoadedState extends State<AllListingsLoaded> {
     }
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (!Utils.isWebNavigable(request.url)) {
+              Utils.launchExternalAppLink(request.url);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
       ..loadRequest(Uri.parse(link));
 
     await showModalBottomSheet(

@@ -30,6 +30,7 @@ import 'package:upgrader/upgrader.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
+import '../../../../utils/common.dart';
 import 'cubit/home_cubit.dart';
 import 'cubit/home_state.dart';
 
@@ -675,6 +676,17 @@ class _HomeScreenState extends State<HomeScreen> {
     // context.read<HomeCubit>().sendToMatomo(id, link);
     final webViewController = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onNavigationRequest: (NavigationRequest request) {
+            if (!Utils.isWebNavigable(request.url)) {
+              Utils.launchExternalAppLink(request.url);
+              return NavigationDecision.prevent;
+            }
+            return NavigationDecision.navigate;
+          },
+        ),
+      )
       ..loadRequest(Uri.parse(link));
 
     await showModalBottomSheet(

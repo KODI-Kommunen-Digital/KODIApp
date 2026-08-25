@@ -194,6 +194,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               webViewController.setNavigationDelegate(
                 NavigationDelegate(
                   onNavigationRequest: (NavigationRequest request) {
+                    if (!Utils.isWebNavigable(request.url)) {
+                      Utils.launchExternalAppLink(request.url);
+                      return NavigationDecision.prevent;
+                    }
                     if (_isPdfLink(request.url)) {
                       if (pdfUrl != request.url) {
                         setModalState(() {
@@ -295,6 +299,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               webViewController.setNavigationDelegate(
                 NavigationDelegate(
                   onNavigationRequest: (NavigationRequest request) {
+                    if (!Utils.isWebNavigable(request.url)) {
+                      Utils.launchExternalAppLink(request.url);
+                      return NavigationDecision.prevent;
+                    }
                     if (_isPdfLink(request.url)) {
                       if (pdfUrl != request.url) {
                         setModalState(() {
