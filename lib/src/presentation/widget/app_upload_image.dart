@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -172,22 +171,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Future<void> _uploadImage() async {
     PermissionStatus statusImage;
-    if (await Permission.storage.isGranted) {
+    if (Platform.isAndroid) {
+      // Photo Picker (API 33+) and its backport (API ≤32) need no storage/media permission
       statusImage = PermissionStatus.granted;
     } else {
-      if (Platform.isAndroid) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        if (androidInfo.version.sdkInt <= 32) {
-          statusImage = await Permission.storage.status;
-          statusImage = await Permission.storage.request();
-        } else {
-          statusImage = await Permission.photos.status;
-          statusImage = await Permission.photos.request();
-        }
-      } else {
-        statusImage = await Permission.photos.status;
-        statusImage = await Permission.photos.request();
-      }
+      statusImage = await Permission.photos.isGranted
+          ? PermissionStatus.granted
+          : await Permission.photos.request();
     }
 
     if (showAction) {
@@ -284,22 +274,13 @@ class _AppUploadImageState extends State<AppUploadImage> {
 
   Future<void> showChooseFileTypeDialog() async {
     PermissionStatus status;
-    if (await Permission.storage.isGranted) {
+    if (Platform.isAndroid) {
+      // Photo Picker (API 33+) and SAF/file_picker (API ≤32) need no storage/media permission
       status = PermissionStatus.granted;
     } else {
-      if (Platform.isAndroid) {
-        final androidInfo = await DeviceInfoPlugin().androidInfo;
-        if (androidInfo.version.sdkInt <= 32) {
-          status = await Permission.storage.status;
-          status = await Permission.storage.request();
-        } else {
-          status = await Permission.photos.status;
-          status = await Permission.photos.request();
-        }
-      } else {
-        status = await Permission.photos.status;
-        status = await Permission.photos.request();
-      }
+      status = await Permission.photos.isGranted
+          ? PermissionStatus.granted
+          : await Permission.photos.request();
     }
 
     if (!mounted) return;
@@ -383,20 +364,17 @@ class _AppUploadImageState extends State<AppUploadImage> {
                       await openAppSettings();
                     }
                   } else {
-                    FilePickerResult? result =
-                        await FilePicker.platform.pickFiles(
-                      type: FileType.image,
-                      allowMultiple: true,
-                    );
-                    if (result != null) {
+                    // Android: use image_picker which triggers the Photo Picker on API 33+
+                    final List<XFile> results = await _picker.pickMultiImage();
+                    if (results.isNotEmpty) {
                       _file = File('');
                       setState(() {
-                        _file = File(result.files.first.path!);
+                        _file = File(results.first.path);
                         isImageUploaded = false;
                       });
                       images.clear();
-                      for (final selectedImages in result.files) {
-                        images.add(File(selectedImages.path!));
+                      for (final selectedImage in results) {
+                        images.add(File(selectedImage.path));
                       }
                       widget.onChange(images);
                       final profile = widget.profile;
