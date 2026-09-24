@@ -19,8 +19,10 @@ import 'package:heidi/src/utils/configs/application.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/multiple_gesture_detector.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:html/parser.dart' as html_parser;
 import 'package:intl/intl.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:add_2_calendar/add_2_calendar.dart';
@@ -135,6 +137,82 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       link = "https://$link";
     }
     CustomWebViewScreen.showAsBottomSheet(context: context, url: link);
+  }
+
+  ///Share action
+  Future<void> _shareAction(
+      ProductModel product, BuildContext buttonContext) async {
+    final translate = Translate.of(context);
+
+    // Adds "Label: value" to [block] only when the value is non-empty.
+    void addLine(List<String> block, String labelKey, String? value) {
+      final trimmed = value?.trim() ?? '';
+      if (trimmed.isNotEmpty) {
+        block.add('${translate.translate(labelKey)}: $trimmed');
+      }
+    }
+
+    final details = <String>[];
+    addLine(details, 'listing_type', product.category);
+    addLine(details, 'date', product.createDate);
+    addLine(details, 'start_date', product.startDate);
+    addLine(details, 'end_date', product.endDate);
+
+    var address = product.address.trim();
+    final zipCode = product.zipCode?.trim() ?? '';
+    if (zipCode.isNotEmpty && !address.contains(zipCode)) {
+      address = address.isEmpty ? zipCode : '$address, $zipCode';
+    }
+
+    final contact = <String>[];
+    addLine(contact, 'address', address);
+    addLine(contact, 'phone', product.phone);
+    addLine(contact, 'fax', product.fax);
+    addLine(contact, 'email', product.email);
+    addLine(contact, 'more_info', product.website);
+
+    final blocks = <String>[
+      '${translate.translate('share_listing_intro')}: ${product.title}',
+      if (details.isNotEmpty) details.join('\n'),
+      _sharePlainText(product.description),
+      if (contact.isNotEmpty) contact.join('\n'),
+    ]..removeWhere((block) => block.isEmpty);
+
+    // iPad needs an anchor for the share popover.
+    final box = buttonContext.findRenderObject() as RenderBox?;
+    final origin =
+        box != null ? box.localToGlobal(Offset.zero) & box.size : null;
+
+    try {
+      await SharePlus.instance.share(ShareParams(
+        text: blocks.join('\n\n'),
+        subject: product.title,
+        sharePositionOrigin: origin,
+      ));
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
+    }
+  }
+
+  /// Full plain text of the (possibly HTML) description, keeping line and
+  /// paragraph breaks.
+  String _sharePlainText(String description) {
+    // Source newlines are just whitespace in HTML; breaks come from the tags.
+    final marked = description
+        .replaceAll(RegExp(r'[\r\n]+'), ' ')
+        .replaceAllMapped(RegExp(r'<br\b[^>]*>', caseSensitive: false),
+            (match) => '${match[0]}\n')
+        .replaceAllMapped(RegExp(r'</(p|div|h[1-6])\s*>', caseSensitive: false),
+            (match) => '${match[0]}\n\n')
+        .replaceAllMapped(RegExp(r'</li\s*>', caseSensitive: false),
+            (match) => '${match[0]}\n');
+    final text = html_parser.parse(marked).body?.text ?? description;
+    return text
+        .split('\n')
+        .map((line) => line.replaceAll(RegExp(r'[^\S\n]+'), ' ').trim())
+        .join('\n')
+        .replaceAll(RegExp(r'\n{3,}'), '\n\n')
+        .trim();
   }
 
   Future<void> _requestPermissions() async {
@@ -882,8 +960,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               ),
                               Text(
                                 product.address,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium!
@@ -938,8 +1014,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           product.phone,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
@@ -991,8 +1065,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           product.email,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
@@ -1044,8 +1116,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         ),
                         Text(
                           product.website,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
@@ -1173,152 +1243,175 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         });
       }
 
-      info = Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Expanded(
-                  child: Text(
-                    product.title,
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          fontWeight: FontWeight.bold,
+      info = SelectionArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Expanded(
+                    child: Text(
+                      product.title,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                  SelectionContainer.disabled(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (product.category?.toLowerCase() == "events")
+                          IconButton(
+                              icon: const Icon(Icons.event),
+                              onPressed: _requestPermissions,
+                              color: Colors.blue),
+                        Builder(
+                          builder: (buttonContext) => IconButton(
+                              tooltip: Translate.of(context).translate('share'),
+                              icon: Icon(Platform.isIOS
+                                  ? Icons.ios_share
+                                  : Icons.share_outlined),
+                              onPressed: () =>
+                                  _shareAction(product, buttonContext),
+                              color: Colors.blue),
                         ),
-                    maxLines: 3,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-                if (product.category?.toLowerCase() == "events")
-                  IconButton(
-                      icon: const Icon(Icons.event),
-                      onPressed: _requestPermissions,
-                      color: Colors.blue),
-                const SizedBox(width: 8),
-                // price,
-                // booking,
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      product.category != null
-                          ? product.category as String
-                          : '',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall
-                          ?.copyWith(fontWeight: FontWeight.bold),
+                      ],
                     ),
-                    const SizedBox(height: 4),
-                  ],
-                ),
-                Visibility(
-                  visible: isLoggedIn,
-                  child: IconButton(
-                    icon: Icon(
-                      product.favorite ? Icons.favorite : Icons.favorite_border,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    onPressed: () async {
-                      setState(() {
-                        _productDetailCubit.setFavoriteIconValue();
-                        product.favorite =
-                            _productDetailCubit.getFavoriteIconValue();
-                      });
-                      if (_productDetailCubit.getFavoriteIconValue()) {
-                        await _productDetailCubit.onAddFavorite(widget.item);
-                      } else {
-                        await _productDetailCubit.onDeleteFavorite(widget.item);
-                      }
-                    },
                   ),
-                ),
-              ],
-            ),
-            createdDate,
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                startDate,
-                endDate,
-                addCalendarButton,
-                // priceRange,
-              ],
-            ),
-            description,
-            address,
-            phone,
-            fax,
-            email,
-            website,
-            openHours,
-            attachments,
-            const SizedBox(height: 16),
-            // Container(
-            //   padding: const EdgeInsets.all(8),
-            //   margin: const EdgeInsets.symmetric(horizontal: 8),
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(8),
-            //     color: Theme.of(context).cardColor,
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Theme.of(context).dividerColor.withOpacity(
-            //               .05,
-            //             ),
-            //         spreadRadius: 4,
-            //         blurRadius: 4,
-            //         offset: const Offset(
-            //           0,
-            //           2,
-            //         ), // changes position of shadow
-            //       ),
-            //     ],
-            //   ),
-            //   child: AppUserInfo(
-            //     user: userDetail,
-            //     onPressed: () async {
-            //       final loggedInUserId = await context
-            //           .read<ProductDetailCubit>()
-            //           .getLoggedInUserId();
-            //       if (!mounted) return;
-            //       final productUserId = await context
-            //           .read<ProductDetailCubit>()
-            //           .getUserDetails(widget.item.userId, widget.item.cityId);
-            //       if (product.sourceId != 2 && product.sourceId != 3) {
-            //         if (productUserId?.id == loggedInUserId) {
-            //           if (!mounted) return;
-            //           Navigator.pushNamed(context, Routes.profile,
-            //                   arguments: {'user': userDetail, 'editable': true})
-            //               .then((value) {
-            //             setState(() {});
-            //           });
-            //         } else {
-            //           if (!mounted) return;
-            //           Navigator.pushNamed(context, Routes.profile, arguments: {
-            //             'user': userDetail,
-            //             'editable': false
-            //           }).then((value) {
-            //             setState(() {});
-            //           });
-            //         }
-            //       }
-            //     },
-            //     type: UserViewType.information,
-            //     showDirectionIcon:
-            //         product.sourceId != 2 && product.sourceId != 3,
-            //   ),
-            // ),
-            const SizedBox(height: 16),
-          ],
+                  const SizedBox(width: 8),
+                  // price,
+                  // booking,
+                ],
+              ),
+              const SizedBox(height: 4),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        product.category != null
+                            ? product.category as String
+                            : '',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                  ),
+                  SelectionContainer.disabled(
+                    child: Visibility(
+                      visible: isLoggedIn,
+                      child: IconButton(
+                        icon: Icon(
+                          product.favorite
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                        onPressed: () async {
+                          setState(() {
+                            _productDetailCubit.setFavoriteIconValue();
+                            product.favorite =
+                                _productDetailCubit.getFavoriteIconValue();
+                          });
+                          if (_productDetailCubit.getFavoriteIconValue()) {
+                            await _productDetailCubit
+                                .onAddFavorite(widget.item);
+                          } else {
+                            await _productDetailCubit
+                                .onDeleteFavorite(widget.item);
+                          }
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              createdDate,
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  startDate,
+                  endDate,
+                  addCalendarButton,
+                  // priceRange,
+                ],
+              ),
+              description,
+              address,
+              phone,
+              fax,
+              email,
+              website,
+              openHours,
+              attachments,
+              const SizedBox(height: 16),
+              // Container(
+              //   padding: const EdgeInsets.all(8),
+              //   margin: const EdgeInsets.symmetric(horizontal: 8),
+              //   decoration: BoxDecoration(
+              //     borderRadius: BorderRadius.circular(8),
+              //     color: Theme.of(context).cardColor,
+              //     boxShadow: [
+              //       BoxShadow(
+              //         color: Theme.of(context).dividerColor.withOpacity(
+              //               .05,
+              //             ),
+              //         spreadRadius: 4,
+              //         blurRadius: 4,
+              //         offset: const Offset(
+              //           0,
+              //           2,
+              //         ), // changes position of shadow
+              //       ),
+              //     ],
+              //   ),
+              //   child: AppUserInfo(
+              //     user: userDetail,
+              //     onPressed: () async {
+              //       final loggedInUserId = await context
+              //           .read<ProductDetailCubit>()
+              //           .getLoggedInUserId();
+              //       if (!mounted) return;
+              //       final productUserId = await context
+              //           .read<ProductDetailCubit>()
+              //           .getUserDetails(widget.item.userId, widget.item.cityId);
+              //       if (product.sourceId != 2 && product.sourceId != 3) {
+              //         if (productUserId?.id == loggedInUserId) {
+              //           if (!mounted) return;
+              //           Navigator.pushNamed(context, Routes.profile,
+              //                   arguments: {'user': userDetail, 'editable': true})
+              //               .then((value) {
+              //             setState(() {});
+              //           });
+              //         } else {
+              //           if (!mounted) return;
+              //           Navigator.pushNamed(context, Routes.profile, arguments: {
+              //             'user': userDetail,
+              //             'editable': false
+              //           }).then((value) {
+              //             setState(() {});
+              //           });
+              //         }
+              //       }
+              //     },
+              //     type: UserViewType.information,
+              //     showDirectionIcon:
+              //         product.sourceId != 2 && product.sourceId != 3,
+              //   ),
+              // ),
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       );
     }

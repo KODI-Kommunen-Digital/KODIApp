@@ -696,5 +696,9 @@
   "wc_intro_p3_volume": "Bins: 80–240 litres\nContainers: 660–1,100 litres",
   "wc_intro_p4_heading": "Get Reminded in Time",
   "wc_intro_p4_body": "Enable push reminders and never miss a pickup.",
-  "wc_intro_btn_setup": "Set up now"
+  "wc_intro_btn_setup": "Set up now",
+  "no_app_to_open_link": "No app found to open this link",
+  "share_listing_intro": "Check out this listing",
+  "more_info": "More Info",
+  "listing_type": "Listing type"
 }

@@ -705,6 +705,9 @@
   "wc_intro_p3_volume": "Mülltonnen: 80–240 Liter\nMüllcontainer: 660–1.100 Liter",
   "wc_intro_p4_heading": "Rechtzeitig erinnert werden",
   "wc_intro_p4_body": "Aktiviere Push-Erinnerungen und verpasse keinen Termin.",
-  "wc_intro_btn_setup": "Jetzt einrichten"
+  "wc_intro_btn_setup": "Jetzt einrichten",
+  "no_app_to_open_link": "Keine App zum Öffnen dieses Links gefunden",
+  "share_listing_intro": "Schau dir diesen Eintrag an",
+  "more_info": "Weitere Infos",
+  "listing_type": "Eintragstyp"
 }
-

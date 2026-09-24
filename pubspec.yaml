@@ -114,6 +114,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   # Secure storage
   flutter_secure_storage: ^9.2.2
+  # Native share sheet
+  share_plus: ^12.0.2
 
 dev_dependencies:
   flutter_test:
