@@ -51,31 +51,20 @@ class CustomWebViewScreen extends StatefulWidget {
         return;
       }
     }
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      // Dragging/tapping outside would fight with the web page gestures and
-      // the in-page back navigation, so the sheet is closed via its buttons
-      // or the system back once the history is exhausted.
-      enableDrag: false,
-      isDismissible: false,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.only(top: kToolbarHeight),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: SizedBox(
-              height: MediaQuery.sizeOf(context).height - kToolbarHeight,
-              child: CustomWebViewScreen(
-                url: url,
-                title: title,
-                hasGeoLocation: needGeoLocation,
-              ),
-            ),
-          ),
-        );
-      },
+    // Opened as an opaque full-screen page on the root navigator so nothing
+    // behind it (including any bottom navigation) stays visible. As a
+    // fullscreen dialog it slides up and has no iOS swipe-to-dismiss, which
+    // would fight with the web page gestures; it is closed via its buttons
+    // or the system back once the history is exhausted.
+    Navigator.of(context, rootNavigator: true).push(
+      MaterialPageRoute<void>(
+        fullscreenDialog: true,
+        builder: (BuildContext context) => CustomWebViewScreen(
+          url: url,
+          title: title,
+          hasGeoLocation: needGeoLocation,
+        ),
+      ),
     );
   }
 }
@@ -134,7 +123,7 @@ class _CustomWebViewScreenState extends State<CustomWebViewScreen> {
   WebUri? _currentUrl;
 
   // Let the web view claim every gesture so long-press text selection, the
-  // selection handles and horizontal scrolling are not stolen by the sheet.
+  // selection handles and horizontal scrolling are not stolen by the route.
   final Set<Factory<OneSequenceGestureRecognizer>> gestureRecognizers = {
     Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer()),
   };
