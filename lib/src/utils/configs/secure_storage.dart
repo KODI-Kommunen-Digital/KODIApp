@@ -19,6 +19,10 @@ class SecureStorage {
     return decodedList.cast<int>();
   }
 
+  Future<void> delete(String key) async {
+    await _storage.delete(key: key);
+  }
+
   static SecureStorage getInstance() {
     return SecureStorage();
   }

@@ -54,14 +54,9 @@ class _TrolleyMakerSigninScreenState extends State<TrolleyMakerSigninScreen> {
           body: BlocConsumer<TrolleyMakerSigninCubit, TrolleyMakerSigninState>(
             listener: (context, state) {
               if (state == const TrolleyMakerSigninState.success()) {
-                //todo navigate to trolley maker screen
-                Navigator.pushReplacementNamed(
-                  context,
-                  Routes.discoveryDetail,
-                  arguments: {
-                    'id': 16,
-                  },
-                );
+                // The caller (StadtGUTSCHEIN screen) continues to the card
+                // the user wanted to open.
+                Navigator.pop(context, true);
               }
               state.maybeWhen(
                 error: (msg) {

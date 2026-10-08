@@ -166,6 +166,21 @@ class TrolleyMakerRepository {
     return Left(TrolleyMakerErrorResponse.unknownError());
   }
 
+  /// The Trolley Maker API has no logout endpoint, so logging out only clears
+  /// the locally stored session data.
+  Future<void> logout() async {
+    await prefs.deleteKey(Preferences.trolleyMakerApiToken);
+    await prefs.deleteKey(Preferences.trolleyMakerCardName);
+    try {
+      await secureStorage.delete(SecureStorage.keyCardList);
+    } catch (error, stackTrace) {
+      if (kDebugMode) {
+        print('Error: $error');
+        print('Stack trace: $stackTrace');
+      }
+    }
+  }
+
   Future<void> _saveLoginResult(TrolleyMakerLoginResponse result) async {
     await prefs.setKeyValue(Preferences.trolleyMakerApiToken, result.xApiToken);
     await prefs.setKeyValue(Preferences.trolleyMakerCardName, result.cardName);

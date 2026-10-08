@@ -6,12 +6,14 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:heidi/src/data/model/model_citizen_service.dart';
+import 'package:heidi/src/data/repository/trolley_maker_repository.dart';
 import 'package:heidi/src/presentation/cubit/app_bloc.dart';
 import 'package:heidi/src/presentation/widget/custom_webview.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
 import 'package:heidi/src/utils/mobilitat_helper.dart';
 import 'package:heidi/src/utils/translate.dart';
+import 'package:heidi/src/utils/trolley_maker_session.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'cubit/cubit.dart';
 
@@ -29,6 +31,10 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
 
   late DiscoveryCubit discoveryCubit;
 
+  bool _isTrolleyMakerSignedIn = false;
+
+  bool get _isTrolleyMaker => widget.arguments['id'] == 16;
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +42,52 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       loadLocationList();
     });
+    if (_isTrolleyMaker) {
+      _refreshTrolleyMakerSession();
+    }
+  }
+
+  Future<void> _refreshTrolleyMakerSession() async {
+    if (!mounted || !_isTrolleyMaker) return;
+    final signedIn = await context
+        .read<TrolleyMakerRepository>()
+        .hasValidTrolleyMakerAuthToken();
+    if (!mounted) return;
+    setState(() {
+      _isTrolleyMakerSignedIn = signedIn;
+    });
+  }
+
+  Future<void> _confirmTrolleyMakerLogout() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(Translate.of(dialogContext).translate('sign_out')),
+          content: Text(Translate.of(dialogContext)
+              .translate('trolley_maker_logout_confirm')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(Translate.of(dialogContext).translate('cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(Translate.of(dialogContext).translate('sign_out')),
+            ),
+          ],
+        );
+      },
+    );
+    if (confirmed != true || !mounted) return;
+    await TrolleyMakerSession.clear(context);
+    if (!mounted) return;
+    setState(() {
+      _isTrolleyMakerSignedIn = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(Translate.of(context)
+            .translate('trolley_maker_logout_success'))));
   }
 
   Future<void> loadLocationList() async {
@@ -63,6 +115,16 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
                 ? Translate.of(context).translate('mobility')
                 : Translate.of(context).translate('cust_services')),
           ),
+          actions: [
+            if (_isTrolleyMaker && _isTrolleyMakerSignedIn)
+              TextButton(
+                onPressed: _confirmTrolleyMakerLogout,
+                child: Text(Translate.of(context).translate('sign_out'),
+                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
+                      color: Theme.of(context).primaryColor,
+                      fontWeight: FontWeight.bold),),
+              ),
+          ],
         ),
         body: BlocConsumer<DiscoveryCubit, DiscoveryState>(
           listener: (context, state) {
@@ -78,6 +140,7 @@ class _DiscoveryScreenState extends State<DiscoveryScreenDetail> {
             },
             loaded: (list) => DiscoveryLoaded(
               services: list,
+              onTrolleyMakerSessionChanged: _refreshTrolleyMakerSession,
             ),
             updated: (list) {
               return Container();
@@ -106,10 +169,12 @@ class DiscoveryLoading extends StatelessWidget {
 
 class DiscoveryLoaded extends StatefulWidget {
   final List<CitizenServiceModel> services;
+  final VoidCallback? onTrolleyMakerSessionChanged;
 
   const DiscoveryLoaded({
     super.key,
     required this.services,
+    this.onTrolleyMakerSessionChanged,
   });
 
   @override
@@ -188,13 +253,19 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         title: 'Parken',
       );
     } else if (service.arguments == 161) {
-      Navigator.pushNamed(context, Routes.trolleyMakerMyCredit);
+      await _openTrolleyMakerCard(Routes.trolleyMakerMyCredit,
+          requiresLogin: true);
     } else if (service.arguments == 162) {
-      Navigator.pushNamed(context, Routes.trolleyMakerCards);
+      await _openTrolleyMakerCard(Routes.trolleyMakerCards,
+          requiresLogin: true);
     } else if (service.arguments == 163) {
-      Navigator.pushNamed(context, Routes.trolleyMakerPartner);
+      // Partner APIs are public, no sign-in needed.
+      await _openTrolleyMakerCard(Routes.trolleyMakerPartner,
+          requiresLogin: false);
     } else if (service.arguments == 164) {
-      Navigator.pushNamed(context, Routes.trolleyNewsScreen);
+      // News APIs are public, no sign-in needed.
+      await _openTrolleyMakerCard(Routes.trolleyNewsScreen,
+          requiresLogin: false);
     } else {
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);
@@ -208,5 +279,54 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
         'type': 'categoryService'
       });
     }
+  }
+
+  Future<void> _openTrolleyMakerCard(String route,
+      {required bool requiresLogin}) async {
+    if (requiresLogin) {
+      final signedIn = await context
+          .read<TrolleyMakerRepository>()
+          .hasValidTrolleyMakerAuthToken();
+      if (!mounted) return;
+      if (!signedIn) {
+        final loggedIn = await _requestTrolleyMakerSignIn();
+        if (!mounted) return;
+        widget.onTrolleyMakerSessionChanged?.call();
+        if (!loggedIn) return;
+      }
+    }
+    await Navigator.pushNamed(context, route);
+    // The session may have expired while the card was open.
+    if (!mounted) return;
+    widget.onTrolleyMakerSessionChanged?.call();
+  }
+
+  /// Shows the login required popup and opens the Trolley Maker sign-in.
+  /// Returns true when the user signed in successfully.
+  Future<bool> _requestTrolleyMakerSignIn() async {
+    final wantsSignIn = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: Text(Translate.of(dialogContext).translate('login_required')),
+          content: Text(Translate.of(dialogContext)
+              .translate('trolley_maker_login_required_message')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, false),
+              child: Text(Translate.of(dialogContext).translate('cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext, true),
+              child: Text(Translate.of(dialogContext).translate('sign_in')),
+            ),
+          ],
+        );
+      },
+    );
+    if (wantsSignIn != true || !mounted) return false;
+    final result =
+        await Navigator.pushNamed(context, Routes.trolleyMakerSignIn);
+    return result == true;
   }
 }

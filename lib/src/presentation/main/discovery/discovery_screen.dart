@@ -305,7 +305,11 @@ class _DiscoveryLoadedState extends State<DiscoveryLoaded> {
       Routes.trackMatomoEvent(false, null, int.parse(service.imageLink), null);
       Navigator.pushNamed(context, Routes.wasteCalendar);
     } else if (service.imageLink == "16") {
-      Navigator.pushNamed(context, Routes.trolleyMakerSignIn);
+      // Open the StadtGUTSCHEIN cards directly; cards that need an account
+      // ask for sign-in when tapped.
+      Navigator.pushNamed(context, Routes.discoveryDetail, arguments: {
+        'id': 16,
+      });
     } else if(service.imageLink !="19"){
       AppBloc.discoveryCubit
           .setServiceValue(Preferences.type, service.type, null);

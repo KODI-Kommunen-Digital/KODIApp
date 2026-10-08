@@ -26,7 +26,13 @@ class TokenInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
     final newToken = response.headers.value('X-NEW-Token');
-    if (newToken != null) {
+    // Only refresh an existing session, so a response that arrives after
+    // logout cannot sign the user back in.
+    final hasSession = prefBox
+        .getKeyValue(Preferences.trolleyMakerApiToken, "")
+        .toString()
+        .isNotEmpty;
+    if (newToken != null && hasSession) {
       prefBox.setKeyValue(Preferences.trolleyMakerApiToken, newToken);
     }
     super.onResponse(response, handler);

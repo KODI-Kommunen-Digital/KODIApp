@@ -700,5 +700,8 @@
   "no_app_to_open_link": "No app found to open this link",
   "share_listing_intro": "Check out this listing",
   "more_info": "More Info",
-  "listing_type": "Listing type"
+  "listing_type": "Listing type",
+  "trolley_maker_login_required_message": "Please sign in with your StadtGUTSCHEIN account to use this feature.",
+  "trolley_maker_logout_confirm": "Do you want to sign out of your StadtGUTSCHEIN account?",
+  "trolley_maker_logout_success": "You have been signed out of StadtGUTSCHEIN."
 }

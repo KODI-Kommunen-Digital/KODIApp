@@ -19,6 +19,7 @@ import 'package:heidi/src/utils/adapters/formdata_adapter.dart';
 import 'package:heidi/src/utils/configs/language.dart';
 import 'package:heidi/src/utils/configs/preferences.dart';
 import 'package:heidi/src/utils/configs/routes.dart';
+import 'package:heidi/src/utils/trolley_maker_session.dart';
 import 'package:heidi/src/utils/configs/secure_storage.dart';
 import 'package:heidi/src/utils/heidi_bloc_observer.dart';
 import 'package:heidi/src/utils/language_manager.dart';
@@ -201,10 +202,16 @@ class _HeidiAppState extends State<HeidiApp> {
   }
 
   VoidCallback _getTrolleyMakerTokenExpiryCallback() {
-    return () {
+    return () async {
+      final navContext = globalNavKey.currentContext;
+      if (navContext != null) {
+        await TrolleyMakerSession.clear(navContext);
+      }
       globalNavKey.currentState?.popUntil((route) {
         return route.settings.name == Routes.main;
       });
+      globalNavKey.currentState
+          ?.pushNamed(Routes.discoveryDetail, arguments: {'id': 16});
       globalNavKey.currentState?.pushNamed(Routes.trolleyMakerSignIn);
     };
   }

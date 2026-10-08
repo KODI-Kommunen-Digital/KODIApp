@@ -24,6 +24,10 @@ class TrolleyMakerCardsCubit extends Cubit<TrolleyMakerCardsState> {
     }
   }
 
+  void reset() {
+    emit(const Initial());
+  }
+
   Future<void> addedNewCard(String cardNumber) async {
     try {
       final intCardNumber = int.parse(cardNumber);

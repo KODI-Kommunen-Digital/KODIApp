@@ -709,5 +709,8 @@
   "no_app_to_open_link": "Keine App zum Öffnen dieses Links gefunden",
   "share_listing_intro": "Schau dir diesen Eintrag an",
   "more_info": "Weitere Infos",
-  "listing_type": "Eintragstyp"
+  "listing_type": "Eintragstyp",
+  "trolley_maker_login_required_message": "Bitte melden Sie sich mit Ihrem StadtGUTSCHEIN-Konto an, um diese Funktion zu nutzen.",
+  "trolley_maker_logout_confirm": "Möchten Sie sich von Ihrem StadtGUTSCHEIN-Konto abmelden?",
+  "trolley_maker_logout_success": "Sie wurden von StadtGUTSCHEIN abgemeldet."
 }
