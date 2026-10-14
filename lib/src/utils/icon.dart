@@ -1919,7 +1919,7 @@ class UtilIcon {
     'brands vaadin': FontAwesomeIcons.vaadin,
     'solid van-shuttle': FontAwesomeIcons.vanShuttle,
     'solid vault': FontAwesomeIcons.vault,
-    'solid vector-square': FontAwesomeIcons.vectorSquare,
+    'solid vector-square': FontAwesomeIcons.drawPolygon,
     'solid venus': FontAwesomeIcons.venus,
     'solid venus-double': FontAwesomeIcons.venusDouble,
     'solid venus-mars': FontAwesomeIcons.venusMars,
