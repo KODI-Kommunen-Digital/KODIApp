@@ -98,6 +98,8 @@ class NetworkExceptions with _$NetworkExceptions {
               networkExceptions =
                   const NetworkExceptions.noInternetConnection();
               break;
+            case DioExceptionType.transformTimeout:
+              throw UnimplementedError();
           }
         } else if (error is SocketException) {
           networkExceptions = const NetworkExceptions.noInternetConnection();
