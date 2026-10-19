@@ -566,31 +566,28 @@ class _HomeScreenState extends State<HomeScreen> {
       Navigator.pushNamed(context, Routes.listProduct,
           arguments: {'id': item.id, 'title': item.title, 'type': 'location'});
     } else if (item.id == 2) {
-      if (Platform.isIOS) {
-        await launchUrl(Uri.parse(pressigAppleLink),
-            mode: LaunchMode.externalApplication);
-      } else if (Platform.isAndroid) {
-        await launchUrl(Uri.parse(pressigAndroidLink),
-            mode: LaunchMode.externalApplication);
-      }
+      await _openStoreLink(pressigAppleLink, pressigAndroidLink);
     } else if (item.id == 3) {
-      if (Platform.isIOS) {
-        await launchUrl(Uri.parse(schneckenloheAppleLink),
-            mode: LaunchMode.externalApplication);
-      } else if (Platform.isAndroid) {
-        await launchUrl(Uri.parse(schneckenloheAndroidLink),
-            mode: LaunchMode.externalApplication);
-      }
+      await _openStoreLink(schneckenloheAppleLink, schneckenloheAndroidLink);
     } else if (item.id == 4) {
-      if (Platform.isIOS) {
-        await launchUrl(Uri.parse(stockheimAppleLink),
-            mode: LaunchMode.externalApplication);
-      } else if (Platform.isAndroid) {
-        await launchUrl(Uri.parse(stockheimAndroidLink),
-            mode: LaunchMode.externalApplication);
-      }
+      await _openStoreLink(stockheimAppleLink, stockheimAndroidLink);
     } else if (item.id != -1 && !item.hasChild) {
       _onPopUpCatError();
+    }
+  }
+
+  Future<void> _openStoreLink(String appleLink, String androidLink) async {
+    final link = Platform.isIOS ? appleLink : androidLink;
+    if (link.isEmpty) {
+      // Store links come from Firebase Remote Config; empty means the key is
+      // missing in the active Firebase project or the fetch failed.
+      await Sentry.captureMessage('Store link missing in Remote Config');
+      return;
+    }
+    try {
+      await launchUrl(Uri.parse(link), mode: LaunchMode.externalApplication);
+    } catch (e, stackTrace) {
+      await Sentry.captureException(e, stackTrace: stackTrace);
     }
   }
 
