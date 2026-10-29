@@ -54,7 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:363023604244:android:c0eff2c9682596bef2a501',
     messagingSenderId: '363023604244',
     projectId: 'schneckenlohe-21773',
-    storageBucket: 'schneckenlohe-21773.appspot.com',
+    storageBucket: 'schneckenlohe-21773.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -62,7 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:363023604244:ios:f6f45e35497ad531f2a501',
     messagingSenderId: '363023604244',
     projectId: 'schneckenlohe-21773',
-    storageBucket: 'schneckenlohe-21773.appspot.com',
+    storageBucket: 'schneckenlohe-21773.firebasestorage.app',
     iosBundleId: 'com.hasslachtal.schneckenlohe',
   );
 }
