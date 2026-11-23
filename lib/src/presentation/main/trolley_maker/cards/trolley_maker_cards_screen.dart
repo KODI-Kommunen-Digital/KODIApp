@@ -2,7 +2,7 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:heidi/src/presentation/main/trolley_maker/add_card/trolley_maker_add_card_sheet.dart';
+// import 'package:heidi/src/presentation/main/trolley_maker/add_card/trolley_maker_add_card_sheet.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/cards/cubit/trolley_maker_cards_cubit.dart';
 import 'package:heidi/src/presentation/main/trolley_maker/cards/cubit/trolley_maker_cards_state.dart';
 import 'package:heidi/src/utils/translate.dart';
@@ -46,14 +46,15 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
         title: Text(
           Translate.of(context).translate('title_card'),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add_card),
-            onPressed: () {
-              _showAddCardDialog(context);
-            },
-          ),
-        ],
+        // Add Card feature (POST /api/v2/add-card) hidden for now.
+        // actions: [
+        //   IconButton(
+        //     icon: const Icon(Icons.add_card),
+        //     onPressed: () {
+        //       _showAddCardDialog(context);
+        //     },
+        //   ),
+        // ],
       ),
       body: SafeArea(
         child: Container(
@@ -253,15 +254,16 @@ class _TrolleyMakerCardsScreenState extends State<TrolleyMakerCardsScreen> {
     );
   }
 
-  void _showAddCardDialog(BuildContext context) {
-    showModalBottomSheet(
-        isDismissible: true,
-        isScrollControlled: true,
-        context: context,
-        builder: (BuildContext context) {
-          return TrolleyMakerAddCardSheet(cardList?.first);
-        });
-  }
+  // Add Card feature hidden for now.
+  // void _showAddCardDialog(BuildContext context) {
+  //   showModalBottomSheet(
+  //       isDismissible: true,
+  //       isScrollControlled: true,
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return TrolleyMakerAddCardSheet(cardList?.first);
+  //       });
+  // }
 }
 
 class StyledCardName extends StatelessWidget {
